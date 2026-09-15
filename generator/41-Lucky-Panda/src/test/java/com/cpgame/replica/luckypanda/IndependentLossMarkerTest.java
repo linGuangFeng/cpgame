@@ -37,7 +37,7 @@ class IndependentLossMarkerTest {
     @Test void preservesPanCountsMultiplierTrajectoryAwardsAndCascadeTail() {
         for (boolean retrigger : new boolean[]{false, true}) {
             CompleteRoundFact before = freeRound(retrigger);
-            String full = codec.encodeFull(before), compact = codec.encode(before);
+            String full = codec.encodeWithoutMarkers(before), compact = codec.encode(before);
             assertTrue(compact.contains("|#0|#1|#2"));
             assertTrue(compact.length() < full.length());
             for (int repeat = 0; repeat < 30; repeat++) {
@@ -76,7 +76,7 @@ class IndependentLossMarkerTest {
         assertTrue(boards.size() > 5500);
     }
 
-    @Test void inconsistentLegacyMultiplierIsPreservedAndMalformedMarkersRejected() {
+    @Test void explicitMultiplierIsPreservedAndMalformedMarkersRejected() {
         var board = loss(1);
         var fact = new CompleteRoundFact(BigDecimal.ONE, 1,
                 List.of(new CompleteRoundFact.PageFact(board, 17, List.of(), List.of())), List.of());
@@ -84,7 +84,7 @@ class IndependentLossMarkerTest {
         assertEquals(board.toRskl(), codec.decode(codec.encode(fact)).paid().get(0).board().toRskl());
         assertEquals(17, codec.decode(codec.encode(fact)).paid().get(0).rpx());
         for (String token : List.of("#", "#-1", "#30", "#01", "#999999", "#1;#2", "0"))
-            assertThrows(IllegalArgumentException.class, () -> codec.decode("lp1|bs=1|bl=1|P=" + token));
+            assertThrows(IllegalArgumentException.class, () -> codec.decode(token));
     }
 
     @Test void concurrentDecodesDoNotShareMultiplierState() throws Exception {

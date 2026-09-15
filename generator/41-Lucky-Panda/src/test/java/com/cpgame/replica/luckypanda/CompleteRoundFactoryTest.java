@@ -30,13 +30,14 @@ class CompleteRoundFactoryTest {
     private static final int BL = 1;
 
     @Test
-    void legacyCodecRoundTripIsAsciiNotJsonAndRestoresBoards() {
+    void explicitCompactPagesRestoreBoards() {
         CompleteRoundFactory factory = new CompleteRoundFactory(BS, BL);
         CompleteRoundFactory.GeneratedRound generated = factory.generate(
                 new Random(7), 10, 30, weights(), true);
         CompleteRoundCodec codec = new CompleteRoundCodec();
-        String member = codec.encodeFull(generated.fact());
-        assertTrue(member.startsWith("lp1|"));
+        String member = codec.encodeWithoutMarkers(generated.fact());
+        assertFalse(member.contains("="));
+        assertFalse(member.contains(","));
         assertFalse(member.contains("{"));
         assertFalse(member.contains("["));
         assertEquals(StandardCharsets.US_ASCII.newEncoder().canEncode(member), true);

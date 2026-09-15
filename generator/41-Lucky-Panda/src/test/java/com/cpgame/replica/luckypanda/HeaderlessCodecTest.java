@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HeaderlessCodecTest {
-    @Test void removesOnlyEnvelopeAndKeepsLegacyReadable() {
+    @Test void preservesCompactRoundAndRejectsLegacy() {
         var codec = new CompleteRoundCodec();
         var random = new Random(41915);
         var factory = new CompleteRoundFactory(new BigDecimal("0.02"), 3);
@@ -26,10 +26,10 @@ class HeaderlessCodecTest {
             assertFalse(encoded.startsWith("lp1|"));
             var decoded = codec.decode(encoded);
             assertEquals(generated.actualMultiplier(), codec.verify(decoded, 10).actualMultiplier());
-            var legacy = codec.decode(codec.encodeFull(fact));
-            assertEquals(fact.betSize(), legacy.betSize());
-            assertEquals(fact.betLevel(), legacy.betLevel());
-            assertEquals(codec.encodeFull(fact), codec.encodeFull(legacy));
+            assertThrows(IllegalArgumentException.class, () -> codec.decode(
+                    "lp1|bs=0.02|bl=3|P=" + encoded.replace("|", "|F=")));
+            String oldPage = String.join(",", fact.paid().get(0).board().toRskl()) + "@0";
+            assertThrows(IllegalArgumentException.class, () -> codec.decode(oldPage));
             assertEquals(encoded, codec.encode(decoded));
             var originalSpins = new java.util.ArrayList<java.util.List<CompleteRoundFact.PageFact>>();
             originalSpins.add(fact.paid()); originalSpins.addAll(fact.freeSpins());
@@ -47,9 +47,6 @@ class HeaderlessCodecTest {
                     assertEquals(before.get(page).sfl(), after.get(page).sfl());
                 }
             }
-            // The old envelope may also contain markers from the previous loader.
-            String oldMarkers = "lp1|bs=0.02|bl=3|P=" + encoded.replace("|", "|F=");
-            assertEquals(generated.actualMultiplier(), codec.verify(oldMarkers, 10).actualMultiplier());
             accepted++;
         }
         assertTrue(accepted >= 50);

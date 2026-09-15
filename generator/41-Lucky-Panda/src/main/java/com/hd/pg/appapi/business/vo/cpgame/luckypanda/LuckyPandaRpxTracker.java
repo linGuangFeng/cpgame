@@ -19,7 +19,7 @@ public final class LuckyPandaRpxTracker {
         this(0, 0);
     }
 
-    /** Resume from the preceding stored page when decoding a mixed legacy/marker round. */
+    /** Resume from the preceding stored page when decoding a mixed explicit-page/marker round. */
     public LuckyPandaRpxTracker(int rpx, int lastNfsc) {
         if (rpx < 0 || lastNfsc < 0) throw new IllegalArgumentException("negative multiplier context");
         this.rpx = rpx;

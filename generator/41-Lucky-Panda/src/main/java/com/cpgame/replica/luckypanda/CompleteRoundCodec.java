@@ -16,28 +16,21 @@ import java.util.StringJoiner;
 
 /**
  * Headerless ASCII member: ordered rskl pages + per-page rpx.
- * Legacy lp1 envelopes remain readable; bets are supplied by the live request.
+ * Only the compact format is accepted; bets are supplied by the live request.
  * ResultUtil restores wmkl/wa/ss/fsn/nfsc/actualMultiplier. Not a JSON envelope.
  */
 public final class CompleteRoundCodec {
-    public static final String VERSION = "lp1";
-
     private static final java.security.SecureRandom RANDOM = new java.security.SecureRandom();
 
     public String encode(CompleteRoundFact fact) { return encode(fact, true); }
-    public String encodeFull(CompleteRoundFact fact) { return encode(fact, false); }
+    String encodeWithoutMarkers(CompleteRoundFact fact) { return encode(fact, false); }
 
     private String encode(CompleteRoundFact fact, boolean compact) {
         MarkerContext context = new MarkerContext();
         StringBuilder out = new StringBuilder();
-        if (!compact) {
-            out.append(VERSION)
-                    .append("|bs=").append(fact.betSize().toPlainString())
-                    .append("|bl=").append(fact.betLevel()).append("|P=");
-        }
         out.append(encodeSegment(fact.paid(), 0, context, compact));
         for (int i = 0; i < fact.freeSpins().size(); i++) {
-            out.append(compact ? "|" : "|F=").append(encodeSegment(fact.freeSpins().get(i), i + 1, context, compact));
+            out.append("|").append(encodeSegment(fact.freeSpins().get(i), i + 1, context, compact));
         }
         String member = out.toString();
         if (member.indexOf('{') >= 0 || member.indexOf('[') >= 0) {
@@ -52,38 +45,14 @@ public final class CompleteRoundCodec {
             throw new IllegalArgumentException("JSON members are not accepted");
         }
         String[] parts = member.split("\\|", -1);
-        if (!VERSION.equals(parts[0])) {
-            // Segment position determines paid/free mode. Unit stake is only for
-            // verification; SpinProjector uses the actual request's bs/bl.
-            MarkerContext context = new MarkerContext();
-            List<CompleteRoundFact.PageFact> paidPages = decodeSegment(parts[0], 0, context);
-            List<List<CompleteRoundFact.PageFact>> freePages = new ArrayList<>();
-            for (int i = 1; i < parts.length; i++) {
-                freePages.add(decodeSegment(parts[i], i, context));
-            }
-            return new CompleteRoundFact(BigDecimal.ONE, 1, paidPages, freePages);
-        }
-        if (parts.length < 4) throw new IllegalArgumentException("incomplete legacy member");
-        BigDecimal betSize = null;
-        int betLevel = -1;
-        String paid = null;
-        List<String> free = new ArrayList<>();
-        for (int i = 1; i < parts.length; i++) {
-            String part = parts[i];
-            if (part.startsWith("bs=")) betSize = new BigDecimal(part.substring(3));
-            else if (part.startsWith("bl=")) betLevel = Integer.parseInt(part.substring(3));
-            else if (part.startsWith("P=")) paid = part.substring(2);
-            else if (part.startsWith("F=")) free.add(part.substring(2));
-            else throw new IllegalArgumentException("unknown member field: " + part);
-        }
-        if (betSize == null || betLevel < 1 || paid == null) {
-            throw new IllegalArgumentException("member missing bs/bl/P");
-        }
         MarkerContext context = new MarkerContext();
-        List<CompleteRoundFact.PageFact> paidPages = decodeSegment(paid, 0, context);
+        List<CompleteRoundFact.PageFact> paidPages = decodeSegment(parts[0], 0, context);
         List<List<CompleteRoundFact.PageFact>> freePages = new ArrayList<>();
-        for (int i = 0; i < free.size(); i++) freePages.add(decodeSegment(free.get(i), i + 1, context));
-        return new CompleteRoundFact(betSize, betLevel, paidPages, freePages);
+        for (int i = 1; i < parts.length; i++) {
+            freePages.add(decodeSegment(parts[i], i, context));
+        }
+        // Unit bet is only for bucket verification; delivery uses the request's bs/bl.
+        return new CompleteRoundFact(BigDecimal.ONE, 1, paidPages, freePages);
     }
 
     public RoundVerification verify(String member, int maxConsecutiveWins) {
@@ -181,7 +150,7 @@ public final class CompleteRoundCodec {
                     && GameRuleCore.withinCapturedCaps(page.board())
                     && page.board().scatterTokens() < LuckyPandaResultUtil.SCATTER_TRIGGER_TOKENS
                     && !LuckyPandaResultUtil.evaluate(page.board(), BigDecimal.ONE, 1, page.rpx()).hasWaysWin();
-            joiner.add(compact && independent ? "#" + pans : encodePage(page, compact));
+            joiner.add(compact && independent ? "#" + pans : encodePage(page));
             context.restore(page.rpx(), nfsc);
         }
         return joiner.toString();
@@ -196,9 +165,9 @@ public final class CompleteRoundCodec {
         void restore(int multiplier, int spin) { rpx = multiplier; nfsc = spin; }
     }
 
-    private static String encodePage(CompleteRoundFact.PageFact page, boolean compact) {
+    private static String encodePage(CompleteRoundFact.PageFact page) {
         StringBuilder out = new StringBuilder();
-        out.append(compact ? CompactBoardCodec.encode(page.board()) : String.join(",", page.board().toRskl()))
+        out.append(CompactBoardCodec.encode(page.board()))
                 .append('@').append(page.rpx());
         if (!page.gfl().isEmpty()) {
             out.append("#G");
@@ -232,9 +201,7 @@ public final class CompleteRoundCodec {
             int at = page.lastIndexOf('@');
             if (at <= 0) throw new IllegalArgumentException("page missing rpx");
             String boardText = page.substring(0, at);
-            LuckyPandaBoard board = boardText.indexOf(',') >= 0
-                    ? LuckyPandaBoard.fromRskl(List.of(boardText.split("\\,", -1)))
-                    : CompactBoardCodec.decode(boardText);
+            LuckyPandaBoard board = CompactBoardCodec.decode(boardText);
             String rest = page.substring(at + 1);
             int hash = rest.indexOf('#');
             int rpx;
