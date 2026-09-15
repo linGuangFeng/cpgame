@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 3,
+  "gameId": 2110,
+  "directoryName": "2110-mac-Bee-Workshop",
+  "originalDirectoryName": "2110-Bee-Workshop",
+  "rulesVersion": "bee-workshop-2110-mac-v1",
+  "rulesHash": "bw2110-lines20-paytable-v2-a7afb966-deal-3d5f4e28",
+  "behaviorIds": [
+    "BW2110.ORDINARY_LOSS",
+    "BW2110.ORDINARY_WIN",
+    "BW2110.MYSTERY_BOX",
+    "BW2110.FREE_STICKY_SYMBOLS",
+    "BW2110.INIT-CONFIG",
+    "BW2110.HISTORY",
+    "BW2110.REDIS-COMPLETE-ROUND"
+  ],
+  "name": "Bee Workshop",
+  "entryPath": "index.html",
+  "originalPath": "/fixed/",
+  "board": {
+    "reels": 5,
+    "rows": 3,
+    "layout": "column-major-bottom-to-top",
+    "paylineCount": 20,
+    "evaluation": "payline-left-to-right"
+  },
+  "symbols": {
+    "paying": [1, 2, 3, 4, 5, 6, 7],
+    "wild": 8,
+    "scatter": 9,
+    "wildLegalReels": [2, 3, 4]
+  },
+  "roundKinds": ["ORDINARY_LOSS", "ORDINARY_WIN", "MYSTERY_BOX", "FREE_STICKY_SYMBOLS"],
+  "buy": {
+    "capturedConfiguration": "buy_free_max_bet=-1",
+    "confirmedEntry": false,
+    "implementation": "no invented purchase route"
+  },
+  "freeAwards": {"3": 8, "4": 10, "5": 15},
+  "generatedFreeAwards": [8, 10],
+  "fiveScatterGeneration": "SAMPLE_INSUFFICIENT; observed Scatter cap is four",
+  "mystery": {
+    "specialCellsMin": 5,
+    "specialCellsMax": 10,
+    "revealTargets": [1, 2, 3, 4, 5, 6, 7]
+  },
+  "languages": {
+    "resourceDirectories": ["bn", "en", "es", "fr", "id", "ko", "pt-br", "th", "tr", "vi"]
+  },
+  "redis": {
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "normalIndex": "PerKeyList_000002110",
+    "maryIndex": "MaryKeyList_000002110",
+    "codec": "BW1",
+    "emptyPolicy": "503 PREGENERATED_CACHE_EMPTY",
+    "runtimeGeneration": false,
+    "fixtureReplay": false
+  },
+  "controller": {
+    "contractVersion": 3,
+    "descriptor": "server-api/2110-mac-Bee-Workshop/demo-controller.properties",
+    "jar": "server-api/2110-mac-Bee-Workshop/dist/controller.jar",
+    "portRange": [50000, 59999]
+  }
+}

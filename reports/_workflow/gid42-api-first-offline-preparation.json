@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-30T22:56:15+08:00",
+  "workflowTemplateVersion": 15,
+  "rawGameId": 42,
+  "directoryName": "42-Lucky-Dragon",
+  "status": "OFFLINE_COLLECTOR_READY_PROTOCOL_AND_RELEASE_BLOCKED",
+  "releaseGate": {
+    "requiredSignal": "RELEASE_GID42",
+    "received": false,
+    "liveProtocolMayBeConnected": false
+  },
+  "evidenceCounts": {
+    "originalAuthorizedHttpPaidRoundStarts": 0,
+    "hmsUiManualPaidRoundStarts": 10,
+    "hmsUiManualContributionToFormalCount": 0
+  },
+  "implemented": [
+    "raw gid 42 identity gate and derived-id rejection",
+    "gid42-only endpoint/origin/request/response schema evidence gate",
+    "gid42-only signed or explicitly unsigned evidence gate",
+    "persist-intent state model with no retry after unknown request outcome",
+    "paid-start plus continuation-to-confirmed-terminal Round grouping",
+    "ordinary LOSS 200, ordinary WIN 200, each confirmed special 30, maximum 5000 gates",
+    "ORIGINAL_AUTHORIZED_HTTP and HMS_UI_MANUAL source separation",
+    "Round to History unique business-evidence matching",
+    "recursive credential and sensitive-value rejection",
+    "atomic canonical spin, round, History and finalization output writer"
+  ],
+  "deliberatelyNotImplemented": [
+    "network transport",
+    "browser control",
+    "credential or token input",
+    "endpoint or slug defaults",
+    "signapt or signature inference",
+    "unknown protocol fallback",
+    "automatic retry after ambiguous request outcome"
+  ],
+  "files": [
+    "captures/42-Lucky-Dragon/api-first-collector-config.json",
+    "captures/42-Lucky-Dragon/tools/gid42-api-first-core.mjs",
+    "captures/42-Lucky-Dragon/tools/gid42-api-first-collector.mjs",
+    "captures/42-Lucky-Dragon/tools/gid42-api-first-core.test.mjs"
+  ],
+  "verification": {
+    "nodeSyntaxChecks": "PASS_3_OF_3",
+    "offlineTests": "PASS_12_OF_12",
+    "shippedConfigFailClosed": true,
+    "shippedConfigExitCode": 2,
+    "networkRequestsMade": 0,
+    "browserOperations": 0,
+    "spinRequestsMade": 0,
+    "tokensReadOrPersisted": 0
+  },
+  "nextAction": "Wait for root RELEASE_GID42, then replace every UNKNOWN protocol field only with redacted gid42 ORIGINAL_AUTHORIZED_HTTP evidence before any live adapter is allowed."
+}

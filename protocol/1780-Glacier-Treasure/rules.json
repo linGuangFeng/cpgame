@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "gameId": 1780,
+  "status": "PARTIAL_EVIDENCE_VERIFIED",
+  "implementationScope": "Deterministic board payout and known transitions; stochastic generation and API delivery unimplemented",
+  "symbols": {
+    "min": 1,
+    "max": 13,
+    "scatter": 12,
+    "wild": 13
+  },
+  "board": {
+    "columns": 6,
+    "columnHeight": 5,
+    "horizontalCount": 4,
+    "horizontalReelsZeroBased": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "maxMiddleSymbolHeight": 4,
+    "maxScatterHeightFromClientAndSamples": 2,
+    "edgeSymbolHeight": 1,
+    "wildReelsZeroBased": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "largeSymbolCountsAsOne": "ordinary/wild payout paths only",
+    "scatterTriggerUnits": "sum(grid) for Scatter symbols"
+  },
+  "paytableBy3Through6": {
+    "1": [
+      30,
+      40,
+      60,
+      80
+    ],
+    "2": [
+      20,
+      25,
+      50,
+      70
+    ],
+    "3": [
+      10,
+      25,
+      40,
+      60
+    ],
+    "4": [
+      8,
+      15,
+      20,
+      30
+    ],
+    "5": [
+      6,
+      10,
+      12,
+      15
+    ],
+    "6": [
+      6,
+      10,
+      12,
+      15
+    ],
+    "7": [
+      4,
+      6,
+      8,
+      10
+    ],
+    "8": [
+      4,
+      6,
+      8,
+      10
+    ],
+    "9": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "10": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "11": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "bet": {
+    "baseLines": 20,
+    "formula": "betSize * level * 20",
+    "payoutFormula": "betSize * level * odds * ways * multiplier",
+    "buyCostMultiple": 60,
+    "buyRequestBetType": 3
+  },
+  "multipliers": {
+    "normalInitial": 1,
+    "normalIncrement": 1,
+    "freeInitial": 2,
+    "freeIncrement": 2,
+    "freeCarriesAcrossDeliveries": true
+  },
+  "features": {
+    "scatterTriggerCount": 4,
+    "scatterTriggerCountsSymbolsNotUnits": true,
+    "newFreeNumsIsGridSumUnits": true,
+    "initialAward": 10,
+    "extraScatterAward": 2,
+    "retriggerAllowed": true,
+    "retriggerAwardFormulaStatus": "HELP_ALLOWS_NOT_IN_SPIN_CORPUS",
+    "terminalFreeField": "surplus_times",
+    "terminalDoesNotRequireZero": [
+      "total_times",
+      "multiple",
+      "total_win_amount"
+    ]
+  },
+  "transitions": {
+    "normalWinningSymbol": "removed",
+    "nonWinningSymbol": "retained",
+    "winningSilver": "same id and size; changes to non-wild non-scatter gold symbol",
+    "winningGold": "same id and size; changes to Wild with frame 0"
+  },
+  "capsFromSpinCorpus": {
+    "maxScatterUnitsBoard": 5,
+    "maxScatterUnitsReel": 2,
+    "maxWildBoard": 3,
+    "maxWildReel": 2,
+    "maxCascadePages": 14,
+    "maxScatterSymbolsOnFreeBoardsGenerated": 3
+  },
+  "unresolved": [
+    "Purchase bet_type=3 request chains were not captured; buy is implemented from client/help cost x60 and special-pool members",
+    "Retrigger request chains not in spin corpus; generator refuses 4+ scatter symbols on free boards",
+    "Auto capture split free sequences; 25 triggers exist but surplus_times=0 terminals are missing from spin files (History has one complete free)",
+    "Mali: no original name or mode established"
+  ],
+  "sources": {
+    "help": {
+      "path": "/Volumes/hd/cpgame/resources/1780-Glacier-Treasure/programmatic-http/20260902T103846701Z/files/static.cpgame.io/v2/1780/assets/resources/import/0e/0e8193bfb.03966.json",
+      "sha256": "8b3b723654bbe4cfab421e19daceafacf15fc575b469404bd3aebf69fb7b156e"
+    },
+    "script": {
+      "path": "/Volumes/hd/cpgame/resources/1780-Glacier-Treasure/programmatic-http/20260902T103846701Z/files/static.cpgame.io/v2/1780/assets/Game1780/index.c1fff.js",
+      "sha256": "79fb9949581adf2aae645feea56c452bd3323adf7565757af2c6cb7773ca8650"
+    },
+    "init": {
+      "path": "/Volumes/hd/cpgame/fixtures/1780-Glacier-Treasure/enter/initRoom/response.json",
+      "sha256": "8439dbf3659ca4130ab3b1caa62da872907c85b84929f79b84968a85fbb1582b"
+    },
+    "history": {
+      "path": "/Volumes/hd/cpgame/fixtures/1780-Glacier-Treasure/history-view/response.json",
+      "sha256": "8692c7d33bc60782466ab996b2581fe3199d489ef1071041780597fb49b19628"
+    },
+    "scatterUnits": {
+      "path": "/Volumes/hd/cpgame/fixtures/1780-Glacier-Treasure/history-view/response.json",
+      "locators": [
+        "data.list[14].results[0]",
+        "data.list[19].results[3]",
+        "data.list[19].results[4]"
+      ],
+      "observation": "Each has one grid=2 Scatter and new_free.nums=2"
+    }
+  }
+}

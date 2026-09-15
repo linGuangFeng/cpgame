@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "2.0",
+  "roundSchemaVersion": "r2",
+  "gameId": "2001007",
+  "sourceGameId": "2001007",
+  "redisGameIdDefault": 2001007,
+  "directoryName": "2001007-Magic-Scroll-2",
+  "rulesVersion": "1.2.6",
+  "rulesHash": "sha256:ab8f86b20f45615af560b928c2f5bd860ea6abf641d461d2e200a3e4aaed3fcd",
+  "contractStatus": "CONFIRMED_PLATFORM_DELIVERY_CONTRACT",
+  "loader": "generator/2001007-Magic-Scroll-2/dist/magic-scroll2-loader.jar",
+  "formalConfig": "generator/2001007-Magic-Scroll-2/dist/generator.properties",
+  "startScript": "generator/2001007-Magic-Scroll-2/dist/start-loader.cmd",
+  "normalIndex": "PerKeyList_%09d",
+  "specialIndex": "MaryKeyList_%09d",
+  "normalList": "BetLog:0%08d:%06d",
+  "specialList": "MaryLog:%09d:%06d",
+  "memberCodec": "MS2A1 ASCII RedisMemberCodec; prefix;rulesHash;seed;rows:formation|...",
+  "memberFacts": ["prefix","rulesHash","seed","activeRows","formation"],
+  "writeTransaction": ["ZADD","RPUSH","LTRIM"],
+  "sameMultiExec": true,
+  "zeroMultiplierWritten": true,
+  "defaultMaxMembersPerMultiplier": 300,
+  "fixtureRuntimeDependency": false,
+  "evidenceRefs": [
+    "generator/1809-Freedom-Day platform generic index/list convention",
+    "generator/2001007-Magic-Scroll-2/src/main/java/com/hd/cpgame/magicscroll2/loader/RedisLoader.java",
+    "reports/2001007-Magic-Scroll-2/independent-generator-targeted-acceptance-20260901.json"
+  ],
+  "result": "READY_FOR_REVALIDATION"
+}

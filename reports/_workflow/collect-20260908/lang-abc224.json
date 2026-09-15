@@ -1,0 +1,16 @@
+{
+  "worker": "abc224",
+  "alive": true,
+  "phase": "DONE",
+  "currentGame": null,
+  "error": null,
+  "updatedAt": "2026-09-08T07:37:29.653Z",
+  "games": {
+    "2300-Monster-Slayer": {
+      "status": "LANG_DONE",
+      "captured": 16,
+      "total": 16,
+      "failed": []
+    }
+  }
+}

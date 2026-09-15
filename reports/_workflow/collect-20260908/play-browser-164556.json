@@ -1,0 +1,95 @@
+[
+  {
+    "id": "16",
+    "url": "http://127.0.0.1:50071/play/16-Jungle-Fruit/index.html?t=demo-jf16&l=en&gid=16&language=en&ai=luck_single_10229&btt=1&sip=127.0.0.1%3A50071&apiHost=127.0.0.1%3A50071",
+    "error": null,
+    "canvas": true,
+    "apis": [
+      {
+        "status": 200,
+        "path": "/play/16-Jungle-Fruit/assets/internal/config.d17e2.json"
+      },
+      {
+        "status": 200,
+        "path": "/play/16-Jungle-Fruit/assets/resources/config.36c43.json"
+      },
+      {
+        "status": 200,
+        "path": "/play/16-Jungle-Fruit/assets/main/config.ea468.json"
+      },
+      {
+        "status": 200,
+        "path": "/cp/api/v1/auth/verify"
+      },
+      {
+        "status": 200,
+        "path": "/cp/api/v1/jungle-fruit/config"
+      }
+    ],
+    "title": "Jungle Fruit",
+    "bodyHint": "",
+    "screenshot": "play-16.png"
+  },
+  {
+    "id": "45",
+    "url": "http://127.0.0.1:50072/play/45-Rio-Carnival/index.html?ai=local&btt=1&gid=45&l=en&language=en&t=rio-local-demo&sip=127.0.0.1%3A50072&apiHost=127.0.0.1%3A50072",
+    "error": null,
+    "canvas": true,
+    "apis": [
+      {
+        "status": 200,
+        "path": "/play/45-Rio-Carnival/assets/resources/config.a30b3.json"
+      },
+      {
+        "status": 200,
+        "path": "/play/45-Rio-Carnival/assets/internal/config.d0832.json"
+      },
+      {
+        "status": 200,
+        "path": "/play/45-Rio-Carnival/assets/main/config.76d7e.json"
+      },
+      {
+        "status": 200,
+        "path": "/cp/api/v1/auth/verify"
+      },
+      {
+        "status": 200,
+        "path": "/cp/api/v1/rio-carnival/config"
+      }
+    ],
+    "title": "Rio Carnival",
+    "bodyHint": ".",
+    "screenshot": "play-45.png"
+  },
+  {
+    "id": "56",
+    "url": "http://127.0.0.1:50073/play/56-Crazy-Piggy/index.html?gid=56&t=demo-launch&ai=luck_single_10229&btt=1&l=en&language=en&sip=127.0.0.1%3A50073&apiHost=127.0.0.1%3A50073",
+    "error": null,
+    "canvas": true,
+    "apis": [
+      {
+        "status": 200,
+        "path": "/play/56-Crazy-Piggy/assets/internal/config.d0832.json"
+      },
+      {
+        "status": 200,
+        "path": "/play/56-Crazy-Piggy/assets/resources/config.a7fe8.json"
+      },
+      {
+        "status": 200,
+        "path": "/play/56-Crazy-Piggy/assets/main/config.0c3ee.json"
+      },
+      {
+        "status": 200,
+        "path": "/cp/api/v1/auth/verify"
+      },
+      {
+        "status": 200,
+        "path": "/cp/api/v1/crazy-piggy/config"
+      }
+    ],
+    "title": "Crazy Piggy",
+    "bodyHint": "",
+    "screenshot": "play-56.png"
+  }
+]

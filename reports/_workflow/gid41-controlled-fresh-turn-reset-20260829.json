@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "checkpointType": "CONTROLLED_FRESH_TURN_RESET",
+  "status": "INCOMPLETE_CONTINUE_NEXT_TURN",
+  "capturedAt": "2026-08-29T14:55:52Z",
+  "game": {
+    "rawGid": 41,
+    "name": "Lucky Panda",
+    "directoryName": "41-Lucky-Panda",
+    "integrationGameIdUsed": false
+  },
+  "browserScope": {
+    "profileName": "abc222",
+    "extensionInstanceId": "35d86d21-ac60-4133-9019-8c4645472100",
+    "otherProfilesTouched": false
+  },
+  "safeState": {
+    "formalOriginalAuthorizedHttpPaidStarts": 0,
+    "hmsUiManualConfirmedRounds": 4,
+    "hmsUiManualCompletedRounds": 4,
+    "ordinaryLossCount": 4,
+    "ordinaryWinCount": 0,
+    "specialOrRewardCount": 0,
+    "historyListRecordCount": 4,
+    "historyMatchedRoundCount": 1,
+    "sequence5Delivery": "NOT_DELIVERED_CONFIRMED_BY_HISTORY_COUNT",
+    "ambiguousSpinDelivery": false,
+    "lastVerifiedLiveBalance": "5793.80",
+    "minimumBet": "0.40",
+    "nextSequence": 5
+  },
+  "restoredRaw41OpenTab": {
+    "matchCount": 1,
+    "tabIdAtCheckpoint": "520526812",
+    "title": "Lucky Panda",
+    "origin": "https://static.cpgame.io",
+    "path": "/41/",
+    "queryKeys": [
+      "ai",
+      "btt",
+      "gid",
+      "l",
+      "language",
+      "sip",
+      "t",
+      "token"
+    ],
+    "rawGid": 41,
+    "queryValuesPersisted": false
+  },
+  "historyDetailState": {
+    "sequence1": "MATCHED",
+    "sequence2": "PENDING_DETAIL_READ",
+    "sequence3": "PENDING_DETAIL_READ",
+    "sequence4": "DETAIL_READ_HISTORY_MATCH_PENDING_LEDGER_PROMOTION"
+  },
+  "browserControlState": {
+    "pageCallsStopped": true,
+    "lastFailure": "RAW41_CLAIM_BOUNDED_RETRIES_EXHAUSTED",
+    "unknownSpinOutstanding": false,
+    "resumeInstruction": "Start a fresh turn, rebuild the exact abc222 browser route, resume raw gid41 from sequence 5 only after read-only History reconciliation."
+  },
+  "completion": {
+    "collectionComplete41Generated": false,
+    "gid2Started": false,
+    "archived": false
+  },
+  "evidence": [
+    "captures/41-Lucky-Panda/ui-manual-round-001.json",
+    "captures/41-Lucky-Panda/ui-manual-chunk-002-010-partial.json",
+    "captures/41-Lucky-Panda/ui-manual-history-recovery-002-004-partial.json",
+    "captures/41-Lucky-Panda/capture-session.json",
+    "reports/41-Lucky-Panda/current-status.json"
+  ]
+}

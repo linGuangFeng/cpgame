@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 3,
+  "gameId": 1090,
+  "rulesHash": "b7ad95ad00f84d07c0e212cc68c0c1a9dbb2662c5c701d0cc6c2d4d395667131",
+  "database": 15,
+  "prefix": "cpgame:v3:1090",
+  "indexes": {"loss":"cpgame:v3:1090:multiplier-index:loss","win":"cpgame:v3:1090:multiplier-index:win"},
+  "bucketPattern": "cpgame:v3:1090:outcome:{NORMAL_LOSS|NORMAL_WIN|FREE_SPINS}:multiplier:{integerCentiMultiplier}",
+  "memberCodec": "SS1",
+  "memberGuarantees": ["printable ASCII", "one complete paid Round", "all steps from the same member", "no envelope/session/balance/time/token"],
+  "emptyBehavior": "HTTP 503 PREGENERATED_CACHE_EMPTY; no fallback"
+}

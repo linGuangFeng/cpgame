@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "gameId": 1910,
+  "name": "Churrasco",
+  "board": {"columns": 5, "rows": 3, "providerOrder": "COLUMN_MAJOR_BOTTOM_TO_TOP"},
+  "paylines": [[1,1,1,1,1],[2,2,2,2,2],[0,0,0,0,0],[2,1,0,1,2],[0,1,2,1,0],[1,2,2,2,1],[1,0,0,0,1],[2,2,1,0,0],[0,0,1,2,2],[1,0,1,2,1],[1,2,1,0,1],[2,1,1,1,2],[0,1,1,1,0],[2,1,2,1,2],[0,1,0,1,0],[1,1,2,1,1],[1,1,0,1,1],[2,2,0,2,2],[0,0,2,0,0],[2,0,0,0,2],[0,2,2,2,0],[1,0,2,0,1],[1,2,0,2,1],[2,0,2,0,2],[0,2,0,2,0]],
+  "paytable": {"1":[0,10,50,250,750],"2":[0,5,40,200,500],"3":[0,0,30,150,400],"4":[0,0,25,100,250],"5":[0,0,25,100,250],"6":[0,0,10,50,150],"7":[0,0,10,50,150],"8":[0,0,5,25,100],"9":[0,0,5,25,100],"10":[0,0,5,25,100],"11":[0,0,5,25,100],"12":[0,25,150,1000,2500]},
+  "wild": {"symbol": 12, "substitutes": [1,2,3,4,5,6,7,8,9,10,11], "lineMultiplierWhenPresent": 2},
+  "scatter": {"symbol": 13, "triggerCounts": [3,4], "threeScatterTimeOptions": [8,12,20], "fourScatterTimeOptions": [12,16,24]},
+  "freeMultipliers": [2,5,8],
+  "retrigger": {"triggerScatterMinimum": 3, "additionalFreeSteps": 8},
+  "modes": ["ORDINARY_LOSS","ORDINARY_WIN","SMALL_GAME_1","FREE_REWARD"],
+  "roundBoundary": "PAID_TYPE_1_THROUGH_ADJACENT_MINIGAMES_AND_TYPE_2_UNTIL_FREES_ST_ZERO",
+  "money": {"paidBetFormula": "bet*level*25", "awardFormula": "bet*level*integerUnits", "redisScore": "integerUnits"},
+  "codec": "CH40_MINIMAL_ASCII_COMPLETE_ROUND"
+}

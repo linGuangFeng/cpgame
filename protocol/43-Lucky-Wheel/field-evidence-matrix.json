@@ -1,0 +1,274 @@
+{
+  "schemaVersion": 2,
+  "gameId": 43,
+  "gameName": "Lucky Wheel",
+  "directoryName": "43-Lucky-Wheel",
+  "rulesHash": "sha256:5BD756F5F541F6577977BA3A6FD309AED6BCC45730150E4A687B488157E595D1",
+  "status": "PROTOCOL_REVIEW_COMPLETE",
+  "sources": {
+    "rulesRaw": "resources/43-Lucky-Wheel/public-static/_hosts/static.cpgame.io/43/assets/resources/import/07/071e7ce22.e91b6.json",
+    "rulesExtracted": "fixtures/43-Lucky-Wheel/static-rule-text-assets.json",
+    "frontendRaw": "resources/43-Lucky-Wheel/public-static/_hosts/static.cpgame.io/43/assets/main/index.d1d79.js",
+    "frontendExtracted": "fixtures/43-Lucky-Wheel/frontend-code-evidence.json",
+    "runtimeIndex": "captures/43-Lucky-Wheel/spin-index.jsonl",
+    "capOverageAudit": "captures/43-Lucky-Wheel/spin-index.cap-overage-audit.jsonl",
+    "runtimeSteps": "captures/43-Lucky-Wheel/round-steps.jsonl",
+    "preCorrectionIndex": "captures/43-Lucky-Wheel/spin-index.pre-protocol-correction.jsonl",
+    "captureTool": "captures/43-Lucky-Wheel/tools/capture-paid-rounds.cjs",
+    "boundaryCorrectionTool": "captures/43-Lucky-Wheel/tools/reindex-round-boundaries.cjs",
+    "configHandoff": "captures/43-Lucky-Wheel/entry-resource-handoff.json",
+    "historyList": "fixtures/43-Lucky-Wheel/history-list.json",
+    "historyView": "fixtures/43-Lucky-Wheel/history-view.json"
+  },
+  "sampleFacts": {
+    "indexedPaidRoundStarts": 5000,
+    "completedRounds": 5000,
+    "protocolSteps": 5000,
+    "mdCounts": {"0": 4033, "1": 885, "2": 82, "3": 0},
+    "ordinaryLoss": 3815,
+    "ordinaryWin": 218,
+    "rpxGt1": 885,
+    "ssFieldPresent": 0,
+    "stableFieldShapeRows": 5000,
+    "balanceAdjacentPairs": 4999,
+    "balanceFormulaMatches": 4997,
+    "balanceFormulaExceptions": 2,
+    "collectorOldGroupedRounds": 5000,
+    "excludedCapAuditResponses": 87,
+    "serverConfirmedUnindexedTransportGaps": 2,
+    "totalServerObservedPaidStarts": 5089
+  },
+  "matrix": [
+    {
+      "fieldOrRule": "game identity",
+      "sourceEvidence": "portal catalog image code 50043; versionconfig title Lucky Wheel",
+      "frontendDecision": "bundle _gameId=43 and static path /43",
+      "sampleEvidence": "authenticated startup resolved to static.cpgame.io/43",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "winModel/paylineCount",
+      "sourceEvidence": "English rules describe one current winning line and numeric reels",
+      "frontendDecision": "GameConfig.PayLineCount=1; RowCounts=[1,1,1,1]; ColumnCount=4",
+      "sampleEvidence": "ba=bl*bs*1 for all 5000 official minimum-bet samples",
+      "status": "CONFIRMED_FIXED_SINGLE_PAYLINE"
+    },
+    {
+      "fieldOrRule": "minimum-bet board activity",
+      "sourceEvidence": "first three reels bonus, fourth special; higher bets unlock mechanics",
+      "frontendDecision": "ThreeRollLockStatus locks column index 2 when CurMultiplierIndex=0",
+      "sampleEvidence": "rskl length=2 in 5000/5000 official bl=1 samples; fws supplies special reel",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "symbol numeric encoding",
+      "sourceEvidence": "rule: complete numbers concatenate left to right and blanks do not affect order",
+      "frontendDecision": "GameSymbolNums H1=0,H2=00,H3=1,H4=5,H5=10; H0 is blank in result logic",
+      "sampleEvidence": "all 4104 md=0 payouts equal score(rskl)",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "transport codec",
+      "sourceEvidence": "current main bundle Http module",
+      "frontendDecision": "XHR POST application/x-www-form-urlencoded; encodeURIComponent with + spaces; response JSON envelope",
+      "sampleEvidence": "capture tool reproduced auth/config/spin/history with form bodies",
+      "status": "CONFIRMED_NO_APPLICATION_LAYER_ENCRYPTION_OBSERVED"
+    },
+    {
+      "fieldOrRule": "web-token/game-id mapping",
+      "sourceEvidence": "Http map {game-id:gid,web-token:t}",
+      "frontendDecision": "logical headers copied into URL-encoded form body",
+      "sampleEvidence": "authorized calls succeeded with t and gid=43; sensitive values not persisted",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "auth/config order",
+      "sourceEvidence": "Login/Config functions and capture tool",
+      "frontendDecision": "auth/verify returns token, then lucky-wheel/config initializes bll/bsl",
+      "sampleEvidence": "bll=[1,5,10,50,100], bsl=[1], minimum bl=1 bs=1 checked before capture",
+      "status": "CONFIRMED_LIMITED_TO_PERSISTED_FIELDS"
+    },
+    {
+      "fieldOrRule": "Config bll/bsl",
+      "sourceEvidence": "authenticated Config observation persisted in entry-resource-handoff",
+      "frontendDecision": "ConfigData initializes multiplier and base-multiplier selections from response lists",
+      "sampleEvidence": "bll=[1,5,10,50,100], bsl=[1]; capture tool refused to continue unless first values were bl=1 and bs=1",
+      "status": "CONFIRMED_CAPTURED_VALUES_ONLY"
+    },
+    {
+      "fieldOrRule": "Config currency",
+      "sourceEvidence": "authenticated Config observation and minimum-bet capture metadata",
+      "frontendDecision": "Config assigns response cs to global Currency",
+      "sampleEvidence": "BRL/R$ context persisted; every indexed minimum bet records currency BRL",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "response envelope",
+      "sourceEvidence": "frontend Http._cancelResponseData",
+      "frontendDecision": "HTTP 2xx plus envelope code 200 resolves data; other codes reject; info is retained for errors",
+      "sampleEvidence": "5000 official Spin rows persist {code:200,data:{...},info:'ok'}",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Spin request",
+      "sourceEvidence": "Spin UI builds bl/bs plus web-token/game-id logical headers",
+      "frontendDecision": "POST /api/v1/lucky-wheel/spin",
+      "sampleEvidence": "5000 official original successful responses at bl=1 bs=1",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "ba/bl/bs",
+      "sourceEvidence": "config and rule bet controls",
+      "frontendDecision": "current multiplier/base multiplier selected before Spin",
+      "sampleEvidence": "number type, present 5000/5000, each constant 1",
+      "status": "CONFIRMED_MINIMUM_BET_ONLY"
+    },
+    {
+      "fieldOrRule": "ca",
+      "sourceEvidence": "history UI consumes record time",
+      "frontendDecision": "history date display uses creation timestamp",
+      "sampleEvidence": "number type in 5000/5000; history mirrors as created_at Unix seconds",
+      "status": "CONFIRMED_UNIX_SECONDS"
+    },
+    {
+      "fieldOrRule": "gt",
+      "sourceEvidence": "Spin/history response field",
+      "frontendDecision": "no result branch found beyond storage/display",
+      "sampleEvidence": "number type and value 1 in 5000/5000; history-list gt=43 is a different list field",
+      "status": "SHAPE_CONFIRMED_SEMANTIC_NAME_UNKNOWN"
+    },
+    {
+      "fieldOrRule": "small_game_type",
+      "sourceEvidence": "Spin/history detail field",
+      "frontendDecision": "no current branch found",
+      "sampleEvidence": "number type and value 0 in 5000/5000",
+      "status": "CONSTANT_OBSERVED_OTHER_VALUES_UNKNOWN"
+    },
+    {
+      "fieldOrRule": "md=0",
+      "sourceEvidence": "GameMode.MODE_BASE and rules without special reel",
+      "frontendDecision": "normal result animation",
+      "sampleEvidence": "4033 official rounds; 3815 wa=0 and 218 wa>0; wa=score(rskl) in 4033/4033",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "md=1/rpx",
+      "sourceEvidence": "rules: base number multiplied by multiplier wheel",
+      "frontendDecision": "MODE_FEATURE_X; rpx>1 reward animation",
+      "sampleEvidence": "885 official rounds; fws=fsk is 2 or 5; wa=score(rskl)*rpx in 885/885",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "rpx>1 scenario",
+      "sourceEvidence": "frontend uses rpx for multiplier/reward animation",
+      "frontendDecision": "rpx values 2/5 only with md=1 in captured sample",
+      "sampleEvidence": "885/885 official md=1 rounds and no other official round has rpx>1",
+      "status": "CONFIRMED_ALIAS_OF_MD1_NOT_SEPARATE_MODE"
+    },
+    {
+      "fieldOrRule": "md=2 embedded respin",
+      "sourceEvidence": "rules: pre-spin number plus one free re-spin number",
+      "frontendDecision": "IsFreeGame selects refreshRespinList(fwi); onPlayBet returns without HTTP while IsFreeGame",
+      "sampleEvidence": "82 official independent paid responses; fwa=score(fwi) and wa=score(rskl)+fwa in 82/82",
+      "status": "CONFIRMED_SINGLE_HTTP_ROUND_TWO_DISPLAY_PHASES"
+    },
+    {
+      "fieldOrRule": "old md=2 cross-request grouping",
+      "sourceEvidence": "capture tool isContinuation incorrectly treated md=2 as HTTP continuation",
+      "frontendDecision": "contradicted by onGameEnd/onPlayBet/refreshRespinList",
+      "sampleEvidence": "captureSeq 40 md=2 pb=14255.99 -> captureSeq 41 wa=0 pb=14254.99, proving a new paid deduction",
+      "status": "REJECTED_AND_REINDEXED"
+    },
+    {
+      "fieldOrRule": "md=3 Lucky Wheel",
+      "sourceEvidence": "rules: base number plus Lucky Wheel bonus",
+      "frontendDecision": "MODE_FEATURE_SCAT; scatNums=parseInt(fwa); before_win_amount=wa-fwa",
+      "sampleEvidence": "0 original occurrences in 5000 official indexed paid starts",
+      "status": "SAMPLE_INSUFFICIENT_STATIC_CONFIRMED_GENERATION_DISABLED"
+    },
+    {
+      "fieldOrRule": "ss=0 continuation",
+      "sourceEvidence": "no rule text field name; behavior visible in bundle",
+      "frontendDecision": "spin_status=!ss; ss=0 leads onPlaySymbol -> onPlayRemoveBlock -> onReqSpin",
+      "sampleEvidence": "ss absent from 5000/5000 official responses; no adjacent original chain",
+      "status": "SAMPLE_INSUFFICIENT_CODE_CONFIRMED_GENERATION_DISABLED"
+    },
+    {
+      "fieldOrRule": "rskl",
+      "sourceEvidence": "numeric bonus reels",
+      "frontendDecision": "converted into seed_reel_symbol_list; fourth column overridden by fws",
+      "sampleEvidence": "array type in 5000/5000; length 2 at minimum bet",
+      "status": "CONFIRMED_MINIMUM_BET_SHAPE"
+    },
+    {
+      "fieldOrRule": "wskl",
+      "sourceEvidence": "Spin result field",
+      "frontendDecision": "no independent payout calculation found",
+      "sampleEvidence": "equals rskl filtered to remove H0 in 5000/5000",
+      "status": "CONFIRMED_DERIVED_NONBLANK_SYMBOLS"
+    },
+    {
+      "fieldOrRule": "fws/fsk",
+      "sourceEvidence": "special reel symbol domain from bundle",
+      "frontendDecision": "fws placed in fourth column; fsk not independently branched",
+      "sampleEvidence": "both string, present and equal in 5000/5000; observed H0/2/5/RS",
+      "status": "SHAPE_AND_CAPTURED_VALUES_CONFIRMED_DISTINCT_SEMANTICS_UNKNOWN"
+    },
+    {
+      "fieldOrRule": "fwi/fwa",
+      "sourceEvidence": "respin and Lucky Wheel rules",
+      "frontendDecision": "md2 refreshRespinList(fwi); md3 parses fwa as scatter wheel number",
+      "sampleEvidence": "md2 fwi length 2 and fwa=score(fwi) in 82/82 official md2 responses; otherwise captured fwi=[] and fwa=0",
+      "status": "CONFIRMED_FOR_MD0_MD1_MD2_MD3_RUNTIME_UNKNOWN"
+    },
+    {
+      "fieldOrRule": "wa",
+      "sourceEvidence": "rules define final payout by mode",
+      "frontendDecision": "Award_Balance and RoundReward",
+      "sampleEvidence": "number type in 5000/5000; every official captured mode satisfies its independent rule formula",
+      "status": "CONFIRMED_CAPTURED_MODES"
+    },
+    {
+      "fieldOrRule": "pb/balance recurrence",
+      "sourceEvidence": "frontend replaces PlayerData.Coins with pb",
+      "frontendDecision": "post-settlement balance display",
+      "sampleEvidence": "pb string in 5000/5000; pb_cur=pb_prev-ba+wa in 4997/4999 adjacent pairs; two transport/session gaps retained",
+      "status": "CONFIRMED_WITH_TWO_DOCUMENTED_GAPS"
+    },
+    {
+      "fieldOrRule": "Round boundary",
+      "sourceEvidence": "rules say special wheel triggers once per game/round; md2 is one free re-spin",
+      "frontendDecision": "md2 consumes embedded fwi; only ss=0 can call adjacent onReqSpin",
+      "sampleEvidence": "5000 official original responses index to 5000 paid starts and complete Rounds; the next 87 responses are audit-only; no ss response captured",
+      "status": "CONFIRMED_CAPTURED_BRANCHES_SS0_UNRESOLVED"
+    },
+    {
+      "fieldOrRule": "original round identifier",
+      "sourceEvidence": "no Spin field found; history separately has bid/tis",
+      "frontendDecision": "Spin UI does not consume bid/tis",
+      "sampleEvidence": "collector-generated roundId only",
+      "status": "UNKNOWN_NOT_PRESENT_IN_SPIN"
+    },
+    {
+      "fieldOrRule": "history list/view",
+      "sourceEvidence": "History/HistoryByID frontend functions",
+      "frontendDecision": "log-list then log-view by transfer_id",
+      "sampleEvidence": "authenticated list and detail fixtures captured; tis selects detail; baf/balance_after mirror settled balance",
+      "status": "CONFIRMED_API_UI_CLICK_SOFT_GAP"
+    },
+    {
+      "fieldOrRule": "symbolWeights",
+      "sourceEvidence": "bundle has visual SymbolWeightsList=[10,20,15,10,5]",
+      "frontendDecision": "used in client reel presentation context, not proven server RNG",
+      "sampleEvidence": "frequency cannot establish authoritative weights",
+      "status": "NOT_CONFIRMED_FOR_GENERATION_VALUES_FORBIDDEN"
+    },
+    {
+      "fieldOrRule": "redisContract",
+      "sourceEvidence": "none in current game sources/captures",
+      "frontendDecision": "browser protocol has no Redis consumer contract",
+      "sampleEvidence": "no key/member/payload/codec evidence",
+      "status": "UNKNOWN_WAITING_CONSUMER_EVIDENCE"
+    }
+  ]
+}

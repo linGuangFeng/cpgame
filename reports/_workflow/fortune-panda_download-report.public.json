@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 1050,
+  "gameName": "Fortune Panda",
+  "runId": "20260902T092726000Z",
+  "startedAt": "2026-09-02T09:27:27.939Z",
+  "finishedAt": "2026-09-02T09:28:36.159Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 76,
+    "exactStaticUrls": 73,
+    "excludedDynamicApiUrls": 3,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 73,
+    "succeeded": 73,
+    "failed": 0,
+    "downloadedBytes": 27636844,
+    "statusCounts": {
+      "200": 73
+    },
+    "contentTypeCounts": {
+      "application/javascript": 12,
+      "image/png": 39,
+      "image/x-icon": 1,
+      "application/json": 8,
+      "application/octet-stream": 10,
+      "image/jpeg": 2,
+      "audio/mpeg": 1
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/1050-Fortune-Panda/programmatic-http/20260902T092726000Z/download-items.public.jsonl",
+      "sha256": "31e7a51c093cd4ec79b99ca6df23fab1923f9729021941fa8be26a211c7cdafd",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/1050-Fortune-Panda/programmatic-http/20260902T092726000Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "failedUrls": [],
+  "stageDirectory": "/Users/a1/Downloads/fortune-panda-stage/20260902T092726000Z",
+  "resourceFolder": "1050-Fortune-Panda"
+}

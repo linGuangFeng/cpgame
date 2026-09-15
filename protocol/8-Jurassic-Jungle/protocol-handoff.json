@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "gameId": 8,
+  "rawGameId": 8,
+  "directoryName": "8-Jurassic-Jungle",
+  "controllerContractVersion": 3,
+  "rulesHash": "8dae3e502d7eb6610086d677915adb0b988b25f2b8210b378d3ba6d313518b04",
+  "artifacts": {
+    "protocolSpec": "protocol/8-Jurassic-Jungle/protocol-spec.md",
+    "capabilities": "protocol/8-Jurassic-Jungle/game-capabilities.json",
+    "canonicalRules": "protocol/8-Jurassic-Jungle/rules-core-canonical.json",
+    "publish": "publish/8-Jurassic-Jungle",
+    "resources": "resources/8-Jurassic-Jungle",
+    "loaderJar": "generator/8-Jurassic-Jungle/dist/jurassic-jungle-loader.jar",
+    "loaderCmd": "generator/8-Jurassic-Jungle/dist/start-loader.cmd",
+    "generatorProperties": "generator/8-Jurassic-Jungle/dist/generator.properties",
+    "controllerJar": "server-api/8-Jurassic-Jungle/dist/controller.jar",
+    "controllerConfig": "server-api/8-Jurassic-Jungle/dist/controller.properties",
+    "demoControllerProperties": "server-api/8-Jurassic-Jungle/dist/demo-controller.properties"
+  },
+  "runtimePolicy": {
+    "redis": "192.168.10.3:6379/15",
+    "claim": "LPOP",
+    "runtimeResultGeneration": false,
+    "runtimeFixtures": false,
+    "runtimeScriptedRotation": false,
+    "managedPortRange": "50000-59999"
+  },
+  "originOracle": {
+    "completePaidRounds": 1613,
+    "steps": 8207,
+    "payMismatch": 0,
+    "clusterMismatch": 0,
+    "materializeFail": 0
+  }
+}

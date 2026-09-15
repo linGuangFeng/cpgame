@@ -1,0 +1,46 @@
+{
+  "at": "2026-09-09T08:50:00Z",
+  "scope": "PASSED games excluding 1407 and 1809",
+  "games": [
+    "16-Jungle-Fruit",
+    "33-Jungle-Party",
+    "42-Lucky-Dragon",
+    "43-Lucky-Wheel",
+    "45-Rio-Carnival",
+    "52-Cyber-GO",
+    "56-Crazy-Piggy",
+    "58-Crazy-Gems",
+    "1670-Christmas-Gift",
+    "1810-Treasure-Hunt",
+    "1830-Hotpot",
+    "1910-Churrasco",
+    "2060-Club-Goddess",
+    "2210-Wu-Kong",
+    "2290-Samba-Sensation",
+    "2410-Electro-Fiesta"
+  ],
+  "apiFixes": {
+    "2410-Electro-Fiesta": [
+      "added /goldgame/single_game_user_gold_history",
+      "added /goldgame/single_game_user_history",
+      "rewrote /Goldgame/user_game_history to list+totals.bet_golds/change_golds/total with oid,time,bg,cg,ext,res[]"
+    ],
+    "2060-Club-Goddess": [
+      "history detail statistics now total_bet_gold/total_change_gold",
+      "results[].result + extend.act_id string 0"
+    ],
+    "1830-Hotpot": ["parent/step extend", "day filter on user_history"],
+    "2210-Wu-Kong": ["history extend.act_id"],
+    "1910-Churrasco": ["results[].result + extend.act_id string"],
+    "1810-Treasure-Hunt": ["results[].result"],
+    "2290-Samba-Sensation": ["results[].result + step extend"]
+  },
+  "httpVerified": {
+    "2410-Electro-Fiesta": "complete multi-step round then gold 7-day list, daily and range rows with res[]",
+    "2060-Club-Goddess": "after getUserInfo bootstrap token: result, results[].result, extend",
+    "1830-Hotpot": "gold+daily with result/results/extend",
+    "2210-Wu-Kong": "gold+daily with result/extend/results",
+    "1910-Churrasco": "gold+daily with result/results/extend",
+    "16-Jungle-Fruit": "log_list + log-view base_spin_list"
+  }
+}

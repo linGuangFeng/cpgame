@@ -1,0 +1,11 @@
+[
+  {
+    "game": "1830-Hotpot",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "270493e868906ce1614f33d3ff72bef1df286b64efcf80fe7bbfa30fad06d245",
+    "logTail": "REDIS_CONNECTING host=127.0.0.1 port=58016 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=58016 database=0 ssl=false\nINDEPENDENT_LOSS_PRELOAD loss=0 capPerMultiplier=300\nNATURAL_CLASSIFICATION_COMPLETE normal=2 special=2 lossPreloaded=0 normalBuckets=2 specialBuckets=2 capPerMultiplier=300 discardedCandidateLimit=1\nBATCH_COMMITTED batch=1 members=4 loaded=4\nLOAD_COMPLETE redisGameId=1830 loss=0 normal=2 special=2 batches=1 maxConsecutiveWins=2 rulesVersion=hotpot-1830-result-engine-r1-20260904 rulesHash=725261a0bdda79f9d63bfeec37472febd8be9e1ec304c4a74291388468f9342f protocolHash=01123dc898992e5e38efb1f58b816c844093dfcf07939e2cefa3153022b61c01\n"
+  }
+]

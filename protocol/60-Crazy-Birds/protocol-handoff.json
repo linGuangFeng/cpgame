@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 60,
+  "directoryName": "60-Crazy-Birds",
+  "status": "IMPLEMENTATION_READY",
+  "accountAlias": "abc225",
+  "sourceAuthority": "ORIGINAL_SITE_ONLY",
+  "rulesHash": "sha256:60crazybirds-v1510250430-ways4096",
+  "behaviorIds": [
+    "AUTH_VERIFY",
+    "CONFIG",
+    "SPIN_PAID",
+    "SPIN_FREE_FOLLOW",
+    "HISTORY_LIST",
+    "HISTORY_VIEW"
+  ],
+  "endpoints": {
+    "verify": "POST /cp/api/v1/auth/verify",
+    "config": "POST /cp/api/v1/crazy-birds/config",
+    "spin": "POST /cp/api/v1/crazy-birds/spin",
+    "historyList": "POST /cp/api/v1/crazy-birds/log-list",
+    "historyView": "POST /cp/api/v1/crazy-birds/log-view"
+  },
+  "redis": {
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "memberPrefix": "CB60A1"
+  }
+}

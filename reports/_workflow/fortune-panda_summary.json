@@ -1,0 +1,15 @@
+{
+  "slug": "fortune-panda",
+  "folder": "1050-Fortune-Panda",
+  "gid": 1050,
+  "runId": "20260902T092726000Z",
+  "stage": "/Users/a1/Downloads/fortune-panda-stage/20260902T092726000Z",
+  "hdDest": "/Volumes/hd/cpgame/resources/1050-Fortune-Panda/programmatic-http/20260902T092726000Z",
+  "succeeded": 73,
+  "failed": 0,
+  "bytes": 27636844,
+  "total": 73,
+  "gameDirs": [
+    "Game1050"
+  ]
+}

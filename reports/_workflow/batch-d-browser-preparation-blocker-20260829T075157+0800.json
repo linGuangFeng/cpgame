@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "workflowTemplateVersion": 15,
+  "eventTime": "2026-08-29T07:51:57+08:00",
+  "batch": "D",
+  "trigger": "ABC224_CODEX_EXTENSION_RELOADED",
+  "operation": "setupBrowserRuntime -> agent.browsers.list -> unique profileName abc224 attribution",
+  "expected": {
+    "family": "chrome",
+    "profileName": "abc224",
+    "extensionInstanceIdMayChange": true
+  },
+  "observed": [
+    {
+      "family": "chrome",
+      "browserId": "-8c57-4be5-926b-d746b99df4fe",
+      "profileName": "fgl",
+      "extensionInstanceId": "ca572871-84f4-4fc8-9697-bf8a96bcfaf3"
+    },
+    {
+      "family": "chrome",
+      "browserId": "-ea45-455d-b95c-8368cc256955",
+      "profileName": "abc222",
+      "extensionInstanceId": "35d86d21-ac60-4133-9019-8c4645472100"
+    }
+  ],
+  "result": "NO_DISCOVERED_CHROME_INSTANCE_ATTRIBUTABLE_TO_ABC224",
+  "abc224BrowserId": null,
+  "abc224ExtensionInstanceId": null,
+  "selectionPerformed": false,
+  "tabCreated": false,
+  "pageLevelCallsPerformed": false,
+  "otherProfilesTouched": false,
+  "formalPaidRounds": 0,
+  "disposition": "FAIL_CLOSED_DO_NOT_GUESS"
+}
+

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "gameId": 42,
+  "gameName": "Lucky Dragon",
+  "contractStatus": "CONFIRMED_UI_OBSERVATION_NOT_HTTP_PROTOCOL",
+  "sourceType": "AUTHORIZED_ORIGINAL_BROWSER_MANUAL_MILESTONE",
+  "formalOriginalHttpEligible": false,
+  "account": { "alias": "abc222", "id": "74171415" },
+  "historyNavigation": {
+    "transitions": [
+      "OPEN_GAME_CONTROL_MENU",
+      "OPEN_HISTORY_LIST",
+      "OPEN_HISTORY_ROW_DETAIL",
+      "VIEW_TERMINAL_REEL_REPLAY_AND_PAYMENT",
+      "RETURN_TO_HISTORY_LIST"
+    ],
+    "requiredVisibleFields": [
+      "roundType", "timestamp", "betId", "transactionId", "bet", "netResult",
+      "endingBalance", "betSize", "betLevel", "terminalReelReplay", "payment"
+    ]
+  },
+  "sessionAggregate": {
+    "paidRoundStarts": 10,
+    "ordinaryLossRounds": 9,
+    "ordinaryWinRounds": 1,
+    "totalBet": "5.00",
+    "netResult": "26.50",
+    "completeDetailRecordsPersisted": 2
+  },
+  "confirmedWinningDetail": {
+    "transactionId": "2093422299384020992",
+    "betId": "42-2093422299384020992",
+    "bet": "0.50",
+    "payment": "31.50",
+    "netResult": "31.00",
+    "terminal": true,
+    "continuationSteps": 0,
+    "observedCentralSymbols": "THREE_SILVER_DRAGON_SYMBOLS",
+    "candidateMechanism": "WILD_MULTIPLIER_X3",
+    "candidateOnly": true
+  },
+  "implementationBoundary": {
+    "allowed": [
+      "HISTORY_NAVIGATION_STATE_NAMES",
+      "HISTORY_VISIBLE_FIELD_PRESENCE",
+      "UI_ACCEPTANCE_ASSERTIONS_USING_THE_RECORDED_AGGREGATE_AND_TWO_PERSISTED_DETAILS"
+    ],
+    "forbidden": [
+      "INFER_SPIN_ENDPOINT_OR_NETWORK_FIELDS",
+      "INFER_RULE_PROBABILITIES_OR_SYMBOL_WEIGHTS",
+      "PROMOTE_WILD_MULTIPLIER_X3_TO_CONFIRMED_GAME_RULE",
+      "COUNT_UI_HISTORY_AS_ORIGINAL_AUTHORIZED_HTTP"
+    ]
+  },
+  "evidence": "protocol/42-Lucky-Dragon/browser-milestone-evidence.json"
+}

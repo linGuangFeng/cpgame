@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 3,
+  "gameId": 2410,
+  "gameName": "Electro Fiesta",
+  "directoryName": "2410-Electro-Fiesta",
+  "rulesVersion": "2410-rules-v1",
+  "rulesHash": "0c99b115e7f083bea9aea3d198ae64bb6b3f1685c31fccdaf84aa159cf1726ac",
+  "implementationReady": true,
+  "supportedLanguages": {"codes":["pt-br","en-us","es-es"],"evidenceRefs":["E-RESOURCE-READY"]},
+  "winModel": "FIXED_PAYLINE",
+  "winModelDetails": {"paylineCount":5,"boardOrder":"COLUMN_MAJOR","paylines":[[1,4,7],[2,5,8],[0,3,6],[0,4,8],[2,4,6]],"wild":"NOT_APPLICABLE","evidenceRefs":["E-FRONTEND-RULES","E-PROVIDER-ROUNDS"]},
+  "boardModel": {"columns":3,"rows":3,"visiblePositions":9,"bufferPositions":0,"symbols":[2,3,5,10,20,50],"threeOfKindPaytable":{"2":2,"3":3,"5":5,"10":10,"20":20,"50":50},"doubleReel":{"supported":true,"observedPages":0,"generationAllowed":false}},
+  "roundModel": {"paidStartRequestType":1,"continuationRequestType":2,"termination":"f is array/missing or f.cf=0","maxContinuationSteps":10,"countingUnit":"COMPLETE_ROUND","evidenceRefs":["E-FRONTEND-STATE","E-ADJACENT-STEPS"]},
+  "specialModes": [
+    {"id":"RESPIN_UNTIL_WIN","providerFeatureType":1,"confirmed":true,"multiStep":true,"directDealEntry":"RESPIN_REEL","sampleRoundCount":71,"maxStepsObserved":11,"evidenceRefs":["E-ADJACENT-STEPS","E-SAMPLE-ANALYSIS"]},
+    {"id":"MULTIPLIER_STICKY","providerFeatureType":2,"confirmed":true,"multiStep":true,"directDealEntry":"MULTIPLIER_STICKY_ADDITION","sampleRoundCount":12,"maxStepsObserved":11,"materialValues":[2,3,5,10],"maxPositions":9,"evidenceRefs":["E-ADJACENT-STEPS","E-SAMPLE-ANALYSIS"]}
+  ],
+  "buyFeature": {"supported":false,"relationship":"INERT_MENU_ENTRY_NOT_A_RESULT_MODE","evidenceRefs":["E-RESOURCE-READY","E-FRONTEND-RULES"]},
+  "runtimeIndependentLoss": {"supported":true,"demoRuntimeGenerationAllowed":false},
+  "symbolCaps": {"scope":"INITIAL_AND_RESPIN_VISIBLE_BOARD","bySymbol":{"2":{"perReel":3,"total":9},"3":{"perReel":3,"total":9},"5":{"perReel":3,"total":9},"10":{"perReel":3,"total":9},"20":{"perReel":3,"total":9},"50":{"perReel":3,"total":9}},"rule":"min(rule cap, observed cap); all values equal observed maxima"},
+  "symbolWeights": {
+    "INITIAL": {"2":591,"3":598,"5":565,"10":553,"20":558,"50":915},
+    "RESPIN_REEL": {"2":69,"3":77,"5":102,"10":92,"20":112,"50":115},
+    "MULTIPLIER_STICKY_ADDITION": {"2":11,"3":8,"5":11,"10":9},
+    "disclaimer": "Local replica relative weights estimated from current provider samples; not provider long-run probability or RTP."
+  },
+  "evidence": ["E-RESOURCE-READY","E-FRONTEND-RULES","E-FRONTEND-STATE","E-PROVIDER-ROUNDS","E-ADJACENT-STEPS","E-SAMPLE-ANALYSIS"],
+  "generationModel": {
+    "implementationReady": true,
+    "usesIndependentCellMarginalsOnly": false,
+    "artificialLossBoardConstraints": false,
+    "lifecycleEntries": [
+      {"id":"INITIAL","role":"INITIAL","countingUnit":"COMPLETE_INITIAL_STATE","sampleRoundCount":420,"samplePositionCount":3780,"wholeNextStateCountedAsNewDeal":false,"retainedPositionCount":0,"positionSelection":"all 9 positions of paid-start response; initial state is the complete starting state, not a next-state replacement","weights":{"2":591,"3":598,"5":565,"10":553,"20":558,"50":915},"evidenceRefs":["E-SAMPLE-ANALYSIS"]},
+      {"id":"RESPIN_REEL","role":"RESPIN_REEL","countingUnit":"NEWLY_DEALT_POSITIONS","sampleRoundCount":57,"samplePositionCount":567,"wholeNextStateCountedAsNewDeal":false,"retainedPositionCount":6,"positionSelection":"adjacent-state difference restricted to f.pr reel","weights":{"2":69,"3":77,"5":102,"10":92,"20":112,"50":115},"evidenceRefs":["E-SAMPLE-ANALYSIS","E-ADJACENT-STEPS"]},
+      {"id":"MULTIPLIER_STICKY_ADDITION","role":"MULTIPLIER_STICKY_ADDITION","countingUnit":"NEWLY_DEALT_POSITIONS","sampleRoundCount":7,"samplePositionCount":39,"wholeNextStateCountedAsNewDeal":false,"retainedPositionCount":8,"positionSelection":"pcn positions newly absent-to-present in adjacent pcp states","weights":{"2":11,"3":8,"5":11,"10":9},"evidenceRefs":["E-SAMPLE-ANALYSIS","E-ADJACENT-STEPS"]}
+    ],
+    "jointDistributions": ["ROUND_OUTCOME_CLASS","ROUND_STEP_COUNT","STATE_ELEMENT_COUNT_VECTOR"],
+    "jointRoundFeatures": [
+      {"id":"ROUND_OUTCOME_CLASS","source":"520 locked REAL_PROVIDER training plus holdout complete rounds","evidenceRefs":["E-PROVIDER-ROUNDS","E-SAMPLE-ANALYSIS"]},
+      {"id":"ROUND_STEP_COUNT","source":"ordered paid-start and continuation boundaries","evidenceRefs":["E-ADJACENT-STEPS","E-SAMPLE-ANALYSIS"]},
+      {"id":"STATE_ELEMENT_COUNT_VECTOR","source":"per-round ordered sticky-material counts and zero vectors","evidenceRefs":["E-ADJACENT-STEPS","E-SAMPLE-ANALYSIS"]}
+    ],
+    "trainingSet":{"roundCount":420,"hash":"38a0efb329d8d246a0461535fd909b9a527e5f0ae15141bdcb0fae237797fab6"},
+    "holdoutPlan":{"source":"REAL_PROVIDER","subsetRole":"HOLDOUT","countingUnit":"COMPLETE_ROUND","roundCount":100,"hash":"dac35984b569746a4eea8172fc57fb9bd1be8bb0add622021ca9b66cfddcf48a","disjointFromTraining":true}
+  },
+  "redisContract": {"host":"192.168.10.3","port":6379,"database":15,"integerMultiplierUnit":"sum(res.wa[].o), or base payout units times sticky multiplier sum","keyPattern":"cpgame:v3:{redisGameId}:outcome:{mode}:multiplier:{integerMultiplier}","lossIndex":"cpgame:v3:{redisGameId}:multiplier-index:loss","winIndex":"cpgame:v3:{redisGameId}:multiplier-index:win","indexType":"ZSET","memberOperation":"RPUSH, LTRIM and ZADD in one MULTI/EXEC"},
+  "codecContract": {"id":"EF1","encoding":"minimal ASCII structural facts","containsHttpEnvelope":false,"containsBalanceSessionTimestamp":false,"recomputableFieldsStored":false},
+  "handoffContract": {"file":"protocol-handoff.json","rulesHash":"0c99b115e7f083bea9aea3d198ae64bb6b3f1685c31fccdaf84aa159cf1726ac","behaviorIds":["B-NORMAL","B-RESPIN","B-MULTIPLIER","B-ROUND-BOUNDARY","B-HISTORY"]}
+}

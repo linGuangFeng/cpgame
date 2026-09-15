@@ -1,0 +1,297 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 58,
+  "directoryName": "58-Crazy-Gems",
+  "rulesVersion": "crazy-gems-rules-0bf6b8291cfbfe00",
+  "rulesHash": "0bf6b8291cfbfe0005aacbe5150d64097752cd989da88fb5a384db1e2d3d60ef",
+  "columns": [
+    "fieldOrRule",
+    "observedWireType",
+    "source",
+    "frontendDecision",
+    "sampleConfirmation",
+    "disposition",
+    "behaviorIds"
+  ],
+  "rows": [
+    {
+      "fieldOrRule": "identity: gid / game-id / GameName",
+      "observedWireType": "number/string/string",
+      "source": ["captures/58-Crazy-Gems/id-name-evidence.json", "captures/58-Crazy-Gems/game-launch-network-redacted.json", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "启动 /58?gid=58，业务请求携带 gid=58，bundle GameName=Crazy Gems。",
+      "sampleConfirmation": "Config、Spin、History 均走 game-id 58；大厅 g_id=456 未作为业务 gameId。",
+      "disposition": "CONFIRMED_ID_58_NAME_CRAZY_GEMS",
+      "behaviorIds": ["B-ENTRY-ID"]
+    },
+    {
+      "fieldOrRule": "HTTP success envelope: code / data / info",
+      "observedWireType": "number/object/string",
+      "source": ["fixtures/58-Crazy-Gems/first-load/0001-post-config.json", "fixtures/58-Crazy-Gems/initial-round/0001-post-spin.json", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "_cancelResponseData 对 JSON 响应做 loose code == 200，成功时只向游戏逻辑返回 data||{}，否则 reject。",
+      "sampleConfirmation": "现有 Config、Spin、log-list、log-view fixture 均为 code=200、info=ok、data 对象。",
+      "disposition": "CONFIRMED_JSON_ENVELOPE",
+      "behaviorIds": ["B-FORM-JSON-CODEC"]
+    },
+    {
+      "fieldOrRule": "request codec and t",
+      "observedWireType": "application/x-www-form-urlencoded; t=opaque string",
+      "source": ["captures/58-Crazy-Gems/game-first-load-api-network.json", "captures/58-Crazy-Gems/initial-paid-round-network.json", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "Http.post 默认 encodeURIComponent 键值后以 & 连接，Content-Type 为 application/x-www-form-urlencoded；未观察游戏端点 JSON request 模式。",
+      "sampleConfirmation": "Config 请求 t=[REDACTED]&gid=58；Spin 请求 bl=1&bs=0.5&t=[REDACTED]&gid=58。",
+      "disposition": "CONFIRMED_FORM_CODEC_NO_APP_PAYLOAD_ENCRYPTION",
+      "behaviorIds": ["B-FORM-JSON-CODEC", "B-SOURCE-REQUEST-SEQUENCE"]
+    },
+    {
+      "fieldOrRule": "first-load request order",
+      "observedWireType": "ordered HTTP requests",
+      "source": ["captures/58-Crazy-Gems/game-first-load-api-network.json"],
+      "frontendDecision": "加载静态资源后先 auth/verify，再读取 crazy-gems/config；Spin 依赖 ConfigData 初始化。",
+      "sampleConfirmation": "wallTime 依次为 auth/verify 1787973795.89031、config 1787973798.07599。",
+      "disposition": "CONFIRMED_AUTH_THEN_CONFIG",
+      "behaviorIds": ["B-SOURCE-REQUEST-SEQUENCE"]
+    },
+    {
+      "fieldOrRule": "Config.auto",
+      "observedWireType": "number[]",
+      "source": ["fixtures/58-Crazy-Gems/first-load/0001-post-config.json"],
+      "frontendDecision": "ConfigData.initConfig 写入 autoTimes。",
+      "sampleConfirmation": "[10,30,50,100,500]。",
+      "disposition": "CONFIRMED_AUTOSPIN_CHOICES",
+      "behaviorIds": ["B-CONFIG-BET-PAYTABLE"]
+    },
+    {
+      "fieldOrRule": "Config.bll / bsl",
+      "observedWireType": "number[] / number[]",
+      "source": ["fixtures/58-Crazy-Gems/first-load/0001-post-config.json", "captures/58-Crazy-Gems/rules-text-pt.json"],
+      "frontendDecision": "分别初始化 multiplier 与 base_multiplier 可选列表。",
+      "sampleConfirmation": "bll=1..10，bsl=[0.5,5,50]；1160 个付费起点均使用 bl=1、bs=0.5。",
+      "disposition": "CONFIRMED_BET_LISTS",
+      "behaviorIds": ["B-CONFIG-BET-PAYTABLE", "B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN"]
+    },
+    {
+      "fieldOrRule": "Config.dbs",
+      "observedWireType": "number",
+      "source": ["fixtures/58-Crazy-Gems/first-load/0001-post-config.json", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "getIndexByBaseMultiplier(Number(dbs)) 选中默认 bet size。",
+      "sampleConfirmation": "dbs=0.5 且存在于 bsl。",
+      "disposition": "CONFIRMED_DEFAULT_BET_SIZE",
+      "behaviorIds": ["B-CONFIG-BET-PAYTABLE"]
+    },
+    {
+      "fieldOrRule": "Config.dbl",
+      "observedWireType": "number",
+      "source": ["fixtures/58-Crazy-Gems/first-load/0001-post-config.json", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "传给 getIndexByMultiplier；找不到时该函数回退索引 0。",
+      "sampleConfirmation": "dbl=50，不在 bll=1..10；采样最低 bl 明确为 1。",
+      "disposition": "UNKNOWN_SEMANTICS_PRESERVE_RAW_DO_NOT_CONFIGURE",
+      "behaviorIds": []
+    },
+    {
+      "fieldOrRule": "Config.cc / cs",
+      "observedWireType": "string / string",
+      "source": ["fixtures/58-Crazy-Gems/first-load/0001-post-config.json"],
+      "frontendDecision": "cs 写入全局 Currency，cc/cs 用于金额显示。",
+      "sampleConfirmation": "cc=BRL，cs=R$，规则页显示 R$。",
+      "disposition": "CONFIRMED_CURRENCY",
+      "behaviorIds": ["B-CONFIG-BET-PAYTABLE"]
+    },
+    {
+      "fieldOrRule": "Config.spl",
+      "observedWireType": "object<string,number>",
+      "source": ["fixtures/58-Crazy-Gems/first-load/0001-post-config.json", "captures/58-Crazy-Gems/paytable-text-pt.json"],
+      "frontendDecision": "ConfigData.getSymbolById 为 History 行奖金额与主游戏中奖显示提供 paytable 值。",
+      "sampleConfirmation": "WILD=5,H1=4,H2=3,H3=2.4,H4=2,H5=1.6,H6=1,H7=0.4，与奖表一致。",
+      "disposition": "CONFIRMED_PAYTABLE",
+      "behaviorIds": ["B-CONFIG-BET-PAYTABLE", "B-FIXED-PAYLINE-WIN", "B-WILD-SUBSTITUTION"]
+    },
+    {
+      "fieldOrRule": "Config.ts",
+      "observedWireType": "number",
+      "source": ["fixtures/58-Crazy-Gems/first-load/0001-post-config.json"],
+      "frontendDecision": "当前 bundle 未找到参与中奖或状态转换的判定。",
+      "sampleConfirmation": "观察值 1787973798，与首载时间一致。",
+      "disposition": "OBSERVED_SERVER_TIMESTAMP_NO_GAMEPLAY_SEMANTICS",
+      "behaviorIds": ["B-CONFIG-BET-PAYTABLE"]
+    },
+    {
+      "fieldOrRule": "theoretical aggregate RTP",
+      "observedWireType": "rule text percentage",
+      "source": ["captures/58-Crazy-Gems/rules-text-pt.json", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js", "protocol/58-Crazy-Gems/game-capabilities.json"],
+      "frontendDecision": "规则页将当前游戏理论长期 RTP 显示为 96.4%；该值是总派奖/总投注的聚合约束，不提供服务端符号或倍率权重。",
+      "sampleConfirmation": "能力清单 rtp.valuePercent=96.4、status=RULE_TEXT_CONFIRMED；1160 局抓取频率仅作协议 oracle，不用于反推正式权重。",
+      "disposition": "CONFIRMED_AGGREGATE_RTP_TARGET_NO_SERVER_WEIGHT_INFERENCE",
+      "behaviorIds": ["B-FIXED-PAYLINE-WIN"]
+    },
+    {
+      "fieldOrRule": "Spin request bl / bs / gid / t",
+      "observedWireType": "number / number / number / opaque string",
+      "source": ["captures/58-Crazy-Gems/initial-paid-round-network.json", "fixtures/58-Crazy-Gems/initial-round/0001-post-spin.json"],
+      "frontendDecision": "Spin(t) POST 到 crazy-gems/spin。",
+      "sampleConfirmation": "最低押注请求 bl=1、bs=0.5、gid=58；t 已脱敏且未持久化。",
+      "disposition": "CONFIRMED_PAID_ROUND_START",
+      "behaviorIds": ["B-SOURCE-REQUEST-SEQUENCE", "B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN", "B-ROUND-DELIVERY-STATE"]
+    },
+    {
+      "fieldOrRule": "Spin.data.rskl",
+      "observedWireType": "string[9]",
+      "source": ["fixtures/58-Crazy-Gems/initial-round/0001-post-spin.json", "captures/58-Crazy-Gems/history-details.jsonl", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "按 reel-major 映射 3 个符号滚轴，每轴 3 行；第 4 前端列另作倍率展示。",
+      "sampleConfirmation": "1160/1160 长度为 9；符号域仅 H1..H7、WILD。",
+      "disposition": "CONFIRMED_3X3_BOARD",
+      "behaviorIds": ["B-FIXED-PAYLINE-WIN", "B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN"]
+    },
+    {
+      "fieldOrRule": "frontend GameConfig.ColumnCount / RowCounts",
+      "observedWireType": "number / number[]",
+      "source": ["resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js", "captures/58-Crazy-Gems/rules-text-pt.json"],
+      "frontendDecision": "ColumnCount=4、RowCounts=[3,3,3,3] 支撑三列符号滚轴加一列 minecart 倍率动画。",
+      "sampleConfirmation": "服务端 rskl 恒为 9，不含第 4 列；规则明确 3 reels。",
+      "disposition": "CONFIRMED_VISUAL_COLUMN_NOT_SERVER_REEL",
+      "behaviorIds": ["B-MINECART-MULTIPLIER", "B-FIXED-PAYLINE-WIN"]
+    },
+    {
+      "fieldOrRule": "Spin.data.wmkl and five fixed paylines",
+      "observedWireType": "object<lineKey,symbolKey>",
+      "source": ["captures/58-Crazy-Gems/rules-text-pt.json", "captures/58-Crazy-Gems/paytable-text-pt.json", "captures/58-Crazy-Gems/history-details.jsonl", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "wmkl key 映射 MatchLineIndexData 0..4，坐标为 [000],[111],[222],[012],[210]。",
+      "sampleConfirmation": "201 个 WIN 的 key 仅 0..4；独立复算 1160 局 lineSetMismatch=0。",
+      "disposition": "CONFIRMED_PAYLINE_COUNT_5",
+      "behaviorIds": ["B-FIXED-PAYLINE-WIN", "B-PAID-ROUND-WIN"]
+    },
+    {
+      "fieldOrRule": "WILD substitution",
+      "observedWireType": "symbol rule",
+      "source": ["captures/58-Crazy-Gems/paytable-text-pt.json", "captures/58-Crazy-Gems/history-details.jsonl"],
+      "frontendDecision": "WILD 进入同一 wmkl/中奖线显示路径；奖表明确可替代任意其他符号。",
+      "sampleConfirmation": "含 WILD 的中奖明细与替代规则逐线复算一致；全 WILD 线按 WILD=5。",
+      "disposition": "CONFIRMED",
+      "behaviorIds": ["B-WILD-SUBSTITUTION", "B-FIXED-PAYLINE-WIN"]
+    },
+    {
+      "fieldOrRule": "Spin.data.ba",
+      "observedWireType": "number",
+      "source": ["fixtures/58-Crazy-Gems/initial-round/0001-post-spin.json", "captures/58-Crazy-Gems/history-details.jsonl"],
+      "frontendDecision": "History 模型映射为 bet_amount。",
+      "sampleConfirmation": "1160 局均为 0.5；history header ba=580 等于 1160*0.5。",
+      "disposition": "CONFIRMED_TOTAL_BET_AMOUNT",
+      "behaviorIds": ["B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN", "B-BALANCE-LEDGER-CONTINUITY"]
+    },
+    {
+      "fieldOrRule": "Spin.data.pb",
+      "observedWireType": "decimal string",
+      "source": ["fixtures/58-Crazy-Gems/initial-round/0001-post-spin.json", "captures/58-Crazy-Gems/history-details.jsonl", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "Spin 成功后 PlayerData.Coins=t.pb。",
+      "sampleConfirmation": "1160/1160 与 detail.baf 数值相等；1159 个相邻 Round 满足 next.pb=prev.pb-next.ba+next.wa。",
+      "disposition": "CONFIRMED_POST_ROUND_BALANCE",
+      "behaviorIds": ["B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN", "B-BALANCE-LEDGER-CONTINUITY"]
+    },
+    {
+      "fieldOrRule": "Spin.data.rpx",
+      "observedWireType": "number",
+      "source": ["captures/58-Crazy-Gems/rules-text-pt.json", "captures/58-Crazy-Gems/paytable-text-pt.json", "captures/58-Crazy-Gems/history-details.jsonl", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "CurRoundTimes 接收 rpx；History 每线金额乘以 rpx；前端第 4 列展示倍率。",
+      "sampleConfirmation": "值域仅 1,2,3,5,10,15；分布 177/293/229/186/136/139，rpx>1 为 983 局。",
+      "disposition": "CONFIRMED_MINECART_MULTIPLIER",
+      "behaviorIds": ["B-MINECART-MULTIPLIER", "B-FIXED-PAYLINE-WIN"]
+    },
+    {
+      "fieldOrRule": "Spin.data.wa",
+      "observedWireType": "number",
+      "source": ["fixtures/58-Crazy-Gems/initial-round/0001-post-spin.json", "captures/58-Crazy-Gems/history-details.jsonl", "captures/58-Crazy-Gems/rules-text-pt.json"],
+      "frontendDecision": "映射为 Award_Balance；wa>0 进入中奖展示，wa=0 为无奖。",
+      "sampleConfirmation": "LOSS 959、WIN 201；独立公式 sum(spl*bs*bl*rpx) 在 1160 局 amountMismatch=0。",
+      "disposition": "CONFIRMED_TOTAL_WIN_AMOUNT",
+      "behaviorIds": ["B-FIXED-PAYLINE-WIN", "B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN", "B-MINECART-MULTIPLIER"]
+    },
+    {
+      "fieldOrRule": "Spin.data.spin_status",
+      "observedWireType": "absent in all captured details; generic frontend truthiness field",
+      "source": ["resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js", "captures/58-Crazy-Gems/history-details.jsonl", "captures/58-Crazy-Gems/spin-index.jsonl"],
+      "frontendDecision": "onGameEnd 与 onGameEndBefore 仅在 !spin_status 时进入终局；truthy 分支不执行当前终局。",
+      "sampleConfirmation": "1160/1160 字段缺失/假且各自一对一进入完成 History；无相邻 continuation Step。",
+      "disposition": "FALSY_TERMINAL_CONFIRMED_TRUTHY_PATH_UNCONFIRMED_RARE",
+      "behaviorIds": ["B-ROUND-DELIVERY-STATE"]
+    },
+    {
+      "fieldOrRule": "fbt / fbl / fbs / fsn / frwa and FreeGame scaffold",
+      "observedWireType": "not present in captured current-game responses",
+      "source": ["resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js", "captures/58-Crazy-Gems/history-details.jsonl", "captures/58-Crazy-Gems/rules-text-pt.json", "captures/58-Crazy-Gems/paytable-text-pt.json"],
+      "frontendDecision": "bundle 含通用 FreeGame 数据结构与 prefab 路径。",
+      "sampleConfirmation": "规则/奖表无触发入口，1160 局均无这些字段。",
+      "disposition": "UNCONFIRMED_GENERIC_SCAFFOLD_NOT_CURRENT_CAPABILITY",
+      "behaviorIds": []
+    },
+    {
+      "fieldOrRule": "History request page_index / begin_at / end_at",
+      "observedWireType": "number / Unix seconds / Unix seconds",
+      "source": ["captures/58-Crazy-Gems/history-list-pages.jsonl", "captures/58-Crazy-Gems/history-page-001-network.json"],
+      "frontendDecision": "History 按页请求 log-list，滚动加载后续页面。",
+      "sampleConfirmation": "117 页，最后一页 end=1；共 1160 条。",
+      "disposition": "CONFIRMED_HISTORY_PAGINATION",
+      "behaviorIds": ["B-HISTORY-PAGINATION", "B-HISTORY-LIST-DETAIL"]
+    },
+    {
+      "fieldOrRule": "History header lc / end / ba / wa",
+      "observedWireType": "number / number / decimal string / decimal string",
+      "source": ["captures/58-Crazy-Gems/history-list-pages.jsonl"],
+      "frontendDecision": "lc 为列表总数，end 控制分页终止。",
+      "sampleConfirmation": "lc=1160；末页 end=1；ba=580 等于明细总下注；wa=14303 等于明细总中奖。",
+      "disposition": "CONFIRMED_HISTORY_AGGREGATES",
+      "behaviorIds": ["B-HISTORY-PAGINATION", "B-HISTORY-LIST-DETAIL"]
+    },
+    {
+      "fieldOrRule": "History ll[].tis / bid and log-view.transfer_id",
+      "observedWireType": "decimal string / string / decimal string",
+      "source": ["captures/58-Crazy-Gems/history-list-pages.jsonl", "captures/58-Crazy-Gems/history-details.jsonl", "captures/58-Crazy-Gems/history-detail-probe-network.json"],
+      "frontendDecision": "History list 的 tis 作为 log-view transfer_id；bid 为业务展示 ID。",
+      "sampleConfirmation": "1160 个 tis 唯一，bid 恒为 '58-'+tis，log-view 详情一对一。",
+      "disposition": "CONFIRMED_CROSS_REQUEST_JOIN",
+      "behaviorIds": ["B-HISTORY-LIST-DETAIL", "B-ROUND-DELIVERY-STATE"]
+    },
+    {
+      "fieldOrRule": "History ll[].baf / ca / fe / gm / gt",
+      "observedWireType": "decimal string / number / number / null / number",
+      "source": ["captures/58-Crazy-Gems/history-list-pages.jsonl"],
+      "frontendDecision": "ca 映射 created_at，gt 映射 game_type；其他字段无当前中奖判定消费证据。",
+      "sampleConfirmation": "gt=58、fe=0、gm=null；baf 与对应 detail.pb 数值一致。",
+      "disposition": "ca_AND_LIST_gt_CONFIRMED; fe_gm_OBSERVED_RAW_NO_GUESSED_SEMANTICS",
+      "behaviorIds": ["B-HISTORY-LIST-DETAIL", "B-BALANCE-LEDGER-CONTINUITY"]
+    },
+    {
+      "fieldOrRule": "History detail bl / bs / gt / baf",
+      "observedWireType": "number / number / number / decimal string",
+      "source": ["captures/58-Crazy-Gems/history-details.jsonl", "fixtures/58-Crazy-Gems/history-detail-probe/0001-post-log-view.json"],
+      "frontendDecision": "HistoryDetailWin 使用 bl、bs、rpx、spl 重建逐线金额；gt 仅存入 game_type。",
+      "sampleConfirmation": "1160 局 bl=1、bs=0.5、gt=1、baf=pb。注意 detail.gt=1 与 list.gt=58 语境不同。",
+      "disposition": "bl_bs_baf_CONFIRMED; detail_gt_RAW_CONTEXT_SPECIFIC_DO_NOT_USE_AS_GAME_ID",
+      "behaviorIds": ["B-HISTORY-LIST-DETAIL", "B-FIXED-PAYLINE-WIN", "B-BALANCE-LEDGER-CONTINUITY"]
+    },
+    {
+      "fieldOrRule": "cross-round balance transition",
+      "observedWireType": "decimal arithmetic over adjacent completed Rounds",
+      "source": ["captures/58-Crazy-Gems/history-details.jsonl", "captures/58-Crazy-Gems/history-list-pages.jsonl"],
+      "frontendDecision": "每次 Spin 完成后 pb 覆盖客户端余额。",
+      "sampleConfirmation": "按 transferId 升序的 1159 对相邻局全部满足 next.pb = prev.pb - next.ba + next.wa，mismatch=0。",
+      "disposition": "CONFIRMED_LEDGER_CONTINUITY",
+      "behaviorIds": ["B-BALANCE-LEDGER-CONTINUITY"]
+    },
+    {
+      "fieldOrRule": "frontend SymbolWeightsList / SymbolRpxWeightsList",
+      "observedWireType": "number[] constants",
+      "source": ["resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "仅在 GameConfigData.randomReel 生成并打乱 backReels，最终权威符号仍由 Spin.data.rskl 注入。",
+      "sampleConfirmation": "rpx 采样分布不等同动画权重；服务端真实权重未由规则/API公开。",
+      "disposition": "ANIMATION_ONLY_FORBIDDEN_AS_SERVER_GENERATOR_WEIGHTS",
+      "behaviorIds": []
+    },
+    {
+      "fieldOrRule": "Redis key / member codec / encoded length",
+      "observedWireType": "not present",
+      "source": ["captures/58-Crazy-Gems/game-first-load-api-network.json", "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"],
+      "frontendDecision": "当前网页、规则、配置和业务抓包不使用 Redis。",
+      "sampleConfirmation": "当前游戏权威证据中无 Redis Key、成员编码或长度。",
+      "disposition": "UNKNOWN_DO_NOT_INHERIT_OR_GUESS",
+      "behaviorIds": []
+    }
+  ]
+}

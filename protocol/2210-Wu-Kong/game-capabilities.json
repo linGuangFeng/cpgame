@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 46,
+  "gameId": 2210,
+  "gameName": "Wu Kong",
+  "directoryName": "2210-Wu-Kong",
+  "rulesVersion": "WUKONG_V46_REBUILD_20260907",
+  "rulesHash": "8815bbc4ff5dd45c7ed5d2ccc1d0891183ce5f109f981594ce944a681a9c1516",
+  "implementationAllowed": true,
+  "winModel": "ORDERED_DIGIT_CONCAT",
+  "winModelDetails": {"paylineCount":null,"paylineApplicability":"NOT_APPLICABLE","multipliers":[1,2,5],"respinAwardsAreAdded":true},
+  "boardModel": {"kind":"TWO_ORDERED_POSITIONS","initialPositionCount":2,"respinPositionCount":2,"visibleFields":["chess.normal","chess.extend","chess.respin","chess.result","chess.win","chess.bonus"],"specialSymbolCaps":{"applicable":true,"columnOrPositionCaps":{"extendPerRound":1},"totalCaps":{"initialPositions":2,"respinPositions":2,"bonus":0}}},
+  "roundModel": {"countingBoundary":"one successful minimum-bet gameResult and all visual states through Game_All_Anim_End","paidStartCount":1,"httpDeliveryCount":1,"internalStateSequence":["NORMAL_LEFT","NORMAL_RIGHT","OPTIONAL_SPECIAL","SETTLEMENT"],"terminalCondition":"Game_All_Anim_End and spin button enabled","maximumConsecutiveWinStates":1},
+  "specialModes": [
+    {"id":"SPECIAL_X2","status":"CONFIRMED","trigger":"chess.extend=2","sampleCount":83,"zeroMultiplierObserved":true},
+    {"id":"SPECIAL_X5","status":"CONFIRMED","trigger":"chess.extend=5","sampleCount":97,"zeroMultiplierObserved":true},
+    {"id":"SPECIAL_RESPIN","status":"CONFIRMED","trigger":"chess.extend=respin and respin is a two-element array","sampleCount":33,"zeroMultiplierObserved":false},
+    {"id":"SPECIAL_X10","status":"NOT_APPLICABLE","reason":"minimum-bet configuration excludes 10 and 1122 rounds contain none"},
+    {"id":"SPECIAL_BONUS","status":"NOT_APPLICABLE","reason":"minimum-bet configuration excludes bonus and bonus is 0 in all 1122 rounds"}
+  ],
+  "purchaseRelationship": {"supported":false,"reason":"No purchase UI/request/config; confirmed special modes are natural paid-spin results"},
+  "runtimeIndependentLoss": {"supported":true,"generationOnly":true,"runtimeUsesGenerator":false,"cacheEmptyBehavior":"FAIL_CLOSED"},
+  "supportedLanguages": {"codes":["bn","en","es","fr","id","ko","pt-br","th","tr","vi"]},
+  "generationModel": {
+    "implementationReady":true,
+    "usesIndependentCellMarginalsOnly":false,
+    "artificialLossBoardConstraints":false,
+    "lifecycleEntries":[
+      {"id":"INITIAL","role":"INITIAL","countingUnit":"COMPLETE_INITIAL_STATE","sampleRoundCount":1000,"samplePositionCount":2000,"wholeNextStateCountedAsNewDeal":false,"positionSelection":"normal[0..1] counted as one ordered joint initial state","evidenceRefs":["E_PROVIDER_TRAIN"]},
+      {"id":"RESPIN_REDEAL","role":"RESPIN_REDEAL","countingUnit":"NEWLY_DEALT_POSITIONS","sampleRoundCount":28,"samplePositionCount":56,"wholeNextStateCountedAsNewDeal":true,"retainedPositionCount":0,"positionSelection":"provider response and frontend GAME_SLOT_TWO_START show complete two-position redeal","evidenceRefs":["E_PROVIDER_TRAIN","E_FRONTEND"]}
+    ],
+    "jointRoundFeatures":[
+      {"id":"ROUND_OUTCOME_CLASS","evidenceRefs":["E_SPIN_INDEX"]},
+      {"id":"ROUND_STEP_COUNT","evidenceRefs":["E_ROUND_INDEX"]},
+      {"id":"STATE_ELEMENT_COUNT_VECTOR","evidenceRefs":["E_PROVIDER_TRAIN"]}
+    ],
+    "holdoutPlan":{"source":"REAL_PROVIDER","sourceType":"REAL_PROVIDER","evidenceType":"REAL_PROVIDER_HOLDOUT","oracleSource":"REAL_PROVIDER_HOLDOUT","oracleType":"REAL_PROVIDER","subsetRole":"HOLDOUT","countingUnit":"COMPLETE_ROUND","minimumRounds":100,"minimumRoundCount":100,"minimumCompleteRoundCount":100,"actualRounds":122,"roundCount":122,"sampleRoundCount":122,"holdoutRoundCount":122,"completeRoundOnly":true,"range":"records 1001-1122","trainingRange":"records 1-1000","selection":"FROZEN_DISJOINT_RECORDS_1001_1122","disjointFromTraining":true,"holdoutDisjointFromTraining":true,"intersectionCount":0,"trainingOverlapCount":0,"usesImplementationGeneratedExpected":false}
+  },
+  "symbolWeights": {
+    "model":"CONDITIONAL_COMPLETE_JOINT_STATES",
+    "trainingRange":"records 1-1000",
+    "mode":"NONE:804|X2:75|X5:93|RESPIN:28",
+    "initialNone":"null,null:621|null,0:132|10,1:12|10,0:11|10,5:10|5,0:10|5,1:5|5,5:3",
+    "initialX2":"null,null:24|10,5:14|10,0:13|10,1:8|5,5:8|5,1:7|5,0:1",
+    "initialX5":"null,null:34|5,5:13|10,0:12|5,0:11|1,5:8|5,1:8|null,0:6|10,null:1",
+    "initialRespin":"null,null:15|null,0:5|null,1:3|5,5:2|null,5:2|5,null:1",
+    "respinRedeal":"10,1:9|10,5:5|5,0:5|5,5:5|10,0:3|5,1:1",
+    "disclaimer":"Sample estimate only; not provider long-run probability or RTP"
+  },
+  "redisContract": {"source":"target consumer plus mature 1809 generic list/index convention; game-specific facts are 2210-only","host":"192.168.10.3","port":6379,"database":15,"normalIndex":"PerKeyList_%09d","specialIndex":"MaryKeyList_%09d","normalList":"BetLog:0%08d:%06d","specialList":"MaryLog:%09d:%06d","selection":"SecureRandom LOSS/WIN, then an existing multiplier, then one complete member claim","atomicAppend":["MULTI","ZADD","RPUSH","LTRIM","EXEC"]},
+  "codecContract": {"version":"WK46R2","encoding":"ASCII_PIPE_DELIMITED","storedFacts":["mode","initialLeft","initialRight","respinLeft","respinRight"],"forbidden":["HTTP response","balance","session","timestamp","derived awards"]},
+  "evidence":["captures/2210-Wu-Kong/v40-formal-rounds-batch-001.json","captures/2210-Wu-Kong/spin-index.jsonl","captures/2210-Wu-Kong/round-index.jsonl","captures/2210-Wu-Kong/v40-formal-history.json","publish/2210-Wu-Kong/assets/Game2210/index.64954.js","reports/2210-Wu-Kong/resource-stage-status.json"],
+  "handoffContract": {"file":"protocol-handoff.json","rulesHash":"8815bbc4ff5dd45c7ed5d2ccc1d0891183ce5f109f981594ce944a681a9c1516","behaviorIds":["B_BOOT_CONFIG","B_INIT_RESUME","B_PAID_ROUND","B_RESULT_CONCAT","B_SPECIAL_X2","B_SPECIAL_X5","B_SPECIAL_RESPIN","B_HISTORY","B_BALANCE_SESSION","B_REDIS_CLAIM","B_MINBET_PARTITION"]}
+}

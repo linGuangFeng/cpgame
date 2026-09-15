@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 2,
+  "workflowTemplateVersion": 40,
+  "gameId": 1670,
+  "endpoint": "/cp/single_game.Game/gameResult",
+  "request": {
+    "method": "POST",
+    "contentType": "application/x-www-form-urlencoded",
+    "fields": {
+      "token": "<redacted>",
+      "gid": 1670,
+      "bet": 0.08,
+      "level": 10,
+      "language": "supported locale code",
+      "signapt": "<redacted>",
+      "expire": "<redacted>"
+    }
+  },
+  "response": {
+    "envelope": [
+      "code",
+      "data",
+      "msg",
+      "time"
+    ],
+    "data": [
+      "bet",
+      "bet_gold",
+      "big",
+      "big_win",
+      "change_gold",
+      "end_gold",
+      "level",
+      "luck_prop",
+      "odds",
+      "oid",
+      "props",
+      "small_game_type?",
+      "start_gold",
+      "total_win",
+      "type"
+    ],
+    "step": {
+      "props": "position -> symbol",
+      "win_arrs": [
+        "prop",
+        "roll",
+        "win_amount",
+        "win_odd"
+      ]
+    }
+  },
+  "roundBoundary": "The response is atomic for one paid Round; props[] enumerates its ordinary or respin steps."
+}

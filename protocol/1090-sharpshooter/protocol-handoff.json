@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 3,
+  "gameId": 1090,
+  "rulesHash": "e2d48bc36060cfa82c86468e67d20617b0f137bae5ed9986541823c558c7daff",
+  "behaviorIds": [
+    "B-NORMAL-LOSS",
+    "B-NORMAL-WIN",
+    "B-TUMBLE",
+    "B-FREE-SPINS",
+    "B-ROUND-BOUNDARY",
+    "B-HISTORY",
+    "B-REDIS-EMPTY"
+  ],
+  "states": [
+    {
+      "id": "IDLE",
+      "on": "paid gameResult",
+      "to": "PAID",
+      "claimsRedisMember": true
+    },
+    {
+      "id": "PAID",
+      "terminalWhen": "freeTotal=0",
+      "continueWhen": "freeTotal>0",
+      "to": "FREE"
+    },
+    {
+      "id": "FREE",
+      "on": "next gameResult",
+      "action": "advance same member",
+      "terminalWhen": "freeRemaining=0"
+    },
+    {
+      "id": "TERMINAL",
+      "action": "append history and clear active member",
+      "to": "IDLE"
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-NORMAL-LOSS",
+      "status": "CONFIRMED",
+      "evidence": "1235 complete paid fixtures",
+      "assertions": [
+        "one state",
+        "zero payout",
+        "terminal cascade has no win"
+      ]
+    },
+    {
+      "id": "B-NORMAL-WIN",
+      "status": "CONFIRMED",
+      "evidence": "200 complete paid fixtures",
+      "assertions": [
+        "ordered props tumbles",
+        "award recomputed by paytable and multiplier"
+      ]
+    },
+    {
+      "id": "B-TUMBLE",
+      "status": "CONFIRMED",
+      "evidence": "frontend Slot5GameResult plus win fixtures",
+      "assertions": [
+        "nonterminal page has win",
+        "final page has no win",
+        "mode multiplier follows page index"
+      ]
+    },
+    {
+      "id": "B-FREE-SPINS",
+      "status": "CONFIRMED_NON_RETRIGGER_ONLY",
+      "evidence": "30 complete counter-contiguous feature rounds",
+      "assertions": [
+        "type 1 trigger",
+        "type 2 continuations",
+        "12 or 14 free states",
+        "counter ends at zero"
+      ],
+      "limitations": [
+        "Retrigger supported by original help; missing original counter/award evidence and implementation."
+      ]
+    },
+    {
+      "id": "B-ROUND-BOUNDARY",
+      "status": "CONFIRMED",
+      "evidence": "paid/free OID and counter audit",
+      "assertions": [
+        "single claimed member",
+        "no member switch",
+        "clear only after terminal"
+      ]
+    },
+    {
+      "id": "B-HISTORY",
+      "status": "CONFIRMED",
+      "evidence": "saved list and detail responses",
+      "assertions": [
+        "nested results",
+        "read-only"
+      ]
+    },
+    {
+      "id": "B-REDIS-EMPTY",
+      "status": "REQUIRED_FAILURE",
+      "evidence": "contract v3",
+      "assertions": [
+        "HTTP 503",
+        "no fixture fallback",
+        "no runtime generation"
+      ]
+    }
+  ],
+  "rulesVersion": "1090-rules-v2",
+  "readyForAcceptance": true,
+  "acceptanceStatus": "READY_FOR_ACCEPTANCE",
+  "capabilityGaps": [
+    {
+      "id": "FREE_RETRIGGER_SAMPLE_INSUFFICIENT",
+      "behaviorId": "B-FREE-SPINS",
+      "status": "SAMPLE_INSUFFICIENT",
+      "blocking": false,
+      "helpEvidence": "Original help: Free spins can be retriggered.",
+      "screenshot": "screenshots/1090-Sharpshooter/recovery-help-free-rule.png",
+      "audit": {
+        "spinResponses": 2068,
+        "freeResponses": 583,
+        "positiveFreeRetriggers": 0,
+        "historyRecords": 30,
+        "historyNestedStates": 42,
+        "historyPositiveFreeRetriggers": 0,
+        "dirtyResponses": 2,
+        "dirtyPositiveFreeRetriggers": 0
+      },
+      "missing": [
+        "Retrigger threshold and additional award",
+        "Counter updates across retrigger",
+        "Complete retrigger chain to terminal"
+      ],
+      "currentImplementation": "Non-retrigger features only. Empirical free Scatter cap 2 prevents retrigger. This is an implementation gap, not a confirmed provider prohibition.",
+      "requiredNextInput": "Existing complete retrigger response-chain path or authoritative archived rule evidence; no new original-site capture."
+    }
+  ],
+  "redisPrefix": "PerKeyList_000001090",
+  "artifacts": {
+    "generator/1090-sharpshooter/dist/sharpshooter-loader.jar": {
+      "sha256": "e41665deeb6097d20eb9d4bfe145ead484f616188a57d58901a4ccaeb404b55a",
+      "bytes": 3994899,
+      "zipIntegrity": "PASS"
+    },
+    "server-api/1090-sharpshooter/dist/controller.jar": {
+      "sha256": "9abdbed70c1b01cb316043edc2f51fa67708ecc81edb5ba673023661796a2fd3",
+      "bytes": 3977695,
+      "zipIntegrity": "PASS"
+    }
+  },
+  "sharedCoreSha256": "2b96c41b3b52c4e5eb0fd033d92740880275b58e140e466a3221c52e8e8b766b",
+  "embeddedModelSha256": "7311dac09a0c73e04c12df748eb284e214c31bec4812e44c33dbd405bb7085db",
+  "validationReport": "reports/1090-Sharpshooter/generation-model-validation.json",
+  "apiReport": "reports/1090-Sharpshooter/api-acceptance-recovery.json",
+  "browserReport": "reports/1090-Sharpshooter/browser-acceptance-resumed.json",
+  "nativeLocaleReport": "reports/1090-Sharpshooter/native-locale-acceptance.json",
+  "localOriginalAssetsReusedReport": "reports/1090-Sharpshooter/reused-local-assets-resumed.json",
+  "redisInventoryReport": "reports/1090-Sharpshooter/redis-inventory-final.json",
+  "remainingBlockers": [],
+  "nonBlockingGaps": [
+    "FREE_RETRIGGER_SAMPLE_INSUFFICIENT"
+  ]
+}

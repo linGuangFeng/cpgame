@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 58,
+  "directoryName": "58-Crazy-Gems",
+  "rulesVersion": "crazy-gems-rules-0bf6b8291cfbfe00",
+  "rulesHash": "0bf6b8291cfbfe0005aacbe5150d64097752cd989da88fb5a384db1e2d3d60ef",
+  "status": "PROTOCOL_VALIDATED_WITH_ALL_GAPS_DISPOSED",
+  "unresolvedBehaviorRefs": [
+    "UB-FREE-SPINS",
+    "UB-MULTI-STEP-SPIN-STATUS",
+    "UB-FEATURE-BUY",
+    "UB-CONFIG-DBL",
+    "UB-SERVER-SYMBOL-WEIGHTS",
+    "UB-REDIS-WIRE-CONTRACT",
+    "UB-AUTH-HEART-FIELDS"
+  ],
+  "blockingSummary": {
+    "hard": 0,
+    "soft": 0,
+    "rare": 3,
+    "rareRefs": ["UB-FREE-SPINS", "UB-MULTI-STEP-SPIN-STATUS", "UB-FEATURE-BUY"]
+  },
+  "authoritativeDisposition": "每个未确认项均在 protocol-handoff.json.unresolvedBehaviors 中给出禁止猜测的处置；不阻断进入独立协议验收。Redis wire contract 与服务端权重仍须独立平台证据，当前节点未继承示例值。"
+}

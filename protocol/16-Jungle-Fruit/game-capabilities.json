@@ -1,0 +1,189 @@
+{
+  "schemaVersion": 5,
+  "workflowTemplateVersion": 40,
+  "controllerContractVersion": 3,
+  "status": "READY_FOR_ACCEPTANCE",
+  "gameId": 16,
+  "rawGameId": 16,
+  "gameName": "Jungle Fruit",
+  "slug": "jungle-fruit",
+  "rulesVersion": "jf16-empirical-2026-09-08-v3",
+  "rulesHash": "164088c0440871c9bc33b631a1b6bfa5e00d3012db3b0e3694bb59ac683e1743",
+  "rulesHashDefinitionFile": "rules-hash-definition.json",
+  "behaviorIds": [
+    "B-RAW-GID-16",
+    "B-HTTP-CODEC-ENDPOINTS",
+    "B-CONFIG-BET-PAYTABLE",
+    "B-COUNT-ANYWHERE-WIN",
+    "B-TUMBLE-X-SETTLEMENT",
+    "B-ORDINARY-INDEPENDENT-LOSS",
+    "B-MARY-SMALL-GAME",
+    "B-SCATTER-FREE-ROUNDS",
+    "B-COMPLETE-ROUND-PAYOUT",
+    "B-BALANCE-LEDGER",
+    "B-HISTORY-LIST-DETAIL-RETURN",
+    "B-REDIS-ATOMIC-ROUND-CLAIM",
+    "B-ORIGIN-PROBABILITY",
+    "B-ORIGIN-REDIS-CONSUMER",
+    "B-SUPPORTED-LANGUAGES",
+    "B-HIGHER-BET-COMBINATIONS"
+  ],
+  "uniqueRuleCore": "generator/16-Jungle-Fruit/src/main/java/com/cpgame/batcha/g16/GameRuleCore.java",
+  "winModel": {
+    "type": "COUNT_ANYWHERE_TUMBLE",
+    "board": "6x6 column-major",
+    "minimumCount": 8,
+    "awardFormula": "sum(paytable[symbol][count] * bet_size * bet_level)",
+    "wirePosition": "column*10+row",
+    "evidenceValidation": "2852/2852 original Steps and 1224/1224 adjacent tumbles matched"
+  },
+  "roundModel": {
+    "memberBoundary": "complete Round",
+    "payout": "sum(round_win_amount for every Step where spin_status==1)",
+    "observed": {
+      "paidStarts": 1126,
+      "completedRounds": 1126,
+      "steps": 2852,
+      "historyMatches": 1126
+    }
+  },
+  "observedCoverage": {
+    "report": "reports/16-Jungle-Fruit/original-round-audit.json",
+    "completeRounds": 2407,
+    "ordinaryLoss": 2111,
+    "ordinaryNonFreeWin": 241,
+    "marySmallGame": 241,
+    "scatterFreeRounds": 55,
+    "winningTotal": 296,
+    "deduplicatedIdenticalSequences": 39,
+    "rejectedIncompleteOrInconsistentCandidates": 104,
+    "candidateRounds": 2550,
+    "note": "MARY denotes evidenced non-free tumble continuation small_game_type=1; overlaps ordinaryNonFreeWin rather than adding a separate 241. No artificial single-Step paying terminal WIN is generated."
+  },
+  "betModel": {
+    "betLevels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "betSizes": [
+      0.05,
+      0.5,
+      2.5
+    ],
+    "minimumAuthorized": {
+      "bl": 1,
+      "bs": 0.05,
+      "betAmount": 1
+    },
+    "higherCombinationRuntimeEquivalence": "PASS_SHARED_CORE_API_ALL_30_COMBINATIONS_EACH_LOSS_MARY_FREE; raw Config independent oracle; exhaustive browser stake matrix not claimed",
+    "observedInputs": [
+      {
+        "bet_level": 1,
+        "bet_size": 0.05
+      },
+      {
+        "bet_level": 10,
+        "bet_size": 0.05
+      }
+    ],
+    "requestFields": [
+      "bet_level",
+      "bet_size"
+    ]
+  },
+  "supportedLanguages": {
+    "status": "PASS_10_ARCHIVED_LANGUAGES_VISUALLY_ENTERED",
+    "codes": [
+      "bn",
+      "en",
+      "es",
+      "fr",
+      "id",
+      "ko",
+      "pt-br",
+      "th",
+      "tr",
+      "vi"
+    ]
+  },
+  "runtimePolicy": {
+    "runtimeRandomGeneration": false,
+    "runtimeFixturesOrCaptures": false,
+    "scriptedRotation": false,
+    "allModesFromRedis": [
+      "LOSS",
+      "MARY",
+      "FREE"
+    ],
+    "emptyOrUnavailable": "HTTP 503 before debit or any state mutation",
+    "unsupportedModes": [
+      "EXCLUSIVE_ORDINARY_WIN_UNOBSERVED"
+    ]
+  },
+  "redisContract": {
+    "database": 15,
+    "claim": "LPOP",
+    "memberEncoding": "ASCII JF16V1.<base64url>",
+    "multiplierBucket": "exact nonnegative integer payout/paidBet; never floor",
+    "contractFile": "redis-pack/16-Jungle-Fruit/redis-contract.json",
+    "host": "192.168.10.3",
+    "port": 6379,
+    "namespace": "cpgame:runtime:16:jungle-fruit:empirical-v1",
+    "selection": "choose win/loss, then uniformly choose existing integer multiplier, then LPOP one complete member"
+  },
+  "generationValidation": {
+    "holdoutRounds": 100,
+    "generatedRounds": 10000,
+    "report": "reports/16-Jungle-Fruit/generation-model-validation.json",
+    "modelSha256": "0d46ea41b87e22e433f21acdcf5f536b1fbcd1120200b25923a71ae3688757e2",
+    "modelReport": "reports/16-Jungle-Fruit/distribution-model.json",
+    "holdoutSteps": 246,
+    "generatedSteps": 72114,
+    "mismatches": 0,
+    "duplicates": 0,
+    "empiricalApproximationOnly": true
+  },
+  "controller": {
+    "artifact": "server-api/16-Jungle-Fruit/dist/controller.jar",
+    "config": "server-api/16-Jungle-Fruit/dist/controller.properties",
+    "portSource": "--port or PORT",
+    "managedPortRange": "50000-59999",
+    "publishArgument": "--publish"
+  },
+  "history": {
+    "listPath": "/cp/api/v1/jungle-fruit/log-list",
+    "detailPath": "/cp/api/v1/jungle-fruit/log-view",
+    "matched": 1126,
+    "stepOrder": "base_spin_list then free_spin_list",
+    "balanceEquation": "balance_after + row.win_amount == terminal player.balance",
+    "wireShape": "History monetary fields are strings and matches are symbol_key/win_match_key/win_amount objects; Spin retains numeric amounts and position arrays."
+  },
+  "unknowns": [
+    "origin symbol/mode probability weights",
+    "origin Redis consumer key/member/TTL/partition contract",
+    "unobserved X/Scatter awards and maximum win",
+    "higher bet browser matrix not fully tested"
+  ],
+  "generationConstraints": {
+    "source": "reports/16-Jungle-Fruit/distribution-model.json",
+    "trainingCompleteRounds": 1026,
+    "excludedHoldoutRounds": 100,
+    "model": "weighted column blocks by entry/column/exact replacement length; whole-candidate rejection",
+    "maxCascadesPerSegment": 18,
+    "maxFreeSpins": 25,
+    "maxScatterPerColumn": 1,
+    "maxMultiplierPerColumn": 2,
+    "maxScatterPerBoard": 5,
+    "maxMultiplierPerBoard": 4,
+    "scope": "conservative observed bounds; not an assertion of original theoretical limits"
+  },
+  "acceptanceReport": "reports/16-Jungle-Fruit/current-status.json"
+}

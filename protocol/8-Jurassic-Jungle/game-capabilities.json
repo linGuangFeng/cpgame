@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "gameId": 8,
+  "rawGameId": 8,
+  "gameName": "Jurassic Jungle",
+  "slug": "jurassic-jungle",
+  "rulesVersion": "jj8-empirical-2026-09-09-v1",
+  "rulesHash": "8dae3e502d7eb6610086d677915adb0b988b25f2b8210b378d3ba6d313518b04",
+  "winModel": "FOUR_CONNECTED_CLUSTER_SHARED_WILD",
+  "boardModel": {
+    "status": "CONFIRMED",
+    "visibleReels": 5,
+    "visibleRowsPerReel": 5,
+    "layout": "row-major",
+    "wireCoordinate": "row*10+column",
+    "evidenceRounds": 1613
+  },
+  "betModel": {
+    "configLevels": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "configSizes": [0.05, 0.5, 4],
+    "minimumBet": { "bl": 1, "bs": 0.05, "amount": 0.5, "status": "CONFIRMED_FROM_CONFIG" },
+    "archivedSpinCombination": { "bl": 4, "bs": 0.05, "amount": 2, "status": "CONFIRMED_1613_ROUNDS" },
+    "formula": "10 * bet_size * bet_level"
+  },
+  "specialModes": [
+    { "id": "EARTH", "removeStatus": 1, "threshold": 10, "status": "CONFIRMED" },
+    { "id": "WATER", "removeStatus": 2, "threshold": 30, "status": "CONFIRMED", "wildCoords": [11, 13, 31, 33] },
+    { "id": "FIRE", "removeStatus": 3, "threshold": 50, "status": "CONFIRMED", "checker": "even-row-plus-col", "observedFireSymbols": ["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8"], "excludedFireSymbols": ["S9"] },
+    { "id": "GIANT", "removeStatus": 4, "threshold": 70, "status": "CONFIRMED", "transformTo": ["S2", "S3", "S4", "S5"] }
+  ],
+  "buyBonus": false,
+  "scatterFree": false,
+  "supportedLanguages": {
+    "status": "CONFIRMED_FROM_ORIGIN_RESOURCE_BUNDLE",
+    "codes": ["bn", "en", "es", "fr", "id", "ko", "pt-br", "th", "tr", "vi"]
+  },
+  "theoreticalRtp": { "status": "UNKNOWN", "inGameDisplay": "97.16", "sampleCorpusRtpMustNotBeUsed": true },
+  "redisContract": {
+    "status": "LOCAL_FORMAL_REPLICA_CONTRACT_ORIGIN_CONSUMER_UNKNOWN",
+    "sourceGameId": 8,
+    "codec": "JJ8V1",
+    "claim": "LPOP",
+    "ratio": "integer paytable unit sum = payout/bet*10",
+    "zeroMultiplierWritten": true,
+    "readyPools": ["PerKeyList_000000008", "MaryKeyList_000000008"],
+    "serverRealtimeGenerationFallback": false
+  }
+}

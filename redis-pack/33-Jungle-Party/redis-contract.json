@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 2,
+  "workflowTemplateVersion": 40,
+  "rawGameId": 33,
+  "rulesHash": "8522e03f81318ebb80df6219fcb41d380314f12911062c0888066a9464067638",
+  "host": "192.168.10.3",
+  "port": 6379,
+  "database": 15,
+  "normalIndex": "PerKeyList_000000033",
+  "specialIndex": "MaryKeyList_000000033",
+  "normalKeyPattern": "BetLog:000000033:{multiplierBasisPoints,6digits}",
+  "specialKeyPattern": "MaryLog:000000033:{multiplierBasisPoints,6digits}",
+  "memberBoundary": "COMPLETE_ROUND",
+  "write": "MULTI/ZADD/RPUSH/LTRIM/EXEC",
+  "claim": "SecureRandom WIN_OR_LOSS, SecureRandom available integer multiplier bucket, LPOP",
+  "emptyPolicy": "FAIL_CLOSED_NO_RUNTIME_GENERATION",
+  "codec": "JSON envelope with rawGameId/rulesHash and base64url Java complete-Round payload",
+  "originalCompatibility": "NOT_CLAIMED"
+}

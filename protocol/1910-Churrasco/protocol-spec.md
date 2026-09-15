@@ -1,0 +1,7 @@
+# 1910 Churrasco formal protocol
+
+The v40 contract is derived from the current Game1910 bundle and 1,399 real-provider paid starts. One nonterminal free trigger is retained in `incomplete-round-index.jsonl` but excluded from the 1,398 canonical complete rounds. Coverage remains complete: 916 ordinary losses, 203 ordinary wins, 229 `small_game_type=1` rounds, and 50 complete free-reward chains. A disjoint 100-round provider holdout is frozen after the 1,298-round training partition.
+
+The board is 5×3. `props.prop` is column-major and bottom-to-top within each column. The 25 fixed paylines in `rules-contract.json` are evaluated left-to-right. Symbol 12 is Wild; a winning line containing one or more Wild symbols uses `mul=2`. Symbol 13 is Scatter and does not substitute. Award units are `odd * mul * freeMultiplier`; money is `bet * level * units`, while paid wager is `bet * level * 25`.
+
+Paid `type=1` starts a Round. Ordinary and `small_game_type=1` results end after that state. A zero-win 3/4-Scatter trigger sets both selector flags. `/single_game.game/miniGames` selects the initial free count and multiplier, then `type=2` states continue through `frees.st=0`; a free state with at least three Scatters adds eight states to both the remaining-state lifecycle and the complete Redis fact. The Redis member contains this complete chain as compact `CH40` ASCII facts. The Demo never generates or loads a loss locally; it consumes the pre-generated Redis pools in `192.168.10.3:6379/15`.

@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 1830,
+  "directoryName": "1830-Hotpot",
+  "displayName": "Hotpot",
+  "rulesVersion": "hotpot-1830-protocol-r1-20260904",
+  "sourceAuthority": "THIS_GAME_FRONTEND_AND_HELP_ONLY",
+  "doNotInheritFrom": ["1809-Freedom-Day", "1407-Coin-Master-GO"],
+  "board": {
+    "columns": 6,
+    "rows": 6,
+    "cellCount": 36,
+    "propLayout": "column-major",
+    "columnSlice": "prop[6*col .. 6*col+5]",
+    "withinColumn": "index 0 is visual top, index 5 is visual bottom; Game1830ResultDisplay.onGetColToIdx reverses the slice before filling from the bottom",
+    "evidence": [
+      "publish/1830-Hotpot/assets/Game1830/index.19146.js Game1830Constant.COL_NUM=6",
+      "Game1830ResultDisplay.onGetColToIdx / updateColToResult",
+      "Game1830BetDetails instantiates 36 children"
+    ]
+  },
+  "symbols": {
+    "paySymbols": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "scatter": 11,
+    "multiplierSymbolIds": [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+    "multiplierValuesByIdMinus12": [2, 3, 4, 5, 7, 10, 15, 20, 25, 30, 40, 50],
+    "wildSubstitute": false,
+    "note": "GamePropID only names Scatter=11. SymbolDesc uses label_wild for Scatter and multiplier copy, not a substituting Wild. Help never describes Wild substitution."
+  },
+  "winModel": {
+    "kind": "COUNT_ANYWHERE",
+    "paylineCount": null,
+    "paylineApplicable": false,
+    "waysApplicable": false,
+    "adjacentClusterRequired": false,
+    "minimumMatchingCount": 8,
+    "rule": "At every spin, any combinations of 8 or more matching symbols appear anywhere on the reels will result in a winning combination. Client eliminates every cell whose symbolId equals win_arr[i].p.",
+    "payoutFormulaFromHistoryTips": "betSize * betLevel * symbolPayoutOdd",
+    "win_arrFieldsConsumed": ["p", "n", "wm", "odd"],
+    "evidence": [
+      "PolyglotGame1830 Game1830_4 / Game1830_Loading_1 / Game_1830_Tip_3",
+      "Game1830ResultDisplay.StartEliminate symbolId==p.p",
+      "Game1830BetDetails onTipsCallBack bet X level X odd"
+    ]
+  },
+  "cascade": {
+    "pagesField": "data.props",
+    "oneHttpSpinContainsAllPages": true,
+    "terminalPage": "PageIndex >= props.length-1",
+    "eliminateThenGravityDownThenFillFromNextPage": true,
+    "continueUntilNoWinningCombination": true,
+    "evidence": [
+      "PolyglotGame1830 Game1830_6 Game1830_7",
+      "enum_Game1830RutStatus ELIMINATE / OLDMOVES / NEXTPAGE_ELIMINATE",
+      "checkGameEnd PageIndex >= props.length-1"
+    ]
+  },
+  "bet": {
+    "request.bet_gold": "Bet Size (Game1830Mgr.BaseBetNum), not charged total",
+    "request.level": "Bet Level, frontend list 10..1",
+    "baseBetListHardcodedInMgr": [20],
+    "chargedStakeFromDirtyQuarantineCheck": "response.bet_gold = request.bet_gold * level * 20 (0.02*10*20=4); dirty fixture only, not a complete-round count",
+    "betLinesConfigIsBaseBetNotPaylines": true
+  },
+  "ordinaryLoss": {
+    "kind": "ORDINARY_LOSS",
+    "definition": "A complete paid Round whose legal terminal state has no Scatter Free Spins feature and no positive total_win. Client: checkScatterModel is false (frees.st==0) and last page win_arr is empty / total_win==0 / change_gold equals -response.bet_gold.",
+    "httpShape": "One POST /cp/single_game.Game/gameResult while isScatterIng is false; props may still be a single page.",
+    "notCountedFrom": "fixtures/1830-Hotpot/spin-dirty-20260903"
+  },
+  "ordinaryWin": {
+    "kind": "ORDINARY_WIN",
+    "definition": "A complete paid Round with positive settlement (total_win>0 or last-page tw>0) that does not enter Scatter Free Spins (frees.st==0 after the paid gameResult, checkScatterModel false).",
+    "cascade": "All props pages of that one gameResult belong to the same paid spin."
+  },
+  "specialScatterFreeSpins": {
+    "kind": "SCATTER_FREE_SPINS",
+    "maliAliasInThisGame": false,
+    "buyIndependence": "NOT_AN_INDEPENDENT_MODE",
+    "triggerPaid": "3 Scatter (id=11) anywhere awards 10 free spins; each extra Scatter +2. Frontend: type!=2 and scatterCount>=3; award 10+2*(count-3).",
+    "retriggerInFree": "2 Scatter anywhere during Free Spins awards 5 more. Frontend: type==2 and scatterCount>=2; award 5+2*(count-2). Help: Free spins can be retriggered.",
+    "clientFlag": "isScatterIng set true after Game1830GetFreeTimesView; cleared when frees.st==0 on a later gameResult",
+    "freesFieldsConsumed": {
+      "st": "remaining free spins; checkScatterModel = st>0",
+      "tt": "total free spins of this feature; extra popup uses tt-OldScatterNum; feature summary when tt>0 and st==0",
+      "twa": "feature accumulated win shown on FreeSpinTotalWinView as twa+lwa",
+      "lwa": "added to twa for feature total display"
+    },
+    "freesFieldsUnusedByClient": ["ba", "bet", "l"],
+    "roundIncludes": "The paid trigger gameResult plus every subsequent gameResult until frees.st==0 and Game1830FreeSpinTotalWinView, then GAME_ENDED",
+    "multiplierHelp": "During free spins multiplier symbols range x5 to x50; during main game x2 to x5. All multipliers on the reels are summed and multiply that spin total win."
+  },
+  "buy": {
+    "independentMode": false,
+    "reason": "Game1830 has no buy API, no buy button, no buy form, and Help never describes a purchase. Promo FreeBetTimes/act_id is an activity free-bet, not a game mode."
+  },
+  "roundBoundary": {
+    "paidStart": "Player is in INIT or GAME_ENDED, isScatterIng is false, RequestBet calls RequestGameBet (POST gameResult) after RecBetClick resets PageIndex to 0",
+    "spinTerminal": "ResultDisplay.checkGameEnd true (last props page) then setGameEnd -> GAME_ENDED, or BigWin then OnPlayBigWinEndEvent",
+    "featureContinue": "If checkScatterModel (frees.st>0) after a paid spin, GetFreeTimesView then isScatterIng=true; further BetClick still POST gameResult without charging (isScatterIng skips gold deduct and bet limit)",
+    "featureTerminal": "isScatterIng && frees.st==0 clears the flag; if frees.tt>0 && frees.st==0 show FreeSpinTotalWinView then DISPLAYEND / GAME_ENDED",
+    "completeRound": "From the paid gameResult inclusive through the last legal GAME_ENDED of that paid start, including all cascade pages inside each gameResult and all free gameResult calls if triggered",
+    "onePaidSpinPlusAllFollowupsCountsAsOneRound": true
+  },
+  "history": {
+    "dayList": {
+      "path": "/goldgame/single_game_user_gold_history",
+      "request": ["token", "page_size=30", "page", "gid"],
+      "listItemFieldsFromCode": ["day", "bet_gold", "change_gold"],
+      "statisticsFieldsFromCode": ["total_bet_gold", "total_change_gold"]
+    },
+    "oneDayList": {
+      "path": "/goldgame/single_game_user_history",
+      "request": ["token", "day", "page_size=30", "gid", "page"],
+      "listItemFieldsFromCode": ["time", "order_id", "change_gold", "results", "extend.act_id"]
+    },
+    "detail": {
+      "form": "Game1830BetDetails",
+      "groups": "data.results[] — index 0 labelled Normal Spin, later groups Free Spin",
+      "pages": "results[g].result[] cascade pages with prop/win_arr/mult/tw",
+      "type2MeansFreeStep": true
+    },
+    "lightweightPolicy": "After classification, capture list+detail once per confirmed outcome. Do not attach full history to every spin. Do not use history to fill 200/200/30."
+  },
+  "endpoints": {
+    "initRoom": "POST /cp/single_game.Game/initRoom token+gid",
+    "gameResult": "POST /cp/single_game.Game/gameResult token+bet_gold+level+gid optional act_id",
+    "goldHistory": "POST /cp/goldgame/single_game_user_gold_history",
+    "oneDayHistory": "POST /cp/goldgame/single_game_user_history",
+    "alsoObservedOnFirstLoad": [
+      "POST /cp/config/initialData",
+      "POST /cp/account/getUserInfo"
+    ]
+  },
+  "unimplementedUntilCleanSamples": [
+    "symbol generation weights for start page vs cascade fill vs free page",
+    "integer total_win/bet_gold rate",
+    "empty-field rates beyond loss-path hypothesis",
+    "initRoom prop_odds numeric table",
+    "clean type=2 gameResult body"
+  ]
+}

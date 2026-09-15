@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 3,
+  "gameId": "1809",
+  "directoryName": "1809-mac-Freedom-Day",
+  "scope": "2026-09-01 incremental defect scope only",
+  "status": "ACCEPTED_FOR_INCREMENTAL_DEFECT_SCOPE",
+  "rulesVersion": "freedom-day-1809-v2-defect-fix",
+  "rulesHash": "235af93ec1e76cecf4816ab889bb1924113501faa79714b372473261367e6986",
+  "evidenceInventory": [
+    {"id":"EV-FRONTEND-TRANSLATE","source":"publish/1809-Freedom-Day/assets/Game2260/index.58f0d.js: TranslateListData/TranslateListData_H","behaviorIds":["FD-INIT-CONFIG","FD-MERGED-GRID-PROJECTION"],"facts":["prop=6x5 and each column reversed","grids length=Height","sl=IsSilver","gf=IsGold","trl=four horizontal cells"]},
+    {"id":"EV-FRONTEND-CASCADE","source":"publish/1809-Freedom-Day/assets/Game2260/index.58f0d.js: StartEliminate/PlayTwoPhaseEliminate/StartPropMoveToBlank/ReadyNextPageEliminate","behaviorIds":["FD-CASCADE-ADJACENCY","FD-MERGED-GRID-PROJECTION"],"facts":["win_arr.p last index selects visible merged symbol","ordinary win removes full Height","silver/gold win reads next page replacement","survivors fall before fills"]},
+    {"id":"EV-FRONTEND-CONSTANTS","source":"publish/1809-Freedom-Day/assets/Game2260/index.58f0d.js: Game2260Constant/Game2260SymbolInfo","behaviorIds":["FD-WAYS-EVALUATION","FD-MERGED-GRID-PROJECTION","FD-MARY-ROUND"],"facts":["6x5+4","symbols 1..13","scatter=12","wild=13","Height=1..4","outer reels Height=1","buy=75 bets","free multiplier starts 2 and increments 2"]},
+    {"id":"EV-JAVA-CORE","source":"generator/1809-Freedom-Day/src/main/java","behaviorIds":["FD-WAYS-EVALUATION","FD-CASCADE-ADJACENCY","FD-MARY-ROUND","FD-ORDINARY-LOSS-BALL-RATE","FD-ROUND-DELIVERY"],"facts":["deterministic ResultUtil","complete Round factory","independent codec recomputation and adjacency validation"]},
+    {"id":"EV-DIRECTED-TEST","source":"reports/1809-Freedom-Day/incremental-defect-repair-20260901.json","behaviorIds":["FD-ORDINARY-LOSS-BALL-RATE","FD-CASCADE-ADJACENCY","FD-MERGED-GRID-PROJECTION"],"facts":["100000 samples per arm","illegal adjacency mutation rejected","legal and illegal occupancy regression"]},
+    {"id":"EV-CONTROLLER-LIVE","source":"reports/1809-Freedom-Day/controller-v3-directed-acceptance.json","behaviorIds":["FD-INIT-CONFIG","FD-MARY-ROUND","FD-ROUND-DELIVERY","FD-HISTORY-SESSION"],"facts":["one Java PID and one assigned port","feature round delivery indexes 0..10","Init resumes","History order matches","visitor Host reflected"]},
+    {"id":"EV-LEGACY-SYNTHETIC","source":"fixtures/1809-Freedom-Day","behaviorIds":[],"disposition":"TEST_ORACLE_ONLY_NOT_RUNTIME","reason":"synthetic historical evidence is not read by formal runtime"}
+  ],
+  "behaviorContracts": [
+    {
+      "id":"FD-INIT-CONFIG","category":"API","status":"CONFIRMED","multiStep":false,"evidenceRefs":["EV-FRONTEND-TRANSLATE","EV-CONTROLLER-LIVE"],
+      "implementationContract":{"preconditions":["valid session"],"stateFields":["balance","activeRound","lastDelivery","visitorHost","assignedPort"],"transitionRules":["Init never consumes Delivery","Config derives hosts from request Host and assigned listener"],"outputs":["initRoom","initialData","user balance"],"terminationRules":["deliveryIndex unchanged"]},
+      "verificationContract":{"independentOracleRefs":["EV-FRONTEND-TRANSLATE"],"assertions":["prop=30","trl=4","Host and port reflect visitor"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"FD-WAYS-EVALUATION","category":"RULE","status":"CONFIRMED","multiStep":false,"evidenceRefs":["EV-FRONTEND-CONSTANTS","EV-JAVA-CORE"],
+      "implementationContract":{"preconditions":["validated board"],"stateFields":["prop","trl","grids","wild","paytable","multiplier"],"transitionRules":["symbol or Wild matches from left for at least 3 reels","merged group counts once"],"outputs":["win_arr","total multiplier","winning groups"],"terminationRules":["first reel without match stops symbol"]},
+      "verificationContract":{"independentOracleRefs":["EV-FRONTEND-CONSTANTS"],"assertions":["deterministic ResultUtil","p positions remain nested"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"FD-CASCADE-ADJACENCY","category":"STATE_MACHINE","status":"CONFIRMED","multiStep":true,"evidenceRefs":["EV-FRONTEND-CASCADE","EV-JAVA-CORE","EV-DIRECTED-TEST"],
+      "implementationContract":{"preconditions":["current page wins","next page exists"],"stateFields":["prop","trl","win_arr.p","win_arr.h","grids","gf","sl"],"transitionRules":["remove only selected units","preserve all survivor order","main falls down","top moves left","new symbols fill vacancies only","framed win may transform from next page"],"outputs":["reconstructable next page"],"terminationRules":["terminal page has empty win_arr"]},
+      "verificationContract":{"independentOracleRefs":["EV-FRONTEND-CASCADE"],"assertions":["each survivor maps once","unexplained change rejects Round","no page after terminal"],"usesImplementationGeneratedExpected":false,"adjacentStepEvidence":[{"ref":"EV-FRONTEND-CASCADE","from":"winning logical cells","event":"elimination/frame transform plus gravity","to":"next occupied cells"}]}
+    },
+    {
+      "id":"FD-MERGED-GRID-PROJECTION","category":"PROJECTION","status":"CONFIRMED","multiStep":true,"evidenceRefs":["EV-FRONTEND-TRANSLATE","EV-FRONTEND-CASCADE","EV-FRONTEND-CONSTANTS"],
+      "implementationContract":{"preconditions":["contiguous same-reel group"],"stateFields":["grids","gf","sl","prop"],"transitionRules":["Height=2..4","same symbol in every occupied cell","gf/sl reference whole grids group","gold and silver do not overlap","outer reels stay Height=1"],"outputs":["exact grids/gf/sl"],"terminationRules":["invalid occupancy rejected before runtime or Redis"]},
+      "verificationContract":{"independentOracleRefs":["EV-FRONTEND-TRANSLATE","EV-FRONTEND-CONSTANTS"],"assertions":["no cross-reel/overlap/orphan frame","structured codec preserves legal group"],"usesImplementationGeneratedExpected":false,"adjacentStepEvidence":[{"ref":"EV-FRONTEND-CASCADE","from":"current merged symbol","event":"ordinary removal or framed replacement","to":"next group with valid occupancy"}]}
+    },
+    {
+      "id":"FD-MARY-ROUND","category":"SPECIAL_MODE","status":"CONFIRMED","multiStep":true,"evidenceRefs":["EV-FRONTEND-CONSTANTS","EV-JAVA-CORE","EV-CONTROLLER-LIVE"],
+      "implementationContract":{"preconditions":["four Scatter or feature buy"],"stateFields":["freeTotal","freeIndex","multiplier","cumulativeWin"],"transitionRules":["four Scatter=10","each extra Scatter=2","free multiplier starts 2 and carries"],"outputs":["paid trigger plus all free deliveries"],"terminationRules":["all awards delivered and terminal page reached"]},
+      "verificationContract":{"independentOracleRefs":["EV-FRONTEND-CONSTANTS","EV-CONTROLLER-LIVE"],"assertions":["complete Round generated once","free indexes continuous"],"usesImplementationGeneratedExpected":false,"adjacentStepEvidence":[{"ref":"EV-CONTROLLER-LIVE","from":"feature delivery 0","event":"ten free deliveries","to":"delivery 10 terminal"}]}
+    },
+    {
+      "id":"FD-ORDINARY-LOSS-BALL-RATE","category":"DEFECT_POLICY","status":"CONFIRMED","multiStep":false,"evidenceRefs":["EV-JAVA-CORE","EV-DIRECTED-TEST"],
+      "implementationContract":{"preconditions":["ordinary paid single-step ResultUtil zero","no following state"],"stateFields":["baselineBoard","Ball=1","formalWeights"],"transitionRules":["50% keep baseline","50% generate realtime no-Ball LOSS","reverify zero"],"outputs":["ordinary paid LOSS"],"terminationRules":["never applies to wins, buy or free mode"]},
+      "verificationContract":{"independentOracleRefs":["EV-DIRECTED-TEST"],"assertions":["100000 samples per arm","modified rate equals baseline/2 within error","all zero and terminal"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"FD-ROUND-DELIVERY","category":"DELIVERY","status":"CONFIRMED","multiStep":true,"evidenceRefs":["EV-JAVA-CORE","EV-CONTROLLER-LIVE"],
+      "implementationContract":{"preconditions":["new paid start or active continuation"],"stateFields":["roundKey","deliveryIndex","deliveries","idempotencyMap"],"transitionRules":["generate full Round once","return next Delivery only","duplicate key never advances"],"outputs":["roundKey","deliveryIndex","deliveryCount","spin"],"terminationRules":["clear active after final Delivery"]},
+      "verificationContract":{"independentOracleRefs":["EV-CONTROLLER-LIVE"],"assertions":["one roundKey","indexes start 0 and increase 1","duplicate response identical"],"usesImplementationGeneratedExpected":false,"adjacentStepEvidence":[{"ref":"EV-CONTROLLER-LIVE","from":"delivery n","event":"next nonduplicate request","to":"delivery n+1"}]}
+    },
+    {
+      "id":"FD-HISTORY-SESSION","category":"SESSION","status":"CONFIRMED","multiStep":true,"evidenceRefs":["EV-CONTROLLER-LIVE"],
+      "implementationContract":{"preconditions":["session token"],"stateFields":["balance","activeRound","lastDelivery","history"],"transitionRules":["Init resumes without consuming","History contains delivered results only","sessions do not share state"],"outputs":["balance","resume projection","history rows"],"terminationRules":["state lives for managed process lifetime"]},
+      "verificationContract":{"independentOracleRefs":["EV-CONTROLLER-LIVE"],"assertions":["Init roundKey unchanged","History indexes equal delivery order","balance matches settlement"],"usesImplementationGeneratedExpected":false,"adjacentStepEvidence":[{"ref":"EV-CONTROLLER-LIVE","from":"delivered spin","event":"disconnect then Init/History","to":"same round and recorded delivery"}]}
+    }
+  ],
+  "unresolvedBehaviors": [
+    {"id":"FD-UPSTREAM-MERGED-WEIGHTS","status":"DEFERRED_OUT_OF_SCOPE","reason":"real-provider grids/gf/sl frequency was not captured; repair preserves and validates legal structures without inventing an upstream rate","doesNotBlock":["adjacent continuity","illegal long-frame rejection","LOSS ball-rate fix","Controller v3 delivery"]}
+  ]
+}

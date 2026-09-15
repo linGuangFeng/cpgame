@@ -1,0 +1,293 @@
+{
+  "schemaVersion": 1,
+  "gameId": 57,
+  "gameName": "Crazy 777",
+  "directoryName": "57-Crazy-777",
+  "protocolRevision": "protocol-r3-20260829",
+  "rulesVersion": "v1.5.10.250430",
+  "rulesVersionEvidence": "resources/57-Crazy-777/pt-BR/_hosts/static.cpgame.io/57/versionconfig.js window.GameVersion",
+  "rulesHash": "sha256:852d3021084c1f4117203c4a6eda137747bf9c1f689b30decb9791e46bf66f2b",
+  "identity": {
+    "status": "CONFIRMED",
+    "nativeGameId": 57,
+    "title": "Crazy 777",
+    "platformLobbyRecord": {"id": 2518, "g_id": 455, "game_name": "crazy 777"},
+    "namespaceWarning": "platform id/g_id and native gid are distinct; native gid=57 is confirmed by /57/, bundle _gameId and provider requests",
+    "evidence": [
+      "fixtures/57-Crazy-777/lobby-game-list.json",
+      "fixtures/57-Crazy-777/startup-crazy-777.json",
+      "captures/57-Crazy-777/game-first-load.json",
+      "resources/57-Crazy-777/pt-BR/_hosts/static.cpgame.io/57/assets/main/index.7eb25.js"
+    ]
+  },
+  "supportedLanguages": {
+    "codes": ["en", "pt", "es", "th", "vi", "id", "bn", "ko", "fr", "tr"],
+    "parameter": "l",
+    "defaultCode": "pt",
+    "allFirstLoadsCaptured": true,
+    "evidence": [
+      "provider bundle LanguageManager whitelist",
+      "captures/57-Crazy-777/language-sweep.json",
+      "reports/57-Crazy-777/language-inventory.json"
+    ]
+  },
+  "winModel": "FIXED_PAYLINES",
+  "winModelDetails": {
+    "type": "FIXED_PAYLINES",
+    "paylineCount": 5,
+    "notApplicable": false,
+    "lineKeys": ["0", "1", "2", "3", "4"],
+    "paylines": {
+      "0": ["01", "11", "21"],
+      "1": ["02", "12", "22"],
+      "2": ["03", "13", "23"],
+      "3": ["01", "12", "23"],
+      "4": ["03", "12", "21"]
+    },
+    "specialWinKey": {"key": "5", "meaning": "SC trigger payout", "countsAsPayline": false},
+    "payoutFormula": "sum(spl[wmkl[key]] * bl * bs * rpx)",
+    "evidence": [
+      "rules text: 5 linhas de pagamento fixas",
+      "bundle PayLineList defines keys 0..4",
+      "200 ordinary win rounds expose wmkl keys 0..4",
+      "r000013 exposes wmkl key 5 as SC trigger"
+    ],
+    "conflictDisposition": {
+      "bundleInternalConstant": "GameConfig.PayLineCount=1",
+      "decision": "BET_UI_MULTIPLIER_ONLY_NOT_EXTERNAL_LINE_COUNT",
+      "reason": "the constant is used in total-bet UI arithmetic; authoritative rules, five line nodes, PayLineList and samples prove five fixed paylines"
+    }
+  },
+  "boardModel": {
+    "type": "THREE_REEL_FIVE_ENCODED_POSITIONS_WITH_BLANKS",
+    "reelCount": 3,
+    "logicalPaylineRowsPerReel": 3,
+    "encodedPositionsPerReel": 5,
+    "encodedPositionCount": 15,
+    "encodingOrder": "reel-major: indexes 0..4 reel0, 5..9 reel1, 10..14 reel2",
+    "blankCountPerReel": {"minimum": 2, "maximum": 3},
+    "nonBlankCountPerReel": {"minimum": 2, "maximum": 3},
+    "alternationRule": "BLANK and regular/special symbols alternate sequentially",
+    "renderingWarning": "rskl is not a conventional flat 3x3 board; the client removes BLANK before appending result symbols to animation reels",
+    "evidence": [
+      "rules: 3 reels, five symbols per reel, two or three blanks",
+      "bundle RowCounts:[3,3,3] and parser RowCounts[col]+2",
+      "all 1751 captured Steps have rskl length 15"
+    ]
+  },
+  "reelModel": {
+    "status": "ALIAS_OF_BOARD_MODEL",
+    "reelCount": 3,
+    "logicalRows": 3,
+    "encodedPositionsPerReel": 5,
+    "encodedPositionCount": 15
+  },
+  "symbols": {
+    "codes": ["H1", "H2", "H3", "H4", "H5", "H6", "WILD", "SC", "BLANK"],
+    "regularCodes": ["H1", "H2", "H3", "H4", "H5", "H6"],
+    "wild": {
+      "code": "WILD",
+      "substitutes": ["H1", "H2", "H3", "H4", "H5", "H6"],
+      "excludes": ["SC"],
+      "evidence": "rules text"
+    },
+    "gradientSubstitution": {
+      "status": "CONFIRMED",
+      "pairs": [
+        {"substitute": "H1", "target": "H4", "color": "yellow"},
+        {"substitute": "H2", "target": "H5", "color": "pink"},
+        {"substitute": "H3", "target": "H6", "color": "blue"}
+      ],
+      "evidence": [
+        "captures/57-Crazy-777/rules-page-evidence.json",
+        "captures/57-Crazy-777/symbol-asset-evidence.json",
+        "bundle SymbolRewardPath H1..H6 bindings"
+      ]
+    },
+    "scatter": {
+      "code": "SC",
+      "payMultiplier": 7,
+      "triggerCount": 3,
+      "appearsInFreeSpins": false,
+      "evidence": ["config spl.SC=7", "rules: SC appears only in main game and 3 SC activates 10 free spins"]
+    },
+    "payTable": {
+      "H1": 50,
+      "H2": 25,
+      "H3": 15,
+      "H4": 6,
+      "H5": 5,
+      "H6": 3,
+      "MIX": 1,
+      "SC": 7,
+      "WILD": 500,
+      "evidence": "fixtures/57-Crazy-777/game-config.json response.data.spl"
+    }
+  },
+  "symbolWeights": {
+    "serverOutcomeWeights": null,
+    "status": "UNKNOWN_NOT_CAPTURED",
+    "formalConfigurationAllowed": false,
+    "visualOnlyBundleConstant": {
+      "symbolOrder": ["H1", "H2", "H3", "H4", "H5", "H6", "WILD", "SC"],
+      "values": [5, 10, 15, 20, 25, 30, 10, 10],
+      "usage": "GameConfigData.randomReel creates client animation background reels before server rskl is appended",
+      "runtimeResultUse": "FORBIDDEN"
+    },
+    "reason": "client animation weights are not evidence of provider/server outcome probabilities; captured frequency is not converted into weights"
+  },
+  "betModel": {
+    "betLevels": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "betSizes": [0.5, 5, 50],
+    "minimumBet": {"bl": 1, "bs": 0.5, "amount": 0.5, "currency": "BRL"},
+    "amountFormula": "ba = bl * bs",
+    "evidence": ["config bll/bsl", "rules page", "1341 paid starts at ba=0.5,bl=1,bs=0.5"]
+  },
+  "roundModel": {
+    "paidRoundStart": "first accepted /spin after prior complete Round",
+    "stepEndpoint": "POST /cp/api/v1/crazy-seven/spin",
+    "continuation": "repeat the same endpoint while fsn>0 and not (fsn==nfsc and ss==1), retaining one local Round",
+    "terminationRules": ["fsn==0", "fsn==nfsc AND ss==1"],
+    "upstreamRoundIdObserved": false,
+    "captureRoundIdSynthetic": true,
+    "deliveryModel": {
+      "generation": "generate an entire winning/special Round once",
+      "memberClaimCount": 1,
+      "deliverOneStoredStepPerRequest": true,
+      "regenerationDuringActiveRound": false,
+      "stateFields": ["pendingRound", "nextStepIndex", "memberClaimed"]
+    },
+    "observedStateFields": ["fsn", "nfsc", "ss", "rpx", "gt", "small_game_type", "ba", "pb", "rwa", "wa"],
+    "evidence": ["protocol/57-Crazy-777/protocol-spec.json", "captures/57-Crazy-777/rounds.jsonl", "captures/57-Crazy-777/spin-index.jsonl"]
+  },
+  "roundBoundary": {
+    "paidRoundStart": "accepted spin call when preceding state is terminal",
+    "continuation": "free Step stays in the same Round",
+    "terminationRules": ["fsn==0", "fsn==nfsc AND ss==1"]
+  },
+  "specialModes": [
+    {
+      "id": "FREE_SPINS",
+      "status": "CONFIRMED",
+      "trigger": "3 SC on the three reels/SC win key 5 in the paid game",
+      "awardedSpins": 10,
+      "winMultiplier": 3,
+      "sameBetAsTrigger": true,
+      "scatterPresentDuringMode": false,
+      "retriggerObserved": false,
+      "retriggerSupported": false,
+      "retriggerEvidence": "rules say SC appears only in main game; across 48 complete free-spin Rounds fsn remained 10",
+      "completeRoundCount": 48,
+      "encodingObserved": {
+        "adjacentHttpSteps": {"count": 41, "stepCount": 11, "example": "r000013", "sequence": "paid trigger nfsc=0,rpx=1; free nfsc=1..9 ss=0,rpx=3; terminal nfsc=10,ss=1,rpx=3"},
+        "singleResponseTerminal": {"count": 7, "stepCount": 1, "example": "r000529", "sequence": "fsn=10,nfsc=10,ss=1,rpx=3,ba=0.5"}
+      },
+      "evidence": ["rules page", "rounds.jsonl", "spin-index.jsonl", "round-coverage-validation.json"]
+    }
+  ],
+  "purchaseFeature": {
+    "supported": false,
+    "status": "CONFIRMED_ABSENT_IN_CURRENT_BUILD",
+    "evidence": ["21 runtime buttons contain no buy control", "bundle API/control enumeration contains no buy/purchase path"],
+    "disposition": "not an applicable sampling category"
+  },
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "scope": "ordinary paid single-Step LOSS only",
+    "requirements": ["fsn=0", "wa=0", "wmkl empty", "valid 15-entry rskl", "ss=1", "independent ResultUtil verification"],
+    "prohibitedWhen": ["pendingRound exists", "free/special mode active", "nonterminal prior Step"],
+    "evidence": ["1093 complete ordinary LOSS Rounds", "r000001", "bundle IsFreeGame termination code"]
+  },
+  "codecContract": {
+    "transport": "HTTPS JSON over form-urlencoded POST",
+    "requestEncoding": "encodeURIComponent key/value; %20 replaced by +",
+    "virtualHeaderToForm": {"web-token": "t", "game-id": "gid"},
+    "payloadEncryption": "NONE",
+    "responseEnvelope": {"successCode": 200, "payloadField": "data", "messageField": "info"},
+    "websocket": "NOT_OBSERVED",
+    "evidence": ["bundle Http module", "captured first paid request", "captured auth/config responses"]
+  },
+  "redisContract": {
+    "originObserved": false,
+    "status": "REPLICA_PLATFORM_CACHE",
+    "keyPattern": {
+      "normalIndex": "PerKeyList_000000057",
+      "specialIndex": "MaryKeyList_000000057",
+      "normalList": "BetLog:000000057:{ratio6}",
+      "specialList": "MaryLog:000000057:{ratio6}"
+    },
+    "payloadCodec": "C777A1 US-ASCII member: prefix;rulesHash;reel-major boards joined by |",
+    "claimPolicy": "choose loss/win/free then an existing integer multiplier then LINDEX one complete Round member; free deliveries project the same member",
+    "reason": "origin captures contain no Redis key; replica Demo uses the platform cache host 192.168.10.3:6379 db15 with a current-game ASCII member that restores visible rskl only"
+  },
+  "api": {
+    "baseHost": "api.omgapibra.com",
+    "authVerify": "POST /cp/api/v1/auth/verify",
+    "config": "POST /cp/api/v1/crazy-seven/config",
+    "spin": "POST /cp/api/v1/crazy-seven/spin",
+    "ping": "POST /cp/api/v1/ping",
+    "historyList": "POST /cp/api/v1/crazy-seven/log-list",
+    "historyView": "POST /cp/api/v1/crazy-seven/log-view",
+    "contentType": "application/x-www-form-urlencoded",
+    "spinParams": ["bl", "bs", "t", "gid"],
+    "secretPersistence": "sensitive values redacted; only field names and isolated browser session state retained"
+  },
+  "history": {
+    "status": "CONFIRMED",
+    "endpointsDiscovered": true,
+    "requestOrder": ["log-list", "select ll[].tis", "log-view transfer_id=tis", "second log-view for detail prefab", "render bsl+fsl", "HISTORY_DETAIL_BACK"],
+    "actualAdjacentHistoryUiCaptured": true,
+    "observedRequestCountPerOpen": {"logList": 1, "logView": 2},
+    "returnState": "detail node terminated; existing list restored at opacity 255 without another log-list request",
+    "evidence": [
+      "captures/57-Crazy-777/history-adjacent-evidence.json",
+      "fixtures/57-Crazy-777/history-list-adjacent.json",
+      "fixtures/57-Crazy-777/history-detail-adjacent.json",
+      "resources/57-Crazy-777/pt-BR/_hosts/static.cpgame.io/57/assets/main/index.7eb25.js"
+    ]
+  },
+  "heartbeat": {
+    "endpoint": "POST /cp/api/v1/ping",
+    "negotiationFields": ["ping.enable", "ping.seconds"],
+    "capturedState": {"enable": 0, "seconds": 0, "scheduled": false},
+    "evidence": ["auth-verify-redacted.json", "bundle HeartMgr"]
+  },
+  "websocket": {
+    "used": false,
+    "observation": "none in first load, ten language loads, rules visits or 1341-Round collection; observed protocol is HTTP(S)"
+  },
+  "fixturePolicy": "fixtures are protocol/regression oracles only and forbidden as runtime result sources",
+  "evidence": [
+    "protocol/57-Crazy-777/protocol-spec.json",
+    "protocol/57-Crazy-777/protocol-spec.md",
+    "protocol/57-Crazy-777/field-evidence-matrix.json",
+    "captures/57-Crazy-777/rules-page-evidence.json",
+    "captures/57-Crazy-777/symbol-asset-evidence.json",
+    "captures/57-Crazy-777/history-adjacent-evidence.json",
+    "fixtures/57-Crazy-777/game-config.json",
+    "resources/57-Crazy-777/pt-BR/_hosts/static.cpgame.io/57/assets/main/index.7eb25.js",
+    "captures/57-Crazy-777/rounds.jsonl",
+    "captures/57-Crazy-777/spin-index.jsonl"
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "sha256:852d3021084c1f4117203c4a6eda137747bf9c1f689b30decb9791e46bf66f2b",
+    "behaviorIds": [
+      "B-ENTRY-LAUNCH",
+      "B-CODEC-FORM",
+      "B-AUTH-CONFIG",
+      "B-LAST-STATE-RESTORE",
+      "B-LANGUAGE-LOAD",
+      "B-RULES-PAYTABLE",
+      "B-GRADIENT-SUBSTITUTION",
+      "B-RUNTIME-WEIGHT-GUARD",
+      "B-PAID-ROUND",
+      "B-ORDINARY-LOSS",
+      "B-ORDINARY-WIN",
+      "B-FREE-SPINS",
+      "B-HEARTBEAT-NEGOTIATION",
+      "B-PURCHASE-UNAVAILABLE",
+      "B-HISTORY"
+    ]
+  }
+}

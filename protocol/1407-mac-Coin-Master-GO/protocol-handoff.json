@@ -1,0 +1,2162 @@
+{
+  "schemaVersion": 2,
+  "gameId": 1407,
+  "directoryName": "1407-mac-Coin-Master-GO",
+  "generatedAt": "2026-09-01T18:52:00+08:00",
+  "rulesVersion": "1407-mac-evidence-v18.4",
+  "rulesHash": "08727f7e5a890dcd1b3cf5ae9559474ef9ea98c6e9a09ac34b7d53598ba1662f",
+  "evidenceInventory": [
+    {
+      "id": "evidence.0ecb4329391a3d42",
+      "source": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/history-capture.json",
+      "behaviorIds": [
+        "history.list-detail-round-projection"
+      ]
+    },
+    {
+      "id": "evidence.3cd776cbc78966c5",
+      "source": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/history-capture.json#/detail",
+      "behaviorIds": [
+        "history.list-detail-round-projection"
+      ]
+    },
+    {
+      "id": "evidence.0dccf9fd7808092a",
+      "source": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/history-capture.json#/list",
+      "behaviorIds": [
+        "history.list-detail-round-projection"
+      ]
+    },
+    {
+      "id": "evidence.4d710027387e6869",
+      "source": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json",
+      "behaviorIds": [
+        "session.verify-config-resume",
+        "transport.form-json-envelope"
+      ]
+    },
+    {
+      "id": "evidence.a7785cc8d5cd0dfb",
+      "source": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json#/config",
+      "behaviorIds": [
+        "session.verify-config-resume"
+      ]
+    },
+    {
+      "id": "evidence.7f9966195be3de6c",
+      "source": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json#/config/response/json/data/spl",
+      "behaviorIds": [],
+      "disposition": "SUPPORTING_EVIDENCE_RETAINED",
+      "reason": "Current-game evidence is retained for traceability but is not required by a specific behavior contract."
+    },
+    {
+      "id": "evidence.d433d9f5921e0c6d",
+      "source": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json#/verify",
+      "behaviorIds": [
+        "session.verify-config-resume"
+      ]
+    },
+    {
+      "id": "evidence.93f4f2786f3d32b3",
+      "source": "captures/1407-Coin-Master-GO/history-detail-scan.jsonl",
+      "behaviorIds": [
+        "history.list-detail-round-projection"
+      ]
+    },
+    {
+      "id": "evidence.b39170d1910986fe",
+      "source": "captures/1407-Coin-Master-GO/history-special-details.jsonl",
+      "behaviorIds": [
+        "free-spin.initial-award",
+        "history.list-detail-round-projection"
+      ]
+    },
+    {
+      "id": "evidence.6bb33467a5f2d8a6",
+      "source": "captures/1407-Coin-Master-GO/history-special-index.json",
+      "behaviorIds": [
+        "free-spin.retrigger"
+      ]
+    },
+    {
+      "id": "evidence.efc03db3bcd98e67",
+      "source": "captures/1407-Coin-Master-GO/round-index.jsonl",
+      "behaviorIds": [
+        "free-spin.initial-award",
+        "round.boundary-and-state-progression"
+      ]
+    },
+    {
+      "id": "evidence.31cc76fdd00700c5",
+      "source": "captures/1407-Coin-Master-GO/spin-index.jsonl",
+      "behaviorIds": [
+        "wager.bet-amount"
+      ]
+    },
+    {
+      "id": "evidence.94f5900ab3b66c90",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl",
+      "behaviorIds": [
+        "balance.delayed-settlement",
+        "board.transport-coordinate-mapping",
+        "outcome.fixed-ways-payout",
+        "round.boundary-and-state-progression",
+        "runtime.independent-paid-loss"
+      ]
+    },
+    {
+      "id": "evidence.4cc44935f142095f",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-11",
+      "behaviorIds": [
+        "balance.delayed-settlement",
+        "cascade.physical-board-continuity",
+        "golden.transform-to-wild",
+        "round.boundary-and-state-progression"
+      ]
+    },
+    {
+      "id": "evidence.7578eb4fb67af769",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-11-to-13",
+      "behaviorIds": [
+        "golden.transform-to-wild"
+      ]
+    },
+    {
+      "id": "evidence.525b1776421ea83b",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-26-to-27",
+      "behaviorIds": [
+        "cascade.physical-board-continuity",
+        "golden.transform-to-wild"
+      ]
+    },
+    {
+      "id": "evidence.4c50e2518c0ceb9a",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-12",
+      "behaviorIds": [
+        "balance.delayed-settlement",
+        "cascade.physical-board-continuity",
+        "golden.transform-to-wild",
+        "round.boundary-and-state-progression"
+      ]
+    },
+    {
+      "id": "evidence.310934cf5b44ec79",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-13",
+      "behaviorIds": [
+        "balance.delayed-settlement",
+        "cascade.physical-board-continuity",
+        "golden.transform-to-wild",
+        "round.boundary-and-state-progression"
+      ]
+    },
+    {
+      "id": "evidence.46d52b842100d891",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-187",
+      "behaviorIds": [
+        "free-spin.retrigger"
+      ]
+    },
+    {
+      "id": "evidence.77f3b9c538d76275",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-54",
+      "behaviorIds": [
+        "free-spin.initial-award"
+      ]
+    },
+    {
+      "id": "evidence.e4f1306cac825a5e",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-54-to-56",
+      "behaviorIds": [
+        "free-spin.initial-award"
+      ]
+    },
+    {
+      "id": "evidence.ef884ab19391b255",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-55",
+      "behaviorIds": [
+        "free-spin.initial-award"
+      ]
+    },
+    {
+      "id": "evidence.582b5d8606dbb15c",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-56",
+      "behaviorIds": [
+        "free-spin.initial-award"
+      ]
+    },
+    {
+      "id": "evidence.8fcab33ecbdfcaa6",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-636",
+      "behaviorIds": [
+        "free-spin.retrigger"
+      ]
+    },
+    {
+      "id": "evidence.9dc1f8b3fb265d3c",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-818",
+      "behaviorIds": [
+        "free-spin.retrigger"
+      ]
+    },
+    {
+      "id": "evidence.a3fdc939825ae648",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-819",
+      "behaviorIds": [
+        "free-spin.retrigger"
+      ]
+    },
+    {
+      "id": "evidence.a27fe9915794fa47",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-820",
+      "behaviorIds": [
+        "free-spin.retrigger"
+      ]
+    },
+    {
+      "id": "evidence.8fa3b23100012e8c",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-832",
+      "behaviorIds": [
+        "free-spin.retrigger"
+      ]
+    },
+    {
+      "id": "evidence.049e04c5a44700c0",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-833",
+      "behaviorIds": [
+        "free-spin.retrigger"
+      ]
+    },
+    {
+      "id": "evidence.eb0f4c06be4c1946",
+      "source": "captures/1407-Coin-Master-GO/step-index.jsonl#scene-834",
+      "behaviorIds": [
+        "free-spin.retrigger"
+      ]
+    },
+    {
+      "id": "evidence.c892a040276f0f1c",
+      "source": "protocol/1407-Coin-Master-GO/game-capabilities.json",
+      "behaviorIds": [],
+      "disposition": "SUPPORTING_EVIDENCE_RETAINED",
+      "reason": "Current-game evidence is retained for traceability but is not required by a specific behavior contract."
+    },
+    {
+      "id": "evidence.44b802344f51ac7e",
+      "source": "protocol/1407-Coin-Master-GO/game-capabilities.json#/betModel",
+      "behaviorIds": [
+        "wager.bet-amount"
+      ]
+    },
+    {
+      "id": "evidence.1b915f5edef2a71a",
+      "source": "protocol/1407-Coin-Master-GO/game-capabilities.json#/redisContract",
+      "behaviorIds": [
+        "redis.platform-downstream-loader"
+      ]
+    },
+    {
+      "id": "evidence.40cfb1882cf87caa",
+      "source": "protocol/1407-Coin-Master-GO/game-capabilities.json#/runtimeIndependentLoss",
+      "behaviorIds": [
+        "runtime.independent-paid-loss"
+      ]
+    },
+    {
+      "id": "evidence.b84bfe67229fab1b",
+      "source": "protocol/1407-Coin-Master-GO/game-capabilities.json#/sourcePolicy",
+      "behaviorIds": [
+        "runtime.fixture-isolation"
+      ]
+    },
+    {
+      "id": "evidence.f0c15261fc88dfb3",
+      "source": "protocol/1407-Coin-Master-GO/game-capabilities.json#/specialModeDetails/purchaseEntry",
+      "behaviorIds": [
+        "mode.purchase-entry-disabled"
+      ]
+    },
+    {
+      "id": "evidence.e943117e5d6b6f90",
+      "source": "protocol/1407-Coin-Master-GO/game-capabilities.json#/specialModeDetails/separateRespinPurchase",
+      "behaviorIds": [
+        "mode.separate-respin-purchase-disabled"
+      ]
+    },
+    {
+      "id": "evidence.a96e884865262de7",
+      "source": "protocol/1407-Coin-Master-GO/game-capabilities.json#/symbolWeights",
+      "behaviorIds": [
+        "generator.local-adjustable-weights"
+      ]
+    },
+    {
+      "id": "evidence.4904fde72f510a6f",
+      "source": "protocol/1407-Coin-Master-GO/game-capabilities.json#/theoreticalRtp",
+      "behaviorIds": [
+        "theoretical-rtp.frontend-constant"
+      ]
+    },
+    {
+      "id": "evidence.ad09bb371f105ca9",
+      "source": "protocol/1407-Coin-Master-GO/protocol-spec.json",
+      "behaviorIds": [],
+      "disposition": "SUPPORTING_EVIDENCE_RETAINED",
+      "reason": "Current-game evidence is retained for traceability but is not required by a specific behavior contract."
+    },
+    {
+      "id": "evidence.84c64d4bf78fa613",
+      "source": "protocol/1407-Coin-Master-GO/protocol-spec.json#/endpoints",
+      "behaviorIds": [
+        "session.verify-config-resume"
+      ]
+    },
+    {
+      "id": "evidence.c47402b295607844",
+      "source": "protocol/1407-Coin-Master-GO/protocol-spec.json#/endpoints/game.config",
+      "behaviorIds": [
+        "disconnect.durable-resume"
+      ]
+    },
+    {
+      "id": "evidence.5711b10c9bb046e5",
+      "source": "protocol/1407-Coin-Master-GO/protocol-spec.json#/moneyAndSettlement",
+      "behaviorIds": [
+        "balance.delayed-settlement"
+      ]
+    },
+    {
+      "id": "evidence.9f69ed14cb858176",
+      "source": "protocol/1407-Coin-Master-GO/protocol-spec.json#/transport",
+      "behaviorIds": [
+        "transport.form-json-envelope"
+      ]
+    },
+    {
+      "id": "evidence.23faeecb5b47c3d5",
+      "source": "protocol/1407-Coin-Master-GO/state-machine.json",
+      "behaviorIds": [
+        "disconnect.durable-resume",
+        "free-spin.initial-award",
+        "request.idempotency",
+        "round.boundary-and-state-progression",
+        "round.delivery-single-claim"
+      ]
+    },
+    {
+      "id": "evidence.ed2898e3dde004b8",
+      "source": "reports/1407-Coin-Master-GO/delivery-ledger.jsonl",
+      "behaviorIds": [
+        "request.idempotency",
+        "round.boundary-and-state-progression",
+        "round.delivery-single-claim"
+      ]
+    },
+    {
+      "id": "evidence.f427cc8747a0a261",
+      "source": "reports/1407-Coin-Master-GO/field-evidence-matrix.json",
+      "behaviorIds": [
+        "board.transport-coordinate-mapping",
+        "outcome.fixed-ways-payout",
+        "transport.form-json-envelope"
+      ]
+    },
+    {
+      "id": "evidence.da2f35dca292e842",
+      "source": "reports/1407-Coin-Master-GO/field-evidence-matrix.json#/rows",
+      "behaviorIds": [
+        "cascade.physical-board-continuity"
+      ]
+    },
+    {
+      "id": "evidence.5ac0cc5e02e0e120",
+      "source": "reports/1407-Coin-Master-GO/independent-automated-test-report.json#/fixtureIsolation",
+      "behaviorIds": [
+        "runtime.fixture-isolation"
+      ]
+    },
+    {
+      "id": "evidence.f585a019cd63ebbf",
+      "source": "reports/1407-Coin-Master-GO/independent-automated-test-report.json#/formalLoader",
+      "behaviorIds": [
+        "redis.platform-downstream-loader"
+      ]
+    },
+    {
+      "id": "evidence.66cbdfb91c66e22c",
+      "source": "reports/1407-Coin-Master-GO/independent-automated-test-report.json#/weights",
+      "behaviorIds": [
+        "generator.local-adjustable-weights"
+      ]
+    },
+    {
+      "id": "evidence.48bb4da2e121b31e",
+      "source": "reports/1407-Coin-Master-GO/independent-run-report.json",
+      "behaviorIds": [],
+      "disposition": "SUPPORTING_EVIDENCE_RETAINED",
+      "reason": "Current-game evidence is retained for traceability but is not required by a specific behavior contract."
+    },
+    {
+      "id": "evidence.1e7a38760aab2a62",
+      "source": "reports/1407-Coin-Master-GO/independent-run-report.json#/balance",
+      "behaviorIds": [
+        "balance.delayed-settlement"
+      ]
+    },
+    {
+      "id": "evidence.18dd2b44ef7a6248",
+      "source": "reports/1407-Coin-Master-GO/independent-run-report.json#/languages",
+      "behaviorIds": [
+        "language.supported-first-load"
+      ]
+    },
+    {
+      "id": "evidence.8516969573937987",
+      "source": "reports/1407-Coin-Master-GO/independent-run-report.json#/requests",
+      "behaviorIds": [
+        "language.supported-first-load",
+        "session.verify-config-resume"
+      ]
+    },
+    {
+      "id": "evidence.fb22c599354e1985",
+      "source": "reports/1407-Coin-Master-GO/independent-run-report.json#/rounds",
+      "behaviorIds": [
+        "request.idempotency"
+      ]
+    },
+    {
+      "id": "evidence.1b74ecd40089a0f2",
+      "source": "reports/1407-Coin-Master-GO/independent-run-report.json#/rounds/LOSS",
+      "behaviorIds": [
+        "runtime.independent-paid-loss"
+      ]
+    },
+    {
+      "id": "evidence.184e38a2f847b314",
+      "source": "reports/1407-Coin-Master-GO/independent-run-report.json#/serverState",
+      "behaviorIds": [
+        "round.delivery-single-claim"
+      ]
+    },
+    {
+      "id": "evidence.281c49924b0af5d0",
+      "source": "reports/1407-Coin-Master-GO/independent-run-report.json#/specialModes/cascade",
+      "behaviorIds": [
+        "cascade.physical-board-continuity"
+      ]
+    },
+    {
+      "id": "evidence.e88c0436b5acab17",
+      "source": "reports/1407-Coin-Master-GO/independent-run-report.json#/specialModes/goldenTransformingWild",
+      "behaviorIds": [
+        "golden.transform-to-wild"
+      ]
+    },
+    {
+      "id": "evidence.29e88fb05165af9b",
+      "source": "reports/1407-Coin-Master-GO/independent-test-matrix.json",
+      "behaviorIds": [],
+      "disposition": "SUPPORTING_EVIDENCE_RETAINED",
+      "reason": "Current-game evidence is retained for traceability but is not required by a specific behavior contract."
+    },
+    {
+      "id": "evidence.7ea9db5772dfa606",
+      "source": "reports/1407-Coin-Master-GO/language-inventory.json",
+      "behaviorIds": [
+        "language.supported-first-load"
+      ]
+    },
+    {
+      "id": "evidence.5676334932c14610",
+      "source": "reports/1407-Coin-Master-GO/restart-demo-validation.json",
+      "behaviorIds": [
+        "disconnect.durable-resume"
+      ]
+    },
+    {
+      "id": "evidence.c87857122ef9fcde",
+      "source": "reports/1407-Coin-Master-GO/resume-validation.json",
+      "behaviorIds": [
+        "disconnect.durable-resume",
+        "round.delivery-single-claim"
+      ]
+    },
+    {
+      "id": "evidence.145ea779499dc82a",
+      "source": "reports/1407-Coin-Master-GO/resume-validation.json#/afterRestart",
+      "behaviorIds": [
+        "disconnect.durable-resume"
+      ]
+    },
+    {
+      "id": "evidence.b8c466ca30c0eb20",
+      "source": "reports/1407-Coin-Master-GO/resume-validation.json#/beforeRestart",
+      "behaviorIds": [
+        "disconnect.durable-resume"
+      ]
+    },
+    {
+      "id": "evidence.ccc006f691b8874b",
+      "source": "reports/1407-Coin-Master-GO/scenario-coverage.json",
+      "behaviorIds": [
+        "mode.purchase-entry-disabled",
+        "mode.separate-respin-purchase-disabled"
+      ]
+    },
+    {
+      "id": "evidence.ec7b11364a54cba6",
+      "source": "reports/1407-Coin-Master-GO/static-http-validation.json",
+      "behaviorIds": [
+        "language.supported-first-load"
+      ]
+    },
+    {
+      "id": "evidence.da36ada363b66d76",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/languages/en/json/gameRules.json",
+      "behaviorIds": [
+        "golden.transform-to-wild",
+        "wager.bet-amount"
+      ]
+    },
+    {
+      "id": "evidence.15a1a944c3c5bab9",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/languages/en/json/paytable.json",
+      "behaviorIds": [
+        "outcome.fixed-ways-payout"
+      ]
+    },
+    {
+      "id": "evidence.bcd47e75e10cf37d",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#BlockLineLogic",
+      "behaviorIds": [
+        "cascade.physical-board-continuity"
+      ]
+    },
+    {
+      "id": "evidence.fb71b676c0c99e53",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameConfig.RowCounts",
+      "behaviorIds": [
+        "board.transport-coordinate-mapping"
+      ]
+    },
+    {
+      "id": "evidence.d74c02d61e555ba3",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameGlobalConfig",
+      "behaviorIds": [
+        "theoretical-rtp.frontend-constant"
+      ]
+    },
+    {
+      "id": "evidence.28b7b86a48b3d356",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameLogic.CurBetGold",
+      "behaviorIds": [],
+      "disposition": "SUPPORTING_EVIDENCE_RETAINED",
+      "reason": "Current-game evidence is retained for traceability but is not required by a specific behavior contract."
+    },
+    {
+      "id": "evidence.fcd69fcfbad1d3e2",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameLogic.isGoldSymbolByIndex",
+      "behaviorIds": [
+        "golden.transform-to-wild"
+      ]
+    },
+    {
+      "id": "evidence.f31c2f3cc34be6c3",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameResults",
+      "behaviorIds": [
+        "balance.delayed-settlement",
+        "cascade.physical-board-continuity",
+        "free-spin.initial-award",
+        "free-spin.retrigger",
+        "round.boundary-and-state-progression",
+        "round.delivery-single-claim"
+      ]
+    },
+    {
+      "id": "evidence.8848d488f3016537",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#HistoryByID",
+      "behaviorIds": [
+        "history.list-detail-round-projection"
+      ]
+    },
+    {
+      "id": "evidence.d78cec980339c401",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#language-loadDir",
+      "behaviorIds": [
+        "language.supported-first-load"
+      ]
+    },
+    {
+      "id": "evidence.4b5ebcb1077c8ff0",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#offset-119271",
+      "behaviorIds": [
+        "generator.local-adjustable-weights"
+      ]
+    },
+    {
+      "id": "evidence.7ed3cb45f345d7e3",
+      "source": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#offset-235658",
+      "behaviorIds": [
+        "session.verify-config-resume"
+      ]
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "status": "CONFIRMED",
+      "summary": "The frontend posts UTF-8 form data and consumes an unencrypted JSON success envelope.",
+      "implementationContract": {
+        "preconditions": [
+          "Request targets an evidenced /cp/api/v1 endpoint",
+          "gid is 55",
+          "t is the opaque launch or authenticated token"
+        ],
+        "stateFields": [
+          "t",
+          "gid",
+          "web-token header alias",
+          "game-id header alias"
+        ],
+        "transitionRules": [
+          "Copy web-token to form field t",
+          "Copy game-id to form field gid",
+          "Do not decrypt or decompress application payloads"
+        ],
+        "outputs": [
+          "HTTP JSON with code=200, info=ok and data object",
+          "Money fields retain captured number/string types"
+        ],
+        "terminationRules": [
+          "A response is complete when the JSON envelope has been emitted"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "protocol/1407-Coin-Master-GO/protocol-spec.json#/transport",
+          "reports/1407-Coin-Master-GO/field-evidence-matrix.json",
+          "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json"
+        ],
+        "assertions": [
+          "Request content type is application/x-www-form-urlencoded",
+          "Response envelope fields match the captured frontend contract",
+          "No application encryption or compression is introduced"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "transport.form-json-envelope",
+      "category": "transport",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.4d710027387e6869",
+        "evidence.9f69ed14cb858176",
+        "evidence.f427cc8747a0a261"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "Verify establishes player/token state and config projects current or resumable game state before play.",
+      "implementationContract": {
+        "preconditions": [
+          "Launch URL supplies ai, btt, t and gid=55"
+        ],
+        "stateFields": [
+          "player.balance",
+          "player.id",
+          "token",
+          "ping.enable",
+          "ping.seconds",
+          "config.last",
+          "config.ls"
+        ],
+        "transitionRules": [
+          "auth.verify returns the token used by config and later calls",
+          "config returns paytable, bet lists, defaults and last resumable state",
+          "ping is called only when ping.enable is true"
+        ],
+        "outputs": [
+          "auth.verify data.player/token/ping/rc/gc",
+          "game.config auto/bll/bsl/cc/cs/dbl/dbs/last/ls/spl/ts"
+        ],
+        "terminationRules": [
+          "Session initialization terminates in an operational game state after config",
+          "If config.last describes an active Round, it remains resumable rather than being replaced"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json",
+          "protocol/1407-Coin-Master-GO/protocol-spec.json#/endpoints",
+          "reports/1407-Coin-Master-GO/independent-run-report.json#/requests"
+        ],
+        "assertions": [
+          "Verify precedes config",
+          "The verify response token is accepted by config",
+          "The original page reaches an operational Spin state"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "captured-verify-to-config",
+            "stepRefs": [
+              "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json#/verify",
+              "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json#/config"
+            ],
+            "frontendOracleRefs": [
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#offset-235658"
+            ],
+            "assertions": [
+              "The authenticated token flows from verify into config without transformation"
+            ]
+          }
+        ]
+      },
+      "id": "session.verify-config-resume",
+      "category": "session",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.4d710027387e6869",
+        "evidence.7ed3cb45f345d7e3",
+        "evidence.84c64d4bf78fa613",
+        "evidence.8516969573937987",
+        "evidence.a7785cc8d5cd0dfb",
+        "evidence.d433d9f5921e0c6d"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "Paid bet amount is 20 * bl * bs and the captured minimum wager is 0.40.",
+      "implementationContract": {
+        "preconditions": [
+          "bl belongs to 1..10",
+          "bs belongs to 0.02, 0.1 or 0.5",
+          "No prior Round is active"
+        ],
+        "stateFields": [
+          "bl",
+          "bs",
+          "ba",
+          "pb"
+        ],
+        "transitionRules": [
+          "Compute ba=20*bl*bs",
+          "Debit ba only on the paid Round start"
+        ],
+        "outputs": [
+          "Paid Step ba",
+          "Post-debit pb"
+        ],
+        "terminationRules": [
+          "A wager starts exactly one Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/1407-Coin-Master-GO/spin-index.jsonl",
+          "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/languages/en/json/gameRules.json",
+          "protocol/1407-Coin-Master-GO/game-capabilities.json#/betModel"
+        ],
+        "assertions": [
+          "Every indexed minimum paid start has bl=1, bs=0.02 and ba=0.4",
+          "Zero-bet continuation Steps are not counted as paid Spins"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "wager.bet-amount",
+      "category": "wager",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.31cc76fdd00700c5",
+        "evidence.44b802344f51ac7e",
+        "evidence.da36ada363b66d76"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "The board has 5 reels, 4 visible rows and one leading buffer row per reel in the 25-entry rskl transport.",
+      "implementationContract": {
+        "preconditions": [
+          "A Spin Step is projected"
+        ],
+        "stateFields": [
+          "rskl",
+          "wmkl",
+          "gfl"
+        ],
+        "transitionRules": [
+          "Read rskl reel-major in groups of five",
+          "Treat row 0 as buffer and rows 1..4 as visible",
+          "Decode wmkl raw RR by adding one before frontend reel/row lookup",
+          "Compare gfl directly with frontend live-board coordinates"
+        ],
+        "outputs": [
+          "Exactly 25 rskl symbols",
+          "wmkl coordinates only from 00..43 visible positions",
+          "gfl only on eligible inner reels"
+        ],
+        "terminationRules": [
+          "Projection fails when transport length or coordinate domains are invalid"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/1407-Coin-Master-GO/step-index.jsonl",
+          "reports/1407-Coin-Master-GO/field-evidence-matrix.json",
+          "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameConfig.RowCounts"
+        ],
+        "assertions": [
+          "All 1470 captured Steps contain the expected transport shape",
+          "wmkl and gfl coordinate transforms match frontend lookup"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "board.transport-coordinate-mapping",
+      "category": "board",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.94f5900ab3b66c90",
+        "evidence.f427cc8747a0a261",
+        "evidence.fb71b676c0c99e53"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "Wins use fixed 1024 Ways, leftmost consecutive reels, current multiplier rpx and the captured paytable.",
+      "implementationContract": {
+        "preconditions": [
+          "Visible board and paytable are available",
+          "A paying symbol or WILD substitute is present from reel 1 across at least 3 consecutive reels"
+        ],
+        "stateFields": [
+          "rskl",
+          "wmkl",
+          "wskl",
+          "spl",
+          "bl",
+          "bs",
+          "rpx",
+          "wa"
+        ],
+        "transitionRules": [
+          "Count matching visible cells per consecutive reel",
+          "Ways are the product of reel match counts",
+          "WILD substitutes H1..H8 but not SC",
+          "Compute each component as spl[symbol][reelCount]*bs*bl*ways*rpx"
+        ],
+        "outputs": [
+          "wskl paying symbols",
+          "wmkl grouped coordinates",
+          "wa equal to the sum of all components"
+        ],
+        "terminationRules": [
+          "SC has no cash payout",
+          "No leftmost 3-reel match produces empty win fields and wa=0"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/languages/en/json/paytable.json",
+          "captures/1407-Coin-Master-GO/step-index.jsonl",
+          "reports/1407-Coin-Master-GO/field-evidence-matrix.json"
+        ],
+        "assertions": [
+          "All 222 captured winning Steps used for rule verification match the payout formula",
+          "No captured formula mismatch is tolerated",
+          "Paylines are not introduced for this Ways game"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "outcome.fixed-ways-payout",
+      "category": "outcome",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.15a1a944c3c5bab9",
+        "evidence.94f5900ab3b66c90",
+        "evidence.f427cc8747a0a261"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "One Round begins with ba>0 and includes every base cascade and free Step through the terminal predicate.",
+      "implementationContract": {
+        "preconditions": [
+          "READY state",
+          "Valid paid bet"
+        ],
+        "stateFields": [
+          "roundKey",
+          "deliveryIndex",
+          "stepIndex",
+          "gt",
+          "small_game_type",
+          "ss",
+          "fsn",
+          "nfsc",
+          "rpx",
+          "ba",
+          "rwa",
+          "frwa"
+        ],
+        "transitionRules": [
+          "Paid base Step uses gt=1, small_game_type=0, rpx=1",
+          "Base continuations use ba=0, small_game_type=1 and rpx 2,3,5",
+          "Free Steps use ba=0, gt=2, small_game_type=2 and rpx 2,4,6,10",
+          "Indices advance contiguously inside the same roundKey"
+        ],
+        "outputs": [
+          "One Step projection per request",
+          "Cumulative rwa and frwa",
+          "Stable roundKey across all continuations"
+        ],
+        "terminationRules": [
+          "Round terminates only when ss=1 and either fsn=0 or gt=2 and nfsc=fsn",
+          "No cascade/free active state may be replaced by an independent result"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "protocol/1407-Coin-Master-GO/state-machine.json",
+          "captures/1407-Coin-Master-GO/round-index.jsonl",
+          "captures/1407-Coin-Master-GO/step-index.jsonl",
+          "reports/1407-Coin-Master-GO/delivery-ledger.jsonl"
+        ],
+        "assertions": [
+          "Each indexed Step belongs to one paid Round",
+          "500 Rounds reach an observed terminal and scene 499 remains an explicit unsynthesized gap",
+          "deliveryIndex and stepIndex do not skip or repeat on non-idempotent continuation"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "captured-base-cascade-state-sequence",
+            "stepRefs": [
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-11",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-12",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-13"
+            ],
+            "frontendOracleRefs": [
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameResults"
+            ],
+            "assertions": [
+              "ba transitions 0.4->0->0",
+              "rpx transitions 1->2->3",
+              "rwa accumulates 0.16->0.40->0.64"
+            ]
+          }
+        ]
+      },
+      "id": "round.boundary-and-state-progression",
+      "category": "round",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.23faeecb5b47c3d5",
+        "evidence.310934cf5b44ec79",
+        "evidence.4c50e2518c0ceb9a",
+        "evidence.4cc44935f142095f",
+        "evidence.94f5900ab3b66c90",
+        "evidence.ed2898e3dde004b8",
+        "evidence.efc03db3bcd98e67",
+        "evidence.f31c2f3cc34be6c3"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "Only an ordinary paid base-game single-Step LOSS may be generated independently at request time.",
+      "implementationContract": {
+        "preconditions": [
+          "No active Round",
+          "Ordinary paid base-game request",
+          "Valid bl and bs"
+        ],
+        "stateFields": [
+          "ba",
+          "gt",
+          "small_game_type",
+          "rpx",
+          "fsn",
+          "nfsc",
+          "ss",
+          "wa",
+          "rwa",
+          "frwa",
+          "wskl",
+          "wmkl"
+        ],
+        "transitionRules": [
+          "Generate one non-winning board without activating a feature",
+          "Debit and terminate in the same Step"
+        ],
+        "outputs": [
+          "gt=1",
+          "small_game_type=0",
+          "rpx=1",
+          "fsn=0",
+          "nfsc=0",
+          "ss=1",
+          "wa=rwa=frwa=0",
+          "empty wskl and wmkl"
+        ],
+        "terminationRules": [
+          "Forbidden while cascade, free or reward state is active",
+          "Forbidden as a temporary terminal for any pre-generated winning or special Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "protocol/1407-Coin-Master-GO/game-capabilities.json#/runtimeIndependentLoss",
+          "captures/1407-Coin-Master-GO/step-index.jsonl",
+          "reports/1407-Coin-Master-GO/independent-run-report.json#/rounds/LOSS"
+        ],
+        "assertions": [
+          "Shape matches captured qualifying LOSS Steps",
+          "No forbidden active state uses this path"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "runtime.independent-paid-loss",
+      "category": "runtime",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.1b74ecd40089a0f2",
+        "evidence.40cfb1882cf87caa",
+        "evidence.94f5900ab3b66c90"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "Adjacent cascade boards remove Silver winning coordinates, preserve each non-winning Silver/Gold material and survivor order, fall reel-locally and fill new eligible top holes with Silver.",
+      "implementationContract": {
+        "preconditions": [
+          "Current Step has ss=0 and nonempty wmkl",
+          "Successor Step belongs to the same Round"
+        ],
+        "stateFields": [
+          "roundKey",
+          "deliveryIndex",
+          "stepIndex",
+          "rskl",
+          "wmkl",
+          "gfl",
+          "decodedSilverCoordinates",
+          "rpx"
+        ],
+        "transitionRules": [
+          "Decode gfl=Gold and materialize every other eligible inner-reel paying coordinate as explicit Silver before applying rules",
+          "For each reel remove Silver/ordinary winning visible cells only",
+          "Preserve prior buffer plus non-winning visible cells in order",
+          "Compact survivors toward the final transport row",
+          "Prepend exactly the number of new symbols needed",
+          "Reels with no winning coordinate preserve all five cells",
+          "Winning Golden symbols become WILD survivors and fall with the same reel-local queue",
+          "Non-winning gfl markers move with their surviving symbols and transformed markers are removed",
+          "Non-winning Silver markers move with their surviving symbols",
+          "Every material-eligible new top refill is Silver; 2429/2429 such refills across 679 source-adjacent pairs are Silver",
+          "Repeat the mapping for every consecutive cascade"
+        ],
+        "outputs": [
+          "Physically related successor rskl",
+          "Contiguous deliveryIndex/stepIndex",
+          "No whole-board replacement"
+        ],
+        "terminationRules": [
+          "Continue while ss=0",
+          "End the Delivery at ss=1 without violating the final adjacent mapping"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/1407-Coin-Master-GO/step-index.jsonl#scene-11",
+          "captures/1407-Coin-Master-GO/step-index.jsonl#scene-12",
+          "captures/1407-Coin-Master-GO/step-index.jsonl#scene-13",
+          "reports/1407-Coin-Master-GO/field-evidence-matrix.json#/rows",
+          "reports/1407-Coin-Master-GO/independent-run-report.json#/specialModes/cascade"
+        ],
+        "assertions": [
+          "Non-winning symbols map to the successor in reel-local survivor order",
+          "Every Silver winning coordinate is absent from its previous physical slot",
+          "Only top holes are newly supplied",
+          "Every eligible top refill is Silver and no new Gold marker appears",
+          "Silver and Gold form a complete disjoint partition before and after the transition",
+          "Successor gfl is exactly the projection of surviving Golden symbols",
+          "At least two consecutive transitions are checked",
+          "The frontend Spin path reports wholeBoardJump=false"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "scene-11-12-13-physical-cascade",
+            "stepRefs": [
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-11",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-12",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-13"
+            ],
+            "frontendOracleRefs": [
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameResults",
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#BlockLineLogic"
+            ],
+            "assertions": [
+              "Unaffected reels 4 and 5 remain byte-for-byte stable for scene 11->12",
+              "Removed counts 1/1/2 on the affected reels match the successor queue shift",
+              "The same rule holds again for scene 12->13"
+            ]
+          }
+        ]
+      },
+      "id": "cascade.physical-board-continuity",
+      "category": "cascade",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.281c49924b0af5d0",
+        "evidence.310934cf5b44ec79",
+        "evidence.4c50e2518c0ceb9a",
+        "evidence.4cc44935f142095f",
+        "evidence.bcd47e75e10cf37d",
+        "evidence.da2f35dca292e842",
+        "evidence.525b1776421ea83b",
+        "evidence.f31c2f3cc34be6c3"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "A winning Golden paying symbol becomes WILD, remains in the reel survivor queue and falls after Silver winners are removed.",
+      "implementationContract": {
+        "preconditions": [
+          "A winning wmkl coordinate maps to a coordinate present in gfl",
+          "The symbol is neither WILD nor SC",
+          "A successor cascade exists"
+        ],
+        "stateFields": [
+          "gfl",
+          "wmkl",
+          "rskl",
+          "roundKey",
+          "deliveryIndex",
+          "stepIndex"
+        ],
+        "transitionRules": [
+          "Convert raw wmkl coordinate to frontend coordinate by adding one",
+          "Do not remove the golden winning symbol from the survivor queue",
+          "Transform it to WILD before stable reel-local compaction",
+          "Remove Silver winners, then let the WILD and all non-winning Silver/Gold survivors fall",
+          "Move non-winning gfl coordinates with their symbols and remove the transformed coordinate from gfl"
+        ],
+        "outputs": [
+          "Nonempty gfl on the winning Step",
+          "WILD at the physically projected successor coordinate",
+          "Exact successor gfl projection"
+        ],
+        "terminationRules": [
+          "Transformation is verified only against the immediate successor in the same Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/1407-Coin-Master-GO/step-index.jsonl#scene-11-to-13",
+          "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/languages/en/json/gameRules.json",
+          "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameLogic.isGoldSymbolByIndex",
+          "reports/1407-Coin-Master-GO/independent-run-report.json#/specialModes/goldenTransformingWild"
+        ],
+        "assertions": [
+          "gfl coordinate is in range",
+          "The golden coordinate participates in the current win",
+          "The immediate successor contains WILD at the mapped survivor position",
+          "gfl follows non-winning Golden survivors",
+          "Tampering either coordinate or WILD fails independent verification"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "captured-golden-adjacent-transform",
+            "stepRefs": [
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-11",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-12",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-13",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-26",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-27"
+            ],
+            "frontendOracleRefs": [
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameLogic.isGoldSymbolByIndex"
+            ],
+            "assertions": [
+              "The wmkl+1 coordinate intersecting gfl becomes a WILD survivor in the immediate successor",
+              "Scene 26->27 proves the WILD falls when an ordinary winning symbol below it is removed"
+            ]
+          }
+        ]
+      },
+      "id": "golden.transform-to-wild",
+      "category": "golden",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.310934cf5b44ec79",
+        "evidence.4c50e2518c0ceb9a",
+        "evidence.4cc44935f142095f",
+        "evidence.7578eb4fb67af769",
+        "evidence.525b1776421ea83b",
+        "evidence.da36ada363b66d76",
+        "evidence.e88c0436b5acab17",
+        "evidence.fcd69fcfbad1d3e2"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "Three scatters award 12 free Spins; extra scatters add two each, and the Round remains active until nfsc reaches fsn.",
+      "implementationContract": {
+        "preconditions": [
+          "Paid/base Step contains at least three SC symbols",
+          "No prior free award exists for the new Round"
+        ],
+        "stateFields": [
+          "gt",
+          "small_game_type",
+          "fsn",
+          "nfsc",
+          "rpx",
+          "rwa",
+          "frwa",
+          "ss"
+        ],
+        "transitionRules": [
+          "Set fsn=12 for three scatters and add two per extra scatter",
+          "Enter gt=2/small_game_type=2 with ba=0",
+          "Increment nfsc once per new free Delivery",
+          "Reset each new free Delivery to rpx=2 and use 4,6,10 for its cascades"
+        ],
+        "outputs": [
+          "Free Step sequence retained in the paid Round",
+          "frwa accumulates only free-mode wins"
+        ],
+        "terminationRules": [
+          "Do not settle while nfsc<fsn",
+          "Settle only on ss=1 and nfsc=fsn"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/1407-Coin-Master-GO/step-index.jsonl#scene-54-to-56",
+          "captures/1407-Coin-Master-GO/round-index.jsonl",
+          "captures/1407-Coin-Master-GO/history-special-details.jsonl",
+          "protocol/1407-Coin-Master-GO/state-machine.json"
+        ],
+        "assertions": [
+          "Initial captured trigger changes fsn from 0 to at least 12",
+          "Following free Step uses ba=0, gt=2 and small_game_type=2",
+          "History fsl preserves all free Steps"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "scene-54-paid-trigger-to-free-delivery",
+            "stepRefs": [
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-54",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-55",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-56"
+            ],
+            "frontendOracleRefs": [
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameResults"
+            ],
+            "assertions": [
+              "scene 54 exposes fsn=12,nfsc=0",
+              "scene 55 is the first free Delivery with gt=2,nfsc=1,rpx=2",
+              "scene 56 continues the same free Delivery cascade at rpx=4"
+            ]
+          }
+        ]
+      },
+      "id": "free-spin.initial-award",
+      "category": "free-spin",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.23faeecb5b47c3d5",
+        "evidence.582b5d8606dbb15c",
+        "evidence.77f3b9c538d76275",
+        "evidence.b39170d1910986fe",
+        "evidence.e4f1306cac825a5e",
+        "evidence.ef884ab19391b255",
+        "evidence.efc03db3bcd98e67",
+        "evidence.f31c2f3cc34be6c3"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "During an active free Round, fsn may increase and all newly awarded Deliveries remain in the same Round; one Round may retrigger more than once.",
+      "implementationContract": {
+        "preconditions": [
+          "gt=2",
+          "nfsc<fsn",
+          "A free Step produces the evidenced scatter trigger"
+        ],
+        "stateFields": [
+          "roundKey",
+          "deliveryIndex",
+          "stepIndex",
+          "fsn",
+          "nfsc",
+          "gt",
+          "ss",
+          "rwa",
+          "frwa"
+        ],
+        "transitionRules": [
+          "Increase fsn without resetting nfsc",
+          "Keep the same roundKey",
+          "Continue free Deliveries through the new fsn boundary",
+          "Allow multiple increases in one Round"
+        ],
+        "outputs": [
+          "Observed fsn transitions 12->24, 12->26 or 24->36",
+          "Contiguous subsequent free Steps"
+        ],
+        "terminationRules": [
+          "A retrigger never terminates the Round while nfsc<new fsn",
+          "Final termination remains ss=1 and nfsc=fsn"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/1407-Coin-Master-GO/step-index.jsonl#scene-187",
+          "captures/1407-Coin-Master-GO/step-index.jsonl#scene-636",
+          "captures/1407-Coin-Master-GO/step-index.jsonl#scene-819",
+          "captures/1407-Coin-Master-GO/step-index.jsonl#scene-833",
+          "captures/1407-Coin-Master-GO/history-special-index.json"
+        ],
+        "assertions": [
+          "Five captured events occur in four Rounds",
+          "Observed transition counts are 12->24 three, 12->26 one and 24->36 one",
+          "Round starting scene 813 contains two distinct retriggers",
+          "History fsl contains the corresponding continuation"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "scene-813-double-retrigger",
+            "stepRefs": [
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-818",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-819",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-820",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-832",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-833",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-834"
+            ],
+            "frontendOracleRefs": [
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameResults"
+            ],
+            "assertions": [
+              "fsn becomes 24 at scene 819 and the next Step continues",
+              "fsn becomes 36 at scene 833 and scene 834 continues with nfsc=10"
+            ]
+          }
+        ]
+      },
+      "id": "free-spin.retrigger",
+      "category": "free-spin",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.049e04c5a44700c0",
+        "evidence.46d52b842100d891",
+        "evidence.6bb33467a5f2d8a6",
+        "evidence.8fa3b23100012e8c",
+        "evidence.8fcab33ecbdfcaa6",
+        "evidence.9dc1f8b3fb265d3c",
+        "evidence.a27fe9915794fa47",
+        "evidence.a3fdc939825ae648",
+        "evidence.eb0f4c06be4c1946",
+        "evidence.f31c2f3cc34be6c3"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "A complete winning or special Round is claimed once; later requests only project its next Delivery/Step.",
+      "implementationContract": {
+        "preconditions": [
+          "No active Round for a new paid start or an active durable Round for continuation"
+        ],
+        "stateFields": [
+          "roundKey",
+          "deliveryIndex",
+          "stepIndex",
+          "claimedRoundKeys",
+          "deliveredStepKeys"
+        ],
+        "transitionRules": [
+          "Claim a generated complete Round exactly once",
+          "Persist roundKey before returning its first Step",
+          "Advance only after a new idempotency key",
+          "Never claim a second Round while the current Round is active"
+        ],
+        "outputs": [
+          "Exactly one next Step projection",
+          "Stable roundKey and contiguous indices"
+        ],
+        "terminationRules": [
+          "Release active Round only after its terminal Step is delivered",
+          "Duplicate requests return the prior projection without advancing"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "protocol/1407-Coin-Master-GO/state-machine.json",
+          "reports/1407-Coin-Master-GO/delivery-ledger.jsonl",
+          "reports/1407-Coin-Master-GO/independent-run-report.json#/serverState",
+          "reports/1407-Coin-Master-GO/resume-validation.json"
+        ],
+        "assertions": [
+          "One roundKey covers all Steps of a complete Round",
+          "deliveryIndex and stepIndex are contiguous",
+          "Claim count remains one",
+          "No future Step is exposed early"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "runtime-complete-round-projection",
+            "stepRefs": [
+              "reports/1407-Coin-Master-GO/delivery-ledger.jsonl",
+              "reports/1407-Coin-Master-GO/independent-run-report.json#/serverState"
+            ],
+            "frontendOracleRefs": [
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameResults"
+            ],
+            "assertions": [
+              "Each response is consumed by the frontend in the same order as the captured state machine"
+            ]
+          }
+        ]
+      },
+      "id": "round.delivery-single-claim",
+      "category": "round",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.184e38a2f847b314",
+        "evidence.23faeecb5b47c3d5",
+        "evidence.c87857122ef9fcde",
+        "evidence.ed2898e3dde004b8",
+        "evidence.f31c2f3cc34be6c3"
+      ],
+      "reason": "Confirmed implementation boundary: one complete Round is claimed once and only its next persisted Delivery/Step is projected."
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "Repeating the same request identity returns the same projection and does not advance Round state or charge twice.",
+      "implementationContract": {
+        "preconditions": [
+          "A prior request with the same session and idempotency identity exists"
+        ],
+        "stateFields": [
+          "idempotencyKey",
+          "roundKey",
+          "deliveryIndex",
+          "stepIndex",
+          "balance",
+          "responseProjection"
+        ],
+        "transitionRules": [
+          "Look up the stored response before mutation",
+          "Return the stored response verbatim",
+          "Do not increment indices or apply balance changes again"
+        ],
+        "outputs": [
+          "Same response projection",
+          "Unchanged active Round and wallet state"
+        ],
+        "terminationRules": [
+          "Only a new request identity may advance to the next Step"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "reports/1407-Coin-Master-GO/independent-run-report.json#/rounds",
+          "reports/1407-Coin-Master-GO/delivery-ledger.jsonl"
+        ],
+        "assertions": [
+          "Duplicate response body is stable",
+          "deliveryIndex and stepIndex do not change",
+          "Balance is debited or credited once"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "runtime-duplicate-then-next",
+            "stepRefs": [
+              "reports/1407-Coin-Master-GO/independent-run-report.json#/rounds",
+              "reports/1407-Coin-Master-GO/delivery-ledger.jsonl"
+            ],
+            "frontendOracleRefs": [
+              "protocol/1407-Coin-Master-GO/state-machine.json"
+            ],
+            "assertions": [
+              "Duplicate request repeats the same Step; the following distinct request advances exactly once"
+            ]
+          }
+        ]
+      },
+      "id": "request.idempotency",
+      "category": "request",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.23faeecb5b47c3d5",
+        "evidence.ed2898e3dde004b8",
+        "evidence.fb22c599354e1985"
+      ],
+      "reason": "Confirmed implementation boundary: a duplicate request returns the stored projection without advancing state or charging twice."
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "The paid debit is visible immediately, intermediate Steps retain post-debit pb, and cumulative win is credited only at Round termination.",
+      "implementationContract": {
+        "preconditions": [
+          "A paid Round starts with a known wallet balance"
+        ],
+        "stateFields": [
+          "balanceBefore",
+          "ba",
+          "pb",
+          "wa",
+          "rwa",
+          "frwa",
+          "settled"
+        ],
+        "transitionRules": [
+          "Debit ba on the first paid Step",
+          "Accumulate wa into rwa and free wa into frwa",
+          "Keep pb at post-debit value on nonterminal Steps",
+          "Add rwa once on the terminal Step"
+        ],
+        "outputs": [
+          "Captured pb string",
+          "Current wa",
+          "Cumulative rwa/frwa",
+          "Final wallet balance"
+        ],
+        "terminationRules": [
+          "Settlement is idempotent and occurs once at the Round terminal predicate"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/1407-Coin-Master-GO/step-index.jsonl",
+          "protocol/1407-Coin-Master-GO/protocol-spec.json#/moneyAndSettlement",
+          "reports/1407-Coin-Master-GO/independent-run-report.json#/balance"
+        ],
+        "assertions": [
+          "Intermediate pb never includes an early win credit",
+          "Final pb equals postDebit+rwa",
+          "Captured settlement mismatch count is zero"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "captured-cascade-delayed-credit",
+            "stepRefs": [
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-11",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-12",
+              "captures/1407-Coin-Master-GO/step-index.jsonl#scene-13"
+            ],
+            "frontendOracleRefs": [
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameResults"
+            ],
+            "assertions": [
+              "rwa accumulates across adjacent Steps while pb stays at the post-debit value until terminal settlement"
+            ]
+          }
+        ]
+      },
+      "id": "balance.delayed-settlement",
+      "category": "balance",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.1e7a38760aab2a62",
+        "evidence.310934cf5b44ec79",
+        "evidence.4c50e2518c0ceb9a",
+        "evidence.4cc44935f142095f",
+        "evidence.5711b10c9bb046e5",
+        "evidence.94f5900ab3b66c90",
+        "evidence.f31c2f3cc34be6c3"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "History lists one row per paid Round and log-view returns its base Steps in bsl and free Steps in fsl.",
+      "implementationContract": {
+        "preconditions": [
+          "A terminal paid Round has been settled and recorded"
+        ],
+        "stateFields": [
+          "transferId",
+          "bid",
+          "ba",
+          "wa",
+          "baf",
+          "bsl",
+          "fsl"
+        ],
+        "transitionRules": [
+          "Expose one list row for the Round",
+          "Use list-row tis as log-view transfer_id",
+          "Keep base Steps ordered in bsl",
+          "Keep free/free-cascade Steps ordered in fsl"
+        ],
+        "outputs": [
+          "log-list pagination fields and ll rows",
+          "log-view baf/bid/bsl/fsl",
+          "Captured expanded history wmkl objects"
+        ],
+        "terminationRules": [
+          "An active incomplete Round is not duplicated as a second history row",
+          "Each terminal Round is recorded once"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/history-capture.json",
+          "captures/1407-Coin-Master-GO/history-detail-scan.jsonl",
+          "captures/1407-Coin-Master-GO/history-special-details.jsonl",
+          "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#HistoryByID"
+        ],
+        "assertions": [
+          "tis maps to detail transfer_id",
+          "bsl precedes fsl in frontend history projection",
+          "19 details contain fsl and four contain retrigger evidence",
+          "History monetary totals match the Round"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "history-list-to-detail",
+            "stepRefs": [
+              "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/history-capture.json#/list",
+              "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/history-capture.json#/detail",
+              "captures/1407-Coin-Master-GO/history-special-details.jsonl"
+            ],
+            "frontendOracleRefs": [
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#HistoryByID"
+            ],
+            "assertions": [
+              "Selected list tis resolves the same Round detail and ordered bsl/fsl sequence"
+            ]
+          }
+        ]
+      },
+      "id": "history.list-detail-round-projection",
+      "category": "history",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.0dccf9fd7808092a",
+        "evidence.0ecb4329391a3d42",
+        "evidence.3cd776cbc78966c5",
+        "evidence.8848d488f3016537",
+        "evidence.93f4f2786f3d32b3",
+        "evidence.b39170d1910986fe"
+      ]
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "An active Round survives Java process restart and resumes at its next undelivered Step.",
+      "implementationContract": {
+        "preconditions": [
+          "A nonterminal Round has a persisted roundKey and delivered index",
+          "The service restarts"
+        ],
+        "stateFields": [
+          "sessionId",
+          "roundKey",
+          "deliveryIndex",
+          "stepIndex",
+          "deliveredStepKeys",
+          "postDebitBalance",
+          "rwa",
+          "frwa"
+        ],
+        "transitionRules": [
+          "Persist Round and wallet mutation before acknowledging a Step",
+          "Reload the active Round on session/config",
+          "Project the first undelivered Step after restart"
+        ],
+        "outputs": [
+          "Resumable config.last/session state",
+          "Same roundKey",
+          "Next contiguous deliveryIndex/stepIndex"
+        ],
+        "terminationRules": [
+          "Never replay an already acknowledged Step as a new charge",
+          "Finalize and clear only after terminal settlement"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "reports/1407-Coin-Master-GO/resume-validation.json",
+          "reports/1407-Coin-Master-GO/restart-demo-validation.json",
+          "protocol/1407-Coin-Master-GO/state-machine.json"
+        ],
+        "assertions": [
+          "The first pre-restart Step is nonterminal",
+          "After restart the same Round continues at the next index",
+          "Final balance and History contain one settlement/row"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "runtime-pre-restart-to-post-restart",
+            "stepRefs": [
+              "reports/1407-Coin-Master-GO/resume-validation.json#/beforeRestart",
+              "reports/1407-Coin-Master-GO/resume-validation.json#/afterRestart"
+            ],
+            "frontendOracleRefs": [
+              "protocol/1407-Coin-Master-GO/protocol-spec.json#/endpoints/game.config",
+              "protocol/1407-Coin-Master-GO/state-machine.json"
+            ],
+            "assertions": [
+              "roundKey is unchanged and the post-restart Step is exactly the next undelivered state"
+            ]
+          }
+        ]
+      },
+      "id": "disconnect.durable-resume",
+      "category": "disconnect",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.145ea779499dc82a",
+        "evidence.23faeecb5b47c3d5",
+        "evidence.5676334932c14610",
+        "evidence.b8c466ca30c0eb20",
+        "evidence.c47402b295607844",
+        "evidence.c87857122ef9fcde"
+      ],
+      "reason": "Confirmed implementation boundary: persisted roundKey and delivery indices resume at the first undelivered Step after restart."
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "The original page supports and was first-loaded in bn, en, es, fr, id, ko, pt, th, tr and vi.",
+      "implementationContract": {
+        "preconditions": [
+          "Launch URL supplies a supported language code",
+          "Static publish root is available"
+        ],
+        "stateFields": [
+          "l",
+          "language",
+          "localized JSON path"
+        ],
+        "transitionRules": [
+          "Resolve language through the captured frontend language directory logic",
+          "Keep publish/index.html as the direct entry",
+          "Do not depend on _hosts"
+        ],
+        "outputs": [
+          "Localized resources",
+          "Operational game scene"
+        ],
+        "terminationRules": [
+          "First-load succeeds only when session/config and playable state also succeed"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "reports/1407-Coin-Master-GO/language-inventory.json",
+          "reports/1407-Coin-Master-GO/static-http-validation.json",
+          "reports/1407-Coin-Master-GO/independent-run-report.json#/languages"
+        ],
+        "assertions": [
+          "Exactly the ten capability language codes are tested",
+          "Each reaches the operational game",
+          "No unauthorized external request is ignored"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "sequenceId": "language-static-session-config-load",
+            "stepRefs": [
+              "reports/1407-Coin-Master-GO/independent-run-report.json#/languages",
+              "reports/1407-Coin-Master-GO/independent-run-report.json#/requests"
+            ],
+            "frontendOracleRefs": [
+              "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#language-loadDir"
+            ],
+            "assertions": [
+              "Localized static load is followed by successful verify/config and operational state"
+            ]
+          }
+        ]
+      },
+      "id": "language.supported-first-load",
+      "category": "language",
+      "multiStep": true,
+      "evidenceRefs": [
+        "evidence.18dd2b44ef7a6248",
+        "evidence.7ea9db5772dfa606",
+        "evidence.8516969573937987",
+        "evidence.d78cec980339c401",
+        "evidence.ec7b11364a54cba6"
+      ]
+    },
+    {
+      "status": "NOT_APPLICABLE",
+      "summary": "No purchase or bonus-buy entry is supported by current 1407 evidence.",
+      "implementationContract": {
+        "preconditions": [
+          "Runtime or generator considers exposing a purchase entry"
+        ],
+        "stateFields": [
+          "specialModeDetails.purchaseEntry.supported"
+        ],
+        "transitionRules": [
+          "Keep purchase entry disabled",
+          "Do not invent an endpoint, request field or Round shape"
+        ],
+        "outputs": [
+          "No purchase control or purchase result"
+        ],
+        "terminationRules": [
+          "Capability remains unsupported until independent current-game evidence is added"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "reports/1407-Coin-Master-GO/scenario-coverage.json",
+          "protocol/1407-Coin-Master-GO/game-capabilities.json#/specialModeDetails/purchaseEntry"
+        ],
+        "assertions": [
+          "Rules, bundle, menu probes and endpoints contain no purchase entry",
+          "Tests mark the mode unsupported rather than PASS"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "mode.purchase-entry-disabled",
+      "category": "mode",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.ccc006f691b8874b",
+        "evidence.f0c15261fc88dfb3"
+      ],
+      "reason": "Not applicable because current-game rules, bundle, menu probes and endpoints contain no purchase or bonus-buy entry."
+    },
+    {
+      "status": "NOT_APPLICABLE",
+      "summary": "No independently purchased respin mode is supported by current 1407 evidence.",
+      "implementationContract": {
+        "preconditions": [
+          "Runtime or generator considers a separate respin purchase"
+        ],
+        "stateFields": [
+          "specialModeDetails.separateRespinPurchase.supported"
+        ],
+        "transitionRules": [
+          "Keep the mode disabled",
+          "Do not treat ordinary cascade rpx changes as a purchased respin"
+        ],
+        "outputs": [
+          "No respin-purchase endpoint or result"
+        ],
+        "terminationRules": [
+          "Capability remains unsupported until independent current-game evidence is added"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "reports/1407-Coin-Master-GO/scenario-coverage.json",
+          "protocol/1407-Coin-Master-GO/game-capabilities.json#/specialModeDetails/separateRespinPurchase"
+        ],
+        "assertions": [
+          "No purchase endpoint or menu entry is evidenced",
+          "rpx>1 remains cascade/free multiplier state only"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "mode.separate-respin-purchase-disabled",
+      "category": "mode",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.ccc006f691b8874b",
+        "evidence.e943117e5d6b6f90"
+      ],
+      "reason": "Not applicable because no separate respin purchase is evidenced; rpx changes belong to cascade/free state."
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "Captured responses and fixtures are oracle-only and are never a runtime result source.",
+      "implementationContract": {
+        "preconditions": [
+          "Server API or generator produces init, config, Spin, balance, session or History state"
+        ],
+        "stateFields": [
+          "GameRuleCore state",
+          "durable session/Round state",
+          "secure random source"
+        ],
+        "transitionRules": [
+          "Generate runtime results from Java GameRuleCore",
+          "Never read, rotate, sample or copy fixtures/captures/JSONL",
+          "Allow captured data only in tests as an external oracle"
+        ],
+        "outputs": [
+          "Fresh Java-generated runtime result or durable stored projection"
+        ],
+        "terminationRules": [
+          "Any runtime source reference to fixtures, captures or historical JSONL is a failure"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "reports/1407-Coin-Master-GO/independent-automated-test-report.json#/fixtureIsolation",
+          "protocol/1407-Coin-Master-GO/game-capabilities.json#/sourcePolicy"
+        ],
+        "assertions": [
+          "Runtime source scan has zero forbidden path references",
+          "Fixture mutation/removal cannot change runtime behavior"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "runtime.fixture-isolation",
+      "category": "runtime",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.5ac0cc5e02e0e120",
+        "evidence.b84bfe67229fab1b"
+      ],
+      "reason": "Confirmed runtime boundary: fixtures, captures and historical responses are oracle-only and never runtime result sources."
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "The workflow target consumer uses a platform downstream Redis adapter; this is not an original-provider fact.",
+      "implementationContract": {
+        "preconditions": [
+          "A complete Round has been generated and independently verified"
+        ],
+        "stateFields": [
+          "sourceGameId",
+          "redisGameId",
+          "pool",
+          "actualMultiplier",
+          "minimalMember"
+        ],
+        "transitionRules": [
+          "Skip zero multiplier",
+          "Select normal/special index from recomputed mode",
+          "Use actual multiplier as ZSET score/member",
+          "Submit ZADD, RPUSH and LTRIM in one MULTI/EXEC"
+        ],
+        "outputs": [
+          "Positive complete-Round member in the matching multiplier LIST",
+          "Normal/special multiplier present in the matching index ZSET"
+        ],
+        "terminationRules": [
+          "Stop after configured natural candidate targets or capacity completion",
+          "Never chase a requested multiplier"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "generator/1407-mac-Coin-Master-GO/src/main/java/com/cpgame/coinmastergo/generator/CompleteRoundVerifier.java",
+          "generator/1407-mac-Coin-Master-GO/src/main/java/com/cpgame/coinmastergo/generator/JedisRedisListWriter.java"
+        ],
+        "assertions": [
+          "0x results create no Redis member",
+          "positive results use independently recomputed actual multipliers",
+          "MULTI/EXEC contains ZADD+RPUSH+LTRIM",
+          "capacity is enforced per actual multiplier"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "redis.platform-downstream-loader",
+      "category": "redis",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.1b915f5edef2a71a",
+        "evidence.f585a019cd63ebbf"
+      ],
+      "reason": "The current workflow explicitly requires a formal direct Redis Loader while preserving the absence of any original-provider Redis evidence."
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "Original-provider weights remain UNKNOWN; local generation samples the exact 501-start symbol counts, never directly draws WILD, and never claims capture frequency as provider probability.",
+      "implementationContract": {
+        "preconditions": [
+          "Original-provider outcome weights remain UNKNOWN",
+          "generator.properties contains the exact 501-start counts; WILD is explicitly zero because it is transformation-only"
+        ],
+        "stateFields": [
+          "providerWeightStatus",
+          "localReplicaWeights",
+          "SecureRandom"
+        ],
+        "transitionRules": [
+          "Read every configured weight",
+          "Draw with SecureRandom",
+          "Use capture counts only as an evidence sampling profile, never as provider probability",
+          "Create WILD only from a winning Golden symbol in the immediate successor",
+          "Allow SC in top refills as proved by 132 adjacent-step increases"
+        ],
+        "outputs": [
+          "Natural local replica candidate Round",
+          "Explicit separation of provider UNKNOWN and local configurable weights"
+        ],
+        "terminationRules": [
+          "Reject a positive WILD direct-draw weight and reject missing, unknown or unused properties"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "protocol/1407-mac-Coin-Master-GO/game-capabilities.json#/symbolWeights",
+          "generator/1407-mac-Coin-Master-GO/src/test/java/com/cpgame/coinmastergo/generator/GeneratorContractTest.java"
+        ],
+        "assertions": [
+          "provider weights remain UNKNOWN",
+          "all sampled counts are read by code and WILD direct-draw weight is exactly zero",
+          "200k symbol draws remain within tolerance",
+          "100k complete Rounds pass independent verification"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "generator.local-adjustable-weights",
+      "category": "generator",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.4b5ebcb1077c8ff0",
+        "evidence.66cbdfb91c66e22c",
+        "evidence.a96e884865262de7"
+      ],
+      "reason": "The 501 preserved paid starts supply an evidence sampling profile without converting it into a provider probability claim."
+    },
+    {
+      "status": "CONFIRMED",
+      "summary": "The frontend declares theoretical RTP 96.68%; it is metadata, not evidence of server outcome weights.",
+      "implementationContract": {
+        "preconditions": [
+          "RTP metadata is displayed or exported"
+        ],
+        "stateFields": [
+          "theoreticalRtp.percent",
+          "theoreticalRtp.source"
+        ],
+        "transitionRules": [
+          "Expose 96.68 as evidenced frontend metadata",
+          "Do not derive symbol weights or live probabilities from it"
+        ],
+        "outputs": [
+          "RTP metadata value 96.68"
+        ],
+        "terminationRules": [
+          "Metadata must remain separate from result generation"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameGlobalConfig",
+          "protocol/1407-Coin-Master-GO/game-capabilities.json#/theoreticalRtp"
+        ],
+        "assertions": [
+          "Reported value equals the frontend constant",
+          "No production RNG contract is inferred"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      },
+      "id": "theoretical-rtp.frontend-constant",
+      "category": "theoretical-rtp",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.4904fde72f510a6f",
+        "evidence.d74c02d61e555ba3"
+      ],
+      "reason": "Confirmed metadata-only value: the frontend RTP constant is not a production outcome-weight contract."
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "status": "UNRESOLVED_NO_CURRENT_GAME_EVIDENCE",
+      "evidenceBoundary": "No server reel strips or symbol/outcome weights are present in rules, config, bundle or captures.",
+      "implementationRestriction": "Must not be used for production outcome generation.",
+      "id": "production.server-symbol-weights",
+      "category": "production",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.4b5ebcb1077c8ff0",
+        "evidence.a96e884865262de7"
+      ],
+      "reason": "No server reel strips or symbol/outcome weights are present in rules, config, bundle or captures."
+    },
+    {
+      "status": "UNRESOLVED_NO_CURRENT_GAME_EVIDENCE",
+      "evidenceBoundary": "Capture frequency is not an authoritative production probability source.",
+      "implementationRestriction": "Do not assign production probabilities to WIN, cascade, golden or free modes.",
+      "id": "production.win-special-selection-probability",
+      "category": "production",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.40cfb1882cf87caa",
+        "evidence.94f5900ab3b66c90"
+      ],
+      "reason": "Capture frequency is not an authoritative production probability source."
+    },
+    {
+      "status": "UNRESOLVED_PRESERVED_CAPTURE_GAP",
+      "evidenceBoundary": "The Round starting at scene 499 lacks two live Step responses; History bsl proves completion but the live payloads were not captured.",
+      "implementationRestriction": "Do not synthesize the missing live responses or use them as a runtime oracle.",
+      "id": "capture.scene-499-live-tail",
+      "category": "capture",
+      "multiStep": false,
+      "evidenceRefs": [
+        "evidence.0ecb4329391a3d42",
+        "evidence.efc03db3bcd98e67"
+      ],
+      "reason": "The Round starting at scene 499 lacks two live Step responses; History bsl proves completion but the live payloads were not captured."
+    },
+    {
+      "id": "capture.history-non-strict-one-to-one",
+      "reason": "502 captured History details are not a strict 1:1 mapping to 501 paid starts or 500 complete Rounds; no mapping is fabricated.",
+      "evidenceRefs": [
+        "evidence.93f4f2786f3d32b3",
+        "evidence.0ecb4329391a3d42"
+      ]
+    },
+    {
+      "id": "sample.ordinary-win-insufficient",
+      "reason": "78/200 complete ordinary WIN Rounds; retained as SAMPLE_INSUFFICIENT by explicit isolated-delivery instruction.",
+      "evidenceRefs": [
+        "evidence.ccc006f691b8874b"
+      ]
+    },
+    {
+      "id": "sample.free-spins-insufficient",
+      "reason": "19/30 complete free-spin Rounds; retained as SAMPLE_INSUFFICIENT.",
+      "evidenceRefs": [
+        "evidence.ccc006f691b8874b"
+      ]
+    },
+    {
+      "id": "sample.retrigger-insufficient",
+      "reason": "4/30 complete retrigger Rounds; retained as SAMPLE_INSUFFICIENT.",
+      "evidenceRefs": [
+        "evidence.ccc006f691b8874b"
+      ]
+    }
+  ],
+  "evidencePolicy": {
+    "fixturesAreOracleOnly": true,
+    "runtimeMayReadFixturesOrCaptures": false,
+    "implementationGeneratedExpectedAllowed": false,
+    "missingLiveResponsesMayBeSynthesized": false
+  },
+  "observedCounts": {
+    "paidSpinStarts": 501,
+    "httpSteps": 1470,
+    "completeRounds": 500,
+    "preservedIncompleteRounds": 1,
+    "baseCascadeSteps": 385,
+    "freeSteps": 584,
+    "historyTransfersChecked": 502,
+    "historyDetailsWithFsl": 19,
+    "freeRetriggerRounds": 4,
+    "freeRetriggerEvents": 5,
+    "testedLanguages": 10
+  }
+}

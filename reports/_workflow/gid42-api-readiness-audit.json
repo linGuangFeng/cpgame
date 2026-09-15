@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 17,
+  "auditKind": "RAW_GID_API_FIRST_READINESS",
+  "auditedAt": "2026-08-30T12:54:53Z",
+  "updatedAt": "2026-08-31T15:52:52+08:00",
+  "historicalSnapshot": {
+    "preserved": true,
+    "auditedAt": "2026-08-30T12:54:53Z",
+    "statusAtAudit": "INSUFFICIENT_FOR_COLLECTOR_WAITING_GID33_RELEASE_AND_GID42_FIRST_LOAD_PROBE",
+    "formalOriginalAuthorizedHttpAtAudit": {
+      "paidRoundStarts": 0,
+      "completedRounds": 0,
+      "networkExchanges": 0,
+      "historyMatches": 0
+    },
+    "note": "The original pre-probe findings remain below as historical discovery provenance; currentReadiness is the authoritative post-probe gate."
+  },
+  "currentReadiness": {
+    "source": [
+      "reports/_workflow/gid42-batch-readiness.json",
+      "reports/42-Lucky-Dragon/current-status.json",
+      "captures/42-Lucky-Dragon/capture-ledger.json",
+      "captures/42-Lucky-Dragon/original-http-progress.json",
+      "captures/42-Lucky-Dragon/original-http-request-intents.jsonl",
+      "captures/42-Lucky-Dragon/original-http-spin-index.jsonl",
+      "captures/42-Lucky-Dragon/original-http-round-index.jsonl",
+      "captures/42-Lucky-Dragon/original-http-history-index.jsonl"
+    ],
+    "rawGameId": 42,
+    "formalOriginalAuthorizedHttp": {
+      "paidRoundStarts": 1131,
+      "completedRounds": 1131,
+      "networkExchanges": 1131,
+      "historyMatchesOneToOne": 1131,
+      "ordinaryLoss": 931,
+      "ordinaryWin": 200,
+      "wildMultiplierX3": 80,
+      "wildMultiplierX5": 40,
+      "wildMultiplierX9": 35,
+      "grossBetBrl": 565.5
+    },
+    "unknownInFlight": false,
+    "batchRequestsSent": 1130,
+    "fundingAuthorization": {
+      "received": true,
+      "maximumPaidStarts": 5000,
+      "minimumBetBrl": 0.5,
+      "maximumGrossBetBrl": 2500
+    },
+    "collectorGate": "GID42_COLLECTION_COMPLETE_FROZEN_ALL_TARGETS_MET"
+  },
+  "completionSnapshot": {
+    "authoritative": true,
+    "preservesHistoricalDiscoveryBody": true,
+    "completedAt": "2026-08-31T07:52:52.756Z",
+    "paidRoundStarts": 1131,
+    "completedRounds": 1131,
+    "historyMatchesOneToOne": 1131,
+    "grossBetBrl": 565.5,
+    "ordinaryLoss": 931,
+    "ordinaryWin": 200,
+    "wildMultiplierX3": 80,
+    "wildMultiplierX5": 40,
+    "wildMultiplierX9": 35,
+    "unknownInFlight": false,
+    "writerLockPresent": false,
+    "stopReason": "ALL_TARGETS_MET",
+    "note": "The remaining protocol-readiness discovery body is preserved as historical provenance; currentReadiness and completionSnapshot are authoritative."
+  },
+  "rawGameId": 42,
+  "gameName": "Lucky Dragon",
+  "directoryName": "42-Lucky-Dragon",
+  "queueGate": {
+    "currentCollector": "raw gid 33",
+    "gid33ReadOrWritePerformed": false,
+    "gid33ProcessTouched": false,
+    "mayStartGid42BeforeGid33FinalHistoryRelease": false,
+    "nextAction": "WAIT_FOR_RAW_GID_33_COLLECTION_AND_HISTORY_FINALIZATION"
+  },
+  "identityPolicy": {
+    "acceptedNumericIdentity": 42,
+    "canonicalLabel": "raw gid 42",
+    "derivedOrIntegrationIdentityAllowed": false,
+    "rejectPatterns": [
+      "8000042",
+      "8000000+gid",
+      "integrationGameId"
+    ]
+  },
+  "workflowAuthority": {
+    "source": "/Volumes/agent-ai/data/workflows.json",
+    "fullFileRead": true,
+    "workflowId": "7423e188-0a2c-4976-9dbb-f680166e6b8c",
+    "templateKind": "GAME_REPLICATION",
+    "templateVersion": 15,
+    "definitionUpdatedAt": "2026-08-30T11:48:38.706838Z",
+    "collectionTargets": {
+      "ordinaryLossCompleteRounds": 200,
+      "ordinaryWinCompleteRounds": 200,
+      "eachConfirmedSpecialOrRewardCompleteRounds": 30,
+      "maximumPaidRoundStarts": 5000,
+      "roundDefinition": "one paid Spin plus every adjacent continuation/re-spin/free/reward Step through legal terminal state"
+    }
+  },
+  "currentGid42Evidence": {
+    "filesRead": {
+      "captures": 2,
+      "protocol": 5,
+      "reports": 6,
+      "resourceIdentity": "resources/42-Lucky-Dragon/source-catalog-evidence.json",
+      "batchBWorkflowEvidence": true
+    },
+    "account": {
+      "alias": "abc222",
+      "accountId": "74171415",
+      "confirmedByPriorVisibleHmsPage": true,
+      "mustReverifyAtCollectionTime": true
+    },
+    "launch": {
+      "provider": "CP",
+      "resourceCode": 50042,
+      "staticPath": "/42/",
+      "historyBetIdPrefix": "42-",
+      "status": "CONFIRMED_MANUAL_AND_STATIC_IDENTITY_ONLY"
+    },
+    "minimumBet": {
+      "amount": "0.50",
+      "currency": "BRL",
+      "betLevel": 1,
+      "status": "CONFIRMED_HMS_UI_MANUAL",
+      "networkBetLevelField": "UNKNOWN",
+      "networkBetSizeField": "UNKNOWN"
+    },
+    "uiHistory": {
+      "sourceType": "HMS_UI_MANUAL",
+      "paidRoundStarts": 10,
+      "ordinaryLossRounds": 9,
+      "ordinaryWinRounds": 1,
+      "totalBet": "5.00",
+      "netResult": "26.50",
+      "completeDetailsPersisted": 2,
+      "formalOriginalAuthorizedHttpContribution": 0,
+      "mayBeRelabeledAsOriginalAuthorizedHttp": false
+    },
+    "uiObservedWinningCandidate": {
+      "transactionId": "2093422299384020992",
+      "bet": "0.50",
+      "payout": "31.50",
+      "continuationSteps": 0,
+      "candidateMechanism": "WILD_MULTIPLIER_X3",
+      "confirmedRule": false,
+      "formalSpecialCategoryCount": 0
+    },
+    "formalOriginalAuthorizedHttp": {
+      "paidRoundStarts": 1,
+      "completedRounds": 1,
+      "networkExchanges": 1,
+      "historyMatches": 1,
+      "source": "currentReadiness",
+      "historicalCountsPreservedAt": "/historicalSnapshot/formalOriginalAuthorizedHttpAtAudit"
+    }
+  },
+  "gid42ProtocolReadinessMatrix": {
+    "apiHost": {
+      "value": null,
+      "status": "NOT_CONFIRMED_BY_GID42_NETWORK_EVIDENCE",
+      "note": "api.omgapibra.com is an authorized destination and is confirmed by other CP games, but no gid42 request has established it as the active host"
+    },
+    "authEndpoint": {
+      "value": null,
+      "status": "UNKNOWN"
+    },
+    "configEndpoint": {
+      "value": null,
+      "status": "UNKNOWN"
+    },
+    "configResponseFields": {
+      "value": [],
+      "status": "UNKNOWN"
+    },
+    "spinEndpoint": {
+      "value": null,
+      "status": "UNKNOWN"
+    },
+    "spinRequestFields": {
+      "value": [],
+      "status": "UNKNOWN"
+    },
+    "spinResponseFields": {
+      "value": [],
+      "status": "UNKNOWN"
+    },
+    "historyListEndpoint": {
+      "value": null,
+      "status": "UNKNOWN"
+    },
+    "historyDetailEndpoint": {
+      "value": null,
+      "status": "UNKNOWN"
+    },
+    "historyNetworkFields": {
+      "value": [],
+      "status": "UNKNOWN",
+      "uiFieldsAreNotNetworkFieldEvidence": true
+    },
+    "signatureAlgorithm": {
+      "value": null,
+      "status": "UNKNOWN",
+      "signaptRequired": "UNKNOWN"
+    },
+    "paidStartPointer": {
+      "value": null,
+      "status": "UNKNOWN"
+    },
+    "terminalPointerAndValues": {
+      "pointer": null,
+      "values": [],
+      "status": "UNKNOWN"
+    },
+    "roundPayoutPointer": {
+      "value": null,
+      "status": "UNKNOWN"
+    },
+    "roundIdOrTransferPointer": {
+      "value": null,
+      "status": "UNKNOWN"
+    },
+    "networkRoundBoundary": {
+      "status": "UNKNOWN",
+      "manualUiEvidence": "two inspected terminal UI details had zero continuation Steps, but this does not prove the wire state machine"
+    }
+  },
+  "sameSupplierRedactedEvidence": {
+    "disposition": "DISCOVERY_HINTS_ONLY_NOT_GID42_PROTOCOL",
+    "newCpV1Family": {
+      "confirmedRawGameIds": [
+        2,
+        16,
+        41
+      ],
+      "formalRoundIndexCountsObserved": {
+        "2": 1152,
+        "16": 1126,
+        "41": 1093
+      },
+      "observedPattern": "POST form auth/verify followed by game-specific config, spin, log-list and log-view routes",
+      "observedBaseFamily": "/cp/api/v1",
+      "signatureObservedInThoseAdapters": false,
+      "gid42SlugConfirmed": false,
+      "mayHardcodeLuckyDragonSlug": false
+    },
+    "olderSignedCpFamily": {
+      "referenceRawGameId": 2060,
+      "observedPattern": "initialData/getUserInfo/initRoom/gameResult plus signed form requests",
+      "signaptConfirmedForGid2060Only": true,
+      "mayReuseEndpointSetForGid42": false,
+      "mayReuseSigningAlgorithmOrFrontendSecretForGid42": false
+    },
+    "familyDecisionForGid42": "UNRESOLVED_UNTIL_CURRENT_GAME_FIRST_LOAD_REQUESTS_ARE_OBSERVED"
+  },
+  "collectorDecision": {
+    "evidenceSufficientForDedicatedCollectorConfig": false,
+    "evidenceSufficientForOfflineRoundParser": false,
+    "reason": "the exact endpoint family, request fields, response fields, terminal condition, History schema and signing requirements are all unknown for gid42",
+    "collectorConfigCreated": false,
+    "parserTestsCreated": false,
+    "unknownRulesImplemented": false
+  },
+  "minimumFirstPaidProbe": [
+    {
+      "step": 1,
+      "action": "after gid33 releases the writer, bind only the authorized abc222 profile and visibly reverify alias abc222 plus raw gid 42 before any paid request",
+      "paidRequest": false
+    },
+    {
+      "step": 2,
+      "action": "launch the official resource 50042 card and keep every launch credential only in memory; persist only origin, path, query-key names and redacted metadata",
+      "paidRequest": false
+    },
+    {
+      "step": 3,
+      "action": "observe gid42 first-load requests to determine the actual API host and whether it uses the CP v1 family or a signed legacy family; do not guess a slug or signapt contract",
+      "paidRequest": false
+    },
+    {
+      "step": 4,
+      "action": "persist a redacted preflight containing exact auth/config paths, methods, non-secret request key names, response key names, signing-required flag and configuration evidence",
+      "paidRequest": false
+    },
+    {
+      "step": 5,
+      "action": "derive the actual network minimum-bet fields from gid42 config and require their value to reconcile with the UI-confirmed BRL 0.50; fail closed on mismatch",
+      "paidRequest": false
+    },
+    {
+      "step": 6,
+      "action": "issue exactly one minimum-bet paid request through the observed endpoint; write an intent checkpoint before sending so timeout recovery cannot duplicate the wager",
+      "paidRequest": true
+    },
+    {
+      "step": 7,
+      "action": "follow only response-proven continuation requests until a response-proven legal terminal state; do not count continuation or reward Steps as new paid starts",
+      "paidRequest": false
+    },
+    {
+      "step": 8,
+      "action": "query only the observed gid42 History list/detail endpoints and match exactly one transfer using time, raw gid, bet, total payout, complete Step evidence and balance movement",
+      "paidRequest": false
+    },
+    {
+      "step": 9,
+      "action": "only after the probe and History match pass, freeze the observed schema into a gid42-specific collector config and offline parser tests, then start the 200/200/30 batch",
+      "paidRequest": false
+    }
+  ],
+  "probeOutputContract": {
+    "preflight": "captures/42-Lucky-Dragon/original-http-preflight.json",
+    "singleRoundProbe": "captures/42-Lucky-Dragon/original-http-spin-probe-001.json",
+    "singleRoundHistory": "captures/42-Lucky-Dragon/original-http-history-probe-001.json",
+    "requiredSourceType": "ORIGINAL_AUTHORIZED_HTTP",
+    "credentialFieldsPersisted": false,
+    "uiManualRowsIncludedInFormalIndexes": false
+  },
+  "status": "GID42_COLLECTION_COMPLETE_FROZEN_ALL_TARGETS_MET",
+  "actionsPerformed": {
+    "browserCalls": 0,
+    "networkCalls": 0,
+    "spinCalls": 0,
+    "credentialReads": 0,
+    "gid33ActiveProcessCalls": 0,
+    "gid33ActiveCaptureOutputReads": 0,
+    "gid33Writes": 0
+  }
+}

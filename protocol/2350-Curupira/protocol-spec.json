@@ -1,0 +1,230 @@
+{
+  "schemaVersion": "1.1",
+  "gameId": 2350,
+  "directoryName": "2350-Curupira",
+  "gameName": "Curupira",
+  "rulesHash": "d5421efc347392576699048c0538c72d669056017eb723ae2a046fa7bac71404",
+  "rulesVersion": "2350-curupira-rules-d5421efc",
+  "scope": "authenticated HTTP protocol, request ordering, request signing, field semantics and evidenced Round/Step state machine",
+  "transport": {
+    "apiBaseConstruction": {
+      "source": "versionconfig.js",
+      "rule": "window.ApiURL = window.location.protocol + '//' + query.sip + '/cp'",
+      "capturedBase": "https://api.omgapibra.com/cp",
+      "localReplicaRequirement": "preserve the /cp route family while deriving the host from the local launch contract"
+    },
+    "request": {
+      "method": "POST for every captured API exchange",
+      "contentType": "application/x-www-form-urlencoded;charset=utf-8",
+      "signature": {
+        "field": "signapt",
+        "secret": "3fZ8kL2qW9xA4pT7vJ1rQ6yB0sN5mX8h",
+        "expireField": "expire",
+        "expireSemantics": "server-adjusted epoch milliseconds",
+        "canonicalization": "sort original parameter keys ascending and join key=value pairs with ':'",
+        "formula": "lowercaseHex(MD5(secret + expire + canonicalizedOriginalParameters + 'aptsignature'))",
+        "mutationOrder": ["build unsigned field object","read server-adjusted milliseconds","calculate signapt without signapt/expire in the canonical field set","add signapt","add expire","form encode all fields"],
+        "source": "HttpRequest.getParamString and HttpRequest.calc in current main bundle"
+      },
+      "encryption": "none observed",
+      "nestedValues": "JSON.stringify for object/array form values; not exercised by captured gameplay inputs"
+    },
+    "response": {
+      "contentType": "application/json; charset=utf-8",
+      "encryption": "none observed",
+      "successEnvelope": {"httpStatus":200,"code":0,"msg":"success","time":"server epoch seconds string"},
+      "retryEvidence": [
+        "gameResult data=[] is treated as an incomplete/busy sentinel and triggers retryGameResult",
+        "BET_BUSY/BET_ERROR and network failure route through initRoom recovery",
+        "initRoom returning the same oid as the already held room state routes to gameResult recovery rather than indexing a new paid Round"
+      ]
+    },
+    "identifierPrecision": {
+      "fields": ["rid","oid"],
+      "finding": "captured identifiers exceed 2^53-1",
+      "wireImplementation": "Java long is sufficient for observed 19-digit positive values; browser-facing code must also retain a decimal-string representation",
+      "exactCaptureOracle": "History order_id prefix before '-2350'",
+      "prohibited": "double/JavaScript Number based equality or identifier generation"
+    }
+  },
+  "requestSequence": {
+    "mandatoryFirstLoad": [
+      {"order":1,"endpoint":"POST /cp/config/initialData","frontEndCall":"app.config.reqConfig"},
+      {"order":2,"endpoint":"POST /cp/account/getUserInfo","frontEndCall":"mgr.player.reqUserInfo"},
+      {"order":3,"endpoint":"POST /cp/single_game.Game/initRoom","frontEndCall":"mgr.player.initRoom"},
+      {"order":4,"action":"load language textures and preloaded game resources, then show the main game"}
+    ],
+    "observedOptionalAfterLoad": [
+      {"endpoint":"POST /cp/activity/getActivity","disposition":"promotion subsystem; captured but not a game-result state transition"},
+      {"endpoint":"POST /cp/Goldgame/user_game_history","disposition":"opened on demand; initial empty and post-spin populated responses captured"}
+    ],
+    "paidPlay": {"endpoint":"POST /cp/single_game.Game/gameResult","requestDiscriminator":{"type":1,"game_type":1}},
+    "frontEndCodeOnlySpecialPlay": {"endpoint":"POST /cp/single_game.Game/gameResult","freeStep":{"type":2,"game_type":[2,3]},"featureBuy":{"type":3,"game_type":[2,3]},"status":"request builder confirmed; response contracts not captured"}
+  },
+  "endpoints": [
+    {
+      "id": "initialData",
+      "path": "/cp/config/initialData",
+      "requestFields": [
+        {"name":"currency","captured":"undefined","status":"CAPTURED_OPAQUE_ENTRY_VALUE"},
+        {"name":"gid","value":"2350","semantics":"game ID"},
+        {"name":"language","captured":"pt-br","semantics":"requested language; response returned en-us"},
+        {"name":"ai","captured":"luck_single_10229","semantics":"entry affiliate/integration identifier; opaque"},
+        {"name":"signapt","semantics":"request signature"},
+        {"name":"expire","semantics":"server-adjusted epoch milliseconds"}
+      ],
+      "responseSemantics": [
+        {"field":"data.language","meaning":"actual API language","evidence":"pt-br request returned en-us"},
+        {"field":"data.game_info.bet_gold","meaning":"available line-bet values","captured":[0.02,0.04,0.2,0.4]},
+        {"field":"data.game_info.buy_free_max_bet","meaning":"front-end feature-buy ceiling input","captured":0,"codeDecision":"isShowBetBuy treats zero as passing the availability check; zero is not a disable flag"},
+        {"field":"data.game_info.default_level","meaning":"configured default level","captured":10,"restriction":"not a payline count"},
+        {"field":"data.game_info.name","meaning":"backend display metadata","captured":"Magic Scroll","disposition":"identity conflict rejected"},
+        {"field":"data.initial_config.current_sys_time","meaning":"server time used to compute request-time offset"},
+        {"field":"data.initial_config.is_debug","meaning":"front-end debug flag"}
+      ]
+    },
+    {
+      "id": "getUserInfo",
+      "path": "/cp/account/getUserInfo",
+      "requestFields": ["token","gid","language","ai","signapt","expire"],
+      "responseFields": ["currency_symbol","day_first_login","first_gold","gid","gold","is_guide","nickname","token","total_recharge","uid","user_config"],
+      "sensitiveFieldRule": "token and account identifiers remain redacted in derived reports; local runtime session values must not be sourced from fixtures"
+    },
+    {
+      "id": "initRoom",
+      "path": "/cp/single_game.Game/initRoom",
+      "requestFields": ["token","gid","language","signapt","expire"],
+      "semantics": "restore current/last room result for display; does not start or index a paid Round",
+      "capturedResult": "replayed paid Round 10 with the same result payload and total win"
+    },
+    {
+      "id": "gameResult",
+      "path": "/cp/single_game.Game/gameResult",
+      "requestFields": [
+        {"name":"token","meaning":"session token"},
+        {"name":"gid","value":"2350"},
+        {"name":"language","captured":"pt-br"},
+        {"name":"bet","capturedMinimum":"0.02","meaning":"line bet b"},
+        {"name":"level","capturedMinimum":"1","meaning":"bet level l"},
+        {"name":"type","capturedPaid":"1","codeEnum":{"normal":1,"free":2,"buy":3}},
+        {"name":"game_type","capturedPaid":"1","codeEnum":{"normal":1,"freeExpandingWild":2,"holdAndSpins":3}},
+        {"name":"signapt","meaning":"request signature"},
+        {"name":"expire","meaning":"server-adjusted epoch milliseconds"}
+      ]
+    },
+    {
+      "id": "history",
+      "path": "/cp/Goldgame/user_game_history",
+      "requestFields": ["start","end","page_size","page","token","gid","language","zone_time","signapt","expire"],
+      "capturedPageSize": 30,
+      "capturedZoneTime": "-480",
+      "semantics": "returns one list row per paid Round plus an embedded results array and aggregate totals"
+    }
+  ],
+  "gameResultFieldMatrix": [
+    {"field":"b","type":"decimal number","meaning":"line bet","status":"CONFIRMED","evidence":"request bet and all responses"},
+    {"field":"l","type":"integer","meaning":"bet level","status":"CONFIRMED","evidence":"request level and total-bet formula"},
+    {"field":"bg","type":"decimal number","meaning":"total stake charged for this paid ordinary response","status":"CONFIRMED","evidence":"0.02*1*25=0.5 in all ten paid Rounds"},
+    {"field":"sg / start_gold","type":"decimal number","meaning":"balance before this response","status":"CONFIRMED_DUPLICATE","evidence":"equal in all samples"},
+    {"field":"cg","type":"decimal number","meaning":"net balance change","status":"CONFIRMED","rule":"cg=tw-bg for captured paid ordinary responses"},
+    {"field":"eg","type":"decimal number","meaning":"balance after this response","status":"CONFIRMED","rule":"eg=sg+cg"},
+    {"field":"tw","type":"decimal number","meaning":"Round/response total win","status":"CONFIRMED"},
+    {"field":"o","type":"number","meaning":"sum of ordinary wa.o multipliers in captured responses","status":"CONFIRMED_ORDINARY_ONLY","evidence":"Round 10 o=1303=sum(wa.o); LOSS o=0"},
+    {"field":"cl","type":"number","meaning":"UNKNOWN","status":"OBSERVED_ALWAYS_ZERO_DO_NOT_INTERPRET"},
+    {"field":"gt","type":"integer","meaning":"top-level game/result type discriminator","status":"OBSERVED_NORMAL_EQUALS_1"},
+    {"field":"small_game_type","type":"integer","meaning":"secondary mode discriminator","status":"OBSERVED_ORDINARY_EQUALS_0"},
+    {"field":"f","type":"array or object","meaning":"special-mode state envelope","status":"CONFIRMED_EMPTY_ARRAY_FOR_ORDINARY_CODE_EXPECTED_OBJECT_FOR_SPECIAL"},
+    {"field":"rid","type":"integer on source wire","meaning":"Round identifier","status":"CONFIRMED_PRECISION_HAZARD"},
+    {"field":"oid","type":"integer on source wire","meaning":"order/current-room identifier; equals rid in all ordinary samples","status":"CONFIRMED_ORDINARY"},
+    {"field":"t","type":"opaque","meaning":"UNKNOWN sensitive/opaque response field","status":"REDACTED_DO_NOT_GUESS"},
+    {"field":"u","type":"integer","meaning":"user identifier","status":"OBSERVED_NOT_GAME_RULE_INPUT"},
+    {"field":"res.gt","type":"integer","meaning":"result game type","status":"OBSERVED_NORMAL_EQUALS_1"},
+    {"field":"res.ps","type":"integer[15]","meaning":"column-major 5x3 final symbol matrix","status":"CONFIRMED"},
+    {"field":"res.sc","type":"integer","meaning":"Scatter symbol count","status":"CONFIRMED","evidence":"arrays with one symbol 31 have sc=1; Round 10 has none and sc=0"},
+    {"field":"res.tws","type":"decimal number","meaning":"result win total; equals tw in ordinary samples","status":"CONFIRMED_ORDINARY"},
+    {"field":"res.wa","type":"array","meaning":"winning fixed-line awards","status":"CONFIRMED"},
+    {"field":"res.wa[].c","type":"integer","meaning":"matching symbol count","status":"CONFIRMED"},
+    {"field":"res.wa[].ln","type":"integer 1..25","meaning":"payline identifier","status":"CONFIRMED"},
+    {"field":"res.wa[].o","type":"number","meaning":"paytable multiplier","status":"CONFIRMED"},
+    {"field":"res.wa[].s","type":"integer","meaning":"winning evaluated symbol ID","status":"CONFIRMED"}
+  ],
+  "frontEndSpecialFieldMatrix": [
+    {"field":"f.t","codeMeaning":"GameType mode","status":"CODE_PATH_ONLY_NOT_CAPTURED"},
+    {"field":"f.st","codeMeaning":"remaining free/respin count; zero also participates in start detection","status":"CODE_PATH_ONLY_NOT_CAPTURED"},
+    {"field":"f.tt","codeMeaning":"total feature count displayed","status":"CODE_PATH_ONLY_NOT_CAPTURED"},
+    {"field":"f.twa","codeMeaning":"cumulative feature win","status":"CODE_PATH_ONLY_NOT_CAPTURED"},
+    {"field":"f.fcc","codeMeaning":"current held Coin count","status":"CODE_PATH_ONLY_NOT_CAPTURED"},
+    {"field":"f.fcp","codeMeaning":"Coin multiplier/position array used to freeze symbols and sum multiplier","status":"CODE_PATH_ONLY_NOT_CAPTURED"},
+    {"field":"f.fcn","codeMeaning":"indices of newly added Coins for the current Step","status":"CODE_PATH_ONLY_NOT_CAPTURED"},
+    {"field":"f.ba / f.bet / f.l","codeMeaning":"RecordMgr code paths use these for special award display","status":"CODE_PATH_ONLY_NOT_CAPTURED"}
+  ],
+  "historyFieldMatrix": [
+    {"field":"data.list[].order_id","meaning":"exact decimal Round/order identifier plus '-2350' suffix","status":"CONFIRMED_STRING_PRECISION_ORACLE"},
+    {"field":"data.list[].rid / oid","meaning":"numeric Round/order identifier exposed to browser Number precision risk","status":"CONFIRMED"},
+    {"field":"data.list[].results","meaning":"response Steps grouped under the paid Round row","status":"CONFIRMED_ORDINARY_ONE_STEP_ONLY"},
+    {"field":"bet_gold / bg","meaning":"total stake","status":"CONFIRMED_DUPLICATE"},
+    {"field":"change_gold / cg","meaning":"net change","status":"CONFIRMED_DUPLICATE"},
+    {"field":"total_win / tw","meaning":"total win","status":"CONFIRMED_DUPLICATE"},
+    {"field":"data.totals.bet_golds","meaning":"page/range total stake","captured":5},
+    {"field":"data.totals.change_golds","meaning":"page/range total net change","captured":21.06},
+    {"field":"data.totals.total","meaning":"row count","captured":10}
+  ],
+  "stateMachine": {
+    "states": ["UNINITIALIZED","CONFIGURED","AUTHENTICATED","ROOM_READY","PAID_REQUEST_IN_FLIGHT","ORDINARY_TERMINAL","FEATURE_SELECTION_CODE_PATH","FREE_STEP_CODE_PATH","FEATURE_TERMINAL_CODE_PATH","RECOVERY"],
+    "confirmedTransitions": [
+      {"from":"UNINITIALIZED","to":"CONFIGURED","event":"initialData code=0"},
+      {"from":"CONFIGURED","to":"AUTHENTICATED","event":"getUserInfo code=0"},
+      {"from":"AUTHENTICATED","to":"ROOM_READY","event":"initRoom code=0; replay is not a paid start"},
+      {"from":"ROOM_READY","to":"PAID_REQUEST_IN_FLIGHT","event":"gameResult type=1 game_type=1"},
+      {"from":"PAID_REQUEST_IN_FLIGHT","to":"ORDINARY_TERMINAL","event":"gt=1, small_game_type=0, f=[], non-array response data, no active feature"},
+      {"from":"ORDINARY_TERMINAL","to":"ROOM_READY","event":"UI finishes result presentation"},
+      {"from":"PAID_REQUEST_IN_FLIGHT","to":"RECOVERY","event":"network error, BET_BUSY/BET_ERROR or data=[]"},
+      {"from":"RECOVERY","to":"ROOM_READY","event":"initRoom/retry produces stable room data; never index recovery as a paid start"}
+    ],
+    "codeOnlyUnconfirmedTransitions": [
+      {"from":"PAID_REQUEST_IN_FLIGHT","to":"FEATURE_SELECTION_CODE_PATH","event":"3+ Scatter and f object expected","status":"NO_RUNTIME_RESPONSE"},
+      {"from":"FEATURE_SELECTION_CODE_PATH","to":"FREE_STEP_CODE_PATH","event":"player selects mode; next request type=2 game_type=2 or 3","status":"REQUEST_CODE_ONLY"},
+      {"from":"FREE_STEP_CODE_PATH","to":"FREE_STEP_CODE_PATH","event":"f.st remains positive / Hold-and-Spins new Coin alters count","status":"STATE_FIELDS_CODE_ONLY"},
+      {"from":"FREE_STEP_CODE_PATH","to":"FEATURE_TERMINAL_CODE_PATH","event":"f.st reaches terminal condition or Hold grid reaches 15","status":"RULE_AND_CODE_ONLY"},
+      {"from":"FEATURE_TERMINAL_CODE_PATH","to":"ROOM_READY","event":"feature total presentation closes","status":"UI_CODE_ONLY"}
+    ],
+    "roundAndStepBoundaryRules": [
+      "Only a type=1 game_type=1 gameResult request is indexed as a paid Round start in current evidence.",
+      "initRoom, retryGameResult, replay and History never increment spinCount.",
+      "Captured ordinary paid responses terminate in one Step because f=[] and no feature state is active.",
+      "No dedicated Delivery endpoint was observed. Front-end code would request each future free/reward Step through gameResult type=2 and must associate it with the originating paid Round.",
+      "Because no complete special Round was captured, exact rid stability, charge timing, f transitions and History.results adjacency for those modes remain unresolved and must not be implemented."
+    ]
+  },
+  "ordinaryIndependentOracles": [
+    "res.ps length is 15 and every symbol belongs to the current-game enum",
+    "res.sc equals count(symbol 31)",
+    "each wa entry follows one of the 25 current-game payline patterns left-to-right with Wild substitution",
+    "wa.o equals the current paytable value for wa.s and wa.c",
+    "ordinary tw equals res.tws equals b*l*sum(wa.o)",
+    "ordinary bg equals b*l*25",
+    "cg equals tw-bg and eg equals sg+cg",
+    "an independent LOSS has wa=[], tw=0, f=[], and Scatter count below 3"
+  ],
+  "unresolved": [
+    {"id":"FREE_EXPANDING_WILD_WIRE","actualPaidRounds":10,"disposition":"do not implement until a complete adjacent Step sequence is captured"},
+    {"id":"HOLD_AND_SPINS_WIRE","actualPaidRounds":10,"disposition":"do not implement until activation, Coin transitions and termination are captured"},
+    {"id":"FEATURE_BUY_WIRE","actualPaidRounds":10,"disposition":"do not implement purchase; entry/code exists but no purchase was authorized or captured"},
+    {"id":"SYMBOL_WEIGHTS","disposition":"no reel strips or server weights found; do not inherit or guess"},
+    {"id":"REDIS_CODEC","disposition":"no current-game Redis evidence; do not inherit keys or member format"},
+    {"id":"FIELD_cl","disposition":"observed zero only; keep opaque"},
+    {"id":"FIELD_t","disposition":"redacted/opaque; do not guess"}
+  ],
+  "evidence": [
+    "resources/2350-Curupira/shared/static.cpgame.io/v2/2350/versionconfig.js",
+    "resources/2350-Curupira/shared/static.cpgame.io/v2/2350/assets/main/index.ef0c9.js",
+    "captures/2350-Curupira/authenticated-http/001-cp-config-initialData.json",
+    "captures/2350-Curupira/authenticated-http/002-cp-account-getUserInfo.json",
+    "captures/2350-Curupira/authenticated-http/003-cp-single_game.Game-initRoom.json",
+    "captures/2350-Curupira/paid-rounds/round-0001/gameResult.json",
+    "captures/2350-Curupira/paid-rounds/round-0010/gameResult.json",
+    "captures/2350-Curupira/history-after-spins.json",
+    "captures/2350-Curupira/round-id-precision-evidence.json",
+    "screenshots/2350-Curupira/rules-screen-1.png through rules-screen-8.png"
+  ]
+}

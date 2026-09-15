@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 2,
+  "gameId": 50,
+  "gameName": "Lucky Cat II",
+  "directoryName": "50-Lucky-Cat-II",
+  "status": "PROTOCOL_ACCEPTED_READY_FOR_IMPLEMENTATION",
+  "rulesVersion": "v1.5.10.250430",
+  "rulesHash": "4fcb4da38b457ee89e699b66ae9e258af2c73a622fc324202f20b7d7957c95f6",
+  "rulesHashContract": {
+    "algorithm": "SHA-256",
+    "inputFile": "protocol/50-Lucky-Cat-II/rules-core-canonical.json",
+    "scope": "identity, current rules/paytable, frontend decisions and captured config oracle"
+  },
+  "identity": {
+    "id": 50,
+    "name": "Lucky Cat II",
+    "idName": "50-Lucky-Cat-II",
+    "evidence": [
+      "resources/50-Lucky-Cat-II/en/static.cpgame.io/50/versionconfig.js: document.title and GameVersion",
+      "resources/50-Lucky-Cat-II/en/static.cpgame.io/50/assets/main/index.b4be9.js: GameConfig._gameId=50 and GameName",
+      "resources/50-Lucky-Cat-II/extracted/text-assets/en/gameRules.json: Rules.Title"
+    ]
+  },
+  "boardModel": {
+    "type": "REELS",
+    "reelCount": 3,
+    "rowCounts": [3, 3, 3],
+    "visibleCellCount": 9,
+    "bufferCellCount": "NOT_PART_OF_RESULT_PROTOCOL",
+    "wireFlattening": "reel-major: reel0 rows0..2, reel1 rows0..2, reel2 rows0..2",
+    "evidence": [
+      "gameRules.json Rules.Desc1",
+      "frontend GameGlobalConfig.GameConfig RowCounts=[3,3,3], ColumnCount=3",
+      "1565/1565 captured rskl arrays have length 9"
+    ]
+  },
+  "winModel": "FIXED_PAYLINES",
+  "winModelDetails": {
+    "type": "FIXED_PAYLINES",
+    "paylineCount": 5,
+    "paylineCountApplicability": "APPLICABLE",
+    "direction": "LEFT_TO_RIGHT",
+    "matchRequirement": "three matching symbols on a payline after WILD substitution",
+    "highestPrizePerLineOnly": true,
+    "paylineCoordinates": {
+      "1": [0, 0, 0],
+      "2": [1, 1, 1],
+      "3": [2, 2, 2],
+      "4": [0, 1, 2],
+      "5": [2, 1, 0]
+    },
+    "payoutFormula": "sum(spl[wmkl[line]] * bs * bl) * rpx",
+    "sampleVerification": {
+      "roundsChecked": 1565,
+      "winningMapMismatches": 0,
+      "awardFormulaMismatches": 0,
+      "floatingPointMaxDelta": 7.105427357601002e-15
+    },
+    "evidence": [
+      "gameRules.json Rules.Desc1/Desc6/Desc9",
+      "paytable.json WinTip.HighestWinIsPaid",
+      "frontend GameGlobalConfig PayLineCount/MatchLineIndexData",
+      "fixtures/50-Lucky-Cat-II/spin-responses.jsonl"
+    ]
+  },
+  "symbols": {
+    "codes": ["WILD", "S1", "S2", "S3", "S4", "S5", "S6"],
+    "wild": {
+      "code": "WILD",
+      "substitutesFor": "ALL_NON_WILD_SYMBOLS",
+      "allWildLinePaysAs": "WILD",
+      "evidence": ["gameRules.json Rules.Desc8", "paytable.json Payout.Wild", "captured wmkl line symbols"]
+    },
+    "paytable": {
+      "sourceField": "Config.spl",
+      "values": {"WILD": 80, "S1": 25, "S2": 20, "S3": 15, "S4": 7, "S5": 5, "S6": 2},
+      "unit": "multiplied by bs and bl per winning line before rpx"
+    }
+  },
+  "symbolWeights": {
+    "status": "UNKNOWN_FOR_SERVER_RESULT_GENERATION",
+    "serverGenerationValues": null,
+    "frontendAnimationOnly": {
+      "symbols": ["WILD", "S1", "S2", "S3", "S4", "S5", "S6"],
+      "values": [10, 15, 15, 15, 20, 20, 30],
+      "codeUse": "GameConfigData.randomReel builds client-side rolling filler strips"
+    },
+    "implementationRule": "Do not copy the animation filler values into Java generation probabilities and do not infer probabilities from sample frequencies.",
+    "evidence": "frontend SymbolWeightsList/randomReel; no server reel strips or probability configuration were captured"
+  },
+  "specialModes": [
+    {
+      "id": "LUCKY_RESPIN",
+      "applicable": true,
+      "status": "CONFIRMED_WITH_COMPLETE_ROUND_SAMPLES",
+      "sampleTarget": 30,
+      "completeRoundCount": 50,
+      "entry": "gm=1 in the paid Spin response",
+      "ruleTrigger": "same symbol and/or WILD stacked on two reels without a fixed-payline win",
+      "capturedTriggerRefinement": "in reel-major row order, each held reel is WILD* followed by repetitions of one compatible symbol; suffix-WILD stacks did not trigger",
+      "effect": "the two qualifying reels stay fixed and the remaining rdri reel performs exactly one free respin",
+      "stepBoundary": "S01 paid board = rskl with reel rdri replaced by rdskl; S02 free final board = rskl",
+      "retrigger": "NOT_SUPPORTED; the response and frontend contain exactly one embedded respin transition and then terminate",
+      "frontendFields": ["gm/game_mode", "rdri/respin_line_index", "rdskl/respin_symbol_list", "rskl/seed_reel_symbol_list"],
+      "evidence": [
+        "gameRules.json Rules.Desc2 and Respin.Desc1",
+        "frontend GameResults constructor/isRespinMode/refreshRespinResult",
+        "50 two-step entries in captures/50-Lucky-Cat-II/spin-index.jsonl with zero adjacency mismatch"
+      ]
+    },
+    {
+      "id": "MULTIPLIER_WHEEL",
+      "applicable": true,
+      "status": "CONFIRMED_WITH_COMPLETE_ROUND_SAMPLES",
+      "sampleTarget": 30,
+      "completeRoundCount": 48,
+      "entry": "rpx>1 in the paid Spin response or embedded Lucky Respin final result",
+      "trigger": "all 3x3 positions contain one common non-WILD symbol and/or WILD",
+      "effect": "multiply every winning-line payout and total award by rpx",
+      "capturedMultipliers": [2, 3, 4, 5, 10],
+      "ruleMaximum": 10,
+      "overlapWithLuckyRespinRounds": 5,
+      "deliveryBoundary": "board result and wheel multiplier are delivered in one response; wheel animation is not another Spin or paid Round",
+      "probabilityDistribution": "UNKNOWN; rule text explicitly says wheel graphic distribution is not actual probability",
+      "frontendFields": ["rpx/win_multiple"],
+      "evidence": [
+        "gameRules.json Rules.Desc3 and Wheel.Desc1-3",
+        "frontend TurnTable/GameResults.win_multiple",
+        "48 complete rpx>1 Rounds with zero trigger mismatch"
+      ]
+    }
+  ],
+  "unconfirmedModes": [
+    {
+      "id": "MULTI_FREE_SPIN_SERIES",
+      "status": "NOT_CURRENT_CAPABILITY",
+      "reason": "generic fbt/fcg framework fields exist, but current rules and all current-game samples only establish one embedded Lucky Respin"
+    },
+    {
+      "id": "PURCHASE_OR_BUY_FEATURE",
+      "status": "NOT_APPLICABLE_NOT_DISCOVERED",
+      "reason": "authenticated runtime tree, bundle tokens and rules contain no purchase entry"
+    }
+  ],
+  "supportedLanguages": {
+    "codes": ["en", "pt", "es", "th", "vi", "id", "bn", "ko", "fr", "tr"],
+    "parameter": "l",
+    "gameDefault": "pt",
+    "status": "CONFIRMED",
+    "unsupportedPortalAlias": {"code": "spa", "behavior": "retain pt; do not alias to es"},
+    "evidence": [
+      "frontend LanguageManager allow-list",
+      "reports/50-Lucky-Cat-II/language-inventory.json",
+      "captures/50-Lucky-Cat-II/first-load-summary.json"
+    ]
+  },
+  "interfaceModel": {
+    "transport": "HTTP_POST_FORM_URLENCODED",
+    "apiBaseSelection": "sip query sets window.GameUrl to {launch-scheme}://{sip}/cp",
+    "capturedApiBase": "https://api.omgapibra.com/cp",
+    "requestOrder": ["SESSION_V2", "CONFIG", "SPIN and/or HISTORY", "PING only when session ping.enable is truthy"],
+    "endpoints": [
+      {"behavior": "SESSION_V1", "method": "POST", "path": "/api/v1/auth/session", "status": "STATIC_ALTERNATE_NOT_WIRE_CONFIRMED"},
+      {"behavior": "SESSION_V2", "method": "POST", "path": "/api/v1/auth/verify", "status": "CAPTURED_200"},
+      {"behavior": "CONFIG", "method": "POST", "path": "/api/v1/golden-cat/config", "status": "CAPTURED_200"},
+      {"behavior": "SPIN", "method": "POST", "path": "/api/v1/golden-cat/spin", "status": "CAPTURED_200", "completeRounds": 1565},
+      {"behavior": "HISTORY_LIST", "method": "POST", "path": "/api/v1/golden-cat/log-list", "status": "CAPTURED_200"},
+      {"behavior": "HISTORY_VIEW", "method": "POST", "path": "/api/v1/golden-cat/log-view", "status": "CAPTURED_200"},
+      {"behavior": "PING", "method": "POST", "path": "/api/v1/ping", "status": "RUNTIME_DISABLED_PING_ENABLE_0"}
+    ],
+    "websocket": {
+      "status": "NOT_OBSERVED",
+      "observedConnections": 0,
+      "firstLoadRuns": 11,
+      "mainBundleTokenMatches": 0
+    },
+    "evidence": "captures/50-Lucky-Cat-II/interface-capture-summary.json and current frontend GameApi/Http code"
+  },
+  "codecContract": {
+    "requestBody": "application/x-www-form-urlencoded; UTF-8 percent encoding; spaces encoded as +",
+    "logicalToWireAuthMapping": {"game-id": "gid", "web-token": "t"},
+    "requestEncryption": "NONE",
+    "responseBody": "plain JSON wrapper {code, info, data}",
+    "responseEncryption": "NONE",
+    "successRule": "HTTP 2xx and string/number code equal to 200; frontend resolves data or {}",
+    "errorRules": [
+      "business code other than 200 rejects with the parsed wrapper",
+      "non-2xx rejects; non-JSON/no-code response becomes {code: HTTP<status>, info: ''}",
+      "code 401 stops heartbeat",
+      "Spin failure restores displayed balance, clears auto-play and unlocks play controls",
+      "Ping HTTP0 retries; other Ping errors are shown"
+    ],
+    "typeRule": "preserve endpoint-specific number/string types; History list monetary fields are strings while Spin fields are numbers",
+    "evidence": "frontend Http.encodeFormData/post/_cancelResponseData, GameApi, HeartMgr and Spin.onReqSpin"
+  },
+  "roundModel": {
+    "status": "CONFIRMED",
+    "paidStart": "one authenticated POST /api/v1/golden-cat/spin with bl and bs",
+    "paidRequestFields": ["bl", "bs", "gid", "t"],
+    "roundIdRule": "one spin-index.jsonl line per real paid start; provider tis/bid are optional on direct Spin responses",
+    "deliveryModel": "one HTTP response delivers the entire Round",
+    "stepRules": [
+      "gm=0: one paid S01 step and terminal",
+      "gm=1: paid S01 plus embedded free S02 Lucky Respin final board under the same roundId",
+      "rpx>1 adds an in-delivery wheel award phase but not another spin-index step",
+      "no free/respin/wheel phase may be counted as another paid Round"
+    ],
+    "terminalCondition": "after S01 for gm=0; after exactly one embedded S02 for gm=1; wheel presentation consumes the same response and then terminates",
+    "roundSampleCoverage": {
+      "ordinaryTargetPerCategory": 200,
+      "specialTargetPerCategory": 30,
+      "maxPaidRounds": 5000,
+      "paidRoundStarts": 1565,
+      "completedRoundCount": 1565,
+      "categories": [
+        {"kind": "ORDINARY_LOSS", "completeRoundCount": 1272, "target": 200, "status": "TARGET_MET"},
+        {"kind": "ORDINARY_WIN", "completeRoundCount": 200, "target": 200, "status": "TARGET_MET"},
+        {"kind": "LUCKY_RESPIN", "completeRoundCount": 50, "target": 30, "status": "TARGET_MET"},
+        {"kind": "MULTIPLIER_WHEEL", "completeRoundCount": 48, "target": 30, "status": "TARGET_MET"}
+      ],
+      "stopReason": "ALL_APPLICABLE_CATEGORY_TARGETS_MET"
+    },
+    "evidence": [
+      "captures/50-Lucky-Cat-II/spin-index.jsonl",
+      "fixtures/50-Lucky-Cat-II/spin-responses.jsonl",
+      "frontend GameResults constructor/refreshRespinResult"
+    ]
+  },
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "status": "CONFIRMED",
+    "contract": "gm=0, rpx=1, wa=0, wmkl={} is a terminal independent paid LOSS",
+    "completeRoundCount": 1272,
+    "implementationConstraint": "Demo never generates at request time. Independent LOSS members are produced only by the formal GameRuleCore in the Redis Loader and claimed from BetLog 0."
+  },
+  "redisContract": {
+    "status": "PLATFORM_CONTRACT_V3",
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "gameId": 50,
+    "keyPattern": {
+      "normalIndex": "PerKeyList_%09d",
+      "specialIndex": "MaryKeyList_%09d",
+      "normalList": "BetLog:0%08d:%06d",
+      "specialList": "MaryLog:%09d:%06d"
+    },
+    "encoding": "LC50A1 ASCII member: prefix;rulesHash;roundKey;epoch;bs;bl;rpx;s01;s02",
+    "integerMultiplier": "wa/(bs*bl) exact integer; 0 = ordinary or lucky miss",
+    "resultBoundary": "COMPLETE_ROUND",
+    "runtimeSourceRule": "Demo claims one complete member per paid Spin from Redis db 15. Empty pool fails. Fixtures are never a runtime source.",
+    "implementationRule": "Loader writes GameRuleCore complete rounds; Controller only LINDEX/restores the same member."
+  },
+  "evidence": [
+    "protocol/50-Lucky-Cat-II/rules-core-canonical.json",
+    "protocol/50-Lucky-Cat-II/capture-field-evidence-matrix.json",
+    "protocol/50-Lucky-Cat-II/protocol-spec.md",
+    "captures/50-Lucky-Cat-II/spin-index.jsonl",
+    "fixtures/50-Lucky-Cat-II/spin-responses.jsonl",
+    "reports/50-Lucky-Cat-II/protocol-analysis-validation.json"
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "4fcb4da38b457ee89e699b66ae9e258af2c73a622fc324202f20b7d7957c95f6",
+    "status": "PROTOCOL_ACCEPTED_READY_FOR_IMPLEMENTATION",
+    "behaviorIds": [
+      "LANGUAGE_SELECTION",
+      "SESSION_BOOTSTRAP_V2",
+      "SESSION_V1_FALLBACK",
+      "HTTP_CODEC_AND_ERRORS",
+      "CONFIG_LOAD",
+      "HEARTBEAT",
+      "RULES_PAYTABLE_UI",
+      "FIXED_PAYLINE_EVALUATION",
+      "PAID_SPIN_ROUND",
+      "LUCKY_RESPIN",
+      "MULTIPLIER_WHEEL",
+      "HISTORY_LIST_VIEW",
+      "REDIS_PACKAGING_BOUNDARY"
+    ]
+  }
+}

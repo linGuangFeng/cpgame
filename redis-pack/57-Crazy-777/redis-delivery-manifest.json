@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "gameId": 57,
+  "directoryName": "57-Crazy-777",
+  "rulesHash": "sha256:852d3021084c1f4117203c4a6eda137747bf9c1f689b30decb9791e46bf66f2b",
+  "deliveryStatus": "DISABLED_CAPABILITY_UNKNOWN",
+  "redisContract": {
+    "status": "UNKNOWN_NO_CURRENT_GAME_EVIDENCE",
+    "keyPattern": null,
+    "payloadCodec": null,
+    "atomicWriteValidated": false,
+    "trimValidated": false
+  },
+  "redisPayloadFiles": [],
+  "loaderPolicy": "Redis export remains disabled and must be safely rejected until an authoritative current-game key and payload contract is supplied.",
+  "evidence": [
+    "protocol/57-Crazy-777/game-capabilities.json#redisContract",
+    "reports/57-Crazy-777/runtime-generation-validation.json#redis"
+  ],
+  "nonClaims": [
+    "No Redis key is invented.",
+    "No payload or wire codec is invented.",
+    "No atomic write or trim is reported as passed."
+  ]
+}

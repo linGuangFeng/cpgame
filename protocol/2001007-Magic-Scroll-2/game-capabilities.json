@@ -1,0 +1,676 @@
+{
+  "schemaVersion": "1.1",
+  "gameId": "2001007",
+  "directoryName": "2001007-Magic-Scroll-2",
+  "gameName": "Magic Scroll 2",
+  "displayName": "Magic Scroll 2",
+  "provider": "CP",
+  "rulesHash": "sha256:ab8f86b20f45615af560b928c2f5bd860ea6abf641d461d2e200a3e4aaed3fcd",
+  "rulesVersion": "1.2.6",
+  "rtp": 96.04,
+  "ruleMetadata": {
+    "status": "CONFIRMED",
+    "rulesVersion": "1.2.6",
+    "rtpPercent": 96.04,
+    "evidenceRefs": [
+      "E-RULE-METADATA"
+    ],
+    "evidence": "screenshots/2001007-Magic-Scroll-2/rules-pt-12.png and rules-pt-18.png show the current-game rule footer/version and RTP text."
+  },
+  "currency": "BRL",
+  "supportedLanguages": {
+    "codes": [
+      "en",
+      "pt"
+    ],
+    "status": "CONFIRMED",
+    "evidence": [
+      "resources/2001007-Magic-Scroll-2/pt/assets/resources/import/09/09b37d4f0.a8485.json: embedded LanguageData CSV header none,en,pt",
+      "resources/2001007-Magic-Scroll-2/pt/assets/main/index.b9a82.js: getLangs() exposes en and pt; selectLang(cn) is false",
+      "reports/2001007-Magic-Scroll-2/language-inventory.json: real first loads with l=en and l=pt"
+    ]
+  },
+  "wager": {
+    "minimumUiTotalBet": 0.4,
+    "minimumApiPaidBet": 0.4,
+    "minimumMult": 1,
+    "betListWire": [
+      20,
+      120,
+      800
+    ],
+    "betListNormalized": [
+      0.02,
+      0.12,
+      0.8
+    ],
+    "multListWire": [
+      10000,
+      20000,
+      30000,
+      40000,
+      50000,
+      60000,
+      70000,
+      80000,
+      90000,
+      100000
+    ],
+    "multListNormalized": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "baseBetDivisor": 20,
+    "totalBetFormula": "normalizedBet * normalizedMult * 20",
+    "warning": "The frontend LineCount=20 constant is the base-bet/total-bet conversion factor for this Ways game, not a payline count.",
+    "evidenceRefs": [
+      "E-GAMEINFO",
+      "E-BUNDLE-WAGER",
+      "E-VALID-LOSS",
+      "E-VALID-WIN"
+    ]
+  },
+  "winModel": "WAYS",
+  "paylineCount": null,
+  "paylineCountApplicability": "NOT_APPLICABLE",
+  "paylineCountEvidenceRefs": [
+    "E-RULES-WAYS",
+    "E-BUNDLE-LINEMGR"
+  ],
+  "winModelDetails": {
+    "type": "WAYS",
+    "paylineCount": {
+      "applicability": "NOT_APPLICABLE",
+      "value": null,
+      "evidence": "Rules state left-to-right ways payout and up to 46,656 ways; frontend checkWinGridLines multiplies the paytable value by countPerCol product."
+    },
+    "minimumMatchedColumns": 3,
+    "maximumWays": 46656,
+    "direction": "LEFT_TO_RIGHT",
+    "highestWinPerBetWayOnly": true,
+    "baseWinFormula": "baseBet * paytableMultiplier * product(countPerMatchedColumn)",
+    "stepWinFormula": "baseWin * globalMultiplier",
+    "paytableBySymbolId": {
+      "3": {
+        "3": 15,
+        "4": 40,
+        "5": 80,
+        "6": 150
+      },
+      "4": {
+        "3": 10,
+        "4": 15,
+        "5": 40,
+        "6": 75
+      },
+      "5": {
+        "3": 9,
+        "4": 12,
+        "5": 30,
+        "6": 50
+      },
+      "6": {
+        "3": 8,
+        "4": 11,
+        "5": 25,
+        "6": 40
+      },
+      "7": {
+        "3": 7,
+        "4": 10,
+        "5": 20,
+        "6": 35
+      },
+      "8": {
+        "3": 6,
+        "4": 8,
+        "5": 16,
+        "6": 30
+      },
+      "9": {
+        "3": 5,
+        "4": 7,
+        "5": 14,
+        "6": 25
+      },
+      "10": {
+        "3": 4,
+        "4": 6,
+        "5": 12,
+        "6": 22
+      },
+      "11": {
+        "3": 4,
+        "4": 6,
+        "5": 12,
+        "6": 21
+      },
+      "12": {
+        "3": 4,
+        "4": 6,
+        "5": 12,
+        "6": 20
+      }
+    },
+    "specialSymbolPayouts": {
+      "0_WILD": 0,
+      "1_BONUS": 0,
+      "2_XSPLIT": 0
+    },
+    "evidenceRefs": [
+      "E-RULES-PAYTABLE",
+      "E-RULES-WAYS",
+      "E-BUNDLE-LINEMGR",
+      "E-VALID-WIN"
+    ]
+  },
+  "boardModel": {
+    "type": "DYNAMIC_ACTIVE_ROWS_WITH_COLLAPSE",
+    "columns": 6,
+    "encodedRowsPerColumn": 6,
+    "encodedCellCount": 36,
+    "ordering": "COLUMN_MAJOR",
+    "initialActiveRows": 3,
+    "maximumVisibleActiveRows": 6,
+    "activeRowProgression": "A qualifying collapse activates one additional row, capped visually at six by the rules.",
+    "derivedCounterNote": "The frontend vaildRow counter reached 7 on the terminal projection of captured Round 29; this is a derived post-six counter/sentinel and is not evidence of a seventh encoded or visible row.",
+    "symbolIds": {
+      "0": "WILD_XBOMB",
+      "1": "BONUS_SCATTER",
+      "2": "XSPLIT",
+      "99": "EMPTY",
+      "999": "CHANGING_INTERNAL",
+      "3-12": "PAYING_REGULAR"
+    },
+    "cellIntegerCodec": {
+      "symbolId": "raw % 100",
+      "count": "2 ^ floor(raw / 1000)",
+      "blockOrDirt": "floor((raw % 1000) / 100)",
+      "status": "CONFIRMED_FRONTEND_DECODER"
+    },
+    "evidenceRefs": [
+      "E-RULES-COLLAPSE",
+      "E-BUNDLE-LINEMGR",
+      "E-GAMEINFO",
+      "E-VALID-LOSS",
+      "E-VALID-WIN"
+    ]
+  },
+  "roundModel": {
+    "paidRoundStart": {
+      "endpoint": "v2/Spin",
+      "request": "atk plus bet>0, mult>0 and gameType"
+    },
+    "continuation": {
+      "endpoint": "v2/Spin",
+      "request": "same atk with bet=0, mult=0, gameType=1"
+    },
+    "wireStepFieldsConfirmed": [
+      "bl",
+      "formation",
+      "free"
+    ],
+    "clientDerivedStepFields": [
+      "end",
+      "ways",
+      "vaildRow",
+      "winGridLines",
+      "wildGrids",
+      "SplitGrids",
+      "ScatterGrids",
+      "gloablMulti",
+      "finaltotalwinamount",
+      "finaltotalwinWays"
+    ],
+    "transitionRule": "The frontend decodes each formation, derives wins/special triggers and recursively requests a zero-bet continuation while the derived step is nonterminal.",
+    "terminalRule": "A Round terminates when the frontend-derived step has no win, xSplit, active xBomb Wild, Magic Mining combine trigger or active free-mode continuation. end=true is a Delivery projection, not a confirmed raw wire field.",
+    "balanceRule": "The paid request debits the wager; captured continuations may carry bl=0; the final raw step carries the authoritative terminal balance.",
+    "countingRule": "Only a request with bet>0 and mult>0 starts and counts as a paid Round. All zero-bet steps are adjacent Delivery/Step evidence for that Round.",
+    "evidenceRefs": [
+      "E-BUNDLE-ROUND",
+      "E-SPIN-INDEX",
+      "E-VALID-LOSS",
+      "E-VALID-WIN"
+    ]
+  },
+  "specialModes": [
+    {
+      "id": "MAGIC_MINING",
+      "status": "CONFIRMED_RULE_AND_VALID_MIN_COMPLETE_ROUND_EVIDENCE_IMPLEMENTATION_GATED",
+      "implementationAllowed": false,
+      "behaviorId": "B-MAGIC-MINING",
+      "evidence": [
+        "screenshots/2001007-Magic-Scroll-2/rules-pt-07.png",
+        "resources/2001007-Magic-Scroll-2/pt/assets/main/index.b9a82.js checkCombineCol/checkCombineRow",
+        "captures/2001007-Magic-Scroll-2/followup-20260829/original-rounds.jsonl"
+      ]
+    },
+    {
+      "id": "XSPLIT",
+      "status": "CONFIRMED_RULE_AND_VALID_MIN_COMPLETE_ROUND_EVIDENCE",
+      "implementationAllowed": true,
+      "behaviorId": "B-XSPLIT",
+      "evidence": [
+        "screenshots/2001007-Magic-Scroll-2/rules-pt-08.png",
+        "fixtures/2001007-Magic-Scroll-2/04-spin-valid-min-win-multistep.json requests 562-567",
+        "captures/2001007-Magic-Scroll-2/followup-20260829/original-rounds.jsonl"
+      ]
+    },
+    {
+      "id": "XBOMB_WILD_MULTIPLIER",
+      "status": "CONFIRMED_RULE_AND_VALID_MIN_COMPLETE_ROUND_EVIDENCE",
+      "implementationAllowed": true,
+      "behaviorId": "B-XBOMB-WILD",
+      "evidence": [
+        "screenshots/2001007-Magic-Scroll-2/rules-pt-06.png",
+        "fixtures/2001007-Magic-Scroll-2/04-spin-valid-min-win-multistep.json requests 564-566",
+        "captures/2001007-Magic-Scroll-2/followup-20260829/original-rounds.jsonl"
+      ]
+    },
+    {
+      "id": "LUCKY_WAGON_SPINS",
+      "status": "CONFIRMED_RULE_AND_VALID_MIN_COMPLETE_ROUND_EVIDENCE_IMPLEMENTATION_GATED",
+      "implementationAllowed": false,
+      "behaviorId": "B-LUCKY-WAGON",
+      "evidence": [
+        "screenshots/2001007-Magic-Scroll-2/rules-pt-03.png through rules-pt-05.png",
+        "captures/2001007-Magic-Scroll-2/followup-20260829/original-rounds.jsonl pipe-delimited complete chains"
+      ]
+    },
+    {
+      "id": "FEATURE_BUY_GAMETYPES_2_TO_6",
+      "status": "ENTRY_AND_FRONTEND_MAPPING_ONLY",
+      "implementationAllowed": false,
+      "behaviorId": "B-FEATURE-BUY",
+      "evidence": [
+        "MS2BuyView needValues [70,200,600,3600,175] and gameType=selection+2"
+      ]
+    },
+    {
+      "id": "XBET_GAMETYPE7",
+      "status": "RULE_AND_FRONTEND_REFERENCE_ONLY",
+      "implementationAllowed": false,
+      "behaviorId": "B-XBET",
+      "evidence": [
+        "screenshots/2001007-Magic-Scroll-2/rules-pt-08.png",
+        "frontend gameType reference; no runtime response"
+      ]
+    }
+  ],
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "scope": "BASE_PAID_SINGLE_STEP_ONLY",
+    "preconditions": [
+      "gameType=1",
+      "bet>=0.40 BRL",
+      "mult>=1",
+      "no unfinished Round",
+      "no special mode is activated"
+    ],
+    "requiredIndependentChecks": [
+      "36 encoded cells decode under boardModel",
+      "no WAYS win",
+      "no xSplit",
+      "no active xBomb Wild continuation",
+      "no Magic Mining horizontal/vertical 3-6 no-win trigger",
+      "fewer than three active Bonus symbols",
+      "derived end=true"
+    ],
+    "prohibitions": [
+      "No fixture/history response as result source",
+      "No fixed board",
+      "No round-number script",
+      "No use during an active or special Round"
+    ],
+    "evidenceRefs": [
+      "E-VALID-LOSS",
+      "E-BUNDLE-ROUND",
+      "E-RULES-COLLAPSE"
+    ]
+  },
+  "runtimeImplementation": {
+    "rulesHashChanged": false,
+    "rulesHashChangeReason": "No protocol rule or evidence contract changed in this implementation-only defect correction.",
+    "formalGenerationCore": "com.hd.cpgame.magicscroll2.core.GameRuleCore",
+    "liveProbabilityPolicy": {
+      "class": "com.hd.cpgame.magicscroll2.core.TrialProbabilityPolicy",
+      "classification": "NON_AUTHORITATIVE_TRIAL_CONFIGURATION_NOT_ORIGINAL_RTP",
+      "descriptionZh": "外置非权威试玩概率配置，仅在四种已确认完整 Round 模式间选择；不代表或声称复现原厂 RTP。",
+      "confirmedModes": [
+        "LOSS",
+        "BASE_WIN",
+        "XSPLIT",
+        "XBOMB_WILD"
+      ],
+      "authoritativeOriginalRtp": false,
+      "configurationSources": [
+        "generator/2001007-Magic-Scroll-2/dist/loader.properties",
+        "server-api/2001007-Magic-Scroll-2/dist/server.properties"
+      ]
+    },
+    "liveUnselectedPath": "PlayerSession.spin paid start -> RedisRoundStore.claim (LOSS/WIN/SPECIAL weights, integer ratio, LINDEX ASCII member) -> RedisMemberCodec.decode -> DeliveryRuntimeUtil.project. No live generation.",
+    "controlledConfirmedRoundPath": "Removed. Demo has no X-Validation-Round-Mode and no on-the-fly generation.",
+    "selectionProperties": [
+      "configured weighted selection once per paid live Round start",
+      "non-authoritative trial strategy; not an original RTP claim",
+      "no round-number or request-count rotation",
+      "no seed",
+      "no fixed formation or preset result",
+      "no fixture, capture or history runtime dependency"
+    ],
+    "completeRoundConsumption": {
+      "encodedMemberClaimsPerRound": 1,
+      "claimBoundary": "EncodedRoundMember.claimOnce",
+      "decodePath": "MinimalFactCodec.encode -> EncodedRoundMember.claimOnce -> MinimalFactCodec.decode -> persisted ActiveRoundState",
+      "preEncodingGeneratedRoundConsumed": false,
+      "claimCountSource": "successful claimOnce invocation; not a fixed response field",
+      "persistedFields": [
+        "decoded GeneratedRound",
+        "roundKey",
+        "deliveryIndex",
+        "memberSha256",
+        "actual memberClaimCount",
+        "payoutCredited"
+      ],
+      "continuation": "the original frontend issues bet=0,mult=0 and Java projects the next Delivery from the same decoded claimed member",
+      "reconnect": "bet<0 replays the persisted current Delivery",
+      "terminalSettlement": "credited exactly once"
+    },
+    "runtimeEvidence": [
+      {
+        "id": "RI-GAME-RULE-CORE",
+        "source": "generator/2001007-Magic-Scroll-2/src/main/java/com/hd/cpgame/magicscroll2/core/GameRuleCore.java",
+        "supports": "generateLiveRound delegates live mode selection to TrialProbabilityPolicy and creates one complete Round"
+      },
+      {
+        "id": "RI-TRIAL-PROBABILITY-POLICY",
+        "source": "generator/2001007-Magic-Scroll-2/src/main/java/com/hd/cpgame/magicscroll2/core/TrialProbabilityPolicy.java",
+        "supports": "externally configured secure-random selection among LOSS, BASE_WIN, XSPLIT and XBOMB_WILD; explicitly non-authoritative and not an original RTP claim"
+      },
+      {
+        "id": "RI-RUNTIME-GENERATION-VALIDATION",
+        "source": "reports/2001007-Magic-Scroll-2/runtime-generation-validation.json",
+        "supports": "same formal runtime chain, four-mode live generation, independent verification, complete-Round continuity and terminal settlement once"
+      }
+    ],
+    "validatedReports": [
+      "reports/2001007-Magic-Scroll-2/original-ui-rounds-validation.json",
+      "reports/2001007-Magic-Scroll-2/member-claim-runtime-validation.json",
+      "reports/2001007-Magic-Scroll-2/browser-acceptance.json",
+      "reports/2001007-Magic-Scroll-2/runtime-generation-validation.json",
+      "reports/2001007-Magic-Scroll-2/independent-live-win-defect-acceptance.json",
+      "reports/2001007-Magic-Scroll-2/independent-runtime-acceptance.json",
+      "reports/2001007-Magic-Scroll-2/server-api-validation.json"
+    ],
+    "status": "PASS_CONFIRMED_BEHAVIORS_END_TO_END"
+  },
+  "redisContract": {
+    "status": "CONFIRMED_PLATFORM_DELIVERY_CONTRACT",
+    "upstreamProtocolStatus": "NOT_APPLICABLE_REDIS_IS_INTERNAL_DOWNSTREAM",
+    "sourceGameId": "2001007",
+    "redisGameIdDefault": 2001007,
+    "redisGameIdConfigurable": true,
+    "normalIndex": "PerKeyList_%09d",
+    "specialIndex": "MaryKeyList_%09d",
+    "normalList": "BetLog:0%08d:<actual-multiplier-token>",
+    "specialList": "MaryLog:%09d:<actual-multiplier-token>",
+    "valueCodec": "MS2A1 ASCII RedisMemberCodec; prefix;rulesHash;seed;rows:formation|...",
+    "roundEncoding": "one member is exactly one paid complete Round with ordered deliveries starting at deliveryIndex 0",
+    "implementationAllowed": true,
+    "zeroMultiplierPolicy": "LOSS writes integer ratio 0 into BetLog unhit pool; Demo claims that pool instead of skipping 0x",
+    "atomicWrite": "each batch uses one MULTI/EXEC; every positive member contributes ZADD + RPUSH + LTRIM",
+    "capacity": "generation.max-members-per-multiplier, default 300, trimmed from the left",
+    "delivery": {
+      "directory": "redis-pack/2001007-Magic-Scroll-2",
+      "manifest": "redis-pack-manifest.json",
+      "status": "JAVA_LOADER_DELIVERED_AND_ISOLATED_REDIS_VERIFIED",
+      "loader": "generator/2001007-Magic-Scroll-2/dist/magic-scroll2-loader.jar",
+      "formalConfig": "generator/2001007-Magic-Scroll-2/dist/generator.properties"
+    },
+    "evidence": [
+      "generator/1809-Freedom-Day and redis-pack/1809-Freedom-Day for platform generic index/list convention only",
+      "generator/2001007-Magic-Scroll-2/src/main/java/com/hd/cpgame/magicscroll2/loader/RedisLoader.java",
+      "reports/2001007-Magic-Scroll-2/independent-generator-targeted-acceptance-20260901.json"
+    ]
+  },
+  "codecContract": {
+    "httpMethod": "POST",
+    "requestEncoding": "multipart/form-data generated with FormData",
+    "responseEnvelope": {
+      "shape": "{dt:<payload>,err:<error-or-null>}",
+      "frontendBehavior": "only dt is passed to success callback when err is falsy"
+    },
+    "applicationEncryption": {
+      "status": "NONE_OBSERVED",
+      "notes": "No CryptoJS/AES/encrypt/decrypt path was found in the current main bundle and captured payloads are readable JSON/FormData. This is evidence of observed transport behavior, not a claim about TLS internals."
+    },
+    "formation": {
+      "baseMode": "36 comma-separated decimal integers",
+      "freeModeReference": "frontend contains a pipe-delimited parser, but legal-min Lucky Wagon wire samples were not retained; do not implement that branch",
+      "cellCodecRef": "boardModel.cellIntegerCodec"
+    },
+    "moneyNormalization": {
+      "GameInfo.betList": "divide by 1000",
+      "GameInfo.multList": "divide by 10000",
+      "Spin.bet": "decimal total bet",
+      "Spin.mult": "decimal multiplier"
+    },
+    "evidenceRefs": [
+      "E-BUNDLE-TRANSPORT",
+      "E-BUNDLE-LINEMGR",
+      "E-INIT",
+      "E-GAMEINFO",
+      "E-VALID-WIN"
+    ]
+  },
+  "symbolWeights": {
+    "status": "SAMPLE_ESTIMATE_FOR_LOCAL_REPLICA_NOT_FACTORY_RTP",
+    "serverWeights": null,
+    "implementationAllowed": true,
+    "sample": {
+      "completeRoundStarts": 3885,
+      "cellDenominator": 139860,
+      "regularSymbolCounts3To12": [2008,3157,4024,4579,5893,6891,8029,10511,10623,10243],
+      "emptyMaterialDenominator": 65363,
+      "emptyMaterialCounts": {"empty":30587,"dirt":34776},
+      "source": "captures/2001007-Magic-Scroll-2/followup-20260829/original-rounds.jsonl first paid Delivery formation"
+    },
+    "reason": "No authoritative factory reel table exists. The formal configurable weights use retained full-Round-start sample counts and explicitly do not claim factory long-run probability or RTP."
+  },
+  "history": {
+    "endpoint": "v2/History",
+    "status": "CONFIRMED_ORIGINAL_CURRENT_DATE_AND_LOCAL_PERSISTENCE",
+    "acceptedObservedRequest": {
+      "page": 1,
+      "size": 20
+    },
+    "observedResponse": {
+      "unfiltered": {
+        "all_num": 0,
+        "historyItem": null
+      },
+      "currentDateTimeRange": {
+        "all_num": 2042,
+        "pageItems": 20
+      }
+    },
+    "frontendConsumedItemFields": [
+      "psid",
+      "created_at",
+      "bet",
+      "transfer",
+      "balance",
+      "mult",
+      "formation",
+      "free"
+    ],
+    "originalItemFields": [
+      "psid",
+      "created_at",
+      "bet",
+      "mult",
+      "transfer",
+      "balance",
+      "gameType",
+      "formation"
+    ],
+    "originalFieldSemantics": {
+      "psid": "complete paid Round/order id",
+      "transfer": "payout minus bet; LOSS=-0.40",
+      "formation": "ordered array of all raw Step formations",
+      "status": "not present",
+      "currency": "BRL from verifySession, not repeated in item"
+    },
+    "matchedCategories": [
+      "ORDINARY_LOSS",
+      "ORDINARY_WIN",
+      "SPECIAL_LUCKY_WAGON_AND_OTHER_CAPTURED_MODES"
+    ],
+    "localPersistenceContract": "one durable record per terminal roundKey; transfer=payout-bet; formation contains all ordered Delivery formations; continuation and idempotency replay do not append",
+    "historyDate": {
+      "endpoint": "v2/HistoryDate",
+      "originalObservedStatus": 404,
+      "localBehavior": "HTTP_404_DO_NOT_SYNTHESIZE_UNKNOWN_SCHEMA"
+    },
+    "implementationAllowed": true
+  },
+  "missingModes": [
+    {
+      "target": "FEATURE_BUY_GAMETYPES_2_TO_6_EXECUTION",
+      "actualPaidRoundAttempts": 3518,
+      "purchaseAttempts": 0,
+      "attemptContext": "3518 normal gameType=1 paid starts were observed; no feature purchase was executed",
+      "retrievalEntry": "MS2BuyView",
+      "missingEvidence": "purchase request/response and mode execution",
+      "classification": "ENTRY_ONLY_DO_NOT_GUESS"
+    },
+    {
+      "target": "XBET_GAMETYPE7_EXECUTION",
+      "actualPaidRoundAttempts": 3518,
+      "purchaseAttempts": 0,
+      "attemptContext": "3518 normal gameType=1 paid starts were observed; gameType=7 was never activated",
+      "retrievalEntry": "rules/frontend references",
+      "missingEvidence": "runtime request/response",
+      "classification": "RARE_GAP_NOT_NODE_BLOCKER"
+    },
+    {
+      "target": "TOP_ENDPOINT_SCHEMA",
+      "actualPaidRoundAttempts": 3518,
+      "endpointActivationAttempts": 0,
+      "attemptContext": "normal Spin sampling did not activate the conditional Top caller",
+      "retrievalEntry": "conditional frontend v2/Top path",
+      "missingEvidence": "current-game activation and response",
+      "classification": "ENUMERATION_ONLY_DO_NOT_IMPLEMENT"
+    }
+  ],
+  "evidence": [
+    "protocol/2001007-Magic-Scroll-2/field-evidence-matrix.json",
+    "protocol/2001007-Magic-Scroll-2/protocol-spec.json",
+    "protocol/2001007-Magic-Scroll-2/protocol-spec.md",
+    "protocol/2001007-Magic-Scroll-2/protocol-handoff.json",
+    "screenshots/2001007-Magic-Scroll-2/rules-pt-01.png through rules-pt-18.png",
+    "captures/2001007-Magic-Scroll-2/init-api-capture.json",
+    "captures/2001007-Magic-Scroll-2/spin-index.jsonl",
+    "fixtures/2001007-Magic-Scroll-2/03-spin-valid-min-loss.json",
+    "fixtures/2001007-Magic-Scroll-2/04-spin-valid-min-win-multistep.json",
+    "fixtures/2001007-Magic-Scroll-2/05-history-empty.json"
+  ],
+  "evidenceCatalog": {
+    "fieldMatrix": "field-evidence-matrix.json",
+    "protocolSpec": "protocol-spec.json",
+    "handoff": "protocol-handoff.json",
+    "rulesScreenshots": "screenshots/2001007-Magic-Scroll-2/rules-pt-01.png through rules-pt-18.png",
+    "initCapture": "captures/2001007-Magic-Scroll-2/init-api-capture.json",
+    "paidRoundIndex": "captures/2001007-Magic-Scroll-2/spin-index.jsonl",
+    "fixtureOracles": [
+      "fixtures/2001007-Magic-Scroll-2/03-spin-valid-min-loss.json",
+      "fixtures/2001007-Magic-Scroll-2/04-spin-valid-min-win-multistep.json",
+      "fixtures/2001007-Magic-Scroll-2/05-history-empty.json"
+    ]
+  },
+  "sourceHashes": {
+    "entry": "sha256:e78bf260f381e6b6f3115e17b5b1abb1f2c90128099170f7b945ba866cb49076",
+    "mainBundle": "sha256:ab8f86b20f45615af560b928c2f5bd860ea6abf641d461d2e200a3e4aaed3fcd",
+    "resourcesConfig": "sha256:786c32bf1c6538646bcdce5ee4f77d8da1d635907cfb19abe5971f7eeb8b629e",
+    "languageImport": "sha256:21e5a12a43fe167c12abd8a4200bc896d1b6abf4b985b3ed0f21bb86b645ae75"
+  },
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "sha256:ab8f86b20f45615af560b928c2f5bd860ea6abf641d461d2e200a3e4aaed3fcd",
+    "behaviorIds": [
+      "B-IDENTITY-LANGUAGE",
+      "B-SESSION-INIT",
+      "B-TRANSPORT-CODEC",
+      "B-WAGER-NORMALIZATION",
+      "B-RULE-METADATA",
+      "B-BOARD-CODEC",
+      "B-WAYS-PAYOUT",
+      "B-BASE-ROUND",
+      "B-RUNTIME-INDEPENDENT-LOSS",
+      "B-MAGIC-MINING",
+      "B-XSPLIT",
+      "B-XBOMB-WILD",
+      "B-HISTORY",
+      "B-HISTORY-DATE",
+      "B-LUCKY-WAGON",
+      "B-FEATURE-BUY",
+      "B-XBET",
+      "B-TOP",
+      "B-SYMBOL-WEIGHTS",
+      "B-REDIS-CONTRACT"
+    ]
+  },
+  "roundSampleCoverage": {
+    "ordinaryTargetPerCategory": 200,
+    "specialTargetPerCategory": 30,
+    "maxPaidRounds": 5000,
+    "paidRoundStarts": 3886,
+    "completedRoundCount": 3885,
+    "interruptedPaidRoundStarts": 1,
+    "categories": {
+      "ORDINARY_LOSS": {
+        "completeRoundCount": 1918,
+        "target": 200,
+        "status": "TARGET_MET"
+      },
+      "ORDINARY_WIN": {
+        "completeRoundCount": 200,
+        "target": 200,
+        "status": "TARGET_MET"
+      },
+      "MAGIC_MINING": {
+        "completeRoundCount": 1467,
+        "target": 30,
+        "status": "TARGET_MET"
+      },
+      "XSPLIT": {
+        "completeRoundCount": 698,
+        "target": 30,
+        "status": "TARGET_MET"
+      },
+      "XBOMB_WILD_MULTIPLIER": {
+        "completeRoundCount": 1347,
+        "target": 30,
+        "status": "TARGET_MET"
+      },
+      "LUCKY_WAGON_SPINS": {
+        "completeRoundCount": 310,
+        "target": 30,
+        "status": "TARGET_MET"
+      }
+    },
+    "stopReason": "ALL_APPLICABLE_TARGETS_MET",
+    "indexLineCount": 3886,
+    "rawRoundLineCount": 3885,
+    "countConsistency": true,
+    "evidence": "captures/2001007-Magic-Scroll-2/followup-20260829/scenario-coverage.json"
+  }
+}

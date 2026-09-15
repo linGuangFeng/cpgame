@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 1670,
+  "gameName": "Christmas Gift",
+  "runId": "20260902T084955000Z",
+  "startedAt": "2026-09-02T08:49:56.841Z",
+  "finishedAt": "2026-09-02T08:51:11.166Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 85,
+    "exactStaticUrls": 82,
+    "excludedDynamicApiUrls": 3,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 82,
+    "succeeded": 81,
+    "failed": 1,
+    "downloadedBytes": 13146122,
+    "statusCounts": {
+      "200": 81,
+      "404": 1
+    },
+    "contentTypeCounts": {
+      "application/javascript": 14,
+      "image/png": 51,
+      "application/json": 8,
+      "application/octet-stream": 4,
+      "image/jpeg": 3,
+      "audio/mpeg": 1
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/1670-Christmas-Gift/programmatic-http/20260902T084955000Z/download-items.public.jsonl",
+      "sha256": "96b1e38dcd84609768d9377ea6f0789008d82a848d20af297c70a40c19f803ae",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/1670-Christmas-Gift/programmatic-http/20260902T084955000Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "failedUrls": [
+    {
+      "url": "https://static.cpgame.io/v2/1670/asset/external/versionconfig.js?v=1788338016162",
+      "httpStatus": 404,
+      "error": "curl: (56) The requested URL returned error: 404"
+    }
+  ],
+  "stageDirectory": "/Users/a1/Downloads/christmas-gift-stage/20260902T084955000Z",
+  "resourceFolder": "1670-Christmas-Gift"
+}

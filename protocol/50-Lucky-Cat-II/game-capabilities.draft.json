@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "gameId": 50,
+  "directoryName": "50-Lucky-Cat-II",
+  "status": "SUPERSEDED",
+  "supersededBy": "game-capabilities.json",
+  "reason": "The canonical current-game static capability evidence has been captured. This compatibility marker must not be used for implementation."
+}

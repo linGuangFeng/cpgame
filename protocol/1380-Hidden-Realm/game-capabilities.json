@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "gid": 1380,
+  "directory": "1380-Hidden-Realm",
+  "rulesHash": "a47cbb826fa130d6cf03c208a992f29789aad2a9870202ea7080145935f2d7db",
+  "rulesVersion": "1380-rules-v2",
+  "readyForAcceptance": true,
+  "runtimeAvailable": true,
+  "behaviorIds": [
+    "board.column-major-5x5",
+    "symbols.ids",
+    "payout.orthogonal-cluster",
+    "payout.scale",
+    "cascade.gravity",
+    "phase.grass",
+    "phase.water",
+    "phase.fire",
+    "phase.lord",
+    "round.delivery-continuation",
+    "ui.round-finish",
+    "history.day-and-round"
+  ],
+  "confirmedFromOriginal": {
+    "board": [5, 5],
+    "wild": true,
+    "featureNames": ["Grass Dragon", "Water Dragon", "Fire Dragon", "Dragon Lord"],
+    "buyFeature": false,
+    "scatterFreeSpins": false
+  },
+  "implemented": [
+    "clusterPayoutWithWild",
+    "independentResultUtil",
+    "grassRemoval",
+    "waterPositions",
+    "fireMask",
+    "lordTransformNoScoreWhileLow",
+    "redisCompleteRounds",
+    "controllerV3"
+  ],
+  "sampleStatus": {
+    "ordinaryLoss": 576,
+    "ordinaryWinOriginal": 0,
+    "ordinaryWinOriginalNote": "SAMPLE_INSUFFICIENT — 695 training true paid rounds never produced a win with collection < 10",
+    "specialByMaxPhase": {"1": 23, "2": 24, "3": 24, "4": 48},
+    "holdoutTruePaid": 100
+  }
+}

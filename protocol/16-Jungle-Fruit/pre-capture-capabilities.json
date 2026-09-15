@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "workflowTemplateVersion": 15,
+  "gameId": 16,
+  "gameName": "Jungle Fruit",
+  "directoryName": "16-Jungle-Fruit",
+  "status": "PRECAPTURE_CAPABILITY_GAPS_NOT_GAME_CAPABILITIES",
+  "implementationAllowed": false,
+  "identity": {"status": "CONFIRMED", "rawGameId": 16},
+  "winModel": {"status": "UNKNOWN"},
+  "boardModel": {"status": "UNKNOWN"},
+  "betModel": {"status": "UNKNOWN"},
+  "roundModel": {"status": "UNKNOWN"},
+  "specialModes": {"status": "UNKNOWN", "confirmed": []},
+  "supportedLanguages": {"status": "UNKNOWN", "codes": []},
+  "runtimeIndependentLoss": {"status": "UNKNOWN", "supported": false},
+  "redisContract": {"status": "UNKNOWN", "writesAllowed": false},
+  "codecContract": {"status": "UNKNOWN"},
+  "symbolWeights": {"status": "UNKNOWN"},
+  "history": {"status": "UNKNOWN"},
+  "nextEvidenceNeeded": ["first-load resources", "rules/paytable", "paid Round and History", "language inventory", "codec and Redis consumer contract"]
+}

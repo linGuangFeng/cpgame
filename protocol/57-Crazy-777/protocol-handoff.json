@@ -1,0 +1,455 @@
+{
+  "schemaVersion": 1,
+  "gameId": 57,
+  "gameName": "Crazy 777",
+  "protocolRevision": "protocol-r3-20260829",
+  "rulesVersion": "v1.5.10.250430",
+  "rulesHash": "sha256:852d3021084c1f4117203c4a6eda137747bf9c1f689b30decb9791e46bf66f2b",
+  "evidenceHashes": {
+    "providerBundle": "d32f1e5184c25a8a61eb55e830875ba54039c270246cd75b857abbccafdea154",
+    "gameConfig": "b471831f3f57f0d69495594b1afc727a993fd91aa7608d3fa08c796b38b8bfc2",
+    "rulesPage": "d9e2773ce3c368e7b6625cb02df7ee012f507291906c624a364397714b8496b5",
+    "roundValidation": "fc89ae31f8409691e7f322043bc46b4b06a91bcf866037a425a16b4fecd276fa",
+    "languageSweep": "0865e32106fe87af292c675338b9870c6cbf5073902ac5278a6b70b335128a19",
+    "symbolAssetEvidence": "bfd1af4dfb17e180e6ce28eca4cff57f19c3eb5be41f95bdd1a212b77555069b",
+    "historyAdjacentEvidence": "b0a5753b23b085e0d3b0b98c2d5b4d804d53835bf480513125828fe65c376ca6",
+    "historyListFixture": "d794fc8c1376d038588c39847fc0aaf3f05e391655ac0678ddd2f6bd00e35384",
+    "historyDetailFixture": "999218ef381dca846a10735fe817ad4257c76fce341c7102b13d0417dd1049c8",
+    "protocolSpecAtAuthoring": "dbd1dcde7d74bec63646d4573d2e6f403aa5daf5f469e2f8e81a40df62fb2abf",
+    "protocolSpecMarkdown": "7633866ce48e7a77059cad81a17f1e62567c347cbfa804a3b493c2d86e403525"
+  },
+  "evidenceInventory": [
+    {
+      "id": "EV-ENTRY",
+      "source": "captures/57-Crazy-777/entry-first-load.json",
+      "behaviorIds": ["B-ENTRY-LAUNCH"]
+    },
+    {
+      "id": "EV-LOBBY-LIST",
+      "source": "fixtures/57-Crazy-777/lobby-game-list.json",
+      "behaviorIds": ["B-ENTRY-LAUNCH"]
+    },
+    {
+      "id": "EV-STARTUP",
+      "source": "fixtures/57-Crazy-777/startup-crazy-777.json",
+      "behaviorIds": ["B-ENTRY-LAUNCH", "B-AUTH-CONFIG"]
+    },
+    {
+      "id": "EV-FIRST-LOAD",
+      "source": "captures/57-Crazy-777/game-first-load.json",
+      "behaviorIds": ["B-ENTRY-LAUNCH", "B-AUTH-CONFIG", "B-LAST-STATE-RESTORE", "B-HEARTBEAT-NEGOTIATION"]
+    },
+    {
+      "id": "EV-AUTH",
+      "source": "fixtures/57-Crazy-777/auth-verify-redacted.json",
+      "behaviorIds": ["B-CODEC-FORM", "B-AUTH-CONFIG", "B-HEARTBEAT-NEGOTIATION"]
+    },
+    {
+      "id": "EV-CONFIG",
+      "source": "fixtures/57-Crazy-777/game-config.json",
+      "behaviorIds": ["B-CODEC-FORM", "B-AUTH-CONFIG", "B-LAST-STATE-RESTORE", "B-RULES-PAYTABLE", "B-RUNTIME-WEIGHT-GUARD", "B-PAID-ROUND", "B-ORDINARY-WIN", "B-FREE-SPINS"]
+    },
+    {
+      "id": "EV-BUNDLE",
+      "source": "resources/57-Crazy-777/pt-BR/_hosts/static.cpgame.io/57/assets/main/index.7eb25.js",
+      "behaviorIds": [
+        "B-ENTRY-LAUNCH",
+        "B-CODEC-FORM",
+        "B-AUTH-CONFIG",
+        "B-LAST-STATE-RESTORE",
+        "B-LANGUAGE-LOAD",
+        "B-RULES-PAYTABLE",
+        "B-GRADIENT-SUBSTITUTION",
+        "B-RUNTIME-WEIGHT-GUARD",
+        "B-PAID-ROUND",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-FREE-SPINS",
+        "B-HEARTBEAT-NEGOTIATION",
+        "B-PURCHASE-UNAVAILABLE",
+        "B-HISTORY"
+      ]
+    },
+    {
+      "id": "EV-RULES",
+      "source": "captures/57-Crazy-777/rules-page-evidence.json + screenshots/57-Crazy-777/rules-controls-pt.png",
+      "behaviorIds": ["B-RULES-PAYTABLE", "B-GRADIENT-SUBSTITUTION", "B-FREE-SPINS"]
+    },
+    {
+      "id": "EV-SYMBOL-ASSETS",
+      "source": "captures/57-Crazy-777/symbol-asset-evidence.json",
+      "behaviorIds": ["B-GRADIENT-SUBSTITUTION"]
+    },
+    {
+      "id": "EV-LANG",
+      "source": "captures/57-Crazy-777/language-sweep.json",
+      "behaviorIds": ["B-LANGUAGE-LOAD"]
+    },
+    {
+      "id": "EV-ROUND-VALIDATION",
+      "source": "captures/57-Crazy-777/round-coverage-validation.json",
+      "behaviorIds": ["B-PAID-ROUND", "B-ORDINARY-LOSS", "B-ORDINARY-WIN", "B-FREE-SPINS"]
+    },
+    {
+      "id": "EV-SPIN-INDEX",
+      "source": "captures/57-Crazy-777/spin-index.jsonl",
+      "behaviorIds": ["B-PAID-ROUND"]
+    },
+    {
+      "id": "EV-LOSS",
+      "source": "captures/57-Crazy-777/rounds.jsonl#r000001",
+      "behaviorIds": ["B-CODEC-FORM", "B-PAID-ROUND", "B-ORDINARY-LOSS"]
+    },
+    {
+      "id": "EV-WIN",
+      "source": "captures/57-Crazy-777/rounds.jsonl#r000006",
+      "behaviorIds": ["B-PAID-ROUND", "B-ORDINARY-WIN"]
+    },
+    {
+      "id": "EV-FREE-ADJACENT",
+      "source": "captures/57-Crazy-777/rounds.jsonl#r000013",
+      "behaviorIds": ["B-LAST-STATE-RESTORE", "B-PAID-ROUND", "B-FREE-SPINS"]
+    },
+    {
+      "id": "EV-FREE-COMPACT",
+      "source": "captures/57-Crazy-777/rounds.jsonl#r000529",
+      "behaviorIds": ["B-PAID-ROUND", "B-FREE-SPINS"]
+    },
+    {
+      "id": "EV-UI-ENUM",
+      "source": "captures/57-Crazy-777/ui-runtime-introspection.json",
+      "behaviorIds": ["B-RULES-PAYTABLE", "B-PURCHASE-UNAVAILABLE", "B-HISTORY"]
+    },
+    {
+      "id": "EV-HISTORY-GAP",
+      "source": "captures/57-Crazy-777/history-evidence-status.json",
+      "behaviorIds": [],
+      "disposition": "SUPERSEDED_BY_CAPTURE",
+      "reason": "This pre-capture gap audit is retained for provenance; EV-HISTORY-ADJACENT now supplies the real same-interaction sample."
+    },
+    {
+      "id": "EV-HISTORY-ADJACENT",
+      "source": "captures/57-Crazy-777/history-adjacent-evidence.json + fixtures/57-Crazy-777/history-list-adjacent.json + fixtures/57-Crazy-777/history-detail-adjacent.json",
+      "behaviorIds": ["B-HISTORY"]
+    },
+    {
+      "id": "EV-NO-WS",
+      "source": "captures/57-Crazy-777/game-first-load.json websocketEvidence=[]",
+      "behaviorIds": [],
+      "disposition": "NO_BEHAVIOR",
+      "reason": "No WebSocket was observed; HTTP codec behavior is represented by B-CODEC-FORM."
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-ENTRY-LAUNCH",
+      "category": "ENTRY_AND_IDENTITY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-ENTRY", "EV-LOBBY-LIST", "EV-STARTUP", "EV-FIRST-LOAD", "EV-BUNDLE"],
+      "implementationContract": {
+        "preconditions": ["authorized isolated session", "platform Crazy 777 record selected by id=2518"],
+        "stateFields": ["platform.id=2518", "platform.g_id=455", "native.gid=57", "l", "sip", "redacted launch t/token"],
+        "transitionRules": ["platform game/list", "startup?game_id=2518", "load static /57/ with gid=57", "provider auth", "provider config"],
+        "outputs": ["native title Crazy 777", "provider player state", "current game config"],
+        "terminationRules": ["auth code=200", "config code=200", "native identity remains gid=57"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-LOBBY-LIST", "EV-STARTUP", "EV-BUNDLE"],
+        "assertions": ["platform record is id2518/g_id455", "native URL/bundle/request use gid57", "do not conflate other platform g_id values"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["EV-STARTUP", "EV-FIRST-LOAD"]
+      }
+    },
+    {
+      "id": "B-CODEC-FORM",
+      "category": "TRANSPORT_CODEC",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-BUNDLE", "EV-LOSS", "EV-AUTH", "EV-CONFIG"],
+      "implementationContract": {
+        "preconditions": ["provider API POST"],
+        "stateFields": ["form params", "virtual web-token", "virtual game-id", "JSON code/data/info"],
+        "transitionRules": ["map web-token to t", "map game-id to gid", "form encode", "send without custom headers", "resolve only code=200"],
+        "outputs": ["plain form request", "decoded data object or protocol error"],
+        "terminationRules": ["HTTP and envelope evaluation complete"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-BUNDLE", "EV-LOSS", "EV-AUTH"],
+        "assertions": ["no provider payload crypto", "captured actual request contains t/gid in body", "success payload is response.data"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-AUTH-CONFIG",
+      "category": "SESSION_INITIALIZATION",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-STARTUP", "EV-FIRST-LOAD", "EV-AUTH", "EV-CONFIG", "EV-BUNDLE"],
+      "implementationContract": {
+        "preconditions": ["valid launch fields and gid57"],
+        "stateFields": ["player.id", "player.balance", "provider token", "ping", "bll", "bsl", "spl", "last", "cc", "cs"],
+        "transitionRules": ["POST auth/verify", "store returned provider token/player", "POST crazy-seven/config using returned token", "initialize bet/paytable/last state"],
+        "outputs": ["authenticated balance", "bet choices", "symbol pay table", "last result"],
+        "terminationRules": ["both calls code=200", "player token nonempty in memory", "config contains bll/bsl/spl"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-AUTH", "EV-CONFIG", "EV-BUNDLE"],
+        "assertions": ["auth precedes config", "config credential is returned provider token", "currency BRL/R$ and minimum 0.5"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["EV-FIRST-LOAD"]
+      }
+    },
+    {
+      "id": "B-LAST-STATE-RESTORE",
+      "category": "CROSS_REQUEST_STATE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-FIRST-LOAD", "EV-CONFIG", "EV-BUNDLE", "EV-FREE-ADJACENT"],
+      "implementationContract": {
+        "preconditions": ["config returns last"],
+        "stateFields": ["last.ss", "last.fsn", "last.nfsc", "last.rwa", "last.wa", "last.rpx", "last.bl", "last.bs"],
+        "transitionRules": ["content pending iff last.ss==0 or last.fsn!=last.nfsc", "restore bet/rpx/result", "restore prior accumulated reward as last.rwa-last.wa"],
+        "outputs": ["resumable or terminal current state without creating a paid Round"],
+        "terminationRules": ["terminal last follows normal Round predicate; nonterminal last requires stored continuation delivery"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-CONFIG", "EV-BUNDLE", "EV-FREE-ADJACENT"],
+        "assertions": ["captured terminal last is not resumed", "fsn!=nfsc is nonterminal even when ss=1", "init must not increment paidRoundStarts"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["EV-FIRST-LOAD", "EV-FREE-ADJACENT"]
+      }
+    },
+    {
+      "id": "B-LANGUAGE-LOAD",
+      "category": "LANGUAGE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-BUNDLE", "EV-LANG"],
+      "implementationContract": {
+        "preconditions": ["valid native launch URL"],
+        "stateFields": ["query l", "LanguageManager.CurLanguage"],
+        "transitionRules": ["set l to one listed code", "fresh first load", "load /language/<code> assets"],
+        "outputs": ["localized first load"],
+        "terminationRules": ["runtime language equals requested code"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-BUNDLE", "EV-LANG"],
+        "assertions": ["exact codes en,pt,es,th,vi,id,bn,ko,fr,tr", "all ten first loads matched"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["EV-LANG"]
+      }
+    },
+    {
+      "id": "B-RULES-PAYTABLE",
+      "category": "RULES_BOARD_AND_PAYTABLE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-RULES", "EV-CONFIG", "EV-BUNDLE", "EV-UI-ENUM"],
+      "implementationContract": {
+        "preconditions": ["current game capabilities loaded"],
+        "stateFields": ["five paylines", "15-entry reel encoding", "bll", "bsl", "spl", "symbol codes"],
+        "transitionRules": ["split rskl into 3x5 reel-major groups", "preserve BLANK alternation", "evaluate line keys 0..4", "treat key5 as SC pseudo-key"],
+        "outputs": ["board model", "winning entries", "payout amount"],
+        "terminationRules": ["board and payout independently validate"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-RULES", "EV-CONFIG", "EV-BUNDLE", "EV-WIN"],
+        "assertions": ["paylineCount=5", "rskl length=15", "wmkl key5 is not line6", "wa equation uses spl*bl*bs*rpx"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-GRADIENT-SUBSTITUTION",
+      "category": "SYMBOL_SUBSTITUTION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-RULES", "EV-SYMBOL-ASSETS", "EV-BUNDLE"],
+      "implementationContract": {
+        "preconditions": ["regular payline evaluation"],
+        "stateFields": ["H1/H4 yellow", "H2/H5 pink", "H3/H6 blue", "WILD", "SC"],
+        "transitionRules": ["H1 substitutes H4", "H2 substitutes H5", "H3 substitutes H6", "WILD substitutes all H codes", "WILD never substitutes SC"],
+        "outputs": ["legal regular symbol match set"],
+        "terminationRules": ["substitution remains within confirmed pair or WILD rule"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-RULES", "EV-SYMBOL-ASSETS", "EV-BUNDLE"],
+        "assertions": ["pair colors and code bindings match raw textures", "SC excluded from all substitution"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-RUNTIME-WEIGHT-GUARD",
+      "category": "GENERATION_GUARD",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-BUNDLE", "EV-CONFIG"],
+      "implementationContract": {
+        "preconditions": ["formal result generator configuration"],
+        "stateFields": ["serverOutcomeWeights unknown", "visual SymbolWeightsList"],
+        "transitionRules": ["omit symbol weights from formal config", "never copy visual randomReel weights into GameRuleCore", "never infer weights from capture frequency"],
+        "outputs": ["no unsupported weight configuration"],
+        "terminationRules": ["formal runtime contains no claimed current-game symbol probabilities"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-BUNDLE", "EV-CONFIG"],
+        "assertions": ["SymbolWeightsList is called only by client randomReel animation setup", "config has no server outcome weights"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-PAID-ROUND",
+      "category": "ROUND_DELIVERY_STEP_LIFECYCLE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-BUNDLE", "EV-CONFIG", "EV-ROUND-VALIDATION", "EV-SPIN-INDEX", "EV-LOSS", "EV-WIN", "EV-FREE-ADJACENT", "EV-FREE-COMPACT"],
+      "implementationContract": {
+        "preconditions": ["no active prior Round", "balance>=0.5", "valid session", "minimum bl=1,bs=0.5 for sampling"],
+        "stateFields": ["pendingRound", "nextStepIndex", "memberClaimed", "fsn", "nfsc", "ss", "rpx", "gt", "small_game_type", "pb"],
+        "transitionRules": ["first accepted paid spin creates one Round and claims one member", "generate full winning/special Round once", "deliver stored Steps in order", "continuations do not increment paid starts", "do not expose capture-synthetic roundId as upstream field"],
+        "outputs": ["one ordered complete Round", "one paid-start index entry", "post-Step balances"],
+        "terminationRules": ["fsn==0 or fsn==nfsc and ss==1", "clear pendingRound only after terminal Step"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-BUNDLE", "EV-ROUND-VALIDATION", "EV-SPIN-INDEX"],
+        "assertions": ["1341 paid starts equal 1341 complete Rounds", "all final Steps terminal and prior Steps nonterminal", "free Steps share one capture roundId", "runtime never reads fixtures"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["EV-FREE-ADJACENT", "EV-FREE-COMPACT"]
+      }
+    },
+    {
+      "id": "B-ORDINARY-LOSS",
+      "category": "ORDINARY_RESULT",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-LOSS", "EV-ROUND-VALIDATION", "EV-BUNDLE"],
+      "implementationContract": {
+        "preconditions": ["paid spin with no active Round"],
+        "stateFields": ["fsn=0", "wa=0", "wmkl empty", "ss=1", "valid rskl", "pb"],
+        "transitionRules": ["generate random legal no-win board", "independent ResultUtil must prove no win", "debit ba once", "return terminal Step"],
+        "outputs": ["single-Step LOSS"],
+        "terminationRules": ["fsn==0"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-LOSS", "EV-ROUND-VALIDATION", "EV-RULES"],
+        "assertions": ["at least 200 complete LOSS Rounds", "no wmkl entry and wa=0", "valid 3x5 encoded board"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-ORDINARY-WIN",
+      "category": "ORDINARY_RESULT",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-WIN", "EV-ROUND-VALIDATION", "EV-CONFIG", "EV-BUNDLE"],
+      "implementationContract": {
+        "preconditions": ["paid spin with no active Round"],
+        "stateFields": ["fsn=0", "wmkl keys0..4", "wa", "rwa", "rpx=1", "rskl", "pb"],
+        "transitionRules": ["evaluate all five fixed lines with confirmed substitutions", "compute each line from spl*bl*bs", "sum wa", "credit pb"],
+        "outputs": ["single-Step WIN and matching wmkl"],
+        "terminationRules": ["fsn==0"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-WIN", "EV-CONFIG", "EV-BUNDLE", "EV-RULES"],
+        "assertions": ["at least 200 complete WIN Rounds", "line keys subset0..4", "independent payout equals wa"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-FREE-SPINS",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-RULES", "EV-CONFIG", "EV-BUNDLE", "EV-FREE-ADJACENT", "EV-FREE-COMPACT", "EV-ROUND-VALIDATION"],
+      "implementationContract": {
+        "preconditions": ["paid main-game trigger with 3 SC or provider-compatible aggregate terminal form"],
+        "stateFields": ["fsn=10", "nfsc", "ss", "rpx", "gt", "small_game_type=2", "rwa", "wa", "pendingRound"],
+        "transitionRules": ["paid trigger uses nfsc0,rpx1 and remains same Round", "deliver free nfsc1..10 at rpx3 and ba0", "SC does not appear in free mode", "no retrigger", "also accept captured one-response terminal encoding as one paid Round"],
+        "outputs": ["10 free results or captured aggregate terminal equivalent", "x3 free payouts", "one complete paid Round"],
+        "terminationRules": ["nfsc=10 and ss=1", "no new paid count for free Steps"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-RULES", "EV-CONFIG", "EV-FREE-ADJACENT", "EV-FREE-COMPACT", "EV-ROUND-VALIDATION"],
+        "assertions": ["48 complete Rounds", "41 have trigger plus ten adjacent free Steps", "7 have one terminal aggregate response", "rpx3 payout equation", "fsn never exceeds10 and no free SC"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["EV-FREE-ADJACENT", "EV-FREE-COMPACT"]
+      }
+    },
+    {
+      "id": "B-HEARTBEAT-NEGOTIATION",
+      "category": "SESSION_HEARTBEAT",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-AUTH", "EV-FIRST-LOAD", "EV-BUNDLE"],
+      "implementationContract": {
+        "preconditions": ["auth response contains ping"],
+        "stateFields": ["ping.enable", "ping.seconds", "provider token", "gid"],
+        "transitionRules": ["enable=false means no scheduled request", "enable=true schedules POST /ping after seconds and repeats on success", "401 stops heartbeat"],
+        "outputs": ["disabled or scheduled heartbeat state"],
+        "terminationRules": ["captured state enable=0 terminates immediately", "enabled state stops on 401/session close"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-AUTH", "EV-BUNDLE"],
+        "assertions": ["current captured session has enable0/seconds0", "do not invent WebSocket heartbeat", "enabled branch uses same t/gid form codec"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["EV-AUTH", "EV-FIRST-LOAD"]
+      }
+    },
+    {
+      "id": "B-PURCHASE-UNAVAILABLE",
+      "category": "CAPABILITY_ABSENCE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-BUNDLE", "EV-UI-ENUM"],
+      "implementationContract": {
+        "preconditions": ["current build capabilities"],
+        "stateFields": ["runtime controls", "provider endpoint set"],
+        "transitionRules": ["enumerate controls and API methods", "keep purchase mode disabled"],
+        "outputs": ["purchaseFeature.supported=false"],
+        "terminationRules": ["no buy/purchase behavior exposed"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-BUNDLE", "EV-UI-ENUM"],
+        "assertions": ["no purchase endpoint or control", "no purchase sampling target or generated result"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HISTORY",
+      "category": "HISTORY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-BUNDLE", "EV-UI-ENUM", "EV-HISTORY-ADJACENT"],
+      "reason": "The current-game UI and API were observed in one isolated abc224 interaction: one list request, selection of a real ll[].tis, two adjacent detail requests using that same transfer_id, and an observable return to the existing list state.",
+      "implementationContract": {
+        "preconditions": ["authorized session", "History opened while game is idle", "list contains at least one ll[].tis"],
+        "stateFields": ["pageIndex", "pageLock", "end", "CurId", "ll", "bsl", "fsl", "baf", "historyListOpacity", "historyDetailActive"],
+        "transitionRules": [
+          "POST log-list with page_index, begin_at, end_at, t and gid",
+          "store list data and select one ll[].tis as CurId",
+          "POST log-view with transfer_id=CurId; current UI then issues a second log-view from HistoryDetailMgr using the identical transfer_id",
+          "concatenate bsl followed by fsl and render the detail",
+          "detail close clears CurId and dispatches HISTORY_DETAIL_BACK",
+          "restore the existing list without issuing another log-list request"
+        ],
+        "outputs": ["list totals lc/ba/wa/end and ll entries", "detail baf/bid/bsl and optional fsl steps", "restored list view"],
+        "terminationRules": ["pagination stops when end is truthy", "detail terminates when activeDetailCount becomes 0 after HISTORY_DETAIL_BACK", "list return terminates when list opacity is 255 and selected item remains visible"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-BUNDLE", "EV-HISTORY-ADJACENT"],
+        "assertions": [
+          "exchange sequence is log-list then two log-view responses",
+          "selected ll[].tis equals transfer_id in both log-view requests",
+          "all three HTTP responses are code=200 JSON envelopes",
+          "before back detail count=1 and list opacity=0",
+          "after back detail count=0 and list opacity=255 with selected item still visible",
+          "back does not trigger another log-list request"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["EV-HISTORY-ADJACENT"]
+      },
+      "wireObservation": {"logListRequests": 1, "logViewRequests": 2, "selectedTis": "2093578569416081408", "listEntryCount": 10, "detailBslCount": 1, "detailFslCount": 0}
+    }
+  ],
+  "unresolvedBehaviors": []
+}

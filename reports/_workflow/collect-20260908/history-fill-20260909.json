@@ -1,0 +1,33 @@
+[
+  {
+    "id": "2110-Bee-Workshop",
+    "user": {
+      "code": 10011,
+      "token": {
+        "n": 1,
+        "len": 0,
+        "jwt": false
+      }
+    },
+    "error": "NO_JWT",
+    "at": "2026-09-09T02:39:44.027Z"
+  },
+  {
+    "id": "1780-Glacier-Treasure",
+    "user": {
+      "sent": true,
+      "hit": false
+    },
+    "error": "NO_JWT",
+    "at": "2026-09-09T02:39:54.190Z"
+  },
+  {
+    "id": "1380-Hidden-Realm",
+    "user": {
+      "sent": true,
+      "hit": false
+    },
+    "error": "NO_JWT",
+    "at": "2026-09-09T02:39:54.190Z"
+  }
+]

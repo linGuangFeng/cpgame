@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "batch": "E",
+  "scope": [1910, 2010, 2110],
+  "browserPolicy": "NO_BATCH_E_BROWSER_CONNECTION_OR_PROFILE_RETRY",
+  "evidenceSourceChannel": "STABLE_ABC222_CHANNEL",
+  "requiredInPageAccountAlias": "abc225",
+  "handoffGateBeforeIndexing": "ORIGINAL_EVIDENCE_HANDOFF_READY",
+  "requiredIdentityPolicy": "RAW_GID_ONLY",
+  "requiredRoundBoundary": "one paid start plus every subsequent Step through confirmed terminal state",
+  "requiredHistoryReconciliation": "MATCHED_SAME_RAW_GID_WITH_EVIDENCE_REF",
+  "allowedEvidenceClasses": ["ORIGINAL_AUTHORIZED_HTTP", "HMS_UI_MANUAL"],
+  "manualUiMayMasqueradeAsAuthorizedHttp": false,
+  "tokenPersistenceAllowed": false,
+  "currentFormalSampleCount": 0,
+  "status": "WAITING_FOR_ORIGINAL_EVIDENCE_HANDOFF"
+}

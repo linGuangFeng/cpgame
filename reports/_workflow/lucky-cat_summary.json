@@ -1,0 +1,13 @@
+{
+  "slug": "lucky-cat",
+  "folder": "1-Lucky-Cat",
+  "gid": 1,
+  "runId": "20260902T092836000Z",
+  "stage": "/Users/a1/Downloads/lucky-cat-stage/20260902T092836000Z",
+  "hdDest": "/Volumes/hd/cpgame/resources/1-Lucky-Cat/programmatic-http/20260902T092836000Z",
+  "succeeded": 121,
+  "failed": 0,
+  "bytes": 10983139,
+  "total": 121,
+  "gameDirs": []
+}

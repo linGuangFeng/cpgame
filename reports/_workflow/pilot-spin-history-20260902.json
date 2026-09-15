@@ -1,0 +1,21 @@
+{
+  "account": "abc222",
+  "spins_41": 3,
+  "spins_58": 2,
+  "spins_61": 3,
+  "history_list_41": true,
+  "history_view_41": false,
+  "paths": {
+    "41": "/Volumes/hd/cpgame/fixtures/41-Lucky-Panda/spin",
+    "58": "/Volumes/hd/cpgame/fixtures/58-Crazy-Gems/spin",
+    "61": "/Volumes/hd/cpgame/fixtures/61-Saci/spin-pilot-20260902",
+    "41_list": "/Volumes/hd/cpgame/fixtures/41-Lucky-Panda/history-list"
+  },
+  "e41": "https://api.omgapibra.com/cp/api/v1/lucky-panda/spin",
+  "e41l": "https://api.omgapibra.com/cp/api/v1/lucky-panda/log-list",
+  "e58": "https://api.omgapibra.com/cp/api/v1/crazy-gems/spin",
+  "e61": "https://api.omgapibra.com/cp/api/v1/d-saci/spin",
+  "port": 9333,
+  "port_status": "up",
+  "residual": "41 view missing; list present"
+}

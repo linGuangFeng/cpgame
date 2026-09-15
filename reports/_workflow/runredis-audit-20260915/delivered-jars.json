@@ -1,0 +1,52 @@
+[
+  {
+    "game": "1090-sharpshooter",
+    "jar": "sharpshooter-loader.jar",
+    "sha256": "e1b2aa61329f66f99bde3b3093881d9387c3e509d185e9224d66a070b2b2c401"
+  },
+  {
+    "game": "16-Jungle-Fruit",
+    "jar": "jungle-fruit-loader.jar",
+    "sha256": "94e211bbcc16e27e0f802069f545cd9f149e3746daa329d50c4bc50b8ab157b0"
+  },
+  {
+    "game": "1809-mac-Freedom-Day",
+    "jar": "freedom-day-redis-loader.jar",
+    "sha256": "5f469a8a47a58a7dbc3d717cb2635bade69baf8640f33561c9615089c9451a79"
+  },
+  {
+    "game": "1830-Hotpot",
+    "jar": "hotpot-redis-loader.jar",
+    "sha256": "270493e868906ce1614f33d3ff72bef1df286b64efcf80fe7bbfa30fad06d245"
+  },
+  {
+    "game": "1910-Churrasco",
+    "jar": "churrasco-generator.jar",
+    "sha256": "9506baaa46e74788004cd17aee3d4a20be4e49eb55ccb2f6d21af6498aeca225"
+  },
+  {
+    "game": "32-Jungle-Treasure",
+    "jar": "jungle-treasure-loader.jar",
+    "sha256": "781b9d7403b2907ef2d28481efa1f2d7cea6f6d88fa6524f3f0716db56b83f9a"
+  },
+  {
+    "game": "33-Jungle-Party",
+    "jar": "jungle-party-generator-1.0.0.jar",
+    "sha256": "78daaa60b15ad249a8a12719e3929b87e07c8d297e561b9639a7f4db2bbe96f9"
+  },
+  {
+    "game": "52-Cyber-GO",
+    "jar": "cyber-go-loader.jar",
+    "sha256": "83d03b920819a7e3d2ffb1a3a58c9bab16feb594e1eff8dd14f964f4cdb0c37a"
+  },
+  {
+    "game": "61-Saci",
+    "jar": "saci-loader.jar",
+    "sha256": "346f2d1abca5f3158ac402fb3101250da7368965c5c0f4812d70d1d4f306386d"
+  },
+  {
+    "game": "8-Jurassic-Jungle",
+    "jar": "jurassic-jungle-loader.jar",
+    "sha256": "9dcc38f0cbc0ea55ac6b429f939e7811b2bc1744923675296d1f53b918dbcc15"
+  }
+]

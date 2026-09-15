@@ -1,0 +1,1 @@
+http://192.168.10.3:55050/?gid=50&t=local-demo-token&ai=luck_single_50&btt=1&l=pt&sip=192.168.10.3:55050

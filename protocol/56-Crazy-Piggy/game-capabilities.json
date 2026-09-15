@@ -1,0 +1,618 @@
+{
+  "schemaVersion": "2.0",
+  "gameId": 56,
+  "directoryName": "56-Crazy-Piggy",
+  "gameName": "Crazy Piggy",
+  "generatedAt": "2026-09-07T16:16:28.661Z",
+  "rulesVersion": "v1.5.10.250430",
+  "rulesVersionEvidence": [
+    "resources/56-Crazy-Piggy/en/_hosts/static.cpgame.io/56/versionconfig.js",
+    "captures/56-Crazy-Piggy/source-modules/GameConfig.js"
+  ],
+  "rulesHash": "7edd2945da54923875932aa9feb1bfd657c9c67cca832637060f8419573480ab",
+  "status": "READY_FOR_IMPLEMENTATION",
+  "identity": {
+    "idName": "56-Crazy-Piggy",
+    "launchGameId": 56,
+    "lobbyProviderGameId": 454,
+    "displayName": "Crazy Piggy",
+    "evidence": [
+      "captures/56-Crazy-Piggy/account-and-game-match.json",
+      "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js"
+    ]
+  },
+  "entry": {
+    "page": "https://hms-paddle.com/",
+    "gameOrigin": "https://static.cpgame.io/56/",
+    "apiOrigin": "https://api.omgapibra.com",
+    "accountIsolationAlias": "abc223",
+    "credentialPersisted": false
+  },
+  "supportedLanguages": {
+    "codes": [
+      "en",
+      "pt",
+      "es",
+      "th",
+      "vi",
+      "id",
+      "bn",
+      "ko",
+      "fr",
+      "tr"
+    ],
+    "launchAliases": {
+      "pt": {
+        "l": "pt",
+        "language": "pt-br"
+      }
+    },
+    "firstLoadStatus": "10_OF_10_CAPTURED",
+    "rulesAndPaytableStatus": "30_OF_30_LANGUAGE_JSON_ASSETS_EXPORTED",
+    "evidence": [
+      "captures/56-Crazy-Piggy/source-modules/LanguageManager.js",
+      "reports/56-Crazy-Piggy/language-inventory.json",
+      "resources/56-Crazy-Piggy/rules-export-summary.json"
+    ]
+  },
+  "boardModel": {
+    "type": "REEL_GRID",
+    "reels": 3,
+    "rowsPerReel": [
+      3,
+      3,
+      3
+    ],
+    "visibleSymbolCount": 9,
+    "responseField": "rskl",
+    "flattening": "COLUMN_MAJOR",
+    "indexFormula": "column*3+row",
+    "protocolBufferCellCount": 0,
+    "frontendAnimationBuffers": {
+      "status": "NOT_PROTOCOL_BOARD",
+      "fields": [
+        "BlockNums",
+        "QuickBlockNums",
+        "SpecailBlockNums"
+      ]
+    },
+    "symbolCodes": [
+      "HOT",
+      "SEV",
+      "H2",
+      "H3",
+      "H4",
+      "H5",
+      "H6",
+      "H7"
+    ],
+    "wild": {
+      "status": "NOT_AVAILABLE_IN_CONFIRMED_RUNTIME_SYMBOL_SET",
+      "reason": "通用 paytable 文本提到 Wild，但 spl、SymbolList 与 1392 局均无 WILD；禁止生成。"
+    },
+    "evidence": [
+      "resources/56-Crazy-Piggy/en/extracted-rules/gameRules.json",
+      "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js",
+      "captures/56-Crazy-Piggy/source-modules/GameDataCommon.js",
+      "fixtures/56-Crazy-Piggy/round-steps.jsonl"
+    ]
+  },
+  "winModel": "FIXED_PAYLINES",
+  "winModelDetails": {
+    "type": "FIXED_PAYLINES",
+    "paylineCount": 5,
+    "paylineCountApplicability": "APPLICABLE",
+    "routes": [
+      {
+        "id": 0,
+        "code": "PL0001",
+        "rowsByColumn": [
+          0,
+          0,
+          0
+        ],
+        "rsklIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      {
+        "id": 1,
+        "code": "PL0002",
+        "rowsByColumn": [
+          1,
+          1,
+          1
+        ],
+        "rsklIndices": [
+          1,
+          4,
+          7
+        ]
+      },
+      {
+        "id": 2,
+        "code": "PL0003",
+        "rowsByColumn": [
+          2,
+          2,
+          2
+        ],
+        "rsklIndices": [
+          2,
+          5,
+          8
+        ]
+      },
+      {
+        "id": 3,
+        "code": "PL0004",
+        "rowsByColumn": [
+          0,
+          1,
+          2
+        ],
+        "rsklIndices": [
+          0,
+          4,
+          8
+        ]
+      },
+      {
+        "id": 4,
+        "code": "PL0005",
+        "rowsByColumn": [
+          2,
+          1,
+          0
+        ],
+        "rsklIndices": [
+          2,
+          4,
+          6
+        ]
+      }
+    ],
+    "lineAwardFormula": "symbolPay * bs * bl",
+    "totalAwardFormula": "sum award of keys present in wmkl",
+    "highestPrizePerLineOnly": true,
+    "wmklWireShape": "empty array for loss; sparse JSON object for partial line wins; dense array is observed when all five lines win",
+    "evidence": [
+      {
+        "source": "resources/56-Crazy-Piggy/en/extracted-rules/gameRules.json",
+        "fact": "Rules.Desc2 states 5 fixed bet lines"
+      },
+      {
+        "source": "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js",
+        "fact": "PylineInfo PL0001..PL0005 and MatchLineIndexData enumerate five routes"
+      },
+      {
+        "source": "fixtures/56-Crazy-Piggy/round-steps.jsonl",
+        "fact": "all 200 ordinary wins satisfy the line-award formula"
+      }
+    ],
+    "ambiguityDisposition": {
+      "frontendConstant": "GameConfig.PayLineCount=1",
+      "interpretation": "bet UI formula factor",
+      "excludedAsPaylineCount": true,
+      "reason": "显式规则和五条路线代码共同确认赔付线数为 5。"
+    }
+  },
+  "betModel": {
+    "currency": "BRL",
+    "currencySymbol": "R$",
+    "betSizes": [
+      0.5,
+      5,
+      50
+    ],
+    "betLevels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "minimumPaidRoundBet": 0.5,
+    "minimumRequest": {
+      "bs": 0.5,
+      "bl": 1
+    },
+    "betAmountFormula": "ba = bs * bl",
+    "evidence": [
+      "fixtures/56-Crazy-Piggy/first-load-en-api.json",
+      "captures/56-Crazy-Piggy/source-modules/BetLogic.js",
+      "fixtures/56-Crazy-Piggy/round-steps.jsonl"
+    ]
+  },
+  "paytable": {
+    "HOT": 200,
+    "SEV": 50,
+    "H2": 20,
+    "H3": 10,
+    "H4": 8,
+    "H5": 5,
+    "H6": 3,
+    "H7": 1,
+    "unit": "symbol payout × bet size × bet level per winning line",
+    "evidence": [
+      "fixtures/56-Crazy-Piggy/first-load-en-api.json",
+      "resources/56-Crazy-Piggy/en/extracted-rules/gameRules.json",
+      "captures/56-Crazy-Piggy/source-modules/HistoryData.js"
+    ]
+  },
+  "roundModel": {
+    "paidRoundStart": "one authorized POST /cp/api/v1/crazy-piggy/spin",
+    "networkRequestCountPerCapturedRound": 1,
+    "ordinaryTermination": "gm=0 response is self-contained; frontend finishes reel/payline delivery and returns to Wait",
+    "specialTermination": "gm=1 response embeds fwtl/fwxl; frontend consumes all positions locally, then TurnTable.onHideTurnTable calls GameLogic.onGameEnd",
+    "followUpSpinEndpoint": "NONE",
+    "deliveryUnit": "one complete Round result claimed once; embedded wheel positions are Delivery Steps of that member",
+    "stateFields": [
+      "roundId",
+      "ba",
+      "pb",
+      "rskl",
+      "wa",
+      "wmkl",
+      "gm",
+      "small_game_type",
+      "fwa",
+      "fwtl",
+      "fwxl",
+      "wheelIndex"
+    ],
+    "balanceEquation": "nextPb = previousPb - ba + wa",
+    "balanceEquationCheckedTransitions": 1304,
+    "balanceEquationMismatchCount": 0,
+    "spinIndexRule": "spin-index.jsonl 每行只索引一个真实付费 Round 起点",
+    "evidence": [
+      "captures/56-Crazy-Piggy/spin-index.jsonl",
+      "fixtures/56-Crazy-Piggy/round-steps.jsonl",
+      "captures/56-Crazy-Piggy/source-modules/GameLogic.js",
+      "captures/56-Crazy-Piggy/source-modules/TurnTable.js",
+      "protocol/56-Crazy-Piggy/protocol-spec.json"
+    ]
+  },
+  "specialModes": [
+    {
+      "id": "BOOSTER_WHEEL",
+      "name": "Booster Wheel",
+      "status": "CONFIRMED",
+      "trigger": "9 identical symbols except HOT and SEV",
+      "responseDiscriminators": {
+        "gm": 1,
+        "small_game_type": 2
+      },
+      "responseFields": [
+        "gm",
+        "small_game_type",
+        "fwa",
+        "fwtl",
+        "fwxl",
+        "wa",
+        "wmkl"
+      ],
+      "multiStepRepresentation": "EMBEDDED_DELIVERY_STEPS_IN_SINGLE_SPIN_RESPONSE",
+      "initialBaseAwardFormula": "5 * symbolPay * bs * bl",
+      "supplementalAwardFormula": "fwa = initialBaseAward * sum(fwxl)",
+      "totalAwardFormula": "wa = initialBaseAward + fwa",
+      "fwtlLengthRangeCaptured": [
+        3,
+        7
+      ],
+      "fwxlLengthRangeCaptured": [
+        2,
+        6
+      ],
+      "capturedFwxlValues": [
+        1,
+        2
+      ],
+      "completeRoundCount": 37,
+      "target": 30,
+      "rareSubBranch": {
+        "id": "FWXL_GT_2",
+        "status": "RARE_NOT_CAPTURED_CAP_POLICY",
+        "workflowImpact": "NON_BLOCKING",
+        "reason": "规则写明最高 21 倍且前端有提升倍率逻辑，但 37 局没有 fwxl>2。"
+      },
+      "evidence": [
+        "resources/56-Crazy-Piggy/en/extracted-rules/gameRules.json",
+        "captures/56-Crazy-Piggy/source-modules/TurnTable.js",
+        "captures/56-Crazy-Piggy/spin-index.jsonl#cp56-00105",
+        "fixtures/56-Crazy-Piggy/round-steps.jsonl#cp56-00105",
+        "fixtures/56-Crazy-Piggy/round-steps.jsonl#cp56-00178"
+      ]
+    }
+  ],
+  "codecContract": {
+    "status": "CONFIRMED",
+    "requestContentType": "application/x-www-form-urlencoded",
+    "requestCharset": "UTF-8",
+    "headerAliasToBodyField": {
+      "web-token": "t",
+      "game-id": "gid"
+    },
+    "successResponse": "JSON envelope {code:200,info:'ok',data:{...}}",
+    "applicationEncryption": "NONE_OBSERVED",
+    "applicationSignature": "NONE_OBSERVED",
+    "spinPayloadEncoding": "PLAIN_JSON_FIELDS",
+    "evidence": [
+      "captures/56-Crazy-Piggy/source-modules/Http.js",
+      "captures/56-Crazy-Piggy/source-modules/GameApi.js",
+      "fixtures/56-Crazy-Piggy/first-load-en-api.json",
+      "fixtures/56-Crazy-Piggy/round-steps.jsonl"
+    ]
+  },
+  "redisContract": {
+    "status": "IMPLEMENTED_LOCAL_REPLICA_CONTRACT",
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "normalIndex": "PerKeyList_%09d",
+    "specialIndex": "MaryKeyList_%09d",
+    "normalList": "BetLog:0%08d:%06d",
+    "specialList": "MaryLog:%09d:%06d",
+    "memberEncoding": "CP56A1_MINIMAL_US_ASCII",
+    "memberBoundary": "ONE_COMPLETE_PAID_ROUND_WITH_ALL_EMBEDDED_DELIVERY_STEPS",
+    "claimCountPerRuntimeRound": 1,
+    "selection": "OUTCOME_THEN_EXISTING_INTEGER_MULTIPLIER",
+    "emptyBehavior": "FAIL_CLOSED_503",
+    "evidence": [
+      "generator/56-Crazy-Piggy/src/main/java/com/cpgame/crazypiggy/generator/MinimalRoundFactCodec.java",
+      "server-api/56-Crazy-Piggy/src/main/java/com/cpgame/crazypiggy/server/RedisRoundStore.java"
+    ]
+  },
+  "symbolWeights": {
+    "runtimeGenerationWeights": "UNKNOWN",
+    "configurable": false,
+    "frontendAnimationWeights": {
+      "symbols": [
+        "HOT",
+        "SEV",
+        "H2",
+        "H3",
+        "H4",
+        "H5",
+        "H6",
+        "H7"
+      ],
+      "weights": [
+        10,
+        10,
+        15,
+        15,
+        20,
+        20,
+        25,
+        25
+      ],
+      "purpose": "GameConfigData.randomReel animation filler",
+      "authoritativeForServerGeneration": false
+    },
+    "safeDisposition": "正式配置不得暴露或使用这些前端动画权重作为结果生成权重。",
+    "evidence": [
+      "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js",
+      "captures/56-Crazy-Piggy/source-modules/GameConfigData.js"
+    ]
+  },
+  "negativeCapabilityEvidence": [
+    {
+      "capability": "FREE_OR_MARY",
+      "status": "NOT_DISCOVERED_NOT_APPLICABLE",
+      "action": "DO_NOT_IMPLEMENT_OR_SAMPLE_AS_APPLICABLE_WITHOUT_NEW_CURRENT_GAME_EVIDENCE",
+      "evidence": [
+        "resources/56-Crazy-Piggy/en/extracted-rules/gameRules.json",
+        "fixtures/56-Crazy-Piggy/round-steps.jsonl"
+      ]
+    },
+    {
+      "capability": "FEATURE_BUY",
+      "status": "NOT_DISCOVERED_NOT_APPLICABLE",
+      "action": "DO_NOT_EXPOSE",
+      "evidence": [
+        "captures/56-Crazy-Piggy/buy-entry-discovery.json"
+      ]
+    },
+    {
+      "capability": "RESPIN_OR_CASCADE",
+      "status": "GENERIC_FRONTEND_FIELDS_ONLY_NOT_CURRENT_GAME_CAPABILITY",
+      "action": "DO_NOT_IMPLEMENT",
+      "evidence": [
+        "captures/56-Crazy-Piggy/source-modules/GameDataCommon.js",
+        "fixtures/56-Crazy-Piggy/round-steps.jsonl"
+      ]
+    },
+    {
+      "capability": "WILD_SYMBOL",
+      "status": "GENERIC_TEXT_CONFLICTS_WITH_RUNTIME_SYMBOL_SET",
+      "action": "DO_NOT_GENERATE",
+      "evidence": [
+        "resources/56-Crazy-Piggy/en/extracted-rules/paytable.json",
+        "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js",
+        "fixtures/56-Crazy-Piggy/first-load-en-api.json",
+        "fixtures/56-Crazy-Piggy/round-steps.jsonl"
+      ]
+    }
+  ],
+  "endpoints": [
+    {
+      "id": "auth.verify",
+      "path": "/cp/api/v1/auth/verify",
+      "captureStatus": "CAPTURED"
+    },
+    {
+      "id": "game.config",
+      "path": "/cp/api/v1/crazy-piggy/config",
+      "captureStatus": "CAPTURED"
+    },
+    {
+      "id": "game.spin",
+      "path": "/cp/api/v1/crazy-piggy/spin",
+      "captureStatus": "CAPTURED_1392_COMPLETE_ROUNDS"
+    },
+    {
+      "id": "history.list",
+      "path": "/cp/api/v1/crazy-piggy/log-list",
+      "captureStatus": "CODE_ENUMERATED_NO_RAW_RESPONSE"
+    },
+    {
+      "id": "history.detail",
+      "path": "/cp/api/v1/crazy-piggy/log-view",
+      "captureStatus": "CODE_ENUMERATED_NO_RAW_RESPONSE"
+    },
+    {
+      "id": "heartbeat",
+      "path": "/cp/api/v1/ping",
+      "captureStatus": "CODE_ENUMERATED_DISABLED_IN_CAPTURED_CONFIG"
+    }
+  ],
+  "roundSampleCoverage": {
+    "ordinaryTargetPerCategory": 200,
+    "specialTargetPerCategory": 30,
+    "maxPaidRounds": 5000,
+    "paidRoundStarts": 1392,
+    "completedRoundCount": 1392,
+    "categories": [
+      {
+        "category": "ORDINARY_LOSS",
+        "target": 200,
+        "completeRoundCount": 1153,
+        "status": "TARGET_MET",
+        "entry": "paid POST /cp/api/v1/crazy-piggy/spin; gm=0 and wa=0",
+        "evidence": [
+          "fixtures/56-Crazy-Piggy/spin",
+          "fixtures/56-Crazy-Piggy/coverage.json"
+        ]
+      },
+      {
+        "category": "ORDINARY_WIN",
+        "target": 200,
+        "completeRoundCount": 200,
+        "status": "TARGET_MET",
+        "entry": "paid POST /cp/api/v1/crazy-piggy/spin; gm=0 and wa>0",
+        "evidence": [
+          "fixtures/56-Crazy-Piggy/spin",
+          "fixtures/56-Crazy-Piggy/coverage.json"
+        ]
+      },
+      {
+        "category": "BOOSTER_WHEEL",
+        "target": 30,
+        "completeRoundCount": 39,
+        "status": "TARGET_MET",
+        "entry": "9 identical eligible symbols; gm=1 with embedded fwtl/fwxl wheel sequence",
+        "evidence": [
+          "fixtures/56-Crazy-Piggy/spin",
+          "fixtures/56-Crazy-Piggy/coverage.json"
+        ]
+      }
+    ],
+    "stopReason": "ALL_APPLICABLE_TARGETS_REACHED",
+    "stoppedAtPaidRoundOrdinal": 1392,
+    "maxLimitReached": false,
+    "duplicatePaidRoundIds": 0,
+    "incompleteRoundCount": 0,
+    "countingRule": "spin-index.jsonl 每行恰好一个真实付费 Round 起点；Booster Wheel 的 fwtl/fwxl 内嵌步骤归属同一 roundId，不另计付费局。"
+  },
+  "evidence": [
+    "resources/56-Crazy-Piggy/en/_hosts/static.cpgame.io/56/versionconfig.js",
+    "resources/56-Crazy-Piggy/en/extracted-rules/gameRules.json",
+    "resources/56-Crazy-Piggy/en/extracted-rules/paytable.json",
+    "fixtures/56-Crazy-Piggy/first-load-en-api.json",
+    "captures/56-Crazy-Piggy/source-modules/Http.js",
+    "captures/56-Crazy-Piggy/source-modules/Main.js",
+    "captures/56-Crazy-Piggy/source-modules/GameApi.js",
+    "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js",
+    "captures/56-Crazy-Piggy/source-modules/GameDataCommon.js",
+    "captures/56-Crazy-Piggy/source-modules/TurnTable.js",
+    "captures/56-Crazy-Piggy/spin-index.jsonl",
+    "fixtures/56-Crazy-Piggy/round-steps.jsonl",
+    "reports/56-Crazy-Piggy/field-evidence-matrix.json"
+  ],
+  "evidenceDetails": {
+    "protocolSpec": "protocol/56-Crazy-Piggy/protocol-spec.json",
+    "protocolSpecMarkdown": "protocol/56-Crazy-Piggy/protocol-spec.md",
+    "fieldMatrix": "reports/56-Crazy-Piggy/field-evidence-matrix.json",
+    "rules": "resources/56-Crazy-Piggy/en/extracted-rules/gameRules.json",
+    "paytable": "resources/56-Crazy-Piggy/en/extracted-rules/paytable.json",
+    "configFixture": "fixtures/56-Crazy-Piggy/first-load-en-api.json",
+    "frontendJudgmentCode": [
+      "captures/56-Crazy-Piggy/source-modules/Http.js",
+      "captures/56-Crazy-Piggy/source-modules/Main.js",
+      "captures/56-Crazy-Piggy/source-modules/GameApi.js",
+      "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js",
+      "captures/56-Crazy-Piggy/source-modules/GameDataCommon.js",
+      "captures/56-Crazy-Piggy/source-modules/HistoryData.js",
+      "captures/56-Crazy-Piggy/source-modules/TurnTable.js",
+      "captures/56-Crazy-Piggy/source-modules/BetLogic.js"
+    ],
+    "roundOracle": [
+      "captures/56-Crazy-Piggy/spin-index.jsonl",
+      "fixtures/56-Crazy-Piggy/round-steps.jsonl"
+    ]
+  },
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "protocolSpecFile": "protocol-spec.json",
+    "protocolSpecMarkdownFile": "protocol-spec.md",
+    "rulesVersion": "v1.5.10.250430",
+    "rulesHash": "7edd2945da54923875932aa9feb1bfd657c9c67cca832637060f8419573480ab",
+    "behaviorIds": [
+      "B-ENTRY-IDENTITY",
+      "B-LANGUAGE-FIRST-LOAD",
+      "B-HTTP-CODEC",
+      "B-SESSION-INIT",
+      "B-CONFIG-RESTORE",
+      "B-ORDINARY-LOSS",
+      "B-ORDINARY-WIN",
+      "B-FIXED-PAYLINE-WIN",
+      "B-BALANCE-ACCOUNTING",
+      "B-BOOSTER-WHEEL",
+      "B-RULES-PAYTABLE-LAZY",
+      "B-AUTH-REJECTION",
+      "B-HISTORY-READ",
+      "B-REDIS-COMPLETE-ROUND"
+    ]
+  },
+  "redisRuntimeSource": {
+    "supported": true,
+    "status": "IMPLEMENTED_CONTRACT_V3",
+    "selection": "SecureRandom outcome LOSS/WIN/SPECIAL, then existing integer multiplier, then one LPOP",
+    "runtimeGeneration": false,
+    "fixtureReplay": false,
+    "emptyBehavior": "HTTP_503_FAIL_CLOSED",
+    "member": "one CP56A1 US-ASCII complete Round fact"
+  },
+  "behaviorIds": [
+    "B-ENTRY-IDENTITY",
+    "B-LANGUAGE-FIRST-LOAD",
+    "B-HTTP-CODEC",
+    "B-SESSION-INIT",
+    "B-CONFIG-RESTORE",
+    "B-ORDINARY-LOSS",
+    "B-ORDINARY-WIN",
+    "B-FIXED-PAYLINE-WIN",
+    "B-BALANCE-ACCOUNTING",
+    "B-BOOSTER-WHEEL",
+    "B-RULES-PAYTABLE-LAZY",
+    "B-AUTH-REJECTION",
+    "B-HISTORY-READ",
+    "B-REDIS-COMPLETE-ROUND"
+  ],
+  "stateDefinitions": {
+    "SESSION_READY": "authenticated, no claimed Round",
+    "PAID_REQUEST_IN_FLIGHT": "one paid request awaiting one Redis claim",
+    "ORDINARY_RESULT_DELIVERY": "ordinary complete Round response projection",
+    "BOOSTER_BASE_DELIVERY": "Booster base award projection from claimed member",
+    "BOOSTER_WHEEL_STEP": "local frontend consumption of the same member fwtl/fwxl",
+    "ROUND_COMPLETE": "settled once, history committed, ready to return"
+  }
+}

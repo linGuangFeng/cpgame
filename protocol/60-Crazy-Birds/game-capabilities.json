@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 60,
+  "directoryName": "60-Crazy-Birds",
+  "displayGameId": 60,
+  "evidenceStatus": "CAPTURED_ABC225",
+  "implementationAllowed": true,
+  "ruleCoreAllowed": true,
+  "rulesHash": "sha256:60crazybirds-v1510250430-ways4096",
+  "board": { "reels": 6, "rows": 4, "winModel": "WAYS_4096" },
+  "minBet": { "bl": 1, "bs": 1, "ba": 1, "cc": "BRL" },
+  "supportedLanguages": {
+    "codes": ["en", "pt", "es", "th", "vi", "id", "bn", "ko", "fr", "tr"],
+    "launchAliases": {
+      "pt": { "l": "pt", "language": "pt-br" }
+    },
+    "archiveDirectories": ["en", "pt-br", "es", "th", "vi", "id", "bn", "ko", "fr", "tr"],
+    "defaultCode": "pt",
+    "firstLoadStatus": "10_OF_10_CAPTURED",
+    "evidence": [
+      "captures/60-Crazy-Birds/source-modules/LanguageManager.js",
+      "resources/60-Crazy-Birds/en/static.cpgame.io/60/assets/resources/config.f8cb5.json",
+      "reports/60-Crazy-Birds/language-inventory.json"
+    ]
+  },
+  "confirmedBehaviors": [
+    "auth/verify",
+    "crazy-birds/config",
+    "crazy-birds/spin",
+    "crazy-birds/log-list",
+    "ordinary LOSS",
+    "ordinary WIN",
+    "FREE_SPINS fsn=8",
+    "WILD_MULTIPLIER pxl/WILDXn",
+    "multi-step ss=0 continuation"
+  ],
+  "unresolvedBehaviors": [
+    "feature buy not observed",
+    "mary not applicable"
+  ]
+}

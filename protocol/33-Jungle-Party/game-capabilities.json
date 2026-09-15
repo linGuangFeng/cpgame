@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 5,
+  "workflowTemplateVersion": 40,
+  "gameId": 33,
+  "gameName": "Jungle Party",
+  "directoryName": "33-Jungle-Party",
+  "status": "VALIDATED_V40",
+  "rulesVersion": "replica-33-v40-complete-round-redis",
+  "rulesHash": "8522e03f81318ebb80df6219fcb41d380314f12911062c0888066a9464067638",
+  "winModel": "PAYLINES: 5x3 reel-major board, 25 fixed lines, left-to-right prefixes, Wild substitution and x2 Wild-line multiplier",
+  "boardModel": {
+    "reels": 5,
+    "rows": 3,
+    "cellCount": 15,
+    "indexLayout": "REEL_MAJOR",
+    "symbols": ["9","A","H1","H2","H3","H4","H5","J","K","Q","T","Wild","Scat"]
+  },
+  "roundModel": {
+    "memberBoundary": "COMPLETE_ROUND",
+    "paidStart": "ba > 0",
+    "continuation": "ba = 0 and small_game_type = 2",
+    "terminal": "ss = 1 and (fsn = 0 or nfsc = fsn)",
+    "historyFinalization": "exactly one list row after terminal delivery"
+  },
+  "supportedLanguages": {"codes":["bn","en","es","fr","id","ko","pt","th","tr","vi"],"status":"VERIFIED_FROM_OBSERVED_BUNDLE_AND_BROWSER_FIRST_LOAD"},
+  "specialModes": [{"id":"SCATTER_FREE_ROUNDS","status":"CONFIRMED","completeRoundCount":46,"target":30,"observedInitialCounts":[8,12,16,20],"observedRetriggerTotals":[16,24,28,32],"observedRpx":[2,5,8]}],
+  "sampleCoverage": {"paidRoundStarts":1475,"completedRoundCount":1475,"steps":2099,"ordinaryLoss":1229,"ordinaryWin":200,"scatterFreeRounds":46,"status":"ALL_CONFIRMED_TARGETS_MET"},
+  "runtimeIndependentLoss": {
+    "enabled": false,
+    "reason": "Losses are naturally sampled offline by the same provider-trained complete-Round joint kernel and cached in Redis multiplier bucket 0.",
+    "artificialBoardConstraints": false
+  },
+  "redisContract": {
+    "gameId": 33,
+    "database": 15,
+    "host": "192.168.10.3",
+    "memberBoundary": "COMPLETE_ROUND",
+    "normalIndex": "PerKeyList_000000033",
+    "specialIndex": "MaryKeyList_000000033",
+    "write": "MULTI/ZADD/RPUSH/LTRIM/EXEC",
+    "claim": "choose WIN_OR_LOSS, choose integer multiplier bucket, then LPOP",
+    "emptyPolicy": "FAIL_CLOSED_NO_RUNTIME_DEAL"
+  },
+  "codecContract": {
+    "schemaVersion": 1,
+    "format": "versioned JSON envelope with Java-serialized complete Round payload",
+    "rulesHashRequired": true,
+    "decodeThenIndependentVerify": true,
+    "originalProviderCompatibilityClaimed": false
+  },
+  "symbolWeights": {
+    "source": "LOCAL_REPLICA_AUDIT_CALIBRATION",
+    "authoritativeGenerationModel": "provider-trained complete-Round joint kernel",
+    "configPrefix": "generation.symbol.",
+    "positiveWeightsRequired": true
+  },
+  "generationModel": {
+    "implementationReady": true,
+    "type": "HIERARCHICAL_EMPIRICAL_JOINT_KERNEL",
+    "usesIndependentCellMarginalsOnly": false,
+    "artificialLossBoardConstraints": false,
+    "lifecycleEntries": [
+      {
+        "id": "INITIAL_PAID_SPIN",
+        "role": "INITIAL",
+        "countingUnit": "COMPLETE_INITIAL_STATE",
+        "sampleRoundCount": 1475,
+        "samplePositionCount": 22125,
+        "wholeNextStateCountedAsNewDeal": false,
+        "evidenceRefs": ["captures/33-Jungle-Party/api-capture/spin-steps.jsonl","captures/33-Jungle-Party/api-capture/round-index.jsonl"]
+      },
+      {
+        "id": "FREE_SPIN_CONTINUATION",
+        "role": "SUBSEQUENT",
+        "countingUnit": "NEWLY_DEALT_POSITIONS",
+        "sampleRoundCount": 46,
+        "samplePositionCount": 9360,
+        "wholeNextStateCountedAsNewDeal": true,
+        "retainedPositionCount": 0,
+        "positionSelection": "Adjacent captured free-spin deliveries replace all 15 reel-major positions; no retained cell exists.",
+        "evidenceRefs": ["captures/33-Jungle-Party/api-capture/spin-steps.jsonl","captures/33-Jungle-Party/api-capture/round-index.jsonl"]
+      }
+    ],
+    "jointRoundFeatures": [
+      {"id":"ROUND_OUTCOME_CLASS","applicable":true,"evidenceRefs":["reports/33-Jungle-Party/generation-model-validation.json"]},
+      {"id":"ROUND_STEP_COUNT","applicable":true,"evidenceRefs":["reports/33-Jungle-Party/generation-model-validation.json"]},
+      {"id":"STATE_ELEMENT_COUNT_VECTOR","applicable":true,"evidenceRefs":["reports/33-Jungle-Party/generation-model-validation.json"]}
+    ],
+    "holdoutPlan": {"source":"REAL_PROVIDER","minimumRounds":100,"actualRounds":100,"disjointFromTraining":true,"selection":"predeclared every-14th ordinal from 7"},
+    "completeRoundJointModel": true,
+    "runtimeFixturesOrScriptedRotation": false,
+    "validation": {"report":"reports/33-Jungle-Party/generation-model-validation.json","generatedCompleteRounds":10000,"result":"PASS"}
+  },
+  "runtime": {"language":"Java","formalSource":"REDIS_DB15_COMPLETE_ROUND","fixturesRuntime":false,"fixedBoardRuntime":false,"scriptedRoundRotation":false,"sessions":"isolated and durable","idempotency":true,"disconnectResume":true,"managedPortRange":"50000-59999","listen":"0.0.0.0"},
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "8522e03f81318ebb80df6219fcb41d380314f12911062c0888066a9464067638",
+    "behaviorIds": ["HTTP_CODEC","CONFIG_LOAD","PAYLINE_EVALUATION","SCATTER_FREE_ROUNDS","ROUND_HISTORY_FINALIZATION","HISTORY_LIST_DETAIL_RETURN","REDIS_COMPLETE_ROUND_BOUNDARY"],
+    "contractVersion": 3,
+    "controllerJar": "server-api/33-Jungle-Party/dist/controller.jar",
+    "configuration": "server-api/33-Jungle-Party/dist/controller.properties",
+    "portInjection": "--port or PORT",
+    "singleManagedProcess": true
+  },
+  "unresolvedOriginalProbability": ["original reel strips and symbol probabilities","original RTP and probability distribution","maximum retrigger count","whether unobserved special modes exist","original Redis key/member codec"],
+  "evidence": ["captures/33-Jungle-Party/api-capture/spin-steps.jsonl","captures/33-Jungle-Party/api-capture/round-index.jsonl","captures/33-Jungle-Party/api-capture/history-1to1.jsonl","captures/33-Jungle-Party/api-capture/progress.json","reports/33-Jungle-Party/evidence-integrity-validation.json"]
+}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0",
+  "checkpointAt": "2026-08-28T23:59:09Z",
+  "checkpointKind": "CROSS_MACHINE_SINGLE_WRITER_HANDOFF",
+  "sourceWorkspace": "/Volumes/hd/cpgame",
+  "sourceRole": "LOCAL_BATCH_A_OFFLINE_PREPARATION",
+  "destinationOwner": "ISOLATED_MACHINE_ABC221",
+  "destinationScope": [41, 2, 16, 33, 43],
+  "locallyPreparedScope": [41, 2, 16, 33],
+  "localWriteFreeze": {
+    "enabled": true,
+    "effectiveAt": "2026-08-28T23:59:09Z",
+    "gameIds": [41, 2, 16, 33],
+    "browserActivityAllowed": false,
+    "artifactWritesAllowed": false,
+    "resumeCondition": "explicit cross-machine reassignment from the main monitor"
+  },
+  "completionState": {
+    "overallReplicaComplete": false,
+    "archived": false,
+    "formalSamplesCountedLocally": 0,
+    "productionPublishCompleted": false,
+    "productionGeneratorDistCompleted": false,
+    "protocolHandoffCompleted": false
+  },
+  "preservedOfflineMilestones": {
+    "fixedPathAudit": "PRECAPTURE_FIXED_PATH_VALID_WAITING_SIGNED_ABC222_BACKFILL",
+    "javaScaffolds": "BATCH_A_V15_SCAFFOLD_VALID_FAIL_CLOSED",
+    "roundLedgerSelfTest": "PASS",
+    "rawGameIdsOnly": true,
+    "workflowTemplateVersion": 15,
+    "gid41StaticAssetManifestAssets": 77,
+    "gid41StaticAssetsVerifiedPresent": 77,
+    "gid41PublishableFromCurrentEvidence": false
+  },
+  "authoritativeLocalFiles": [
+    "tools/batch-a-offline-audit.mjs",
+    "tools/batch-a-scaffold-smoke.mjs",
+    "tools/batch-a-round-ledger.mjs",
+    "tools/batch-a-round-ledger-selftest.mjs",
+    "reports/41-Lucky-Panda/current-status.json",
+    "reports/2-Jungle-Kings/current-status.json",
+    "reports/16-Jungle-Fruit/current-status.json",
+    "reports/33-Jungle-Party/current-status.json",
+    "reports/41-Lucky-Panda/static-asset-sufficiency.json",
+    "captures/41-Lucky-Panda/browser-preparation-block-20260828T234536Z.json"
+  ],
+  "handoffRules": [
+    "The isolated abc221 machine is the sole writer for game IDs 41, 2, 16, 33, and 43 after this checkpoint.",
+    "This local workspace must not add, modify, normalize, build, publish, or backfill artifacts for game IDs 41, 2, 16, or 33 unless explicitly reassigned.",
+    "Existing fail-closed scaffolds and zero-sample reports are preparation artifacts, not completed replicas.",
+    "Formal origin evidence must remain distinguishable from offline, UI-only, and synthetic test evidence.",
+    "No existing local evidence or preparation artifact should be deleted during the handoff."
+  ]
+}

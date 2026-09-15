@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "rawGameId": 42,
+  "directoryName": "42-Lucky-Dragon",
+  "checkpointAt": "2026-08-31T12:26:36+08:00",
+  "status": "STOPPED_FAIL_CLOSED_UNKNOWN_IN_FLIGHT_NO_RETRY",
+  "lastCommitted": {
+    "roundOrdinal": 162,
+    "spinIndexRows": 162,
+    "roundIndexRows": 162,
+    "historyIndexRows": 162,
+    "historyMatchedOneToOne": 162,
+    "grossBetBrl": 81,
+    "lastBalanceBrl": 61801.15,
+    "ordinaryLoss": 135,
+    "ordinaryWin": 27,
+    "wildMultiplierX3": 9,
+    "wildMultiplierX5": 5,
+    "wildMultiplierX9": 2
+  },
+  "unknownInFlight": {
+    "value": true,
+    "roundOrdinal": 163,
+    "intentId": "gid42-batch-163-1788150350472",
+    "latestDurableStatus": "INTENT_PERSISTED_BEFORE_PAID_REQUEST",
+    "previousCommittedBalanceBrl": 61801.15,
+    "retryAllowed": false,
+    "historyOnlyRecoveryAllowed": false,
+    "reason": "THE COLLECTOR RECEIVED A RESPONSE BUT CLASSIFICATION THREW BEFORE THE RESPONSE WAS DURABLY APPENDED; NO DURABLE RESPONSE BODY OR HASH EXISTS FOR EXACT HISTORY MATCH"
+  },
+  "failure": {
+    "code": "RPX_SPECIAL_WITHOUT_WIN_OR_WILD_KEY",
+    "phase": "AFTER_PAID_RESPONSE_BEFORE_DURABLE_RESPONSE_JOURNAL",
+    "writerProcessAlive": false,
+    "writerLockPresent": false,
+    "credentialMaterialPersisted": false,
+    "tokenOutput": false,
+    "browserHandlesReleasedByJsReset": true
+  },
+  "gates": {
+    "newPaidStartAllowed": false,
+    "paidRetryAllowed": false,
+    "automaticHistoryRecoveryAllowed": false,
+    "resumeCollectorAllowed": false,
+    "requiresExternalAuthoritativeAdjudication": true
+  }
+}

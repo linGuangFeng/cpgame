@@ -1,0 +1,454 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 58,
+  "directoryName": "58-Crazy-Gems",
+  "gameName": "Crazy Gems",
+  "rulesVersion": "crazy-gems-rules-0bf6b8291cfbfe00",
+  "rulesHash": "0bf6b8291cfbfe0005aacbe5150d64097752cd989da88fb5a384db1e2d3d60ef",
+  "identity": {
+    "id": 58,
+    "name": "Crazy Gems",
+    "status": "CONFIRMED",
+    "evidence": [
+      "captures/58-Crazy-Gems/id-name-evidence.json",
+      "captures/58-Crazy-Gems/game-launch-network-redacted.json",
+      "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"
+    ],
+    "note": "启动路径 /58、gid=58、API game-id=58 与 bundle GameName=Crazy Gems 一致；大厅 g_id=456 仅为目录项 ID。"
+  },
+  "evidence": [
+    "captures/58-Crazy-Gems/rules-text-pt.json",
+    "captures/58-Crazy-Gems/paytable-text-pt.json",
+    "fixtures/58-Crazy-Gems/first-load/0001-post-config.json",
+    "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js",
+    "captures/58-Crazy-Gems/history-details.jsonl",
+    "captures/58-Crazy-Gems/spin-index.jsonl",
+    "reports/58-Crazy-Gems/language-inventory.json",
+    "reports/58-Crazy-Gems/scenario-coverage.json"
+  ],
+  "evidenceDetails": {
+    "rulesHashAlgorithm": "SHA-256(newline-joined absoluteSourcePath=sourceSha256), using the four ordered rulesManifest sources",
+    "rulesManifest": [
+      {
+        "source": "captures/58-Crazy-Gems/rules-text-pt.json",
+        "sha256": "6b1fae94e1f15cd6f5f211fe17226818a4189b2be2a8c8473d0ee2d8f90be355"
+      },
+      {
+        "source": "captures/58-Crazy-Gems/paytable-text-pt.json",
+        "sha256": "3a4ac00cdbcf15c0ba90bbba8e72b1e81b349a6f1feea77185743aaed74632ab"
+      },
+      {
+        "source": "fixtures/58-Crazy-Gems/first-load/0001-post-config.json",
+        "sha256": "2912fdf8743974621b3d2952a77a9f30be6d4619917c93c3698fbb44d1b42b84"
+      },
+      {
+        "source": "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js",
+        "sha256": "0b9ab93e73803fd2f8b8f497a30333607adda1ea074de8a7338aab8b2d4dd1c1"
+      }
+    ],
+    "fieldMatrix": "protocol/58-Crazy-Gems/field-evidence-matrix.json",
+    "protocolSpec": "protocol/58-Crazy-Gems/protocol-spec.md",
+    "handoff": "protocol/58-Crazy-Gems/protocol-handoff.json",
+    "validation": "reports/58-Crazy-Gems/protocol-validation.json"
+  },
+  "supportedLanguages": {
+    "codes": [
+      "bn",
+      "en",
+      "es",
+      "fr",
+      "id",
+      "ko",
+      "pt",
+      "th",
+      "tr",
+      "vi"
+    ],
+    "launchParameterMapping": {
+      "bn": "bn",
+      "en": "en",
+      "es": "es",
+      "fr": "fr",
+      "id": "id",
+      "ko": "ko",
+      "pt": "pt-br",
+      "th": "th",
+      "tr": "tr",
+      "vi": "vi"
+    },
+    "status": "CONFIRMED_FIRST_LOAD_CAPTURED",
+    "evidence": [
+      "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/resources/config.c4224.json",
+      "captures/58-Crazy-Gems/language-collection-run.json",
+      "reports/58-Crazy-Gems/language-inventory.json"
+    ]
+  },
+  "boardModel": {
+    "status": "CONFIRMED",
+    "serverReels": 3,
+    "visibleRowsPerReel": 3,
+    "visibleSymbolCellCount": 9,
+    "serverField": "rskl",
+    "serverFlattening": "reel-major: flatIndex = reelIndex * 3 + rowIndex",
+    "serverRsklLength": 9,
+    "bufferCells": "NOT_EXPOSED_BY_PROTOCOL",
+    "frontendVisualColumns": 4,
+    "frontendVisualColumnDisposition": "前三列为 3x3 符号滚轴；第 4 列为 minecart 倍率展示列，不是第 4 个中奖滚轴。",
+    "evidence": [
+      "captures/58-Crazy-Gems/rules-text-pt.json",
+      "captures/58-Crazy-Gems/history-details.jsonl",
+      "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"
+    ]
+  },
+  "winModel": "FIXED_PAYLINES",
+  "winModelDetails": {
+    "type": "FIXED_PAYLINES",
+    "status": "CONFIRMED",
+    "paylineCount": 5,
+    "paylineCountApplicability": "APPLICABLE",
+    "coordinatesByReelRow": [
+      [0, 0, 0],
+      [1, 1, 1],
+      [2, 2, 2],
+      [0, 1, 2],
+      [2, 1, 0]
+    ],
+    "serverWinField": "wmkl",
+    "wmklKeyDomain": ["0", "1", "2", "3", "4"],
+    "winFormula": "sum(paytable[wmkl[line]] * bs * bl * rpx) over wmkl lines",
+    "highestPrizePerLineOnly": true,
+    "independentOracleResult": {
+      "completeRoundsChecked": 1160,
+      "lineSetMismatchCount": 0,
+      "winAmountMismatchCount": 0
+    },
+    "evidence": [
+      "captures/58-Crazy-Gems/rules-text-pt.json",
+      "captures/58-Crazy-Gems/paytable-text-pt.json",
+      "captures/58-Crazy-Gems/history-details.jsonl",
+      "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"
+    ],
+    "excludedMisleadingConstants": [
+      {
+        "field": "GameConfig.PayLineCount",
+        "observedValue": 1,
+        "disposition": "NOT_USED_AS_PAYLINE_COUNT",
+        "reason": "规则、奖表、MatchLineIndexData 与 1160 局 wmkl 均证明是 5 线；该常量属于前端布局/下注脚手架。"
+      },
+      {
+        "field": "GameConfig.ColumnCount",
+        "observedValue": 4,
+        "disposition": "NOT_USED_AS_SERVER_REEL_COUNT",
+        "reason": "第 4 列是 minecart 倍率展示列；服务端 rskl 恒长 9。"
+      }
+    ]
+  },
+  "symbols": {
+    "regular": ["H1", "H2", "H3", "H4", "H5", "H6", "H7"],
+    "wild": "WILD",
+    "wildSubstitutesAny": true,
+    "paytableForThree": {
+      "WILD": 5,
+      "H1": 4,
+      "H2": 3,
+      "H3": 2.4,
+      "H4": 2,
+      "H5": 1.6,
+      "H6": 1,
+      "H7": 0.4
+    },
+    "evidence": [
+      "captures/58-Crazy-Gems/paytable-text-pt.json",
+      "fixtures/58-Crazy-Gems/first-load/0001-post-config.json",
+      "captures/58-Crazy-Gems/history-details.jsonl"
+    ]
+  },
+  "symbolWeights": {
+    "status": "FRONTEND_ANIMATION_ONLY_NOT_SERVER_GENERATION_AUTHORITY",
+    "runtimeGeneratorUseAllowed": false,
+    "frontendAnimationConstants": {
+      "symbols": ["H1", "H2", "H3", "H4", "H5", "H6", "H7", "WILD"],
+      "weights": [5, 10, 15, 20, 25, 30, 10, 5],
+      "minecartValues": [1, 2, 3, 5, 10, 15],
+      "minecartWeights": [30, 25, 20, 15, 10, 5],
+      "codeScope": "GameConfigData.randomReel builds shuffled backReels used for reel animation; authoritative result symbols still come from Spin.data.rskl."
+    },
+    "serverWeights": "UNKNOWN",
+    "configurationDisposition": "不得把上述动画权重写入正式生成器配置，也不得从 1160 局频率反推服务端权重。",
+    "evidence": [
+      "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js",
+      "captures/58-Crazy-Gems/history-details.jsonl"
+    ]
+  },
+  "betModel": {
+    "currencyCode": "BRL",
+    "currencySymbol": "R$",
+    "betLevels": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "betSizes": [0.5, 5, 50],
+    "minimumBet": {
+      "bl": 1,
+      "bs": 0.5,
+      "total": 0.5
+    },
+    "defaultBetSize": 0.5,
+    "unresolvedRawConfig": {
+      "dbl": 50,
+      "reason": "传给 getIndexByMultiplier，但不在 bll 1..10；前端回退索引 0，禁止猜为线数、倍率或默认 bet level。"
+    },
+    "evidence": [
+      "captures/58-Crazy-Gems/rules-text-pt.json",
+      "fixtures/58-Crazy-Gems/first-load/0001-post-config.json",
+      "captures/58-Crazy-Gems/history-details.jsonl"
+    ]
+  },
+  "rtp": {
+    "valuePercent": 96.4,
+    "status": "RULE_TEXT_CONFIRMED",
+    "evidence": [
+      "captures/58-Crazy-Gems/rules-text-pt.json",
+      "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"
+    ]
+  },
+  "specialModes": [
+    {
+      "id": "MINECART_MULTIPLIER",
+      "applicable": true,
+      "status": "CONFIRMED",
+      "values": [1, 2, 3, 5, 10, 15],
+      "stateField": "rpx",
+      "separateRoundOrStep": false,
+      "sampleCompleteRoundCount": 983,
+      "target": 30,
+      "evidence": [
+        "captures/58-Crazy-Gems/rules-text-pt.json",
+        "captures/58-Crazy-Gems/paytable-text-pt.json",
+        "captures/58-Crazy-Gems/history-details.jsonl"
+      ]
+    },
+    {
+      "id": "FREE_SPINS",
+      "applicable": false,
+      "status": "[BLOCKER:RARE] UNCONFIRMED_GENERIC_SCAFFOLD_ONLY",
+      "sampleCompleteRoundCount": 0,
+      "targetIfConfirmed": 30,
+      "reason": "规则/奖表无入口，1160 局无 fsn/frwa；通用 FreeGame scaffold 不是当前游戏能力证据。",
+      "evidence": [
+        "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js",
+        "captures/58-Crazy-Gems/history-details.jsonl"
+      ]
+    },
+    {
+      "id": "MULTI_STEP_ROUND",
+      "applicable": false,
+      "status": "[BLOCKER:RARE] UNCONFIRMED_NOT_CAPTURED",
+      "sampleCompleteRoundCount": 0,
+      "targetIfConfirmed": 30,
+      "reason": "前端有 truthy spin_status 通用分支，但 1160 个完整 Round 均为单 Step，spin_status 全部缺失/假。",
+      "evidence": [
+        "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js",
+        "captures/58-Crazy-Gems/spin-index.jsonl"
+      ]
+    },
+    {
+      "id": "FEATURE_BUY",
+      "applicable": false,
+      "status": "[BLOCKER:RARE] NOT_FOUND_NOT_APPLICABLE",
+      "sampleCompleteRoundCount": 0,
+      "targetIfConfirmed": 30,
+      "reason": "规则、奖表、场景树和 bundle 搜索均无购买入口。",
+      "evidence": [
+        "captures/58-Crazy-Gems/buy-entry-search.json"
+      ]
+    }
+  ],
+  "roundModel": {
+    "status": "CONFIRMED_OBSERVED_SINGLE_STEP",
+    "paidStart": {
+      "endpoint": "POST /cp/api/v1/crazy-gems/spin",
+      "requiredFields": ["bl", "bs", "t", "gid"],
+      "minimumValues": {"bl": 1, "bs": 0.5, "gid": 58}
+    },
+    "sourceResponseStep": {
+      "stepType": "PAID_SPIN",
+      "fields": ["ba", "pb", "rpx", "rskl", "wa", "wmkl"],
+      "continuationField": "spin_status",
+      "terminalCondition": "spin_status is absent or falsy",
+      "observedStepCount": {"min": 1, "max": 1, "completeRounds": 1160}
+    },
+    "sourceRoundIdentifier": {
+      "spinResponseField": "NOT_RETURNED",
+      "historyTransferField": "tis",
+      "historyBusinessId": "bid = '58-' + tis"
+    },
+    "stateMachine": {
+      "states": [
+        "READY",
+        "PAID_START_ACCEPTED",
+        "COMPLETE_ROUND_GENERATED",
+        "STEP_AVAILABLE",
+        "TERMINAL_STEP_DELIVERED",
+        "READY"
+      ],
+      "transitionRules": [
+        "只在 READY 接受新的付费起点。",
+        "一次调用 GameRuleCore 生成整个完整 Round，并只领取一次 Redis member。",
+        "本游戏当前确认的完整 Round 只有一个 PAID_SPIN Step。",
+        "Delivery 仅消费已生成 Step，不得再次生成、不得读取 fixture。",
+        "终态 Step 交付后清除 activeRound，才可接受下一付费起点。"
+      ],
+      "terminationRules": [
+        "当前确认路径必须在 Step 1 返回缺失/假 spin_status。",
+        "truthy spin_status 路径未确认，正式实现不得臆造 continuation。"
+      ]
+    },
+    "deliveryModel": {
+      "originDeliveryEndpoint": "NOT_PRESENT_IN_CAPTURED_SOURCE_PROTOCOL",
+      "localDeliveryAbstraction": "REQUIRED_FOR_RUNTIME_QUEUEING",
+      "stepsImmutableAfterGeneration": true,
+      "freeOrRewardStepCountedAsPaidStart": false,
+      "fixtureRuntimeUseAllowed": false
+    },
+    "evidence": [
+      "captures/58-Crazy-Gems/initial-paid-round-network.json",
+      "captures/58-Crazy-Gems/round-steps.jsonl",
+      "captures/58-Crazy-Gems/spin-index.jsonl",
+      "captures/58-Crazy-Gems/history-list-pages.jsonl",
+      "captures/58-Crazy-Gems/history-details.jsonl",
+      "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"
+    ]
+  },
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "status": "CONFIRMED_FOR_ORDINARY_PAID_SINGLE_STEP_ONLY",
+    "preconditions": [
+      "no active Round",
+      "ordinary paid request",
+      "bl and bs are valid config choices"
+    ],
+    "requirements": [
+      "使用正式安全随机生成 3x3 rskl 与允许的 rpx。",
+      "独立 ResultUtil 复核五条线均不中奖且 wa=0、wmkl={}。",
+      "不得按次数轮播、固定牌面或从 fixture/History 抽取。"
+    ],
+    "forbiddenWhen": [
+      "active Round exists",
+      "free/reward/continuation Step is requested",
+      "special mode later becomes confirmed"
+    ],
+    "evidence": [
+      "captures/58-Crazy-Gems/history-details.jsonl",
+      "captures/58-Crazy-Gems/spin-index.jsonl",
+      "reports/58-Crazy-Gems/scenario-coverage.json"
+    ]
+  },
+  "endpoints": {
+    "firstLoadOrder": [
+      "GET /58 entry and static resources",
+      "POST /cp/api/v1/auth/verify",
+      "POST /cp/api/v1/crazy-gems/config"
+    ],
+    "gameplayOrder": [
+      "config must complete",
+      "POST /cp/api/v1/crazy-gems/spin",
+      "render returned data"
+    ],
+    "historyOrder": [
+      "POST /cp/api/v1/crazy-gems/log-list page_index=1..end",
+      "POST /cp/api/v1/crazy-gems/log-view transfer_id=ll[].tis"
+    ],
+    "definitions": {
+      "authVerify": {"method": "POST", "path": "/cp/api/v1/auth/verify", "requestFields": "NOT_CAPTURED", "responseBody": "NOT_PERSISTED", "observedStatus": 200},
+      "config": {"method": "POST", "path": "/cp/api/v1/crazy-gems/config", "requestFields": ["t", "gid"], "responseDataFields": ["auto", "bll", "bsl", "cc", "cs", "dbl", "dbs", "spl", "ts"]},
+      "spin": {"method": "POST", "path": "/cp/api/v1/crazy-gems/spin", "requestFields": ["bl", "bs", "t", "gid"], "responseDataFields": ["ba", "pb", "rpx", "rskl", "wa", "wmkl"]},
+      "historyList": {"method": "POST", "path": "/cp/api/v1/crazy-gems/log-list", "requestFields": ["page_index", "begin_at", "end_at", "t", "gid"], "responseDataFields": ["ba", "wa", "lc", "end", "ll"]},
+      "historyDetail": {"method": "POST", "path": "/cp/api/v1/crazy-gems/log-view", "requestFields": ["transfer_id", "t", "gid"], "responseDataFields": ["ba", "baf", "bid", "bl", "bs", "ca", "gt", "pb", "rpx", "rskl", "wa", "wmkl"]},
+      "heartbeat": {"method": "POST", "path": "/cp/api/v1/ping", "requestFields": "NOT_CAPTURED", "responseDataFields": "NOT_CAPTURED"}
+    },
+    "evidence": [
+      "captures/58-Crazy-Gems/game-first-load-api-network.json",
+      "captures/58-Crazy-Gems/initial-paid-round-network.json",
+      "captures/58-Crazy-Gems/history-page-001-network.json",
+      "captures/58-Crazy-Gems/history-detail-probe-network.json",
+      "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"
+    ]
+  },
+  "codecContract": {
+    "status": "CONFIRMED",
+    "transport": "HTTPS at source; local API may use HTTP for LAN demo",
+    "requestEncoding": {
+      "method": "POST",
+      "contentType": "application/x-www-form-urlencoded",
+      "algorithm": "encodeURIComponent key/value pairs joined with '&'; spaces encoded as '+'",
+      "jsonRequestModeObservedForGameEndpoints": false
+    },
+    "responseEncoding": {
+      "contentType": "application/json",
+      "envelope": {"successCode": 200, "fields": ["code", "data", "info"]},
+      "frontendUnwrap": "loose code == 200 then resolve data || {}; otherwise reject"
+    },
+    "applicationLayerEncryption": {
+      "status": "NONE_OBSERVED_FOR_GAME_BUSINESS_PAYLOAD",
+      "tField": "opaque assigned-session credential; URL/form encoded but not decoded or redefined by this handoff",
+      "prohibited": "不得伪造加密、不得把 t 持久化进产物、不得将凭证提交到其他域名。"
+    },
+    "evidence": [
+      "fixtures/58-Crazy-Gems/first-load/0001-post-config.json",
+      "fixtures/58-Crazy-Gems/initial-round/0001-post-spin.json",
+      "captures/58-Crazy-Gems/game-first-load-api-network.json",
+      "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js"
+    ]
+  },
+  "redisContract": {
+    "status": "UNKNOWN_NOT_PRESENT_IN_CURRENT_GAME_RULE_OR_CAPTURE_EVIDENCE",
+    "keyPattern": "UNKNOWN",
+    "memberEncoding": "UNKNOWN",
+    "memberLength": "UNKNOWN",
+    "runtimeSourcePolicy": "Redis member may carry a GameRuleCore-generated complete Round only; fixture, History and captured Spin payloads are forbidden as members.",
+    "downstreamDisposition": "不得从示例游戏继承 Key、编码或长度；须由当前平台接口契约的独立证据补充后实现，未知项必须安全拒绝而非猜测。",
+    "evidence": [
+      "captures/58-Crazy-Gems/game-first-load-api-network.json",
+      "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js",
+      "protocol/58-Crazy-Gems/protocol-handoff.json#UB-REDIS-WIRE-CONTRACT"
+    ]
+  },
+  "roundSampleCoverage": {
+    "ordinaryTargetPerCategory": 200,
+    "specialTargetPerCategory": 30,
+    "maxPaidRounds": 5000,
+    "paidRoundStarts": 1160,
+    "completedRoundCount": 1160,
+    "categories": [
+      {"id": "ORDINARY_LOSS", "applicable": true, "target": 200, "completeRoundCount": 959, "status": "MET", "entry": "POST /cp/api/v1/crazy-gems/spin bl=1 bs=0.5"},
+      {"id": "ORDINARY_WIN", "applicable": true, "target": 200, "completeRoundCount": 201, "status": "MET", "entry": "POST /cp/api/v1/crazy-gems/spin bl=1 bs=0.5"},
+      {"id": "MINECART_MULTIPLIER", "applicable": true, "target": 30, "completeRoundCount": 983, "status": "MET", "entry": "paid base Round response rpx"},
+      {"id": "FREE_SPINS", "applicable": false, "target": 30, "completeRoundCount": 0, "status": "NOT_CONFIRMED_NOT_APPLICABLE", "entry": "no discoverable rule/UI entry"},
+      {"id": "MULTI_STEP_ROUND", "applicable": false, "target": 30, "completeRoundCount": 0, "status": "NOT_CONFIRMED_NOT_APPLICABLE", "entry": "no captured continuation entry"},
+      {"id": "FEATURE_BUY", "applicable": false, "target": 30, "completeRoundCount": 0, "status": "NOT_FOUND_NOT_APPLICABLE", "entry": "no discoverable entry"}
+    ],
+    "stopReason": "ALL_APPLICABLE_TARGETS_MET",
+    "stoppedBelowMaximum": true,
+    "index": "captures/58-Crazy-Gems/spin-index.jsonl"
+  },
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesVersion": "crazy-gems-rules-0bf6b8291cfbfe00",
+    "rulesHash": "0bf6b8291cfbfe0005aacbe5150d64097752cd989da88fb5a384db1e2d3d60ef",
+    "behaviorIds": [
+      "B-ENTRY-ID",
+      "B-LANGUAGE-FIRST-LOAD",
+      "B-SOURCE-REQUEST-SEQUENCE",
+      "B-FORM-JSON-CODEC",
+      "B-CONFIG-BET-PAYTABLE",
+      "B-FIXED-PAYLINE-WIN",
+      "B-WILD-SUBSTITUTION",
+      "B-PAID-ROUND-LOSS",
+      "B-PAID-ROUND-WIN",
+      "B-MINECART-MULTIPLIER",
+      "B-ROUND-DELIVERY-STATE",
+      "B-HISTORY-PAGINATION",
+      "B-HISTORY-LIST-DETAIL",
+      "B-BALANCE-LEDGER-CONTINUITY"
+    ],
+    "status": "SCHEMA_REWORK_COMPLETE_PENDING_INDEPENDENT_PROTOCOL_ACCEPTANCE"
+  }
+}

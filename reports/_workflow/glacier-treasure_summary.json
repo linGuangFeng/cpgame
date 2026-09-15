@@ -1,0 +1,13 @@
+{
+  "slug": "glacier-treasure",
+  "folder": "1780-Glacier-Treasure",
+  "gid": 1780,
+  "runId": "20260902T103846701Z",
+  "stage": "/Users/a1/Downloads/glacier-treasure-stage/20260902T103846701Z",
+  "hdDest": "/Volumes/hd/cpgame/resources/1780-Glacier-Treasure/programmatic-http/20260902T103846701Z",
+  "succeeded": 94,
+  "failed": 0,
+  "bytes": 11823654,
+  "total": 94,
+  "captureJson": "/Users/a1/Downloads/cp-capture-abc221-glacier-treasure-urls.json"
+}

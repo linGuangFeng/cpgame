@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "account": "abc221",
+  "operation": "land_exact_staticUrls",
+  "rsync": {
+    "flags": [
+      "-rltD",
+      "--chmod=ugo=rwX"
+    ]
+  },
+  "urlGuessingOrAssetPathSynthesis": false,
+  "jobs": [
+    {
+      "slug": "blessing-of-ice-and-fire",
+      "gid": 1400,
+      "folder": "1400-Blessing-of-Ice-and-Fire",
+      "assetPathBase": "/v2/1400/",
+      "runId": "20260902T103752712Z",
+      "exactStaticUrls": 186,
+      "ok": 182,
+      "fail": 4,
+      "bytes": 15419905,
+      "hdFileCount": 182,
+      "pathPrefixMatch": 182,
+      "gameDirs": [
+        "Game1400"
+      ],
+      "stage": "/Users/a1/Downloads/blessing-of-ice-and-fire-stage/20260902T103752712Z",
+      "hdDest": "/Volumes/hd/cpgame/resources/1400-Blessing-of-Ice-and-Fire/programmatic-http/20260902T103752712Z",
+      "itemsSha256": "c47ac287bea67015383ebe3e7cb7fdb718ead0e1faa7f1f1f02f444ef9c08eb0",
+      "captureCopied": "/Volumes/hd/cpgame/reports/_workflow/cp-capture-abc221-blessing-of-ice-and-fire-urls.json",
+      "reportCopied": "/Volumes/hd/cpgame/reports/_workflow/blessing-of-ice-and-fire_download-report.public.json",
+      "summaryCopied": "/Volumes/hd/cpgame/reports/_workflow/blessing-of-ice-and-fire_summary.json",
+      "rsync_rc": 0
+    },
+    {
+      "slug": "glacier-treasure",
+      "gid": 1780,
+      "folder": "1780-Glacier-Treasure",
+      "assetPathBase": "/v2/1780/",
+      "runId": "20260902T103846701Z",
+      "exactStaticUrls": 94,
+      "ok": 94,
+      "fail": 0,
+      "bytes": 11823654,
+      "hdFileCount": 94,
+      "pathPrefixMatch": 94,
+      "gameDirs": [
+        "Game1780"
+      ],
+      "stage": "/Users/a1/Downloads/glacier-treasure-stage/20260902T103846701Z",
+      "hdDest": "/Volumes/hd/cpgame/resources/1780-Glacier-Treasure/programmatic-http/20260902T103846701Z",
+      "itemsSha256": "b2312fd2cc329d5c021dbfe9e98801aaed249b031285248d3eb10e48186cf258",
+      "captureCopied": "/Volumes/hd/cpgame/reports/_workflow/cp-capture-abc221-glacier-treasure-urls.json",
+      "reportCopied": "/Volumes/hd/cpgame/reports/_workflow/glacier-treasure_download-report.public.json",
+      "summaryCopied": "/Volumes/hd/cpgame/reports/_workflow/glacier-treasure_summary.json",
+      "rsync_rc": 0
+    }
+  ]
+}

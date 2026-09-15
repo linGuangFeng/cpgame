@@ -1,0 +1,8 @@
+[
+  {
+    "game": "2470-Lucky-Night-Market",
+    "exitCode": 0,
+    "jarSha256": "c8c32319b6726b2a3ed59f549d094116f9f93b8bf35fa8cc6977c1ccb80f9b5b",
+    "logTail": "{\"gameId\":2470,\"generator\":\"SecureRandom / shared Java GameRuleCore\",\"count\":2,\"validationOnly\":false,\"counts\":{\"ORDINARY_WIN\":2},\"bucketCount\":2,\"rejectedSteps\":7,\"rejectedRounds\":0,\"normalIndex\":\"PerKeyList_000002470\",\"featureIndex\":\"MaryKeyList_000002470\",\"wheelIndex\":\"PreKeyList_100002470\"}\n"
+  }
+]

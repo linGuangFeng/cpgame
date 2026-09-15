@@ -1,0 +1,306 @@
+{
+  "schemaVersion": 1,
+  "gameId": 1809,
+  "rulesHash": "ff636cada37978caa1b427fb2c41fe6e4b75b3acb215b5726344da1bfaafcf12",
+  "stage": "CAPTURE_STAGE_ONLY",
+  "status": "PENDING_PROTOCOL_ANALYSIS",
+  "evidenceInventory": [
+    {
+      "id": "EVI-ENTRY",
+      "source": "captures/1809-Freedom-Day/parallel-abc224/network.jsonl + startup bodies",
+      "behaviorIds": [
+        "BHV-PAID-ROUND"
+      ],
+      "disposition": "用于确认入口、runtime gid 与 API 面"
+    },
+    {
+      "id": "EVI-STATIC",
+      "source": "captures/1809-Freedom-Day/official-static-manifest.json + resources/1809-Freedom-Day",
+      "behaviorIds": [],
+      "disposition": "入口资源证据",
+      "reason": "不直接形成结果行为"
+    },
+    {
+      "id": "EVI-LEDGER",
+      "source": "captures/1809-Freedom-Day/source-ledger/round-index.jsonl",
+      "behaviorIds": [
+        "BHV-PAID-ROUND",
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-FREE-SPIN-FEATURE",
+        "BHV-FEATURE-BUY",
+        "BHV-FREE-SPIN-RETRIGGER",
+        "BHV-SILVER-CHANGE",
+        "BHV-GOLD-CHANGE",
+        "BHV-LONG-SYMBOL",
+        "BHV-HORIZONTAL-STRIP",
+        "BHV-MULTIPLIER-FLOWER",
+        "BHV-MULTI-CASCADE"
+      ],
+      "disposition": "完整 REAL_PROVIDER Round 索引"
+    },
+    {
+      "id": "EVI-HISTORY",
+      "source": "captures/1809-Freedom-Day/source-ledger/history-round-index.jsonl",
+      "behaviorIds": [
+        "BHV-PAID-ROUND",
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-FREE-SPIN-FEATURE",
+        "BHV-FEATURE-BUY",
+        "BHV-FREE-SPIN-RETRIGGER",
+        "BHV-SILVER-CHANGE",
+        "BHV-GOLD-CHANGE",
+        "BHV-LONG-SYMBOL",
+        "BHV-HORIZONTAL-STRIP",
+        "BHV-MULTIPLIER-FLOWER",
+        "BHV-MULTI-CASCADE"
+      ],
+      "disposition": "exact orderId 原站 History oracle"
+    },
+    {
+      "id": "EVI-BEHAVIOR",
+      "source": "captures/1809-Freedom-Day/parallel-abc224/behavior-inventory.json",
+      "behaviorIds": [
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-FREE-SPIN-FEATURE",
+        "BHV-FEATURE-BUY",
+        "BHV-FREE-SPIN-RETRIGGER",
+        "BHV-SILVER-CHANGE",
+        "BHV-GOLD-CHANGE",
+        "BHV-LONG-SYMBOL",
+        "BHV-HORIZONTAL-STRIP",
+        "BHV-MULTIPLIER-FLOWER",
+        "BHV-MULTI-CASCADE"
+      ],
+      "disposition": "行为发现与样本索引"
+    },
+    {
+      "id": "EVI-FRONTEND",
+      "source": "captures/1809-Freedom-Day/parallel-abc224/protocol/Game2260-index.58f0d.js",
+      "behaviorIds": [
+        "BHV-PAID-ROUND",
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-FREE-SPIN-FEATURE",
+        "BHV-FEATURE-BUY",
+        "BHV-FREE-SPIN-RETRIGGER",
+        "BHV-SILVER-CHANGE",
+        "BHV-GOLD-CHANGE",
+        "BHV-LONG-SYMBOL",
+        "BHV-HORIZONTAL-STRIP",
+        "BHV-MULTIPLIER-FLOWER",
+        "BHV-MULTI-CASCADE"
+      ],
+      "disposition": "前端字段判定代码，待协议节点逐行为引用"
+    },
+    {
+      "id": "EVI-SUPPLEMENT",
+      "source": "captures/1809-Freedom-Day/supplemental-retrigger",
+      "behaviorIds": [
+        "BHV-PAID-ROUND",
+        "BHV-FEATURE-BUY",
+        "BHV-FREE-SPIN-RETRIGGER"
+      ],
+      "disposition": "为统一 30 局门槛补采的完整 Round"
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "BHV-PAID-ROUND",
+      "category": "ROUND",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-ORDINARY-LOSS",
+      "category": "ROUND",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-ORDINARY-WIN",
+      "category": "ROUND",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-FREE-SPIN-FEATURE",
+      "category": "GAME_BEHAVIOR",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-FEATURE-BUY",
+      "category": "GAME_BEHAVIOR",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-FREE-SPIN-RETRIGGER",
+      "category": "GAME_BEHAVIOR",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-SILVER-CHANGE",
+      "category": "GAME_BEHAVIOR",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-GOLD-CHANGE",
+      "category": "GAME_BEHAVIOR",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-LONG-SYMBOL",
+      "category": "GAME_BEHAVIOR",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-HORIZONTAL-STRIP",
+      "category": "GAME_BEHAVIOR",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-MULTIPLIER-FLOWER",
+      "category": "GAME_BEHAVIOR",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    },
+    {
+      "id": "BHV-MULTI-CASCADE",
+      "category": "GAME_BEHAVIOR",
+      "status": "CAPTURED_PENDING_PROTOCOL_ANALYSIS",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVI-LEDGER",
+        "EVI-HISTORY",
+        "EVI-BEHAVIOR",
+        "EVI-FRONTEND"
+      ]
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "BHV-PAID-ROUND",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-ORDINARY-LOSS",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-ORDINARY-WIN",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-FREE-SPIN-FEATURE",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-FEATURE-BUY",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-FREE-SPIN-RETRIGGER",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-SILVER-CHANGE",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-GOLD-CHANGE",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-LONG-SYMBOL",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-HORIZONTAL-STRIP",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-MULTIPLIER-FLOWER",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    },
+    {
+      "id": "BHV-MULTI-CASCADE",
+      "reason": "当前节点只负责入口、资源、接口与样本采集；后续协议节点必须从 evidenceRefs 建立 implementationContract、verificationContract 和相邻 Step 断言。"
+    }
+  ],
+  "implementationGate": "BLOCKED_UNTIL_PROTOCOL_NODE_CONFIRMS_ALL_BEHAVIOR_CONTRACTS"
+}

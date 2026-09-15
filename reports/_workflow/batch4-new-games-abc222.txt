@@ -1,0 +1,7 @@
+gid | name | spins | status | blocker | endpoint
+2300 | Monster-Slayer | 2 | ok | None | https://api.omgapibra.com/cp/single_game.Game/gameResult
+2350 | Curupira | 4 | ok | None | https://api.omgapibra.com/cp/single_game.Game/gameResult
+2410 | Electro-Fiesta | 2 | ok | None | https://api.omgapibra.com/cp/single_game.Game/gameResult
+2470 | Lucky-Night-Market | 2 | ok | None | https://api.omgapibra.com/cp/single_game.Game/gameResult
+
+RETRY4_OK=4 RETRY4_FAIL=0 TOTAL_OK_IN_PROGRESS=47

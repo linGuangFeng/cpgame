@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 61,
+  "directoryName": "61-Saci",
+  "gameName": "Saci",
+  "activeRevision": "v1.5.10.250821",
+  "rulesHash": "656af5aabcad6a585da1853a38d3b57c86b5f2e4d3eee064b1170e3ea8a58315",
+  "scope": "captured browser protocol and confirmed ordinary/cascade state machine; special modes without adjacent raw evidence remain disabled",
+  "baseUrl": {
+    "captured": "https://api.omgapibra.com/cp",
+    "runtimeRule": "the launch query sip supplies the API host; the front end appends /api/v1 paths",
+    "evidence": ["captures/61-Saci/api-traffic.json", "resources/61-Saci/raw/static.cpgame.io/61/assets/main/index.2155d.js"]
+  },
+  "codec": {
+    "request": {
+      "method": "POST",
+      "contentType": "application/x-www-form-urlencoded",
+      "algorithm": "encodeURIComponent(name)+'='+encodeURIComponent(value), replace %20 with +, join with &",
+      "pseudoHeaderToForm": {"web-token": "t", "game-id": "gid"}
+    },
+    "response": {
+      "contentType": "application/json; charset=utf-8",
+      "envelope": {"code": "integer/string status", "data": "endpoint object", "info": "message"},
+      "success": "HTTP 2xx and String(code)==200 resolves data or {}",
+      "failure": "other code rejects; 401 stops heartbeat; 403/503 info is retained; missing JSON code becomes HTTP<status>"
+    },
+    "encryption": {
+      "request": "NONE",
+      "response": "NONE",
+      "basis": "raw bodies are readable form/JSON and front-end HTTP code contains no crypto transform"
+    },
+    "tokenPhases": [
+      "auth/verify form t is the launch token",
+      "auth/verify data.token is the session token",
+      "config/spin/history form t is that session token"
+    ]
+  },
+  "requestOrder": [
+    {
+      "order": 1,
+      "endpoint": "POST /api/v1/auth/verify",
+      "precondition": "launch parameters are present",
+      "effect": "establish player/session token"
+    },
+    {
+      "order": 2,
+      "endpoint": "POST /api/v1/d-saci/config",
+      "precondition": "auth returned session token",
+      "effect": "initialize bets, payouts, buy metadata, currency and optional last state"
+    },
+    {
+      "order": 3,
+      "endpoint": "POST /api/v1/d-saci/spin",
+      "precondition": "config loaded and player starts/continues a Round",
+      "effect": "deliver exactly one Step"
+    },
+    {
+      "order": 4,
+      "endpoint": "POST /api/v1/d-saci/spin",
+      "condition": "repeat automatically while previous response ss=0",
+      "effect": "deliver next queued Step without another debit"
+    },
+    {
+      "order": 5,
+      "endpoint": "POST /api/v1/d-saci/log-list then /log-view",
+      "condition": "user opens History and selects a transfer_id",
+      "effect": "load generated Round summaries and adjacent Steps"
+    }
+  ],
+  "endpoints": [
+    {
+      "id": "AUTH_VERIFY",
+      "path": "/api/v1/auth/verify",
+      "capturePath": "/cp/api/v1/auth/verify",
+      "status": "CAPTURED",
+      "requestFields": {
+        "ai": "launch/operator identifier",
+        "btt": "launch mode flag; captured 1",
+        "t": "launch token",
+        "gid": "game id 61"
+      },
+      "responseDataFields": {
+        "player.balance": "opening balance",
+        "player.id": "player identifier",
+        "token": "session token for later t",
+        "ping.enable,ping.seconds": "heartbeat state/interval",
+        "rc": "captured object {on,v}; broader semantics not inferred",
+        "gc.os,gc.om": "effect/music settings"
+      },
+      "oracles": ["fixtures/61-Saci/auth-verify/request.json", "fixtures/61-Saci/auth-verify/response.json"]
+    },
+    {
+      "id": "CONFIG",
+      "path": "/api/v1/d-saci/config",
+      "capturePath": "/cp/api/v1/d-saci/config",
+      "status": "CAPTURED",
+      "requestFields": {"t": "session token", "gid": "61"},
+      "responseDataFields": {
+        "auto": "autoplay counts",
+        "bll,bsl": "bet level/size arrays",
+        "dbl,dbs": "default level/size",
+        "buy": "cost multipliers mapped to bm 4..7",
+        "cc,cs,ct": "currency code/symbol/format",
+        "spl": "payout coefficients",
+        "ts": "server epoch seconds",
+        "last": "last Step/resume object"
+      },
+      "activeResumeStatus": "PARTIAL: code branch known but only terminal last captured",
+      "oracles": ["fixtures/61-Saci/config/request.json", "fixtures/61-Saci/config/response.json"]
+    },
+    {
+      "id": "SPIN",
+      "path": "/api/v1/d-saci/spin",
+      "capturePath": "/cp/api/v1/d-saci/spin",
+      "status": "CAPTURED_ORDINARY_AND_CASCADE",
+      "requestFields": {
+        "bl": "bet level",
+        "bs": "bet size",
+        "bm": "optional buy selector 4..7; code-discovered, not captured",
+        "t": "session token",
+        "gid": "61"
+      },
+      "responseDataFields": {
+        "afnl": "free-add annotation list; empty in captures",
+        "ba": "charged Step amount; paid start bl*bs*20, later Steps zero",
+        "bl,bs": "echoed bet",
+        "ca": "created-at epoch seconds",
+        "frwa": "free aggregate field; zero in captured paid Rounds",
+        "fsn,nfsc": "free total/current counters; zero in captures",
+        "gm,gt": "captured numeric metadata; broader enums unknown",
+        "nrsc,rsn": "summon current/total counters; zero in captures",
+        "pb": "player balance after this Delivery's settlement point",
+        "rskl": "15 encoded visible cells",
+        "rpx": "multiplier state consumed by client; absent in captured Steps",
+        "rwa": "cumulative Round award",
+        "small_game_type": "0 on captured paid start; 1 on cascade continuation/terminal Steps",
+        "ss": "0 continue, 1 terminate",
+        "syxl": "split coordinate list; partial lifecycle only",
+        "wa": "current Step award",
+        "wmkl": "flat winning coordinate list",
+        "wn": "current-bet Wild energy progress",
+        "wnl": "Wild energy map by String(100*ba)",
+        "wskl": "present but empty in all captured Steps"
+      },
+      "oracles": ["captures/61-Saci/spin-index.jsonl", "fixtures/61-Saci/spin"]
+    },
+    {
+      "id": "LOG_LIST",
+      "path": "/api/v1/d-saci/log-list",
+      "capturePath": "/cp/api/v1/d-saci/log-list",
+      "status": "CAPTURED",
+      "requestFields": {"page_index": "1-based page", "begin_at,end_at": "epoch-second range", "t": "session token", "gid": "61"},
+      "responseDataFields": {"ba": "page total wager", "wa": "page total award", "lc": "row count", "end": "pagination end flag", "ll": "Round summary rows"},
+      "oracles": ["fixtures/61-Saci/history-list/request.json", "fixtures/61-Saci/history-list/response.json"]
+    },
+    {
+      "id": "LOG_VIEW",
+      "path": "/api/v1/d-saci/log-view",
+      "capturePath": "/cp/api/v1/d-saci/log-view",
+      "status": "CAPTURED_BASE_STEPS_ONLY",
+      "requestFields": {"transfer_id": "Round id from ll[].tis", "t": "session token", "gid": "61"},
+      "responseDataFields": {"baf": "Round starting/after-bet balance display", "bid": "Round/first-Step display id", "bsl": "ordered base/cascade Steps", "fsl": "code-discovered free list, uncaptured", "rsl": "code-discovered summon list, uncaptured"},
+      "oracles": ["fixtures/61-Saci/history-view/request.json", "fixtures/61-Saci/history-view/response.json"]
+    },
+    {
+      "id": "PING",
+      "path": "/api/v1/ping",
+      "status": "CODE_DISCOVERED_NOT_CAPTURED",
+      "implementationDisposition": "response shape UNKNOWN"
+    },
+    {
+      "id": "VERSION",
+      "path": "/api/v1/index",
+      "status": "CODE_DISCOVERED_NOT_CAPTURED",
+      "implementationDisposition": "response shape UNKNOWN except client checks optional version"
+    },
+    {
+      "id": "GAME_CONFIG_SET",
+      "path": "/api/v1/game-config/set",
+      "status": "CODE_DISCOVERED_NOT_CAPTURED",
+      "implementationDisposition": "request os/om is code-discovered; response shape UNKNOWN"
+    }
+  ],
+  "stateMachine": {
+    "states": [
+      {"id": "UNAUTHENTICATED", "meaning": "no session token"},
+      {"id": "AUTHENTICATED", "meaning": "auth token and player are available"},
+      {"id": "READY", "meaning": "config loaded and no active Round"},
+      {"id": "ROUND_ACTIVE", "meaning": "a complete generated Round has queued undelivered Steps"},
+      {"id": "SPECIAL_UNKNOWN", "meaning": "free/summon/buy state indicated by fields but protocol not captured; must not be generated"}
+    ],
+    "transitions": [
+      {"from": "UNAUTHENTICATED", "event": "AUTH_VERIFY code=200", "to": "AUTHENTICATED", "outputs": ["player", "session token", "ping", "gc"]},
+      {"from": "AUTHENTICATED", "event": "CONFIG code=200 with no active last", "to": "READY", "outputs": ["bets", "payouts", "currency", "last"]},
+      {"from": "READY", "event": "paid /spin without bm", "to": "ROUND_ACTIVE or READY", "rules": ["generate complete ordinary/cascade Round once", "charge ba once", "deliver Step 1", "ss=1 returns directly to READY"]},
+      {"from": "ROUND_ACTIVE", "event": "automatic /spin", "to": "ROUND_ACTIVE", "guard": "next Step ss=0", "rules": ["deliver next queued Step", "ba=0", "no new generation", "no new debit"]},
+      {"from": "ROUND_ACTIVE", "event": "automatic /spin", "to": "READY", "guard": "next Step ss=1", "rules": ["deliver terminal Step", "credit cumulative rwa once", "clear queue"]},
+      {"from": "READY", "event": "bm or uncaptured special trigger", "to": "SPECIAL_UNKNOWN", "rules": ["safe reject/disable; no guessed output"]}
+    ],
+    "terminationRules": [
+      "ss=1 terminates the current ordinary/cascade Round",
+      "captured cascade terminal Step has wa=0,wmkl=[],ba=0 and retains final rwa",
+      "captured independent LOSS terminates on paid Step 1 with wa=rwa=0 and wmkl=[]",
+      "free/summon termination is UNKNOWN because no adjacent evidence exists"
+    ]
+  },
+  "winAndBoard": {
+    "board": "5 reels x 3 visible rows, rskl length 15, column-major",
+    "symbols": {"ordinary": ["1", "2", "3", "4", "5", "6", "7", "8"], "wild": "9", "scatter": "a"},
+    "ways": {"base": 243, "maximum": 7776, "paylineCount": "NOT_APPLICABLE", "direction": "leftmost adjacent reels"},
+    "payout": "bs * bl * spl[symbol][matchedReels] * ways * cellMultiplierFactor",
+    "wild": "substitutes ordinary symbols; self-pays only on 5 reels per current spl/code",
+    "scatter": "excluded from ordinary Ways evaluation",
+    "cascade": "winning cells identified by wmkl are removed by presentation; next server Step supplies the resulting full rskl"
+  },
+  "roundEvidence": [
+    {"round": 1, "shape": "single-Step LOSS", "steps": ["fixtures/61-Saci/spin/round-001/step-001.response.json"]},
+    {"round": 5, "shape": "five-Step cascade", "ss": [0,0,0,0,1], "wa": [0.3,0.06,0.08,24,0], "rwaTerminal": 24.44, "path": "fixtures/61-Saci/spin/round-005"},
+    {"round": 8, "shape": "three-Step cascade with split movement and wn=1", "ss": [0,0,1], "path": "fixtures/61-Saci/spin/round-008"},
+    {"round": 10, "shape": "two-Step cascade with terminal balance credit", "ss": [0,1], "pb": [1042.44,1071.24], "path": "fixtures/61-Saci/spin/round-010"},
+    {"historyTransferId": "2092938102106611712", "shape": "round-010 bsl adjacent replay", "path": "fixtures/61-Saci/history-view/response.json"}
+  ],
+  "unresolved": [
+    {"mode": "active config.last resume", "disposition": "DO_NOT_IMPLEMENT", "missing": "nonterminal last sample and following Delivery"},
+    {"mode": "symbol split complete lifecycle", "disposition": "DO_NOT_IMPLEMENT", "missing": "creation/transformation/removal adjacency"},
+    {"mode": "Wild vortex summon/fire vortex", "disposition": "DO_NOT_IMPLEMENT", "missing": "full-energy adjacent responses"},
+    {"mode": "free spins", "disposition": "DO_NOT_IMPLEMENT", "missing": "trigger and all Step boundaries"},
+    {"mode": "feature-buy result", "disposition": "DO_NOT_IMPLEMENT", "missing": "bm request/response and full purchased Round"},
+    {"mode": "Redis", "disposition": "UNKNOWN_DISABLED", "missing": "current-game keys/member codec/length evidence"}
+  ],
+  "runtimeProhibitions": [
+    "Never read, rotate, sample, copy or hard-code fixtures/captures as runtime outcomes.",
+    "Winning/cascade Rounds must be generated completely once and then delivered from their own active queue.",
+    "Only a confirmed ordinary paid independent LOSS may be generated in real time while READY.",
+    "Do not generate any partial/unknown special mode.",
+    "Do not treat the constant 20 as a payline count or front-end weights as proven server probabilities."
+  ],
+  "references": {
+    "capabilities": "protocol/61-Saci/game-capabilities.json",
+    "fieldMatrix": "protocol/61-Saci/field-evidence-matrix.json",
+    "handoff": "protocol/61-Saci/protocol-handoff.json"
+  }
+}

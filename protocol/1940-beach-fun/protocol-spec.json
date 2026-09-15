@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 3,
+  "contractVersion": 3,
+  "gameId": 1940,
+  "gid": 1940,
+  "directoryName": "1940-beach-fun",
+  "rulesHash": "sha256:4332cba4e18f7a2dfb8c99d2c5f8969e7650edc3d109f97204af38fb4d1a2af2",
+  "behaviorIds": ["BF-IDENTITY","BF-INIT","BF-PAID","BF-CASCADE","BF-GOLD","BF-FREE","BF-RETRIGGER","BF-HISTORY","BF-REDIS-ROUND","BF-STATIC-LANGUAGE"],
+  "states": ["IDLE","PAID_START","DELIVERING","CACHE_EMPTY"],
+  "stateMachine": {
+    "IDLE": {"activeMember": false, "next": ["PAID_START"]},
+    "PAID_START": {"chargeOnce": true, "claimRedisMemberOnce": true, "next": ["DELIVERING","IDLE"]},
+    "DELIVERING": {"activeMember": true, "chargeOnce": false, "next": ["DELIVERING","IDLE"]},
+    "CACHE_EMPTY": {"httpStatus": 503, "fallback": "FORBIDDEN", "next": ["IDLE"]}
+  },
+  "transport": {
+    "original": "HTTP_FORM_JSON",
+    "endpoints": [
+      "POST /cp/api/v1/auth/verify",
+      "POST /cp/config/initialData",
+      "POST /cp/account/getUserInfo",
+      "POST /cp/single_game.beath/initRoom",
+      "POST /cp/single_game.Beath/gameResult",
+      "POST /cp/goldgame/single_game_user_gold_history",
+      "POST /cp/goldgame/single_game_user_history",
+      "POST /cp/goldgame/beath_user_gold_history",
+      "POST /cp/goldgame/beath_user_history"
+    ],
+    "contractAliases": ["GET /api/init","GET /api/config","POST /api/spin","GET /api/history","GET /api/balance","GET /api/session","GET /health"]
+  },
+  "roundBoundary": "one paid type=1 response plus all props cascades and subsequent type=2 FREE_STEP responses until frees.surplus_times=0",
+  "redis": {"database":15,"ordinaryIndex":"PerKeyList_000001940","specialIndex":"MaryKeyList_000001940","ordinaryList":"BetLog:000001940:{multiplier6}","specialList":"MaryLog:000001940:{multiplier6}","memberCodec":"BF2","claim":"choose WIN/LOSS, choose indexed integer multiplier, read one complete Round member from that bucket"},
+  "runtimeGeneration": false,
+  "runtimeFixtureReplay": false
+}

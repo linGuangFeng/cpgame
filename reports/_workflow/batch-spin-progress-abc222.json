@@ -1,0 +1,1165 @@
+{
+  "account": "abc222",
+  "port": 9333,
+  "port_status": "up",
+  "started_at": "2026-09-02T19:37:41+08:00",
+  "method": "iframe CDP + canvas hotspot grid + Cocos Button emitEvents (btn_go / lower-center)",
+  "games": {
+    "43": {
+      "gid": 43,
+      "name": "Lucky-Wheel",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/43-Lucky-Wheel/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/43-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/lucky-wheel/spin"
+      ]
+    },
+    "42": {
+      "gid": 42,
+      "name": "Lucky-Dragon",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/42-Lucky-Dragon/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/42-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/lucky-dragon/spin"
+      ]
+    },
+    "45": {
+      "gid": 45,
+      "name": "Rio-Carnival",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/45-Rio-Carnival/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/45-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/rio-carnival/spin"
+      ]
+    },
+    "50": {
+      "gid": 50,
+      "name": "Lucky-Cat-II",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/50-Lucky-Cat-II/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/50-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/golden-cat/spin"
+      ]
+    },
+    "56": {
+      "gid": 56,
+      "name": "Crazy-Piggy",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/56-Crazy-Piggy/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/56-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/crazy-piggy/spin"
+      ]
+    },
+    "57": {
+      "gid": 57,
+      "name": "Crazy-777",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/57-Crazy-777/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/57-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/crazy-seven/spin"
+      ]
+    },
+    "16": {
+      "gid": 16,
+      "name": "Jungle-Fruit",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/16-Jungle-Fruit/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/16-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/jungle-fruit/spin"
+      ]
+    },
+    "33": {
+      "gid": 33,
+      "name": "Jungle-Party",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/33-Jungle-Party/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/33-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/jungle-party/spin"
+      ]
+    },
+    "2": {
+      "gid": 2,
+      "name": "Jungle-Kings",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2-Jungle-Kings/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/jungle-kings/spin-v2"
+      ]
+    },
+    "60": {
+      "gid": 60,
+      "name": "Crazy-Birds",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/60-Crazy-Birds/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/60-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/crazy-birds/spin"
+      ]
+    },
+    "8": {
+      "gid": 8,
+      "name": "Jurassic-Jungle",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/8-Jurassic-Jungle/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/8-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/jurassic-jungle/spin"
+      ]
+    },
+    "1": {
+      "gid": 1,
+      "name": "Lucky-Cat",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1-Lucky-Cat/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/lucky-cat/spin"
+      ]
+    },
+    "4": {
+      "gid": 4,
+      "name": "Jungle-Gems",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/4-Jungle-Gems/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/4-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/jungle-gems/spin"
+      ]
+    },
+    "40": {
+      "gid": 40,
+      "name": "Lucky-Santa",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/40-Lucky-Santa/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/40-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/lucky-santa/spin"
+      ]
+    },
+    "44": {
+      "gid": 44,
+      "name": "Lucky-777",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/44-Lucky-777/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/44-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/lucky-seven/spin"
+      ]
+    },
+    "51": {
+      "gid": 51,
+      "name": "Galactic-GO",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/51-Galactic-GO/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/51-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/go-galactic/spin"
+      ]
+    },
+    "52": {
+      "gid": 52,
+      "name": "Cyber-GO",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/52-Cyber-GO/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/52-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/go-cyber/spin"
+      ]
+    },
+    "53": {
+      "gid": 53,
+      "name": "Ocean-GO",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/53-Ocean-GO/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/53-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/go-ocean/spin"
+      ]
+    },
+    "54": {
+      "gid": 54,
+      "name": "Fishing-GO",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/54-Fishing-GO/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/54-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/go-fishing/spin"
+      ]
+    },
+    "1810": {
+      "gid": 1810,
+      "name": "Treasure-Hunt",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1810-Treasure-Hunt/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1810-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "41": {
+      "gid": 41,
+      "name": "Lucky-Panda",
+      "spins": 3,
+      "history_list": true,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/41-Lucky-Panda/spin",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/lucky-panda/spin"
+      ],
+      "status": "ok",
+      "blocker": null
+    },
+    "58": {
+      "gid": 58,
+      "name": "Crazy-Gems",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/58-Crazy-Gems/spin",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/crazy-gems/spin"
+      ],
+      "status": "ok",
+      "blocker": null
+    },
+    "61": {
+      "gid": 61,
+      "name": "Saci",
+      "spins": 17,
+      "history_list": true,
+      "history_view": true,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/61-Saci/spin",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/d-saci/spin"
+      ],
+      "status": "ok",
+      "blocker": null
+    },
+    "1050": {
+      "gid": 1050,
+      "name": "Fortune-Panda",
+      "spins": 3,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1050-Fortune-Panda/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1050-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Panada/gameResult"
+      ]
+    },
+    "32": {
+      "gid": 32,
+      "name": "Jungle-Treasure",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/32-Jungle-Treasure/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/32-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/jungle-treasure/spin"
+      ]
+    },
+    "1090": {
+      "gid": 1090,
+      "name": "Sharpshooter",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1090-Sharpshooter/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1090-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Shooter/gameResult"
+      ]
+    },
+    "1380": {
+      "gid": 1380,
+      "name": "Hidden-Realm",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1380-Hidden-Realm/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1380-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "1400": {
+      "gid": 1400,
+      "name": "Blessing-of-Ice-and-Fire",
+      "spins": 1,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1400-Blessing-of-Ice-and-Fire/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1400-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "1580": {
+      "gid": 1580,
+      "name": "Maya-Treasure",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1580-Maya-Treasure/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1580-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Maya/gameResult"
+      ]
+    },
+    "1670": {
+      "gid": 1670,
+      "name": "Christmas-Gift",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1670-Christmas-Gift/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1670-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "1780": {
+      "gid": 1780,
+      "name": "Glacier-Treasure",
+      "spins": 1,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1780-Glacier-Treasure/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1780-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "1830": {
+      "gid": 1830,
+      "name": "Hotpot",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1830-Hotpot/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1830-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "1910": {
+      "gid": 1910,
+      "name": "Churrasco",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1910-Churrasco/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1910-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "1940": {
+      "gid": 1940,
+      "name": "Beach-Fun",
+      "spins": 1,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1940-Beach-Fun/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1940-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Beath/gameResult"
+      ]
+    },
+    "1990": {
+      "gid": 1990,
+      "name": "Magic-Scroll",
+      "spins": 1,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/1990-Magic-Scroll/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/1990-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2010": {
+      "gid": 2010,
+      "name": "EDM-Mania",
+      "spins": 1,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2010-EDM-Mania/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2010-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2060": {
+      "gid": 2060,
+      "name": "Club-Goddess",
+      "spins": 1,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2060-Club-Goddess/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2060-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2110": {
+      "gid": 2110,
+      "name": "Bee-Workshop",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2110-Bee-Workshop/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2110-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2130": {
+      "gid": 2130,
+      "name": "Farm-Town",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2130-Farm-Town/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2130-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2210": {
+      "gid": 2210,
+      "name": "Wu-Kong",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2210-Wu-Kong/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2210-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.black_myth_wukong/gameResult"
+      ]
+    },
+    "2220": {
+      "gid": 2220,
+      "name": "Halloween-Meow",
+      "spins": 1,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2220-Halloween-Meow/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2220-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2240": {
+      "gid": 2240,
+      "name": "Sunshine-Coast",
+      "spins": 1,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2240-Sunshine-Coast/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2240-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2290": {
+      "gid": 2290,
+      "name": "Samba-Sensation",
+      "spins": 1,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2290-Samba-Sensation/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2290-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2300": {
+      "gid": 2300,
+      "name": "Monster-Slayer",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2300-Monster-Slayer/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2300-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2350": {
+      "gid": 2350,
+      "name": "Curupira",
+      "spins": 4,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2350-Curupira/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2350-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2410": {
+      "gid": 2410,
+      "name": "Electro-Fiesta",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2410-Electro-Fiesta/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2410-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    "2470": {
+      "gid": 2470,
+      "name": "Lucky-Night-Market",
+      "spins": 2,
+      "history_list": false,
+      "history_view": false,
+      "spin_path": "/Volumes/hd/cpgame/fixtures/2470-Lucky-Night-Market/spin",
+      "status": "ok",
+      "blocker": null,
+      "screenshot": "/Users/a1/Downloads/cp-capture-abc222-work/pilot-run/2470-spins2.jpg",
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    }
+  },
+  "note": "driver adapting from capture_saci61/comecar",
+  "updated_at": "2026-09-02T21:36:26+08:00",
+  "finished_at": "2026-09-02T21:36:26+08:00",
+  "batch_note": "RETRY4 wrap: 2300 restored/ok on HD; 2350/2410/2470 fixtures merged from box capture. CDP:9333 abc222 left up (not relaunched). Tokens redacted. /spin|/gameResult.",
+  "ok_count": 47,
+  "history_note": "history-list/view: prior 41 list + 61 list/view. This batch hist poke on 4/40 did not land fixtures.",
+  "this_run": [
+    {
+      "gid": 1090,
+      "name": "Sharpshooter",
+      "status": "ok",
+      "spins": 2,
+      "new": 2,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 1380,
+      "name": "Hidden-Realm",
+      "status": "ok",
+      "spins": 2,
+      "new": 2,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 1400,
+      "name": "Blessing-of-Ice-and-Fire",
+      "status": "ok",
+      "spins": 1,
+      "new": 1,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 1580,
+      "name": "Maya-Treasure",
+      "status": "ok",
+      "spins": 2,
+      "new": 2,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 1670,
+      "name": "Christmas-Gift",
+      "status": "ok",
+      "spins": 2,
+      "new": 2,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 1780,
+      "name": "Glacier-Treasure",
+      "status": "ok",
+      "spins": 1,
+      "new": 1,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 1810,
+      "name": "Treasure-Hunt",
+      "status": "ok",
+      "spins": 2,
+      "new": 2,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 1830,
+      "name": "Hotpot",
+      "status": "ok",
+      "spins": 2,
+      "new": 2,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 1910,
+      "name": "Churrasco",
+      "status": "ok",
+      "spins": 2,
+      "new": 2,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 1940,
+      "name": "Beach-Fun",
+      "status": "ok",
+      "spins": 1,
+      "new": 1,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 1990,
+      "name": "Magic-Scroll",
+      "status": "ok",
+      "spins": 1,
+      "new": 1,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 2010,
+      "name": "EDM-Mania",
+      "status": "ok",
+      "spins": 1,
+      "new": 1,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 2060,
+      "name": "Club-Goddess",
+      "status": "ok",
+      "spins": 1,
+      "new": 1,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 2110,
+      "name": "Bee-Workshop",
+      "status": "ok",
+      "spins": 2,
+      "new": 2,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 2130,
+      "name": "Farm-Town",
+      "status": "ok",
+      "spins": 2,
+      "new": 2,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 2210,
+      "name": "Wu-Kong",
+      "status": "ok",
+      "spins": 2,
+      "new": 2,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 2220,
+      "name": "Halloween-Meow",
+      "status": "ok",
+      "spins": 1,
+      "new": 1,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 2240,
+      "name": "Sunshine-Coast",
+      "status": "ok",
+      "spins": 1,
+      "new": 1,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 2290,
+      "name": "Samba-Sensation",
+      "status": "ok",
+      "spins": 1,
+      "new": 1,
+      "blocker": null,
+      "rc": 0
+    },
+    {
+      "gid": 2300,
+      "name": "Monster-Slayer",
+      "status": "spin_failed",
+      "spins": 0,
+      "new": 0,
+      "blocker": "no_spin_captured",
+      "rc": 0
+    },
+    {
+      "gid": 2350,
+      "name": "Curupira",
+      "status": "spin_failed",
+      "spins": 0,
+      "new": 0,
+      "blocker": "no_spin_captured",
+      "rc": 0
+    },
+    {
+      "gid": 2410,
+      "name": "Electro-Fiesta",
+      "status": "spin_failed",
+      "spins": 0,
+      "new": 0,
+      "blocker": "no_spin_captured",
+      "rc": 0
+    },
+    {
+      "gid": 2470,
+      "name": "Lucky-Night-Market",
+      "status": "spin_failed",
+      "spins": 0,
+      "new": 0,
+      "blocker": "no_spin_captured",
+      "rc": 0
+    }
+  ],
+  "retry4": [
+    {
+      "gid": 2300,
+      "name": "Monster-Slayer",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2350,
+      "name": "Curupira",
+      "spins": 4,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2410,
+      "name": "Electro-Fiesta",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2470,
+      "name": "Lucky-Night-Market",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    }
+  ],
+  "this_run_new": [
+    {
+      "gid": 32,
+      "name": "Jungle-Treasure",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/api/v1/jungle-treasure/spin"
+      ]
+    },
+    {
+      "gid": 1050,
+      "name": "Fortune-Panda",
+      "spins": 3,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Panada/gameResult"
+      ]
+    },
+    {
+      "gid": 1090,
+      "name": "Sharpshooter",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Shooter/gameResult"
+      ]
+    },
+    {
+      "gid": 1380,
+      "name": "Hidden-Realm",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 1400,
+      "name": "Blessing-of-Ice-and-Fire",
+      "spins": 1,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 1580,
+      "name": "Maya-Treasure",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Maya/gameResult"
+      ]
+    },
+    {
+      "gid": 1670,
+      "name": "Christmas-Gift",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 1780,
+      "name": "Glacier-Treasure",
+      "spins": 1,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 1810,
+      "name": "Treasure-Hunt",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 1830,
+      "name": "Hotpot",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 1910,
+      "name": "Churrasco",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 1940,
+      "name": "Beach-Fun",
+      "spins": 1,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Beath/gameResult"
+      ]
+    },
+    {
+      "gid": 1990,
+      "name": "Magic-Scroll",
+      "spins": 1,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2010,
+      "name": "EDM-Mania",
+      "spins": 1,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2060,
+      "name": "Club-Goddess",
+      "spins": 1,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2110,
+      "name": "Bee-Workshop",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2130,
+      "name": "Farm-Town",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2210,
+      "name": "Wu-Kong",
+      "spins": 2,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.black_myth_wukong/gameResult"
+      ]
+    },
+    {
+      "gid": 2220,
+      "name": "Halloween-Meow",
+      "spins": 1,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2240,
+      "name": "Sunshine-Coast",
+      "spins": 1,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2290,
+      "name": "Samba-Sensation",
+      "spins": 1,
+      "status": "ok",
+      "blocker": null,
+      "endpoints": [
+        "https://api.omgapibra.com/cp/single_game.Game/gameResult"
+      ]
+    },
+    {
+      "gid": 2300,
+      "name": "Monster-Slayer",
+      "spins": 0,
+      "status": "spin_failed",
+      "blocker": "v2_single_game.Game_splash_GET_STARTED_not_captured_failfast",
+      "endpoints": []
+    },
+    {
+      "gid": 2350,
+      "name": "Curupira",
+      "spins": 0,
+      "status": "spin_failed",
+      "blocker": "v2_single_game.Game_splash_GET_STARTED_not_captured_failfast",
+      "endpoints": []
+    },
+    {
+      "gid": 2410,
+      "name": "Electro-Fiesta",
+      "spins": 0,
+      "status": "spin_failed",
+      "blocker": "v2_single_game.Game_splash_GET_STARTED_not_captured_failfast",
+      "endpoints": []
+    },
+    {
+      "gid": 2470,
+      "name": "Lucky-Night-Market",
+      "spins": 0,
+      "status": "spin_failed",
+      "blocker": "v2_single_game.Game_splash_GET_STARTED_not_captured_failfast",
+      "endpoints": []
+    }
+  ]
+}

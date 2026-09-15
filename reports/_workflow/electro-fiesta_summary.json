@@ -1,0 +1,14 @@
+{
+  "slug": "electro-fiesta",
+  "folder": "2410-Electro-Fiesta",
+  "gid": 2410,
+  "runId": "20260902T095036758Z",
+  "stage": "/Users/a1/Downloads/electro-fiesta-stage/20260902T095036758Z",
+  "hdDest": "/Volumes/hd/cpgame/resources/2410-Electro-Fiesta/programmatic-http/20260902T095036758Z",
+  "succeeded": 242,
+  "failed": 0,
+  "bytes": 26636893,
+  "total": 242,
+  "captureJson": "/Users/a1/Downloads/cp-capture-abc221-electro-fiesta-urls.json",
+  "gameDirs": []
+}

@@ -1,0 +1,39 @@
+{
+  "source": "USER_MANDATE_CONTROLLER_V3_AND_REDIS_COMPLETE_ROUND_DELIVERY",
+  "scope": "local downstream contract, not original upstream protocol",
+  "host": "192.168.10.3",
+  "port": 6379,
+  "database": 15,
+  "contractVersion": 3,
+  "index": "CyberGo:52:v3:win",
+  "listPattern": "CyberGo:52:v3:round:<integer-multiplier>",
+  "selection": [
+    "SecureRandom win/loss",
+    "uniform existing positive integer multiplier for win, zero for loss",
+    "atomic LPOP of exactly one member",
+    "remaining deliveries only from that member"
+  ],
+  "memberEncoding": "one digit 0..9 per visible cell; 15 cells per board; | between steps",
+  "runtimeGeneration": false,
+  "fixturesAtRuntime": false,
+  "fallback": false,
+  "emptyPool": "503 without charging/advancing",
+  "loaderPrewritesLosses": true,
+  "report": "reports/52-Cyber-GO/redis-pool-integration-20260908.json",
+  "gameId": 52,
+  "rulesHash": "ae4823db63a5e8bd1d1f3a06da3ed6f76c04d761aefce10f29de6f6502885cfa",
+  "status": "BACKEND_VALIDATED",
+  "generationModel": {
+    "status": "EMPIRICAL_MODEL_VALIDATED",
+    "method": "SEQUENTIAL_JOINT_REEL_STATE_COUNTS",
+    "modelFile": "reports/52-Cyber-GO/generation-distribution-model.json",
+    "validationFile": "reports/52-Cyber-GO/generation-model-validation.json",
+    "source": "captures/52-Cyber-GO/rounds.jsonl",
+    "trainingRounds": 1362,
+    "holdoutRounds": 100,
+    "originalReelsOrRtpClaimed": false,
+    "rawSampleFrequenciesSeparateFromGenerated": true
+  },
+  "loaderJar": "generator/52-Cyber-GO/dist/cyber-go-loader.jar",
+  "controllerJar": "server-api/52-Cyber-GO/dist/controller.jar"
+}

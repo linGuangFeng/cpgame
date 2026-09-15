@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 41,
+  "gameName": "Lucky Panda",
+  "directoryName": "41-Lucky-Panda",
+  "status": "PRE_IMPLEMENTATION_SKELETON_NOT_A_PROTOCOL_HANDOFF",
+  "implementationAllowed": false,
+  "knownStaticObservations": {
+    "visibleBoard": {"reels": 6, "rows": 5, "evidence": "screenshots/41-Lucky-Panda/original-main.png"},
+    "minimumBetDisplay": {"value": 0.4, "currencyDisplay": "R$", "evidence": "screenshots/41-Lucky-Panda/original-main.png"},
+    "historyControlVisible": true,
+    "historyDialogOpened": true,
+    "historyRequestPathObserved": "/cp/api/v1/lucky-panda/log-list",
+    "historyReturnCorrectness": "PENDING_AUTHENTICATED_REVERIFICATION"
+  },
+  "knownEntranceEvidence": [
+    {"source": "resources/41-Lucky-Panda/browser-page-assets/initial/manifest.json", "preIsolationEvidence": true, "eligibleForSpinCoverage": false},
+    {"source": "screenshots/41-Lucky-Panda/original-history.png", "preIsolationEvidence": true, "eligibleForSpinCoverage": false}
+  ],
+  "unknownRequiredFields": [
+    "supportedLanguages.codes",
+    "winModel and payline applicability",
+    "symbol identifiers and exact paytable",
+    "paid Round start request matcher",
+    "round correlation field",
+    "adjacent Step transition rules",
+    "terminal state rule",
+    "ordinary LOSS/WIN classification",
+    "every special/reward mode and its trigger",
+    "history response schema and Round correlation",
+    "balance, session, idempotency and reconnect behavior"
+  ],
+  "resumeGate": "CHROME_RELEASED_TO_A followed by visible account verification for abc221"
+}

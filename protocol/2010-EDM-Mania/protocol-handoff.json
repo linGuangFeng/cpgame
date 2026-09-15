@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 2010,
+  "rulesHash": "f2f29ebdf63e2442409c1eb600513a949d149d47b30f5797f2643c0a7a4af061",
+  "status": "IMPLEMENTABLE",
+  "behaviorContracts": [
+    {
+      "id": "BHV-GAME-IDENTITY",
+      "status": "CONFIRMED",
+      "assertions": ["gid remains 2010"]
+    },
+    {
+      "id": "BHV-ORDINARY-LOSS",
+      "status": "CONFIRMED",
+      "completeRoundCount": 317,
+      "assertions": ["type=1", "win_arr empty on terminal page", "frees=false"]
+    },
+    {
+      "id": "BHV-ORDINARY-WIN",
+      "status": "CONFIRMED",
+      "completeRoundCount": 61,
+      "assertions": ["type=1", "sum win_arr.wm matches page tw", "ResultUtil matches captured pr/way_n/way/p_odd"]
+    },
+    {
+      "id": "BHV-FREE-TRIGGER",
+      "status": "CONFIRMED",
+      "completeRoundCount": 14,
+      "assertions": ["type=3", "frees.st=tt in {10,12}", "visible scatter (prop+trl, stacked=1) 4 or 5"]
+    },
+    {
+      "id": "BHV-FREE-CONTINUATION",
+      "status": "CONFIRMED",
+      "completeRoundCount": 3,
+      "assertions": ["type=2", "small_game_type=2", "running tt/st", "retrigger +10 at 4 visible scatters", "terminal frees.st=0"]
+    },
+    {
+      "id": "BHV-FEATURE-BUY",
+      "status": "CONFIRMED",
+      "completeRoundCount": 30,
+      "assertions": ["request bet_type=3", "bet_gold size 0.02 level 10", "charged 300", "type=3", "frees.ba=300", "free chain to st=0"]
+    },
+    {
+      "id": "BHV-HISTORY",
+      "status": "CONFIRMED",
+      "assertions": ["gold_history daily list", "user_history page+day", "ordinary row results.length=1", "free/buy row results=trigger+frees", "buy row bet_gold=300"]
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "BHV-TRL-BALL-MULTIPLIER",
+      "status": "SAMPLE_INSUFFICIENT",
+      "note": "abc223 round-003 step-4: trl ball on a winning page raised m 4→6; step-2 trl ball on a winning page did not. Multiplier uses visible main balls only."
+    }
+  ]
+}

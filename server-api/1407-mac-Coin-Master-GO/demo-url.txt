@@ -1,0 +1,1 @@
+http://127.0.0.1:50000/?ai=coin-master-go-mac&btt=1&gid=55&l=en&language=en&sip=127.0.0.1%3A50000&t=coin-master-go-mac&token=coin-master-go-mac&report=0

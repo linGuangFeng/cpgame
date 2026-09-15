@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "batchId": "B",
+  "result": "PASS_OFFLINE_PREPARATION_ONLY",
+  "browserUsed": false,
+  "completionClaim": false,
+  "results": [
+    {
+      "gameId": 42,
+      "directoryName": "42-Lucky-Dragon",
+      "rawIdentity": "PASS",
+      "tenCategoryAudit": "PASS",
+      "draftRuleBoundary": "PASS",
+      "formalOriginalHttpPaidRoundStarts": 0,
+      "formalCompletedRounds": 0
+    },
+    {
+      "gameId": 43,
+      "directoryName": "43-Lucky-Wheel",
+      "rawIdentity": "PASS",
+      "tenCategoryAudit": "PASS",
+      "draftRuleBoundary": "PASS",
+      "formalOriginalHttpPaidRoundStarts": 0,
+      "formalCompletedRounds": 0
+    },
+    {
+      "gameId": 45,
+      "directoryName": "45-Rio-Carnival",
+      "rawIdentity": "PASS",
+      "tenCategoryAudit": "PASS",
+      "draftRuleBoundary": "PASS",
+      "formalOriginalHttpPaidRoundStarts": 0,
+      "formalCompletedRounds": 0
+    },
+    {
+      "gameId": 50,
+      "directoryName": "50-Lucky-Cat-II",
+      "rawIdentity": "PASS",
+      "tenCategoryAudit": "PASS",
+      "draftRuleBoundary": "PASS",
+      "formalOriginalHttpPaidRoundStarts": 0,
+      "formalCompletedRounds": 0
+    }
+  ],
+  "uiHistoryEvidence42": {
+    "paidRoundStarts": 10,
+    "ordinaryLossRounds": 9,
+    "ordinaryWinRounds": 1,
+    "countedAsFormalOriginalHttp": false
+  },
+  "browserReadiness43": {
+    "exactExtensionInstanceConnected": true,
+    "ownHmsTabFound": true,
+    "accountVerified": false,
+    "minimumBetObserved": false,
+    "realSpinAttempted": false,
+    "countedAsFormalOriginalHttp": false
+  },
+  "blocker": "WAITING_EXPLICIT_RELEASE_BROWSER_TO_B_FOR_ORIGINAL_AUTHORIZED_HTTP_AND_RULE_EVIDENCE"
+}

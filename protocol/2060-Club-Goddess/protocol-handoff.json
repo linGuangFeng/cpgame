@@ -1,0 +1,1414 @@
+{
+  "schemaVersion": "2.0",
+  "gameId": 2060,
+  "directoryName": "2060-Club-Goddess",
+  "rulesVersion": "2060-protocol-r3",
+  "rulesHash": "sha256:cd9e5bac75dcaee42e78e1298a4e896b3a2b01db98c28027a50d7d3df771016b",
+  "behaviorIds": [
+    "BHV-IDENTITY",
+    "BHV-HTTP-CODEC-SIGNATURE",
+    "BHV-BOOTSTRAP-AUTH-INIT",
+    "BHV-INIT-RESUME-SNAPSHOT",
+    "BHV-BET-MODEL",
+    "BHV-BOARD-SYMBOLS",
+    "BHV-WAYS-BASE-WIN",
+    "BHV-BASE-LOSS",
+    "BHV-PAID-LEDGER",
+    "BHV-HISTORY-AGGREGATE",
+    "BHV-HISTORY-ORDER-STEPS",
+    "BHV-WILD-SUBSTITUTION",
+    "BHV-BUY-FEATURE-ABSENT",
+    "BHV-LANGUAGE-ASSETS",
+    "BHV-FREE-SPINS-TRIGGER",
+    "BHV-FREE-WILD-MULTIPLIER",
+    "BHV-FREE-STEP-STATE-MACHINE",
+    "BHV-REQUEST-RECOVERY",
+    "BHV-RTP-DISCLOSURE",
+    "BHV-REDIS-COMPLETE-ROUND"
+  ],
+  "stateDefinitions": [
+    "WAIT_INIT_DATA",
+    "IDLE",
+    "AUTO_IDLE",
+    "SCROLL",
+    "SHOW_WIN_RESULT",
+    "FREE_IDLE"
+  ],
+  "status": "ACCEPTED_WITH_FREE_SAMPLE_INSUFFICIENT",
+  "evidenceInventory": [
+    {
+      "id": "EV-RULE-SOURCE-MANIFEST",
+      "source": "protocol/2060-Club-Goddess/rules-source-manifest.json",
+      "kind": "SOURCE_DIGEST",
+      "behaviorIds": [
+        "BHV-IDENTITY",
+        "BHV-HTTP-CODEC-SIGNATURE",
+        "BHV-BOOTSTRAP-AUTH-INIT",
+        "BHV-INIT-RESUME-SNAPSHOT",
+        "BHV-BET-MODEL",
+        "BHV-BOARD-SYMBOLS",
+        "BHV-WAYS-BASE-WIN",
+        "BHV-BASE-LOSS",
+        "BHV-PAID-LEDGER",
+        "BHV-HISTORY-AGGREGATE",
+        "BHV-HISTORY-ORDER-STEPS",
+        "BHV-WILD-SUBSTITUTION",
+        "BHV-BUY-FEATURE-ABSENT",
+        "BHV-LANGUAGE-ASSETS",
+        "BHV-FREE-SPINS-TRIGGER",
+        "BHV-FREE-WILD-MULTIPLIER",
+        "BHV-FREE-STEP-STATE-MACHINE",
+        "BHV-REQUEST-RECOVERY",
+        "BHV-RTP-DISCLOSURE"
+      ]
+    },
+    {
+      "id": "EV-ID-NAME",
+      "source": "fixtures/2060-Club-Goddess/oracle/id-name-evidence.json",
+      "kind": "CAPTURED_CATALOG_AND_TITLE_ORACLE",
+      "behaviorIds": [
+        "BHV-IDENTITY"
+      ]
+    },
+    {
+      "id": "EV-FIRST-LOAD-TITLE",
+      "source": "screenshots/2060-Club-Goddess/first-load-pt-br.png",
+      "kind": "SCREENSHOT",
+      "behaviorIds": [
+        "BHV-IDENTITY",
+        "BHV-BOOTSTRAP-AUTH-INIT"
+      ]
+    },
+    {
+      "id": "EV-INITIAL-DATA",
+      "source": "captures/2060-Club-Goddess/network/0058-api.omgapibra.com_cp_config_initialData.json",
+      "kind": "RAW_REQUEST_RESPONSE",
+      "behaviorIds": [
+        "BHV-IDENTITY",
+        "BHV-HTTP-CODEC-SIGNATURE",
+        "BHV-BOOTSTRAP-AUTH-INIT",
+        "BHV-BET-MODEL",
+        "BHV-BUY-FEATURE-ABSENT",
+        "BHV-LANGUAGE-ASSETS"
+      ]
+    },
+    {
+      "id": "EV-USER-INFO",
+      "source": "captures/2060-Club-Goddess/network/0071-api.omgapibra.com_cp_account_getUserInfo.json",
+      "kind": "RAW_REQUEST_RESPONSE_CONTAINS_SENSITIVE_SESSION_DATA",
+      "behaviorIds": [
+        "BHV-HTTP-CODEC-SIGNATURE",
+        "BHV-BOOTSTRAP-AUTH-INIT",
+        "BHV-PAID-LEDGER"
+      ]
+    },
+    {
+      "id": "EV-INIT-ROOM",
+      "source": "captures/2060-Club-Goddess/network/0127-api.omgapibra.com_cp_single_game.Game_initRoom.json",
+      "kind": "RAW_REQUEST_RESPONSE_CONTAINS_SENSITIVE_SESSION_DATA",
+      "behaviorIds": [
+        "BHV-HTTP-CODEC-SIGNATURE",
+        "BHV-BOOTSTRAP-AUTH-INIT",
+        "BHV-INIT-RESUME-SNAPSHOT",
+        "BHV-BOARD-SYMBOLS"
+      ]
+    },
+    {
+      "id": "EV-BASE-LOSS",
+      "source": "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json",
+      "kind": "SANITIZED_INDEPENDENT_ORACLE",
+      "behaviorIds": [
+        "BHV-HTTP-CODEC-SIGNATURE",
+        "BHV-BET-MODEL",
+        "BHV-BOARD-SYMBOLS",
+        "BHV-BASE-LOSS",
+        "BHV-PAID-LEDGER"
+      ]
+    },
+    {
+      "id": "EV-BASE-WIN",
+      "source": "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json",
+      "kind": "SANITIZED_INDEPENDENT_ORACLE",
+      "behaviorIds": [
+        "BHV-BOARD-SYMBOLS",
+        "BHV-WAYS-BASE-WIN",
+        "BHV-PAID-LEDGER"
+      ]
+    },
+    {
+      "id": "EV-PAID-ROUND-INDEX",
+      "source": "captures/2060-Club-Goddess/spin-index.jsonl",
+      "kind": "TEN_REAL_PAID_ROUND_STARTS",
+      "behaviorIds": [
+        "BHV-BASE-LOSS",
+        "BHV-WAYS-BASE-WIN",
+        "BHV-PAID-LEDGER",
+        "BHV-HISTORY-AGGREGATE",
+        "BHV-HISTORY-ORDER-STEPS",
+        "BHV-FREE-SPINS-TRIGGER",
+        "BHV-FREE-WILD-MULTIPLIER",
+        "BHV-FREE-STEP-STATE-MACHINE"
+      ]
+    },
+    {
+      "id": "EV-HISTORY-AGGREGATE",
+      "source": "captures/2060-Club-Goddess/network/0201-api.omgapibra.com_cp_goldgame_single_game_user_gold_history.json",
+      "kind": "RAW_REQUEST_RESPONSE_CONTAINS_SENSITIVE_SESSION_DATA",
+      "behaviorIds": [
+        "BHV-HTTP-CODEC-SIGNATURE",
+        "BHV-HISTORY-AGGREGATE",
+        "BHV-HISTORY-ORDER-STEPS",
+        "BHV-PAID-LEDGER"
+      ]
+    },
+    {
+      "id": "EV-HISTORY-DETAIL",
+      "source": "captures/2060-Club-Goddess/network/0202-api.omgapibra.com_cp_goldgame_single_game_user_history.json",
+      "kind": "RAW_REQUEST_RESPONSE_CONTAINS_SENSITIVE_SESSION_DATA",
+      "behaviorIds": [
+        "BHV-HTTP-CODEC-SIGNATURE",
+        "BHV-HISTORY-ORDER-STEPS",
+        "BHV-PAID-LEDGER",
+        "BHV-FREE-STEP-STATE-MACHINE"
+      ]
+    },
+    {
+      "id": "EV-NETWORK-MANIFEST",
+      "source": "captures/2060-Club-Goddess/network-manifest.json",
+      "kind": "ORDERED_NETWORK_INDEX",
+      "behaviorIds": [
+        "BHV-BOOTSTRAP-AUTH-INIT",
+        "BHV-HISTORY-ORDER-STEPS"
+      ]
+    },
+    {
+      "id": "EV-GAME-FRONTEND",
+      "source": "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+      "kind": "CURRENT_GAME_FRONTEND_DECISION_CODE",
+      "behaviorIds": [
+        "BHV-INIT-RESUME-SNAPSHOT",
+        "BHV-BET-MODEL",
+        "BHV-BOARD-SYMBOLS",
+        "BHV-WAYS-BASE-WIN",
+        "BHV-BASE-LOSS",
+        "BHV-PAID-LEDGER",
+        "BHV-HISTORY-AGGREGATE",
+        "BHV-HISTORY-ORDER-STEPS",
+        "BHV-WILD-SUBSTITUTION",
+        "BHV-FREE-SPINS-TRIGGER",
+        "BHV-FREE-WILD-MULTIPLIER",
+        "BHV-FREE-STEP-STATE-MACHINE",
+        "BHV-REQUEST-RECOVERY"
+      ]
+    },
+    {
+      "id": "EV-COMMON-FRONTEND",
+      "source": "publish/2060-Club-Goddess/assets/main/index.f8fbc.js",
+      "kind": "CURRENT_COMMON_HTTP_AND_LANGUAGE_CODE",
+      "behaviorIds": [
+        "BHV-HTTP-CODEC-SIGNATURE",
+        "BHV-BOOTSTRAP-AUTH-INIT",
+        "BHV-LANGUAGE-ASSETS",
+        "BHV-REQUEST-RECOVERY"
+      ]
+    },
+    {
+      "id": "EV-ENDPOINT-BASE",
+      "source": "publish/2060-Club-Goddess/versionconfig.js",
+      "kind": "ENTRY_CONFIGURATION_CODE",
+      "behaviorIds": [
+        "BHV-HTTP-CODEC-SIGNATURE",
+        "BHV-BOOTSTRAP-AUTH-INIT"
+      ]
+    },
+    {
+      "id": "EV-MD5",
+      "source": "publish/2060-Club-Goddess/src/assets/Common/Lib/MD5Tool.076fa.js",
+      "kind": "SIGNING_PRIMITIVE_CODE",
+      "behaviorIds": [
+        "BHV-HTTP-CODEC-SIGNATURE"
+      ]
+    },
+    {
+      "id": "EV-RULE-PAYTABLE-WILD",
+      "source": "screenshots/2060-Club-Goddess/rules-page-1-pt-br.png",
+      "kind": "RULE_AND_PAYTABLE_SCREENSHOT",
+      "behaviorIds": [
+        "BHV-BOARD-SYMBOLS",
+        "BHV-WAYS-BASE-WIN",
+        "BHV-WILD-SUBSTITUTION"
+      ]
+    },
+    {
+      "id": "EV-RULE-FREE-TRIGGER",
+      "source": "screenshots/2060-Club-Goddess/rules-page-6-pt-br.png",
+      "kind": "RULE_SCREENSHOT",
+      "behaviorIds": [
+        "BHV-FREE-SPINS-TRIGGER",
+        "BHV-FREE-STEP-STATE-MACHINE"
+      ]
+    },
+    {
+      "id": "EV-RULE-FREE-MULTIPLIER",
+      "source": "screenshots/2060-Club-Goddess/rules-page-17-pt-br.png",
+      "kind": "RULE_SCREENSHOT",
+      "behaviorIds": [
+        "BHV-FREE-WILD-MULTIPLIER",
+        "BHV-FREE-STEP-STATE-MACHINE"
+      ]
+    },
+    {
+      "id": "EV-RULE-WAYS",
+      "source": "screenshots/2060-Club-Goddess/rules-page-23-pt-br.png",
+      "kind": "RULE_SCREENSHOT",
+      "behaviorIds": [
+        "BHV-WAYS-BASE-WIN"
+      ]
+    },
+    {
+      "id": "EV-RULE-RTP",
+      "source": "screenshots/2060-Club-Goddess/rules-page-26-pt-br.png",
+      "kind": "RULE_SCREENSHOT",
+      "behaviorIds": [
+        "BHV-WAYS-BASE-WIN",
+        "BHV-RTP-DISCLOSURE"
+      ]
+    },
+    {
+      "id": "EV-MAIN-UI",
+      "source": "screenshots/2060-Club-Goddess/main-ui-pt-br.png",
+      "kind": "SCREENSHOT",
+      "behaviorIds": [
+        "BHV-IDENTITY",
+        "BHV-BUY-FEATURE-ABSENT"
+      ]
+    },
+    {
+      "id": "EV-LANGUAGE-INVENTORY",
+      "source": "reports/2060-Club-Goddess/language-inventory.json",
+      "kind": "LANGUAGE_ENUMERATION_AND_FIRST_LOAD_REPORT",
+      "behaviorIds": [
+        "BHV-LANGUAGE-ASSETS"
+      ]
+    },
+    {
+      "id": "EV-SOURCE-MANIFEST",
+      "source": "resources/2060-Club-Goddess/source-manifest.json",
+      "kind": "RAW_RESOURCE_ARCHIVE_MANIFEST",
+      "behaviorIds": [
+        "BHV-LANGUAGE-ASSETS"
+      ]
+    },
+    {
+      "id": "EV-GAME-BUNDLE-CONFIG",
+      "source": "publish/2060-Club-Goddess/assets/Game2060/config.88d42.json",
+      "kind": "BUNDLE_CONFIGURATION",
+      "behaviorIds": [
+        "BHV-LANGUAGE-ASSETS"
+      ],
+      "disposition": "NO_RULE_WEIGHTS_FOUND",
+      "reason": "The config enumerates assets but contains no evidenced reel strips or symbol weights."
+    },
+    {
+      "id": "EV-RESOURCE-BUNDLE-CONFIG",
+      "source": "publish/2060-Club-Goddess/assets/resources/config.6618e.json",
+      "kind": "BUNDLE_CONFIGURATION",
+      "behaviorIds": [
+        "BHV-LANGUAGE-ASSETS"
+      ]
+    },
+    {
+      "id": "EV-SCENARIO-COVERAGE",
+      "source": "reports/2060-Club-Goddess/scenario-coverage.json",
+      "kind": "CAPTURE_STOP_AND_MISSING_MODE_REPORT",
+      "behaviorIds": [
+        "BHV-BASE-LOSS",
+        "BHV-WAYS-BASE-WIN",
+        "BHV-HISTORY-AGGREGATE",
+        "BHV-FREE-SPINS-TRIGGER",
+        "BHV-FREE-WILD-MULTIPLIER",
+        "BHV-FREE-STEP-STATE-MACHINE"
+      ]
+    },
+    {
+      "id": "EV-ACTIVITY-EMPTY",
+      "source": "captures/2060-Club-Goddess/network/0174-api.omgapibra.com_cp_activity_getActivity.json",
+      "kind": "RAW_REQUEST_RESPONSE_CONTAINS_SENSITIVE_SESSION_DATA",
+      "behaviorIds": [],
+      "disposition": "EXCLUDED_FROM_GAME_SPECIAL_MODES",
+      "reason": "It is a generic promotional free-bet wrapper, returned an empty act_list, and is distinct from Scatter-triggered Free Spins."
+    },
+    {
+      "id": "EV-GENERIC-BINARY-PROTOCOL",
+      "source": "publish/2060-Club-Goddess/src/assets/Common/Lib/protocol.060d7.js",
+      "kind": "GENERIC_LIBRARY_CODE",
+      "behaviorIds": [],
+      "disposition": "NOT_USED_BY_OBSERVED_GAMEPLAY",
+      "reason": "All current Club Goddess init, spin and History traffic was HTTPS form POST plus JSON."
+    },
+    {
+      "id": "EV-TELEMETRY",
+      "source": "captures/2060-Club-Goddess/network/0183-api.omgapibra.com_api_report_timing.json",
+      "kind": "TELEMETRY_REQUEST",
+      "behaviorIds": [],
+      "disposition": "NON_GAMEPLAY_OPTIONAL_TELEMETRY",
+      "reason": "The timing ping carries no game result, state transition or rule field and receives an empty body."
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "BHV-IDENTITY",
+      "category": "IDENTITY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-ID-NAME",
+        "EV-FIRST-LOAD-TITLE",
+        "EV-MAIN-UI",
+        "EV-INITIAL-DATA"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Game id is 2060."
+        ],
+        "stateFields": [
+          "gameId=2060",
+          "directoryName=2060-Club-Goddess",
+          "displayName=Club Goddess"
+        ],
+        "transitionRules": [
+          "Do not rename from initialData.data.game_info.name='Magic Scroll'; that field is recorded as conflicting stale metadata."
+        ],
+        "outputs": [
+          "Management and runtime metadata expose Club Goddess for id 2060."
+        ],
+        "terminationRules": [
+          "Identity resolution is terminal once catalog mapping and title art agree."
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-ID-NAME",
+          "EV-FIRST-LOAD-TITLE"
+        ],
+        "assertions": [
+          "gameId == 2060",
+          "displayName == 'Club Goddess'",
+          "directoryName == '2060-Club-Goddess'"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-HTTP-CODEC-SIGNATURE",
+      "category": "TRANSPORT_CODEC",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-ENDPOINT-BASE",
+        "EV-COMMON-FRONTEND",
+        "EV-MD5",
+        "EV-INITIAL-DATA",
+        "EV-BASE-LOSS",
+        "EV-HISTORY-AGGREGATE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "sip or local API base is known",
+          "request object contains only original business fields before signing"
+        ],
+        "stateFields": [
+          "ApiURL",
+          "language",
+          "expireMillis",
+          "signapt",
+          "session token"
+        ],
+        "transitionRules": [
+          "Inject actual local language",
+          "Canonicalize original keys in lexical order",
+          "Compute MD5(secret + expire + canonical + 'aptsignature')",
+          "Append signapt and expire",
+          "POST form body; parse plain JSON response"
+        ],
+        "outputs": [
+          "application/x-www-form-urlencoded request",
+          "UTF-8 JSON response object"
+        ],
+        "terminationRules": [
+          "code=0 passes data to game callback",
+          "nonzero code follows common error handling"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-COMMON-FRONTEND",
+          "EV-MD5",
+          "EV-INITIAL-DATA"
+        ],
+        "assertions": [
+          "No application encryption is added",
+          "Generic protocol.060d7 is not used",
+          "Captured form includes language, signapt and expire",
+          "No captured credential value is embedded in deliverables"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-BOOTSTRAP-AUTH-INIT",
+      "category": "SESSION_BOOTSTRAP",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EV-NETWORK-MANIFEST",
+        "EV-INITIAL-DATA",
+        "EV-USER-INFO",
+        "EV-INIT-ROOM",
+        "EV-FIRST-LOAD-TITLE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Launch URL supplies gid=2060, sip, ai, language and launch token."
+        ],
+        "stateFields": [
+          "game configuration",
+          "resolved language",
+          "server clock offset",
+          "authenticated session token",
+          "balance",
+          "current result snapshot"
+        ],
+        "transitionRules": [
+          "POST initialData",
+          "POST getUserInfo and install returned session/balance",
+          "POST initRoom with authenticated session",
+          "Install returned result-shaped snapshot before enabling play"
+        ],
+        "outputs": [
+          "Initialized game configuration",
+          "Authenticated member state",
+          "Initial 5x3 board/result snapshot"
+        ],
+        "terminationRules": [
+          "Bootstrap completes after successful initRoom and asset load",
+          "Any required request failure leaves gameplay disabled"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-NETWORK-MANIFEST",
+          "EV-INITIAL-DATA",
+          "EV-USER-INFO",
+          "EV-INIT-ROOM"
+        ],
+        "assertions": [
+          "API order is initialData -> getUserInfo -> initRoom",
+          "getUserInfo balance equals initRoom end_gold in capture",
+          "initRoom oid='0' is not indexed as a paid Round"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "step": 1,
+            "source": "captures/2060-Club-Goddess/network/0058-api.omgapibra.com_cp_config_initialData.json",
+            "seq": 58
+          },
+          {
+            "step": 2,
+            "source": "captures/2060-Club-Goddess/network/0071-api.omgapibra.com_cp_account_getUserInfo.json",
+            "seq": 71
+          },
+          {
+            "step": 3,
+            "source": "captures/2060-Club-Goddess/network/0127-api.omgapibra.com_cp_single_game.Game_initRoom.json",
+            "seq": 127
+          }
+        ]
+      }
+    },
+    {
+      "id": "BHV-INIT-RESUME-SNAPSHOT",
+      "category": "STATE_RESUME",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-INIT-ROOM",
+        "EV-GAME-FRONTEND"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Authenticated session exists."
+        ],
+        "stateFields": [
+          "type",
+          "oid",
+          "props",
+          "frees",
+          "start_gold",
+          "end_gold",
+          "total_win"
+        ],
+        "transitionRules": [
+          "Return a gameResult-shaped snapshot",
+          "Client stores it as current result",
+          "type/frees fields determine base or resumable special presentation"
+        ],
+        "outputs": [
+          "Current board and result state without creating a paid Round index entry"
+        ],
+        "terminationRules": [
+          "Captured type=1, oid='0', frees.st=0 snapshot settles in IDLE"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-INIT-ROOM",
+          "EV-GAME-FRONTEND"
+        ],
+        "assertions": [
+          "props.prop length == 15",
+          "oid == '0' for captured first load",
+          "end_gold == authenticated balance",
+          "init snapshot is excluded from spin-index"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-BET-MODEL",
+      "category": "BET_CONFIGURATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-INITIAL-DATA",
+        "EV-GAME-FRONTEND",
+        "EV-BASE-LOSS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "initialData bet size list is loaded."
+        ],
+        "stateFields": [
+          "betSize",
+          "level",
+          "baseBetFactor=30",
+          "chargedStake"
+        ],
+        "transitionRules": [
+          "Select betSize and level",
+          "chargedStake = betSize * level * 30",
+          "Send bet_gold as betSize and level separately"
+        ],
+        "outputs": [
+          "Captured selection betSize=0.01, level=10, chargedStake=3"
+        ],
+        "terminationRules": [
+          "Reject a combination not represented by current configuration/validated engine constraints"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-INITIAL-DATA",
+          "EV-GAME-FRONTEND",
+          "EV-BASE-LOSS"
+        ],
+        "assertions": [
+          "0.01 * 10 * 30 == 3",
+          "30 is baseBetFactor",
+          "paylineCount is not applicable",
+          "minimum accepted total below 3 is not claimed without a server sample"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-BOARD-SYMBOLS",
+      "category": "BOARD_MODEL",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-GAME-FRONTEND",
+        "EV-RULE-PAYTABLE-WILD",
+        "EV-BASE-LOSS",
+        "EV-BASE-WIN"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "A result props.prop array is available."
+        ],
+        "stateFields": [
+          "5 columns",
+          "3 visible rows",
+          "15 cells",
+          "column-major positions",
+          "symbol IDs 1..10"
+        ],
+        "transitionRules": [
+          "Map position to reel with floor(position/3)",
+          "Map 1..8 regular, 9 Scatter, 10 Wild"
+        ],
+        "outputs": [
+          "A 5x3 visible board"
+        ],
+        "terminationRules": [
+          "Reject props.prop length != 15 or symbol IDs outside current evidence"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-GAME-FRONTEND",
+          "EV-RULE-PAYTABLE-WILD",
+          "EV-BASE-WIN"
+        ],
+        "assertions": [
+          "props.prop length == 15",
+          "floor(pos/3) yields five reels",
+          "wp values reference symbol IDs"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-WAYS-BASE-WIN",
+      "category": "WIN_EVALUATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-RULE-WAYS",
+        "EV-RULE-PAYTABLE-WILD",
+        "EV-GAME-FRONTEND",
+        "EV-BASE-WIN"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "type=1 base board",
+          "5x3 board",
+          "bet and level known"
+        ],
+        "stateFields": [
+          "win_arr[].wp",
+          "odd",
+          "pos_arr",
+          "ways",
+          "tw",
+          "props.tw",
+          "total_win"
+        ],
+        "transitionRules": [
+          "Find matching regular symbol/Wild substitutions from reel 1 across adjacent reels",
+          "Require at least 3 reels",
+          "ways is product of match counts",
+          "line award = bet * level * odd * ways",
+          "Sum awards into props.tw and total_win"
+        ],
+        "outputs": [
+          "One win_arr item per winning symbol and a gross total"
+        ],
+        "terminationRules": [
+          "No additional reel match ends that symbol's Ways chain",
+          "All winning symbols evaluated ends the step"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-RULE-WAYS",
+          "EV-RULE-PAYTABLE-WILD",
+          "EV-BASE-WIN"
+        ],
+        "assertions": [
+          "symbol 6 ways == 8 and tw == 6.4",
+          "symbol 1 ways == 12 and tw == 180",
+          "sum win_arr.tw == 186.4",
+          "paylineCount is null/NOT_APPLICABLE"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-BASE-LOSS",
+      "category": "ORDINARY_RESULT",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-BASE-LOSS",
+        "EV-PAID-ROUND-INDEX",
+        "EV-GAME-FRONTEND"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Normal paid request",
+          "Generated board has no Ways win",
+          "Scatter count < 3"
+        ],
+        "stateFields": [
+          "type=1",
+          "small_game_type=0",
+          "props.tw=0",
+          "win_arr=[]",
+          "total_win=0",
+          "frees.st=0"
+        ],
+        "transitionRules": [
+          "Charge paid stake once",
+          "Return fresh independently validated losing board",
+          "Do not create continuation state"
+        ],
+        "outputs": [
+          "Terminal ordinary LOSS"
+        ],
+        "terminationRules": [
+          "Response is the sole step for its paid oid"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-BASE-LOSS",
+          "EV-PAID-ROUND-INDEX"
+        ],
+        "assertions": [
+          "win_arr is empty",
+          "total_win == 0",
+          "change_gold == -bet_gold",
+          "frees.st == 0",
+          "ResultUtil independently confirms no win and no special trigger"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-PAID-LEDGER",
+      "category": "BALANCE_STATE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EV-USER-INFO",
+        "EV-BASE-LOSS",
+        "EV-BASE-WIN",
+        "EV-PAID-ROUND-INDEX",
+        "EV-HISTORY-AGGREGATE",
+        "EV-HISTORY-DETAIL"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Member balance is loaded",
+          "A paid type=1 result is committed exactly once"
+        ],
+        "stateFields": [
+          "start_gold",
+          "bet_gold",
+          "total_win",
+          "change_gold",
+          "end_gold",
+          "oid"
+        ],
+        "transitionRules": [
+          "change_gold = total_win - bet_gold",
+          "end_gold = start_gold + change_gold",
+          "Next paid result start_gold equals previous terminal end_gold",
+          "History totals reflect committed paid results"
+        ],
+        "outputs": [
+          "Atomic paid ledger transition and updated balance"
+        ],
+        "terminationRules": [
+          "Commit once per unique paid oid",
+          "Do not charge init snapshots or type=2 Free steps"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-PAID-ROUND-INDEX",
+          "EV-HISTORY-AGGREGATE",
+          "EV-HISTORY-DETAIL"
+        ],
+        "assertions": [
+          "Every captured paid end equals start-bet+win",
+          "Paid rounds 1..9 chain 1000 to 973",
+          "Round 10 ends 1156.4",
+          "History total stake == 30",
+          "History net == 156.4"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "step": 1,
+            "source": "captures/2060-Club-Goddess/network/0182-api.omgapibra.com_cp_single_game.Game_gameResult.json",
+            "balanceTransition": "1000 -> 997"
+          },
+          {
+            "step": 2,
+            "source": "captures/2060-Club-Goddess/network/0186-api.omgapibra.com_cp_single_game.Game_gameResult.json",
+            "balanceTransition": "997 -> 994"
+          },
+          {
+            "step": 9,
+            "source": "captures/2060-Club-Goddess/network/0195-api.omgapibra.com_cp_single_game.Game_gameResult.json",
+            "balanceTransition": "976 -> 973"
+          },
+          {
+            "step": 10,
+            "source": "captures/2060-Club-Goddess/network/0196-api.omgapibra.com_cp_single_game.Game_gameResult.json",
+            "balanceTransition": "973 -> 1156.4"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BHV-HISTORY-AGGREGATE",
+      "category": "HISTORY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-HISTORY-AGGREGATE",
+        "EV-PAID-ROUND-INDEX",
+        "EV-GAME-FRONTEND"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Authenticated member and gid=2060."
+        ],
+        "stateFields": [
+          "list[].day",
+          "list[].bet_gold",
+          "list[].change_gold",
+          "statistics.total_bet_gold",
+          "statistics.total_change_gold"
+        ],
+        "transitionRules": [
+          "Aggregate committed paid orders by day",
+          "Return seven day buckets in capture-compatible order",
+          "Return total statistics"
+        ],
+        "outputs": [
+          "History aggregate response"
+        ],
+        "terminationRules": [
+          "Response completes in one request"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-HISTORY-AGGREGATE",
+          "EV-PAID-ROUND-INDEX"
+        ],
+        "assertions": [
+          "Captured active day bet_gold == 30",
+          "Captured active day change_gold == 156.4",
+          "statistics equal active-day totals for captured range"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-HISTORY-ORDER-STEPS",
+      "category": "HISTORY_ROUND_STEPS",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EV-HISTORY-AGGREGATE",
+        "EV-HISTORY-DETAIL",
+        "EV-PAID-ROUND-INDEX",
+        "EV-GAME-FRONTEND"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "A day bucket has been selected",
+          "Committed paid orders exist"
+        ],
+        "stateFields": [
+          "oid",
+          "order_id",
+          "results[]",
+          "result",
+          "time",
+          "start_gold",
+          "end_gold",
+          "type",
+          "frees"
+        ],
+        "transitionRules": [
+          "Request detail with selected day and page",
+          "Group adjacent steps under one paid order",
+          "For confirmed ordinary rounds results.length=1 and results[0] mirrors the terminal result",
+          "order_id = oid + '-2060'"
+        ],
+        "outputs": [
+          "Paged order list with complete result-step grouping"
+        ],
+        "terminationRules": [
+          "Ordinary result is terminal when results.length=1 and frees.st=0",
+          "Special multi-step grouping remains disabled until runtime evidence exists"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-HISTORY-DETAIL",
+          "EV-PAID-ROUND-INDEX"
+        ],
+        "assertions": [
+          "Ten captured paid oid values appear as ten History orders",
+          "Each captured ordinary order has results.length==1",
+          "Top-level result mirrors results[0].result",
+          "Latest winning order matches 186.4 oracle"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "step": 1,
+            "source": "captures/2060-Club-Goddess/network/0201-api.omgapibra.com_cp_goldgame_single_game_user_gold_history.json",
+            "seq": 201,
+            "meaning": "select aggregate day"
+          },
+          {
+            "step": 2,
+            "source": "captures/2060-Club-Goddess/network/0202-api.omgapibra.com_cp_goldgame_single_game_user_history.json",
+            "seq": 202,
+            "meaning": "load orders and results[]"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BHV-WILD-SUBSTITUTION",
+      "category": "SYMBOL_RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-RULE-PAYTABLE-WILD",
+        "EV-GAME-FRONTEND"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Symbol 10 is present on reel 2, 3 or 4."
+        ],
+        "stateFields": [
+          "wildSymbolId=10",
+          "allowed reels 2/3/4",
+          "Scatter symbolId=9"
+        ],
+        "transitionRules": [
+          "Wild substitutes for regular symbols",
+          "Wild never substitutes for Scatter",
+          "Wild must not appear on reels 1 or 5"
+        ],
+        "outputs": [
+          "Ways evaluation with legal Wild substitution"
+        ],
+        "terminationRules": [
+          "Reject a board placing Wild outside evidenced reels"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-RULE-PAYTABLE-WILD"
+        ],
+        "assertions": [
+          "Wild substitutes all except Scatter",
+          "Wild allowed reels exactly [2,3,4]",
+          "No own Wild cash pay is invented"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-BUY-FEATURE-ABSENT",
+      "category": "FEATURE_AVAILABILITY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-INITIAL-DATA",
+        "EV-MAIN-UI"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Game configuration for id 2060 is loaded."
+        ],
+        "stateFields": [
+          "buy_free_max_bet=-1",
+          "buy control absent"
+        ],
+        "transitionRules": [
+          "Do not expose or accept Buy Feature requests"
+        ],
+        "outputs": [
+          "Buy Feature disabled/not advertised"
+        ],
+        "terminationRules": [
+          "Any attempted Buy Feature call is safely rejected as unsupported"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-INITIAL-DATA",
+          "EV-MAIN-UI"
+        ],
+        "assertions": [
+          "buy_free_max_bet == -1",
+          "No Buy Feature is listed in special-mode runtime capabilities"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-LANGUAGE-ASSETS",
+      "category": "LOCALIZATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-LANGUAGE-INVENTORY",
+        "EV-SOURCE-MANIFEST",
+        "EV-GAME-BUNDLE-CONFIG",
+        "EV-RESOURCE-BUNDLE-CONFIG",
+        "EV-COMMON-FRONTEND"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Requested language parameter is known."
+        ],
+        "stateFields": [
+          "supported codes",
+          "server resolved language",
+          "shared asset hashes"
+        ],
+        "transitionRules": [
+          "Load actual requested code first",
+          "Use archived language-specific assets only for enumerated supported codes",
+          "Record server fallback without relabeling unsupported query aliases as native languages"
+        ],
+        "outputs": [
+          "Supported codes: bn-bd,en-us,es-es,fr-fr,id-id,ko-ko,pt-pt,th-th,tr-tr"
+        ],
+        "terminationRules": [
+          "Unsupported/generic-only codes fall back or fail according to inventory; they are not added to supported codes"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-LANGUAGE-INVENTORY",
+          "EV-SOURCE-MANIFEST"
+        ],
+        "assertions": [
+          "supportedLanguages.codes exactly match nine asset-backed codes",
+          "pt-br remains a tested query alias resolving to en-us",
+          "No language directory is introduced outside resources/publish"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-RTP-DISCLOSURE",
+      "category": "RULE_METADATA",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EV-RULE-RTP"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Rule/help metadata is displayed."
+        ],
+        "stateFields": [
+          "theoreticalRtpPercent=96.3"
+        ],
+        "transitionRules": [
+          "Expose as theoretical RTP metadata only"
+        ],
+        "outputs": [
+          "96.3 percent RTP disclosure"
+        ],
+        "terminationRules": [
+          "Do not treat ten-round capture as an RTP validation sample"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EV-RULE-RTP"
+        ],
+        "assertions": [
+          "rtp.percent == 96.3",
+          "rtp.type == THEORETICAL"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-FREE-SPINS-TRIGGER",
+      "category": "SPECIAL_MODE_TRIGGER",
+      "status": "CONFIRMED",
+      "reason": "Saved archive contains 21 complete paid trigger plus adjacent Free Spin sequences; target 30 remains SAMPLE_INSUFFICIENT.",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EV-RULE-FREE-TRIGGER",
+        "EV-GAME-FRONTEND",
+        "EV-PAID-ROUND-INDEX",
+        "EV-SCENARIO-COVERAGE"
+      ],
+      "knownContract": [
+        "3/4/5 Scatters anywhere award 12/15/20 Free Spins",
+        "Frontend enters Free mode when base result frees.st>0"
+      ],
+      "implementationDisposition": "IMPLEMENTED_FROM_ADJACENT_SAVED_EVIDENCE",
+      "unresolvedBehaviorRef": "UNRES-FREE-RUNTIME"
+    },
+    {
+      "id": "BHV-FREE-WILD-MULTIPLIER",
+      "category": "SPECIAL_MODE_RULE",
+      "status": "CONFIRMED",
+      "reason": "Saved adjacent responses confirm frees.m, cumulative frees.spe_num and terminal frees.twa transitions.",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EV-RULE-FREE-MULTIPLIER",
+        "EV-GAME-FRONTEND",
+        "EV-PAID-ROUND-INDEX",
+        "EV-SCENARIO-COVERAGE"
+      ],
+      "knownContract": [
+        "Starts x2",
+        "Collect Wilds",
+        "Every 3 Wilds increase multiplier by 2",
+        "Progress resets",
+        "Maximum x20",
+        "Frontend reads frees.m and frees.spe_num%3"
+      ],
+      "implementationDisposition": "IMPLEMENTED_FROM_ADJACENT_SAVED_EVIDENCE",
+      "unresolvedBehaviorRef": "UNRES-FREE-MULTIPLIER-RUNTIME"
+    },
+    {
+      "id": "BHV-FREE-STEP-STATE-MACHINE",
+      "category": "SPECIAL_MULTI_STEP_STATE",
+      "status": "CONFIRMED",
+      "reason": "Saved archive confirms complete type=1 to type=2 countdown, balance continuity and terminal st=0.",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EV-GAME-FRONTEND",
+        "EV-HISTORY-DETAIL",
+        "EV-PAID-ROUND-INDEX",
+        "EV-SCENARIO-COVERAGE",
+        "EV-RULE-FREE-TRIGGER",
+        "EV-RULE-FREE-MULTIPLIER"
+      ],
+      "knownContract": [
+        "Same gameResult endpoint is called",
+        "type=2 is displayed as Free step",
+        "Prior st is decremented locally before request",
+        "new st>old means retrigger",
+        "new st>0 continues",
+        "st==0 terminates and displays twa",
+        "History UI can page results[]"
+      ],
+      "implementationDisposition": "IMPLEMENTED_FROM_21_COMPLETE_ROUNDS_SAMPLE_INSUFFICIENT",
+      "unresolvedBehaviorRef": "UNRES-FREE-RUNTIME"
+    },
+    {
+      "id": "BHV-REDIS-COMPLETE-ROUND",
+      "category": "RUNTIME_RESULT_SOURCE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EV-PAID-ROUND-INDEX",
+        "EV-GAME-FRONTEND"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Redis 192.168.10.3:6379 db15 pool populated"
+        ],
+        "stateFields": [
+          "category",
+          "integer multiplier",
+          "compact ASCII complete-round member",
+          "deliveryIndex"
+        ],
+        "transitionRules": [
+          "select loss/win/special category",
+          "select an existing integer multiplier",
+          "atomic LPOP one member",
+          "project all steps from that same member"
+        ],
+        "terminationRules": [
+          "empty or invalid pool fails closed"
+        ]
+      },
+      "verificationContract": {
+        "assertions": [
+          "no runtime board generation",
+          "no fixture or capture runtime reads",
+          "all steps reconstruct from one member"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-REQUEST-RECOVERY",
+      "category": "CROSS_REQUEST_RECOVERY",
+      "status": "UNKNOWN",
+      "reason": "Recovery branches exist in frontend code, but no raw failed gameResult to initRoom to retry sequence was observed, so runtime server behavior cannot be confirmed.",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EV-GAME-FRONTEND",
+        "EV-COMMON-FRONTEND"
+      ],
+      "knownContract": [
+        "On result failure client waits to five-second interval then requests initRoom",
+        "Same oid triggers a one-second delayed gameResult retry",
+        "Changed oid is accepted",
+        "Sequence number ignores stale callbacks"
+      ],
+      "implementationDisposition": "May be used as client compatibility guidance but cannot be asserted as runtime-verified server behavior.",
+      "unresolvedBehaviorRef": "UNRES-RECOVERY-RUNTIME"
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "UNRES-FREE-RUNTIME",
+      "behaviorIds": [
+        "BHV-FREE-SPINS-TRIGGER",
+        "BHV-FREE-STEP-STATE-MACHINE"
+      ],
+      "classification": "SAMPLE_INSUFFICIENT",
+      "reason": "21 complete Free Spin rounds are preserved; target is 30.",
+      "evidenceRefs": [
+        "EV-RULE-FREE-TRIGGER",
+        "EV-GAME-FRONTEND",
+        "EV-PAID-ROUND-INDEX",
+        "EV-SCENARIO-COVERAGE"
+      ],
+      "actualPaidRoundAttempts": 1332,
+      "retrievalEntrances": [
+        "minimum-used-bet paid Spin",
+        "rules/paytable Free Spins section",
+        "Game2060 free-mode lazy-load modules"
+      ],
+      "missingEvidence": [
+        "9 additional complete Free Spin rounds to reach target 30"
+      ],
+      "disposition": "Implemented from 21 complete sequences; keep SAMPLE_INSUFFICIENT as a non-blocking coverage disclosure."
+    },
+    {
+      "id": "UNRES-FREE-MULTIPLIER-RUNTIME",
+      "behaviorIds": [
+        "BHV-FREE-WILD-MULTIPLIER",
+        "BHV-FREE-STEP-STATE-MACHINE"
+      ],
+      "classification": "SAMPLE_INSUFFICIENT",
+      "reason": "Runtime multiplier progression and terminal accumulator are confirmed in the 21 complete saved sequences; target is 30.",
+      "evidenceRefs": [
+        "EV-RULE-FREE-MULTIPLIER",
+        "EV-GAME-FRONTEND",
+        "EV-PAID-ROUND-INDEX",
+        "EV-SCENARIO-COVERAGE"
+      ],
+      "actualPaidRoundAttempts": 1332,
+      "retrievalEntrances": [
+        "paid Spin",
+        "Wild multiplier rules",
+        "frontend progress/History code"
+      ],
+      "missingEvidence": [
+        "Adjacent nonzero frees.spe_num",
+        "frees.m increase transition",
+        "wire representation after progress reset",
+        "terminal frees.twa"
+      ],
+      "disposition": "Keep rule metadata only and disable runtime generation/delivery."
+    },
+    {
+      "id": "UNRES-RECOVERY-RUNTIME",
+      "behaviorIds": [
+        "BHV-REQUEST-RECOVERY"
+      ],
+      "classification": "NON_BLOCKING_TECHNICAL_UNKNOWN",
+      "reason": "Frontend recovery code was found, but the corresponding failed-request and retry response sequence was not captured.",
+      "evidenceRefs": [
+        "EV-GAME-FRONTEND",
+        "EV-COMMON-FRONTEND"
+      ],
+      "missingEvidence": [
+        "A raw failed gameResult -> initRoom -> same/new oid -> retry sequence"
+      ],
+      "disposition": "Do not make server conformance depend on an uncaptured error sequence."
+    },
+    {
+      "id": "UNRES-SYMBOL-WEIGHTS",
+      "behaviorIds": [],
+      "classification": "UNKNOWN_CAPABILITY",
+      "reason": "No reel strips, symbol weights or server RNG configuration exist in the inspected current-game rules, bundles, configuration or paid-board evidence.",
+      "evidenceRefs": [
+        "EV-GAME-FRONTEND",
+        "EV-RULE-PAYTABLE-WILD",
+        "EV-PAID-ROUND-INDEX"
+      ],
+      "searchedEntrances": [
+        "Game2060 bundle",
+        "bundle config",
+        "paytable",
+        "ten paid boards"
+      ],
+      "missingEvidence": [
+        "Reel strips",
+        "Per-symbol/per-reel weights",
+        "Server RNG configuration"
+      ],
+      "disposition": "Never infer from ten-round frequency or import from another game."
+    },
+    {
+      "id": "UNRES-REDIS-CONTRACT",
+      "behaviorIds": [],
+      "classification": "OUTSIDE_FRONTEND_PROTOCOL_EVIDENCE",
+      "reason": "The current-game frontend, network manifest and protocol captures expose no Redis key, member, structure, encoding or compression contract.",
+      "evidenceRefs": [
+        "EV-NETWORK-MANIFEST",
+        "EV-GAME-FRONTEND"
+      ],
+      "missingEvidence": [
+        "Redis key pattern",
+        "Redis structure",
+        "member encoding",
+        "round/delivery envelope",
+        "compression"
+      ],
+      "disposition": "This protocol node authorizes no Redis contract. Downstream must obtain current-game platform evidence before defining one."
+    },
+    {
+      "id": "UNRES-OPAQUE-RESULT-FIELDS",
+      "behaviorIds": [],
+      "classification": "NON_BLOCKING_SCHEMA_UNKNOWN",
+      "reason": "Captured ordinary base responses expose only default values for these fields, while current-game code and rules do not establish nonzero semantics.",
+      "evidenceRefs": [
+        "EV-BASE-LOSS",
+        "EV-BASE-WIN",
+        "EV-GAME-FRONTEND"
+      ],
+      "fields": [
+        "setting_id semantics",
+        "nonzero small_game_type",
+        "nonzero props.spe_num",
+        "frees.ba",
+        "frees.bet",
+        "frees.l"
+      ],
+      "disposition": "Preserve observed base defaults where required; reject unsupported nonzero modes and assign no guessed semantics."
+    }
+  ],
+  "handoffRules": [
+    "Downstream implementation and tests must read this file and require matching rulesHash before work begins.",
+    "Only status=CONFIRMED behaviors are authorized for implementation. UNKNOWN behaviors must remain disabled or safely rejected.",
+    "Fixtures/captures are independent oracles only and must never be runtime result sources.",
+    "Test expected values must come from evidenceRefs/independentOracleRefs, never solely from the implementation under test.",
+    "Any later special-mode evidence must add adjacent raw steps, update the behavior contract, recompute rulesHash, and update game-capabilities.handoffContract atomically."
+  ],
+  "generationModel": {
+    "method": "joint special-count signature and conditional three-cell columns by paid/free entry",
+    "runtimeFullBoardReplay": false,
+    "runtimeFixtureReads": false,
+    "source": "generator/2060-Club-Goddess/src/main/resources/com/cpgame/clubgoddess/core/reel-model.json",
+    "validation": "reports/2060-Club-Goddess/generation-model-validation.json",
+    "limits": {
+      "wildPerBoard": 2,
+      "scatterPerReel": 1,
+      "freeScatters": 0,
+      "cumulativeFreeWilds": 15
+    },
+    "freeSampleStatus": "SAMPLE_INSUFFICIENT_21_OF_30"
+  }
+}

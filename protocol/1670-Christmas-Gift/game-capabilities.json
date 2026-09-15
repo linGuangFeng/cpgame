@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "3.0",
+  "workflowTemplateVersion": 40,
+  "gameId": 1670,
+  "gameName": "Christmas Gift",
+  "directoryName": "1670-Christmas-Gift",
+  "rulesVersion": "1670-v40-validated-provider-joint-1",
+  "rulesHash": "58d9172c4942e29e629038fb88877ce11564375b1bd69059e5b9a38ab38df14d",
+  "winModel": "Five fixed 3-symbol paylines; Wild=7 substitutes; line odds are 1:3,2:5,3:8,4:10,5:25,6:100,7:250; round multiplier is the sum of line odds and a full Christmas Gift board applies x10.",
+  "boardModel": {
+    "columns": 3, "rows": 3, "positions": "COLUMN_MAJOR_1_TO_9",
+    "paylines": [[2,5,8],[1,4,7],[3,6,9],[1,5,9],[3,5,7]],
+    "symbols": [1,2,3,4,5,6,7], "wild": 7
+  },
+  "roundModel": {
+    "ordinary": "type=1, exactly one complete 3x3 board",
+    "feature": "type=2, small_game_type=3, luck_prop selects target 1..6; 4..8 ordered props steps hold prior target/Wild positions",
+    "terminal": "non-full rounds end with one zero sentinel at an undealt position; full board has no sentinel",
+    "settlement": "bet_gold=bet*level*5; total_win=bet*level*integerMultiplier"
+  },
+  "specialModes": [{"id":"CHRISTMAS_GIFT_FEATURE","status":"CONFIRMED","serverType":2,"smallGameType":3,"sampleRoundCount":45}],
+  "runtimeIndependentLoss": {"supported":true,"source":"PREGENERATED_REDIS_COMPLETE_ROUND","runtimeGeneration":false,"artificialBoardConstraint":false},
+  "redisContract": {
+    "host":"192.168.10.3","port":6379,"database":15,
+    "normalMultiplierIndex":"PerKeyList_000001670","specialMultiplierIndex":"MaryKeyList_000001670",
+    "normalListPattern":"BetLog:000001670:%06d","specialListPattern":"MaryLog:000001670:%06d",
+    "memberSemantics":"one complete round per list member"
+  },
+  "codecContract": {"encoding":"UTF-8_ASCII_MINIMAL_FACT","ordinaryPrefix":"CG38N:","featurePrefix":"CG38F<target>:","projection":"Controller evaluates the fact through the shared ResultUtil before presentation"},
+  "symbolWeights": {"model":"POSITION_X_PREVIOUS_SYMBOL_HIERARCHICAL","positionEvidenceRounds":1435,"transitionEvidencePairs":11480,"configurationAdjustments":[100,100,100,100,100,100,100]},
+  "generationModel": {
+    "implementationReady": true,
+    "usesIndependentCellMarginalsOnly": false,
+    "artificialLossBoardConstraints": false,
+    "lifecycleEntries": [
+      {"id":"ORDINARY_INITIAL_STATE","role":"INITIAL","countingUnit":"COMPLETE_INITIAL_STATE","sampleRoundCount":1292,"samplePositionCount":11628,"wholeNextStateCountedAsNewDeal":false,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"]},
+      {"id":"FEATURE_INITIAL_STATE","role":"INITIAL","countingUnit":"COMPLETE_INITIAL_STATE","sampleRoundCount":41,"samplePositionCount":87,"wholeNextStateCountedAsNewDeal":false,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"]},
+      {"id":"FEATURE_INCREMENT","role":"TRANSITION","countingUnit":"NEWLY_DEALT_POSITIONS","sampleRoundCount":41,"samplePositionCount":267,"wholeNextStateCountedAsNewDeal":false,"evidenceRefs":["EV-ROUND-STEPS"]}
+    ],
+    "jointRoundFeatures": [
+      {"id":"ROUND_OUTCOME_CLASS","applicable":true,"evidenceRefs":["EV-SPIN-INDEX"]},
+      {"id":"ROUND_STEP_COUNT","applicable":true,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"]},
+      {"id":"STATE_ELEMENT_COUNT_VECTOR","applicable":true,"evidenceRefs":["EV-ROUND-STEPS"]}
+    ],
+    "holdoutPlan": {"source":"REAL_PROVIDER","minimumRounds":100,"actualRounds":147,"selection":"every tenth completed round within each outcome category","disjointFromTraining":true}
+  },
+  "evidence": ["captures/1670-Christmas-Gift/spin-index.jsonl","captures/1670-Christmas-Gift/round-steps.jsonl","reports/1670-Christmas-Gift/scenario-coverage.json","reports/1670-Christmas-Gift/generation-model-validation.json"],
+  "handoffContract": {
+    "file":"protocol-handoff.json",
+    "rulesHash":"58d9172c4942e29e629038fb88877ce11564375b1bd69059e5b9a38ab38df14d",
+    "behaviorIds":["BHV-ORDINARY-PAYLINES","BHV-CHRISTMAS-GIFT-RESPIN","BHV-REDIS-COMPLETE-ROUND","BHV-PROVIDER-PRESENTATION","BHV-HISTORY-PERSISTENCE","BHV-ORIGINAL-UI-LANGUAGES"]
+  },
+  "fixturePolicy": "Fixtures and captures are independent test oracles only and are never runtime result sources."
+}

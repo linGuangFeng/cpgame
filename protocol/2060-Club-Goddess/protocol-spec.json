@@ -1,0 +1,480 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 2060,
+  "directoryName": "2060-Club-Goddess",
+  "gameName": "Club Goddess",
+  "identityStatus": "CONFIRMED",
+  "identityConflict": {
+    "field": "initialData.data.game_info.name",
+    "observed": "Magic Scroll",
+    "disposition": "Stale/misconfigured metadata; rejected because the CP catalog launch mapping, game title art and game-specific bundle identify Club Goddess."
+  },
+  "rulesVersion": "2060-protocol-r3",
+  "rulesHash": "sha256:cd9e5bac75dcaee42e78e1298a4e896b3a2b01db98c28027a50d7d3df771016b",
+  "behaviorIds": [
+    "BHV-IDENTITY",
+    "BHV-HTTP-CODEC-SIGNATURE",
+    "BHV-BOOTSTRAP-AUTH-INIT",
+    "BHV-INIT-RESUME-SNAPSHOT",
+    "BHV-BET-MODEL",
+    "BHV-BOARD-SYMBOLS",
+    "BHV-WAYS-BASE-WIN",
+    "BHV-BASE-LOSS",
+    "BHV-PAID-LEDGER",
+    "BHV-HISTORY-AGGREGATE",
+    "BHV-HISTORY-ORDER-STEPS",
+    "BHV-WILD-SUBSTITUTION",
+    "BHV-BUY-FEATURE-ABSENT",
+    "BHV-LANGUAGE-ASSETS",
+    "BHV-FREE-SPINS-TRIGGER",
+    "BHV-FREE-WILD-MULTIPLIER",
+    "BHV-FREE-STEP-STATE-MACHINE",
+    "BHV-REQUEST-RECOVERY",
+    "BHV-RTP-DISCLOSURE",
+    "BHV-REDIS-COMPLETE-ROUND"
+  ],
+  "stateDefinitions": [
+    "WAIT_INIT_DATA",
+    "IDLE",
+    "AUTO_IDLE",
+    "SCROLL",
+    "SHOW_WIN_RESULT",
+    "FREE_IDLE"
+  ],
+  "sourceManifest": "protocol/2060-Club-Goddess/rules-source-manifest.json",
+  "transport": {
+    "apiBaseResolution": {
+      "rule": "window.ApiURL = window.location.protocol + '//' + launch.query.sip + '/cp'",
+      "observed": "https://api.omgapibra.com/cp",
+      "evidence": "publish/2060-Club-Goddess/versionconfig.js"
+    },
+    "method": "POST",
+    "requestContentType": "application/x-www-form-urlencoded",
+    "serialization": "HttpRequest.formatParams concatenates key=value pairs with '&' and does not call encodeURIComponent; object/array values use JSON.stringify.",
+    "responseContentType": "application/json; charset=utf-8",
+    "responseEncoding": "Plain UTF-8 JSON",
+    "compression": "NONE_OBSERVED_AT_APPLICATION_LAYER",
+    "encryption": "NONE_BEYOND_HTTPS",
+    "genericBinaryProtocolDisposition": "src/assets/Common/Lib/protocol.060d7.js is a generic package/message codec and was not used by any observed Club Goddess HTTP gameplay request."
+  },
+  "requestSigning": {
+    "status": "CONFIRMED",
+    "clock": "app.GameConfigManager().GetAsMsTime(), adjusted from initialData.initial_config.current_sys_time",
+    "embeddedFrontendSecret": "3fZ8kL2qW9xA4pT7vJ1rQ6yB0sN5mX8h",
+    "canonicalization": [
+      "Take the original request object before signapt and expire exist.",
+      "Sort Object.keys(request) with JavaScript default lexicographic sort.",
+      "Render scalar as key=value; render object/array as key=JSON.stringify(value).",
+      "Join rendered entries with ':'."
+    ],
+    "formula": "MD5(secret + expireMillis + canonicalString + 'aptsignature')",
+    "appendOrder": "formatParams assigns signapt first, expire second, then enumerates the mutated object for form output.",
+    "evidence": [
+      "publish/2060-Club-Goddess/assets/main/index.f8fbc.js",
+      "publish/2060-Club-Goddess/src/assets/Common/Lib/MD5Tool.076fa.js",
+      "captures/2060-Club-Goddess/network/0182-api.omgapibra.com_cp_single_game.Game_gameResult.json"
+    ]
+  },
+  "observedRequestOrder": [
+    {
+      "order": 1,
+      "seq": 58,
+      "endpoint": "/config/initialData",
+      "purpose": "Obtain game bet/configuration, server clock and resolved language.",
+      "requiredFields": [
+        "gid",
+        "currency",
+        "language",
+        "ai",
+        "signapt",
+        "expire"
+      ]
+    },
+    {
+      "order": 2,
+      "seq": 71,
+      "endpoint": "/account/getUserInfo",
+      "purpose": "Exchange launch token for authenticated session data and current balance.",
+      "requiredFields": [
+        "token",
+        "gid",
+        "language",
+        "deviceid",
+        "Type",
+        "source",
+        "os",
+        "ai",
+        "signapt",
+        "expire"
+      ]
+    },
+    {
+      "order": 3,
+      "seq": 127,
+      "endpoint": "/single_game.Game/initRoom",
+      "purpose": "Load current/resumable game-result-shaped snapshot.",
+      "requiredFields": [
+        "token",
+        "gid",
+        "language",
+        "signapt",
+        "expire"
+      ]
+    },
+    {
+      "order": 4,
+      "seq": 174,
+      "endpoint": "/activity/getActivity",
+      "purpose": "Load promotional free-bet activity; captured activity list was empty and is not Scatter Free Spins.",
+      "requiredFields": [
+        "token",
+        "gid",
+        "ver_code",
+        "language",
+        "signapt",
+        "expire"
+      ]
+    },
+    {
+      "order": 5,
+      "seq": 179,
+      "endpoint": "/goldgame/single_game_user_gold_history",
+      "purpose": "Load seven-day aggregate History.",
+      "requiredFields": [
+        "gid",
+        "token",
+        "language",
+        "signapt",
+        "expire"
+      ]
+    },
+    {
+      "order": 6,
+      "seqRange": [
+        182,
+        196
+      ],
+      "endpoint": "/single_game.Game/gameResult",
+      "purpose": "Paid base result and, according to current-game code, each later Free Spin step through the same route.",
+      "requiredFields": [
+        "token",
+        "bet_gold",
+        "level",
+        "gid",
+        "act_id",
+        "language",
+        "signapt",
+        "expire"
+      ]
+    },
+    {
+      "order": 7,
+      "seq": 201,
+      "endpoint": "/goldgame/single_game_user_gold_history",
+      "purpose": "Refresh aggregate History after the ten paid rounds."
+    },
+    {
+      "order": 8,
+      "seq": 202,
+      "endpoint": "/goldgame/single_game_user_history",
+      "purpose": "Load selected-day order detail and its results[] steps.",
+      "requiredFields": [
+        "token",
+        "gid",
+        "day",
+        "page_size",
+        "page",
+        "language",
+        "signapt",
+        "expire"
+      ]
+    }
+  ],
+  "endpoints": [
+    {
+      "path": "/config/initialData",
+      "responseContract": {
+        "game_info.bet_gold": "Bet-size list [0.01,0.04,0.2].",
+        "game_info.default_level": "10.",
+        "game_info.buy_free_max_bet": "-1 means no discovered Buy Feature.",
+        "game_info.game_way[0].way_id": "206010000; opaque configuration identifier, not the 243 Ways count.",
+        "initial_config.current_sys_time": "Server epoch seconds used for signing clock adjustment.",
+        "language": "Server-resolved locale; capture resolved pt-br request to en-us."
+      }
+    },
+    {
+      "path": "/single_game.Game/initRoom",
+      "responseContract": "data has the same result shape as gameResult. The captured oid was '0', end_gold equaled authenticated balance, and no paid Round is indexed from this first-load snapshot."
+    },
+    {
+      "path": "/single_game.Game/gameResult",
+      "responseContract": {
+        "envelope": [
+          "code",
+          "msg",
+          "time",
+          "data"
+        ],
+        "data": [
+          "bet",
+          "bet_gold",
+          "change_gold",
+          "end_gold",
+          "frees",
+          "level",
+          "odds",
+          "oid",
+          "props",
+          "setting_id",
+          "small_game_type",
+          "start_gold",
+          "total_win",
+          "type"
+        ],
+        "props": [
+          "frees_prop",
+          "m",
+          "prop",
+          "spe_num",
+          "tw",
+          "win_arr"
+        ],
+        "frees": [
+          "ba",
+          "bet",
+          "l",
+          "m",
+          "spe_num",
+          "st",
+          "tt",
+          "twa"
+        ],
+        "win_arrItem": [
+          "odd",
+          "pos_arr",
+          "tw",
+          "ways",
+          "wp"
+        ]
+      }
+    },
+    {
+      "path": "/goldgame/single_game_user_gold_history",
+      "responseContract": "data.list contains day, bet_gold, change_gold; data.statistics contains total_bet_gold and total_change_gold."
+    },
+    {
+      "path": "/goldgame/single_game_user_history",
+      "responseContract": "data.list contains paid orders; each order has results[] for its adjacent result steps. Ordinary captured orders have exactly one mirrored result step."
+    }
+  ],
+  "gameRules": {
+    "board": {
+      "columns": 5,
+      "visibleRows": 3,
+      "cellCount": 15,
+      "indexing": "COLUMN_MAJOR",
+      "indexFormula": "index = reelZeroBased * 3 + rowZeroBased",
+      "bufferRows": "UNKNOWN"
+    },
+    "symbols": [
+      {
+        "id": 1,
+        "name": "Pool Table",
+        "pays": {
+          "3": 30,
+          "4": 60,
+          "5": 150
+        }
+      },
+      {
+        "id": 2,
+        "name": "Mahjong",
+        "pays": {
+          "3": 20,
+          "4": 45,
+          "5": 90
+        }
+      },
+      {
+        "id": 3,
+        "name": "Cocktail",
+        "pays": {
+          "3": 15,
+          "4": 30,
+          "5": 60
+        }
+      },
+      {
+        "id": 4,
+        "name": "Pool Balls",
+        "pays": {
+          "3": 10,
+          "4": 15,
+          "5": 45
+        }
+      },
+      {
+        "id": 5,
+        "name": "A",
+        "pays": {
+          "3": 8,
+          "4": 10,
+          "5": 30
+        }
+      },
+      {
+        "id": 6,
+        "name": "K",
+        "pays": {
+          "3": 8,
+          "4": 10,
+          "5": 30
+        }
+      },
+      {
+        "id": 7,
+        "name": "Q",
+        "pays": {
+          "3": 5,
+          "4": 8,
+          "5": 15
+        }
+      },
+      {
+        "id": 8,
+        "name": "J",
+        "pays": {
+          "3": 5,
+          "4": 8,
+          "5": 15
+        }
+      },
+      {
+        "id": 9,
+        "name": "Scatter",
+        "pays": "NO_CASH_PAY_CONFIRMED; trigger rule only"
+      },
+      {
+        "id": 10,
+        "name": "Wild",
+        "pays": "NO_OWN_PAY_CONFIRMED; substitution rule only"
+      }
+    ],
+    "wild": {
+      "substitutes": "All symbols except Scatter",
+      "allowedReelsOneBased": [
+        2,
+        3,
+        4
+      ]
+    },
+    "winModel": {
+      "type": "WAYS",
+      "waysCount": 243,
+      "paylineCount": null,
+      "paylineCountStatus": "NOT_APPLICABLE",
+      "direction": "LEFT_TO_RIGHT",
+      "minimumAdjacentReels": 3,
+      "waysFormula": "Multiply matching position counts on each consecutive reel starting with reel 1.",
+      "basePayoutFormula": "bet * level * odd * ways",
+      "evidenceCalculation": [
+        "symbol 6: 0.01 * 10 * 8 * 8 = 6.4",
+        "symbol 1: 0.01 * 10 * 150 * 12 = 180",
+        "total = 186.4"
+      ]
+    },
+    "rtpPercent": 96.3
+  },
+  "stateMachine": {
+    "frontendStates": [
+      "WAIT_INIT_DATA",
+      "IDLE",
+      "AUTO_IDLE",
+      "SCROLL",
+      "SHOW_WIN_RESULT",
+      "FREE_IDLE"
+    ],
+    "roundIdentity": "A real paid Round begins only on a user-authorized type=1 gameResult response with nonzero oid. initRoom oid='0' first-load snapshot is not a paid Round.",
+    "deliveryIdentity": "The live response has no explicit deliveryId or stepId. History results[] is the only current-game evidence of multiple adjacent steps under one paid order.",
+    "ordinaryPaidTransition": {
+      "precondition": "IDLE or AUTO_IDLE, authenticated, accepted bet selection and sufficient balance.",
+      "request": "POST /single_game.Game/gameResult with act_id='0' for normal paid play.",
+      "response": "type=1; debit bet_gold; evaluate props; credit total_win.",
+      "terminalWhen": "frees.st == 0. This covers captured ordinary LOSS and WIN.",
+      "nextWhenSpecial": "frees.st > 0 enters Free Spins; saved complete sequences confirm the next response is type=2."
+    },
+    "freeSpinTransition": {
+      "status": "CONFIRMED_SAMPLE_INSUFFICIENT",
+      "entryRule": "3/4/5 Scatters anywhere award 12/15/20 Free Spins.",
+      "requestBoundary": "Before each free request, frontend locally decrements the prior frees.st and calls the same gameResult route with the same bet-size/level shape.",
+      "expectedStepType": 2,
+      "retriggerRuleFromCode": "new frees.st > locally decremented oldFreeTimes means additional spins were awarded.",
+      "continueRuleFromCode": "new frees.st > 0 continues in FREE_IDLE.",
+      "terminationRuleFromCode": "new frees.st == 0 exits Free mode and displays frees.twa.",
+      "multiplierRule": "Starts x2; collect Wilds; every 3 increases multiplier by 2 and resets collection progress; maximum x20.",
+      "evidence": "fixtures/2060-Club-Goddess/spin-full-from-box.tgz plus reports/2060-Club-Goddess/round-evidence-audit-20260907.json; 21 complete rounds, target 30."
+    },
+    "resumeTransition": {
+      "route": "/single_game.Game/initRoom",
+      "rule": "Client installs the returned gameResult-shaped data. It can render type=1 base snapshot or use type/frees fields to present an active/completed Free mode.",
+      "captured": "Only a type=1 oid='0' snapshot was captured."
+    },
+    "recoveryTransition": {
+      "status": "CODE_CONFIRMED_RUNTIME_SEQUENCE_NOT_CAPTURED",
+      "rule": "On gameResult failure, wait up to the five-second retry interval then call initRoom; if returned oid equals current oid, wait to the one-second same-result interval and retry gameResult; a changed oid is accepted as the result.",
+      "sequenceGuard": "A module sequence number invalidates callbacks from older requests."
+    }
+  },
+  "historyContract": {
+    "aggregateAfterTenRounds": {
+      "total_bet_gold": 30,
+      "total_change_gold": 156.4,
+      "derivation": "10 * 3 stake and 186.4 gross win - 30 stake."
+    },
+    "ordinaryOrder": "order_id = oid + '-2060'; results.length=1; results[0] mirrors the result payload and is terminal.",
+    "specialOrder": "One paid order groups the type=1 trigger and every adjacent type=2 step; preserved complete 12/15-spin chains confirm terminal frees.st=0."
+  },
+  "supportedLanguages": {
+    "codes": [
+      "bn-bd",
+      "en-us",
+      "es-es",
+      "fr-fr",
+      "id-id",
+      "ko-ko",
+      "pt-pt",
+      "th-th",
+      "tr-tr"
+    ],
+    "evidence": "reports/2060-Club-Goddess/language-inventory.json"
+  },
+  "unknownAndForbiddenInferences": [
+    "symbolWeights and reel strips",
+    "buffer/hidden rows",
+    "buffer/hidden rows",
+    "Scatter or Wild own cash pays",
+    "30 as paylineCount (it is a base-bet factor; paylines are not applicable)"
+  ],
+  "redisSourceContract": {
+    "endpoint": "192.168.10.3:6379/15",
+    "selection": "loss/win/special then existing integer multiplier",
+    "claim": "atomic LPOP",
+    "member": "compact ASCII CG2 complete-round minimal fact",
+    "empty": "fail closed"
+  },
+  "runtimeSourcePolicy": "Captured responses and fixtures are oracle-only. Runtime gameResult must project the single Redis member claimed at paid start; runtime generation and fixture fallback are forbidden.",
+  "generationModel": {
+    "method": "joint special-count signature and conditional three-cell columns by paid/free entry",
+    "runtimeFullBoardReplay": false,
+    "runtimeFixtureReads": false,
+    "source": "generator/2060-Club-Goddess/src/main/resources/com/cpgame/clubgoddess/core/reel-model.json",
+    "validation": "reports/2060-Club-Goddess/generation-model-validation.json",
+    "limits": {
+      "wildPerBoard": 2,
+      "scatterPerReel": 1,
+      "freeScatters": 0,
+      "cumulativeFreeWilds": 15
+    },
+    "freeSampleStatus": "SAMPLE_INSUFFICIENT_21_OF_30"
+  }
+}

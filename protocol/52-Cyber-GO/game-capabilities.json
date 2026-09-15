@@ -1,0 +1,484 @@
+{
+  "schemaVersion": 1,
+  "gameId": 52,
+  "gameName": "Cyber GO",
+  "directoryName": "52-Cyber-GO",
+  "rulesHash": "ae4823db63a5e8bd1d1f3a06da3ed6f76c04d761aefce10f29de6f6502885cfa",
+  "behaviorIds": [
+    "B01_LAUNCH_AUTH_CONFIG",
+    "B02_MINIMUM_PAID_SPIN",
+    "B03_243_WAYS_WIN",
+    "B04_FREE_SPINS",
+    "B05_COMPLETE_ROUND_BOUNDARY",
+    "B06_LANGUAGE_FIRST_LOAD",
+    "B07_RULES_AND_PAYTABLE",
+    "B08_HISTORY_DETAIL",
+    "B09_PROMOTIONAL_ACTIVITY_FREE",
+    "B10_HTTP_FORM_CODEC"
+  ],
+  "evidenceStatus": "BACKEND_RECHECKED_SOURCE_ENTRY_PENDING",
+  "supportedLanguages": {
+    "codes": [
+      "bn",
+      "en",
+      "es",
+      "fr",
+      "id",
+      "ko",
+      "pt",
+      "th",
+      "tr",
+      "vi"
+    ],
+    "wrapperAliases": {
+      "pt-br": "pt"
+    },
+    "evidenceRefs": [
+      "E02_FRONTEND_MAIN",
+      "E06_LANGUAGE_MANIFESTS"
+    ]
+  },
+  "boardModel": {
+    "reels": 5,
+    "visibleRows": 3,
+    "visibleCellCount": 15,
+    "responseField": "rskl",
+    "responseLength": 15,
+    "bufferCells": {
+      "status": "UNKNOWN",
+      "reason": "规则与接口样本只确认15个可见格，未捕获额外缓冲格协议字段"
+    },
+    "evidenceRefs": [
+      "E01_RULES_PT",
+      "E02_FRONTEND_MAIN",
+      "E04_COMPLETE_ROUNDS"
+    ]
+  },
+  "layout": {
+    "reels": 5,
+    "visibleRows": 3,
+    "evidenceRefs": [
+      "E01_RULES_PT",
+      "E04_COMPLETE_ROUNDS"
+    ]
+  },
+  "winModel": "WAYS",
+  "betModel": {
+    "minimumBet": 0.6,
+    "currency": "BRL",
+    "basicBetFactor": 30,
+    "minimumBetLevel": 1,
+    "minimumBetSize": 0.02,
+    "formula": "30 * 1 * 0.02 = 0.60",
+    "paidRequestFields": {
+      "bl": 1,
+      "bs": 0.02
+    },
+    "evidenceRefs": [
+      "E01_RULES_PT",
+      "E02_FRONTEND_MAIN",
+      "E03_FIRST_LOAD_API",
+      "E04_COMPLETE_ROUNDS"
+    ]
+  },
+  "symbols": {
+    "keys": [
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A",
+      "K",
+      "Q",
+      "J",
+      "WILD",
+      "SC"
+    ],
+    "payingSymbols": [
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "A",
+      "K",
+      "Q",
+      "J"
+    ],
+    "wild": {
+      "key": "WILD",
+      "substitutesExcept": [
+        "SC"
+      ],
+      "reels": [
+        2,
+        3,
+        4
+      ]
+    },
+    "scatter": {
+      "key": "SC"
+    },
+    "evidenceRefs": [
+      "E01_RULES_PT",
+      "E03_FIRST_LOAD_API",
+      "E04_COMPLETE_ROUNDS"
+    ]
+  },
+  "symbolWeights": {
+    "status": "UNKNOWN",
+    "configurable": false,
+    "reason": "Original reel strips and original probabilities remain unknown. Explicit user requirements authorize a labelled empirical local transition model from training aggregates; no invented original RTP or independent-cell weights.",
+    "evidenceRefs": [
+      "E01_RULES_PT",
+      "E02_FRONTEND_MAIN",
+      "E03_FIRST_LOAD_API",
+      "E04_COMPLETE_ROUNDS"
+    ]
+  },
+  "specialModes": [
+    {
+      "id": "FREE_SPINS",
+      "status": "CONFIRMED",
+      "trigger": {
+        "SC": {
+          "3": 12,
+          "4": 15,
+          "5": 20
+        }
+      },
+      "initialMultiplier": 2,
+      "multiplierIncrement": {
+        "wildsCollected": 3,
+        "increment": 2,
+        "resetCollectedWilds": false,
+        "consumeCollectedWilds": 3,
+        "carryRemainder": true,
+        "adjacentStepEvidence": "reports/52-Cyber-GO/free-wild-carry-evidence-20260908.json"
+      },
+      "maximumMultiplier": 20,
+      "retrigger": {
+        "applicable": false,
+        "reason": "规则明确免费期间不出现Scatter"
+      },
+      "sampleCompleteRoundCount": 54,
+      "observedTriggerCounts": {
+        "12": 52,
+        "15": 2,
+        "20": 0
+      },
+      "observedMultipliers": [
+        2,
+        4,
+        6,
+        8,
+        10
+      ],
+      "rareBranchCoverage": [
+        {
+          "id": "FREE_SPINS_15_BY_4_SCATTER",
+          "status": "BLOCKER_RARE",
+          "observedCompleteRounds": 2,
+          "attemptedPaidRounds": 1462,
+          "reason": "权威规则确认，但达到全部适用类别停止条件前仅出现2局；不为子分支无限补抓"
+        },
+        {
+          "id": "FREE_SPINS_20_BY_5_SCATTER",
+          "status": "BLOCKER_RARE",
+          "observedCompleteRounds": 0,
+          "attemptedPaidRounds": 1462,
+          "reason": "权威规则确认，但达到全部适用类别停止条件前未出现；不为子分支无限补抓"
+        },
+        {
+          "id": "FREE_MULTIPLIER_ABOVE_OBSERVED_MAX",
+          "status": "BLOCKER_RARE",
+          "observedMaximum": 10,
+          "ruleMaximum": 20,
+          "attemptedFreeSpinRounds": 54,
+          "reason": "规则最大x20，实际相邻Step最高观察到x10"
+        }
+      ],
+      "evidenceRefs": [
+        "E01_RULES_PT",
+        "E02_FRONTEND_MAIN",
+        "E04_COMPLETE_ROUNDS"
+      ]
+    }
+  ],
+  "purchaseFeature": {
+    "applicable": false,
+    "status": "NOT_DISCOVERED",
+    "reason": "主界面、规则、config与前端API枚举均无购买入口",
+    "evidenceRefs": [
+      "E08_ENDPOINT_ENUMERATION"
+    ]
+  },
+  "roundModel": {
+    "paidRoundStart": {
+      "endpoint": "/api/v1/go-cyber/spin",
+      "request": {
+        "bl": 1,
+        "bs": 0.02
+      },
+      "observedFields": {
+        "ba": 0.6,
+        "gt": 1,
+        "small_game_type": 0
+      }
+    },
+    "continuationPredicate": "fsn > nfsc",
+    "terminalPredicate": "fsn == 0 OR fsn == nfsc",
+    "freeStep": {
+      "sameRequest": {
+        "bl": 1,
+        "bs": 0.02
+      },
+      "observedFields": {
+        "ba": 0,
+        "gt": 2,
+        "small_game_type": 2
+      },
+      "sequence": "nfsc从1递增到fsn"
+    },
+    "association": {
+      "localRoundId": "采集索引标识，不是原接口字段",
+      "history": "log-view把bsl与fsl合并为同一transfer_id下的相邻Step",
+      "deliveryRule": "一个付费起点及其全部免费Step只领取一次member并属于同一Round"
+    },
+    "stateFields": [
+      "fsn",
+      "nfsc",
+      "gt",
+      "small_game_type",
+      "ss",
+      "rpx",
+      "rwa",
+      "wa"
+    ],
+    "evidenceRefs": [
+      "E02_FRONTEND_MAIN",
+      "E04_COMPLETE_ROUNDS",
+      "E05_SPIN_INDEX"
+    ]
+  },
+  "roundBoundary": {
+    "paidStart": "first go-cyber/spin with ba=0.60 outside active free state",
+    "continueWhile": "fsn > nfsc",
+    "terminal": "fsn=0 OR fsn=nfsc",
+    "evidenceRefs": [
+      "E02_FRONTEND_MAIN",
+      "E04_COMPLETE_ROUNDS",
+      "E05_SPIN_INDEX"
+    ]
+  },
+  "runtimeIndependentLoss": {
+    "supported": false,
+    "reason": "Runtime may only consume a prewritten Redis member; natural loss generation exists exclusively in the offline Loader."
+  },
+  "codecContract": {
+    "httpRequest": {
+      "method": "POST",
+      "contentType": "application/x-www-form-urlencoded",
+      "headerToFormMap": {
+        "web-token": "t",
+        "game-id": "gid"
+      },
+      "encoding": "encodeURIComponent with spaces encoded as +"
+    },
+    "httpResponse": {
+      "encoding": "JSON",
+      "successEnvelope": {
+        "code": 200,
+        "payloadField": "data"
+      }
+    },
+    "applicationEncryption": {
+      "applicable": false,
+      "status": "NOT_OBSERVED",
+      "reason": "前端Http.post直接表单编码并解析JSON；授权token作为不透明值传输，未发现自定义加解密层"
+    },
+    "evidenceRefs": [
+      "E02_FRONTEND_MAIN",
+      "E03_FIRST_LOAD_API",
+      "E09_HTTP_CODEC"
+    ]
+  },
+  "redisContract": {
+    "status": "LOCAL_CONTRACT_IMPLEMENTED_AND_TESTED",
+    "implementationAllowed": true,
+    "source": "USER_MANDATE",
+    "file": "redis-pack/52-Cyber-GO/redis-delivery-contract.json"
+  },
+  "sourceCaptureCoverage": {
+    "ordinaryTargetPerCategory": 200,
+    "specialTargetPerCategory": 30,
+    "maxPaidRounds": 5000,
+    "paidRoundStarts": 1462,
+    "completedRoundCount": 1462,
+    "categories": [
+      {
+        "kind": "ORDINARY_LOSS",
+        "target": 200,
+        "completeRoundCount": 1205,
+        "status": "COVERED"
+      },
+      {
+        "kind": "ORDINARY_WIN",
+        "target": 200,
+        "completeRoundCount": 203,
+        "status": "COVERED"
+      },
+      {
+        "kind": "FREE_SPINS",
+        "target": 30,
+        "completeRoundCount": 54,
+        "status": "COVERED"
+      }
+    ],
+    "stopReason": "ALL_APPLICABLE_CATEGORIES_REACHED_TARGET"
+  },
+  "evidence": [
+    {
+      "id": "E01_RULES_PT",
+      "file": "resources/52-Cyber-GO/pt-br/extracted-rules-and-paytable.json",
+      "currentPathStatus": "INDEXED_PATH_UNRESOLVED",
+      "availablePaytableEvidence": [
+        "fixtures/52-Cyber-GO/first-load-api-pt-br.json",
+        "screenshots/52-Cyber-GO/rules-page-1-pt-br.png"
+      ]
+    },
+    {
+      "id": "E02_FRONTEND_MAIN",
+      "file": "resources/52-Cyber-GO/programmatic-http/20260902T073314000Z/files/static.cpgame.io/52/assets/main/index.b04df.js"
+    },
+    {
+      "id": "E03_FIRST_LOAD_API",
+      "file": "fixtures/52-Cyber-GO/first-load-api-pt-br.json"
+    },
+    {
+      "id": "E04_COMPLETE_ROUNDS",
+      "file": "captures/52-Cyber-GO/rounds.jsonl"
+    },
+    {
+      "id": "E05_SPIN_INDEX",
+      "file": "captures/52-Cyber-GO/spin-index.jsonl"
+    },
+    {
+      "id": "E06_LANGUAGE_MANIFESTS",
+      "file": "resources/52-Cyber-GO/<code>/first-load-manifest.json"
+    },
+    {
+      "id": "E07_RULE_SCREENSHOTS",
+      "file": "screenshots/52-Cyber-GO/rules-page-1-pt-br.png"
+    },
+    {
+      "id": "E08_ENDPOINT_ENUMERATION",
+      "file": "resources/52-Cyber-GO/programmatic-http/20260902T073314000Z/files/static.cpgame.io/52/assets/main/index.b04df.js"
+    },
+    {
+      "id": "E09_HTTP_CODEC",
+      "file": "resources/52-Cyber-GO/programmatic-http/20260902T073314000Z/files/static.cpgame.io/52/assets/main/index.b04df.js"
+    }
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "ae4823db63a5e8bd1d1f3a06da3ed6f76c04d761aefce10f29de6f6502885cfa",
+    "behaviorIds": [
+      "B01_LAUNCH_AUTH_CONFIG",
+      "B02_MINIMUM_PAID_SPIN",
+      "B03_243_WAYS_WIN",
+      "B04_FREE_SPINS",
+      "B05_COMPLETE_ROUND_BOUNDARY",
+      "B06_LANGUAGE_FIRST_LOAD",
+      "B07_RULES_AND_PAYTABLE",
+      "B08_HISTORY_DETAIL",
+      "B09_PROMOTIONAL_ACTIVITY_FREE",
+      "B10_HTTP_FORM_CODEC"
+    ]
+  },
+  "rulesVersion": "evidence-snapshot-e138fe9b94c489b9",
+  "winModelDetails": {
+    "type": "WAYS",
+    "waysCount": 243,
+    "fixed": true,
+    "direction": "LEFT_TO_RIGHT_CONSECUTIVE_REELS",
+    "paylineCount": {
+      "applicable": false,
+      "value": null,
+      "status": "NOT_APPLICABLE",
+      "reason": "权威规则明确243固定Ways；前端常量30用于CurBetGold基础投注因子，不是中奖线"
+    },
+    "evidenceRefs": [
+      "E01_RULES_PT",
+      "E02_FRONTEND_MAIN",
+      "E04_COMPLETE_ROUNDS"
+    ]
+  },
+  "paylineCount": {
+    "status": "NOT_APPLICABLE",
+    "applicable": false,
+    "value": null,
+    "reason": "Cyber GO为固定243 Ways；前端常量30是基础投注因子，不是中奖线数",
+    "evidenceRefs": [
+      "E01_RULES_PT",
+      "E02_FRONTEND_MAIN",
+      "E04_COMPLETE_ROUNDS"
+    ]
+  },
+  "rulesHashBasis": {
+    "schema": "cyber-go-protocol-evidence-v2",
+    "rules": "e138fe9b94c489b9c466bece77f554103bb0d6b27452852fe49cf61d6be53c49",
+    "frontend": "bfd11963ddb820fc14f7885a2645dd71e0347fc3b77985d9b417fdfd2595e2f9",
+    "firstLoadApi": "c78a22bc4bb95ab06d82001d48f572e08c314bfba1768381f652f8b2a67b4bd5",
+    "completeRounds": "1e63cd3af6bf9d87712cf9236c7d6501ecb2a2104acf4c8a79291832e0259fb5"
+  },
+  "runtimeDeliveryContract": {
+    "source": "USER_MANDATE_CONTROLLER_V3_AND_REDIS_COMPLETE_ROUND_DELIVERY",
+    "scope": "local downstream contract, not original upstream protocol",
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "contractVersion": 3,
+    "index": "CyberGo:52:v3:win",
+    "listPattern": "CyberGo:52:v3:round:<integer-multiplier>",
+    "selection": [
+      "SecureRandom win/loss",
+      "uniform existing positive integer multiplier for win, zero for loss",
+      "atomic LPOP of exactly one member",
+      "remaining deliveries only from that member"
+    ],
+    "memberEncoding": "one digit 0..9 per visible cell; 15 cells per board; | between steps",
+    "runtimeGeneration": false,
+    "fixturesAtRuntime": false,
+    "fallback": false,
+    "emptyPool": "503 without charging/advancing",
+    "loaderPrewritesLosses": true,
+    "report": "reports/52-Cyber-GO/redis-pool-integration-20260908.json"
+  },
+  "generationModel": {
+    "status": "EMPIRICAL_MODEL_VALIDATED",
+    "method": "SEQUENTIAL_JOINT_REEL_STATE_COUNTS",
+    "modelFile": "reports/52-Cyber-GO/generation-distribution-model.json",
+    "validationFile": "reports/52-Cyber-GO/generation-model-validation.json",
+    "source": "captures/52-Cyber-GO/rounds.jsonl",
+    "trainingRounds": 1362,
+    "holdoutRounds": 100,
+    "originalReelsOrRtpClaimed": false,
+    "rawSampleFrequenciesSeparateFromGenerated": true
+  },
+  "implementationStatus": "BACKEND_VALIDATED_UI_AND_ORIGINAL_ENTRY_PENDING",
+  "generationLimits": {
+    "scatterPerReel": 1,
+    "scatterBoard": 4,
+    "wildPerReel": 1,
+    "wildBoard": 3,
+    "wildReels": [
+      2,
+      3,
+      4
+    ],
+    "freeScatter": 0,
+    "freeSteps": 15,
+    "freeMultiplier": 10,
+    "basis": "stricter of confirmed rule constraints and observed complete-round ceilings"
+  }
+}

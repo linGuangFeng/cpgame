@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 5,
+  "gameId": 32,
+  "rawGameId": 32,
+  "gameName": "Jungle Treasure",
+  "directoryName": "32-Jungle-Treasure",
+  "family": "auth-verify-config",
+  "grid": { "reels": [5, 6, 6, 6, 6, 5], "cells": 34, "ways": "2025-32400" },
+  "bet": { "levels": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "sizes": [0.02, 0.1, 0.2], "base": 20 },
+  "symbols": {
+    "paying": ["H1", "H2", "H3", "H4", "H5", "H6", "A", "K", "Q", "J", "T"],
+    "wild": { "symbol": "Wild", "reels": [1, 2, 3, 4], "substitutes": "all except Scat" },
+    "scatter": { "symbol": "Scat", "trigger": 4, "freeSpins": 10 }
+  },
+  "modes": ["LOSS", "WIN", "FREE"],
+  "languages": ["bn", "en", "es", "fr", "id", "ko", "pt-br", "th", "tr", "vi"],
+  "endpoints": {
+    "verify": "/cp/api/v1/auth/verify",
+    "config": "/cp/api/v1/jungle-treasure/config",
+    "spin": "/cp/api/v1/jungle-treasure/spin",
+    "historyList": "/cp/api/v1/jungle-treasure/log-list",
+    "historyView": "/cp/api/v1/jungle-treasure/log-view"
+  },
+  "observedCaps": {
+    "scatterTokens": 4,
+    "wildTokens": 2,
+    "h1Tokens": 2,
+    "rpx": 30,
+    "cascades": 11,
+    "freeGrant": 10,
+    "retrigger": false
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 1990,
+  "gameName": "Magic Scroll",
+  "runId": "20260902T085111000Z",
+  "startedAt": "2026-09-02T08:51:12.239Z",
+  "finishedAt": "2026-09-02T08:53:31.058Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 153,
+    "exactStaticUrls": 150,
+    "excludedDynamicApiUrls": 3,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 150,
+    "succeeded": 150,
+    "failed": 0,
+    "downloadedBytes": 27558022,
+    "statusCounts": {
+      "200": 150
+    },
+    "contentTypeCounts": {
+      "application/javascript": 12,
+      "image/png": 78,
+      "application/json": 8,
+      "application/octet-stream": 7,
+      "image/jpeg": 33,
+      "audio/mpeg": 12
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/1990-Magic-Scroll/programmatic-http/20260902T085111000Z/download-items.public.jsonl",
+      "sha256": "8bf20a4a98fe75aff47b2144523cf0c59010fddf5effb664bd18c762c49b544a",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/1990-Magic-Scroll/programmatic-http/20260902T085111000Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "failedUrls": [],
+  "stageDirectory": "/Users/a1/Downloads/magic-scroll-stage/20260902T085111000Z",
+  "resourceFolder": "1990-Magic-Scroll"
+}

@@ -1,0 +1,15 @@
+{
+  "slug": "christmas-gift",
+  "folder": "1670-Christmas-Gift",
+  "gid": 1670,
+  "runId": "20260902T084955000Z",
+  "stage": "/Users/a1/Downloads/christmas-gift-stage/20260902T084955000Z",
+  "hdDest": "/Volumes/hd/cpgame/resources/1670-Christmas-Gift/programmatic-http/20260902T084955000Z",
+  "succeeded": 81,
+  "failed": 1,
+  "bytes": 13146122,
+  "total": 82,
+  "gameDirs": [
+    "Game1670"
+  ]
+}

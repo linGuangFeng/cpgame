@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 2220,
+  "gameName": "halloween meow",
+  "runId": "20260902T093210000Z",
+  "startedAt": "2026-09-02T09:32:11.296Z",
+  "finishedAt": "2026-09-02T09:34:15.128Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 137,
+    "exactStaticUrls": 134,
+    "excludedDynamicApiUrls": 3,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 134,
+    "succeeded": 134,
+    "failed": 0,
+    "downloadedBytes": 26635000,
+    "statusCounts": {
+      "200": 134
+    },
+    "contentTypeCounts": {
+      "application/javascript": 12,
+      "image/png": 65,
+      "application/json": 8,
+      "application/octet-stream": 9,
+      "image/jpeg": 18,
+      "audio/mpeg": 22
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/2220-Halloween-Meow/programmatic-http/20260902T093210000Z/download-items.public.jsonl",
+      "sha256": "b98e8f711068bdfb1015b5a7102ab84993b24314c6d87f7989b0d2332d59d2f7",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/2220-Halloween-Meow/programmatic-http/20260902T093210000Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "failedUrls": [],
+  "stageDirectory": "/Users/a1/Downloads/halloween-meow-stage/20260902T093210000Z",
+  "resourceFolder": "2220-Halloween-Meow"
+}

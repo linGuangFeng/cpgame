@@ -1,0 +1,1700 @@
+{
+  "schemaVersion": 1,
+  "gameId": 41,
+  "directoryName": "41-Lucky-Panda",
+  "analyzedAt": "2026-09-04T02:19:10.062Z",
+  "sources": {
+    "spinDeliveries": "captures/41-Lucky-Panda/original-http-spin-index.jsonl",
+    "rounds": "captures/41-Lucky-Panda/round-index.jsonl",
+    "spinIndex": "captures/41-Lucky-Panda/spin-index.jsonl",
+    "history": "captures/41-Lucky-Panda/history-1to1.jsonl",
+    "preflight": "captures/41-Lucky-Panda/original-http-preflight-round-001.json",
+    "frontend": "publish/41-Lucky-Panda/41/assets/main/index.ef386.js",
+    "versionconfig": "publish/41-Lucky-Panda/41/versionconfig.js",
+    "paytableScreenshot": "screenshots/41-Lucky-Panda/original-paytable.png"
+  },
+  "identity": {
+    "titleFromVersionconfig": "Lucky Panda",
+    "gameVersion": "v1.5.10.250430",
+    "apiGamePath": "lucky-panda",
+    "gid": 41
+  },
+  "frontend": {
+    "file": "publish/41-Lucky-Panda/41/assets/main/index.ef386.js",
+    "bytes": 389635,
+    "sha256": "f2f845981b6ceca93b45bc93fb1505e506f725be06f374a6255009655cada223",
+    "hits": {
+      "gameIdAssign": {
+        "count": 1,
+        "samples": [
+          "gameId:41"
+        ]
+      },
+      "gameName": {
+        "count": 5,
+        "samples": [
+          "lucky-panda",
+          "lucky-panda",
+          "lucky-panda",
+          "lucky-panda",
+          "Lucky Panda"
+        ]
+      },
+      "rowCounts": {
+        "count": 1,
+        "samples": [
+          "[5,6,6,6,6,5]"
+        ]
+      },
+      "columnCount": {
+        "count": 3,
+        "samples": [
+          "ColumnCount+1;r>=0;r--)i(r)},e.prototype.setBlurImg",
+          "ColumnCount:5,TopRowCount:4,RollWidth:708,TopRollIn",
+          "ColumnCount;u.GameData.getInstance().BlockSize=new "
+        ]
+      },
+      "payLineCount": {
+        "count": 0,
+        "samples": []
+      },
+      "ways": {
+        "count": 4,
+        "samples": [
+          "WAYS",
+          "WAYS",
+          "WAYS",
+          "WAYS"
+        ]
+      },
+      "apiSpin": {
+        "count": 2,
+        "samples": [
+          "lucky-panda/spin",
+          "/spin\""
+        ]
+      },
+      "apiConfig": {
+        "count": 1,
+        "samples": [
+          "lucky-panda/config"
+        ]
+      },
+      "apiLogList": {
+        "count": 1,
+        "samples": [
+          "log-list"
+        ]
+      },
+      "apiLogView": {
+        "count": 1,
+        "samples": [
+          "log-view"
+        ]
+      },
+      "buy": {
+        "count": 0,
+        "samples": []
+      },
+      "freeSpin": {
+        "count": 144,
+        "samples": [
+          "FreeGame",
+          "FreeGame",
+          "FreeGame",
+          "FreeGame",
+          "FreeGame",
+          "FreeGame",
+          "FreeGame",
+          "FreeGame"
+        ]
+      },
+      "scatter": {
+        "count": 36,
+        "samples": [
+          "Scat",
+          "Scat",
+          "Scat",
+          "Scat",
+          "Scat",
+          "Scat",
+          "Scat",
+          "Scat"
+        ]
+      },
+      "wild": {
+        "count": 30,
+        "samples": [
+          "Wild",
+          "Wild",
+          "Wild",
+          "Wild",
+          "Wild",
+          "Wild",
+          "Wild",
+          "Wild"
+        ]
+      },
+      "rpx": {
+        "count": 8,
+        "samples": [
+          "rpx",
+          "rpx",
+          "rpx",
+          "rpx",
+          "rpx",
+          "rpx",
+          "rpx",
+          "rpx"
+        ]
+      },
+      "ss": {
+        "count": 7,
+        "samples": [
+          "spin_status",
+          "spin_status",
+          "spin_status",
+          "spin_status",
+          "spin_status",
+          "spin_status",
+          "spin_status"
+        ]
+      },
+      "paytableLiteral": {
+        "count": 3,
+        "samples": [
+          "Pan\",\"H1\",\"H2",
+          "Pan:\"#f47a6e\",H1:\"#d897da\",H2",
+          "Pan\",\"H1\",\"H2"
+        ]
+      },
+      "symbolList": {
+        "count": 70,
+        "samples": [
+          "\"Pan\"",
+          "\"Scat\"",
+          "\"Pan\"",
+          "\"Wild\"",
+          "\"Pan\"",
+          "\"Pan\"",
+          "\"Wild\"",
+          "\"Scat\""
+        ]
+      },
+      "httpForm": {
+        "count": 3,
+        "samples": [
+          "encodeURIComponent",
+          "encodeURIComponent",
+          "application/x-www-form-urlencoded"
+        ]
+      },
+      "authVerify": {
+        "count": 2,
+        "samples": [
+          "auth/verify",
+          "auth/session"
+        ]
+      },
+      "headerMap": {
+        "count": 21,
+        "samples": [
+          "web-token",
+          "game-id",
+          "web-token",
+          "game-id",
+          "web-token",
+          "game-id",
+          "web-token",
+          "game-id"
+        ]
+      }
+    },
+    "moduleCount": 92,
+    "modulesOfInterest": [
+      "FreeGameRewardLogic",
+      "FreeGame",
+      "GameApi",
+      "GameConfigData",
+      "GameConfig",
+      "GameEventConfig",
+      "GameGlobalConfig",
+      "HistoryCustomItemLogic",
+      "HistoryCustomLogic",
+      "HistoryData",
+      "HistoryDetailBlock",
+      "HistoryDetailItemLineLogic",
+      "HistoryDetailLogic",
+      "HistoryDetailMgr",
+      "HistoryDetailTrasNumsLogic",
+      "HistoryItemLogic",
+      "HistoryLogic",
+      "HistoryMenuItemLogic",
+      "HistoryMenuLogic",
+      "Http",
+      "SpineAnima",
+      "SpineComponent",
+      "Spin"
+    ],
+    "snippets": {
+      "GameConfig": "ire,r=0;r<o.length;r++)i(o[r]);return i}({Adapter:[function(t,e,n){\"use strict\";",
+      "luckyPandaPath": "h(function(t){return Promise.reject(t)})},n.Config=function(t){var e=h(\"/api/v1/lucky-panda/config\",t.BaseUrl);return o.Http.post(e,t.Params,t.Headers,t.DataType).then(function(t){if(t)return globalThis.Currency=t.cs,r.GameApp.ConfigData.initConfig(t),l.GameData.getInstance().CurBaseMultiplierIndex=r.GameApp.ConfigData.getIndexByBaseMultiplier(Number(t.dbs)),l.GameData.getInstance().CurMultiplierIndex=r.GameApp.ConfigData.getIndexByMultiplier(t.dbl),c.GameLogic.getInstance().",
+      "rowCounts": null,
+      "payLine": null,
+      "column": ".y=s,e.x=t.node.x,t._nodes.push(e)}),a._initPosY.push(s)},a=this,r=p.GameConfig.ColumnCount+1;r>=0;r--)i(r)},e.prototype.setBlurImg=function(){this._nodes.forEach(function(t){return t.getComponent(\"BlockLogic\").setBlurImg()})},e.prototype.setNormalImg=function(){this._nodes.forEach(function(t){return t.getComponent(\"BlockLogic\").setNormalImg()})},e.prototype.onShowPanDouble=function(){this._nodes.forEach(function(t){t.getComponent(\"BlockLogic\")._symbolData.times&&(t.getCompon",
+      "buy": null,
+      "freeNum": ".effect_rate=\"\",this.is_effected=\"\",this.ctrl_log_id=0,this.control_key=\"\",this.free_spin_num=0,this.win_amount=0,this.bet_amount=0,this.now_free_spin_count=0,this.all_free_win_amount=\"\",this.wmkl_count=0,n.ctorCopyData.call(this,t);var u=t.wskl,p=t.gfl,A=t.sfl,d=(t.pl,t.rskl),h=t.wmkl,m=t.ss,f=t.remove_num,g=t.rpx;for(var y in this.totalTimes=g||1,this.remove_num=f,this.win_match_amount={},h){var _=h[y],C=_[_.length-1];C=String(C).padStart(2,\"0\");var b=u[y];this.win_match_am"
+    },
+    "apiPaths": [
+      "/api/v1/auth/session",
+      "/api/v1/auth/verify",
+      "/api/v1/lucky-panda/config",
+      "/api/v1/lucky-panda/log-list",
+      "/api/v1/lucky-panda/log-view",
+      "/api/v1/lucky-panda/spin",
+      "/api/v1/ping"
+    ],
+    "numericConfigSnippets": [
+      {
+        "key": "ColumnCount",
+        "snippet": "ColumnCount+1;r>=0;r--)i(r)},e.prototype.setBlurImg=function(){this._nodes.forEach(function(t){return t.getComponent(\"BlockLogic\").setBlurImg()})},e.prototype.setNormalImg=function(){this._nodes.forEach(function(t){retur"
+      },
+      {
+        "key": "spl",
+        "snippet": "split(\"/\");if(s=s[s.length-1],!e[s]){var l=\"function\"==typeof __require&&__require;if(!c&&l)return l(s,!0);if(a)return a(s,!0);throw new Error(\"Cannot find module '\"+r+\"'\")}r=s}var u=n[r]={exports:{}};e[r][0].call(u.expo"
+      },
+      {
+        "key": "bll",
+        "snippet": "bll,i.GameLogic.getInstance().minBetLeave=String(this.multiplier[0]),i.GameLogic.getInstance().maxBetLeave=String(this.multiplier[this.multiplier.length-1]),this.autoTimes=t.auto,this.symbol_pay_list=t.spl,this.reels=thi"
+      },
+      {
+        "key": "bsl",
+        "snippet": "bsl&&n.push.apply(n,t.bsl),t.fsl&&n.push.apply(n,null!==(e=t.fsl)&&void 0!==e?e:[]),r.GameApp.HistotyData.setCurIdDetailInfo(n,t.baf),t})},n.Heart=function(t){var e=h(\"/api/v1/ping\",t.BaseUrl);return o.Http.post(e,t.Para"
+      }
+    ],
+    "rowCountLiteral": "[5,6,6,6,6,5]",
+    "paytableArrays": []
+  },
+  "configObserved": {
+    "bll": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "bsl": [
+      0.02,
+      0.2
+    ],
+    "cc": "BRL",
+    "cs": "R$"
+  },
+  "counts": {
+    "deliveries": 2883,
+    "uniqueRoundOrdinals": 1092,
+    "roundIndexRows": 1093,
+    "spinIndexRows": 1093,
+    "historyRows": 1093,
+    "origRoundRows": 1092
+  },
+  "identityMatch": {
+    "roundVsHistoryTransferExact": true,
+    "roundVsSpinIndexTransferExact": true,
+    "uniqueRoundTransfers": 1093,
+    "uniqueHistoryTransfers": 1093
+  },
+  "request": {
+    "path": "/cp/api/v1/lucky-panda/spin",
+    "method": "POST",
+    "fieldsObserved": [
+      "bl",
+      "bs",
+      "gid"
+    ],
+    "extraNonStandardFields": {
+      "spinWithExtraFields": 0,
+      "extraFieldNames": {}
+    }
+  },
+  "envelopeKeys": [
+    "code",
+    "data"
+  ],
+  "fieldPresence": {
+    "spin.data.ba": 2883,
+    "spin.data.frwa": 2883,
+    "spin.data.fsn": 2883,
+    "spin.data.gfl": 2883,
+    "spin.data.gt": 2883,
+    "spin.data.nfsc": 2883,
+    "spin.data.pb": 2883,
+    "spin.data.rpx": 2883,
+    "spin.data.rskl": 2883,
+    "spin.data.rwa": 2883,
+    "spin.data.sfl": 2883,
+    "spin.data.ss": 2883,
+    "spin.data.wa": 2883,
+    "spin.data.wmkl": 2883,
+    "spin.data.wskl": 2883
+  },
+  "fieldNullCount": {
+    "spin.data.frwa": 2883,
+    "spin.data.fsn": 2115,
+    "spin.data.gfl": 2404,
+    "spin.data.nfsc": 2150,
+    "spin.data.rpx": 940,
+    "spin.data.rwa": 939,
+    "spin.data.wa": 1442,
+    "spin.data.wmkl": 1442,
+    "spin.data.wskl": 1442,
+    "spin.data.sfl": 1031,
+    "spin.data.ss": 1441,
+    "spin.data.ba": 1791
+  },
+  "fieldTypes": {
+    "spin.data.ba": {
+      "number": 2883
+    },
+    "spin.data.frwa": {
+      "number": 2883
+    },
+    "spin.data.fsn": {
+      "number": 2883
+    },
+    "spin.data.gfl": {
+      "array": 2883
+    },
+    "spin.data.gt": {
+      "number": 2883
+    },
+    "spin.data.nfsc": {
+      "number": 2883
+    },
+    "spin.data.pb": {
+      "string": 2883
+    },
+    "spin.data.rpx": {
+      "number": 2883
+    },
+    "spin.data.rskl": {
+      "array": 2883
+    },
+    "spin.data.rwa": {
+      "number": 2883
+    },
+    "spin.data.sfl": {
+      "array": 2883
+    },
+    "spin.data.ss": {
+      "number": 2883
+    },
+    "spin.data.wa": {
+      "number": 2883
+    },
+    "spin.data.wmkl": {
+      "array": 2883
+    },
+    "spin.data.wskl": {
+      "array": 2883
+    }
+  },
+  "boardCodec": {
+    "rowCounts": [
+      5,
+      6,
+      6,
+      6,
+      6,
+      5
+    ],
+    "deliveriesChecked": 2883,
+    "mismatchCount": 0
+  },
+  "allWaysAward": {
+    "formula": "sum(product(wmkl[i][*].length) * paytable[wskl[i]][reelCount-3] * bs * bl * max(1,rpx))",
+    "paytableSource": "screenshots/41-Lucky-Panda/original-paytable.png plus 2883 delivery wa match",
+    "paytable": {
+      "Pan": [
+        30,
+        40,
+        50,
+        80
+      ],
+      "H1": [
+        20,
+        25,
+        30,
+        50
+      ],
+      "H2": [
+        10,
+        25,
+        30,
+        40
+      ],
+      "H3": [
+        8,
+        15,
+        20,
+        30
+      ],
+      "H4": [
+        6,
+        10,
+        12,
+        15
+      ],
+      "H5": [
+        6,
+        10,
+        12,
+        15
+      ],
+      "A": [
+        4,
+        6,
+        8,
+        10
+      ],
+      "K": [
+        4,
+        6,
+        8,
+        10
+      ],
+      "Q": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "J": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "T": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "bs": 0.02,
+    "bl": 1,
+    "deliveriesChecked": 2883,
+    "mismatchCount": 0,
+    "unknownAwardTerms": 0,
+    "maxAbsoluteDelta": 2.842170943040401e-14
+  },
+  "stackedSymbolWinEncoding": {
+    "checked": 2005,
+    "stackCountedAsOnePos": 1703,
+    "stackCountedAsManyCells": 302,
+    "examples": [
+      {
+        "roundOrdinal": 11,
+        "stepOrdinal": 1,
+        "symbol": "H5",
+        "pos": 11,
+        "height": 2,
+        "listedFromSameBlock": [
+          11
+        ]
+      },
+      {
+        "roundOrdinal": 11,
+        "stepOrdinal": 1,
+        "symbol": "H5",
+        "pos": 21,
+        "height": 3,
+        "listedFromSameBlock": [
+          21
+        ]
+      },
+      {
+        "roundOrdinal": 11,
+        "stepOrdinal": 1,
+        "symbol": "H5",
+        "pos": 33,
+        "height": 3,
+        "listedFromSameBlock": [
+          33
+        ]
+      },
+      {
+        "roundOrdinal": 11,
+        "stepOrdinal": 1,
+        "symbol": "H5",
+        "pos": 43,
+        "height": 3,
+        "listedFromSameBlock": [
+          43
+        ]
+      },
+      {
+        "roundOrdinal": 11,
+        "stepOrdinal": 4,
+        "symbol": "K",
+        "pos": 43,
+        "height": 3,
+        "listedFromSameBlock": [
+          43
+        ]
+      }
+    ]
+  },
+  "observedEnums": {
+    "rpx": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26
+    ],
+    "fsn": [
+      0,
+      10
+    ],
+    "nfsc": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "gt": [
+      1
+    ],
+    "ss": [
+      0,
+      1
+    ],
+    "ba": [
+      0,
+      0.4
+    ]
+  },
+  "scatterTrigger": {
+    "deliveries": 208,
+    "byCount": {
+      "3": 129,
+      "4": 49,
+      "5": 18,
+      "6": 8,
+      "7": 1,
+      "9": 3
+    },
+    "fsnOnTrigger": {
+      "0": 173,
+      "10": 35
+    },
+    "ssOnTrigger": {
+      "0": 101,
+      "1": 107
+    },
+    "nfscOnTrigger": {
+      "0": 208
+    }
+  },
+  "freeRetrigger": {
+    "extraFsnAfterFreeStart": 0,
+    "examples": []
+  },
+  "independentRoundStats": {
+    "total": 1092,
+    "ORDINARY_LOSS": 892,
+    "ORDINARY_WIN": 165,
+    "ORDINARY_WIN_SINGLE_STEP": 0,
+    "ORDINARY_WIN_CASCADE": 165,
+    "SCATTER_FREE": 35,
+    "SCATTER_FREE_WITH_CASCADE": 35,
+    "BUY": 0,
+    "dirty": 0,
+    "ssNotTerminal": 0,
+    "paidBaNotMin": 0,
+    "continuationBaNonZero": 0,
+    "fsnNotTen": 0,
+    "nfscNotTenAtEnd": 0
+  },
+  "oldRoundIndexClass": {
+    "LOSS": 893,
+    "WIN": 200,
+    "cascade": 165,
+    "scatter": 35
+  },
+  "adjacentStepChecks": {
+    "cascade": {
+      "pairs": 985,
+      "rwaNonDecreasing": 985,
+      "ss0ThenContinue": 985,
+      "terminalSs1": 165
+    },
+    "scatter": {
+      "pairs": 806,
+      "nfscNonDecreasing": 806,
+      "fsnStable10": 733,
+      "terminalNfscEqualsFsn": 35
+    }
+  },
+  "ssSequenceExamples": {
+    "cascade": {
+      "roundOrdinal": 11,
+      "steps": [
+        {
+          "step": 1,
+          "ss": 0,
+          "wa": 0.6,
+          "rwa": 0.6,
+          "rpx": 0,
+          "fsn": 0,
+          "nfsc": 0,
+          "ba": 0.4
+        },
+        {
+          "step": 2,
+          "ss": 0,
+          "wa": 0.5,
+          "rwa": 1.1,
+          "rpx": 0,
+          "fsn": 0,
+          "nfsc": 0,
+          "ba": 0
+        },
+        {
+          "step": 3,
+          "ss": 0,
+          "wa": 0.16,
+          "rwa": 1.26,
+          "rpx": 0,
+          "fsn": 0,
+          "nfsc": 0,
+          "ba": 0
+        },
+        {
+          "step": 4,
+          "ss": 0,
+          "wa": 0.32,
+          "rwa": 1.58,
+          "rpx": 2,
+          "fsn": 0,
+          "nfsc": 0,
+          "ba": 0
+        },
+        {
+          "step": 5,
+          "ss": 0,
+          "wa": 19.2,
+          "rwa": 20.78,
+          "rpx": 2,
+          "fsn": 0,
+          "nfsc": 0,
+          "ba": 0
+        },
+        {
+          "step": 6,
+          "ss": 0,
+          "wa": 0.04,
+          "rwa": 20.82,
+          "rpx": 2,
+          "fsn": 0,
+          "nfsc": 0,
+          "ba": 0
+        },
+        {
+          "step": 7,
+          "ss": 0,
+          "wa": 1.6,
+          "rwa": 22.42,
+          "rpx": 2,
+          "fsn": 0,
+          "nfsc": 0,
+          "ba": 0
+        },
+        {
+          "step": 8,
+          "ss": 0,
+          "wa": 0.24,
+          "rwa": 22.66,
+          "rpx": 2,
+          "fsn": 0,
+          "nfsc": 0,
+          "ba": 0
+        },
+        {
+          "step": 9,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 22.66,
+          "rpx": 2,
+          "fsn": 0,
+          "nfsc": 0,
+          "ba": 0
+        }
+      ]
+    },
+    "scatter": {
+      "roundOrdinal": 69,
+      "steps": [
+        {
+          "step": 1,
+          "ss": 0,
+          "wa": 0.5,
+          "rwa": 0.5,
+          "frwa": 0,
+          "rpx": 0,
+          "fsn": 0,
+          "nfsc": 0,
+          "ba": 0.4,
+          "scat": 3
+        },
+        {
+          "step": 2,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 0.5,
+          "frwa": 0,
+          "rpx": 0,
+          "fsn": 10,
+          "nfsc": 0,
+          "ba": 0,
+          "scat": 4
+        },
+        {
+          "step": 3,
+          "ss": 0,
+          "wa": 1.92,
+          "rwa": 1.92,
+          "frwa": 0,
+          "rpx": 6,
+          "fsn": 10,
+          "nfsc": 1,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 4,
+          "ss": 0,
+          "wa": 0.96,
+          "rwa": 2.88,
+          "frwa": 0,
+          "rpx": 6,
+          "fsn": 10,
+          "nfsc": 1,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 5,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 2.88,
+          "frwa": 0,
+          "rpx": 6,
+          "fsn": 10,
+          "nfsc": 1,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 6,
+          "ss": 0,
+          "wa": 0.36,
+          "rwa": 3.24,
+          "frwa": 0,
+          "rpx": 6,
+          "fsn": 10,
+          "nfsc": 2,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 7,
+          "ss": 0,
+          "wa": 1.2,
+          "rwa": 4.44,
+          "frwa": 0,
+          "rpx": 6,
+          "fsn": 10,
+          "nfsc": 2,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 8,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 4.44,
+          "frwa": 0,
+          "rpx": 6,
+          "fsn": 10,
+          "nfsc": 2,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 9,
+          "ss": 0,
+          "wa": 2.56,
+          "rwa": 7,
+          "frwa": 0,
+          "rpx": 8,
+          "fsn": 10,
+          "nfsc": 3,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 10,
+          "ss": 0,
+          "wa": 6.56,
+          "rwa": 13.56,
+          "frwa": 0,
+          "rpx": 8,
+          "fsn": 10,
+          "nfsc": 3,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 11,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 13.56,
+          "frwa": 0,
+          "rpx": 8,
+          "fsn": 10,
+          "nfsc": 3,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 12,
+          "ss": 0,
+          "wa": 2.56,
+          "rwa": 16.12,
+          "frwa": 0,
+          "rpx": 8,
+          "fsn": 10,
+          "nfsc": 4,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 13,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 16.12,
+          "frwa": 0,
+          "rpx": 8,
+          "fsn": 10,
+          "nfsc": 4,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 14,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 16.12,
+          "frwa": 0,
+          "rpx": 10,
+          "fsn": 10,
+          "nfsc": 5,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 15,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 16.12,
+          "frwa": 0,
+          "rpx": 10,
+          "fsn": 10,
+          "nfsc": 6,
+          "ba": 0,
+          "scat": 1
+        },
+        {
+          "step": 16,
+          "ss": 0,
+          "wa": 7.2,
+          "rwa": 23.32,
+          "frwa": 0,
+          "rpx": 10,
+          "fsn": 10,
+          "nfsc": 7,
+          "ba": 0,
+          "scat": 1
+        },
+        {
+          "step": 17,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 23.32,
+          "frwa": 0,
+          "rpx": 10,
+          "fsn": 10,
+          "nfsc": 7,
+          "ba": 0,
+          "scat": 1
+        },
+        {
+          "step": 18,
+          "ss": 0,
+          "wa": 30,
+          "rwa": 53.32,
+          "frwa": 0,
+          "rpx": 10,
+          "fsn": 10,
+          "nfsc": 8,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 19,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 53.32,
+          "frwa": 0,
+          "rpx": 10,
+          "fsn": 10,
+          "nfsc": 8,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 20,
+          "ss": 0,
+          "wa": 4,
+          "rwa": 57.32,
+          "frwa": 0,
+          "rpx": 10,
+          "fsn": 10,
+          "nfsc": 9,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 21,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 57.32,
+          "frwa": 0,
+          "rpx": 10,
+          "fsn": 10,
+          "nfsc": 9,
+          "ba": 0,
+          "scat": 0
+        },
+        {
+          "step": 22,
+          "ss": 1,
+          "wa": 0,
+          "rwa": 57.32,
+          "frwa": 0,
+          "rpx": 10,
+          "fsn": 10,
+          "nfsc": 10,
+          "ba": 0,
+          "scat": 1
+        }
+      ]
+    }
+  },
+  "rpxByCascadeDepth": {
+    "1": {
+      "0": 94,
+      "2": 90,
+      "4": 45,
+      "6": 39,
+      "8": 23,
+      "10": 25,
+      "12": 23,
+      "14": 22,
+      "16": 6,
+      "18": 4,
+      "20": 6,
+      "22": 4,
+      "24": 2
+    },
+    "2": {
+      "0": 64,
+      "2": 74,
+      "4": 41,
+      "6": 35,
+      "8": 7,
+      "10": 19,
+      "12": 12,
+      "14": 10,
+      "16": 5,
+      "20": 4,
+      "22": 2
+    },
+    "3": {
+      "0": 46,
+      "2": 67,
+      "4": 29,
+      "6": 29,
+      "8": 11,
+      "10": 13,
+      "12": 8,
+      "14": 3,
+      "16": 3,
+      "22": 1
+    },
+    "4": {
+      "0": 33,
+      "2": 49,
+      "4": 31,
+      "6": 22,
+      "8": 11,
+      "10": 10,
+      "12": 4,
+      "14": 1,
+      "16": 3,
+      "22": 1
+    },
+    "5": {
+      "0": 15,
+      "2": 37,
+      "4": 32,
+      "6": 17,
+      "8": 13,
+      "10": 5,
+      "12": 4,
+      "16": 3
+    },
+    "6": {
+      "0": 8,
+      "2": 30,
+      "4": 22,
+      "6": 14,
+      "8": 10,
+      "10": 4,
+      "12": 3,
+      "16": 1,
+      "18": 1
+    },
+    "7": {
+      "0": 5,
+      "2": 18,
+      "4": 20,
+      "6": 12,
+      "8": 4,
+      "10": 3,
+      "12": 1
+    },
+    "8": {
+      "0": 5,
+      "2": 10,
+      "4": 14,
+      "6": 9,
+      "8": 5,
+      "10": 2,
+      "12": 1
+    },
+    "9": {
+      "0": 3,
+      "2": 6,
+      "4": 11,
+      "6": 5,
+      "8": 6,
+      "12": 1
+    },
+    "10": {
+      "0": 2,
+      "2": 5,
+      "4": 7,
+      "6": 2,
+      "8": 2,
+      "12": 1
+    },
+    "11": {
+      "0": 1,
+      "2": 3,
+      "4": 7,
+      "10": 2,
+      "12": 1
+    },
+    "12": {
+      "2": 3,
+      "4": 5
+    },
+    "13": {
+      "2": 2,
+      "4": 1
+    },
+    "14": {
+      "2": 1,
+      "4": 1
+    },
+    "15": {
+      "2": 1
+    },
+    "16": {
+      "2": 1
+    },
+    "17": {
+      "2": 1
+    },
+    "18": {
+      "2": 1
+    }
+  },
+  "integerMultiplier": {
+    "ordinaryWin": {
+      "n": 165,
+      "integerCount": 18,
+      "nonIntegerCount": 147,
+      "distinctIntegerMultipliers": [
+        67,
+        69,
+        78,
+        81,
+        82,
+        97,
+        105,
+        144,
+        162,
+        163,
+        180,
+        181,
+        216,
+        235,
+        270,
+        366
+      ],
+      "sampleInsufficientIfEmpty": false
+    },
+    "scatterFree": {
+      "n": 35,
+      "integerCount": 3,
+      "nonIntegerCount": 32,
+      "distinctIntegerMultipliers": [
+        193,
+        313,
+        426
+      ],
+      "sampleInsufficientIfEmpty": false
+    },
+    "ordinaryLoss": {
+      "n": 892,
+      "integerCount": 892,
+      "nonIntegerCount": 0,
+      "distinctIntegerMultipliers": [
+        0
+      ],
+      "sampleInsufficientIfEmpty": false
+    },
+    "note": "integer multiplier = (terminal rwa [+ frwa if free]) / paidBet 0.4; if not integer, do not claim integer-multiplier Redis keys from this ratio alone"
+  },
+  "symbolWeightsByEntry": {
+    "paidStart": {
+      "denominatorCells": 45322,
+      "denominatorBlocks": 35246,
+      "boards": 1333,
+      "evidence": "1333 boards * 34 visible cells = 45322",
+      "symbols": {
+        "Pan": {
+          "cells": 719,
+          "blocks": 559,
+          "cellPct": 1.586426,
+          "blockPct": 1.585996
+        },
+        "H1": {
+          "cells": 4613,
+          "blocks": 3608,
+          "cellPct": 10.17828,
+          "blockPct": 10.236623
+        },
+        "H2": {
+          "cells": 4567,
+          "blocks": 3588,
+          "cellPct": 10.076784,
+          "blockPct": 10.179879
+        },
+        "H3": {
+          "cells": 4331,
+          "blocks": 3365,
+          "cellPct": 9.556065,
+          "blockPct": 9.547183
+        },
+        "H4": {
+          "cells": 4321,
+          "blocks": 3388,
+          "cellPct": 9.534001,
+          "blockPct": 9.612438
+        },
+        "H5": {
+          "cells": 4253,
+          "blocks": 3330,
+          "cellPct": 9.383964,
+          "blockPct": 9.447881
+        },
+        "A": {
+          "cells": 4329,
+          "blocks": 3370,
+          "cellPct": 9.551653,
+          "blockPct": 9.561369
+        },
+        "K": {
+          "cells": 4299,
+          "blocks": 3337,
+          "cellPct": 9.48546,
+          "blockPct": 9.467741
+        },
+        "Q": {
+          "cells": 4398,
+          "blocks": 3375,
+          "cellPct": 9.703897,
+          "blockPct": 9.575555
+        },
+        "J": {
+          "cells": 4265,
+          "blocks": 3286,
+          "cellPct": 9.410441,
+          "blockPct": 9.323044
+        },
+        "T": {
+          "cells": 4190,
+          "blocks": 3264,
+          "cellPct": 9.244958,
+          "blockPct": 9.260625
+        },
+        "Wild": {
+          "cells": 185,
+          "blocks": 130,
+          "cellPct": 0.40819,
+          "blockPct": 0.368836
+        },
+        "Scat": {
+          "cells": 852,
+          "blocks": 646,
+          "cellPct": 1.879882,
+          "blockPct": 1.832832
+        }
+      }
+    },
+    "cascadeRefill": {
+      "denominatorCells": 42806,
+      "denominatorBlocks": 38822,
+      "boards": 1259,
+      "evidence": "1259 boards * 34 visible cells = 42806",
+      "symbols": {
+        "Pan": {
+          "cells": 1877,
+          "blocks": 1670,
+          "cellPct": 4.384899,
+          "blockPct": 4.301685
+        },
+        "H1": {
+          "cells": 4570,
+          "blocks": 4171,
+          "cellPct": 10.676073,
+          "blockPct": 10.743908
+        },
+        "H2": {
+          "cells": 4144,
+          "blocks": 3769,
+          "cellPct": 9.680886,
+          "blockPct": 9.708413
+        },
+        "H3": {
+          "cells": 4255,
+          "blocks": 3853,
+          "cellPct": 9.940195,
+          "blockPct": 9.924785
+        },
+        "H4": {
+          "cells": 4089,
+          "blocks": 3686,
+          "cellPct": 9.552399,
+          "blockPct": 9.494616
+        },
+        "H5": {
+          "cells": 3863,
+          "blocks": 3444,
+          "cellPct": 9.024436,
+          "blockPct": 8.871259
+        },
+        "A": {
+          "cells": 3720,
+          "blocks": 3471,
+          "cellPct": 8.690371,
+          "blockPct": 8.940807
+        },
+        "K": {
+          "cells": 3791,
+          "blocks": 3484,
+          "cellPct": 8.856235,
+          "blockPct": 8.974293
+        },
+        "Q": {
+          "cells": 3778,
+          "blocks": 3457,
+          "cellPct": 8.825866,
+          "blockPct": 8.904745
+        },
+        "J": {
+          "cells": 3731,
+          "blocks": 3444,
+          "cellPct": 8.716068,
+          "blockPct": 8.871259
+        },
+        "T": {
+          "cells": 3353,
+          "blocks": 3075,
+          "cellPct": 7.833014,
+          "blockPct": 7.920767
+        },
+        "Wild": {
+          "cells": 475,
+          "blocks": 245,
+          "cellPct": 1.109658,
+          "blockPct": 0.631085
+        },
+        "Scat": {
+          "cells": 1160,
+          "blocks": 1053,
+          "cellPct": 2.7099,
+          "blockPct": 2.71238
+        }
+      }
+    },
+    "freeStart": {
+      "denominatorCells": 12920,
+      "denominatorBlocks": 10073,
+      "boards": 380,
+      "evidence": "380 boards * 34 visible cells = 12920",
+      "symbols": {
+        "Pan": {
+          "cells": 233,
+          "blocks": 181,
+          "cellPct": 1.803406,
+          "blockPct": 1.796883
+        },
+        "H1": {
+          "cells": 1262,
+          "blocks": 987,
+          "cellPct": 9.767802,
+          "blockPct": 9.798471
+        },
+        "H2": {
+          "cells": 1386,
+          "blocks": 1051,
+          "cellPct": 10.727554,
+          "blockPct": 10.433833
+        },
+        "H3": {
+          "cells": 1285,
+          "blocks": 1004,
+          "cellPct": 9.94582,
+          "blockPct": 9.967239
+        },
+        "H4": {
+          "cells": 1179,
+          "blocks": 944,
+          "cellPct": 9.125387,
+          "blockPct": 9.371587
+        },
+        "H5": {
+          "cells": 1242,
+          "blocks": 988,
+          "cellPct": 9.613003,
+          "blockPct": 9.808399
+        },
+        "A": {
+          "cells": 1157,
+          "blocks": 898,
+          "cellPct": 8.955108,
+          "blockPct": 8.914921
+        },
+        "K": {
+          "cells": 1201,
+          "blocks": 961,
+          "cellPct": 9.295666,
+          "blockPct": 9.540355
+        },
+        "Q": {
+          "cells": 1189,
+          "blocks": 921,
+          "cellPct": 9.202786,
+          "blockPct": 9.143254
+        },
+        "J": {
+          "cells": 1258,
+          "blocks": 966,
+          "cellPct": 9.736842,
+          "blockPct": 9.589993
+        },
+        "T": {
+          "cells": 1219,
+          "blocks": 936,
+          "cellPct": 9.434985,
+          "blockPct": 9.292167
+        },
+        "Wild": {
+          "cells": 80,
+          "blocks": 60,
+          "cellPct": 0.619195,
+          "blockPct": 0.595652
+        },
+        "Scat": {
+          "cells": 229,
+          "blocks": 176,
+          "cellPct": 1.772446,
+          "blockPct": 1.747245
+        }
+      }
+    },
+    "freeCascadeRefill": {
+      "denominatorCells": 13974,
+      "denominatorBlocks": 11922,
+      "boards": 411,
+      "evidence": "411 boards * 34 visible cells = 13974",
+      "symbols": {
+        "Pan": {
+          "cells": 412,
+          "blocks": 314,
+          "cellPct": 2.948333,
+          "blockPct": 2.633786
+        },
+        "H1": {
+          "cells": 1346,
+          "blocks": 1164,
+          "cellPct": 9.632174,
+          "blockPct": 9.763463
+        },
+        "H2": {
+          "cells": 1340,
+          "blocks": 1136,
+          "cellPct": 9.589237,
+          "blockPct": 9.528603
+        },
+        "H3": {
+          "cells": 1238,
+          "blocks": 1065,
+          "cellPct": 8.85931,
+          "blockPct": 8.933065
+        },
+        "H4": {
+          "cells": 1375,
+          "blocks": 1188,
+          "cellPct": 9.839702,
+          "blockPct": 9.964771
+        },
+        "H5": {
+          "cells": 1260,
+          "blocks": 1118,
+          "cellPct": 9.016745,
+          "blockPct": 9.377621
+        },
+        "A": {
+          "cells": 1249,
+          "blocks": 1041,
+          "cellPct": 8.938028,
+          "blockPct": 8.731756
+        },
+        "K": {
+          "cells": 1388,
+          "blocks": 1199,
+          "cellPct": 9.932732,
+          "blockPct": 10.057037
+        },
+        "Q": {
+          "cells": 1298,
+          "blocks": 1113,
+          "cellPct": 9.288679,
+          "blockPct": 9.335682
+        },
+        "J": {
+          "cells": 1339,
+          "blocks": 1126,
+          "cellPct": 9.582081,
+          "blockPct": 9.444724
+        },
+        "T": {
+          "cells": 1337,
+          "blocks": 1124,
+          "cellPct": 9.567769,
+          "blockPct": 9.427948
+        },
+        "Wild": {
+          "cells": 73,
+          "blocks": 42,
+          "cellPct": 0.522399,
+          "blockPct": 0.35229
+        },
+        "Scat": {
+          "cells": 319,
+          "blocks": 292,
+          "cellPct": 2.282811,
+          "blockPct": 2.449253
+        }
+      }
+    },
+    "disclaimer": "Observed cell/block counts from 1333 authorized complete Rounds (original-http + preflight round 1 + recapture already merged into original-http). Not original reel-strip probability or RTP. Do not copy paidStart weights onto cascade refill or free entries."
+  },
+  "history": {
+    "rows": 1093,
+    "fieldPresence": {
+      "row": {
+        "ba": 1093,
+        "baf": 1093,
+        "bid": 1093,
+        "ca": 1093,
+        "fe": 1093,
+        "gm": 1093,
+        "gt": 1093,
+        "tis": 1093,
+        "wa": 1093
+      },
+      "detail": {
+        "baf": 1093,
+        "bid": 1093,
+        "bsl": 1093,
+        "fsl": 35
+      },
+      "bsl": {
+        "ba": 1093,
+        "balance_after": 1093,
+        "bet_level": 1093,
+        "bet_size": 1093,
+        "bid": 1093,
+        "bl": 1093,
+        "bs": 1093,
+        "ca": 1093,
+        "cc": 1093,
+        "created_at": 1093,
+        "cs": 1093,
+        "frwa": 1093,
+        "fsn": 1093,
+        "gfl": 1093,
+        "gt": 1093,
+        "nfsc": 1093,
+        "pb": 1093,
+        "rpx": 1093,
+        "rskl": 1093,
+        "rwa": 1093,
+        "sfl": 1093,
+        "ss": 1093,
+        "wa": 1093,
+        "wmkl": 1093,
+        "wskl": 1093
+      },
+      "fsl": {
+        "ba": 35,
+        "balance_after": 35,
+        "bet_level": 35,
+        "bet_size": 35,
+        "bid": 35,
+        "bl": 35,
+        "bs": 35,
+        "ca": 35,
+        "cc": 35,
+        "created_at": 35,
+        "cs": 35,
+        "frwa": 35,
+        "fsn": 35,
+        "gfl": 35,
+        "gt": 35,
+        "nfsc": 35,
+        "pb": 35,
+        "rpx": 35,
+        "rskl": 35,
+        "rwa": 35,
+        "sfl": 35,
+        "ss": 35,
+        "wa": 35,
+        "wmkl": 35,
+        "wskl": 35
+      }
+    },
+    "gmValues": [
+      "null"
+    ],
+    "feValues": [
+      0
+    ],
+    "gtValues": [
+      41
+    ],
+    "detailHasFslKey": 35,
+    "fslNonEmpty": 35,
+    "bslAverageLength": 1.9679780420860018
+  },
+  "scatterCaps": {
+    "unit": "RLE blocks (trigger symbol Scat). Help/paytable has no numeric cap; capture max is the generator cap.",
+    "columnMaxBlocks": 3,
+    "totalMaxBlocks": 5,
+    "columnMaxCells": 4,
+    "totalMaxCells": 9,
+    "maxTokenHeight": 4,
+    "triggerBoards": 38,
+    "triggerMaxBlocks": 5,
+    "triggerMaxBlocksPerReel": 3,
+    "triggerMaxCells": 9,
+    "blockHistogram": {
+      "0": 1881,
+      "1": 1027,
+      "2": 342,
+      "3": 77,
+      "4": 55,
+      "5": 1
+    },
+    "cellHistogram": {
+      "0": 1881,
+      "1": 889,
+      "2": 333,
+      "3": 174,
+      "4": 73,
+      "5": 18,
+      "6": 10,
+      "7": 2,
+      "9": 3
+    },
+    "perReelBlockHistogram": {
+      "0": 18196,
+      "1": 2038,
+      "2": 63,
+      "3": 1
+    },
+    "boards": 3383
+  },
+  "resultEngineCorpus": {
+    "paidStarts": 1333,
+    "deliveries": 3383,
+    "originalHttpDeliveries": 3382,
+    "originalHttpAdded": 3382,
+    "preflightAdded": 1,
+    "recaptureDeliveries": 499,
+    "recaptureOnlyAdded": 0,
+    "ORDINARY_LOSS": 1095,
+    "ORDINARY_WIN": 200,
+    "SCATTER_FREE": 38
+  }
+}

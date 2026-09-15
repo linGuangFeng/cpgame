@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 43,
+  "gameId": 2470,
+  "status": "READY_FOR_ACCEPTANCE",
+  "sampleInsufficient": ["LUCKY_WHEEL"],
+  "normalIndex": "PerKeyList_000002470",
+  "specialIndex": "MaryKeyList_000002470",
+  "wheelIndex": "PreKeyList_100002470",
+  "factPrefix": "LNM43",
+  "board": {"reels": 3, "rows": 3, "paylines": 5},
+  "symbols": [0, 1, 2, 3, 4, 5, 6],
+  "multiplierReel": {"positions": 3, "appliedPosition": 1},
+  "modes": ["ORDINARY_LOSS", "ORDINARY_WIN", "LUCKY_WHEEL", "LUCKY_FEATURE"],
+  "runtimeGeneration": false,
+  "generatedMembersCountAsRealEvidence": false,
+  "integerKey": "totalUnits",
+  "rulesHash": "f4b680958ea1d56e5d780d6292b01ab1ceedd7041a1c7ee1b5853c52cff5d6d2"
+}

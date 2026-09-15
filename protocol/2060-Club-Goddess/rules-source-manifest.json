@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 2060,
+  "directoryName": "2060-Club-Goddess",
+  "hashAlgorithm": "SHA-256",
+  "rulesHashDefinition": "rulesHash is sha256 of the exact UTF-8 bytes of this file.",
+  "sources": [
+    {
+      "source": "fixtures/2060-Club-Goddess/oracle/history-after-10-rounds.response.json",
+      "sha256": "6c6b7d04e40e35f8a2bceb8f6681163643cfc999c83ac8f4d979324f15c576a2"
+    },
+    {
+      "source": "fixtures/2060-Club-Goddess/oracle/init-room.response.json",
+      "sha256": "fe949037d2c8a697e912dfc2c79e58aeca5abd61ab8d5972087f5c9685f35fc6"
+    },
+    {
+      "source": "fixtures/2060-Club-Goddess/oracle/initial-data.response.json",
+      "sha256": "f0c95c242e0cd88e309bc7283cfc5e06939a4815897dd3975dfc1dffc0ae6030"
+    },
+    {
+      "source": "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json",
+      "sha256": "5d95c71999945ed3e28358ed41519b36c26c7590550ee5a9f6c392be675e8e14"
+    },
+    {
+      "source": "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json",
+      "sha256": "eb9014d7e940c971e84204609a7fe0a664d4adab2538b70e2af70b6132a8c4e7"
+    },
+    {
+      "source": "publish/2060-Club-Goddess/assets/Game2060/config.88d42.json",
+      "sha256": "9f458652cf5fdb52c42773f7271e7f2ddb7707a6d09ae5e63d10659cd5f8a35f"
+    },
+    {
+      "source": "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+      "sha256": "de6b010de8dd32e59ff3c89b5410cc87c75efdba038445e45c74e8879e5c08e3"
+    },
+    {
+      "source": "publish/2060-Club-Goddess/assets/main/index.f8fbc.js",
+      "sha256": "be06686871537f96389d6cea69c165e316ae12d55cc939665d1a19f5dbbbc6ad"
+    },
+    {
+      "source": "publish/2060-Club-Goddess/assets/resources/config.6618e.json",
+      "sha256": "83e496703597f68fed3ca72380be9356b9878b97fd2b83f577264287becc8b6c"
+    },
+    {
+      "source": "publish/2060-Club-Goddess/versionconfig.js",
+      "sha256": "3706126b6cc134ea5ce384674508dc4b55b4c257be72a2e569c23da96f854aa6"
+    },
+    {
+      "source": "screenshots/2060-Club-Goddess/rules-page-1-pt-br.png",
+      "sha256": "5565b603f8d4384948c29501ee14b687e6fd316d7ef2e08c13dbc16d5e70f47c"
+    },
+    {
+      "source": "screenshots/2060-Club-Goddess/rules-page-6-pt-br.png",
+      "sha256": "a609d2ba72a43eb72c0f0d161faf49bfe72d431c6405e20bbd42ab770275730e"
+    },
+    {
+      "source": "screenshots/2060-Club-Goddess/rules-page-17-pt-br.png",
+      "sha256": "4c5113f61a39998700158bf9b1ec080c59262386734ce6596eb8914a6965c317"
+    },
+    {
+      "source": "screenshots/2060-Club-Goddess/rules-page-23-pt-br.png",
+      "sha256": "d410be7285a24407c779d1abbed6609fd9e8ffb3db66283453f4d5a7824d8529"
+    },
+    {
+      "source": "screenshots/2060-Club-Goddess/rules-page-26-pt-br.png",
+      "sha256": "858c7e65a65a647afbf17ecb7dc4c4347c22d77eb12cf7594ad05ba87eddd4a8"
+    },
+    {
+      "source": "fixtures/2060-Club-Goddess/spin-full-from-box.tgz",
+      "sha256": "d96ae9aaf2305c235428b9fa071df000af91c2724926b06906be4da7e4c268d5"
+    },
+    {
+      "source": "generator/2060-Club-Goddess/src/main/resources/com/cpgame/clubgoddess/core/reel-model.json",
+      "sha256": "18f220562add4a1dc37fa73d2cfadf3c7c4112cf6467257bcac3111f22b4f57b"
+    }
+  ],
+  "fixturePolicy": "Fixtures are independent protocol oracles only and are forbidden as runtime result sources."
+}

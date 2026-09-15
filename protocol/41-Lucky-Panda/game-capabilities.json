@@ -1,0 +1,333 @@
+{
+  "schemaVersion": 3,
+  "gameId": 41,
+  "rawGameId": 41,
+  "gameName": "Lucky Panda",
+  "directoryName": "41-Lucky-Panda",
+  "status": "PROTOCOL_ACCEPTED_READY_FOR_IMPLEMENTATION",
+  "rulesVersion": "gid41-protocol-20260904",
+  "rulesHash": "5f8142ce67bb887905edb625ebfb90128fa872cc0de8e9af0f8017debc2dc50c",
+  "rulesHashContract": {
+    "algorithm": "SHA-256",
+    "inputFile": "protocol/41-Lucky-Panda/rules-core-canonical.json",
+    "scope": "identity, board, ways paytable, cascade, scatter-free, round-end, bet"
+  },
+  "supportedLanguages": {
+    "codes": [
+      "en",
+      "pt",
+      "es",
+      "th",
+      "vi",
+      "id",
+      "bn",
+      "ko",
+      "fr",
+      "tr"
+    ],
+    "actualParameter": "l",
+    "secondaryLaunchParameter": "language",
+    "default": "pt",
+    "status": "CONFIRMED",
+    "evidence": "reports/41-Lucky-Panda/language-inventory.json"
+  },
+  "winModel": {
+    "type": "ALL_WAYS",
+    "paylineCount": "NOT_APPLICABLE",
+    "paylineCountApplicability": "NOT_APPLICABLE",
+    "direction": "LEFT_TO_RIGHT",
+    "minimumConsecutiveReels": 3,
+    "maximumConsecutiveReels": 6,
+    "evidence": [
+      "screenshots/41-Lucky-Panda/language-en-main.png footer WAYS",
+      "screenshots/41-Lucky-Panda/original-paytable.png adjacent-identical-symbols times number of paths",
+      "publish/41-Lucky-Panda/41/assets/main/index.ef386.js GameConfigData.payline_count hardcoded 20 used only as ba=bs*bl*20",
+      "2883/2883 original deliveries recompute wa with zero mismatch using ways product, not 20 lines"
+    ],
+    "hardcodedStakeFactor20": {
+      "value": 20,
+      "use": "bet amount ba = bs * bl * 20",
+      "notAWinningLineCount": true
+    }
+  },
+  "boardModel": {
+    "type": "RLE_REELS",
+    "reelCount": 6,
+    "rowCounts": [
+      5,
+      6,
+      6,
+      6,
+      6,
+      5
+    ],
+    "visibleCellCount": 34,
+    "bufferCellCount": "NOT_PART_OF_RESULT_PROTOCOL",
+    "responseField": "rskl",
+    "wireCodec": "RLE <height><symbol> partitioned by rowCounts",
+    "wirePosition": "reelIndex*10+rowIndex",
+    "symbols": [
+      "Pan",
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "H5",
+      "A",
+      "K",
+      "Q",
+      "J",
+      "T",
+      "Wild",
+      "Scat"
+    ],
+    "wild": "Wild",
+    "scatter": "Scat",
+    "validation": "2883/2883 original rskl boards decode exactly to rowCounts [5,6,6,6,6,5]"
+  },
+  "betModel": {
+    "currency": "BRL",
+    "currencySymbol": "R$",
+    "betSizes": [
+      0.02,
+      0.2
+    ],
+    "betLevels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "amountFormula": "bs * bl * 20",
+    "minimumBet": {
+      "amount": 0.4,
+      "betSize": 0.02,
+      "betLevel": 1
+    },
+    "corpus": "all 1333 paid starts used bl=1 bs=0.02 ba=0.4"
+  },
+  "roundModel": {
+    "paidStart": "one POST /cp/api/v1/lucky-panda/spin with bl, bs, gid=41",
+    "continuation": "same path and same bl/bs/gid; server infers the active Round from the session; ba=0 on continuation",
+    "completeRound": "paid start plus every subsequent tumble and free-spin delivery until ss=1 AND (fsn=0 OR nfsc=fsn)",
+    "deliveryProjection": "each HTTP response is one delivery; the complete Round is generated once",
+    "historyFinalization": "one log-list row and one log-view detail after the Round terminal",
+    "observed": {
+      "paidStarts": 1333,
+      "completeRounds": 1333,
+      "historyMatches": 1333,
+      "deliveries": 3382,
+      "recapture": {
+        "tag": "ORDINARY_WIN_DIRECTED_20260904",
+        "addedExclusive": {
+          "ORDINARY_LOSS": 202,
+          "ORDINARY_WIN": 35,
+          "SCATTER_FREE": 3
+        },
+        "quarantinedUncommitted": "captures/41-Lucky-Panda/ordinary-win-recapture/quarantine/uncommitted-round-1109.jsonl"
+      },
+      "preflightRound1OnlyIn": "captures/41-Lucky-Panda/original-http-preflight-round-001.json"
+    }
+  },
+  "specialModes": [
+    {
+      "id": "SCATTER_FREE_ROUNDS",
+      "status": "CONFIRMED",
+      "mali": true,
+      "sampleTarget": 30,
+      "completeRoundCount": 38,
+      "freeSpinCount": 10,
+      "trigger": "paid tumble terminal ss=1 nfsc=0 with at least 4 Scat RLE blocks",
+      "fields": {
+        "awarded": "fsn=10",
+        "current": "nfsc=1..10"
+      },
+      "retrigger": "NOT_OBSERVED",
+      "buyIsNotThisMode": true
+    }
+  ],
+  "mechanics": [
+    {
+      "id": "CASCADE_TUMBLE",
+      "status": "CONFIRMED",
+      "mutuallyExclusivePlayMode": false,
+      "ordinaryWinAlwaysUsesThis": true,
+      "completeOrdinaryWinRounds": 200,
+      "note": "Cascade is how an ordinary win continues, not a separate mali class. Redis ordinary pool holds the complete Round including all tumble pages."
+    }
+  ],
+  "unconfirmedOrAbsent": [
+    {
+      "id": "PURCHASE_OR_BUY_FEATURE",
+      "status": "NOT_APPLICABLE_NOT_DISCOVERED",
+      "reason": "Ten-language menu has no buy entry; frontend has no BuyBonus/featureBuy; 1333 spin requests have only bl/bs/gid."
+    },
+    {
+      "id": "FREE_SPIN_RETRIGGER",
+      "status": "NOT_OBSERVED",
+      "reason": "38/38 scatter-free Rounds award fsn=10 and never increase fsn after nfsc>0."
+    },
+    {
+      "id": "ACTIVITY_EC",
+      "status": "NOT_OBSERVED",
+      "reason": "frontend may add form field ec when ActivityData.isFreeGame(); the authorized corpus never sent it."
+    }
+  ],
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "scope": "ordinary paid Round with no scatter-free trigger and ResultUtil award 0",
+    "method": "construct a board with no 3-reel ways win and fewer than 4 Scat blocks, independently recompute zero",
+    "forbiddenScopes": [
+      "active Round delivery",
+      "scatter-free continuation",
+      "History replay"
+    ],
+    "notALicenseToDealAtDemoRuntime": true
+  },
+  "redisContract": {
+    "supported": true,
+    "source": "platform consumer + 1809/42 mature delivery keys, adapted to gid 41 complete Rounds",
+    "redisGameId": 41,
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "normalIndex": "PerKeyList_000000041",
+    "specialIndex": "MaryKeyList_000000041",
+    "normalResultKey": "BetLog:000000041:{actualMultiplier as six digits}",
+    "specialResultKey": "MaryLog:000000041:{actualMultiplier as six digits}",
+    "lossMultiplier": "000000",
+    "zeroMultiplierWrite": true,
+    "writeTransaction": [
+      "MULTI",
+      "ZADD index",
+      "RPUSH result-list member",
+      "LTRIM result-list -capacity -1",
+      "EXEC"
+    ],
+    "claimContract": "downstream LPOP/BLPOP removes one complete terminal Round member exactly once",
+    "maxMembersPerMultiplierDefault": 300,
+    "actualMultiplier": "integer terminal rwa / (bs * bl); 238/238 positive-rwa Rounds match",
+    "ordinaryPool": "ORDINARY_LOSS and ORDINARY_WIN complete Rounds including tumble pages",
+    "specialPool": "SCATTER_FREE_ROUNDS complete Rounds including paid tumble plus nfsc 1..10"
+  },
+  "codecContract": {
+    "version": "lp1",
+    "encoding": "US-ASCII",
+    "memberShape": "lp1|bs=<decimal>|bl=<int>|P=<page>;<page>|F=<page>;<page>|...",
+    "pageShape": "<rle-token>,<rle-token>,...@<rpx>",
+    "paidSegment": "P= all tumble pages of the paid start, semicolon-separated",
+    "freeSegments": "each F= group is one free spin and its tumbles; omit F when fsn=0",
+    "nonRecomputableFacts": [
+      "betSize",
+      "betLevel",
+      "per-page rskl",
+      "per-page rpx"
+    ],
+    "recomputedFields": [
+      "wmkl",
+      "wskl",
+      "wa",
+      "rwa",
+      "ss",
+      "fsn",
+      "nfsc",
+      "actualMultiplier",
+      "scatter trigger"
+    ],
+    "excludedFields": [
+      "HTTP envelope",
+      "balance pb",
+      "session token",
+      "timestamp",
+      "frwa always-zero",
+      "history ba/baf"
+    ],
+    "gflSfl": "visual gold/silver frame coordinates; assignment rule not reconstructed; not required to recompute wa"
+  },
+  "symbolWeights": {
+    "status": "LOCAL_REPLICA_EMPIRICAL_NOT_ORIGINAL_PROBABILITY",
+    "disclaimer": "These adjustable local-replica weights do not claim original reel strips, symbol probabilities, RTP or volatility.",
+    "file": "protocol/41-Lucky-Panda/symbol-weight-empirical.json",
+    "entries": [
+      "paidStart",
+      "cascadeRefill",
+      "freeStart",
+      "freeCascadeRefill"
+    ],
+    "doNotCopyStartWeightsOntoRefill": true,
+    "frontendAnimationOnly": {
+      "randomReelWeights": [
+        8,
+        10,
+        15,
+        12,
+        20,
+        12,
+        30,
+        14,
+        30,
+        20,
+        30,
+        2,
+        6
+      ],
+      "symbols": [
+        "Pan",
+        "H1",
+        "H2",
+        "H3",
+        "H4",
+        "H5",
+        "A",
+        "K",
+        "Q",
+        "J",
+        "T",
+        "Wild",
+        "Scat"
+      ],
+      "codeUse": "GameConfigData.randomReel builds client rolling filler strips only"
+    }
+  },
+  "unknowns": [
+    "ORIGINAL_REEL_STRIPS",
+    "ORIGINAL_SYMBOL_PROBABILITIES",
+    "ORIGINAL_RTP",
+    "RPX_INCREMENT_CLOSED_FORM",
+    "GFL_SFL_ASSIGNMENT_RULE",
+    "FOUR_SCAT_BLOCKS_ON_FEWER_THAN_THREE_REELS"
+  ],
+  "evidence": [
+    "protocol/41-Lucky-Panda/rules-core-canonical.json",
+    "protocol/41-Lucky-Panda/independent-reanalysis.json",
+    "protocol/41-Lucky-Panda/independent-reanalysis-rules.json",
+    "captures/41-Lucky-Panda/original-http-spin-index.jsonl",
+    "captures/41-Lucky-Panda/round-index.jsonl",
+    "captures/41-Lucky-Panda/history-1to1.jsonl",
+    "captures/41-Lucky-Panda/original-http-preflight-round-001.json",
+    "publish/41-Lucky-Panda/41/assets/main/index.ef386.js",
+    "screenshots/41-Lucky-Panda/original-paytable.png"
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "5f8142ce67bb887905edb625ebfb90128fa872cc0de8e9af0f8017debc2dc50c",
+    "status": "PROTOCOL_ACCEPTED_READY_FOR_IMPLEMENTATION",
+    "behaviorIds": [
+      "B-IDENTITY",
+      "B-CODEC-HTTP",
+      "B-CONFIG-BET",
+      "B-WAYS-EVAL",
+      "B-CASCADE",
+      "B-SCATTER-FREE",
+      "B-ROUND-END",
+      "B-HISTORY",
+      "B-REDIS-ROUND"
+    ]
+  }
+}

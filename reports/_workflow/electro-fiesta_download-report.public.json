@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 2410,
+  "gameName": "Electro Fiesta",
+  "runId": "20260902T095036758Z",
+  "startedAt": "2026-09-02T09:50:36.758Z",
+  "finishedAt": "2026-09-02T09:50:56.525Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 246,
+    "exactStaticUrls": 242,
+    "excludedDynamicApiUrls": 4,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 242,
+    "succeeded": 242,
+    "failed": 0,
+    "downloadedBytes": 26636893,
+    "statusCounts": {
+      "200": 242
+    },
+    "contentTypeCounts": {
+      "application/javascript": 21,
+      "application/json": 105,
+      "image/png": 52,
+      "application/wasm": 2,
+      "audio/mpeg": 1,
+      "application/octet-stream": 57,
+      "image/jpeg": 4
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/2410-Electro-Fiesta/programmatic-http/20260902T095036758Z/download-items.public.jsonl",
+      "sha256": "9c22f5f56b02bb2b409219241302c9197fc1a0eaf703ef92a0fc8c1ff809eabe",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/2410-Electro-Fiesta/programmatic-http/20260902T095036758Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "stageDirectory": "/Users/a1/Downloads/electro-fiesta-stage/20260902T095036758Z",
+  "resourceFolder": "2410-Electro-Fiesta"
+}

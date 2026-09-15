@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 1,
+  "gameName": "Lucky Cat",
+  "runId": "20260902T092836000Z",
+  "startedAt": "2026-09-02T09:28:37.224Z",
+  "finishedAt": "2026-09-02T09:30:23.325Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 124,
+    "exactStaticUrls": 121,
+    "excludedDynamicApiUrls": 3,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 121,
+    "succeeded": 121,
+    "failed": 0,
+    "downloadedBytes": 10983139,
+    "statusCounts": {
+      "200": 121
+    },
+    "contentTypeCounts": {
+      "application/javascript": 9,
+      "image/png": 50,
+      "application/json": 6,
+      "image/jpeg": 10,
+      "application/octet-stream": 23,
+      "audio/mpeg": 23
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/1-Lucky-Cat/programmatic-http/20260902T092836000Z/download-items.public.jsonl",
+      "sha256": "ac44d99771d77c219a495783c1dbc2a5f52f455a995dce57303514f2fad42648",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/1-Lucky-Cat/programmatic-http/20260902T092836000Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "failedUrls": [],
+  "stageDirectory": "/Users/a1/Downloads/lucky-cat-stage/20260902T092836000Z",
+  "resourceFolder": "1-Lucky-Cat"
+}

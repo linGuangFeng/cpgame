@@ -1,0 +1,27 @@
+{
+  "worker": "abc223",
+  "alive": true,
+  "phase": "DONE",
+  "games": {
+    "2110-Bee-Workshop": {
+      "status": "SAMPLE_DONE",
+      "LOSS": 1485,
+      "WIN": 120,
+      "SPECIAL": 324,
+      "paid": 1929,
+      "completeSpecial": 252,
+      "history": {
+        "goldDays": 0,
+        "detailLists": [
+          {
+            "day": 1788825600,
+            "n": 0
+          }
+        ]
+      }
+    }
+  },
+  "currentGame": null,
+  "updatedAt": "2026-09-08T18:17:27.043Z",
+  "error": null
+}

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 37,
+  "rawGameId": 33,
+  "gameName": "Jungle Party",
+  "evidenceCutoff": {
+    "rounds": 1475,
+    "history": 1475,
+    "steps": 2099,
+    "loss": 1229,
+    "ordinaryWin": 200,
+    "scatterFreeRounds": 46
+  },
+  "board": {
+    "reels": 5,
+    "rows": 3,
+    "indexLayout": "REEL_MAJOR",
+    "paylines": [
+      [1,1,1,1,1], [0,0,0,0,0], [2,2,2,2,2], [0,1,2,1,0], [2,1,0,1,2],
+      [1,0,0,0,1], [1,2,2,2,1], [0,0,1,2,2], [2,2,1,0,0], [1,2,1,0,1],
+      [1,0,1,2,1], [0,1,1,1,0], [2,1,1,1,2], [0,1,0,1,0], [2,1,2,1,2],
+      [1,1,0,1,1], [1,1,2,1,1], [0,0,2,0,0], [2,2,0,2,2], [0,2,2,2,0],
+      [2,0,0,0,2], [1,2,0,2,1], [1,0,2,0,1], [0,2,0,2,0], [2,0,2,0,2]
+    ]
+  },
+  "bet": {
+    "levels": [1,2,3,4,5,6,7,8,9,10],
+    "sizes": [0.02,0.12,0.8],
+    "paidBetFormula": "betLevel * betSize * 25"
+  },
+  "paytable": {
+    "9":{"3":5,"4":25,"5":100}, "A":{"3":10,"4":50,"5":150},
+    "H1":{"2":10,"3":50,"4":250,"5":750}, "H2":{"2":5,"3":40,"4":200,"5":500},
+    "H3":{"3":30,"4":150,"5":400}, "H4":{"3":25,"4":100,"5":250},
+    "H5":{"3":25,"4":100,"5":250}, "J":{"3":5,"4":25,"5":100},
+    "K":{"3":10,"4":50,"5":150}, "Q":{"3":5,"4":25,"5":100},
+    "T":{"3":5,"4":25,"5":100}, "Wild":{"2":25,"3":150,"4":1000,"5":2500}
+  },
+  "award": {
+    "lineBase": "paytable[symbol][count] * betLevel * betSize",
+    "freeMultiplier": "max(1,rpx)",
+    "wildMultiplier": "x2 for each winning line whose matched prefix contains at least one Wild, including a native Wild win",
+    "stepAward": "sum(lineBase * freeMultiplier * wildMultiplier)",
+    "roundAward": "sum(stepAward); terminal cumulative rwa corroborates the same total"
+  },
+  "round": {
+    "ordinary": "one paid step; ba>0, gt=1, small_game_type=0, fsn=0, nfsc=0, ss=1",
+    "free": "one paid trigger plus fsn zero-bet continuations; gt=2 on continuations; terminal ss=1 and nfsc=fsn",
+    "observedInitialFreeSpinCounts": [8,12,16,20],
+    "observedFreeMultipliers": [2,5,8],
+    "observedRetrigger": "three Scat add eight free spins",
+    "history": "one row per paid Round; bsl paid trigger and optional fsl continuations"
+  },
+  "generationModel": {
+    "rulesHash": "8522e03f81318ebb80df6219fcb41d380314f12911062c0888066a9464067638",
+    "type": "HIERARCHICAL_EMPIRICAL_JOINT_KERNEL",
+    "implementationReady": true,
+    "initialEntry": "COMPLETE_INITIAL_STATE",
+    "subsequentFreeEntry": "COMPLETE_SUBSEQUENT_STATE",
+    "cascadeOrRespinEntries": [],
+    "cascadeOrRespinDeltaSemantics": "NEWLY_DEALT_POSITIONS",
+    "jointFeatures": ["ROUND_OUTCOME_CLASS","ROUND_STEP_COUNT","STATE_ELEMENT_COUNT_VECTOR"],
+    "usesIndependentCellMarginalsOnly": false,
+    "artificialLossBoardConstraints": false,
+    "trainingCompleteRounds": 1375,
+    "realProviderHoldoutRounds": 100,
+    "generatedValidationRounds": 10000
+  },
+  "unknown": [
+    "original reel strips and symbol probabilities",
+    "RTP and probability distribution",
+    "maximum retrigger count",
+    "whether unobserved special modes exist",
+    "original Redis key/member codec",
+    "original History UI route"
+  ]
+}

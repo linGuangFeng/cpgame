@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "gameId": 1780,
+  "gameDirectory": "1780-Glacier-Treasure",
+  "rulesHash": "0139e446c93699f20cd06048145312e652edf09876efc7d4ff26cc207a73172e",
+  "behaviorIds": [
+    "1780.board.geometry",
+    "1780.payout.leftways",
+    "1780.cascade.frames",
+    "1780.multiplier.normal",
+    "1780.multiplier.free",
+    "1780.scatter.initial",
+    "1780.free.terminal",
+    "1780.buy.request"
+  ],
+  "status": "READY_FOR_ACCEPTANCE",
+  "readyForAcceptance": true,
+  "implementationLanguage": "Java 21",
+  "core": "generator/1780-Glacier-Treasure/src/main/java/com/cpgame/glacier/GameRuleCore.java",
+  "independentVerifier": "generator/1780-Glacier-Treasure/src/main/java/com/cpgame/glacier/ResultUtil.java",
+  "fixturesRuntimePolicy": "Analysis/regression only; no production replay path",
+  "controller": {
+    "available": true,
+    "requiredJar": "server-api/1780-Glacier-Treasure/dist/controller.jar",
+    "requiredProperties": "server-api/1780-Glacier-Treasure/demo-controller.properties",
+    "requiredContractVersion": 3,
+    "portRange": "50000-59999"
+  },
+  "loader": {
+    "available": true,
+    "requiredLocation": "generator/1780-Glacier-Treasure/dist",
+    "jar": "glacier-treasure-loader.jar",
+    "random": "SecureRandom",
+    "windowsLauncher": "start-redis-loader.cmd --no-pause"
+  },
+  "redis": {
+    "tested": true,
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "lossMembers": 120,
+    "winMembers": 80,
+    "specialMembers": 40,
+    "policy": "Own game namespace. Paid request chooses win/loss then an existing integer multiplier then one ASCII member. Continuations stay on that member. Empty pools fail closed."
+  },
+  "publish": {
+    "available": true,
+    "requiredRoot": "publish/1780-Glacier-Treasure",
+    "requiredEntry": "index.html",
+    "requiredManifest": "publish-manifest.json",
+    "staticHttpValidated": true,
+    "actualUrl": "http://127.0.0.1:51780/index.html?gid=1780&language=en-us&l=en&sip=127.0.0.1:51780&t=demo1780&token=demo1780"
+  }
+}

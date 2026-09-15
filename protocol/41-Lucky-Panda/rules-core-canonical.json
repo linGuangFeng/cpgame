@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "gameId": 41,
+  "gameName": "Lucky Panda",
+  "directoryName": "41-Lucky-Panda",
+  "rulesVersion": "gid41-protocol-20260904",
+  "identity": {
+    "gid": 41,
+    "apiPath": "lucky-panda",
+    "documentTitle": "Lucky Panda",
+    "gameVersion": "v1.5.10.250430"
+  },
+  "board": {
+    "reelCount": 6,
+    "rowCounts": [
+      5,
+      6,
+      6,
+      6,
+      6,
+      5
+    ],
+    "visibleCellCount": 34,
+    "wireField": "rskl",
+    "wireCodec": "RLE token <height><symbol>; tokens partitioned by rowCounts; height 1 on outer reels, 1-4 on inner reels 1-4",
+    "wirePosition": "reelIndex*10+rowIndex",
+    "frontendLayout": {
+      "ColumnCount": 5,
+      "meaning": "last reel index; loop ColumnCount+1 yields 6 reels",
+      "RowCount": 6,
+      "TotalRowCount": 7,
+      "TopRowCount": 4,
+      "TopRollIndex": 6,
+      "topRow": "client overlay copies the first cell of inner reels 1-4; not extra protocol symbols"
+    }
+  },
+  "symbols": {
+    "paying": [
+      "Pan",
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "H5",
+      "A",
+      "K",
+      "Q",
+      "J",
+      "T"
+    ],
+    "wild": "Wild",
+    "scatter": "Scat",
+    "wildSubstitutesFor": [
+      "Pan",
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "H5",
+      "A",
+      "K",
+      "Q",
+      "J",
+      "T"
+    ],
+    "wildDoesNotSubstituteFor": [
+      "Scat"
+    ],
+    "wildReels": [1, 2, 3, 4],
+    "wildNotOnInnerTop": true,
+    "wildHelp": "The Wild symbol only appears on reels 2, 3, 4 and 5. Capture had 29+33 outer-reel Wilds; generation follows the stricter help restriction and never deals Wild on outer reels or the inner top overlay."
+  },
+  "winModel": {
+    "type": "ALL_WAYS",
+    "paylineCount": "NOT_APPLICABLE",
+    "direction": "LEFT_TO_RIGHT",
+    "minimumConsecutiveReels": 3,
+    "maximumConsecutiveReels": 6,
+    "ways": "product of winning cell/block counts per consecutive reel as listed in wmkl",
+    "awardFormula": "sum(product(wmkl[i][*].length) * paytable[wskl[i]][reelCount-3] * bs * bl * max(1,rpx))",
+    "hardcodedStakeFactor20": "frontend GameConfigData.payline_count is hardcoded 20 and only sizes ba=bs*bl*20; it is not a winning-line count"
+  },
+  "paytable": {
+    "source": "screenshots/41-Lucky-Panda/original-paytable.png",
+    "unit": "multiplied by bs*bl then by max(1,rpx); index order is 3-of-kind, 4, 5, 6",
+    "values": {
+      "Pan": [
+        30,
+        40,
+        50,
+        80
+      ],
+      "H1": [
+        20,
+        25,
+        30,
+        50
+      ],
+      "H2": [
+        10,
+        25,
+        30,
+        40
+      ],
+      "H3": [
+        8,
+        15,
+        20,
+        30
+      ],
+      "H4": [
+        6,
+        10,
+        12,
+        15
+      ],
+      "H5": [
+        6,
+        10,
+        12,
+        15
+      ],
+      "A": [
+        4,
+        6,
+        8,
+        10
+      ],
+      "K": [
+        4,
+        6,
+        8,
+        10
+      ],
+      "Q": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "J": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "T": [
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  },
+  "cascade": {
+    "id": "CASCADE_TUMBLE",
+    "mutuallyExclusivePlayMode": false,
+    "rule": "after a delivery with wa>0, winning symbols are removed, remaining symbols fall, vacancies refill; rwa accumulates wa; continue requesting Spin with the same bl/bs/gid until a delivery with wa=0",
+    "ss": "0 while another delivery is required in the current tumble segment; 1 on the segment-terminal delivery",
+    "continuationBetAmount": "ba=0 on continuation deliveries; ba=bs*bl*20 only on the paid start",
+    "ordinaryWinAlwaysMultiStep": true,
+    "longFrame": "Help Multiple Path Wild Match: silver may surround height 2-4 paying symbols on reels 2-5 excluding Wild and treasure. Winning silver transforms in place to a random gold-framed paying symbol; winning gold transforms in place to Wild (capture: 354/354 silver-win same-height gold next; 178/183 gold-win same-height Wild, 5/5 remainder were gold Pan and stayed Pan). Non-winning frames persist through tumble. Gold does not stay on Wild."
+  },
+  "multiplier": {
+    "field": "rpx",
+    "zeroMeans": 1,
+    "observedPositive": [
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26
+    ],
+    "serverAuthoritative": true,
+    "clientPanCollect": "first-seen Pan coordinate in a tumble segment sets times=2 for animation; loaclPanInfo clears on ss=1",
+    "incrementRule": "paid: rpx=max(prev, 2*Pan RLE blocks); first free page from 0 is 2+2*blocks; later free-spin starts add 2*blocks; rpx never decreases; 0 means x1"
+  },
+  "scatterFreeRounds": {
+    "id": "SCATTER_FREE_ROUNDS",
+    "mutuallyExclusivePlayMode": true,
+    "mali": true,
+    "trigger": "paid tumble segment terminal delivery (ss=1, nfsc=0) with at least 4 Scat RLE blocks",
+    "threeBlocksDoNotTrigger": true,
+    "fsn": "10 + 2 * max(0, scatBlocks - 4); help 4 treasures = 10 free spins, each additional treasure +2; stacked Scat is one block",
+    "nfsc": "1 through fsn on subsequent deliveries in the same Round",
+    "retrigger": "help: Free spins can be retriggered. Same 4-block threshold and same 10+2*(blocks-4) award on a free tumble terminal. Not observed in 38 captured free Rounds (rare, not illegal).",
+    "frwa": "always 0 in 3382 original-http deliveries; free wins accumulate in rwa"
+  },
+  "buy": {
+    "presentInMenu": false,
+    "presentInFrontend": false,
+    "presentInSpinRequest": false,
+    "classification": "NOT_A_PLAY_MODE"
+  },
+  "roundEnd": {
+    "predicate": "ss==1 AND (fsn==0 OR nfsc==fsn)",
+    "frontend": "GameLogic.isRealEnd = (ss==1 && fsn==nfsc)",
+    "historyWrite": "one list row plus one detail after the complete Round terminal"
+  },
+  "bet": {
+    "currency": "BRL",
+    "currencySymbol": "R$",
+    "bll": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "bsl": [
+      0.02,
+      0.2
+    ],
+    "amount": "bs * bl * 20",
+    "minimumObserved": {
+      "bl": 1,
+      "bs": 0.02,
+      "ba": 0.4
+    }
+  },
+  "integerMultiplier": {
+    "formula": "terminal rwa / (bs * bl)",
+    "verified": "238/238 positive-rwa complete Rounds are integer under rwa/(bs*bl)",
+    "loss": 0
+  }
+}

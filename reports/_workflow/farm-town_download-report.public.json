@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 2130,
+  "gameName": "farm town",
+  "runId": "20260902T093931000Z",
+  "startedAt": "2026-09-02T09:39:32.883Z",
+  "finishedAt": "2026-09-02T09:40:47.439Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 111,
+    "exactStaticUrls": 108,
+    "excludedDynamicApiUrls": 3,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 108,
+    "succeeded": 108,
+    "failed": 0,
+    "downloadedBytes": 16374283,
+    "statusCounts": {
+      "200": 108
+    },
+    "contentTypeCounts": {
+      "application/javascript": 12,
+      "image/png": 59,
+      "application/json": 8,
+      "application/octet-stream": 5,
+      "image/jpeg": 15,
+      "audio/mpeg": 9
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/2130-Farm-Town/programmatic-http/20260902T093931000Z/download-items.public.jsonl",
+      "sha256": "d1abeb5844a30828ad557719e419e9b7334bcb297dfd6007d91d9fcdfa40c3a0",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/2130-Farm-Town/programmatic-http/20260902T093931000Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "failedUrls": [],
+  "stageDirectory": "/Users/a1/Downloads/farm-town-stage/20260902T093931000Z",
+  "resourceFolder": "2130-Farm-Town"
+}

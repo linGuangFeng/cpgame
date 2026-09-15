@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 46,
+  "gameId": 2210,
+  "gameName": "Wu Kong",
+  "rulesVersion": "WUKONG_V46_REBUILD_20260907",
+  "roundBoundary": {
+    "paidStartsPerRound": 1,
+    "httpDeliveriesPerRound": 1,
+    "orderedVisualStates": ["NORMAL_LEFT", "NORMAL_RIGHT", "OPTIONAL_X2_X5_OR_RESPIN", "SETTLEMENT"],
+    "terminalEvent": "Game_All_Anim_End"
+  },
+  "resultRule": {
+    "base": "normal 两个位置按顺序去除 null 后拼接十进制数字；空串为 0",
+    "NONE": "base",
+    "X2": "base * 2",
+    "X5": "base * 5",
+    "RESPIN": "base + 按同一拼接规则计算的 respin"
+  },
+  "exclusiveModes": [
+    {"id":"NONE","extend":"null","respin":"null"},
+    {"id":"X2","extend":"2","respin":"null"},
+    {"id":"X5","extend":"5","respin":"null"},
+    {"id":"RESPIN","extend":"respin","respin":"two-position-array"}
+  ],
+  "positionDomains": {
+    "initialLeft": ["null", "1", "5", "10"],
+    "initialRight": ["null", "0", "1", "5"],
+    "respinLeft": ["5", "10"],
+    "respinRight": ["0", "1", "5"]
+  },
+  "hardCaps": {
+    "initialPositions": 2,
+    "respinNewPositions": 2,
+    "extendTokensPerRound": 1,
+    "bonus": 0,
+    "x10AllowedAtMinimumBet": false,
+    "bonusModeAllowedAtMinimumBet": false
+  },
+  "sample": {
+    "source": "captures/2210-Wu-Kong/v40-formal-rounds-batch-001.json",
+    "sourceSha256": "f6e64730a2de33b4d605b3aa0d781e76e911536271dc307c367302b4bfaa0d27",
+    "paidRounds": 1122,
+    "totalWinZero": 919,
+    "totalWinPositive": 203,
+    "providerCategories": {"ORDINARY_LOSS":851,"ORDINARY_WIN":58,"SPECIAL_X2":83,"SPECIAL_X5":97,"SPECIAL_RESPIN":33},
+    "uniqueOid": 1122,
+    "uniqueRoundId": 1122,
+    "accountingContinuityBreaks": 0,
+    "maximumObservedMultiplier": 500
+  },
+  "purchase": {"supported":false,"relationship":"No buy endpoint or UI; X2/X5/RESPIN are natural paid-spin outcomes"},
+  "redisCodec": {"version":"WK46R2","facts":["mode","initialLeft","initialRight","respinLeft","respinRight"]}
+}

@@ -1,0 +1,1572 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 54,
+  "gameName": "Fishing GO",
+  "directoryName": "54-Fishing-GO",
+  "protocolRevision": "protocol-20260831-r11-status-enum-fix",
+  "rulesHash": "23e7a379b8a38d25d638cd0726cab97c49a6c425c88e2dd371c82007f9f81463",
+  "rulesVersion": "fishing-go-rules-23e7a379b8a38d25",
+  "generatedAt": "2026-08-31T22:57:01+08:00",
+  "handoffStatus": "ACCEPTED_FOR_DOWNSTREAM_IMPLEMENTATION",
+  "handoffStage": "PROTOCOL_STATE_MACHINE_ANALYZED",
+  "rulesManifest": [
+    {
+      "source": "captures/54-Fishing-GO/000085-config.json",
+      "sha256": "b5b1af237f7fd876d0d5f17c219bb5a6536c81be123ea491397a842982a7e01e"
+    },
+    {
+      "source": "captures/54-Fishing-GO/config-resume-after-timeout.json",
+      "sha256": "c268cb42dc103c8b9e4ecb5a7d89697526f7b728c02184f29c6adb016b1833b0"
+    },
+    {
+      "source": "captures/54-Fishing-GO/rounds.jsonl",
+      "sha256": "7ee7e22fcff9a8c0080588dd10b657c85319ca964be27b3fbc58d06bd772f418"
+    },
+    {
+      "source": "captures/54-Fishing-GO/source-snippets.json",
+      "sha256": "646b3889782c5328309d0e3d11632526f583024f2271cf93eba3375c5210bce4"
+    },
+    {
+      "source": "captures/54-Fishing-GO/history-log-list-view-adjacent.json",
+      "sha256": "58b4e9af96c5cd401410d11ac19bc51c23d7a40c08741e23abac620a63b30755"
+    },
+    {
+      "source": "captures/54-Fishing-GO/platform-redis-contract-evidence.json",
+      "sha256": "efc30ef0e349d4088862eab4aa836815bf986f9f77274b4fe21cf3302114613b"
+    },
+    {
+      "source": "publish/54-Fishing-GO/assets/main/index.32cc7.js",
+      "sha256": "6cbab8a73b235bbdbf8fdb2bf5171a031911754ce486e266129077a134d607dc"
+    },
+    {
+      "source": "resources/54-Fishing-GO/pt-br/assets/resources/import/0e/0e662cfdb.8da9b.json",
+      "sha256": "d339d8eeef88daed95d6ba816943efba6ef3c909e828b679f1ea038e0d93c12b"
+    }
+  ],
+  "evidenceInventory": [
+    {
+      "id": "E-IDENTITY-ENTRY",
+      "source": "publish/versionconfig.js",
+      "sources": [
+        "publish/versionconfig.js",
+        "publish/assets/main/index.32cc7.js#GameConfig",
+        "screenshots/01-first-load-pt-br.png",
+        "reports/interface-inventory.json",
+        "reports/resource-capture-summary.json"
+      ],
+      "behaviorIds": [
+        "B-IDENTITY"
+      ]
+    },
+    {
+      "id": "E-FIRST-LOAD-NETWORK",
+      "source": "captures/first-load-network.json",
+      "behaviorIds": [
+        "B-IDENTITY",
+        "B-CONFIG",
+        "B-LANGUAGE-LOAD"
+      ]
+    },
+    {
+      "id": "E-CONFIG-RAW",
+      "source": "captures/000085-config.json",
+      "behaviorIds": [
+        "B-CONFIG",
+        "B-HTTP-CODEC",
+        "B-PAID-SPIN",
+        "B-WAYS-WIN",
+        "B-PURCHASE-DISCOVERY"
+      ]
+    },
+    {
+      "id": "E-CONFIG-RECOVERY",
+      "source": "captures/config-resume-after-timeout.json",
+      "behaviorIds": [
+        "B-CONFIG",
+        "B-SESSION-RESUME",
+        "B-ERROR-HANDLING",
+        "B-ROUND-DELIVERY"
+      ]
+    },
+    {
+      "id": "E-RULES-PACKED",
+      "source": "resources/pt-br/assets/resources/import/0e/0e662cfdb.8da9b.json",
+      "behaviorIds": [
+        "B-LANGUAGE-LOAD",
+        "B-WAYS-WIN",
+        "B-WILD",
+        "B-FREE-ENTRY",
+        "B-FREE-MULTIPLIER",
+        "B-FREE-RETRIGGER"
+      ]
+    },
+    {
+      "id": "E-RULES-UI",
+      "source": "screenshots/05-rules-page-1-pt-br.png",
+      "sources": [
+        "screenshots/05-rules-page-1-pt-br.png",
+        "screenshots/05-rules-page-2-pt-br.png",
+        "screenshots/05-rules-page-3-pt-br.png",
+        "screenshots/05-rules-page-4-pt-br.png",
+        "screenshots/05-rules-page-5-pt-br.png"
+      ],
+      "behaviorIds": [
+        "B-WAYS-WIN",
+        "B-WILD",
+        "B-FREE-ENTRY",
+        "B-FREE-RETRIGGER"
+      ]
+    },
+    {
+      "id": "E-FRONTEND-SOURCE",
+      "source": "publish/assets/main/index.32cc7.js",
+      "sources": [
+        "publish/assets/main/index.32cc7.js",
+        "captures/source-snippets.json"
+      ],
+      "behaviorIds": [
+        "B-IDENTITY",
+        "B-LANGUAGE-LOAD",
+        "B-CONFIG",
+        "B-HTTP-CODEC",
+        "B-ERROR-HANDLING",
+        "B-SESSION-RESUME",
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-WMKL-COORDINATE",
+        "B-FREE-MULTIPLIER",
+        "B-FREE-CONTINUATION",
+        "B-ROUND-TERMINATION",
+        "B-BALANCE-SETTLEMENT",
+        "B-HISTORY"
+      ]
+    },
+    {
+      "id": "E-ROUNDS-RAW",
+      "source": "captures/rounds.jsonl",
+      "behaviorIds": [
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-RUNTIME-INDEPENDENT-LOSS",
+        "B-WAYS-WIN",
+        "B-WMKL-COORDINATE",
+        "B-WILD",
+        "B-FREE-ENTRY",
+        "B-FREE-MULTIPLIER",
+        "B-FREE-CONTINUATION",
+        "B-ROUND-TERMINATION",
+        "B-BALANCE-SETTLEMENT",
+        "B-REDIS-CONTRACT"
+      ]
+    },
+    {
+      "id": "E-ROUND-INDEX",
+      "source": "captures/spin-index.jsonl",
+      "behaviorIds": [
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-FREE-CONTINUATION",
+        "B-ROUND-TERMINATION"
+      ]
+    },
+    {
+      "id": "E-ORACLE-FIXTURES",
+      "source": "fixtures/fixture-manifest.json",
+      "sources": [
+        "fixtures/ordinary-loss-round.json",
+        "fixtures/ordinary-win-round.json",
+        "fixtures/free-spins-x1-round.json",
+        "fixtures/free-spins-x2-round.json",
+        "fixtures/free-spins-x3-round.json",
+        "fixtures/fixture-manifest.json"
+      ],
+      "behaviorIds": [
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-RUNTIME-INDEPENDENT-LOSS",
+        "B-WAYS-WIN",
+        "B-WMKL-COORDINATE",
+        "B-WILD",
+        "B-FREE-ENTRY",
+        "B-FREE-MULTIPLIER",
+        "B-FREE-CONTINUATION",
+        "B-ROUND-TERMINATION",
+        "B-BALANCE-SETTLEMENT"
+      ],
+      "disposition": "REGRESSION_ORACLE_ONLY",
+      "reason": "禁止作为运行时结果源、轮播源或生成器输入。"
+    },
+    {
+      "id": "E-LANGUAGE-VALIDATION",
+      "source": "reports/language-inventory.json",
+      "sources": [
+        "reports/language-inventory.json",
+        "reports/static-first-load-validation.json"
+      ],
+      "behaviorIds": [
+        "B-LANGUAGE-LOAD"
+      ]
+    },
+    {
+      "id": "E-ORPHAN-CONTINUATION",
+      "source": "captures/orphan-continuations.jsonl",
+      "sources": [
+        "captures/orphan-continuation-unknown-parent.json",
+        "captures/orphan-continuations.jsonl"
+      ],
+      "behaviorIds": [
+        "B-ERROR-HANDLING",
+        "B-SESSION-RESUME",
+        "B-FREE-CONTINUATION",
+        "B-ROUND-TERMINATION"
+      ],
+      "disposition": "EXCLUDED_FROM_PAID_ROUND_COUNT",
+      "reason": "首Step为ba=0/gt=2或超时后仅从config.last恢复，真实付费父局响应及更早Step未完整捕获；仅保留相邻Step与终止证据，不计完整付费Round。"
+    },
+    {
+      "id": "E-SAMPLE-COVERAGE",
+      "source": "reports/scenario-coverage.json",
+      "sources": [
+        "reports/scenario-coverage.json",
+        "reports/current-status.json",
+        "reports/node-capture-validation.json"
+      ],
+      "behaviorIds": [
+        "B-PAID-SPIN",
+        "B-FREE-ENTRY",
+        "B-FREE-CONTINUATION",
+        "B-FREE-RETRIGGER",
+        "B-ROUND-TERMINATION"
+      ]
+    },
+    {
+      "id": "E-HISTORY-ENDPOINTS",
+      "source": "publish/assets/main/index.32cc7.js#History/HistoryByID",
+      "behaviorIds": [
+        "B-HISTORY"
+      ]
+    },
+    {
+      "id": "E-HISTORY-RUNTIME-ADJACENT",
+      "source": "captures/54-Fishing-GO/history-log-list-view-adjacent.json",
+      "behaviorIds": [
+        "B-HISTORY"
+      ]
+    },
+    {
+      "id": "E-PURCHASE-SEARCH",
+      "source": "screenshots/04-options-open-pt-br.png",
+      "sources": [
+        "screenshots/04-options-open-pt-br.png",
+        "captures/000085-config.json",
+        "publish/assets/main/index.32cc7.js"
+      ],
+      "behaviorIds": [
+        "B-PURCHASE-DISCOVERY"
+      ],
+      "disposition": "NOT_DISCOVERED",
+      "reason": "配置、菜单、规则与代码检索均未发现购买功能入口。"
+    },
+    {
+      "id": "E-PROTOCOL-VALIDATION",
+      "source": "protocol/protocol-analysis-validation.json",
+      "behaviorIds": [
+        "B-RUNTIME-INDEPENDENT-LOSS",
+        "B-WAYS-WIN",
+        "B-WMKL-COORDINATE",
+        "B-FREE-MULTIPLIER",
+        "B-FREE-CONTINUATION",
+        "B-ROUND-TERMINATION",
+        "B-BALANCE-SETTLEMENT"
+      ]
+    },
+    {
+      "id": "E-WORKFLOW-ROUND-CONSTRAINT",
+      "source": "当前任务硬约束#7/#8/#13/#17",
+      "behaviorIds": [
+        "B-ROUND-DELIVERY",
+        "B-RUNTIME-INDEPENDENT-LOSS",
+        "B-REDIS-CONTRACT"
+      ]
+    },
+    {
+      "id": "E-REDIS-PLATFORM-CONTRACT",
+      "source": "captures/platform-redis-contract-evidence.json",
+      "sources": [
+        "captures/platform-redis-contract-evidence.json",
+        "captures/rounds.jsonl",
+        "generator/1809-Freedom-Day/src/main/java/com/cpgame/replica/freedomday/RedisPackCli.java",
+        "generator/1809-Freedom-Day/src/main/java/com/cpgame/replica/freedomday/RedisDirectLoader.java"
+      ],
+      "behaviorIds": [
+        "B-REDIS-CONTRACT"
+      ],
+      "disposition": "CONFIRMED_PLATFORM_INTERNAL_CONTRACT_ADAPTED_TO_CURRENT_GAME",
+      "reason": "Redis是平台内部下游合同而非原厂HTTP协议；只继承1809成熟交付的索引、倍率分桶、完整Round缓存单位和原子写入语义，member字段按Fishing GO当前Round证据适配，禁止复制其他游戏牌面与编码。"
+    },
+    {
+      "id": "E-INVALID-RESIDUALS",
+      "source": "reports/residual-audit.json",
+      "sources": [
+        "captures/residual-invalid-20260829/",
+        "reports/residual-invalid-20260829/",
+        "reports/residual-audit.json"
+      ],
+      "disposition": "REJECTED_NOT_REUSED",
+      "reason": "旧内容使用abc223或转引游戏52，不属于本轮abc221的游戏54证据。"
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-IDENTITY",
+      "category": "IDENTITY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-IDENTITY-ENTRY",
+        "E-FIRST-LOAD-NETWORK",
+        "E-FRONTEND-SOURCE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "加载当前publish入口"
+        ],
+        "stateFields": [
+          "gameId",
+          "directoryName",
+          "gameName"
+        ],
+        "transitionRules": [
+          "协议gameId固定54；门户目录项1406/2515、素材50054与内部g_id=452均不得替代协议ID"
+        ],
+        "outputs": [
+          "54-Fishing-GO",
+          "Fishing GO"
+        ],
+        "terminationRules": [
+          "入口标题、bundle ID与gid一致即完成身份判定"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-IDENTITY-ENTRY",
+          "E-FIRST-LOAD-NETWORK"
+        ],
+        "assertions": [
+          "document.title==Fishing GO",
+          "GameConfig._gameId==54",
+          "iframe path与gid均为54"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-LANGUAGE-LOAD",
+      "category": "LOCALIZATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FIRST-LOAD-NETWORK",
+        "E-RULES-PACKED",
+        "E-FRONTEND-SOURCE",
+        "E-LANGUAGE-VALIDATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "l参数属于白名单"
+        ],
+        "stateFields": [
+          "l",
+          "language"
+        ],
+        "transitionRules": [
+          "l决定/resources/language/<code>虚拟资源；pt门户别名可为pt-br"
+        ],
+        "outputs": [
+          "en",
+          "pt",
+          "es",
+          "th",
+          "vi",
+          "id",
+          "bn",
+          "ko",
+          "fr",
+          "tr"
+        ],
+        "terminationRules": [
+          "入口HTTP 200、title Fishing GO、GameCanvas存在"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-LANGUAGE-VALIDATION",
+          "E-FRONTEND-SOURCE"
+        ],
+        "assertions": [
+          "十个代码逐一首载成功",
+          "没有额外猜测语言代码"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-CONFIG",
+      "category": "API_CONFIG",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-CONFIG-RAW",
+        "E-FIRST-LOAD-NETWORK",
+        "E-FRONTEND-SOURCE",
+        "E-CONFIG-RECOVERY"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "有效会话",
+          "gid=54"
+        ],
+        "stateFields": [
+          "bll",
+          "bsl",
+          "dbl",
+          "dbs",
+          "spl",
+          "auto"
+        ],
+        "transitionRules": [
+          "配置只返回当前游戏证实的选项；不得注入购买或固定线字段"
+        ],
+        "outputs": [
+          "bll=1..10",
+          "bsl=.02/.1/.5",
+          "已证实spl奖表"
+        ],
+        "terminationRules": [
+          "配置响应字段通过当前能力清单校验"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-CONFIG-RAW"
+        ],
+        "assertions": [
+          "最小bl=1",
+          "最小bs=.02",
+          "A/J/K/Q/S1-S4奖表与原响应一致"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HTTP-CODEC",
+      "category": "TRANSPORT_CODEC",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND-SOURCE",
+        "E-CONFIG-RAW"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "已取得不透明会话t与gameId=54",
+          "使用HTTPS"
+        ],
+        "stateFields": [
+          "gid",
+          "t",
+          "bl",
+          "bs",
+          "code",
+          "data",
+          "info"
+        ],
+        "transitionRules": [
+          "请求使用application/x-www-form-urlencoded",
+          "game-id/web-token映射为gid/t",
+          "encodeURIComponent后将%20替换为+",
+          "应用层不加密，t不得解析或落盘",
+          "仅HTTP 2xx且String(code)==200时解包data"
+        ],
+        "outputs": [
+          "业务data对象或结构化错误"
+        ],
+        "terminationRules": [
+          "成功解包data；失败不得推进Round状态"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-SOURCE",
+          "E-CONFIG-RAW"
+        ],
+        "assertions": [
+          "Content-Type为form-urlencoded",
+          "抓包body键与前端映射一致",
+          "响应外层为code/data/info",
+          "无当前游戏应用层加解密代码"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-ERROR-HANDLING",
+      "category": "TRANSPORT_STATE_SAFETY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-SOURCE",
+        "E-CONFIG-RECOVERY",
+        "E-ORPHAN-CONTINUATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "存在HTTP请求或可能激活的Round"
+        ],
+        "stateFields": [
+          "httpStatus",
+          "code",
+          "info",
+          "activeRoundId",
+          "deliveryCursor",
+          "fsn",
+          "nfsc"
+        ],
+        "transitionRules": [
+          "非JSON映射HTTP<status>",
+          "非2xx或业务code非200拒绝",
+          "401停止心跳",
+          "timeout/onerror不推进deliveryCursor",
+          "结果未知时先调用config读取last再恢复"
+        ],
+        "outputs": [
+          "可重试错误、认证错误或已协调的恢复状态"
+        ],
+        "terminationRules": [
+          "确认服务器last后恢复到FREE_ACTIVE或TERMINAL；缺父局时仅排空并作为orphan归档"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-SOURCE",
+          "E-CONFIG-RECOVERY",
+          "E-ORPHAN-CONTINUATION"
+        ],
+        "assertions": [
+          "错误响应不投递为成功Step",
+          "超时恢复不会创建第二个付费roundId",
+          "缺失父局的ba=0续步countedAsPaidRound=false"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "oracle": "captures/config-resume-after-timeout.json",
+            "assert": "超时后config返回last用于服务器状态协调"
+          },
+          {
+            "oracle": "captures/orphan-continuations.jsonl",
+            "assert": "恢复续步相邻推进至终止且没有伪造缺失父局"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-SESSION-RESUME",
+      "category": "CONFIG_RESUME",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-CONFIG-RECOVERY",
+        "E-FRONTEND-SOURCE",
+        "E-ORPHAN-CONTINUATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "首次配置或请求结果未知"
+        ],
+        "stateFields": [
+          "last",
+          "ls",
+          "fsn",
+          "nfsc",
+          "rwa",
+          "pb",
+          "wmkl",
+          "wskl"
+        ],
+        "transitionRules": [
+          "config.last为空则无可恢复结果",
+          "last存在时按其fsn/nfsc恢复是否仍在免费模式",
+          "恢复不得重新扣注或新建付费Round",
+          "字段形状不匹配时安全拒绝而非猜测转换"
+        ],
+        "outputs": [
+          "恢复后的最后Step视图或IDLE"
+        ],
+        "terminationRules": [
+          "last表明fsn==0或fsn==nfsc时终止；否则继续同一Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-CONFIG-RECOVERY",
+          "E-FRONTEND-SOURCE"
+        ],
+        "assertions": [
+          "config包含last/ls",
+          "前端以last.fsn!=last.nfsc判断续态",
+          "恢复不会把last计为新付费起点"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "oracle": "captures/config-resume-after-timeout.json",
+            "assert": "config响应携带真实last与ls"
+          },
+          {
+            "oracle": "captures/orphan-continuations.jsonl",
+            "assert": "未知父局续步保持ba=0并推进至合法终止"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-PAID-SPIN",
+      "category": "ROUND_START",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-CONFIG-RAW",
+        "E-ROUNDS-RAW",
+        "E-ROUND-INDEX",
+        "E-ORACLE-FIXTURES",
+        "E-FRONTEND-SOURCE",
+        "E-SAMPLE-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "没有未结束Round",
+          "bl=1",
+          "bs=.02",
+          "余额足够"
+        ],
+        "stateFields": [
+          "ba",
+          "pb",
+          "gt",
+          "fsn",
+          "nfsc",
+          "rskl",
+          "wa",
+          "rwa"
+        ],
+        "transitionRules": [
+          "一个付费请求只创建一个roundId",
+          "首Step必须ba=.4且gt=1",
+          "若fsn>nfsc则同roundId进入后续免费Step"
+        ],
+        "outputs": [
+          "5x3 rskl",
+          "普通LOSS/WIN或FREE入口"
+        ],
+        "terminationRules": [
+          "普通fsn=nfsc=0可单步结束；激活免费模式不得在首Step结束"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ROUND-INDEX",
+          "E-ORACLE-FIXTURES"
+        ],
+        "assertions": [
+          "每个索引首Step paidStart=true",
+          "首Step ba=.4/gt=1",
+          "免费Step不产生新索引行"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-ROUND-DELIVERY",
+      "category": "ROUND_DELIVERY_BOUNDARY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-ROUNDS-RAW",
+        "E-ROUND-INDEX",
+        "E-ORACLE-FIXTURES",
+        "E-CONFIG-RECOVERY",
+        "E-WORKFLOW-ROUND-CONSTRAINT",
+        "E-FRONTEND-SOURCE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "付费Spin仅在无激活Round时开始",
+          "中奖/特殊模式已由GameRuleCore一次生成完整Round"
+        ],
+        "stateFields": [
+          "roundId",
+          "paidStart",
+          "stepIndex",
+          "deliveryCursor",
+          "fsn",
+          "nfsc",
+          "terminal"
+        ],
+        "transitionRules": [
+          "生成单位为完整Round",
+          "HTTP响应投递单位为一个Step",
+          "一次Round只领取一次member",
+          "首Step paidStart=true",
+          "后续Step paidStart=false且同roundId",
+          "Delivery只按序消费不得临时重新生成"
+        ],
+        "outputs": [
+          "按stepIndex相邻投递的完整Round序列"
+        ],
+        "terminationRules": [
+          "投递terminal Step后清除激活Round；普通单步LOSS可在同一Step创建并终止"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ROUND-INDEX",
+          "E-ORACLE-FIXTURES",
+          "E-SAMPLE-COVERAGE"
+        ],
+        "assertions": [
+          "一个付费起点仅一条spin-index",
+          "免费Step不新建roundId",
+          "完整免费Round恰为1付费+12免费Step",
+          "终止前不得接受下一个付费Round"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "oracle": "fixtures/free-spins-x1-round.json",
+            "assert": "step0..12属于同一roundId且stepIndex连续"
+          },
+          {
+            "oracle": "captures/spin-index.jsonl",
+            "assert": "每行只索引真实付费起点，关联该Round全部Step"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-RUNTIME-INDEPENDENT-LOSS",
+      "category": "RUNTIME_SAFE_LOSS",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-ROUNDS-RAW",
+        "E-ORACLE-FIXTURES",
+        "E-PROTOCOL-VALIDATION",
+        "E-WORKFLOW-ROUND-CONSTRAINT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "无激活Round",
+          "普通付费模式",
+          "当前押注合法"
+        ],
+        "stateFields": [
+          "rskl",
+          "wmkl",
+          "wskl",
+          "wa",
+          "rwa",
+          "fsn",
+          "nfsc",
+          "gt",
+          "ba"
+        ],
+        "transitionRules": [
+          "使用正式安全随机生成候选牌面",
+          "独立ResultUtil复核243 Ways无中奖且SC<5",
+          "失败候选丢弃重试，不使用fixture或预置牌面"
+        ],
+        "outputs": [
+          "单步普通LOSS：wmkl/wskl空、wa=rwa=0、fsn=nfsc=0、gt=1"
+        ],
+        "terminationRules": [
+          "同一Step为Round终止"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ORACLE-FIXTURES",
+          "E-PROTOCOL-VALIDATION"
+        ],
+        "assertions": [
+          "ResultUtil判定无Ways奖",
+          "SC<5",
+          "响应不依赖fixture",
+          "默认运行无seed且非脚本轮播"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-WAYS-WIN",
+      "category": "WIN_EVALUATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-CONFIG-RAW",
+        "E-RULES-PACKED",
+        "E-RULES-UI",
+        "E-ROUNDS-RAW",
+        "E-ORACLE-FIXTURES",
+        "E-PROTOCOL-VALIDATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "5x3可见牌面",
+          "使用当前spl"
+        ],
+        "stateFields": [
+          "rskl",
+          "wskl",
+          "wmkl",
+          "wa",
+          "rwa"
+        ],
+        "transitionRules": [
+          "从最左轮起连续命中",
+          "Ways数为相邻各轮命中数乘积",
+          "WILD按B-WILD替代"
+        ],
+        "outputs": [
+          "中奖符号",
+          "中奖Ways",
+          "Step中奖额"
+        ],
+        "terminationRules": [
+          "首个不含匹配符号的相邻轮终止该符号Ways"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-PACKED",
+          "E-CONFIG-RAW",
+          "E-ORACLE-FIXTURES"
+        ],
+        "assertions": [
+          "模型为243 Ways",
+          "paylineCount不适用",
+          "LOSS oracle无中奖组合",
+          "WIN oracle存在左起连续组合"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-WMKL-COORDINATE",
+      "category": "RESULT_ENCODING",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND-SOURCE",
+        "E-ROUNDS-RAW",
+        "E-ORACLE-FIXTURES",
+        "E-PROTOCOL-VALIDATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "已由独立Ways判定得到每个中奖符号在连续轮上的命中位置"
+        ],
+        "stateFields": [
+          "wmkl",
+          "wskl",
+          "rskl"
+        ],
+        "transitionRules": [
+          "wmkl外层与wskl同索引",
+          "每个wmkl组按reelIndex从0连续排列",
+          "每个位置编码为10*reelIndex+rowIndex",
+          "rskl索引为reelIndex*3+rowIndex"
+        ],
+        "outputs": [
+          "array<array<array<int>>> wmkl"
+        ],
+        "terminationRules": [
+          "首个不连续命中轮之前结束该组；至少3轮"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-SOURCE",
+          "E-PROTOCOL-VALIDATION",
+          "E-ORACLE-FIXTURES"
+        ],
+        "assertions": [
+          "3753个真实坐标全部映射到wskl符号或合法WILD",
+          "667个wmkl组外层对齐且连续轮编码错误数为0",
+          "编码器预期不得由待验收实现自身生成"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-WILD",
+      "category": "SYMBOL_SUBSTITUTION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RULES-PACKED",
+        "E-RULES-UI",
+        "E-ROUNDS-RAW",
+        "E-ORACLE-FIXTURES"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "WILD位于轮2/3/4"
+        ],
+        "stateFields": [
+          "rskl",
+          "wskl",
+          "wmkl"
+        ],
+        "transitionRules": [
+          "WILD可替代除SC外任何普通符号",
+          "WILD不得替代SC"
+        ],
+        "outputs": [
+          "含WILD的Ways中奖组合"
+        ],
+        "terminationRules": [
+          "按Ways连续轮规则结束"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-PACKED",
+          "E-RULES-UI",
+          "E-ORACLE-FIXTURES"
+        ],
+        "assertions": [
+          "WILD不出现在轮1/5规则位置",
+          "WILD不构成SC触发替代"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-FREE-ENTRY",
+      "category": "SPECIAL_ENTRY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULES-PACKED",
+        "E-RULES-UI",
+        "E-ROUNDS-RAW",
+        "E-ORACLE-FIXTURES",
+        "E-SAMPLE-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "付费Step出现5、6或7个SC"
+        ],
+        "stateFields": [
+          "rskl",
+          "fsn",
+          "nfsc",
+          "rpx",
+          "gt",
+          "small_game_type"
+        ],
+        "transitionRules": [
+          "奖励12次",
+          "5/6/7 SC对应首个免费Step rpx=1/2/3",
+          "转入gt=2/small_game_type=2"
+        ],
+        "outputs": [
+          "同roundId的12个免费Step序列"
+        ],
+        "terminationRules": [
+          "入口自身不结束Round；必须交给B-FREE-CONTINUATION"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-PACKED",
+          "E-ORACLE-FIXTURES"
+        ],
+        "assertions": [
+          "5SC->x1",
+          "6SC->x2",
+          "7SC->x3",
+          "入口fsn=12/nfsc=0"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "oracle": "fixtures/free-spins-x1-round.json",
+            "from": "step0 paid fsn=12,nfsc=0",
+            "to": "step1 free gt=2,rpx=1"
+          },
+          {
+            "oracle": "fixtures/free-spins-x2-round.json",
+            "from": "step0含6SC",
+            "to": "step1 rpx=2"
+          },
+          {
+            "oracle": "fixtures/free-spins-x3-round.json",
+            "from": "step0含7SC",
+            "to": "step1 rpx=3"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-FREE-MULTIPLIER",
+      "category": "SPECIAL_MULTIPLIER_STATE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULES-PACKED",
+        "E-FRONTEND-SOURCE",
+        "E-ROUNDS-RAW",
+        "E-ORACLE-FIXTURES",
+        "E-PROTOCOL-VALIDATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "FREE_SPINS已由5/6/7个SC激活"
+        ],
+        "stateFields": [
+          "apx",
+          "rpx",
+          "nfsc",
+          "fsn",
+          "wa"
+        ],
+        "transitionRules": [
+          "5/6/7个SC分别设apx=1/2/3",
+          "捕获免费Step满足rpx=apx*nfsc",
+          "Step奖金按rpx乘算",
+          "显示及规则最大倍率150"
+        ],
+        "outputs": [
+          "每个免费Step的apx/rpx及乘算后的wa"
+        ],
+        "terminationRules": [
+          "免费配额消费完毕；若计算倍率超过150则按规则上限150，超过捕获范围需单独边界测试"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-PACKED",
+          "E-ORACLE-FIXTURES",
+          "E-PROTOCOL-VALIDATION"
+        ],
+        "assertions": [
+          "x1局rpx序列1..12",
+          "x2局为2..24",
+          "x3局为3..36",
+          "全部516个免费Step的入口apx恒定且rpx公式错误数0",
+          "390个中奖Step的wa公式错误数0"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "oracle": "fixtures/free-spins-x1-round.json",
+            "assert": "nfsc 1->2时rpx 1->2且apx=1"
+          },
+          {
+            "oracle": "fixtures/free-spins-x2-round.json",
+            "assert": "nfsc 1->2时rpx 2->4且apx=2"
+          },
+          {
+            "oracle": "fixtures/free-spins-x3-round.json",
+            "assert": "nfsc 1->2时rpx 3->6且apx=3"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-FREE-CONTINUATION",
+      "category": "MULTI_STEP_STATE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-SOURCE",
+        "E-ROUNDS-RAW",
+        "E-ROUND-INDEX",
+        "E-ORACLE-FIXTURES",
+        "E-ORPHAN-CONTINUATION",
+        "E-SAMPLE-COVERAGE",
+        "E-PROTOCOL-VALIDATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "fsn>0且fsn!=nfsc",
+          "已有激活roundId"
+        ],
+        "stateFields": [
+          "fsn",
+          "nfsc",
+          "apx",
+          "rpx",
+          "rwa",
+          "wa",
+          "pb",
+          "ba",
+          "gt",
+          "ss"
+        ],
+        "transitionRules": [
+          "调用同一Spin端点",
+          "ba=0",
+          "nfsc逐步推进",
+          "apx在同一入口序列保持1/2/3",
+          "捕获范围内rpx=apx*nfsc",
+          "rwa累计",
+          "不得领取新member或创建新roundId"
+        ],
+        "outputs": [
+          "相邻免费Step"
+        ],
+        "terminationRules": [
+          "fsn==nfsc；重触发若发生则更新fsn后继续"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-SOURCE",
+          "E-ORACLE-FIXTURES",
+          "E-ORPHAN-CONTINUATION"
+        ],
+        "assertions": [
+          "免费续步ba=0/gt=2",
+          "nfsc从1推进到12",
+          "x1/x2/x3序列终值分别12/24/36",
+          "所有Step保留同一roundId"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "oracle": "fixtures/free-spins-x1-round.json",
+            "assert": "step1.nfsc=1 -> step2.nfsc=2且rpx=1 -> 2"
+          },
+          {
+            "oracle": "fixtures/free-spins-x2-round.json",
+            "assert": "rpx按2递增"
+          },
+          {
+            "oracle": "fixtures/free-spins-x3-round.json",
+            "assert": "rpx按3递增"
+          },
+          {
+            "oracle": "captures/orphan-continuation-unknown-parent.json",
+            "assert": "ba=0的续步序列不得索引为付费Round"
+          },
+          {
+            "oracle": "captures/orphan-continuations.jsonl",
+            "assert": "超时恢复序列从nfsc=7相邻推进至nfsc=12；缺失父局时countedAsPaidRound=false"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-FREE-RETRIGGER",
+      "category": "SPECIAL_RETRIGGER",
+      "status": "UNKNOWN",
+      "multiStep": true,
+      "blocker": "[BLOCKER:RARE]",
+      "evidenceRefs": [
+        "E-RULES-PACKED",
+        "E-RULES-UI",
+        "E-SAMPLE-COVERAGE"
+      ],
+      "reason": "规则确认5个SC增加12次，但43个完整免费Round均未出现真实重触发相邻响应；不得推定fsn更新时间。",
+      "observedContract": {
+        "preconditions": [
+          "处于FREE_SPINS",
+          "一个免费Step出现5个SC"
+        ],
+        "stateFields": [
+          "fsn",
+          "nfsc",
+          "apx",
+          "rpx",
+          "gt",
+          "small_game_type"
+        ],
+        "transitionRules": [
+          "规则文本声明增加12次免费Spin"
+        ],
+        "terminationRules": [
+          "新增配额消费完毕后fsn==nfsc"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-PACKED",
+          "E-RULES-UI",
+          "E-SAMPLE-COVERAGE"
+        ],
+        "assertions": [
+          "规则文本明确5个SC增加12次",
+          "不得把规则文本扩展为未捕获字段值"
+        ],
+        "adjacentStepEvidence": [],
+        "missingAdjacentStepEvidence": "[BLOCKER:RARE] 43个完整免费Round未出现重触发，故真实from/to响应为空；此处显式记录缺口而不伪造。",
+        "usesImplementationGeneratedExpected": false
+      },
+      "unresolved": "1341个完整付费Round、43个完整免费模式Round中未捕获真实重触发相邻响应；禁止猜测fsn更新时点或其他伴随字段。"
+    },
+    {
+      "id": "B-ROUND-TERMINATION",
+      "category": "ROUND_BOUNDARY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-SOURCE",
+        "E-ROUNDS-RAW",
+        "E-ROUND-INDEX",
+        "E-ORACLE-FIXTURES",
+        "E-ORPHAN-CONTINUATION",
+        "E-SAMPLE-COVERAGE",
+        "E-PROTOCOL-VALIDATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "存在当前Round"
+        ],
+        "stateFields": [
+          "fsn",
+          "nfsc",
+          "gt",
+          "ss"
+        ],
+        "transitionRules": [
+          "fsn!=nfsc保持激活",
+          "fsn==nfsc或fsn=0结束"
+        ],
+        "outputs": [
+          "完整Round及全部Step"
+        ],
+        "terminationRules": [
+          "普通0/0可结束；免费终止样本12/12、gt=2、ss=0"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-SOURCE",
+          "E-ROUND-INDEX",
+          "E-ORACLE-FIXTURES"
+        ],
+        "assertions": [
+          "索引1342行包含1341个complete=true及1个已处置的不完整付费起点",
+          "1341个完整局terminalEvidence.equal=true",
+          "免费Step不另计Round"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "oracle": "fixtures/free-spins-x1-round.json",
+            "assert": "倒数Step nfsc=11/ss=1，末Step nfsc=12/ss=0"
+          },
+          {
+            "oracle": "fixtures/ordinary-loss-round.json",
+            "assert": "单步0/0合法结束"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-BALANCE-SETTLEMENT",
+      "category": "BALANCE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-SOURCE",
+        "E-ROUNDS-RAW",
+        "E-ORACLE-FIXTURES",
+        "E-PROTOCOL-VALIDATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "有效付费Round"
+        ],
+        "stateFields": [
+          "pb",
+          "ba",
+          "wa",
+          "rwa"
+        ],
+        "transitionRules": [
+          "付费首Step ba=.4",
+          "免费Step ba=0",
+          "rwa在Round内累计",
+          "pb以响应值更新"
+        ],
+        "outputs": [
+          "每Step余额与Round累计奖"
+        ],
+        "terminationRules": [
+          "Round结束时最终pb为结算余额"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ORACLE-FIXTURES",
+          "E-ROUNDS-RAW"
+        ],
+        "assertions": [
+          "普通付费扣注存在",
+          "免费续步不重复扣注",
+          "全部1341个完整Round末rwa等于Step.wa之和",
+          "43个免费Round中间pb保持且末pb-入口pb=末rwa",
+          "最终Step提供最终pb"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "oracle": "fixtures/free-spins-x2-round.json",
+            "assert": "step0.ba=.4；后续全部ba=0；rwa不下降"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HISTORY",
+      "category": "HISTORY_API",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-SOURCE",
+        "E-HISTORY-ENDPOINTS",
+        "E-HISTORY-RUNTIME-ADJACENT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "有效游戏会话并持有运行时web-token与game-id=54",
+          "列表请求提供page_index、begin_at、end_at；详情请求只使用列表真实记录的tis"
+        ],
+        "stateFields": [
+          "page_index",
+          "begin_at",
+          "end_at",
+          "list.end",
+          "list.ll[].tis",
+          "list.ll[].bid",
+          "selectedHistoryId",
+          "detail.bsl",
+          "detail.fsl",
+          "detail.baf"
+        ],
+        "transitionRules": [
+          "POST log-list后将data.ll作为当前页；data.end=0时允许page_index递增加载下一页，非0时停止分页",
+          "选择记录时令selectedHistoryId=list.ll[i].tis，并以transfer_id=selectedHistoryId POST log-view",
+          "详情Step严格按bsl在前、fsl在后的顺序合并；fsl缺失按空数组处理，不得把Step拆成新Round",
+          "详情显示交易号使用bid；列表选择键与详情请求键使用tis/transfer_id，不得混用bid",
+          "详情Round边界沿用Spin状态机：合并Step中最后一个满足fsn==nfsc或fsn==0的Step为合法终止"
+        ],
+        "outputs": [
+          "列表摘要ba、wa、lc、end及ll记录",
+          "详情交易号bid、余额baf和按bsl+fsl有序合并的完整Round Step",
+          "本次真实样本详情为一个bsl付费Step，fsl缺失且fsn=nfsc=0"
+        ],
+        "terminationRules": [
+          "列表分页在data.end!=0或请求失败时终止",
+          "详情在log-view成功、bsl+fsl合并完成且达到合法Round末Step时终止",
+          "任一请求失败不得猜测记录ID、详情字段或缺失Step"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-SOURCE",
+          "E-HISTORY-ENDPOINTS",
+          "E-HISTORY-RUNTIME-ADJACENT"
+        ],
+        "assertions": [
+          "log-list请求为form并包含page_index/begin_at/end_at/gid/t，响应data键为ba/end/lc/ll/wa",
+          "真实ll[0].tis与紧接的log-view.transfer_id完全相等",
+          "log-view响应data包含baf、bid、bsl；fsl为可选字段，缺失时按空数组处理",
+          "前端HistoryByID按bsl后接fsl合并，详情完整Round终点必须独立复核fsn/nfsc"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "from": "captures/54-Fishing-GO/history-log-list-view-adjacent.json#steps[0]",
+            "to": "captures/54-Fishing-GO/history-log-list-view-adjacent.json#steps[1]",
+            "evidenceRefs": [
+              "E-HISTORY-RUNTIME-ADJACENT"
+            ],
+            "assertion": "同一浏览器和游戏会话中reqid 328的ll[0].tis=2093629175837130752，紧接reqid 329以同值作为transfer_id；期间无其他go-fishing请求"
+          },
+          {
+            "from": "log-view.data.bsl[0]",
+            "to": "HistoryByID合并后的详情终点",
+            "evidenceRefs": [
+              "E-HISTORY-ENDPOINTS",
+              "E-HISTORY-RUNTIME-ADJACENT"
+            ],
+            "assertion": "样本没有fsl，合并后仅一个付费Step且fsn=nfsc=0，构成合法完整历史Round"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-PURCHASE-DISCOVERY",
+      "category": "OPTIONAL_PURCHASE",
+      "status": "NOT_APPLICABLE",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-CONFIG-RAW",
+        "E-PURCHASE-SEARCH"
+      ],
+      "reason": "配置、规则页、菜单和前端代码均未发现当前游戏购买入口；在新证据出现前不得实现或暴露购买模式。",
+      "observedContract": {
+        "configField": null,
+        "uiEntry": null,
+        "apiEndpoint": null
+      },
+      "unresolved": "不得实现或暴露购买模式；若后续真实入口出现新证据，须更新rulesHash与能力清单。"
+    },
+    {
+      "id": "B-REDIS-CONTRACT",
+      "category": "PLATFORM_REDIS_ADAPTER",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-REDIS-PLATFORM-CONTRACT",
+        "E-ROUNDS-RAW",
+        "E-WORKFLOW-ROUND-CONSTRAINT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "GameRuleCore已生成并由独立ResultUtil复核一个Fishing GO完整Round",
+          "实际累计倍率大于0",
+          "同一roundKey不存在未完成Redis写入"
+        ],
+        "stateFields": [
+          "gameId",
+          "roundKey",
+          "mode",
+          "actualMultiplier",
+          "deliveries",
+          "memberPayload",
+          "multiplierIndexKey",
+          "roundListKey",
+          "maxMembersPerMultiplier"
+        ],
+        "transitionRules": [
+          "实际倍率为0时整局跳过",
+          "普通Round使用PerKeyList_000000054与BetLog:000000054:<actual-multiplier-token>",
+          "免费模式完整Round使用MaryKeyList_000000054与MaryLog:000000054:<actual-multiplier-token>",
+          "在同一MULTI/EXEC内依次执行ZADD、RPUSH、LTRIM"
+        ],
+        "outputs": [
+          "每个LIST member恰好编码一个付费起点至全部后续Delivery终止的完整Round",
+          "倍率索引包含实际正倍率",
+          "每倍率默认只保留最新300条member"
+        ],
+        "terminationRules": [
+          "EXEC成功后本批次提交",
+          "事务失败时不得保留部分写入",
+          "不得把Step拆成独立member"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-REDIS-PLATFORM-CONTRACT",
+          "E-ROUNDS-RAW",
+          "E-PROTOCOL-VALIDATION"
+        ],
+        "assertions": [
+          "普通与特殊索引Key分别匹配PerKeyList_%09d和MaryKeyList_%09d",
+          "普通与特殊LIST分别匹配BetLog:0%08d:<actualMultiplier>和MaryLog:%09d:<actualMultiplier>",
+          "解码后最少包含当前游戏roundKey、mode、actualMultiplier及有序deliveries",
+          "ResultUtil重新计算的模式、倍率和终止边界与member一致",
+          "0倍不写入，正倍数按实际倍率分桶",
+          "同批ZADD、RPUSH、LTRIM位于一个MULTI/EXEC"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "from": "Fishing GO完整Round事实对象",
+            "to": "一个Redis LIST member",
+            "evidenceRefs": [
+              "E-ROUNDS-RAW",
+              "E-REDIS-PLATFORM-CONTRACT"
+            ],
+            "assertion": "1341个完整Round均以一个付费起点和其全部deliveries为不可拆分缓存单位"
+          },
+          {
+            "from": "ZADD multiplier index",
+            "to": "RPUSH member then LTRIM",
+            "evidenceRefs": [
+              "E-REDIS-PLATFORM-CONTRACT"
+            ],
+            "assertion": "三个写命令必须在同一MULTI/EXEC内按实际倍率Key原子提交"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "UB-FREE-RETRIGGER",
+      "behaviorId": "B-FREE-RETRIGGER",
+      "category": "SPECIAL_RETRIGGER",
+      "status": "RUNTIME_ADJACENT_SAMPLE_MISSING",
+      "blocker": "[BLOCKER:RARE]",
+      "evidenceRefs": [
+        "E-RULES-PACKED",
+        "E-RULES-UI",
+        "E-SAMPLE-COVERAGE"
+      ],
+      "disposition": "KEEP_UNKNOWN_AND_DO_NOT_INFER_FSN_UPDATE",
+      "reason": "规则确认增加12次，但1341个完整付费Round及43个完整免费模式Round中无真实重触发相邻Step。"
+    },
+    {
+      "id": "UB-PURCHASE-NOT-APPLICABLE",
+      "behaviorId": "B-PURCHASE-DISCOVERY",
+      "category": "OPTIONAL_PURCHASE",
+      "status": "NOT_APPLICABLE_WITH_CURRENT_EVIDENCE",
+      "evidenceRefs": [
+        "E-CONFIG-RAW",
+        "E-PURCHASE-SEARCH"
+      ],
+      "disposition": "DO_NOT_EXPOSE_UNTIL_CURRENT_GAME_EVIDENCE_EXISTS",
+      "reason": "配置、UI、规则及代码未发现购买入口。"
+    },
+    {
+      "id": "UB-BET-GENERAL-FORMULA",
+      "category": "BET_MODEL",
+      "status": "UNKNOWN_GENERAL_FORMULA",
+      "evidenceRefs": [
+        "E-CONFIG-RAW",
+        "E-ROUNDS-RAW",
+        "E-PROTOCOL-VALIDATION"
+      ],
+      "disposition": "IMPLEMENT_CONFIRMED_MINIMUM_MAPPING_ONLY_OR_CAPTURE_AUTHORITY",
+      "reason": "已确认bl=1、bs=.02对应ba=.4及中奖计算以bs=.02为基数，但未抓取其他组合，禁止外推通用bl/bs/ba公式。"
+    },
+    {
+      "id": "UB-ORIGINAL-SYMBOL-WEIGHTS",
+      "category": "GENERATION_WEIGHTS",
+      "status": "ORIGINAL_WEIGHTS_NOT_EXPOSED",
+      "evidenceRefs": [
+        "E-CONFIG-RAW",
+        "E-RULES-PACKED",
+        "E-ROUNDS-RAW"
+      ],
+      "disposition": "DOWNSTREAM_LOCAL_REPLICA_WEIGHTS_REQUIRED_WITH_DISTRIBUTION_VALIDATION",
+      "reason": "配置和规则无原厂卷轴条/权重；抓包频率不能冒充原厂权重，下游须提供Fishing GO专属可调整本地复刻权重并声明不代表原厂RTP。"
+    }
+  ],
+  "downstreamGuardrails": [
+    "fixtures仅作独立oracle，禁止作为运行时结果源。",
+    "正式Java实现开始前必须读取本文件与game-capabilities.json并校验rulesHash一致。",
+    "不得把免费Step、孤立续步或未决超时请求计为付费Round。",
+    "apx已确认为免费倍率步长，rpx在516个捕获免费Step中满足apx*nfsc；不得再按恒为1处理。",
+    "wmkl坐标已由3753个真实位置独立验证为10*reel+row，外层与wskl同索引。",
+    "不得从通用payline_count、Bet Level或倍率常量推断固定线数。",
+    "未决字段保持UNKNOWN或安全禁用；新证据必须更新rulesHash与行为契约。"
+  ]
+}

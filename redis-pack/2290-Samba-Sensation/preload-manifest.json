@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "gameId": 2290,
+  "sourceGameId": 2290,
+  "redisGameId": 2290,
+  "rulesHash": "46ef48cf0977a2785f257825d1e499b8049d293900e2a10d4a0dec7ad1ba2205",
+  "redis": {"host":"192.168.10.3","port":6379,"database":15,"connected":true},
+  "keys": {"normalIndex":"PerKeyList_000002290","specialIndex":"MaryKeyList_000002290","normalListPattern":"BetLog:000002290:%06d","specialListPattern":"MaryLog:000002290:%06d"},
+  "selectionContract":"WIN_OR_LOSS_THEN_EXISTING_INTEGER_MULTIPLIER_THEN_ONE_MEMBER",
+  "writeContract":"ZADD + RPUSH + LTRIM in same MULTI/EXEC batch",
+  "memberCodecVersion": "SS2",
+  "legacyMembersPreservedButRuntimeIneligible": true,
+  "lastLoad": {"normalGenerated":600,"specialGenerated":300,"ordinaryLossGenerated":300,"ordinaryWinGenerated":300,"freeSpinsGenerated":278,"coinRewardGenerated":22,"batches":18},
+  "postLoadVerification": {"membersLocallyVerifiedByResultUtilBeforeWrite":900,"ordinaryLoss":300,"ordinaryWin":300,"freeSpins":278,"coinReward":22,"allFourClassesWritten":true,"normalAndSpecialIndexesWritten":true,"perMultiplierCapacity":300,"atomicRpushLtrim":true,"status":"PASS"},
+  "delivery": {"jar":"generator/2290-Samba-Sensation/dist/samba-sensation-redis-loader.jar","jarSha256":"5803e3fc33a92fe5d4a8c47b93fb738f77a4f5866819a16121f86a13b8be2e20","properties":"generator/2290-Samba-Sensation/dist/generator.properties","propertiesSha256":"814ef6abf11cbc0c4cb770798437c341832795ee3a1c349310ff0a110d4069ce","script":"generator/2290-Samba-Sensation/dist/start-generator.cmd","scriptSha256":"b072a1331c24c55788e7c432a960fbfc27f8bda8ebf86e381598fc149cd799b1"},
+  "preloadedAt":"2026-09-06T03:15:43+08:00"
+}

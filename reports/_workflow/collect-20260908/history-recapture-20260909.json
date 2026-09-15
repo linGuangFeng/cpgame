@@ -1,0 +1,68 @@
+[
+  {
+    "id": "2110-Bee-Workshop",
+    "worker": "abc223",
+    "tokenSummary": [
+      {
+        "source": "local",
+        "key": "token",
+        "user": "abc223",
+        "url": "https://hms-paddle.com/#/index",
+        "kind": "other",
+        "n": 1,
+        "len": 36,
+        "prefix": "6f99"
+      }
+    ],
+    "attempts": [],
+    "goldCode": null,
+    "goldDays": 0,
+    "details": [],
+    "historyView": false,
+    "at": "2026-09-09T02:24:21.451Z"
+  },
+  {
+    "id": "1380-Hidden-Realm",
+    "worker": "abc224",
+    "tokenSummary": [
+      {
+        "source": "local",
+        "key": "token",
+        "user": "abc224",
+        "url": "https://hms-paddle.com/#/index",
+        "kind": "other",
+        "n": 1,
+        "len": 36,
+        "prefix": "1527"
+      }
+    ],
+    "attempts": [],
+    "goldCode": null,
+    "goldDays": 0,
+    "details": [],
+    "historyView": false,
+    "at": "2026-09-09T02:24:29.335Z"
+  },
+  {
+    "id": "1780-Glacier-Treasure",
+    "worker": "abc224",
+    "tokenSummary": [
+      {
+        "source": "local",
+        "key": "token",
+        "user": "abc224",
+        "url": "https://hms-paddle.com/#/index",
+        "kind": "other",
+        "n": 1,
+        "len": 36,
+        "prefix": "1527"
+      }
+    ],
+    "attempts": [],
+    "goldCode": null,
+    "goldDays": 0,
+    "details": [],
+    "historyView": false,
+    "at": "2026-09-09T02:24:36.132Z"
+  }
+]

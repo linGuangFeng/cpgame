@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "gameId": 1780,
+  "gameDirectory": "1780-Glacier-Treasure",
+  "rulesHash": "0139e446c93699f20cd06048145312e652edf09876efc7d4ff26cc207a73172e",
+  "behaviorIds": [
+    "1780.board.geometry",
+    "1780.payout.leftways",
+    "1780.cascade.frames",
+    "1780.multiplier.normal",
+    "1780.multiplier.free",
+    "1780.scatter.initial",
+    "1780.free.terminal",
+    "1780.buy.request"
+  ],
+  "status": "READY_FOR_ACCEPTANCE",
+  "readyForAcceptance": true,
+  "capabilities": {
+    "ordinaryPayout": {
+      "observed": true,
+      "implementation": "JAVA_DETERMINISTIC_CORE",
+      "validation": "71 original History boards; raw payout/flags/breakdown plus independent path oracle"
+    },
+    "cascade": {
+      "observed": true,
+      "implementation": "JAVA_REFILL_ONE_CELL_UNFRAMED",
+      "validation": "6461 origin new refill symbols all grid=1 frame=0; ResultUtil checks 31 history transitions"
+    },
+    "silverGoldWild": {
+      "observed": true,
+      "implementation": "OPENING_SILVER_THEN_TRANSFORM",
+      "validation": "Opening goldPct=0; silver 30.27% of large groups; silver win -> gold prop 2-11; gold win -> wild"
+    },
+    "naturalFree": {
+      "observed": true,
+      "implementation": "PARTIAL_RULE_FUNCTIONS_AND_HISTORY_VERIFICATION",
+      "validation": "One complete History feature, ten free Deliveries; original spin request chain absent"
+    },
+    "freeRetrigger": {
+      "observed": true,
+      "evidence": "UI_Game1780_25",
+      "implementation": "NOT_IMPLEMENTED",
+      "validation": "NO_RETRIGGER_ROUND_IN_ACCESSIBLE_HISTORY"
+    },
+    "featureBuy": {
+      "observed": true,
+      "evidence": "reqBuyFreeTimes bet_type=3 and cost x60; GameBetCom@7cd67 now in publish",
+      "implementation": "SPECIAL_POOL_PLUS_60X_DEBIT",
+      "validation": "DEMO_BUY_FREE_COMPLETE_X2_SURPLUS_0; origin bet_type=3 chains SAMPLE_INSUFFICIENT"
+    },
+    "mali": {
+      "observed": null,
+      "implementation": "UNDETERMINED",
+      "validation": "No mali symbol or mode name established; do not map from another game"
+    },
+    "initialData": {
+      "observed": true,
+      "implementation": "SERVED"
+    },
+    "initRoom": {
+      "observed": true,
+      "implementation": "SERVED"
+    },
+    "gameResult": {
+      "observed": true,
+      "implementation": "REDIS_COMPLETE_ROUND_PROJECTION"
+    },
+    "history": {
+      "observed": true,
+      "implementation": "SESSION_LIST_AND_DETAIL"
+    },
+    "balance": {
+      "observed": true,
+      "implementation": "SESSION_GOLD"
+    },
+    "session": {
+      "observed": true,
+      "implementation": "TOKEN_BEARING_NO_STANDALONE_SESSION_ENDPOINT",
+      "evidence": "Token-bearing observed requests; /api/session is demo-only"
+    },
+    "generator": {
+      "observed": null,
+      "implementation": "JAVA_COMPLETE_ROUND_FACTORY",
+      "runtimeReplay": false
+    },
+    "redisLoader": {
+      "implementation": "BUILT_SECURE_RANDOM"
+    },
+    "controllerV3": {
+      "implementation": "BUILT"
+    },
+    "staticOriginalFrontend": {
+      "implementation": "PUBLISH_ROOT_ORIGINAL_HTML",
+      "indexedAssetsVerified": 212
+    },
+    "browserPlayable": {
+      "implementation": "EDGE_GET_STARTED_TWO_CONSECUTIVE_PAID_SPINS"
+    }
+  },
+  "languages": {
+    "resourceDirectoriesObserved": [
+      "bn",
+      "en",
+      "es",
+      "fr",
+      "id",
+      "ko",
+      "pt-br",
+      "th",
+      "tr",
+      "vi",
+      "zh"
+    ],
+    "embeddedHelpLocales": [
+      "en-us",
+      "hi-in",
+      "th-th",
+      "zh-cn",
+      "zh-hk",
+      "vi-vn",
+      "id-id",
+      "in-telugu",
+      "in-marathi",
+      "pt-pt",
+      "es-es",
+      "fr-fr",
+      "bn-bd",
+      "ko-ko",
+      "tr-tr"
+    ],
+    "clickVerified": ["en-us"],
+    "note": "Directory existence and embedded translation text do not establish playable localization. en-us GET STARTED and two paid spins verified in-browser."
+  },
+  "coverage": {
+    "source": "History detail, 30 development regression rounds",
+    "counts": {
+      "ordinary_loss": 725,
+      "ordinary_win": 122,
+      "free_feature_triggers": 25,
+      "free_feature_history": 1
+    },
+    "sampleStatus": "SAMPLE_INSUFFICIENT",
+    "spinCorpusReported1864IndependentlyVerified": false,
+    "holdoutOriginalRounds": 30,
+    "generatedCompleteRounds": 10000
+  }
+}

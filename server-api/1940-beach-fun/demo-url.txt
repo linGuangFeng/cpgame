@@ -1,0 +1,1 @@
+http://127.0.0.1:51940/v2/1940/index.html?ai=local&btt=1&gid=1940&l=pt&language=pt-br&sip=127.0.0.1:51940&token=demo

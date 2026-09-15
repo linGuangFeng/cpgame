@@ -1,0 +1,514 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 54,
+  "directoryName": "54-Fishing-GO",
+  "gameName": "Fishing GO",
+  "rulesVersion": "fishing-go-rules-23e7a379b8a38d25",
+  "rulesHash": "23e7a379b8a38d25d638cd0726cab97c49a6c425c88e2dd371c82007f9f81463",
+  "scope": "原站端点、请求顺序、编解码、字段语义以及Paid Round/Delivery/Step状态机",
+  "identity": {
+    "status": "CONFIRMED",
+    "idName": "54-Fishing-GO",
+    "evidence": [
+      "入口/54/?gid=54",
+      "publish/54-Fishing-GO/versionconfig.js",
+      "publish/54-Fishing-GO/assets/main/index.32cc7.js#GameConfig._gameId=54",
+      "打包语言GameName.Name=Fishing GO"
+    ]
+  },
+  "apiBase": {
+    "observed": "https://api.omgapibra.com/cp",
+    "construction": "入口sip参数提供主机，前端GameApi将相对端点拼到BaseUrl；不得把抓取主机硬编码为所有环境的唯一主机。",
+    "credentialIsolation": "仅使用本执行分配账号abc221；t保持不透明且所有落盘证据已脱敏。"
+  },
+  "codec": {
+    "request": {
+      "method": "POST",
+      "contentType": "application/x-www-form-urlencoded",
+      "formAlgorithm": "逐键encodeURIComponent，空格%20替换为+，再以&连接",
+      "headerToFormMapping": {
+        "game-id": "gid",
+        "web-token": "t"
+      },
+      "applicationEncryption": "NONE_OBSERVED",
+      "transportEncryption": "TLS/HTTPS",
+      "token": "不透明会话值，禁止解析、解密或写入产物"
+    },
+    "response": {
+      "media": "UTF-8 JSON",
+      "envelope": {
+        "code": "number|string",
+        "data": "object",
+        "info": "string"
+      },
+      "unwrap": "HTTP 2xx且String(code)==\"200\"时向业务层返回data或{}",
+      "errors": [
+        "响应不是JSON时构造code=HTTP<status>",
+        "HTTP非2xx或业务code非200时拒绝，不推进Round/Step游标",
+        "code=401时停止心跳并要求重新认证",
+        "timeout/onerror时拒绝；先以config.last核对服务器状态，再决定恢复，禁止重放成新付费Round"
+      ]
+    },
+    "evidence": [
+      "publish/54-Fishing-GO/assets/main/index.32cc7.js#Http",
+      "captures/54-Fishing-GO/000085-config.json",
+      "captures/54-Fishing-GO/000151-spin.json"
+    ]
+  },
+  "requestSequence": [
+    {
+      "order": 1,
+      "action": "FIRST_LOAD",
+      "request": "GET /54/?gid=54&l=<code>&sip=<host>&t=<opaque>",
+      "result": "加载静态bundle与实际语言资源",
+      "evidence": "captures/54-Fishing-GO/first-load-network.json"
+    },
+    {
+      "order": 2,
+      "action": "CONFIG",
+      "request": "POST /api/v1/go-fishing/config form t=<opaque>&gid=54",
+      "result": "返回下注选项、币种、奖表以及可选last/ls恢复状态",
+      "evidence": [
+        "captures/54-Fishing-GO/000085-config.json",
+        "captures/54-Fishing-GO/config-resume-after-timeout.json"
+      ]
+    },
+    {
+      "order": 3,
+      "action": "PAID_SPIN",
+      "precondition": "没有激活Round",
+      "request": "POST /api/v1/go-fishing/spin form bl=<level>&bs=<size>&t=<opaque>&gid=54",
+      "minimumObserved": {
+        "bl": 1,
+        "bs": 0.02,
+        "ba": 0.4,
+        "currency": "BRL"
+      },
+      "result": "返回一个付费Step；普通局可终止，5/6/7个SC则激活同一Round的免费序列",
+      "evidence": [
+        "captures/54-Fishing-GO/000151-spin.json",
+        "captures/54-Fishing-GO/rounds.jsonl"
+      ]
+    },
+    {
+      "order": 4,
+      "action": "CONTINUATION_SPIN",
+      "precondition": "fsn>0且fsn!=nfsc",
+      "request": "继续调用同一Spin端点；不创建新roundId，不重复领取member",
+      "result": "每个响应投递同一Round的一个免费Step，ba=0、gt=2，直到合法终止",
+      "evidence": [
+        "fixtures/54-Fishing-GO/free-spins-x1-round.json",
+        "fixtures/54-Fishing-GO/free-spins-x2-round.json",
+        "fixtures/54-Fishing-GO/free-spins-x3-round.json"
+      ]
+    },
+    {
+      "order": 5,
+      "action": "HISTORY_OPTIONAL",
+      "request": "POST log-list，再按用户选择POST log-view",
+      "status": "CONFIRMED",
+      "evidence": "captures/54-Fishing-GO/history-log-list-view-adjacent.json"
+    }
+  ],
+  "endpoints": [
+    {
+      "id": "CONFIG",
+      "method": "POST",
+      "path": "/api/v1/go-fishing/config",
+      "requestKeys": [
+        "t",
+        "gid"
+      ],
+      "responseDataKeys": [
+        "auto",
+        "bll",
+        "bsl",
+        "cc",
+        "cs",
+        "dbl",
+        "dbs",
+        "last",
+        "ls",
+        "spl",
+        "ts"
+      ],
+      "runtimeCaptured": true
+    },
+    {
+      "id": "SPIN",
+      "method": "POST",
+      "path": "/api/v1/go-fishing/spin",
+      "requestKeys": [
+        "bl",
+        "bs",
+        "t",
+        "gid"
+      ],
+      "responseDataKeys": [
+        "apx",
+        "ba",
+        "fsn",
+        "gt",
+        "nfsc",
+        "pb",
+        "rpx",
+        "rskl",
+        "rwa",
+        "small_game_type",
+        "ss",
+        "wa",
+        "wmkl",
+        "wskl"
+      ],
+      "runtimeCaptured": true
+    },
+    {
+      "id": "HISTORY_LIST",
+      "method": "POST",
+      "path": "/api/v1/go-fishing/log-list",
+      "requestKeys": [
+        "page_index",
+        "begin_at",
+        "end_at",
+        "t",
+        "gid"
+      ],
+      "responseDataKeys": [
+        "ba",
+        "end",
+        "lc",
+        "ll",
+        "wa"
+      ],
+      "recordKeys": [
+        "ba",
+        "baf",
+        "bid",
+        "ca",
+        "fe",
+        "gm",
+        "gt",
+        "tis",
+        "wa"
+      ],
+      "runtimeCaptured": true,
+      "status": "CONFIRMED"
+    },
+    {
+      "id": "HISTORY_VIEW",
+      "method": "POST",
+      "path": "/api/v1/go-fishing/log-view",
+      "requestKeys": [
+        "transfer_id",
+        "t",
+        "gid"
+      ],
+      "responseDataKeys": [
+        "baf",
+        "bid",
+        "bsl",
+        "fsl"
+      ],
+      "optionalResponseDataKeys": [
+        "fsl"
+      ],
+      "frontendConsumedKeys": [
+        "bsl",
+        "fsl",
+        "baf"
+      ],
+      "runtimeCaptured": true,
+      "status": "CONFIRMED"
+    },
+    {
+      "id": "HEARTBEAT",
+      "method": "POST",
+      "path": "/api/v1/ping",
+      "runtimeCaptured": false,
+      "status": "SOURCE_ENUMERATED"
+    }
+  ],
+  "historyModel": {
+    "status": "CONFIRMED",
+    "evidence": "captures/54-Fishing-GO/history-log-list-view-adjacent.json",
+    "requestSequence": [
+      "HISTORY_LIST",
+      "HISTORY_VIEW"
+    ],
+    "recordSelectionKey": "ll[].tis",
+    "detailRequestMapping": "transfer_id=selected ll[].tis",
+    "displayTransactionId": "bid",
+    "pagination": "end=0允许page_index递增；end!=0终止",
+    "detailStepOrder": "bsl后接fsl；fsl缺失按空数组",
+    "capturedSample": {
+      "listRecordCount": 10,
+      "selectedListIndex": 0,
+      "detailPaidStepCount": 1,
+      "detailFreeStepCount": 0
+    },
+    "roundBoundary": "详情合并后最后Step满足fsn==nfsc或fsn==0；捕获样本为单步bsl且fsn=nfsc=0",
+    "failureRule": "任一请求失败不得猜测记录ID、响应字段或缺失Step"
+  },
+  "configSemantics": {
+    "auto": "自动Spin次数选项[10,30,50,100,500]",
+    "bll": "合法Bet Level列表[1..10]",
+    "bsl": "合法Bet Size列表[0.02,0.1,0.5]",
+    "dbl": "配置默认Bet Level 0.5；不等同固定中奖线数量",
+    "dbs": "配置默认Bet Size 0.02",
+    "cc": "币种代码BRL",
+    "cs": "币种符号R$",
+    "spl": "A/J/K/Q/S1-S4的3/4/5连续轮奖表倍率",
+    "last": "最后结果/恢复入口；null或结果对象",
+    "ls": "历史展示兼容对象；字段命名来自通用历史模型，不能覆盖当前Spin字段语义",
+    "ts": "服务端时间值；单位未单独验证，不参与游戏规则生成"
+  },
+  "spinFieldSemantics": [
+    {
+      "field": "rskl",
+      "type": "array<string>",
+      "meaning": "5列x3行可见牌面，索引=reel*3+row",
+      "status": "CONFIRMED"
+    },
+    {
+      "field": "wskl",
+      "type": "array<string>",
+      "meaning": "中奖符号列表，与wmkl外层一一对应",
+      "status": "CONFIRMED"
+    },
+    {
+      "field": "wmkl",
+      "type": "array<array<array<int>>>",
+      "meaning": "每个中奖符号按从左到右连续轮列出命中位置；坐标=10*reel+row",
+      "status": "CONFIRMED_3753_COORDINATES"
+    },
+    {
+      "field": "wa",
+      "type": "number",
+      "meaning": "当前Step奖金；最小押注样本公式Σ(spl[symbol][reelCount]×ways×bs×rpx)",
+      "status": "CONFIRMED_390_WINNING_STEPS"
+    },
+    {
+      "field": "rwa",
+      "type": "number",
+      "meaning": "Round累计奖金，不随Step下降；完整Round末值等于全部Step.wa之和",
+      "status": "CONFIRMED_1341_ROUNDS"
+    },
+    {
+      "field": "ba",
+      "type": "number",
+      "meaning": "当前Step扣注；最小付费Step为0.4，免费续步为0",
+      "status": "CONFIRMED"
+    },
+    {
+      "field": "pb",
+      "type": "decimal-string",
+      "meaning": "响应后的BRL玩家余额，2位小数；43个免费Round中中间Step保持入口扣注后余额，末Step.pb-入口Step.pb=末Step.rwa",
+      "status": "CONFIRMED_43_FREE_ROUNDS"
+    },
+    {
+      "field": "fsn",
+      "type": "integer",
+      "meaning": "当前免费Spin总配额；初始为12，重触发时如何更新缺真实相邻响应",
+      "status": "CONFIRMED_WITH_RARE_UPDATE_GAP"
+    },
+    {
+      "field": "nfsc",
+      "type": "integer",
+      "meaning": "已消费免费Spin数；捕获序列从0推进至12",
+      "status": "CONFIRMED"
+    },
+    {
+      "field": "apx",
+      "type": "number",
+      "meaning": "免费倍率步长/增量；5/6/7个SC入口分别为1/2/3",
+      "status": "CONFIRMED"
+    },
+    {
+      "field": "rpx",
+      "type": "number",
+      "meaning": "当前Step中奖倍率；捕获免费Step满足rpx=apx×nfsc，规则上限150",
+      "status": "CONFIRMED_CAPTURED_RANGE_1_TO_36"
+    },
+    {
+      "field": "gt",
+      "type": "integer",
+      "meaning": "游戏Step类型：1=付费/普通，2=免费",
+      "status": "CONFIRMED_OBSERVED_VALUES"
+    },
+    {
+      "field": "small_game_type",
+      "type": "integer",
+      "meaning": "子模式：0=普通/入口付费Step，2=免费Step",
+      "status": "CONFIRMED_OBSERVED_VALUES"
+    },
+    {
+      "field": "ss",
+      "type": "integer",
+      "meaning": "前端spin_status；普通及进行中免费样本为1，免费终止Step为0；Round终止不得只依赖该字段",
+      "status": "CONFIRMED_OBSERVED_VALUES"
+    }
+  ],
+  "winEvaluation": {
+    "model": "243_WAYS",
+    "paylineCount": "NOT_APPLICABLE",
+    "direction": "LEFT_TO_RIGHT_CONSECUTIVE_REELS",
+    "ways": "每个中奖符号各相邻中奖轮命中位置数的乘积",
+    "wild": "WILD仅出现于轮2/3/4，可替代除SC外所有普通符号",
+    "minimumBetWinFormula": "wa=Σ(spl[wskl[i]][wmkl[i].length]×Π wmkl[i][reel].length×0.02×rpx)",
+    "formulaScope": "0.02为本次全部真实采样的bs；未抓取其他bs/bl组合，禁止外推总押注通用公式。",
+    "validation": {
+      "completeRounds": 1341,
+      "steps": 1857,
+      "winningSteps": 390,
+      "wmklGroups": 667,
+      "coordinateValues": 3753,
+      "coordinateErrors": 0,
+      "formulaErrors": 0
+    }
+  },
+  "stateMachine": {
+    "states": [
+      {
+        "id": "IDLE",
+        "meaning": "无激活Round，可接收付费Spin"
+      },
+      {
+        "id": "PAID_STEP_DELIVERED",
+        "meaning": "已投递付费起点Step，等待判断普通终止或免费入口"
+      },
+      {
+        "id": "FREE_ACTIVE",
+        "meaning": "fsn>0且fsn!=nfsc，只能投递同一Round后续免费Step"
+      },
+      {
+        "id": "ROUND_TERMINAL",
+        "meaning": "fsn==0或fsn==nfsc，最终余额与累计奖已确定"
+      },
+      {
+        "id": "RECOVERY_REQUIRED",
+        "meaning": "请求超时/网络未知，先查config.last，不得直接再次创建付费Round"
+      }
+    ],
+    "transitions": [
+      {
+        "from": "IDLE",
+        "event": "VALID_PAID_SPIN",
+        "to": "PAID_STEP_DELIVERED",
+        "assert": "ba>0,gt=1,一个新roundId"
+      },
+      {
+        "from": "PAID_STEP_DELIVERED",
+        "event": "fsn==0",
+        "to": "ROUND_TERMINAL",
+        "assert": "普通单步Round"
+      },
+      {
+        "from": "PAID_STEP_DELIVERED",
+        "event": "fsn>nfsc",
+        "to": "FREE_ACTIVE",
+        "assert": "5/6/7个SC，fsn=12,nfsc=0"
+      },
+      {
+        "from": "FREE_ACTIVE",
+        "event": "NEXT_SPIN_RESPONSE",
+        "to": "FREE_ACTIVE",
+        "assert": "ba=0,gt=2,nfsc递增,rwa不下降，同roundId"
+      },
+      {
+        "from": "FREE_ACTIVE",
+        "event": "fsn==nfsc",
+        "to": "ROUND_TERMINAL",
+        "assert": "捕获终止为12/12且ss=0"
+      },
+      {
+        "from": "FREE_ACTIVE",
+        "event": "5_SC_RETRIGGER",
+        "to": "FREE_ACTIVE",
+        "assert": "规则确认增加12次；fsn具体更新相邻响应未捕获，不得猜测"
+      },
+      {
+        "from": "PAID_STEP_DELIVERED|FREE_ACTIVE",
+        "event": "TIMEOUT_OR_ERROR",
+        "to": "RECOVERY_REQUIRED",
+        "assert": "不推进本地Step游标"
+      },
+      {
+        "from": "RECOVERY_REQUIRED",
+        "event": "CONFIG_LAST_RECONCILED",
+        "to": "FREE_ACTIVE|ROUND_TERMINAL",
+        "assert": "按服务器last恢复；缺父局则仅归档孤立续步，不计完整Round"
+      }
+    ],
+    "generationAndDeliveryContract": {
+      "generationUnit": "完整Round",
+      "deliveryUnit": "一个Step响应",
+      "paidStartCountUnit": "仅真实付费起点",
+      "memberAcquisition": "一次完整Round仅领取一次member",
+      "lossException": "仅无激活Round且能力清单允许的普通单步LOSS可实时安全随机生成并由独立ResultUtil复核",
+      "forbidden": [
+        "免费Step重复计局",
+        "激活Round内临时生成",
+        "按请求而非Round采样",
+        "fixture/历史响应作为运行时结果源"
+      ]
+    }
+  },
+  "specialModes": [
+    {
+      "id": "FREE_SPINS",
+      "status": "CONFIRMED",
+      "entry": [
+        "5 SC -> 12 Spins, apx=1",
+        "6 SC -> 12 Spins, apx=2",
+        "7 SC -> 12 Spins, apx=3"
+      ],
+      "stepRule": "捕获范围内rpx=apx×nfsc；规则最大150",
+      "retrigger": {
+        "rule": "免费模式中任意位置5个SC增加12次",
+        "status": "RULE_CONFIRMED_NOT_CAPTURED_RARE",
+        "implementationLimit": "禁止猜测fsn更新时点及伴随字段"
+      },
+      "completeRoundEvidence": {
+        "total": 43,
+        "5_SC": 27,
+        "6_SC": 12,
+        "7_SC": 4
+      }
+    }
+  ],
+  "unknownOrUnavailable": [
+    {
+      "item": "通用bl/bs/ba公式",
+      "status": "UNKNOWN",
+      "disposition": "仅实现有证据的最小映射或先补当前游戏权威证据"
+    },
+    {
+      "item": "免费重触发响应字段转换",
+      "status": "UNKNOWN",
+      "blocker": "[BLOCKER:RARE]",
+      "disposition": "规则可用但相邻响应缺失，不阻断普通与已捕获免费模式实现"
+    },
+    {
+      "item": "购买模式",
+      "status": "NOT_DISCOVERED",
+      "disposition": "禁用"
+    },
+    {
+      "item": "符号权重/卷轴条",
+      "status": "UNKNOWN_NOT_EXPOSED",
+      "disposition": "正式配置省略，不从频率反推"
+    },
+    {
+      "item": "原厂HTTP协议中的Redis字段",
+      "status": "NOT_APPLICABLE",
+      "disposition": "Redis属于平台内部下游合同，不把它伪装成原厂字段"
+    },
+    {
+      "item": "平台Redis Key/完整Round member合同",
+      "status": "CONFIRMED",
+      "disposition": "采用1809成熟交付的索引、倍率分桶和MULTI/EXEC原子写入；member字段按Fishing GO完整Round适配，禁止复制其他游戏牌面编码",
+      "evidence": "captures/54-Fishing-GO/platform-redis-contract-evidence.json"
+    }
+  ],
+  "oraclePolicy": "fixtures/54-Fishing-GO仅用于独立协议oracle与回归断言；正式运行时、Loader和Demo均禁止读取、轮播或抽取fixture。"
+}

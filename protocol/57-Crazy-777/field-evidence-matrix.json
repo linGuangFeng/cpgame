@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 1,
+  "gameId": 57,
+  "gameName": "Crazy 777",
+  "protocolRevision": "protocol-r3-20260829",
+  "rulesHash": "sha256:852d3021084c1f4117203c4a6eda137747bf9c1f689b30decb9791e46bf66f2b",
+  "columns": ["fieldOrRule", "source", "frontendDecision", "sampleCorroboration", "status"],
+  "rows": [
+    {
+      "fieldOrRule": "rulesVersion",
+      "source": "resources/57-Crazy-777/pt-BR/_hosts/static.cpgame.io/57/versionconfig.js",
+      "frontendDecision": "window.GameVersion is v1.5.10.250430",
+      "sampleCorroboration": "en, pt and pt-BR archived versionconfig.js agree",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "identity: platform id=2518/g_id=455 versus native gid=57/Crazy 777",
+      "source": "lobby-game-list.json; startup-crazy-777.json; provider /57/ bundle _gameId:57",
+      "frontendDecision": "GameConfig.getGameId() returns native 57",
+      "sampleCorroboration": "provider requests contain gid=57 and document title Crazy 777",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "provider request codec",
+      "source": "bundle Http.encodeFormData and Http.post",
+      "frontendDecision": "encodeURIComponent key/value, replace %20 with +, Content-Type form-urlencoded",
+      "sampleCorroboration": "captured spin body bl=1&bs=0.5&t=[REDACTED]&gid=57",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "virtual headers web-token/game-id",
+      "source": "bundle Http map {game-id:gid,web-token:t}",
+      "frontendDecision": "copy virtual header values into form fields; do not set them as actual HTTP headers",
+      "sampleCorroboration": "browser request headers omit custom headers while postData contains t/gid",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "provider encryption/decryption",
+      "source": "bundle Http module and provider GameApi",
+      "frontendDecision": "plain form request and JSON.parse-compatible response; no crypto transform",
+      "sampleCorroboration": "auth/config/spin bodies captured as plain JSON envelopes",
+      "status": "CONFIRMED_NONE"
+    },
+    {
+      "fieldOrRule": "response envelope code/data/info",
+      "source": "bundle Http._cancelResponseData",
+      "frontendDecision": "HTTP 2xx and code==200 resolves data; otherwise reject; non-JSON becomes HTTP<status>",
+      "sampleCorroboration": "auth/config/spin each return code=200,data,info=ok",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "auth request fields ai,btt,t,gid",
+      "source": "Platform recognized launch fields; GameInit onLogin; Http virtual header map",
+      "frontendDecision": "POST /auth/verify then store returned player/token/ping",
+      "sampleCorroboration": "actual auth response captured; sensitive request values redacted",
+      "status": "CONFIRMED_STRUCTURE"
+    },
+    {
+      "fieldOrRule": "auth player.id/player.balance/token",
+      "source": "bundle PlayerData.setUserData",
+      "frontendDecision": "player builds user state; token becomes credential for config/spin/history/ping",
+      "sampleCorroboration": "auth oracle has player.id, balance and redacted token",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "auth ping.enable/ping.seconds",
+      "source": "bundle HeartMgr.setState/Heart",
+      "frontendDecision": "truthy enable schedules /ping every seconds; false stops scheduling",
+      "sampleCorroboration": "captured enable=0,seconds=0 and no ping flow required",
+      "status": "CONFIRMED_CURRENTLY_DISABLED"
+    },
+    {
+      "fieldOrRule": "config auto",
+      "source": "config response and GameConfigData.initConfig",
+      "frontendDecision": "sets selectable auto-spin counts",
+      "sampleCorroboration": "[10,30,50,100,500]",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "config bll/bsl and spin bl/bs",
+      "source": "config response, rules and GameConfigData",
+      "frontendDecision": "bll is multiplier/bet level; bsl is base bet size; spin sends selected values",
+      "sampleCorroboration": "bll=1..10, bsl=0.5/5/50; 1341 paid starts use bl=1,bs=0.5",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "config cc/cs",
+      "source": "config response and Config callback globalThis.Currency=t.cs",
+      "frontendDecision": "cc is currency code; cs is display symbol",
+      "sampleCorroboration": "cc=BRL, cs=R$",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "config dbl/dbs",
+      "source": "config response and config callback index selection",
+      "frontendDecision": "default/last selected bet level and bet size indexes",
+      "sampleCorroboration": "dbl=50, dbs=0.5 on captured first load",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "config last",
+      "source": "bundle Config callback",
+      "frontendDecision": "IsContent = last.ss==0 OR last.fsn!=last.nfsc; restore bet indexes/result/rpx; RoundReward=last.rwa-last.wa",
+      "sampleCorroboration": "captured last is terminal fsn=0,nfsc=0,ss=1 and normal UI becomes ready",
+      "status": "CONFIRMED_CODE_AND_TERMINAL_SAMPLE"
+    },
+    {
+      "fieldOrRule": "config spl",
+      "source": "game-config.json and GameConfigData.symbol_pay_list",
+      "frontendDecision": "wmkl values index this table for display/payout",
+      "sampleCorroboration": "H1=50,H2=25,H3=15,H4=6,H5=5,H6=3,MIX=1,SC=7,WILD=500",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "config ts",
+      "source": "captured config response",
+      "frontendDecision": "no current bundle gameplay decision found",
+      "sampleCorroboration": "numeric value 1787978583 captured once",
+      "status": "CAPTURED_SEMANTICS_UNKNOWN"
+    },
+    {
+      "fieldOrRule": "fixed payline count and layouts",
+      "source": "rules, five line nodes, bundle PayLineList",
+      "frontendDecision": "wmkl keys 0..4 map to five logical coordinate lists",
+      "sampleCorroboration": "ordinary wins exercise every key 0..4",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "wmkl key 5",
+      "source": "bundle GameResults special-case G=='5' using SC coordinates",
+      "frontendDecision": "treat as scatter trigger payout rather than PayLineList entry",
+      "sampleCorroboration": "r000013 paid trigger has wmkl.5=SC and wa=7*0.5=3.5",
+      "status": "CONFIRMED_NOT_A_SIXTH_PAYLINE"
+    },
+    {
+      "fieldOrRule": "rskl",
+      "source": "rules and GameResults parser",
+      "frontendDecision": "split into three groups of RowCounts[col]+2=5; drop BLANK before appending result symbols",
+      "sampleCorroboration": "all 1751 Steps contain exactly 15 entries; each reel has 2 or 3 BLANKs",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "H1/H2/H3 gradient substitution",
+      "source": "rules + bundle H1..H6 asset bindings + symbol-asset-evidence.json textures",
+      "frontendDecision": "rules permit gradient seven to substitute same-color hollow seven",
+      "sampleCorroboration": "confirmed pairs H1->H4 yellow, H2->H5 pink, H3->H6 blue",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "WILD substitution",
+      "source": "rules text",
+      "frontendDecision": "WILD participates in regular winning combinations and excludes SC",
+      "sampleCorroboration": "winning boards include WILD with regular wmkl outcomes",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "ba",
+      "source": "spin response and history detail parser",
+      "frontendDecision": "bet amount/Step debit displayed as bet_amount",
+      "sampleCorroboration": "paid ordinary/trigger ba=0.5; adjacent free Steps ba=0; aggregated terminal free samples ba=0.5",
+      "status": "CONFIRMED_OBSERVED_VALUES"
+    },
+    {
+      "fieldOrRule": "pb",
+      "source": "GameApi.Spin sets PlayerData.Coins=t.pb",
+      "frontendDecision": "authoritative post-Step player balance refresh",
+      "sampleCorroboration": "r000013 pb changes by each Step wa after the paid debit",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "wa",
+      "source": "GameResults award_balance and history parser",
+      "frontendDecision": "current Step win amount",
+      "sampleCorroboration": "observed equation sum(spl[wmkl]*bl*bs*rpx), e.g. r000013 free Step 1 = (6+50)*0.5*3=84",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "rwa",
+      "source": "GameResults round_win_amount; Config restore formula",
+      "frontendDecision": "current result phase cumulative win used for round display/restore",
+      "sampleCorroboration": "in adjacent free Steps it cumulatively sums free wa and excludes paid SC trigger award",
+      "status": "CONFIRMED_FOR_CAPTURED_FREE_FLOW"
+    },
+    {
+      "fieldOrRule": "fsn/nfsc",
+      "source": "GameResults FreeGameTimes and IsFreeGame decision",
+      "frontendDecision": "fsn total free spins; nfsc delivered/current free count; remaining=fsn-nfsc",
+      "sampleCorroboration": "41 Rounds progress 10/0 through 10/10; 7 Rounds return 10/10 in one response",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "ss",
+      "source": "GameResults and Config continuation decisions; history round segmentation",
+      "frontendDecision": "sequence status participates in termination; cannot alone terminate a full Round",
+      "sampleCorroboration": "paid free trigger has ss=1 while fsn=10,nfsc=0 and must continue; nfsc1..9 has ss=0; nfsc10 has ss=1",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "rpx",
+      "source": "GameResults CurRoundTimes and history detail display",
+      "frontendDecision": "current payout multiplier",
+      "sampleCorroboration": "rpx=1 for ordinary/trigger and rpx=3 for all captured free Steps; wa equation matches",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "gt/small_game_type",
+      "source": "captured Step cross-tab and history list game_type parser",
+      "frontendDecision": "gt carried as game type; small_game_type not otherwise branched in current bundle excerpt",
+      "sampleCorroboration": "ordinary=(1,0), paid trigger=(1,2), free/aggregate terminal=(2,2)",
+      "status": "CONFIRMED_FOR_VALUES_0_1_2_ONLY"
+    },
+    {
+      "fieldOrRule": "Round termination",
+      "source": "GameResults IsFreeGame and 1341-Round validator",
+      "frontendDecision": "terminal when fsn==0 OR (fsn==nfsc AND ss==1)",
+      "sampleCorroboration": "all 1341 final Steps terminal and no earlier Step terminal",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "roundId/stepIndex",
+      "source": "rounds.jsonl and spin-index.jsonl collector schema",
+      "frontendDecision": "not present in upstream spin response",
+      "sampleCorroboration": "one synthetic roundId per paid start and stepRefs associate continuations",
+      "status": "CAPTURE_SYNTHETIC_NOT_PROTOCOL_FIELD"
+    },
+    {
+      "fieldOrRule": "ordinary LOSS",
+      "source": "spin fields and runtimeIndependentLoss rule",
+      "frontendDecision": "fsn=0,wa=0,empty wmkl is an independent terminal paid result",
+      "sampleCorroboration": "1093 complete Rounds",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "ordinary WIN",
+      "source": "spin fields, spl and PayLineList",
+      "frontendDecision": "fsn=0,wa>0,wmkl line entries form a terminal paid win",
+      "sampleCorroboration": "200 complete Rounds and payout equation checks",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "FREE_SPINS trigger/lifecycle",
+      "source": "rules, bundle GameResults and adjacent Round evidence",
+      "frontendDecision": "3 SC => 10; same trigger bet; free rpx=3; SC absent in free mode",
+      "sampleCorroboration": "48 complete Rounds: 41 eleven-Step and 7 single-response terminal",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "frwa/wsk/wskl/gfl/fbt optional response fields",
+      "source": "bundle parser references",
+      "frontendDecision": "optional code branches exist",
+      "sampleCorroboration": "not present in 1751 captured spin Steps",
+      "status": "CODE_ONLY_NOT_CAPTURED_DO_NOT_GUESS"
+    },
+    {
+      "fieldOrRule": "SymbolWeightsList",
+      "source": "bundle GameConfigData.randomReel",
+      "frontendDecision": "creates client animation background reels before server results are appended",
+      "sampleCorroboration": "no config response field or server rule supplies outcome weights",
+      "status": "VISUAL_ONLY_FORBIDDEN_AS_RESULT_WEIGHTS"
+    },
+    {
+      "fieldOrRule": "history list/detail/back",
+      "source": "bundle HistoryLogic/HistoryDetailMgr/HistoryData plus captures/57-Crazy-777/history-adjacent-evidence.json",
+      "frontendDecision": "log-list -> select tis -> two log-view requests with identical transfer_id -> concatenate bsl/fsl -> back clears CurId and restores list",
+      "sampleCorroboration": "same UI interaction captured one log-list, selected tis=2093578569416081408, two adjacent log-view responses, then detailCount 1->0 and list opacity 0->255 without list reload",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "purchase/buy mode",
+      "source": "bundle endpoint/control enumeration and runtime buttons",
+      "frontendDecision": "no buy/purchase path or control in current build",
+      "sampleCorroboration": "not an applicable scenario category",
+      "status": "CONFIRMED_ABSENT_IN_CURRENT_BUILD"
+    },
+    {
+      "fieldOrRule": "Redis key/payload codec",
+      "source": "rules/config/bundle/captures search",
+      "frontendDecision": "no Redis behavior exists in original frontend",
+      "sampleCorroboration": "no current-game Redis evidence found",
+      "status": "UNKNOWN_MUST_NOT_INHERIT"
+    },
+    {
+      "fieldOrRule": "supported language codes",
+      "source": "LanguageManager whitelist",
+      "frontendDecision": "only ten codes accepted by setCurLanguage and /language/<code> loading",
+      "sampleCorroboration": "all ten actual l-parameter first loads matched runtime language",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "WebSocket",
+      "source": "first load, language, rules and round network evidence",
+      "frontendDecision": "provider API implementation uses XMLHttpRequest HTTP(S)",
+      "sampleCorroboration": "no WebSocket observed",
+      "status": "NOT_USED_IN_OBSERVED_CURRENT_BUILD"
+    }
+  ]
+}

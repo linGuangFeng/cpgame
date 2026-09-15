@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "checkpointAt": "2026-08-29T07:59:28+08:00",
+  "batch": "C",
+  "status": "HANDOFF_ACTIVE_NOT_COMPLETE_NOT_ARCHIVED",
+  "handoff": {
+    "owner": "isolated-machine-abc223",
+    "gameIds": [52, 54, 56, 57, 45],
+    "formalSamplingAndSubsequentWritesOwnedByHandoffMachine": true,
+    "localWritesStopped": true,
+    "localBrowserAttemptsStopped": true
+  },
+  "authoritativeVisibleFactsPreserved": {
+    "accountAlias": "abc223",
+    "rawGameId": 52,
+    "gameName": "Cyber GO",
+    "minimumBet": 0.60,
+    "currency": "BRL",
+    "lastTransactionState": "SPIN_NOT_CLICKED",
+    "formalRoundSample": false
+  },
+  "sampleCounters": {
+    "formalPaidRoundStarts": 0,
+    "completedRounds": 0,
+    "historyMatchedRounds": 0,
+    "originalAuthorizedHttpSamples": 0,
+    "officialUiManualSamples": 0
+  },
+  "completedOfflineChecks": {
+    "collectorUnitTests": "PASS",
+    "rawGameIdsCovered": [52, 54, 56, 57],
+    "fixedPathMachineValidation": "VALID_BUT_INCOMPLETE_EXPECTED_EXIT_2_ALL_FOUR",
+    "jsonParseValidation": "PASS_18_FILES_AT_LAST_RUN",
+    "credentialAndTokenScan": "PASS_ZERO_MATCHES_AT_LAST_RUN",
+    "historyGate": "TIME_GAME_ID_BET_PAYOUT_NET_STEP_COUNT_EXACT_MATCH_REQUIRED"
+  },
+  "durableArtifacts": [
+    "captures/52-Cyber-GO/tools/batch-c-round-collector.mjs",
+    "captures/52-Cyber-GO/tools/batch-c-round-collector.test.mjs",
+    "captures/52-Cyber-GO/tools/validate-batch-c-round-coverage.mjs",
+    "captures/52-Cyber-GO/collector-config.json",
+    "captures/54-Fishing-GO/collector-config.json",
+    "captures/56-Crazy-Piggy/collector-config.json",
+    "captures/57-Crazy-777/collector-config.json",
+    "reports/52-Cyber-GO/offline-v15-audit.md",
+    "reports/52-Cyber-GO/capture-blocker.json",
+    "reports/54-Fishing-GO/capture-blocker.json",
+    "reports/56-Crazy-Piggy/capture-blocker.json",
+    "reports/57-Crazy-777/capture-blocker.json"
+  ],
+  "partialUnverifiedWork": {
+    "gameId": 52,
+    "description": "Evidence-gated Java loader/server sources were added immediately before the handoff instruction arrived.",
+    "built": false,
+    "tested": false,
+    "implementationAllowed": false,
+    "redisAccessImplemented": false,
+    "guessedGameEndpointsExposed": false,
+    "disposition": "PRESERVE_AS_IS_FOR_HANDOFF_REVIEW; DO_NOT_CLAIM_ACCEPTED"
+  },
+  "completionClaimed": false,
+  "credentialMaterialPersisted": false
+}

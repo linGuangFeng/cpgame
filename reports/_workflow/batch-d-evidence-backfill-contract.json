@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "1.0",
+  "workflowTemplateVersion": 15,
+  "batch": "D",
+  "collectionChannel": "STABLE_ABC222_ROTATION",
+  "sourceAccountAlias": "abc222",
+  "targetGameIds": [
+    58,
+    60,
+    1810,
+    1830
+  ],
+  "rawGameIdOnly": true,
+  "batchDBrowserUseAllowed": false,
+  "requiredBundleFiles": [
+    "manifest.json",
+    "normalized-steps.jsonl",
+    "normalized-history.jsonl",
+    "evidence-inventory.json"
+  ],
+  "manifestContract": {
+    "requiredFields": [
+      "schemaVersion",
+      "workflowTemplateVersion",
+      "bundleId",
+      "gameId",
+      "directoryName",
+      "collectionChannel",
+      "sourceAccountAlias",
+      "originalSite",
+      "sourceAuthority",
+      "collectedAt",
+      "redactionAttestation",
+      "files"
+    ],
+    "bundleIdPattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,79}$",
+    "originalSite": "https://hms-paddle.com/",
+    "allowedSourceAuthorities": [
+      "ORIGINAL_AUTHORIZED_HTTP",
+      "ORIGINAL_OFFICIAL_UI_MANUAL"
+    ],
+    "redactionAttestation": {
+      "authorizationAndCookieHeadersRemoved": true,
+      "credentialObjectFieldsRejected": true,
+      "credentialUrlParametersRemoved": true,
+      "noCredentialMaterialPersisted": true
+    }
+  },
+  "evidenceInventoryContract": {
+    "requiredFields": [
+      "id",
+      "path",
+      "sha256",
+      "mediaType",
+      "sourceAuthority"
+    ],
+    "payloadRequirement": "Every persisted evidence payload must be UTF-8 JSON after redaction; binary or opaque credential-bearing material is rejected."
+  },
+  "roundContract": {
+    "onePaidStartPerRound": true,
+    "allAdjacentStepsThroughTerminal": true,
+    "maxPaidRounds": 3000,
+    "ordinaryLossTarget": 200,
+    "ordinaryWinTarget": 100,
+    "specialTargetPerCategory": 30,
+    "rareRewardAbsencePaidRoundThreshold": 1000
+  },
+  "historyContract": {
+    "listObserved": true,
+    "detailClicked": true,
+    "detailObserved": true,
+    "returnedToList": true,
+    "exactOneToOne": true
+  },
+  "promotionPolicy": "Validation and commit stage a bundle only. Formal counters remain zero until a separate evidence review promotes the staged bundle.",
+  "forbidden": [
+    "integrationGameId",
+    "8000000+gid",
+    "credential fields or headers",
+    "other-game rules or fixtures",
+    "offline generated evidence labeled as original"
+  ]
+}

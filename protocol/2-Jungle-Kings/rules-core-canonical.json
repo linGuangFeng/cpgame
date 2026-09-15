@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "rawGameId": 2,
+  "gameName": "Jungle Kings",
+  "rulesVersion": "jk2-reelstrip-dualboard-20260909",
+  "rulesHash": "3c1e8d7a9b4f2c6e0a5d8b1f7e4c9a2d6b0e3f8c1a7d4b9e2f5c8a0d3b6e1f4",
+  "chessboards": ["CB0002", "CB0003"],
+  "paylines": { "CB0002": "PL0011", "CB0003": "PL0012" },
+  "dealing": {
+    "model": "one-shot catalog of legal reel triples from RID0011-RID0016",
+    "window": "one stop copied across 3 visible rows",
+    "entries": ["PAID_CB0002", "PAID_CB0003"],
+    "cascadeFill": false,
+    "respinFill": false,
+    "redisCache": false
+  },
+  "symbols": {
+    "onStrips": ["S00011", "S00012", "S00013", "S00015"],
+    "forbidden": ["S00014"],
+    "payMultipliers": { "S00011": 100, "S00012": 50, "S00013": 25, "S00014": 5, "S00015": 0 },
+    "confirmedWins": ["S00011", "S00012"],
+    "rejectedWins": ["S00013_TRIPLE"]
+  },
+  "x2": "when both activated chessboards win, sum of line wins is multiplied by 2"
+}

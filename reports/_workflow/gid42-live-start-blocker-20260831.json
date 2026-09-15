@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "rawGameId": 42,
+  "directoryName": "42-Lucky-Dragon",
+  "recordedAt": "2026-08-31T11:12:36+08:00",
+  "status": "LIVE_NOT_STARTED_CHROME_ADMIN_POLICY_VERIFICATION_UNAVAILABLE",
+  "offlineGate": {
+    "testsPassed": 20,
+    "testsFailed": 0,
+    "formalOriginalAuthorizedHttpPaidStarts": 1,
+    "historyMatchedOneToOne": 1,
+    "unknownInFlight": false,
+    "activeWriter": false,
+    "currentCommittedBalanceBrl": 59996.15,
+    "currentGrossBetBrl": 0.5
+  },
+  "fundingAuthorization": {
+    "received": true,
+    "minimumBetBrl": 0.5,
+    "maximumPaidStarts": 5000,
+    "maximumGrossBetBrl": 2500,
+    "earlyStopTargets": {
+      "ordinaryLoss": 200,
+      "ordinaryWin": 200,
+      "wildMultiplierX3": 30,
+      "wildMultiplierX5": 30,
+      "wildMultiplierX9": 30
+    }
+  },
+  "browserBlocker": {
+    "browserFamily": "chrome",
+    "accountAlias": "abc222",
+    "officialLaunchUrl": "https://hms-paddle.com/#/index",
+    "attempts": 2,
+    "result": "ADMIN_ENFORCED_POLICY_VERIFICATION_UNAVAILABLE",
+    "credentialRead": false,
+    "cookieOrStorageRead": false,
+    "launchQueryPersisted": false,
+    "spinRequestsMade": 0,
+    "batchRequestsSent": 0,
+    "policyBypassAttempted": false,
+    "browserFallbackAttempted": false
+  },
+  "nextAction": "KEEP_TASK_ACTIVE_AND_LIVE_WRITER_STOPPED; AFTER_POLICY_RECOVERY RETRY THE OFFICIAL HMS LAUNCH ONCE, THEN RE-RUN THE FULL PRE-LIVE GATE BEFORE STARTING THE UNIQUE WRITER"
+}

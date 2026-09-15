@@ -1,0 +1,716 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 54,
+  "directoryName": "54-Fishing-GO",
+  "gameName": "Fishing GO",
+  "protocolRevision": "protocol-20260831-r11-status-enum-fix",
+  "rulesHash": "23e7a379b8a38d25d638cd0726cab97c49a6c425c88e2dd371c82007f9f81463",
+  "rulesVersion": "fishing-go-rules-23e7a379b8a38d25",
+  "rulesHashAlgorithm": "对下列有序输入逐文件计算SHA-256，再按 path<TAB>sha256<LF> 拼接为UTF-8并再次计算SHA-256",
+  "rulesHashInputs": [
+    {
+      "path": "captures/54-Fishing-GO/000085-config.json",
+      "sha256": "b5b1af237f7fd876d0d5f17c219bb5a6536c81be123ea491397a842982a7e01e"
+    },
+    {
+      "path": "captures/54-Fishing-GO/config-resume-after-timeout.json",
+      "sha256": "c268cb42dc103c8b9e4ecb5a7d89697526f7b728c02184f29c6adb016b1833b0"
+    },
+    {
+      "path": "captures/54-Fishing-GO/rounds.jsonl",
+      "sha256": "7ee7e22fcff9a8c0080588dd10b657c85319ca964be27b3fbc58d06bd772f418"
+    },
+    {
+      "path": "captures/54-Fishing-GO/source-snippets.json",
+      "sha256": "646b3889782c5328309d0e3d11632526f583024f2271cf93eba3375c5210bce4"
+    },
+    {
+      "path": "captures/54-Fishing-GO/history-log-list-view-adjacent.json",
+      "sha256": "58b4e9af96c5cd401410d11ac19bc51c23d7a40c08741e23abac620a63b30755"
+    },
+    {
+      "path": "captures/54-Fishing-GO/platform-redis-contract-evidence.json",
+      "sha256": "efc30ef0e349d4088862eab4aa836815bf986f9f77274b4fe21cf3302114613b"
+    },
+    {
+      "path": "publish/54-Fishing-GO/assets/main/index.32cc7.js",
+      "sha256": "6cbab8a73b235bbdbf8fdb2bf5171a031911754ce486e266129077a134d607dc"
+    },
+    {
+      "path": "resources/54-Fishing-GO/pt-br/assets/resources/import/0e/0e662cfdb.8da9b.json",
+      "sha256": "d339d8eeef88daed95d6ba816943efba6ef3c909e828b679f1ea038e0d93c12b"
+    }
+  ],
+  "identity": {
+    "status": "CONFIRMED",
+    "workflowGameId": 54,
+    "bundleGameId": 54,
+    "name": "Fishing GO",
+    "evidence": [
+      "入口iframe /54/?gid=54",
+      "publish/versionconfig.js document.title",
+      "publish/assets/main/index.32cc7.js GameConfig._gameId=54",
+      "语言资产 GameName.Name=Fishing GO"
+    ],
+    "nonProtocolPortalIds": {
+      "catalogArtworkId": 50054,
+      "catalogItemIds": [
+        1406,
+        2515
+      ],
+      "launcherInternalGid": 452
+    }
+  },
+  "supportedLanguages": {
+    "status": "CONFIRMED",
+    "codes": [
+      "en",
+      "pt",
+      "es",
+      "th",
+      "vi",
+      "id",
+      "bn",
+      "ko",
+      "fr",
+      "tr"
+    ],
+    "portalAliases": {
+      "pt": "pt-br"
+    },
+    "evidence": [
+      "publish/assets/main/index.32cc7.js#LanguageManager offset 259779",
+      "resources打包语言资产",
+      "reports/static-first-load-validation.json"
+    ]
+  },
+  "entryAndApi": {
+    "staticEntry": "/54/",
+    "configEndpoint": "/api/v1/go-fishing/config",
+    "spinEndpoint": "/api/v1/go-fishing/spin",
+    "historyListEndpoint": "/api/v1/go-fishing/log-list",
+    "historyViewEndpoint": "/api/v1/go-fishing/log-view",
+    "requestForm": {
+      "spinConfirmedKeys": [
+        "bl",
+        "bs",
+        "t",
+        "gid"
+      ],
+      "historyListConfirmedKeys": [
+        "page_index",
+        "begin_at",
+        "end_at",
+        "t",
+        "gid"
+      ],
+      "historyViewConfirmedKeys": [
+        "transfer_id",
+        "t",
+        "gid"
+      ],
+      "gid": 54
+    },
+    "minimumBet": {
+      "bl": 1,
+      "bs": 0.02,
+      "observedTotalBet": 0.4,
+      "currency": "BRL"
+    },
+    "betOptions": {
+      "bll": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "bsl": [
+        0.02,
+        0.1,
+        0.5
+      ]
+    },
+    "betFormula": {
+      "status": "UNKNOWN",
+      "reason": "仅确认bl=1/bs=0.02对应ba=0.4；不从常量猜测通用公式。"
+    }
+  },
+  "board": {
+    "status": "CONFIRMED",
+    "reels": 5,
+    "visibleRowsPerReel": 3,
+    "visibleCellCount": 15,
+    "bufferCells": {
+      "status": "UNKNOWN"
+    },
+    "evidence": [
+      "每个捕获Spin的rskl长度为15",
+      "前端按每3个symbol推进一列的判定代码",
+      "游戏截图"
+    ]
+  },
+  "boardModel": {
+    "status": "CONFIRMED",
+    "layout": "REEL_MAJOR_VISIBLE_ONLY",
+    "reels": 5,
+    "visibleRowsPerReel": 3,
+    "visibleCellCount": 15,
+    "rsklIndex": "reelIndex*3+rowIndex，reelIndex和rowIndex均从0开始",
+    "bufferCells": {
+      "status": "UNKNOWN",
+      "value": null,
+      "reason": "协议只返回15个可见符号，未捕获服务端缓冲格。"
+    },
+    "evidence": [
+      "captures/54-Fishing-GO/rounds.jsonl：1857个真实Step的rskl长度均为15",
+      "publish/assets/main/index.32cc7.js#GameDataCommon按每3个符号换列",
+      "protocol/54-Fishing-GO/protocol-analysis-validation.json"
+    ]
+  },
+  "winModel": "WAYS",
+  "winModelDetails": {
+    "status": "CONFIRMED",
+    "type": "WAYS",
+    "ways": 243,
+    "direction": "LEFT_TO_RIGHT_CONSECUTIVE_REELS",
+    "calculation": "每一中奖符号的总Ways为从最左轮起各相邻轮命中个数的乘积",
+    "paylineCount": {
+      "status": "NOT_APPLICABLE",
+      "value": null
+    },
+    "evidence": [
+      "规则页与多语言paytable明确写明243 Ways",
+      "wmkl捕获样本"
+    ],
+    "prohibitedInference": "不得把bl、bs、dbl、dbs或通用前端payline_count变量当作固定中奖线数量。"
+  },
+  "paylineCount": null,
+  "paylineCountApplicability": "NOT_APPLICABLE_WAYS_MODEL",
+  "symbols": {
+    "observedCodes": [
+      "A",
+      "K",
+      "Q",
+      "J",
+      "S1",
+      "S2",
+      "S3",
+      "S4",
+      "SC",
+      "WILD"
+    ],
+    "wild": {
+      "code": "WILD",
+      "substitutes": "除SC之外全部符号",
+      "allowedReels": [
+        2,
+        3,
+        4
+      ],
+      "evidence": [
+        "规则页",
+        "paytable",
+        "rskl/wmkl样本"
+      ]
+    },
+    "scatter": {
+      "code": "SC",
+      "pays": {
+        "status": "UNKNOWN"
+      },
+      "triggerRole": "FREE_SPINS"
+    }
+  },
+  "paytable": {
+    "status": "CONFIRMED_FROM_CONFIG",
+    "unit": "配置返回倍率值；不推断未捕获金额公式",
+    "symbols": {
+      "A": {
+        "3": 6,
+        "4": 15,
+        "5": 50
+      },
+      "J": {
+        "3": 5,
+        "4": 10,
+        "5": 40
+      },
+      "K": {
+        "3": 6,
+        "4": 15,
+        "5": 50
+      },
+      "Q": {
+        "3": 5,
+        "4": 10,
+        "5": 40
+      },
+      "S1": {
+        "3": 30,
+        "4": 60,
+        "5": 150
+      },
+      "S2": {
+        "3": 20,
+        "4": 50,
+        "5": 120
+      },
+      "S3": {
+        "3": 15,
+        "4": 45,
+        "5": 100
+      },
+      "S4": {
+        "3": 10,
+        "4": 45,
+        "5": 80
+      }
+    },
+    "evidence": "captures/000085-config.json#spl"
+  },
+  "specialModes": [
+    {
+      "id": "FREE_SPINS",
+      "status": "CONFIRMED",
+      "modeCodeEvidence": {
+        "gt": 2,
+        "small_game_type": 2
+      },
+      "initialAward": 12,
+      "triggerLocation": "ANYWHERE",
+      "entryVariants": [
+        {
+          "id": "FREE_SPINS_X1_ENTRY",
+          "scatterCount": 5,
+          "startingMultiplier": 1,
+          "incrementPerStep": 1,
+          "capturedCompleteRounds": 27
+        },
+        {
+          "id": "FREE_SPINS_X2_ENTRY",
+          "scatterCount": 6,
+          "startingMultiplier": 2,
+          "incrementPerStep": 2,
+          "capturedCompleteRounds": 12
+        },
+        {
+          "id": "FREE_SPINS_X3_ENTRY",
+          "scatterCount": 7,
+          "startingMultiplier": 3,
+          "incrementPerStep": 3,
+          "capturedCompleteRounds": 4
+        }
+      ],
+      "maximumMultiplier": 150,
+      "retrigger": {
+        "status": "RULE_CONFIRMED_NOT_CAPTURED_RARE",
+        "scatterCount": 5,
+        "additionalSpins": 12,
+        "capturedCompleteRounds": 0
+      },
+      "activeCondition": "fsn>0 AND fsn!=nfsc",
+      "terminationCondition": "fsn==nfsc OR fsn==0",
+      "capturedAdjacentEvidence": [
+        "fixtures/free-spins-x1-round.json",
+        "fixtures/free-spins-x2-round.json",
+        "fixtures/free-spins-x3-round.json"
+      ]
+    }
+  ],
+  "purchaseMode": {
+    "status": "NOT_DISCOVERED",
+    "applicable": "UNKNOWN",
+    "evidence": [
+      "配置无购买字段",
+      "设置与规则UI无购买入口",
+      "screenshots/04-options-open-pt-br.png"
+    ],
+    "rule": "不得生成或暴露购买API，除非后续获得当前游戏证据。"
+  },
+  "roundState": {
+    "paidStart": {
+      "ba": 0.4,
+      "gt": 1,
+      "request": "bl=1&bs=0.02&gid=54"
+    },
+    "continuation": {
+      "ba": 0,
+      "gt": 2,
+      "sameEndpoint": true,
+      "newRound": false
+    },
+    "stateFields": [
+      "fsn",
+      "nfsc",
+      "gt",
+      "ss",
+      "rpx",
+      "rwa",
+      "wa",
+      "pb",
+      "ba",
+      "small_game_type"
+    ],
+    "terminalExamples": [
+      {
+        "ordinary": {
+          "fsn": 0,
+          "nfsc": 0,
+          "gt": 1,
+          "ss": 1
+        }
+      },
+      {
+        "free": {
+          "fsn": 12,
+          "nfsc": 12,
+          "gt": 2,
+          "ss": 0
+        }
+      }
+    ]
+  },
+  "roundModel": {
+    "status": "CONFIRMED",
+    "unit": "一个付费Round起点及其全部后续免费Step",
+    "paidStart": {
+      "request": "POST form bl=1&bs=0.02&t=<opaque>&gid=54",
+      "response": {
+        "ba": 0.4,
+        "gt": 1
+      },
+      "createsRound": true
+    },
+    "delivery": {
+      "endpoint": "/api/v1/go-fishing/spin",
+      "oneResponsePerStep": true,
+      "continuationCreatesRound": false,
+      "continuation": {
+        "ba": 0,
+        "gt": 2
+      }
+    },
+    "activeCondition": "fsn>0 AND fsn!=nfsc",
+    "terminalCondition": "fsn==0 OR fsn==nfsc",
+    "stateFields": [
+      "fsn",
+      "nfsc",
+      "apx",
+      "rpx",
+      "gt",
+      "small_game_type",
+      "ss",
+      "wa",
+      "rwa",
+      "pb",
+      "ba"
+    ],
+    "recovery": "config.data.last可恢复最后结果；缺失父局响应时不得补造或计为完整Round。",
+    "runtimeGenerationBoundary": "中奖或特殊模式必须先由GameRuleCore一次生成完整Round，Delivery仅按序消费；只有无激活Round的普通单步LOSS可实时生成。",
+    "evidence": [
+      "captures/54-Fishing-GO/spin-index.jsonl",
+      "captures/54-Fishing-GO/rounds.jsonl",
+      "captures/54-Fishing-GO/config-resume-after-timeout.json",
+      "fixtures/54-Fishing-GO/free-spins-x1-round.json"
+    ]
+  },
+  "responseFields": [
+    {
+      "field": "rskl",
+      "type": "array<string>",
+      "observed": "15个可见符号"
+    },
+    {
+      "field": "wmkl",
+      "type": "array<array<array<integer>>>",
+      "observed": "外层与wskl同索引；每组按连续轮排列；坐标=10*reelIndex+rowIndex",
+      "semanticStatus": "CONFIRMED_ALL_CAPTURED_WIN_STEPS"
+    },
+    {
+      "field": "wskl",
+      "type": "array<string>",
+      "observed": "中奖符号代码"
+    },
+    {
+      "field": "wa",
+      "type": "number",
+      "observed": "当前Step中奖额"
+    },
+    {
+      "field": "rwa",
+      "type": "number",
+      "observed": "Round累计中奖额"
+    },
+    {
+      "field": "pb",
+      "type": "decimal-string",
+      "observed": "玩家余额"
+    },
+    {
+      "field": "ba",
+      "type": "number",
+      "observed": "当前Step扣注；免费续步为0"
+    },
+    {
+      "field": "fsn",
+      "type": "integer",
+      "observed": "免费Spin总配额/状态上界"
+    },
+    {
+      "field": "nfsc",
+      "type": "integer",
+      "observed": "已消费免费Spin数"
+    },
+    {
+      "field": "rpx",
+      "type": "number",
+      "observed": "免费模式当前倍率"
+    },
+    {
+      "field": "apx",
+      "type": "number",
+      "observed": "免费模式每步倍率增量；5/6/7个SC入口分别为1/2/3，普通Step为1",
+      "semanticStatus": "CONFIRMED"
+    },
+    {
+      "field": "ss",
+      "type": "integer",
+      "observed": "免费模式终止Step为0，其余样本通常为1"
+    },
+    {
+      "field": "gt",
+      "type": "integer",
+      "observed": "1=付费/普通，2=免费模式"
+    },
+    {
+      "field": "small_game_type",
+      "type": "integer",
+      "observed": "0=普通，2=免费模式"
+    }
+  ],
+  "sampleCoverage": {
+    "paidRoundStarts": 1342,
+    "completedRoundCount": 1341,
+    "ordinaryLoss": 1098,
+    "ordinaryWin": 200,
+    "freeSpinsAnyEntry": 43,
+    "freeEntryVariantCounts": {
+      "5_SC": 27,
+      "6_SC": 12,
+      "7_SC": 4
+    },
+    "freeRetriggerCompleteRounds": 0,
+    "status": "ALL_APPLICABLE_TARGETS_REACHED_WITH_RARE_RETRIGGER_GAP",
+    "source": "reports/scenario-coverage.json"
+  },
+  "runtimeIndependentLoss": {
+    "status": "CONFIRMED_SUPPORTED",
+    "scope": "仅无激活Round时的普通付费独立单步LOSS",
+    "preconditions": [
+      "不存在未投递Step",
+      "gt=1",
+      "fsn=nfsc=0"
+    ],
+    "validation": [
+      "rskl长度15",
+      "SC数量小于5",
+      "ResultUtil按243 Ways复核无中奖",
+      "wmkl/wskl为空",
+      "wa=rwa=0",
+      "ba为当前合法总押注"
+    ],
+    "prohibited": [
+      "免费/奖励Step实时临时生成",
+      "用fixture或历史响应作运行时结果源",
+      "按局号或次数轮播LOSS"
+    ],
+    "evidence": [
+      "fixtures/54-Fishing-GO/ordinary-loss-round.json",
+      "captures/54-Fishing-GO/rounds.jsonl：1098个完整普通LOSS"
+    ]
+  },
+  "codecContract": {
+    "status": "CONFIRMED",
+    "transport": "HTTPS POST",
+    "requestEncoding": "application/x-www-form-urlencoded; encodeURIComponent后将%20替换为+",
+    "credentialMapping": {
+      "game-id": "gid",
+      "web-token": "t",
+      "tokenSemantics": "OPAQUE_DO_NOT_DECRYPT"
+    },
+    "applicationEncryption": {
+      "status": "NOT_PRESENT_IN_CAPTURED_GAME_PROTOCOL",
+      "detail": "未发现应用层加密/解密；仅TLS承载，t作为不透明表单值。"
+    },
+    "responseEncoding": "UTF-8 JSON envelope {code,data,info}",
+    "success": "HTTP 2xx且字符串化code等于200时返回data或空对象",
+    "failure": [
+      "非JSON响应映射为code=HTTP<status>",
+      "HTTP非2xx或业务code非200拒绝",
+      "code=401停止心跳",
+      "timeout/error拒绝且不得推进Step"
+    ],
+    "wmklEncoding": "wmkl[group][reelOffset][position]=10*reelIndex+rowIndex；group与wskl同索引",
+    "evidence": [
+      "publish/assets/main/index.32cc7.js#Http",
+      "publish/assets/main/index.32cc7.js#GameDataCommon",
+      "captures/54-Fishing-GO/000151-spin.json",
+      "protocol/54-Fishing-GO/protocol-analysis-validation.json"
+    ]
+  },
+  "redisContract": {
+    "status": "CONFIRMED_PLATFORM_INTERNAL_CONTRACT",
+    "notOriginalGameProtocol": true,
+    "redisGameId": 54,
+    "normalMultiplierIndexKey": "PerKeyList_000000054",
+    "specialMultiplierIndexKey": "MaryKeyList_000000054",
+    "normalRoundListPattern": "BetLog:000000054:<actual-multiplier-token>",
+    "specialRoundListPattern": "MaryLog:000000054:<actual-multiplier-token>",
+    "cacheUnit": "ONE_COMPLETE_ROUND_PER_PAID_BET",
+    "memberEncoding": "FISHING_GO_GAME_SPECIFIC_COMPLETE_ROUND_CODEC",
+    "encodedLength": "VARIABLE_BY_DELIVERY_COUNT",
+    "decodedMinimumMemberFields": [
+      "schemaVersion",
+      "gameId",
+      "rulesHash",
+      "roundKey",
+      "mode",
+      "actualMultiplier",
+      "deliveries"
+    ],
+    "deliveryMinimumFields": [
+      "deliveryIndex",
+      "rskl",
+      "wmkl",
+      "wskl",
+      "wa",
+      "rwa",
+      "ba",
+      "fsn",
+      "nfsc",
+      "rpx",
+      "apx",
+      "gt",
+      "small_game_type",
+      "ss"
+    ],
+    "writePolicy": "SecureRandom自然生成；ResultUtil反推实际模式与倍率；0倍跳过；正倍数按实际倍率Key写入；同一MULTI/EXEC内ZADD+RPUSH+LTRIM",
+    "defaultMaxMembersPerMultiplier": 300,
+    "evidence": [
+      "captures/54-Fishing-GO/platform-redis-contract-evidence.json",
+      "captures/54-Fishing-GO/rounds.jsonl",
+      "generator/1809-Freedom-Day/src/main/java/com/cpgame/replica/freedomday/RedisPackCli.java",
+      "generator/1809-Freedom-Day/src/main/java/com/cpgame/replica/freedomday/RedisDirectLoader.java"
+    ],
+    "guardrail": "只继承平台Redis索引、倍率分桶、完整Round缓存单位和原子写入合同；不得复制1809或其他游戏的符号、模式、牌面或member字节编码。"
+  },
+  "symbolWeights": {
+    "status": "ORIGINAL_WEIGHTS_NOT_EXPOSED",
+    "weights": null,
+    "formalConfigDisposition": "DOWNSTREAM_MUST_SUPPLY_GAME_SPECIFIC_ADJUSTABLE_LOCAL_REPLICA_WEIGHTS_AND_VALIDATE_DISTRIBUTION",
+    "reason": "当前配置没有reel strip或原厂权重，规则页不声明概率；下游必须根据Fishing GO符号域给出可调整的本地复刻权重并明确不代表原厂RTP，不能把抓包频率当作原厂权威权重。",
+    "evidence": [
+      "captures/54-Fishing-GO/000085-config.json",
+      "captures/54-Fishing-GO/rounds.jsonl",
+      "resources/54-Fishing-GO/pt-br/assets/resources/import/0e/0e662cfdb.8da9b.json"
+    ],
+    "prohibitedInference": [
+      "不得按1341局频率反推正式权重",
+      "不得复制示例游戏权重",
+      "不得用weight=0占位"
+    ]
+  },
+  "evidence": [
+    "captures/54-Fishing-GO/000085-config.json",
+    "captures/54-Fishing-GO/config-resume-after-timeout.json",
+    "captures/54-Fishing-GO/rounds.jsonl",
+    "captures/54-Fishing-GO/spin-index.jsonl",
+    "captures/54-Fishing-GO/source-snippets.json",
+    "captures/54-Fishing-GO/platform-redis-contract-evidence.json",
+    "resources/54-Fishing-GO/pt-br/assets/resources/import/0e/0e662cfdb.8da9b.json",
+    "publish/54-Fishing-GO/assets/main/index.32cc7.js",
+    "reports/54-Fishing-GO/scenario-coverage.json",
+    "reports/54-Fishing-GO/language-inventory.json",
+    "captures/54-Fishing-GO/history-log-list-view-adjacent.json"
+  ],
+  "evidenceDetails": {
+    "fieldMatrix": "field-evidence-matrix.json",
+    "protocolSpec": "protocol-spec.json",
+    "handoff": "protocol-handoff.json",
+    "validation": "protocol-analysis-validation.json",
+    "fixturePolicy": "fixtures仅作协议oracle和回归预期，运行时禁止读取"
+  },
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesVersion": "fishing-go-rules-23e7a379b8a38d25",
+    "rulesHash": "23e7a379b8a38d25d638cd0726cab97c49a6c425c88e2dd371c82007f9f81463",
+    "behaviorIds": [
+      "B-IDENTITY",
+      "B-LANGUAGE-LOAD",
+      "B-CONFIG",
+      "B-HTTP-CODEC",
+      "B-ERROR-HANDLING",
+      "B-SESSION-RESUME",
+      "B-PAID-SPIN",
+      "B-ROUND-DELIVERY",
+      "B-RUNTIME-INDEPENDENT-LOSS",
+      "B-WAYS-WIN",
+      "B-WMKL-COORDINATE",
+      "B-WILD",
+      "B-FREE-ENTRY",
+      "B-FREE-MULTIPLIER",
+      "B-FREE-CONTINUATION",
+      "B-FREE-RETRIGGER",
+      "B-ROUND-TERMINATION",
+      "B-BALANCE-SETTLEMENT",
+      "B-HISTORY",
+      "B-PURCHASE-DISCOVERY",
+      "B-REDIS-CONTRACT"
+    ],
+    "status": "ACCEPTED_FOR_DOWNSTREAM_IMPLEMENTATION"
+  },
+  "historyModel": {
+    "status": "CONFIRMED",
+    "listToViewKeyMapping": "log-list.data.ll[].tis -> log-view.transfer_id",
+    "displayTransactionId": "bid",
+    "listResponseFields": [
+      "ba",
+      "end",
+      "lc",
+      "ll",
+      "wa"
+    ],
+    "listRecordFields": [
+      "ba",
+      "baf",
+      "bid",
+      "ca",
+      "fe",
+      "gm",
+      "gt",
+      "tis",
+      "wa"
+    ],
+    "detailResponseFields": [
+      "baf",
+      "bid",
+      "bsl",
+      "fsl"
+    ],
+    "optionalDetailFields": [
+      "fsl"
+    ],
+    "detailStepOrder": [
+      "bsl",
+      "fsl"
+    ],
+    "roundTermination": "合并详情最后Step满足fsn==nfsc或fsn==0",
+    "capturedEvidence": "captures/54-Fishing-GO/history-log-list-view-adjacent.json"
+  }
+}

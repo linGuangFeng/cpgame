@@ -1,0 +1,41 @@
+{
+  "runId": "collect-20260908",
+  "createdAt": "2026-09-08T02:45:00Z",
+  "scope": "resources + origin APIs + response data only; no Java replication",
+  "replicaIndex": "reports/_workflow/collect-20260908/INDEX.zh-CN.md",
+  "replicaHandoffIndex": "reports/_workflow/collect-20260908/game-handoff-index.json",
+  "hall": "https://hms-paddle.com/",
+  "ignoreProvidedGameUrls": true,
+  "workers": [
+    {
+      "id": "abc223",
+      "account": "abc223",
+      "browserProfile": "D:/work/hd/cpgame/captures/_browser-profiles/collect-20260908-abc223",
+      "cdpPort": 19223,
+      "heartbeat": "D:/work/hd/cpgame/reports/_workflow/collect-20260908/worker-abc223.json",
+      "games": ["16-Jungle-Fruit", "52-Cyber-GO", "1090-Sharpshooter"]
+    },
+    {
+      "id": "abc224",
+      "account": "abc224",
+      "browserProfile": "D:/work/hd/cpgame/captures/_browser-profiles/collect-20260908-abc224",
+      "cdpPort": 19224,
+      "heartbeat": "D:/work/hd/cpgame/reports/_workflow/collect-20260908/worker-abc224.json",
+      "games": ["45-Rio-Carnival", "56-Crazy-Piggy", "2300-Monster-Slayer"]
+    }
+  ],
+  "quotas": {
+    "16-Jungle-Fruit": { "loss": 200, "win": 200, "specialEach": 30, "note": "existing captures already exceed; inventory first, do not resample if complete" },
+    "45-Rio-Carnival": { "loss": 200, "win": 200, "specialEach": 30, "note": "existing captures already exceed; inventory first, do not resample if complete" },
+    "52-Cyber-GO": { "loss": 200, "win": 200, "specialEach": 30, "note": "existing spin-index ~1462; inventory first, fill gaps only" },
+    "56-Crazy-Piggy": { "loss": 50, "win": 40, "specialEach": 15, "note": "user reduced quota; existing coverage already exceeds" },
+    "1090-Sharpshooter": { "loss": 50, "win": 40, "specialEach": 15, "note": "user reduced quota; fixtures exist, captures/ missing" },
+    "2300-Monster-Slayer": {
+      "loss": 50,
+      "win": 30,
+      "buyModesEach": 20,
+      "buyModeCount": 3,
+      "note": "MaryLog prefixes 000002300 / 100002300 / 200002300 and matching PerKeyListt_{x}; store separately"
+    }
+  }
+}

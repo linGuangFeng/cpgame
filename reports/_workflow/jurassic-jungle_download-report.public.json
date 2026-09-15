@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 8,
+  "gameName": "Jurassic Jungle",
+  "runId": "20260902T084458000Z",
+  "startedAt": "2026-09-02T08:44:59.154Z",
+  "finishedAt": "2026-09-02T08:46:37.924Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 110,
+    "exactStaticUrls": 107,
+    "excludedDynamicApiUrls": 3,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 107,
+    "succeeded": 106,
+    "failed": 1,
+    "downloadedBytes": 18452838,
+    "statusCounts": {
+      "200": 106,
+      "404": 1
+    },
+    "contentTypeCounts": {
+      "application/javascript": 10,
+      "image/png": 45,
+      "application/json": 6,
+      "image/jpeg": 13,
+      "application/octet-stream": 30,
+      "audio/mpeg": 2
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/8-Jurassic-Jungle/programmatic-http/20260902T084458000Z/download-items.public.jsonl",
+      "sha256": "b7f7928f2e780b969bb9e5674d2c34007817a978de7010b68105c4ba5520d81f",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/8-Jurassic-Jungle/programmatic-http/20260902T084458000Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "failedUrls": [
+    {
+      "url": "https://static.cpgame.io/8/asset/certlogo",
+      "httpStatus": 404,
+      "error": "curl: (56) The requested URL returned error: 404"
+    }
+  ],
+  "stageDirectory": "/Users/a1/Downloads/jurassic-jungle-stage/20260902T084458000Z",
+  "resourceFolder": "8-Jurassic-Jungle"
+}

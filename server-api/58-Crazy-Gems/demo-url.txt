@@ -1,0 +1,1 @@
+http://192.168.10.3:8091/play/58-Crazy-Gems/index.html?gid=58&l=pt&t=demo&sip=192.168.10.3:8091&apiHost=192.168.10.3:8091

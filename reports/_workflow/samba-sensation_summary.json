@@ -1,0 +1,16 @@
+{
+  "slug": "samba-sensation",
+  "folder": "2290-Samba-Sensation",
+  "gid": 2290,
+  "runId": "20260902T094956736Z",
+  "stage": "/Users/a1/Downloads/samba-sensation-stage/20260902T094956736Z",
+  "hdDest": "/Volumes/hd/cpgame/resources/2290-Samba-Sensation/programmatic-http/20260902T094956736Z",
+  "succeeded": 108,
+  "failed": 0,
+  "bytes": 35918483,
+  "total": 108,
+  "captureJson": "/Users/a1/Downloads/cp-capture-abc221-samba-sensation-urls.json",
+  "gameDirs": [
+    "Game2290"
+  ]
+}

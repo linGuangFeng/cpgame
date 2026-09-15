@@ -1,0 +1,1 @@
+http://192.168.10.3:50090/play/43-Lucky-Wheel/index.html?gid=43&l=en&ai=local_43&btt=0&t=local-demo&sip=192.168.10.3%3A50090&apiPort=50090&apiHost=192.168.10.3%3A50090

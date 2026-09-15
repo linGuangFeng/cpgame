@@ -1,0 +1,1498 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CPGame 游戏测试中心</title><link rel="stylesheet" href="/assets/app.css"></head>
+<body class="game-lab-page" th:attr="data-view=${labView == null ? 'play' : labView}">
+<header class="topbar"><a class="brand" href="/">CPGame</a><nav class="nav"><a class="active" href="/">游戏库</a></nav></header>
+<main class="game-lab-container">
+  <section class="game-lab-hero">
+    <div class="game-lab-hero-copy">
+      <h1>CPGame 游戏测试中心</h1>
+      <div class="game-lab-view-row">
+        <div class="game-lab-view-switch" role="tablist" aria-label="页面功能">
+          <button type="button" data-view="play" onclick="setLabView('play')">游戏试玩</button>
+          <button type="button" data-view="betlog" onclick="setLabView('betlog')">betLog</button>
+        </div>
+        <span class="game-lab-visible-count" id="game-visible-count" th:text="${'共' + games.size() + '款游戏'}">共0款游戏</span>
+      </div>
+    </div>
+    <div class="game-lab-controls">
+      <label class="sr-only" for="game-id-search">游戏编号</label><input id="game-id-search" type="search" inputmode="numeric" placeholder="游戏编号" title="按游戏编号精确查找，不受其他过滤条件影响">
+      <label class="sr-only" for="game-search">搜索游戏</label><input id="game-search" type="search" placeholder="搜索游戏名或目录名">
+      <label class="sr-only" for="game-sort">游戏排序</label><select id="game-sort" title="游戏排序"><option value="id-asc" selected>游戏编号正序</option><option value="id-desc">游戏编号倒序</option><option value="name-asc">游戏名称</option><option value="updated-desc">最近更新</option></select>
+      <label class="sr-only" for="acceptance-filter">过滤验收状态</label><select id="acceptance-filter" title="过滤验收状态"><option value="ALL">全部验收状态</option><option value="ACCEPTED">验收通过</option><option value="REJECTED">验收未通过</option><option value="PENDING">待验收</option></select>
+      <label class="sr-only" for="runtime-filter">过滤运行状态</label><select id="runtime-filter" title="过滤运行状态"><option value="ALL">全部运行状态</option><option value="RUNNING">运行中</option><option value="PENDING">待运行</option></select>
+      <button class="btn btn-secondary" type="button" onclick="window.location.reload()">刷新目录</button>
+      <div class="game-lab-controls-action">
+        <button class="btn btn-danger play-only" id="game-stop-all" type="button" th:disabled="${runningProcessCount == 0}" onclick="stopAllGames(this)">关闭全部试玩</button>
+        <button class="btn btn-danger betlog-only" id="betlog-interrupt-all" type="button" th:disabled="${betLogRunningCount == null || betLogRunningCount == 0}" onclick="interruptAllBetLog(this)">中断全部生成</button>
+      </div>
+    </div>
+  </section>
+  <section class="game-lab-grid" id="game-grid">
+    <article class="game-lab-card" th:each="game : ${games}" th:with="betlog=${betLogCapabilities == null ? null : betLogCapabilities.get(game.directoryName)},betrun=${betLogRuns == null ? null : betLogRuns.get(game.directoryName)}" th:attr="data-search=${(game.name + ' ' + game.gameId + ' ' + game.directoryName).toLowerCase()},data-acceptance=${game.acceptanceCategory},data-directory=${game.directoryName},data-game-id=${game.gameId},data-name=${game.name},data-updated=${game.updatedAt != null ? game.updatedAt.toEpochMilli() : 0},data-play-runtime=${mountedDemoUrls.get(game.directoryName) != null ? 'RUNNING' : 'PENDING'},data-betlog-runtime=${betrun != null && betrun.state == 'RUNNING' ? 'RUNNING' : 'PENDING'}">
+      <div class="game-lab-cover">
+        <img th:src="${'/cpgame-lab/games/' + game.directoryName + '/cover?v=' + (game.updatedAt != null ? game.updatedAt.toEpochMilli() : 0)}" th:alt="${game.name}" onerror="this.hidden=true">
+        <select class="game-lab-status" th:classappend="${game.workflowAccepted ? ' accepted' : game.acceptanceCategory == 'REJECTED' ? ' rejected' : game.playable ? ' ready' : ''}" th:attr="data-directory=${game.directoryName},data-current=${game.manualAcceptanceStatus},title=${game.statusLabel}" aria-label="编辑验收状态" onchange="saveAcceptance(this)">
+          <option value="AUTO" th:selected="${game.manualAcceptanceStatus == 'AUTO'}" th:text="${game.manualAcceptanceStatus == 'AUTO' ? game.statusLabel : '恢复自动判断'}"></option>
+          <option value="PASSED" th:selected="${game.manualAcceptanceStatus == 'PASSED'}">人工验收通过</option>
+          <option value="FAILED" th:selected="${game.manualAcceptanceStatus == 'FAILED'}">人工验收未通过</option>
+        </select>
+      </div>
+      <div class="game-lab-card-body">
+        <div class="game-lab-title"><h2 th:text="${game.name}"></h2><span th:text="${'游戏编号 ' + game.gameId}"></span></div>
+        <div class="game-lab-tags">
+          <button class="game-lab-tag-button game-lab-tag-primary" type="button" th:text="${game.languages.isEmpty() ? '语言未知' : game.languages.size() + '种语言'}" title="查看支持语言" onclick="openCardDetail(this,'languages')"></button>
+          <button class="game-lab-tag-button game-lab-tag-primary" type="button" th:attr="data-directory=${game.directoryName},data-value=${game.paylines.count == null ? '' : game.paylines.count}" th:text="${game.paylines.label}" title="点击编辑中奖线" onclick="editPaylines(this)"></button>
+          <button class="game-lab-tag-button game-lab-tag-more" type="button" th:if="${!game.modes.isEmpty()}" th:text="${'+' + game.modes.size()}" title="查看全部玩法标签" onclick="openCardDetail(this,'tags')"></button>
+        </div>
+        <div class="game-lab-detail-store" hidden>
+          <div data-detail="overview"><h3 th:text="${game.name + ' · 游戏详情'}"></h3>
+            <section><h4>验收状态</h4><p th:text="${game.statusLabel}"></p></section>
+            <section><h4>支持语言</h4><p th:if="${game.languages.isEmpty()}">当前未记录语言信息。</p><ul th:unless="${game.languages.isEmpty()}"><li th:each="language : ${game.languages}" th:text="${language}"></li></ul></section>
+            <section><h4>中奖方式</h4><p th:text="${game.paylines.label}"></p></section>
+            <section><h4>玩法标签</h4><p th:if="${game.modes.isEmpty()}">当前未记录玩法标签。</p><ul th:unless="${game.modes.isEmpty()}"><li th:each="mode : ${game.modes}" th:text="${mode}"></li></ul></section>
+            <section><h4>漏做与未获取情况</h4><p th:if="${game.gaps.isEmpty()}">当前没有漏做或未获取项。</p><ul th:unless="${game.gaps.isEmpty()}"><li th:each="gap : ${game.gaps}" th:text="${gap}"></li></ul></section>
+            <section><h4>游戏说明</h4><p th:if="${game.description.isEmpty()}">当前暂无游戏说明记录。</p><ul th:unless="${game.description.isEmpty()}"><li th:each="line : ${game.description}" th:text="${line}"></li></ul></section>
+          </div>
+          <div data-detail="languages"><h3>支持语言</h3><p th:if="${game.languages.isEmpty()}">当前未记录语言信息。</p><ul th:unless="${game.languages.isEmpty()}"><li th:each="language : ${game.languages}" th:text="${language}"></li></ul></div>
+          <div data-detail="tags"><h3>全部标签</h3><ul><li th:text="${game.languages.isEmpty() ? '语言未知' : game.languages.size() + '种语言'}"></li><li th:text="${game.paylines.label}"></li><li th:each="mode : ${game.modes}" th:text="${mode}"></li></ul></div>
+          <div data-detail="gaps"><h3>漏做与未获取情况</h3><p th:if="${game.gaps.isEmpty()}">当前没有漏做或未获取项。</p><ul th:unless="${game.gaps.isEmpty()}"><li th:each="gap : ${game.gaps}" th:text="${gap}"></li></ul></div>
+          <div data-detail="description"><h3>游戏说明</h3><p th:if="${game.description.isEmpty()}">当前暂无游戏说明记录。</p><ul th:unless="${game.description.isEmpty()}"><li th:each="line : ${game.description}" th:text="${line}"></li></ul></div>
+        </div>
+        <div class="game-lab-actions play-only">
+          <button class="btn game-lab-detail-action" type="button" th:title="${game.gaps.isEmpty() ? '查看游戏详情' : game.gaps.size() + ' 项漏做或未获取内容'}" onclick="openCardDetail(this,'overview')">查看详情</button>
+          <div class="game-lab-runtime-actions" th:if="${mountedDemoUrls.get(game.directoryName) != null}">
+            <button class="btn btn-game-enter" type="button" th:attr="data-game-url=${mountedDemoUrls.get(game.directoryName)},data-directory=${game.directoryName},data-reference1=${game.references.reference1Url == null ? '' : game.references.reference1Url},data-reference2=${game.references.reference2Url == null ? '' : game.references.reference2Url},title=${runningProcesses.get(game.directoryName) == null ? '' : 'PID ' + runningProcesses.get(game.directoryName).processId + ' · 端口 ' + runningProcesses.get(game.directoryName).port}" onclick="startGame(this)">进入游戏</button>
+            <button class="btn btn-danger" type="button" th:attr="data-directory=${game.directoryName}" onclick="stopGame(this)">关闭</button>
+          </div>
+          <div class="game-lab-runtime-actions is-stopped" th:if="${mountedDemoUrls.get(game.directoryName) == null && game.publishReady && game.demoUrl != null && launchCapabilities.get(game.directoryName).launchable}">
+            <button class="btn btn-game-enter" type="button" th:attr="data-directory=${game.directoryName},data-reference1=${game.references.reference1Url == null ? '' : game.references.reference1Url},data-reference2=${game.references.reference2Url == null ? '' : game.references.reference2Url}" onclick="startGame(this)">启动试玩</button>
+            <button class="btn btn-danger" type="button" th:attr="data-directory=${game.directoryName}" onclick="stopGame(this)" hidden>关闭</button>
+          </div>
+          <span class="btn btn-secondary disabled" th:if="${mountedDemoUrls.get(game.directoryName) == null && game.publishReady && game.demoUrl != null && !launchCapabilities.get(game.directoryName).launchable}" th:title="${launchCapabilities.get(game.directoryName).message}">试玩模块未就绪</span>
+          <span class="btn btn-secondary disabled" th:if="${mountedDemoUrls.get(game.directoryName) == null && (!game.publishReady || game.demoUrl == null)}">暂无试玩入口</span>
+        </div>
+        <div class="game-lab-actions betlog-only">
+          <button class="btn game-lab-detail-action" type="button" th:attr="data-directory=${game.directoryName}" th:disabled="${betlog == null || betlog.configName == null}" onclick="openBetLogConfig(this)">配置</button>
+          <button class="btn game-lab-detail-action" type="button" th:attr="data-directory=${game.directoryName}" onclick="openBetLogResult(this)">结果</button>
+          <div class="game-lab-runtime-actions betlog-run-actions" th:classappend="${betrun != null && betrun.state == 'RUNNING' ? ' is-running' : ''}">
+            <button class="btn btn-game-enter betlog-run" type="button" th:if="${betlog != null && betlog.available}" th:attr="data-directory=${game.directoryName}" th:hidden="${betrun != null && betrun.state == 'RUNNING'}" onclick="runBetLog(this)">runRedis</button>
+            <span class="btn btn-secondary disabled" th:if="${betlog == null || !betlog.available}" th:title="${betlog == null ? '未找到 generator/dist' : betlog.message}">暂无 dist 命令</span>
+            <button class="btn btn-danger betlog-interrupt" type="button" th:attr="data-directory=${game.directoryName}" th:hidden="${betrun == null || betrun.state != 'RUNNING'}" onclick="interruptBetLog(this)">中断</button>
+          </div>
+        </div>
+        <div class="game-lab-betlog-meta betlog-only" th:attr="data-directory=${game.directoryName}">
+          <button type="button" class="betlog-state" th:attr="data-directory=${game.directoryName}" th:disabled="${betrun == null || betrun.state != 'FAILED'}" th:title="${betrun != null && betrun.state == 'FAILED' ? '点击查看失败原因' : ''}" onclick="openBetLogFailure(this)" th:classappend="${betrun != null && betrun.state == 'RUNNING' ? ' is-running' : (betrun != null && betrun.state == 'FAILED' ? ' is-failed' : (betrun != null && (betrun.state == 'COMPLETED' || betrun.state == 'INTERRUPTED') ? ' is-completed' : ''))}" th:text="${betrun == null ? '未运行' : betrun.stateLabel}"></button>
+          <span class="betlog-count" th:text="${betrun != null && betrun.counts != null && betrun.counts.loaded >= 0 ? '已生成 ' + betrun.counts.loaded + (betrun.counts.targetTotal > 0 ? ' / ' + betrun.counts.targetTotal : '') : (betlog != null && betlog.targetTotal > 0 ? '目标 ' + betlog.targetTotal : '已生成 —')}"></span>
+        </div>
+      </div>
+    </article>
+    <div class="game-lab-empty" th:if="${games.isEmpty()}">暂无可展示游戏。完成 publish/ID-name 和 current-status.json 后会自动出现。</div>
+    <div class="game-lab-empty" id="game-filter-empty" th:if="${!games.isEmpty()}" hidden>没有符合搜索和过滤条件的游戏。</div>
+  </section>
+</main>
+<section class="game-lab-modal" id="detail-modal" hidden><div class="game-lab-modal-card"><div class="game-lab-modal-head"><strong id="detail-title">详情</strong><button type="button" onclick="closeDetail()" aria-label="关闭">×</button></div><div class="game-lab-modal-body" id="detail-body"></div></div></section>
+<section class="game-lab-modal" id="betlog-failure-modal" hidden onclick="if(event.target===this) closeBetLogFailure()">
+  <div class="game-lab-modal-card game-lab-betlog-result-card game-lab-betlog-failure-card">
+    <div class="game-lab-modal-head"><strong id="betlog-failure-title">生成失败原因</strong><button type="button" onclick="closeBetLogFailure()" aria-label="关闭">×</button></div>
+    <div class="game-lab-modal-body">
+      <p id="betlog-failure-reason" role="alert"></p>
+      <pre id="betlog-failure-log" style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:60vh;overflow:auto"></pre>
+    </div>
+  </div>
+</section>
+<section class="game-lab-modal" id="betlog-config-modal" hidden onclick="if(event.target===this) closeBetLogConfig()">
+  <form class="game-lab-modal-card game-lab-betlog-config-card" onsubmit="saveBetLogConfig(event)">
+    <div class="game-lab-modal-head"><strong id="betlog-config-title">配置</strong><button type="button" onclick="closeBetLogConfig()" aria-label="关闭">×</button></div>
+    <div class="game-lab-modal-body">
+      <p id="betlog-config-file" class="muted">generator.properties</p>
+      <textarea id="betlog-config-text" spellcheck="false" rows="18"></textarea>
+      <div class="game-lab-reference-editor-error" id="betlog-config-error" role="alert" hidden></div>
+      <div class="game-lab-betlog-modal-actions"><button class="btn btn-secondary" type="button" onclick="closeBetLogConfig()">取消</button><button class="btn btn-primary" id="betlog-config-save" type="submit">保存配置</button></div>
+    </div>
+  </form>
+</section>
+<section class="game-lab-modal" id="betlog-result-modal" hidden onclick="if(event.target===this) closeBetLogResult()">
+  <div class="game-lab-modal-card game-lab-betlog-result-card">
+    <div class="game-lab-modal-head">
+      <div class="game-lab-cache-head-copy">
+        <strong id="betlog-result-title">缓存</strong>
+        <p class="muted" id="betlog-cache-meta"></p>
+        <p class="game-lab-cache-notice" id="betlog-cache-notice" hidden></p>
+      </div>
+      <div class="game-lab-cache-head-actions">
+        <button class="btn btn-secondary" id="betlog-cache-refresh" type="button" onclick="refreshBetLogCache()">刷新</button>
+        <button class="btn btn-danger" id="betlog-cache-delete-all" type="button" onclick="deleteAllCache()">删除全部</button>
+        <button type="button" onclick="closeBetLogResult()" aria-label="关闭">×</button>
+      </div>
+    </div>
+    <div class="game-lab-modal-body game-lab-cache-body">
+      <div class="game-lab-cache-shell">
+        <aside class="game-lab-cache-nav" id="betlog-cache-nav"></aside>
+        <div class="game-lab-cache-main">
+          <div class="game-lab-cache-stats" id="betlog-cache-stats"></div>
+          <div class="game-lab-cache-toolbar" id="betlog-cache-toolbar"></div>
+          <div class="game-lab-cache-table-wrap" id="betlog-cache-table-wrap"><table class="game-lab-cache-table" id="betlog-cache-table"></table></div>
+          <div class="game-lab-cache-members" id="betlog-cache-members" hidden>
+            <div class="game-lab-cache-members-bar">
+              <button class="btn btn-secondary" type="button" onclick="closeCacheMembers()">返回倍数</button>
+              <div class="game-lab-cache-members-copy">
+                <strong id="betlog-cache-members-title">结果</strong>
+                <p class="muted" id="betlog-cache-members-meta"></p>
+              </div>
+              <button class="btn btn-danger" type="button" id="betlog-cache-members-delete" onclick="deleteOpenCacheMembers()">删除此倍数</button>
+            </div>
+            <div class="game-lab-cache-members-list" id="betlog-cache-members-list"></div>
+            <div class="game-lab-cache-pager" id="betlog-cache-members-pager"></div>
+          </div>
+          <details class="game-lab-cache-log">
+            <summary>生成日志</summary>
+            <dl class="game-lab-betlog-stats" id="betlog-result-stats"></dl>
+            <pre id="betlog-result-log"></pre>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="game-lab-player" id="game-player" hidden>
+  <div class="game-lab-player-bar">
+    <div class="game-lab-player-labels" id="game-player-labels">
+    <div class="game-lab-player-control" id="reference1-control"><button class="game-lab-player-name" type="button" onclick="editReference(1)" title="点击修改参考1链接">参考1</button><button class="game-lab-panel-action" id="reference1-reload" type="button" onclick="reloadPanel('reference1')">刷新</button><button class="game-lab-panel-action" id="reference1-toggle" type="button" onclick="togglePanel('reference1')">隐藏</button></div>
+    <div class="game-lab-player-control" id="demo-control"><strong>demo</strong><button class="game-lab-panel-action" id="demo-reload" type="button" onclick="reloadPanel('demo')">刷新</button><button class="game-lab-panel-action" id="demo-toggle" type="button" onclick="togglePanel('demo')">隐藏</button><button class="game-lab-panel-action" id="reference1-add" type="button" onclick="activateReference(1)">添加参考1</button><button class="game-lab-panel-action" id="reference2-add" type="button" onclick="activateReference(2)">添加参考2</button><button class="game-lab-panel-action" type="button" onclick="closeGame()">退出游戏</button></div>
+    <div class="game-lab-player-control" id="reference2-control"><button class="game-lab-player-name" type="button" onclick="editReference(2)" title="点击修改参考2链接">参考2</button><button class="game-lab-panel-action" id="reference2-reload" type="button" onclick="reloadPanel('reference2')">刷新</button><button class="game-lab-panel-action" id="reference2-toggle" type="button" onclick="togglePanel('reference2')">隐藏</button></div>
+    </div>
+  </div>
+  <div class="game-lab-player-grid" id="game-player-grid">
+    <div class="game-lab-player-pane" id="reference1-pane" hidden><button class="game-lab-reference-empty" id="reference1-empty" type="button" onclick="editReference(1)" hidden>点击这里或顶部“参考1”设置链接</button><iframe id="reference1-frame" title="参考1" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-downloads" allow="autoplay; fullscreen" allowfullscreen hidden></iframe></div>
+    <div class="game-lab-player-pane game-lab-player-demo" id="demo-pane"><iframe id="game-frame" title="游戏试玩 demo" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-downloads" allow="autoplay; fullscreen" allowfullscreen></iframe></div>
+    <div class="game-lab-player-pane" id="reference2-pane" hidden><button class="game-lab-reference-empty" id="reference2-empty" type="button" onclick="editReference(2)" hidden>点击这里或顶部“参考2”设置链接</button><iframe id="reference2-frame" title="参考2" sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-downloads" allow="autoplay; fullscreen" allowfullscreen hidden></iframe></div>
+  </div>
+  <div class="game-lab-reload-warning" id="game-reload-warning" hidden>
+    <strong>已停止反复加载</strong><p>检测到游戏短时间内反复加载，已自动停止，避免管理页面卡死。</p>
+    <div><button class="btn btn-primary" type="button" onclick="retryGame()">重新加载</button><a class="btn btn-secondary" id="game-external-link" target="_blank" rel="noopener noreferrer">独立打开</a><button class="btn btn-secondary" type="button" onclick="closeGame()">返回游戏库</button></div>
+  </div>
+  <section class="game-lab-reference-editor" id="reference-editor" role="dialog" aria-modal="true" aria-labelledby="reference-editor-title" hidden onclick="if(event.target===this) closeReferenceEditor()">
+    <form class="game-lab-reference-editor-card" onsubmit="saveReference(event)">
+      <div class="game-lab-reference-editor-head"><strong id="reference-editor-title">设置参考链接</strong><button type="button" onclick="closeReferenceEditor()" aria-label="关闭">×</button></div>
+      <label for="reference-editor-input">页面地址</label>
+      <input id="reference-editor-input" type="url" maxlength="4096" placeholder="https://example.com/game" autocomplete="off">
+      <p>保存后会在对应栏内打开。若目标网站禁止 iframe 嵌入，可使用“新窗口打开”。</p>
+      <div class="game-lab-reference-editor-error" id="reference-editor-error" role="alert" hidden></div>
+      <div class="game-lab-reference-editor-actions"><button class="btn btn-secondary" type="button" onclick="clearReference()">清除链接</button><button class="btn btn-secondary" id="reference-open-external" type="button" onclick="openReferenceExternal()">新窗口打开</button><button class="btn btn-primary" id="reference-save-button" type="submit">保存并加载</button></div>
+    </form>
+  </section>
+</section>
+<script>
+  const search = document.getElementById('game-search');
+  const idSearch = document.getElementById('game-id-search');
+  const sortSelect = document.getElementById('game-sort');
+  const acceptanceFilter = document.getElementById('acceptance-filter');
+  const runtimeFilter = document.getElementById('runtime-filter');
+  const filterEmpty = document.getElementById('game-filter-empty');
+  const visibleCountEl = document.getElementById('game-visible-count');
+  const FILTER_STORE = 'cpgame-lab-filters';
+  const ACCEPTANCE_VALUES = new Set(['ALL', 'ACCEPTED', 'REJECTED', 'PENDING']);
+  const RUNTIME_VALUES = new Set(['ALL', 'RUNNING', 'PENDING']);
+  const SORT_VALUES = new Set(['id-asc', 'id-desc', 'name-asc', 'updated-desc']);
+  function normalizeAcceptance(value) {
+    return ACCEPTANCE_VALUES.has(value) ? value : 'ALL';
+  }
+  function normalizeRuntime(value) {
+    return RUNTIME_VALUES.has(value) ? value : 'ALL';
+  }
+  function normalizeSort(value) {
+    return SORT_VALUES.has(value) ? value : 'id-asc';
+  }
+  function persistFilters() {
+    const filters = {
+      gid: idSearch ? idSearch.value : '',
+      q: search ? search.value : '',
+      sort: normalizeSort(sortSelect && sortSelect.value),
+      acceptance: normalizeAcceptance(acceptanceFilter && acceptanceFilter.value),
+      runtime: normalizeRuntime(runtimeFilter && runtimeFilter.value)
+    };
+    try { localStorage.setItem(FILTER_STORE, JSON.stringify(filters)); } catch (_) {}
+    const url = new URL(window.location.href);
+    if (filters.gid.trim()) url.searchParams.set('gid', filters.gid.trim());
+    else url.searchParams.delete('gid');
+    if (filters.q.trim()) url.searchParams.set('q', filters.q);
+    else url.searchParams.delete('q');
+    if (filters.sort !== 'id-asc') url.searchParams.set('sort', filters.sort);
+    else url.searchParams.delete('sort');
+    if (filters.acceptance !== 'ALL') url.searchParams.set('acceptance', filters.acceptance);
+    else url.searchParams.delete('acceptance');
+    if (filters.runtime !== 'ALL') url.searchParams.set('runtime', filters.runtime);
+    else url.searchParams.delete('runtime');
+    history.replaceState(null, '', url);
+  }
+  function restoreFilters() {
+    const url = new URL(window.location.href);
+    let gid = url.searchParams.get('gid');
+    let q = url.searchParams.get('q');
+    let sort = url.searchParams.get('sort');
+    let acceptance = url.searchParams.get('acceptance');
+    let runtime = url.searchParams.get('runtime');
+    if (gid == null && q == null && sort == null && acceptance == null && runtime == null) {
+      try {
+        const stored = JSON.parse(localStorage.getItem(FILTER_STORE) || '{}');
+        if (typeof stored.gid === 'string') gid = stored.gid;
+        if (typeof stored.q === 'string') q = stored.q;
+        if (typeof stored.sort === 'string') sort = stored.sort;
+        if (typeof stored.acceptance === 'string') acceptance = stored.acceptance;
+        if (typeof stored.runtime === 'string') runtime = stored.runtime;
+      } catch (_) {}
+    }
+    if (idSearch && gid) idSearch.value = gid;
+    if (search && q) search.value = q;
+    if (sortSelect) sortSelect.value = normalizeSort(sort);
+    if (acceptanceFilter) acceptanceFilter.value = normalizeAcceptance(acceptance);
+    if (runtimeFilter) runtimeFilter.value = normalizeRuntime(runtime);
+  }
+  function cardGameId(card) {
+    const raw = Number(card.dataset.gameId);
+    return Number.isFinite(raw) ? raw : Number.POSITIVE_INFINITY;
+  }
+  function compareCards(a, b, sort) {
+    let result = 0;
+    if (sort === 'id-asc' || sort === 'id-desc') {
+      const idA = cardGameId(a);
+      const idB = cardGameId(b);
+      if (idA !== idB) {
+        if (!Number.isFinite(idA)) result = 1;
+        else if (!Number.isFinite(idB)) result = -1;
+        else result = idA < idB ? -1 : 1;
+      } else {
+        result = String(a.dataset.gameId || '').localeCompare(String(b.dataset.gameId || ''), 'zh-CN', {numeric: true});
+      }
+      if (sort === 'id-desc' && Number.isFinite(idA) && Number.isFinite(idB)) result = -result;
+    } else if (sort === 'name-asc') {
+      result = String(a.dataset.name || '').localeCompare(String(b.dataset.name || ''), 'zh-CN', {numeric: true});
+    } else if (sort === 'updated-desc') {
+      result = Number(b.dataset.updated || 0) - Number(a.dataset.updated || 0);
+    }
+    if (!result) result = String(a.dataset.directory || '').localeCompare(String(b.dataset.directory || ''), 'zh-CN', {numeric: true});
+    return result;
+  }
+  function sortGames() {
+    const grid = document.getElementById('game-grid');
+    if (!grid) return;
+    const sort = normalizeSort(sortSelect && sortSelect.value);
+    const cards = Array.from(grid.querySelectorAll('.game-lab-card'));
+    cards.sort((a, b) => compareCards(a, b, sort));
+    const anchor = grid.querySelector('.game-lab-empty');
+    cards.forEach(card => grid.insertBefore(card, anchor));
+  }
+  function cardRuntime(card) {
+    return currentLabView() === 'betlog' ? (card.dataset.betlogRuntime || 'PENDING') : (card.dataset.playRuntime || 'PENDING');
+  }
+  function updateVisibleCount(count) {
+    if (visibleCountEl) visibleCountEl.textContent = '共' + count + '款游戏';
+  }
+  function filterGames() {
+    const idQuery = (idSearch ? idSearch.value : '').trim();
+    const query = (search ? search.value : '').trim().toLowerCase();
+    const acceptance = normalizeAcceptance(acceptanceFilter && acceptanceFilter.value);
+    const runtime = normalizeRuntime(runtimeFilter && runtimeFilter.value);
+    let visible = 0;
+    const hasOtherFilters = Boolean(query) || acceptance !== 'ALL' || runtime !== 'ALL';
+    document.querySelectorAll('.game-lab-card').forEach(card => {
+      const matchesSearch = card.dataset.search.includes(query);
+      const matchesAcceptance = acceptance === 'ALL' || card.dataset.acceptance === acceptance;
+      const matchesRuntime = runtime === 'ALL' || cardRuntime(card) === runtime;
+      const matchesFilters = matchesSearch && matchesAcceptance && matchesRuntime;
+      const matchesExactId = Boolean(idQuery) && String(card.dataset.gameId || '') === idQuery;
+      const show = idQuery && !hasOtherFilters ? matchesExactId : (matchesFilters || matchesExactId);
+      card.hidden = !show;
+      card.classList.toggle('is-filtered-out', !show);
+      if (show) visible++;
+    });
+    updateVisibleCount(visible);
+    if (filterEmpty) filterEmpty.hidden = visible !== 0;
+    persistFilters();
+  }
+  function applyFilters() {
+    sortGames();
+    filterGames();
+  }
+  restoreFilters();
+  idSearch?.addEventListener('input', applyFilters);
+  search?.addEventListener('input', applyFilters);
+  sortSelect?.addEventListener('change', applyFilters);
+  acceptanceFilter?.addEventListener('change', applyFilters);
+  runtimeFilter?.addEventListener('change', applyFilters);
+  applyFilters();
+  const detailModal = document.getElementById('detail-modal');
+  const detailTitle = document.getElementById('detail-title');
+  const detailBody = document.getElementById('detail-body');
+  const player = document.getElementById('game-player');
+  const playerLabels = document.getElementById('game-player-labels');
+  const playerGrid = document.getElementById('game-player-grid');
+  const gameFrame = document.getElementById('game-frame');
+  const referenceFrames = {1: document.getElementById('reference1-frame'), 2: document.getElementById('reference2-frame')};
+  const referenceEmpty = {1: document.getElementById('reference1-empty'), 2: document.getElementById('reference2-empty')};
+  const playerPanes = {reference1: document.getElementById('reference1-pane'), demo: document.getElementById('demo-pane'), reference2: document.getElementById('reference2-pane')};
+  const panelToggles = {reference1: document.getElementById('reference1-toggle'), demo: document.getElementById('demo-toggle'), reference2: document.getElementById('reference2-toggle')};
+  const panelReloads = {reference1: document.getElementById('reference1-reload'), demo: document.getElementById('demo-reload'), reference2: document.getElementById('reference2-reload')};
+  const panelControls = {reference1: document.getElementById('reference1-control'), demo: document.getElementById('demo-control'), reference2: document.getElementById('reference2-control')};
+  const referenceAdds = {1: document.getElementById('reference1-add'), 2: document.getElementById('reference2-add')};
+  const referenceEditor = document.getElementById('reference-editor');
+  const referenceEditorTitle = document.getElementById('reference-editor-title');
+  const referenceEditorInput = document.getElementById('reference-editor-input');
+  const referenceEditorError = document.getElementById('reference-editor-error');
+  const referenceSaveButton = document.getElementById('reference-save-button');
+  const reloadWarning = document.getElementById('game-reload-warning');
+  const externalGameLink = document.getElementById('game-external-link');
+  const GAME_RELOAD_LIMIT = 4;
+  const GAME_RELOAD_WINDOW_MS = 10000;
+  let activeGameUrl = '';
+  let activeGameDirectory = '';
+  let activeReferences = {1: '', 2: ''};
+  let panelVisibility = {reference1: true, demo: true, reference2: true};
+  let editingReferenceSlot = 0;
+  let gameLoadTimes = [];
+  function rememberPlayDirectory(directory) {
+    if (!directory) return;
+    document.cookie = 'cpgame-play=' + encodeURIComponent(directory) + '; Path=/; SameSite=Lax';
+  }
+  function visitorGameUrl(value, directory) {
+    const target = new URL(value, window.location.href);
+    if (target.protocol !== 'http:' && target.protocol !== 'https:') throw new Error('unsupported game URL');
+    rememberPlayDirectory(directory);
+    target.protocol = window.location.protocol;
+    target.hostname = window.location.hostname;
+    target.port = window.location.port;
+    const endpoint = window.location.host;
+    target.searchParams.set('sip', endpoint);
+    target.searchParams.set('apiHost', endpoint);
+    if (target.searchParams.has('apiPort')) {
+      target.searchParams.set('apiPort', window.location.port || (target.protocol === 'https:' ? '443' : '80'));
+    }
+    return target.toString();
+  }
+  function referenceGameUrl(value) {
+    const target = new URL(value, window.location.href);
+    if (target.protocol !== 'http:' && target.protocol !== 'https:') throw new Error('unsupported reference URL');
+    return target.toString();
+  }
+  function setReferenceFrame(slot, value) {
+    const frame = referenceFrames[slot], empty = referenceEmpty[slot];
+    activeReferences[slot] = value || '';
+    if (!value) { frame.src = 'about:blank'; frame.hidden = true; empty.hidden = false; updatePlayerLayout(); return; }
+    try { frame.src = referenceGameUrl(value); frame.hidden = false; empty.hidden = true; }
+    catch (_) { frame.src = 'about:blank'; frame.hidden = true; empty.hidden = false; }
+    updatePlayerLayout();
+  }
+  function panelAvailable(key) {
+    if (key === 'demo') return Boolean(activeGameUrl);
+    return Boolean(activeReferences[key === 'reference1' ? 1 : 2]);
+  }
+  function updatePlayerLayout() {
+    const keys = ['reference1', 'demo', 'reference2'];
+    const paneKeys = keys.filter(key => panelAvailable(key) && panelVisibility[key]);
+    const labelKeys = keys.filter(key => key === 'demo' || (panelAvailable(key) && panelVisibility[key]));
+    keys.forEach(key => {
+      const available = panelAvailable(key);
+      const active = available && panelVisibility[key];
+      playerPanes[key].hidden = !active;
+      playerPanes[key].classList.remove('is-panel-hidden');
+      if (key === 'demo') {
+        panelControls[key].hidden = false;
+        panelToggles[key].textContent = active ? '隐藏' : '显示';
+      } else {
+        panelControls[key].hidden = !active;
+        panelToggles[key].textContent = '隐藏';
+      }
+      panelReloads[key].disabled = !available;
+    });
+    [1, 2].forEach(slot => {
+      const key = `reference${slot}`;
+      const available = panelAvailable(key);
+      referenceAdds[slot].hidden = available && panelVisibility[key];
+      referenceAdds[slot].textContent = available ? `显示参考${slot}` : `添加参考${slot}`;
+    });
+    playerLabels.style.gridTemplateColumns = `repeat(${Math.max(1, labelKeys.length)},minmax(0,1fr))`;
+    playerGrid.style.gridTemplateColumns = `repeat(${Math.max(1, paneKeys.length)},minmax(0,1fr))`;
+  }
+  function activateReference(slot) {
+    const key = `reference${slot}`;
+    if (!panelAvailable(key)) {
+      editReference(slot);
+      return;
+    }
+    panelVisibility[key] = true;
+    updatePlayerLayout();
+  }
+  function togglePanel(key) {
+    panelVisibility[key] = !panelVisibility[key];
+    updatePlayerLayout();
+  }
+  function reloadPanel(key) {
+    if (!panelAvailable(key)) return;
+    panelVisibility[key] = true;
+    const frame = key === 'demo' ? gameFrame : referenceFrames[key === 'reference1' ? 1 : 2];
+    const url = key === 'demo' ? activeGameUrl : referenceGameUrl(activeReferences[key === 'reference1' ? 1 : 2]);
+    if (key === 'demo') { gameLoadTimes = []; reloadWarning.hidden = true; gameFrame.hidden = false; }
+    frame.src = 'about:blank';
+    requestAnimationFrame(() => { frame.src = url; });
+    updatePlayerLayout();
+  }
+  function openGame(value, directory, reference1, reference2) {
+    try {
+      activeGameUrl = visitorGameUrl(value, directory);
+      activeGameDirectory = directory || '';
+      activeReferences = {1:'',2:''};
+      panelVisibility = {reference1: Boolean(reference1), demo: true, reference2: Boolean(reference2)};
+      gameLoadTimes = [];
+      reloadWarning.hidden = true;
+      gameFrame.hidden = false;
+      externalGameLink.href = activeGameUrl;
+      player.hidden = false;
+      document.body.style.overflow = 'hidden';
+      gameFrame.src = activeGameUrl;
+      setReferenceFrame(1, reference1 || '');
+      setReferenceFrame(2, reference2 || '');
+      updatePlayerLayout();
+    } catch (_) {
+      alert('试玩入口无效，请刷新目录或检查游戏服务。');
+    }
+  }
+  async function startGame(button) {
+    const previous = button.textContent;
+    button.disabled = true;
+    button.textContent = '正在启动游戏…';
+    try {
+      const response = await fetch(`/cpgame-lab/games/${encodeURIComponent(button.dataset.directory)}/start`, {method: 'POST'});
+      const text = await response.text();
+      let result;
+      try { result = JSON.parse(text); } catch (_) { throw new Error(text || '启动失败'); }
+      if (!response.ok) throw new Error(result.message || '启动失败');
+      if (!result.ok || !result.demoUrl) throw new Error(result.message || '启动失败');
+      button.textContent = '进入游戏';
+      button.dataset.gameUrl = result.demoUrl;
+      button.onclick = () => startGame(button);
+      const card = button.closest('.game-lab-card');
+      if (card) card.dataset.playRuntime = 'RUNNING';
+      const runtimeActions = button.closest('.game-lab-runtime-actions');
+      if (runtimeActions) {
+        runtimeActions.classList.remove('is-stopped');
+        const stopButton = runtimeActions.querySelector('.btn-danger');
+        if (stopButton) stopButton.hidden = false;
+      }
+      applyFilters();
+      const stopAllButton = document.getElementById('game-stop-all');
+      if (stopAllButton) stopAllButton.disabled = false;
+      openGame(result.demoUrl, button.dataset.directory, button.dataset.reference1, button.dataset.reference2);
+    } catch (error) {
+      alert(error.message || '游戏进程启动失败');
+      button.textContent = previous;
+    } finally {
+      button.disabled = false;
+    }
+  }
+  async function stopGame(button) {
+    const directory = button.dataset.directory;
+    if (!directory || !confirm('确定关闭这个游戏的试玩进程？')) return;
+    button.disabled = true;
+    try {
+      const response = await fetch(`/cpgame-lab/games/${encodeURIComponent(directory)}/stop`, {method: 'POST'});
+      const text = await response.text();
+      if (!response.ok) throw new Error(text || '关闭失败');
+      if (activeGameDirectory === directory) closeGame();
+      window.location.reload();
+    } catch (error) {
+      alert(error.message || '关闭失败');
+      button.disabled = false;
+    }
+  }
+  async function stopAllGames(button) {
+    if (!confirm('确定关闭全部试玩 Java 进程？')) return;
+    button.disabled = true;
+    try {
+      const response = await fetch('/cpgame-lab/games/stop-all', {method: 'POST'});
+      const text = await response.text();
+      if (!response.ok) throw new Error(text || '关闭失败');
+      closeGame();
+      window.location.reload();
+    } catch (error) {
+      alert(error.message || '关闭失败');
+      button.disabled = false;
+    }
+  }
+  function editReference(slot) {
+    if (!activeGameDirectory) return;
+    editingReferenceSlot = slot;
+    referenceEditorTitle.textContent = `设置参考${slot}链接`;
+    referenceEditorInput.value = activeReferences[slot] || '';
+    referenceEditorError.textContent = '';
+    referenceEditorError.hidden = true;
+    referenceEditor.hidden = false;
+    requestAnimationFrame(() => { referenceEditorInput.focus(); referenceEditorInput.select(); });
+  }
+  function closeReferenceEditor() {
+    referenceEditor.hidden = true;
+    referenceEditorError.hidden = true;
+    editingReferenceSlot = 0;
+  }
+  function clearReference() {
+    referenceEditorInput.value = '';
+    referenceEditorInput.focus();
+  }
+  function openReferenceExternal() {
+    const value = referenceEditorInput.value.trim();
+    if (!value) { referenceEditorError.textContent = '请先输入参考页面地址。'; referenceEditorError.hidden = false; return; }
+    try { window.open(referenceGameUrl(value), '_blank', 'noopener,noreferrer'); }
+    catch (_) { referenceEditorError.textContent = '请输入有效的 http 或 https 地址。'; referenceEditorError.hidden = false; }
+  }
+  async function saveReference(event) {
+    event.preventDefault();
+    const slot = editingReferenceSlot;
+    if (!activeGameDirectory || (slot !== 1 && slot !== 2)) return;
+    const value = referenceEditorInput.value.trim();
+    if (value) {
+      try { referenceGameUrl(value); }
+      catch (_) { referenceEditorError.textContent = '请输入有效的 http 或 https 地址。'; referenceEditorError.hidden = false; return; }
+    }
+    referenceSaveButton.disabled = true;
+    referenceSaveButton.textContent = '正在保存…';
+    referenceEditorError.hidden = true;
+    try {
+      const response = await fetch(`/cpgame-lab/games/${encodeURIComponent(activeGameDirectory)}/references/${slot}`, {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:`value=${encodeURIComponent(value)}`});
+      const text = await response.text();
+      if (!response.ok) throw new Error(text || '保存失败');
+      const result = JSON.parse(text);
+      if (value) panelVisibility[`reference${slot}`] = true;
+      setReferenceFrame(slot, slot === 1
+        ? (result.reference1Url || '')
+        : (result.reference2Url || ''));
+      document.querySelectorAll('[data-directory]').forEach(button => { if (button.dataset.directory === activeGameDirectory) { button.dataset.reference1 = result.reference1Url || ''; button.dataset.reference2 = result.reference2Url || ''; } });
+      closeReferenceEditor();
+    } catch (error) {
+      referenceEditorError.textContent = error.message || '保存失败';
+      referenceEditorError.hidden = false;
+    } finally {
+      referenceSaveButton.disabled = false;
+      referenceSaveButton.textContent = '保存并加载';
+    }
+  }
+  function closeGame() { closeReferenceEditor(); activeGameUrl = ''; activeGameDirectory = ''; activeReferences = {1:'',2:''}; panelVisibility = {reference1:true,demo:true,reference2:true}; gameLoadTimes = []; gameFrame.src = 'about:blank'; gameFrame.hidden = false; setReferenceFrame(1,''); setReferenceFrame(2,''); reloadWarning.hidden = true; player.hidden = true; document.body.style.overflow = ''; }
+  function retryGame() { if (!activeGameUrl) return; gameLoadTimes = []; reloadWarning.hidden = true; gameFrame.hidden = false; gameFrame.src = activeGameUrl; }
+  gameFrame.addEventListener('load', () => {
+    if (!activeGameUrl || gameFrame.src === 'about:blank') return;
+    const now = Date.now();
+    gameLoadTimes = gameLoadTimes.filter(time => now - time <= GAME_RELOAD_WINDOW_MS);
+    gameLoadTimes.push(now);
+    if (gameLoadTimes.length <= GAME_RELOAD_LIMIT) return;
+    gameFrame.src = 'about:blank';
+    gameFrame.hidden = true;
+    reloadWarning.hidden = false;
+  });
+  function openCardDetail(button, type) { const source = button.closest('.game-lab-card').querySelector(`[data-detail="${type}"]`); if (!source) return; detailTitle.textContent = source.querySelector('h3')?.textContent || '详情'; detailBody.innerHTML = source.innerHTML; detailModal.hidden = false; document.body.style.overflow = 'hidden'; }
+  function closeDetail() { detailModal.hidden = true; detailBody.textContent = ''; if (player.hidden) document.body.style.overflow = ''; }
+  async function saveAcceptance(select) {
+    const previous = select.dataset.current || 'AUTO';
+    select.disabled = true;
+    try {
+      const response = await fetch(`/cpgame-lab/games/${encodeURIComponent(select.dataset.directory)}/acceptance`, {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:`status=${encodeURIComponent(select.value)}`});
+      if (!response.ok) throw new Error(await response.text() || '保存失败');
+      window.location.reload();
+    } catch (error) {
+      select.value = previous;
+      select.disabled = false;
+      alert(error.message || '人工验收状态保存失败');
+    }
+  }
+  async function editPaylines(button) { const value = prompt('请输入中奖线数；留空表示未知，输入 0 表示不使用固定中奖线。', button.dataset.value || ''); if (value === null) return; const response = await fetch(`/cpgame-lab/games/${encodeURIComponent(button.dataset.directory)}/paylines`, { method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}, body: `value=${encodeURIComponent(value.trim())}` }); if (!response.ok) { alert(await response.text()); return; } window.location.reload(); }
+  detailModal.addEventListener('click', event => { if (event.target === detailModal) closeDetail(); });
+  document.addEventListener('keydown', event => {
+    if (event.key !== 'Escape') return;
+    const members = document.getElementById('betlog-cache-members');
+    if (!betlogConfigModal.hidden) closeBetLogConfig();
+    else if (members && !members.hidden) closeCacheMembers();
+    else if (!betlogResultModal.hidden) closeBetLogResult();
+    else if (!detailModal.hidden) closeDetail();
+    else if (!player.hidden) closeGame();
+  });
+  const betlogConfigModal = document.getElementById('betlog-config-modal');
+  const betlogConfigTitle = document.getElementById('betlog-config-title');
+  const betlogConfigFile = document.getElementById('betlog-config-file');
+  const betlogConfigText = document.getElementById('betlog-config-text');
+  const betlogConfigError = document.getElementById('betlog-config-error');
+  const betlogConfigSave = document.getElementById('betlog-config-save');
+  const betlogResultModal = document.getElementById('betlog-result-modal');
+  const betlogResultTitle = document.getElementById('betlog-result-title');
+  const betlogResultStats = document.getElementById('betlog-result-stats');
+  const betlogResultLog = document.getElementById('betlog-result-log');
+  let betlogConfigDirectory = '';
+  let betlogResultDirectory = '';
+  let betlogPollTimer = 0;
+  let cacheSnapshot = null;
+  let cachePrefixIndex = 0;
+  let cachePage = 0;
+  let cacheFilter = 'all';
+  let cacheSort = 'multiplier';
+  let cacheMembersKey = '';
+  let cacheMembersMultiplier = '';
+  let cacheMembersOffset = 0;
+  const CACHE_MEMBER_PAGE = 20;
+  let cacheAbort = null;
+  let cacheCountsPending = false;
+  let cacheMemoryPending = false;
+  const CACHE_PAGE_SIZE = 200;
+  const CACHE_COUNT_BATCH = 500;
+  const CACHE_MEMORY_BATCH = 500;
+  let cacheMemorySupported = true;
+  let cacheMemoryError = '';
+  const CACHE_FETCH_TIMEOUT_MS = 20000;
+  function currentLabView() { return document.body.dataset.view === 'betlog' ? 'betlog' : 'play'; }
+  function setLabView(view) {
+    const next = view === 'betlog' ? 'betlog' : 'play';
+    document.body.dataset.view = next;
+    document.querySelectorAll('.game-lab-view-switch button').forEach(button => {
+      button.classList.toggle('active', button.dataset.view === next);
+    });
+    const url = new URL(window.location.href);
+    if (next === 'betlog') url.searchParams.set('view', 'betlog');
+    else url.searchParams.delete('view');
+    history.replaceState(null, '', url);
+    filterGames();
+    if (next === 'betlog') refreshBetLogOverview();
+    else stopBetLogPoll();
+  }
+  function betLogApi(directory, suffix) {
+    const path = directory
+      ? `/cpgame-lab/games/${encodeURIComponent(directory)}/betlog${suffix || ''}`
+      : `/cpgame-lab/games/betlog${suffix || ''}`;
+    return path;
+  }
+  function formatCount(value) {
+    if (value == null) return cacheCountsPending ? '…' : '—';
+    if (value < 0) return '—';
+    return Number(value).toLocaleString('zh-CN');
+  }
+  function prefixHasPending(prefix) {
+    return (prefix && prefix.multipliers || []).some(row => row.count == null);
+  }
+  function stateLabel(status) {
+    switch (status && status.state) {
+      case 'RUNNING': return '生成中';
+      case 'COMPLETED': return '已完成';
+      case 'FAILED': return '失败';
+      case 'INTERRUPTED': return '已中断';
+      case 'UNAVAILABLE': return '不可用';
+      default: return '未运行';
+    }
+  }
+  function countLabel(counts) {
+    if (!counts) return '已生成 —';
+    const loaded = counts.loaded;
+    const target = counts.targetTotal;
+    if (loaded == null || loaded < 0) return target > 0 ? `目标 ${formatCount(target)}` : '已生成 —';
+    return target > 0 ? `已生成 ${formatCount(loaded)} / ${formatCount(target)}` : `已生成 ${formatCount(loaded)}`;
+  }
+  function setInterruptAllVisible(running) {
+    const interruptAll = document.getElementById('betlog-interrupt-all');
+    if (!interruptAll) return;
+    interruptAll.disabled = !running;
+  }
+  function applyBetLogStatus(directory, status) {
+    const card = Array.from(document.querySelectorAll('.game-lab-card')).find(item => item.dataset.directory === directory);
+    if (!card || !status) return;
+    const runButton = card.querySelector('.betlog-run');
+    const interruptButton = card.querySelector('.betlog-interrupt');
+    const runActions = card.querySelector('.betlog-run-actions');
+    const stateEl = card.querySelector('.betlog-state');
+    const countEl = card.querySelector('.betlog-count');
+    const running = status.state === 'RUNNING';
+    if (runButton) {
+      runButton.hidden = running;
+      runButton.disabled = running;
+      runButton.textContent = 'runRedis';
+    }
+    if (interruptButton) {
+      interruptButton.hidden = !running;
+      interruptButton.disabled = !running;
+    }
+    if (runActions) runActions.classList.toggle('is-running', running);
+    card.dataset.betlogRuntime = running ? 'RUNNING' : 'PENDING';
+    if (stateEl) {
+      stateEl.textContent = stateLabel(status);
+      stateEl.disabled = status.state !== 'FAILED';
+      stateEl.title = status.state === 'FAILED' ? '点击查看失败原因' : '';
+      stateEl.classList.remove('is-running', 'is-failed', 'is-completed');
+      if (status.state === 'RUNNING') stateEl.classList.add('is-running');
+      else if (status.state === 'FAILED') stateEl.classList.add('is-failed');
+      else if (status.state === 'COMPLETED' || status.state === 'INTERRUPTED') stateEl.classList.add('is-completed');
+    }
+    if (countEl) countEl.textContent = countLabel(status.counts);
+    setInterruptAllVisible(Array.from(document.querySelectorAll('.betlog-interrupt')).some(button => !button.hidden));
+  }
+  function renderBetLogStats(status) {
+    const counts = status.counts || {};
+    const rows = [
+      ['状态', stateLabel(status)],
+      ['命令', status.commandLine || status.commandName || '—'],
+      ['JAR', status.jarName || '—'],
+      ['配置', status.configName || '—'],
+      ['进程', status.processId ? String(status.processId) : '—'],
+      ['已生成', formatCount(counts.loaded)],
+      ['普通局', formatCount(counts.normal)],
+      ['特殊局', formatCount(counts.special)],
+      ['批次数', formatCount(counts.batches)],
+      ['目标普通', formatCount(counts.targetNormal)],
+      ['目标特殊', formatCount(counts.targetSpecial)],
+      ['目标合计', formatCount(counts.targetTotal)],
+      ['说明', status.message || '']
+    ];
+    betlogResultStats.innerHTML = rows.map(([label, value]) => `<div><dt>${label}</dt><dd>${String(value).replace(/[&<>]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]))}</dd></div>`).join('');
+    betlogResultLog.textContent = status.logTail || '暂无输出。';
+  }
+  async function readJson(response) {
+    const text = await response.text();
+    try { return { ok: response.ok, body: JSON.parse(text), text }; }
+    catch (_) { return { ok: response.ok, body: null, text }; }
+  }
+  async function refreshBetLogOverview() {
+    try {
+      const response = await fetch(betLogApi(null, '/overview'));
+      const result = await readJson(response);
+      if (!result.ok || !result.body || !result.body.runs) return;
+      Object.entries(result.body.runs).forEach(([directory, status]) => applyBetLogStatus(directory, status));
+      filterGames();
+      setInterruptAllVisible(Number(result.body.runningCount) > 0);
+      const running = Object.values(result.body.runs).some(status => status && status.state === 'RUNNING');
+      if (running && currentLabView() === 'betlog') startBetLogPoll();
+      else if (!running && !betlogResultDirectory) stopBetLogPoll();
+      if (betlogResultDirectory && result.body.runs[betlogResultDirectory]) {
+        const detail = await fetch(betLogApi(betlogResultDirectory, ''));
+        const parsed = await readJson(detail);
+        if (parsed.body) renderBetLogStats(parsed.body);
+      }
+    } catch (_) { }
+  }
+  function startBetLogPoll() {
+    if (betlogPollTimer) return;
+    betlogPollTimer = window.setInterval(refreshBetLogOverview, 1500);
+  }
+  function stopBetLogPoll() {
+    if (!betlogPollTimer) return;
+    window.clearInterval(betlogPollTimer);
+    betlogPollTimer = 0;
+  }
+  async function runBetLog(button) {
+    const directory = button.dataset.directory;
+    if (!directory) return;
+    button.disabled = true;
+    button.textContent = '正在启动…';
+    try {
+      const response = await fetch(betLogApi(directory, '/run'), {method: 'POST'});
+      const result = await readJson(response);
+      if (!result.ok) throw new Error((result.body && result.body.message) || result.text || '启动失败');
+      applyBetLogStatus(directory, result.body);
+      filterGames();
+      startBetLogPoll();
+    } catch (error) {
+      alert(error.message || 'runRedis 启动失败');
+      button.hidden = false;
+      button.disabled = false;
+      button.textContent = 'runRedis';
+    }
+  }
+  async function interruptBetLog(button) {
+    const directory = button.dataset.directory;
+    if (!directory || !confirm('确定中断这个游戏的 Redis 生成？')) return;
+    button.disabled = true;
+    try {
+      const response = await fetch(betLogApi(directory, '/interrupt'), {method: 'POST'});
+      const result = await readJson(response);
+      if (!result.ok) throw new Error((result.body && result.body.message) || result.text || '中断失败');
+      applyBetLogStatus(directory, result.body);
+      filterGames();
+      if (betlogResultDirectory === directory && result.body) renderBetLogStats(result.body);
+      refreshBetLogOverview();
+    } catch (error) {
+      alert(error.message || '中断失败');
+      button.disabled = false;
+    }
+  }
+  async function interruptAllBetLog(button) {
+    if (!confirm('确定中断全部 Redis 生成任务？')) return;
+    button.disabled = true;
+    try {
+      const response = await fetch(betLogApi(null, '/interrupt-all'), {method: 'POST'});
+      const result = await readJson(response);
+      if (!result.ok) throw new Error((result.body && result.body.message) || result.text || '中断失败');
+      await refreshBetLogOverview();
+    } catch (error) {
+      alert(error.message || '中断失败');
+      button.disabled = false;
+    }
+  }
+  async function openBetLogConfig(button) {
+    const directory = button.dataset.directory;
+    if (!directory) return;
+    betlogConfigDirectory = directory;
+    betlogConfigTitle.textContent = '修改 Redis Loader 配置';
+    betlogConfigFile.textContent = '正在读取…';
+    betlogConfigText.value = '';
+    betlogConfigError.hidden = true;
+    betlogConfigModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    try {
+      const response = await fetch(betLogApi(directory, '/config'));
+      const result = await readJson(response);
+      if (!result.ok) throw new Error((result.body && result.body.message) || result.text || '读取配置失败');
+      betlogConfigFile.textContent = result.body.fileName || 'generator.properties';
+      betlogConfigText.value = result.body.content || '';
+      requestAnimationFrame(() => betlogConfigText.focus());
+    } catch (error) {
+      betlogConfigError.textContent = error.message || '读取配置失败';
+      betlogConfigError.hidden = false;
+    }
+  }
+  function closeBetLogConfig() {
+    betlogConfigModal.hidden = true;
+    betlogConfigDirectory = '';
+    if (detailModal.hidden && player.hidden && betlogResultModal.hidden) document.body.style.overflow = '';
+  }
+  async function saveBetLogConfig(event) {
+    event.preventDefault();
+    if (!betlogConfigDirectory) return;
+    betlogConfigSave.disabled = true;
+    betlogConfigSave.textContent = '正在保存…';
+    betlogConfigError.hidden = true;
+    try {
+      const response = await fetch(betLogApi(betlogConfigDirectory, '/config'), {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+        body: `content=${encodeURIComponent(betlogConfigText.value)}`
+      });
+      const result = await readJson(response);
+      if (!result.ok) throw new Error((result.body && (result.body.message || result.body)) || result.text || '保存失败');
+      closeBetLogConfig();
+      refreshBetLogOverview();
+    } catch (error) {
+      betlogConfigError.textContent = error.message || '保存失败';
+      betlogConfigError.hidden = false;
+    } finally {
+      betlogConfigSave.disabled = false;
+      betlogConfigSave.textContent = '保存配置';
+    }
+  }
+  let betlogFailureRequest = 0;
+  function closeBetLogFailure() {
+    betlogFailureRequest++;
+    document.getElementById('betlog-failure-modal').hidden = true;
+    document.body.style.overflow = '';
+  }
+  async function openBetLogFailure(button) {
+    const directory = button.dataset.directory;
+    if (!directory) return;
+    const request = ++betlogFailureRequest;
+    const modal = document.getElementById('betlog-failure-modal');
+    const reason = document.getElementById('betlog-failure-reason');
+    const log = document.getElementById('betlog-failure-log');
+    document.getElementById('betlog-failure-title').textContent = directory + ' · 生成失败原因';
+    reason.textContent = '正在读取失败原因…';
+    log.textContent = '';
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    try {
+      const result = await readJson(await fetch(betLogApi(directory, '')));
+      if (request !== betlogFailureRequest) return;
+      if (!result.ok || !result.body) throw new Error(result.body?.message || '读取失败原因失败，请稍后重试');
+      reason.textContent = result.body.message || '进程已退出，请查看下方日志。';
+      log.textContent = result.body.logTail || '暂无日志输出。';
+      applyBetLogStatus(directory, result.body);
+    } catch (error) {
+      if (request === betlogFailureRequest) reason.textContent = error.message;
+    }
+  }
+  async function openBetLogResult(button) {
+    const directory = button.dataset.directory;
+    if (!directory) return;
+    const card = button.closest('.game-lab-card');
+    const gameName = card ? card.querySelector('h2')?.textContent : directory;
+    betlogResultDirectory = directory;
+    cacheSnapshot = null;
+    cachePrefixIndex = 0;
+    cachePage = 0;
+    cacheFilter = 'all';
+    cacheSort = 'multiplier';
+    closeCacheMembers();
+    betlogResultTitle.textContent = (gameName || directory) + ' 缓存';
+    betlogResultStats.textContent = '';
+    betlogResultLog.textContent = '';
+    document.getElementById('betlog-cache-nav').innerHTML = '<p class="muted">正在读取 PerKeyList / MaryKeyList…</p>';
+    document.getElementById('betlog-cache-meta').textContent = '';
+    showCacheNotice('');
+    document.getElementById('betlog-cache-stats').innerHTML = '';
+    document.getElementById('betlog-cache-toolbar').innerHTML = '';
+    document.getElementById('betlog-cache-table').innerHTML = '';
+    betlogResultModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    await refreshBetLogCache();
+    try {
+      const response = await fetch(betLogApi(directory, ''));
+      const result = await readJson(response);
+      if (result.body) {
+        renderBetLogStats(result.body);
+        applyBetLogStatus(directory, result.body);
+        if (result.body.state === 'RUNNING') startBetLogPoll();
+      }
+    } catch (_) { }
+  }
+  async function refreshBetLogCache() {
+    if (!betlogResultDirectory) return;
+    const refresh = document.getElementById('betlog-cache-refresh');
+    if (refresh) { refresh.disabled = true; refresh.textContent = '读取中…'; }
+    if (cacheAbort) cacheAbort.abort();
+    cacheAbort = new AbortController();
+    const abort = cacheAbort;
+    const timeout = window.setTimeout(() => abort.abort(), CACHE_FETCH_TIMEOUT_MS);
+    cacheCountsPending = false;
+    cacheMemoryPending = false;
+    cacheMemorySupported = true;
+    cacheMemoryError = '';
+    try {
+      const response = await fetch(betLogApi(betlogResultDirectory, '/cache'), { signal: abort.signal });
+      const result = await readJson(response);
+      if (!result.ok || !result.body) throw new Error(result.text || '读取缓存失败');
+      cacheSnapshot = result.body;
+      if (!cacheSnapshot.prefixes || cachePrefixIndex >= cacheSnapshot.prefixes.length) cachePrefixIndex = 0;
+      cachePage = 0;
+      renderCache();
+      window.clearTimeout(timeout);
+      if (refresh) refresh.textContent = '统计中…';
+      cacheCountsPending = true;
+      cacheMemoryPending = true;
+      renderCache();
+      const settled = await Promise.allSettled([fillCacheCounts(abort), fillCacheMemory(abort)]);
+      if (settled[0].status === 'rejected') throw settled[0].reason;
+    } catch (error) {
+      if (betlogResultModal.hidden || cacheAbort !== abort) return;
+      const timedOut = error && error.name === 'AbortError';
+      if (cacheSnapshot && cacheSnapshot.prefixes && cacheSnapshot.prefixes.length) {
+        document.getElementById('betlog-cache-meta').textContent = timedOut
+          ? '条数统计超时，已保留已读到的索引和批次。'
+          : (error.message || '条数统计失败');
+        renderCache();
+      } else {
+        cacheSnapshot = null;
+        document.getElementById('betlog-cache-nav').innerHTML = '';
+        document.getElementById('betlog-cache-meta').textContent = timedOut
+          ? '读取 Redis 超时。先只读 PerKeyList / MaryKeyList 索引，条数再分批补齐。'
+          : (error.message || '读取缓存失败');
+        document.getElementById('betlog-cache-stats').innerHTML = '';
+        document.getElementById('betlog-cache-toolbar').innerHTML = '';
+        document.getElementById('betlog-cache-table').innerHTML = '';
+      }
+    } finally {
+      window.clearTimeout(timeout);
+      cacheCountsPending = false;
+      cacheMemoryPending = false;
+      if (refresh) { refresh.disabled = false; refresh.textContent = '刷新'; }
+      if (!betlogResultModal.hidden && cacheSnapshot) renderCache();
+    }
+  }
+  function pendingMemoryKeys() {
+    const preferred = [];
+    const seen = new Set();
+    const prefix = currentCachePrefix();
+    const start = cachePage * CACHE_PAGE_SIZE;
+    (filteredCacheRows(prefix).slice(start, start + CACHE_PAGE_SIZE) || []).forEach(row => {
+      if (!row.redisKey || row.memoryBytes != null || !(Number(row.count) > 0) || seen.has(row.redisKey)) return;
+      seen.add(row.redisKey);
+      preferred.push(row.redisKey);
+    });
+    pendingCacheKeys(row => row.memoryBytes == null && Number(row.count) > 0).forEach(key => {
+      if (seen.has(key)) return;
+      seen.add(key);
+      preferred.push(key);
+    });
+    return preferred;
+  }
+  function pendingCacheKeys(isPending) {
+    const prefixes = cacheSnapshot && cacheSnapshot.prefixes ? cacheSnapshot.prefixes : [];
+    const ordered = [];
+    if (prefixes[cachePrefixIndex]) ordered.push(prefixes[cachePrefixIndex]);
+    prefixes.forEach((prefix, index) => { if (index !== cachePrefixIndex) ordered.push(prefix); });
+    const keys = [];
+    const seen = new Set();
+    for (const prefix of ordered) {
+      for (const row of prefix.multipliers || []) {
+        if (!row.redisKey || seen.has(row.redisKey) || !isPending(row)) continue;
+        seen.add(row.redisKey);
+        keys.push(row.redisKey);
+      }
+    }
+    return keys;
+  }
+  function applyCacheCounts(keys, counts) {
+    if (!cacheSnapshot || !cacheSnapshot.prefixes) return;
+    const got = counts || {};
+    const loaded = {};
+    keys.forEach(key => { loaded[key] = Number(got[key] || 0); });
+    let total = 0;
+    cacheSnapshot.prefixes.forEach(prefix => {
+      let members = 0;
+      (prefix.multipliers || []).forEach(row => {
+        if (row.redisKey && Object.prototype.hasOwnProperty.call(loaded, row.redisKey)) {
+          row.count = loaded[row.redisKey];
+          if (row.count === 0 && row.memoryBytes == null) row.memoryBytes = 0;
+        }
+        if (row.count != null) members += Number(row.count) || 0;
+      });
+      prefix.memberCount = members;
+      total += members;
+    });
+    cacheSnapshot.totalMembers = total;
+  }
+  function applyCacheMemory(memory) {
+    if (!cacheSnapshot || !cacheSnapshot.prefixes) return;
+    const gotMem = memory || {};
+    cacheSnapshot.prefixes.forEach(prefix => {
+      (prefix.multipliers || []).forEach(row => {
+        if (row.redisKey && Object.prototype.hasOwnProperty.call(gotMem, row.redisKey) && gotMem[row.redisKey] != null) {
+          row.memoryBytes = Number(gotMem[row.redisKey]) || 0;
+        }
+      });
+    });
+  }
+  function countsForKeys(keys) {
+    const want = new Set(keys || []);
+    const counts = {};
+    (cacheSnapshot && cacheSnapshot.prefixes ? cacheSnapshot.prefixes : []).forEach(prefix => {
+      (prefix.multipliers || []).forEach(row => {
+        if (row.redisKey && want.has(row.redisKey) && row.count != null) counts[row.redisKey] = Number(row.count) || 0;
+      });
+    });
+    return counts;
+  }
+  async function postCacheBatch(path, keys, abort, failMessage, counts) {
+    const payload = counts ? { keys, counts } : { keys };
+    const response = await fetch(betLogApi(betlogResultDirectory, path), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+      body: JSON.stringify(payload),
+      signal: abort.signal
+    });
+    const result = await readJson(response);
+    if (!result.ok || !result.body || result.body.ok === false) {
+      throw new Error((result.body && result.body.message) || result.text || failMessage);
+    }
+    return result.body;
+  }
+  async function fillCacheCounts(abort) {
+    if (!cacheSnapshot || !cacheSnapshot.prefixes || !cacheSnapshot.prefixes.length) return;
+    try {
+      while (!abort.signal.aborted) {
+        const keys = pendingCacheKeys(row => row.count == null).slice(0, CACHE_COUNT_BATCH);
+        if (!keys.length) break;
+        const body = await postCacheBatch('/cache/counts', keys, abort, '条数统计失败');
+        applyCacheCounts(keys, body.counts || {});
+        renderCache();
+      }
+    } finally {
+      cacheCountsPending = false;
+    }
+  }
+  async function fillCacheMemory(abort) {
+    if (!cacheSnapshot || !cacheSnapshot.prefixes || !cacheSnapshot.prefixes.length || !cacheMemorySupported) {
+      cacheMemoryPending = false;
+      return;
+    }
+    try {
+      while (!abort.signal.aborted && cacheMemorySupported) {
+        const keys = pendingMemoryKeys().slice(0, CACHE_MEMORY_BATCH);
+        if (!keys.length) {
+          if (!cacheCountsPending) break;
+          await new Promise(resolve => {
+            const timer = window.setTimeout(resolve, 80);
+            abort.signal.addEventListener('abort', () => { window.clearTimeout(timer); resolve(); }, { once: true });
+          });
+          continue;
+        }
+        try {
+          const counts = countsForKeys(keys);
+          const body = await postCacheBatch('/cache/memory', keys, abort, '占用抽样失败', counts);
+          if (body.memorySupported === false) {
+            cacheMemorySupported = false;
+            break;
+          }
+          const memory = body.memory || {};
+          applyCacheMemory(memory);
+          if (keys.some(key => memory[key] == null)) {
+            throw new Error('部分内存占用未返回，请刷新重试');
+          }
+          renderCache();
+        } catch (error) {
+          if (error && error.name === 'AbortError') throw error;
+          cacheMemoryError = error.message || '内存占用读取失败，请刷新重试';
+          break;
+        }
+      }
+    } finally {
+      cacheMemoryPending = false;
+    }
+  }
+  function allCacheRows() {
+    const rows = [];
+    (cacheSnapshot && cacheSnapshot.prefixes ? cacheSnapshot.prefixes : []).forEach(prefix => {
+      (prefix.multipliers || []).forEach(row => rows.push(row));
+    });
+    return rows;
+  }
+  function sampledOccupancyLabel(rows) {
+    let total = 0;
+    let seen = 0;
+    let missing = 0;
+    (rows || []).forEach(row => {
+      if (row.memoryBytes == null) { missing++; return; }
+      total += Number(row.memoryBytes) || 0;
+      seen++;
+    });
+    if (!missing) return formatBytes(total);
+    const status = cacheMemoryPending ? '统计中…'
+      : (!cacheMemorySupported ? 'Redis 不支持' : (cacheMemoryError ? '读取失败，请刷新重试' : '未读取'));
+    return seen && total > 0 ? `${formatBytes(total)}（部分，${status}）` : status;
+  }
+  function formatBytes(value) {
+    if (value == null || value < 0) return '—';
+    if (value < 1024) return value + ' B';
+    const units = ['KB', 'MB', 'GB'];
+    let size = value / 1024;
+    let unit = 0;
+    while (size >= 1024 && unit < units.length - 1) { size /= 1024; unit++; }
+    return (size >= 10 ? size.toFixed(0) : size.toFixed(1)) + ' ' + units[unit];
+  }
+  function currentCachePrefix() {
+    const prefixes = cacheSnapshot && cacheSnapshot.prefixes ? cacheSnapshot.prefixes : [];
+    return prefixes[cachePrefixIndex] || null;
+  }
+  function filteredCacheRows(prefix) {
+    let rows = (prefix && prefix.multipliers) ? prefix.multipliers.slice() : [];
+    if (cacheFilter === 'data') rows = rows.filter(row => Number(row.count) > 0);
+    if (cacheFilter === 'empty') rows = rows.filter(row => row.count === 0);
+    if (cacheSort === 'count') rows.sort((a, b) => Number(b.count) - Number(a.count) || String(a.multiplier).localeCompare(String(b.multiplier), 'zh-CN', {numeric: true}));
+    else rows.sort((a, b) => Number(a.multiplier) - Number(b.multiplier) || String(a.multiplier).localeCompare(String(b.multiplier), 'zh-CN', {numeric: true}));
+    return rows;
+  }
+  function renderCache() {
+    const nav = document.getElementById('betlog-cache-nav');
+    const meta = document.getElementById('betlog-cache-meta');
+    const stats = document.getElementById('betlog-cache-stats');
+    const toolbar = document.getElementById('betlog-cache-toolbar');
+    const table = document.getElementById('betlog-cache-table');
+    if (!cacheSnapshot) {
+      nav.innerHTML = '';
+      meta.textContent = '尚未读取缓存';
+      stats.innerHTML = '';
+      toolbar.innerHTML = '';
+      table.innerHTML = '';
+      return;
+    }
+    const prefixes = cacheSnapshot.prefixes || [];
+    if (!prefixes.length) {
+      nav.innerHTML = '<p class="muted">暂无 key 前缀</p>';
+      meta.textContent = cacheSnapshot.message || '当前 Redis 中没有该游戏的缓存';
+      stats.innerHTML = '';
+      toolbar.innerHTML = '';
+      table.innerHTML = '';
+      return;
+    }
+    nav.innerHTML = prefixes.map((prefix, index) => {
+      const active = index === cachePrefixIndex ? ' is-active' : '';
+      const pending = prefixHasPending(prefix);
+      return `<button type="button" class="game-lab-cache-prefix${active}" onclick="selectCachePrefix(${index})"><strong>${escapeHtml(prefix.prefix)}</strong><small>${formatCount(prefix.multiplierCount)} 个倍数 · ${formatCount(prefix.memberCount)}${pending ? '…' : ''} 条</small></button>`;
+    }).join('');
+    const prefix = currentCachePrefix();
+    const rows = filteredCacheRows(prefix);
+    const totalPages = Math.max(1, Math.ceil(rows.length / CACHE_PAGE_SIZE));
+    if (cachePage >= totalPages) cachePage = totalPages - 1;
+    const start = cachePage * CACHE_PAGE_SIZE;
+    const pageRows = rows.slice(start, start + CACHE_PAGE_SIZE);
+    const totalCount = rows.reduce((sum, row) => sum + Number(row.count || 0), 0);
+    const topMultiplier = rows.reduce((best, row) => Number(row.multiplier) > Number(best) ? row.multiplier : best, rows[0] ? rows[0].multiplier : '0');
+    const allOccupancy = sampledOccupancyLabel(allCacheRows());
+    const prefixOccupancy = sampledOccupancyLabel(prefix.multipliers);
+    meta.title = cacheMemoryError || (!cacheMemorySupported ? '当前 Redis 不支持 MEMORY USAGE，无法读取内存占用' : 'Redis 结果列表内存占用（抽样统计）');
+    meta.textContent = `${cacheSnapshot.redisHost}:${cacheSnapshot.redisPort} / db ${cacheSnapshot.redisDatabase}`
+      + ` · 内存占用 ${allOccupancy}`
+      + ` · ${formatCount(cacheSnapshot.totalKeys)} 个 key · ${formatCount(cacheSnapshot.totalMembers)} 条`;
+    stats.innerHTML = [
+      ['全部倍数种类', formatCount(prefix.multiplierCount)],
+      ['记录总条数', formatCount(prefix.memberCount)],
+      ['最高倍数', topMultiplier === undefined ? '—' : ('x' + topMultiplier)],
+      ['内存占用', prefixOccupancy]
+    ].map(([label, value]) => `<div><dt>${label}</dt><dd>${escapeHtml(String(value))}</dd></div>`).join('');
+    toolbar.innerHTML = `
+      <div class="game-lab-cache-filters">
+        <button type="button" class="${cacheFilter === 'all' ? 'is-active' : ''}" onclick="setCacheFilter('all')">全部</button>
+        <button type="button" class="${cacheFilter === 'data' ? 'is-active' : ''}" onclick="setCacheFilter('data')">只看有数据</button>
+        <button type="button" class="${cacheFilter === 'empty' ? 'is-active' : ''}" onclick="setCacheFilter('empty')" title="索引里有该倍数，但对应结果列表没有数据">只看空 key</button>
+        <button type="button" class="${cacheSort === 'multiplier' ? 'is-active' : ''}" onclick="setCacheSort('multiplier')">按倍数</button>
+        <button type="button" class="${cacheSort === 'count' ? 'is-active' : ''}" onclick="setCacheSort('count')">按条数</button>
+      </div>
+      <div class="game-lab-cache-pager">
+        <span>${rows.length ? (start + 1) : 0}–${start + pageRows.length} / ${rows.length}</span>
+        <button type="button" ${cachePage <= 0 ? 'disabled' : ''} onclick="setCachePage(${cachePage - 1})">上一页</button>
+        <button type="button" ${cachePage >= totalPages - 1 ? 'disabled' : ''} onclick="setCachePage(${cachePage + 1})">下一页</button>
+      </div>`;
+    table.innerHTML = `<thead><tr><th>倍数</th><th>条数</th><th>内存占用</th><th>占本池比例</th><th>Redis key</th><th></th></tr></thead><tbody>`
+      + (pageRows.length ? pageRows.map(row => {
+        const ratio = totalCount > 0 ? (Number(row.count) / totalCount) * 100 : 0;
+        const ratioLabel = ratio > 0 && ratio < 0.1 ? '<0.1%' : (ratio.toFixed(1) + '%');
+        const key = row.redisKey || '';
+        return `<tr>
+          <td><button type="button" class="game-lab-cache-multiplier" data-redis-key="${escapeHtml(key)}" data-multiplier="${escapeHtml(String(row.multiplier))}" onclick="openCacheMembers(this)">x${escapeHtml(String(row.multiplier))}</button></td>
+          <td>${formatCount(row.count)} 条</td>
+          <td>${escapeHtml(sampledOccupancyLabel([row]))}</td>
+          <td><span class="game-lab-cache-bar"><i style="width:${Math.min(100, Math.max(ratio, ratio > 0 ? 2 : 0))}%"></i></span> ${ratioLabel}</td>
+          <td class="game-lab-cache-key">${escapeHtml(key)}</td>
+          <td class="game-lab-cache-actions">
+            <button type="button" class="btn btn-secondary" onclick="copyCacheKey(this, '${escapeAttr(key)}')">复制</button>
+            <button type="button" class="btn btn-danger" data-redis-key="${escapeHtml(key)}" data-multiplier="${escapeHtml(String(row.multiplier))}" onclick="deleteCacheMultiplier(this)">删除</button>
+          </td>
+        </tr>`;
+      }).join('') : `<tr><td colspan="6">这一页没有倍数。</td></tr>`)
+      + `</tbody>`;
+  }
+  function setCacheMembersVisible(show) {
+    const members = document.getElementById('betlog-cache-members');
+    const tableWrap = document.getElementById('betlog-cache-table-wrap');
+    const stats = document.getElementById('betlog-cache-stats');
+    const toolbar = document.getElementById('betlog-cache-toolbar');
+    if (members) members.hidden = !show;
+    if (tableWrap) tableWrap.hidden = show;
+    if (stats) stats.hidden = show;
+    if (toolbar) toolbar.hidden = show;
+  }
+  function formatMemberValue(value) {
+    const text = value == null ? '' : String(value);
+    const trimmed = text.trim();
+    if ((trimmed.startsWith('{') || trimmed.startsWith('['))) {
+      try { return JSON.stringify(JSON.parse(trimmed), null, 2); } catch (_) {}
+    }
+    return text;
+  }
+  async function loadCacheMembers() {
+    if (!betlogResultDirectory || !cacheMembersKey) return;
+    const list = document.getElementById('betlog-cache-members-list');
+    const meta = document.getElementById('betlog-cache-members-meta');
+    const title = document.getElementById('betlog-cache-members-title');
+    const pager = document.getElementById('betlog-cache-members-pager');
+    if (title) title.textContent = '倍数 x' + cacheMembersMultiplier;
+    if (list) list.innerHTML = '<p class="muted">正在读取结果…</p>';
+    const response = await fetch(betLogApi(betlogResultDirectory, '/cache/members'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+      body: JSON.stringify({ key: cacheMembersKey, offset: cacheMembersOffset, limit: CACHE_MEMBER_PAGE })
+    });
+    const result = await readJson(response);
+    if (!result.ok || !result.body || result.body.ok === false) {
+      throw new Error((result.body && result.body.message) || result.text || '读取结果失败');
+    }
+    const body = result.body;
+    const total = Number(body.total) || 0;
+    const offset = Number(body.offset) || 0;
+    const members = body.members || [];
+    if (meta) meta.textContent = (body.key || cacheMembersKey) + ' · ' + formatCount(total) + ' 条';
+    if (list) {
+      list.innerHTML = members.length
+        ? members.map(item => {
+            const shown = formatMemberValue(item.value);
+            const extra = item.truncated ? '\n…（已截断）' : '';
+            return `<article class="game-lab-cache-member"><header>#${item.index + 1}</header><pre>${escapeHtml(shown + extra)}</pre></article>`;
+          }).join('')
+        : '<p class="muted">这个倍数没有结果。</p>';
+    }
+    const pageEnd = offset + members.length;
+    const prev = offset <= 0 ? 'disabled' : '';
+    const next = pageEnd >= total ? 'disabled' : '';
+    if (pager) {
+      pager.innerHTML = `<span>${total ? (offset + 1) : 0}–${pageEnd} / ${total}</span>
+        <button type="button" ${prev} onclick="setCacheMembersPage(${offset - CACHE_MEMBER_PAGE})">上一页</button>
+        <button type="button" ${next} onclick="setCacheMembersPage(${offset + CACHE_MEMBER_PAGE})">下一页</button>`;
+    }
+  }
+  async function openCacheMembers(button) {
+    const key = button && button.dataset.redisKey;
+    if (!key) return;
+    cacheMembersKey = key;
+    cacheMembersMultiplier = button.dataset.multiplier || '';
+    cacheMembersOffset = 0;
+    setCacheMembersVisible(true);
+    try { await loadCacheMembers(); }
+    catch (error) {
+      setCacheMembersVisible(false);
+      alert(error.message || '读取结果失败');
+    }
+  }
+  function closeCacheMembers() {
+    cacheMembersKey = '';
+    cacheMembersMultiplier = '';
+    cacheMembersOffset = 0;
+    setCacheMembersVisible(false);
+  }
+  async function setCacheMembersPage(offset) {
+    cacheMembersOffset = Math.max(0, offset);
+    try { await loadCacheMembers(); }
+    catch (error) { alert(error.message || '读取结果失败'); }
+  }
+  async function deleteCacheKeys(keys) {
+    const response = await fetch(betLogApi(betlogResultDirectory, '/cache/delete'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+      body: JSON.stringify({ keys })
+    });
+    const result = await readJson(response);
+    if (!result.ok || !result.body || result.body.ok === false) {
+      throw new Error((result.body && result.body.message) || result.text || '删除失败');
+    }
+    return result.body;
+  }
+  function showCacheNotice(text, kind) {
+    const el = document.getElementById('betlog-cache-notice');
+    if (!el) return;
+    if (!text) {
+      el.hidden = true;
+      el.textContent = '';
+      el.className = 'game-lab-cache-notice';
+      return;
+    }
+    el.hidden = false;
+    el.textContent = text;
+    el.className = 'game-lab-cache-notice ' + (kind === 'error' ? 'is-error' : 'is-ok');
+  }
+  function showEmptyCache(message) {
+    cacheSnapshot = {
+      ok: true,
+      prefixes: [],
+      message: message || '当前 Redis 中没有该游戏的缓存',
+      totalKeys: 0,
+      totalMembers: 0
+    };
+    cachePrefixIndex = 0;
+    cachePage = 0;
+    closeCacheMembers();
+    renderCache();
+  }
+  async function deleteCacheMultiplier(button) {
+    const key = button && button.dataset.redisKey;
+    const multiplier = button && button.dataset.multiplier;
+    if (!key || !betlogResultDirectory) return;
+    if (!confirm('确定删除倍数 x' + (multiplier || '') + ' 及其全部结果？')) return;
+    button.disabled = true;
+    try {
+      await deleteCacheKeys([key]);
+      closeCacheMembers();
+      showCacheNotice('已删除倍数 x' + (multiplier || ''), 'ok');
+      await refreshBetLogCache();
+    } catch (error) {
+      showCacheNotice(error.message || '删除失败', 'error');
+      alert(error.message || '删除失败');
+    } finally {
+      button.disabled = false;
+    }
+  }
+  async function deleteOpenCacheMembers() {
+    if (!cacheMembersKey) return;
+    if (!confirm('确定删除倍数 x' + cacheMembersMultiplier + ' 及其全部结果？')) return;
+    try {
+      await deleteCacheKeys([cacheMembersKey]);
+      closeCacheMembers();
+      showCacheNotice('已删除倍数 x' + cacheMembersMultiplier, 'ok');
+      await refreshBetLogCache();
+    } catch (error) {
+      showCacheNotice(error.message || '删除失败', 'error');
+      alert(error.message || '删除失败');
+    }
+  }
+  async function deleteAllCache() {
+    if (!betlogResultDirectory) return;
+    if (!confirm('确定删除该游戏全部 BetLog / MaryLog 索引和结果？')) return;
+    const button = document.getElementById('betlog-cache-delete-all');
+    const previous = button ? button.textContent : '';
+    if (button) {
+      button.disabled = true;
+      button.textContent = '删除中…';
+    }
+    if (cacheAbort) cacheAbort.abort();
+    let message = '';
+    try {
+      const prefixes = cacheSnapshot && cacheSnapshot.prefixes || [];
+      const indexKeys = prefixes.map(prefix => prefix.indexKey).filter(Boolean);
+      const keys = [];
+      prefixes.forEach(prefix => {
+        (prefix.multipliers || []).forEach(row => { if (row.redisKey) keys.push(row.redisKey); });
+      });
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), 20000);
+      let response;
+      try {
+        response = await fetch(betLogApi(betlogResultDirectory, '/cache/delete-all'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+          body: JSON.stringify({ indexKeys, keys }),
+          signal: controller.signal
+        });
+      } finally {
+        window.clearTimeout(timer);
+      }
+      const result = await readJson(response);
+      if (!result.ok || !result.body || result.body.ok === false) {
+        throw new Error((result.body && result.body.message) || result.text || '删除失败');
+      }
+      message = result.body.message || '已删除全部索引和结果';
+      showEmptyCache(message);
+      showCacheNotice(message, 'ok');
+    } catch (error) {
+      const timedOut = error && error.name === 'AbortError';
+      if (timedOut) {
+        message = '删除请求超时，请点刷新确认是否已清空';
+        showEmptyCache(message);
+        showCacheNotice(message, 'error');
+      } else {
+        showCacheNotice(error.message || '删除失败', 'error');
+        alert(error.message || '删除失败');
+      }
+    } finally {
+      if (button) {
+        button.disabled = false;
+        button.textContent = previous || '删除全部';
+      }
+    }
+    if (message) {
+      refreshBetLogCache().then(() => { if (message) showCacheNotice(message, 'ok'); }).catch(() => {});
+    }
+  }
+  function selectCachePrefix(index) { closeCacheMembers(); cachePrefixIndex = index; cachePage = 0; renderCache(); }
+  function setCacheFilter(value) { cacheFilter = value; cachePage = 0; renderCache(); }
+  function setCacheSort(value) { cacheSort = value; cachePage = 0; renderCache(); }
+  function setCachePage(page) { cachePage = Math.max(0, page); renderCache(); }
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+  function escapeAttr(value) {
+    return String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  }
+  async function copyCacheKey(button, value) {
+    if (!value) return;
+    try { await navigator.clipboard.writeText(value); button.textContent = '已复制'; }
+    catch (_) { button.textContent = '复制失败'; }
+    window.setTimeout(() => { button.textContent = '复制'; }, 1200);
+  }
+  function closeBetLogResult() {
+    if (cacheAbort) cacheAbort.abort();
+    closeCacheMembers();
+    betlogResultModal.hidden = true;
+    betlogResultDirectory = '';
+    cacheSnapshot = null;
+    cacheCountsPending = false;
+    cacheMemoryPending = false;
+    if (detailModal.hidden && player.hidden && betlogConfigModal.hidden) document.body.style.overflow = '';
+  }
+  setLabView(currentLabView());
+</script>
+</body></html>

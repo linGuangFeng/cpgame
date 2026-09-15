@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "gameId": 2,
+  "rawGameId": 2,
+  "rulesHash": "3c1e8d7a9b4f2c6e0a5d8b1f7e4c9a2d6b0e3f8c1a7d4b9e2f5c8a0d3b6e1f4",
+  "frontendProtocol": {
+    "auth": "POST /cp/api/v1/auth/verify",
+    "config": "POST /cp/api/v1/jungle-kings/config-v2",
+    "spin": "POST /cp/api/v1/jungle-kings/spin-v2",
+    "historyList": "POST /cp/api/v1/jungle-kings/log-list",
+    "historyDetail": "POST /cp/api/v1/jungle-kings/log-view",
+    "spinForm": ["bet_level", "bet_size", "ckl", "t", "gid"],
+    "headers": ["web-token", "game-id"]
+  },
+  "behaviorIds": [
+    "B-ENTRY-ID",
+    "B-CONFIG-V2",
+    "B-SPIN-V2-CKL",
+    "B-DUAL-BOARD",
+    "B-X2-BOTH-WIN",
+    "B-REELSTRIP-DEALING",
+    "B-PAID-ROUND-LOSS",
+    "B-PAID-ROUND-WIN-S00011",
+    "B-PAID-ROUND-WIN-S00012",
+    "B-BALANCE-LEDGER",
+    "B-HISTORY-LIST-DETAIL",
+    "B-REALTIME-CATALOG",
+    "B-UNCONFIRMED-SYMBOL-BOUNDARY"
+  ],
+  "oracles": [
+    "captures/2-Jungle-Kings/history-1to1.jsonl",
+    "captures/2-Jungle-Kings/original-http-config.json",
+    "captures/2-Jungle-Kings/original-http-spin-index.jsonl",
+    "publish/2-Jungle-Kings/2/assets/main/index.5891e.js",
+    "resources/2-Jungle-Kings/en/language/en/gameRules.json"
+  ]
+}

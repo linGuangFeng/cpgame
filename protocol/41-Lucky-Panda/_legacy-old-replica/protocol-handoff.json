@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 2,
+  "workflowTemplateVersion": 15,
+  "gameId": 41,
+  "gameName": "Lucky Panda",
+  "directoryName": "41-Lucky-Panda",
+  "rulesHash": "626066184f494c6221c1680502d81372d80fd0ff5ddb8611837567b88b33937f",
+  "status": "IMPLEMENTED_AND_LOCAL_RUNTIME_VERIFIED",
+  "evidenceInventory": [
+    {"id": "E-RULES", "source": "protocol/41-Lucky-Panda/rules-core-canonical.json", "behaviorIds": ["ALL_WAYS_EVALUATION", "CASCADE_ROUND", "SCATTER_FREE_ROUNDS", "REDIS_COMPLETE_ROUND_BOUNDARY"]},
+    {"id": "E-HTTP", "source": "captures/41-Lucky-Panda/original-http-spin-index.jsonl", "behaviorIds": ["HTTP_CODEC", "CONFIG_LOAD", "ALL_WAYS_EVALUATION", "CASCADE_ROUND", "SCATTER_FREE_ROUNDS"]},
+    {"id": "E-ROUND", "source": "captures/41-Lucky-Panda/round-index.jsonl", "behaviorIds": ["CASCADE_ROUND", "SCATTER_FREE_ROUNDS", "ROUND_HISTORY_FINALIZATION", "REDIS_COMPLETE_ROUND_BOUNDARY"]},
+    {"id": "E-HISTORY", "source": "captures/41-Lucky-Panda/history-1to1.jsonl", "behaviorIds": ["ROUND_HISTORY_FINALIZATION", "HISTORY_LIST_DETAIL_RETURN"]},
+    {"id": "E-FINAL", "source": "captures/41-Lucky-Panda/history-finalization.json", "behaviorIds": ["ROUND_HISTORY_FINALIZATION"]},
+    {"id": "E-ANALYSIS", "source": "reports/41-Lucky-Panda/evidence-analysis.json", "behaviorIds": ["ALL_WAYS_EVALUATION", "CASCADE_ROUND", "SCATTER_FREE_ROUNDS", "ROUND_HISTORY_FINALIZATION"]}
+  ],
+  "behaviorContracts": [
+    {
+      "id": "HTTP_CODEC", "category": "CODEC", "status": "CONFIRMED", "multiStep": false, "evidenceRefs": ["E-HTTP"],
+      "implementationContract": {"preconditions": ["endpoint request available"], "stateFields": ["gid", "bl", "bs", "code", "data"], "transitionRules": ["form-urlencode request", "parse plain JSON wrapper", "require raw gid 41"], "outputs": ["endpoint data or structured error"], "terminationRules": ["request settles exactly once"]},
+      "verificationContract": {"independentOracleRefs": ["E-HTTP"], "assertions": ["2883 captured Spin responses use the documented fields"], "usesImplementationGeneratedExpected": false}
+    },
+    {
+      "id": "CONFIG_LOAD", "category": "CONFIG", "status": "CONFIRMED", "multiStep": false, "evidenceRefs": ["E-HTTP"],
+      "implementationContract": {"preconditions": ["raw gid is 41"], "stateFields": ["bll", "bsl", "cc", "cs"], "transitionRules": ["load bll 1..10", "load bsl 0.02 and 0.2", "select BRL/R$"], "outputs": ["legal selectors and currency"], "terminationRules": ["minimum total bet computes to 0.4"]},
+      "verificationContract": {"independentOracleRefs": ["E-HTTP"], "assertions": ["preflight Config matches captured values"], "usesImplementationGeneratedExpected": false}
+    },
+    {
+      "id": "ALL_WAYS_EVALUATION", "category": "GAME_RULE", "status": "CONFIRMED", "multiStep": false, "evidenceRefs": ["E-RULES", "E-HTTP", "E-ANALYSIS"],
+      "implementationContract": {"preconditions": ["RLE board decodes to rowCounts 5,6,6,6,6,5"], "stateFields": ["rskl", "wmkl", "wskl", "wa", "rpx", "bl", "bs"], "transitionRules": ["evaluate left-to-right 3..6 consecutive reels", "Wild substitutes paying symbols", "ways is the product of winning positions", "apply canonical paytable and max(1,rpx)"], "outputs": ["wmkl", "wskl", "wa"], "terminationRules": ["each paying symbol evaluated once"]},
+      "verificationContract": {"independentOracleRefs": ["E-HTTP", "E-ANALYSIS"], "assertions": ["2883 RLE boards decode", "2883 awards recompute with zero mismatch"], "usesImplementationGeneratedExpected": false}
+    },
+    {
+      "id": "CASCADE_ROUND", "category": "SPECIAL_MODE", "status": "CONFIRMED", "multiStep": true, "evidenceRefs": ["E-HTTP", "E-ROUND", "E-ANALYSIS"],
+      "implementationContract": {"preconditions": ["delivery has wa>0"], "stateFields": ["roundId", "deliveryIndex", "ss", "rwa", "rpx", "gfl"], "transitionRules": ["remove winning cells", "refill board", "accumulate rwa", "continue under same roundId"], "outputs": ["ordered delivery projections"], "terminationRules": ["terminal no-win delivery closes current segment"]},
+      "verificationContract": {"independentOracleRefs": ["E-HTTP", "E-ROUND"], "assertions": ["165 complete multi-step Rounds", "no continuation is counted as a paid start"], "usesImplementationGeneratedExpected": false, "adjacentStepEvidence": ["ordered stepOrdinal and shared roundOrdinal in E-HTTP", "stepCount and one transferId per Round in E-ROUND"]}
+    },
+    {
+      "id": "SCATTER_FREE_ROUNDS", "category": "SPECIAL_MODE", "status": "CONFIRMED", "multiStep": true, "evidenceRefs": ["E-HTTP", "E-ROUND", "E-ANALYSIS"],
+      "implementationContract": {"preconditions": ["paid segment reaches at least three Scat positions"], "stateFields": ["fsn", "nfsc", "ss", "roundId"], "transitionRules": ["award fsn=10", "deliver nfsc 1 through 10", "keep all deliveries in the paid Round"], "outputs": ["ten free-spin segments with their cascades"], "terminationRules": ["nfsc=10 terminal delivery closes the Round"]},
+      "verificationContract": {"independentOracleRefs": ["E-HTTP", "E-ROUND"], "assertions": ["35 complete Scatter Free Rounds", "each award is ten free spins"], "usesImplementationGeneratedExpected": false, "adjacentStepEvidence": ["fsn=10 transition followed by nfsc sequence in E-HTTP", "shared transferId in E-ROUND"]}
+    },
+    {
+      "id": "ROUND_HISTORY_FINALIZATION", "category": "HISTORY", "status": "CONFIRMED", "multiStep": true, "evidenceRefs": ["E-ROUND", "E-HISTORY", "E-FINAL"],
+      "implementationContract": {"preconditions": ["complete Round is terminal"], "stateFields": ["transferId", "bid", "baf", "ba", "wa", "bsl", "fsl"], "transitionRules": ["create one summary", "store all paid/free deliveries", "index by transferId"], "outputs": ["one list row and one detail"], "terminationRules": ["history becomes visible only after Round terminal"]},
+      "verificationContract": {"independentOracleRefs": ["E-ROUND", "E-HISTORY", "E-FINAL"], "assertions": ["1093/1093 transferId exact match"], "usesImplementationGeneratedExpected": false, "adjacentStepEvidence": ["Round transferId maps to History tis and detail bid"]}
+    },
+    {
+      "id": "HISTORY_LIST_DETAIL_RETURN", "category": "HISTORY_UI", "status": "CONFIRMED", "reason": "Captured History row/detail shapes are confirmed; the implementation uses an explicitly local detail path.", "multiStep": true, "evidenceRefs": ["E-HISTORY"],
+      "implementationContract": {"preconditions": ["at least one finalized local Round"], "stateFields": ["historyModal", "selectedTransferId"], "transitionRules": ["open list", "select row", "render detail", "return to list", "close modal"], "outputs": ["History list and detail views"], "terminationRules": ["return restores list without new Spin"]},
+      "verificationContract": {"independentOracleRefs": ["E-HISTORY"], "assertions": ["list field names and detail bsl/fsl shapes match captured schema", "local detail path is not claimed as original"], "usesImplementationGeneratedExpected": false, "adjacentStepEvidence": ["captured row.tis resolves captured detail.bid"]}
+    },
+    {
+      "id": "REDIS_COMPLETE_ROUND_BOUNDARY", "category": "PACKAGING", "status": "CONFIRMED", "reason": "The local replica contract queues only independently verified complete Rounds and does not claim original consumer compatibility.", "multiStep": true, "evidenceRefs": ["E-RULES", "E-ROUND"],
+      "implementationContract": {"preconditions": ["formal GameRuleCore generated and independently verified a complete Round"], "stateFields": ["rawGameId", "category", "encodedRound"], "transitionRules": ["encode versioned member", "MULTI", "RPUSH", "LTRIM", "EXEC"], "outputs": ["bounded category list for raw gid 41"], "terminationRules": ["transaction succeeds atomically or member is not accepted"]},
+      "verificationContract": {"independentOracleRefs": ["E-RULES", "E-ROUND"], "assertions": ["member boundary is complete Round", "original Redis consumer compatibility is not claimed"], "usesImplementationGeneratedExpected": false, "adjacentStepEvidence": ["verified complete Round precedes encode and atomic write"]}
+    }
+  ],
+  "unresolvedBehaviors": [
+    {"id": "ORIGINAL_SERVER_PROBABILITY", "reason": "No original reel strips or probability configuration were captured; observed frequencies cannot establish the original distribution.", "evidenceRefs": ["E-ANALYSIS"]},
+    {"id": "ORIGINAL_HISTORY_DETAIL_PATH", "reason": "History detail payloads were captured and reconciled, but the original detail URL was not retained in the authoritative index.", "evidenceRefs": ["E-HISTORY"]},
+    {"id": "FREE_SPIN_RETRIGGER", "reason": "No retrigger rule is established by the completed corpus.", "evidenceRefs": ["E-HTTP", "E-ROUND"]}
+  ]
+}

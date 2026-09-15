@@ -1,0 +1,629 @@
+{
+  "schemaVersion": 1,
+  "gameId": 52,
+  "gameName": "Cyber GO",
+  "rulesHash": "ae4823db63a5e8bd1d1f3a06da3ed6f76c04d761aefce10f29de6f6502885cfa",
+  "behaviorIds": [
+    "B01_LAUNCH_AUTH_CONFIG",
+    "B02_MINIMUM_PAID_SPIN",
+    "B03_243_WAYS_WIN",
+    "B04_FREE_SPINS",
+    "B05_COMPLETE_ROUND_BOUNDARY",
+    "B06_LANGUAGE_FIRST_LOAD",
+    "B07_RULES_AND_PAYTABLE",
+    "B08_HISTORY_DETAIL",
+    "B09_PROMOTIONAL_ACTIVITY_FREE",
+    "B10_HTTP_FORM_CODEC"
+  ],
+  "generatedAt": "2026-08-30T10:03:33.118Z",
+  "evidenceInventory": [
+    {
+      "id": "E01_RULES_PT",
+      "source": "resources/52-Cyber-GO/pt-br/extracted-rules-and-paytable.json",
+      "sourceSha256": "e138fe9b94c489b9c466bece77f554103bb0d6b27452852fe49cf61d6be53c49",
+      "behaviorIds": [
+        "B03_243_WAYS_WIN",
+        "B04_FREE_SPINS",
+        "B05_COMPLETE_ROUND_BOUNDARY",
+        "B07_RULES_AND_PAYTABLE"
+      ],
+      "currentPathStatus": "INDEXED_PATH_UNRESOLVED"
+    },
+    {
+      "id": "E02_FRONTEND_MAIN",
+      "source": "resources/52-Cyber-GO/programmatic-http/20260902T073314000Z/files/static.cpgame.io/52/assets/main/index.b04df.js",
+      "sourceSha256": "bfd11963ddb820fc14f7885a2645dd71e0347fc3b77985d9b417fdfd2595e2f9",
+      "behaviorIds": [
+        "B01_LAUNCH_AUTH_CONFIG",
+        "B02_MINIMUM_PAID_SPIN",
+        "B03_243_WAYS_WIN",
+        "B04_FREE_SPINS",
+        "B05_COMPLETE_ROUND_BOUNDARY",
+        "B06_LANGUAGE_FIRST_LOAD",
+        "B08_HISTORY_DETAIL",
+        "B09_PROMOTIONAL_ACTIVITY_FREE",
+        "B10_HTTP_FORM_CODEC"
+      ]
+    },
+    {
+      "id": "E03_FIRST_LOAD_API",
+      "source": "fixtures/52-Cyber-GO/first-load-api-pt-br.json",
+      "sourceSha256": "c78a22bc4bb95ab06d82001d48f572e08c314bfba1768381f652f8b2a67b4bd5",
+      "behaviorIds": [
+        "B01_LAUNCH_AUTH_CONFIG",
+        "B02_MINIMUM_PAID_SPIN",
+        "B07_RULES_AND_PAYTABLE",
+        "B09_PROMOTIONAL_ACTIVITY_FREE",
+        "B10_HTTP_FORM_CODEC"
+      ]
+    },
+    {
+      "id": "E04_COMPLETE_ROUNDS",
+      "source": "captures/52-Cyber-GO/rounds.jsonl",
+      "sourceSha256": "1e63cd3af6bf9d87712cf9236c7d6501ecb2a2104acf4c8a79291832e0259fb5",
+      "behaviorIds": [
+        "B02_MINIMUM_PAID_SPIN",
+        "B03_243_WAYS_WIN",
+        "B04_FREE_SPINS",
+        "B05_COMPLETE_ROUND_BOUNDARY",
+        "B08_HISTORY_DETAIL"
+      ]
+    },
+    {
+      "id": "E05_SPIN_INDEX",
+      "source": "captures/52-Cyber-GO/spin-index.jsonl",
+      "sourceSha256": "44fbf11dfbfea72177b00fbca9a366bfd4c47b331f84428201b0474cd1ddfe87",
+      "behaviorIds": [
+        "B05_COMPLETE_ROUND_BOUNDARY"
+      ]
+    },
+    {
+      "id": "E06_LANGUAGE_MANIFESTS",
+      "source": "resources/52-Cyber-GO/<code>/first-load-manifest.json",
+      "behaviorIds": [
+        "B06_LANGUAGE_FIRST_LOAD"
+      ]
+    },
+    {
+      "id": "E07_RULE_SCREENSHOTS",
+      "source": "screenshots/52-Cyber-GO/rules-page-1-pt-br.png",
+      "behaviorIds": [
+        "B07_RULES_AND_PAYTABLE"
+      ]
+    },
+    {
+      "id": "E08_ENDPOINT_ENUMERATION",
+      "source": "resources/52-Cyber-GO/programmatic-http/20260902T073314000Z/files/static.cpgame.io/52/assets/main/index.b04df.js",
+      "sourceAnchors": [
+        "GameApi",
+        "go-cyber/config",
+        "go-cyber/spin",
+        "go-cyber/log-list",
+        "go-cyber/log-view"
+      ],
+      "behaviorIds": [],
+      "disposition": "NO_PURCHASE_BEHAVIOR",
+      "reason": "当前游戏前端接口枚举和可见主界面均无购买功能入口或购买 API"
+    },
+    {
+      "id": "E09_HTTP_CODEC",
+      "source": "resources/52-Cyber-GO/programmatic-http/20260902T073314000Z/files/static.cpgame.io/52/assets/main/index.b04df.js",
+      "sourceAnchors": [
+        "Http.encodeFormData",
+        "Http.post",
+        "application/x-www-form-urlencoded",
+        "header map web-token->t and game-id->gid",
+        "_cancelResponseData"
+      ],
+      "behaviorIds": [
+        "B01_LAUNCH_AUTH_CONFIG",
+        "B02_MINIMUM_PAID_SPIN",
+        "B08_HISTORY_DETAIL",
+        "B10_HTTP_FORM_CODEC"
+      ]
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B01_LAUNCH_AUTH_CONFIG",
+      "category": "session",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E02_FRONTEND_MAIN",
+        "E03_FIRST_LOAD_API",
+        "E09_HTTP_CODEC"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "gid=52",
+          "授权 token 仅在内存中使用"
+        ],
+        "stateFields": [
+          "player.id",
+          "player.balance",
+          "cc",
+          "bsl",
+          "bll",
+          "spl",
+          "request.code",
+          "response.code",
+          "response.data"
+        ],
+        "transitionRules": [
+          "POST /api/v1/auth/verify 成功且code=200后，从data.player与data.token建立内存会话",
+          "随后POST /api/v1/go-cyber/config，并把web-token/game-id适配为表单t/gid",
+          "config code=200时以data.cc、bsl、bll、spl初始化游戏"
+        ],
+        "outputs": [
+          "认证玩家与游戏配置"
+        ],
+        "terminationRules": [
+          "config code=200且data可解析"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E03_FIRST_LOAD_API"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "assertions": [
+          "游戏标题为 Cyber GO",
+          "gameId=52",
+          "币种 BRL"
+        ],
+        "adjacentStepEvidence": [
+          "fixtures/52-Cyber-GO/first-load-api-pt-br.json#auth/verify -> go-cyber/config"
+        ]
+      }
+    },
+    {
+      "id": "B02_MINIMUM_PAID_SPIN",
+      "category": "bet",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E02_FRONTEND_MAIN",
+        "E03_FIRST_LOAD_API",
+        "E04_COMPLETE_ROUNDS",
+        "E09_HTTP_CODEC"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "无活动中的免费 Round",
+          "余额至少 R$0.60"
+        ],
+        "stateFields": [
+          "bl",
+          "bs",
+          "ba",
+          "pl.balance",
+          "fsn",
+          "nfsc"
+        ],
+        "transitionRules": [
+          "POST /api/v1/go-cyber/spin，表单字段bl=1、bs=0.02、t、gid=52",
+          "UI最小值bl=1、bs=0.02，30个基础投注因子产生ba=0.60",
+          "响应只交付一个Step；其Round归属继续由B05判断"
+        ],
+        "outputs": [
+          "一个付费Spin起点Step及更新后的玩家余额（pl存在时）"
+        ],
+        "terminationRules": [
+          "进入 B05 Round 边界判定"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E03_FIRST_LOAD_API",
+          "E04_COMPLETE_ROUNDS"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "assertions": [
+          "历史 ba=0.60",
+          "每个付费起点只索引一次"
+        ]
+      }
+    },
+    {
+      "id": "B03_243_WAYS_WIN",
+      "category": "win-model",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E01_RULES_PT",
+        "E02_FRONTEND_MAIN",
+        "E04_COMPLETE_ROUNDS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "5×3 可见盘面"
+        ],
+        "stateFields": [
+          "rskl",
+          "wmkl",
+          "wskl",
+          "wa",
+          "rwa",
+          "rpx"
+        ],
+        "transitionRules": [
+          "从最左卷轴向右连续",
+          "243 固定 Ways",
+          "Wild 替代 Scatter 以外符号且只在卷轴 2/3/4"
+        ],
+        "outputs": [
+          "Ways 中奖组合与金额"
+        ],
+        "terminationRules": [
+          "普通局 fsn=0"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E01_RULES_PT",
+          "E04_COMPLETE_ROUNDS#52-round-00020"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "assertions": [
+          "paylineCount 不适用",
+          "普通 WIN wa>0"
+        ]
+      }
+    },
+    {
+      "id": "B04_FREE_SPINS",
+      "category": "special-mode",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E01_RULES_PT",
+        "E02_FRONTEND_MAIN",
+        "E04_COMPLETE_ROUNDS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "付费起点出现 3/4/5 Scatter"
+        ],
+        "stateFields": [
+          "fsn",
+          "nfsc",
+          "rpx",
+          "rskl",
+          "wa",
+          "rwa",
+          "frwa",
+          "gt",
+          "small_game_type",
+          "ss"
+        ],
+        "transitionRules": [
+          "分别授予 12/15/20 次免费 Spin",
+          "触发Step观测为ba=0.60、gt=1、small_game_type=0、nfsc=0",
+          "后续免费Step使用同一spin请求，观测为ba=0、gt=2、small_game_type=2，nfsc从1递增",
+          "初始倍率 x2",
+          "收集至少 3 Wild 后倍率 +2，消耗 3 个并保留余数",
+          "倍率上限 x20",
+          "免费期间不出现 Scatter，因此无重触发"
+        ],
+        "outputs": [
+          "同一 roundId 下的全部免费 Step"
+        ],
+        "terminationRules": [
+          "fsn=nfsc；已捕获免费Round末Step同时ss=0"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E01_RULES_PT",
+          "E04_COMPLETE_ROUNDS#52-round-00010"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "assertions": [
+          "首 Step fsn>0",
+          "末 Step fsn=nfsc",
+          "Step 未写为新付费 Round",
+          "逐局验证stepIndex从0连续，免费Step的nfsc严格按1..fsn递增"
+        ],
+        "adjacentStepEvidence": [
+          "captures/52-Cyber-GO/rounds.jsonl#52-round-00010:step0..step12",
+          "captures/52-Cyber-GO/rounds.jsonl#52-round-00100:step0 then free nfsc=1..12"
+        ]
+      }
+    },
+    {
+      "id": "B05_COMPLETE_ROUND_BOUNDARY",
+      "category": "state-machine",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E01_RULES_PT",
+        "E02_FRONTEND_MAIN",
+        "E04_COMPLETE_ROUNDS",
+        "E05_SPIN_INDEX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "收到一个真实付费 Spin 起点"
+        ],
+        "stateFields": [
+          "roundId",
+          "stepIndex",
+          "fsn",
+          "nfsc",
+          "gt",
+          "small_game_type",
+          "ba"
+        ],
+        "transitionRules": [
+          "付费起点是活动Round外的首个spin请求；roundId为本地证据索引，不是原接口字段",
+          "fsn>nfsc时下一请求仍属于同一Round",
+          "历史log-view按同一transfer_id把bsl与fsl合并恢复原局",
+          "任何免费 Step 不增加 paidRoundStarts"
+        ],
+        "outputs": [
+          "一个完整 Round"
+        ],
+        "terminationRules": [
+          "fsn=0 或 fsn=nfsc"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E04_COMPLETE_ROUNDS",
+          "E05_SPIN_INDEX"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "assertions": [
+          "索引行数=paidRoundStarts=completedRoundCount",
+          "所有 Round 合法终止",
+          "逐局验证stepIndex从0连续，免费Step的nfsc严格按1..fsn递增"
+        ],
+        "adjacentStepEvidence": [
+          "captures/52-Cyber-GO/rounds.jsonl#52-round-00010:adjacent steps",
+          "captures/52-Cyber-GO/rounds.jsonl#52-round-00100:step0 then free nfsc=1..12"
+        ]
+      }
+    },
+    {
+      "id": "B06_LANGUAGE_FIRST_LOAD",
+      "category": "localization",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E02_FRONTEND_MAIN",
+        "E06_LANGUAGE_MANIFESTS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "l 为 bundle 白名单代码"
+        ],
+        "stateFields": [
+          "l",
+          "language",
+          "LanguageMgr.CurLanguage"
+        ],
+        "transitionRules": [
+          "l 决定内部语言",
+          "pt 的外层别名为 pt-br"
+        ],
+        "outputs": [
+          "对应语言首载"
+        ],
+        "terminationRules": [
+          "运行态 CurLanguage 等于请求代码"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E06_LANGUAGE_MANIFESTS"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "assertions": [
+          "10 个代码逐一首载成功"
+        ]
+      }
+    },
+    {
+      "id": "B07_RULES_AND_PAYTABLE",
+      "category": "help",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E01_RULES_PT",
+        "E03_FIRST_LOAD_API",
+        "E07_RULE_SCREENSHOTS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "打开菜单的信息/规则入口"
+        ],
+        "stateFields": [
+          "spl",
+          "Rules",
+          "Features",
+          "Ways"
+        ],
+        "transitionRules": [
+          "规则页显示规则与奖表"
+        ],
+        "outputs": [
+          "规则文本、符号支付值、玩法说明"
+        ],
+        "terminationRules": [
+          "关闭规则页返回主界面"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E01_RULES_PT",
+          "E03_FIRST_LOAD_API",
+          "E07_RULE_SCREENSHOTS"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "assertions": [
+          "奖表值与 config.spl 一致"
+        ]
+      }
+    },
+    {
+      "id": "B08_HISTORY_DETAIL",
+      "category": "history",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E02_FRONTEND_MAIN",
+        "E04_COMPLETE_ROUNDS",
+        "E09_HTTP_CODEC"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "有效 web-token 和 transfer_id"
+        ],
+        "stateFields": [
+          "page_index",
+          "begin_at",
+          "end_at",
+          "ll",
+          "end",
+          "lc",
+          "ba",
+          "wa",
+          "tis",
+          "bid",
+          "bsl",
+          "fsl",
+          "ss"
+        ],
+        "transitionRules": [
+          "log-list filters by inclusive original second timestamps, returns 10 rows per page and lc/ba/wa totals over the filtered range",
+          "end is integer 0 for more rows and 1 at the last or beyond-last page",
+          "log-view returns bid and merges bsl with fsl from the same member-derived Round"
+        ],
+        "outputs": [
+          "可对账完整 Round"
+        ],
+        "terminationRules": [
+          "明细 Step ss 标记与 fsn/nfsc 边界一致"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E04_COMPLETE_ROUNDS"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "assertions": [
+          "恢复的历史 Round 与最小下注、游戏 52 一致",
+          "逐局验证stepIndex从0连续，免费Step的nfsc严格按1..fsn递增"
+        ],
+        "adjacentStepEvidence": [
+          "captures/52-Cyber-GO/rounds.jsonl#52-round-00010:history bsl+fsl",
+          "captures/52-Cyber-GO/rounds.jsonl#52-round-00100:step0 then free nfsc=1..12"
+        ],
+        "currentImplementationEvidence": "reports/52-Cyber-GO/api-recheck-20260908.json"
+      }
+    },
+    {
+      "id": "B09_PROMOTIONAL_ACTIVITY_FREE",
+      "category": "platform-promotion",
+      "status": "NOT_APPLICABLE",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E02_FRONTEND_MAIN",
+        "E03_FIRST_LOAD_API"
+      ],
+      "disposition": "前端存在条件式 activityFree bundle，但当前 auth/config 未授予 fbt/fcg 活动状态，且它不是规则确认的 Cyber GO 付费触发模式",
+      "reason": "不得把平台活动代码猜成当前游戏可用特殊模式"
+    },
+    {
+      "id": "B10_HTTP_FORM_CODEC",
+      "category": "transport-codec",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E02_FRONTEND_MAIN",
+        "E03_FIRST_LOAD_API",
+        "E09_HTTP_CODEC"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "目标为当前游戏/api/v1端点",
+          "授权token作为不透明会话值处理"
+        ],
+        "stateFields": [
+          "Content-Type",
+          "web-token",
+          "game-id",
+          "t",
+          "gid",
+          "code",
+          "data",
+          "info"
+        ],
+        "transitionRules": [
+          "默认POST请求以application/x-www-form-urlencoded发送",
+          "web-token映射到表单t，game-id映射到表单gid",
+          "字段使用encodeURIComponent，空格替换为+",
+          "HTTP 2xx且JSON code=200时返回data；其他code进入错误分支",
+          "未发现自定义请求加密、响应解密或二进制协议层"
+        ],
+        "outputs": [
+          "解包后的data对象"
+        ],
+        "terminationRules": [
+          "code=200成功；HTTP非2xx或code非200失败"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E02_FRONTEND_MAIN",
+          "E03_FIRST_LOAD_API"
+        ],
+        "assertions": [
+          "config请求可见t与gid表单键",
+          "Content-Type为application/x-www-form-urlencoded",
+          "成功响应从data解包",
+          "实现不得增加证据中不存在的自定义加解密"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    }
+  ],
+  "unresolvedBehaviors": [],
+  "rulesVersion": "evidence-snapshot-e138fe9b94c489b9",
+  "runtimeDeliveryContract": {
+    "source": "USER_MANDATE_CONTROLLER_V3_AND_REDIS_COMPLETE_ROUND_DELIVERY",
+    "scope": "local downstream contract, not original upstream protocol",
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "contractVersion": 3,
+    "index": "CyberGo:52:v3:win",
+    "listPattern": "CyberGo:52:v3:round:<integer-multiplier>",
+    "selection": [
+      "SecureRandom win/loss",
+      "uniform existing positive integer multiplier for win, zero for loss",
+      "atomic LPOP of exactly one member",
+      "remaining deliveries only from that member"
+    ],
+    "memberEncoding": "one digit 0..9 per visible cell; 15 cells per board; | between steps",
+    "runtimeGeneration": false,
+    "fixturesAtRuntime": false,
+    "fallback": false,
+    "emptyPool": "503 without charging/advancing",
+    "loaderPrewritesLosses": true,
+    "report": "reports/52-Cyber-GO/redis-pool-integration-20260908.json"
+  },
+  "generationModel": {
+    "status": "EMPIRICAL_MODEL_VALIDATED",
+    "method": "SEQUENTIAL_JOINT_REEL_STATE_COUNTS",
+    "modelFile": "reports/52-Cyber-GO/generation-distribution-model.json",
+    "validationFile": "reports/52-Cyber-GO/generation-model-validation.json",
+    "source": "captures/52-Cyber-GO/rounds.jsonl",
+    "trainingRounds": 1362,
+    "holdoutRounds": 100,
+    "originalReelsOrRtpClaimed": false,
+    "rawSampleFrequenciesSeparateFromGenerated": true
+  },
+  "implementationStatus": "BACKEND_VALIDATED_UI_AND_ORIGINAL_ENTRY_PENDING"
+}

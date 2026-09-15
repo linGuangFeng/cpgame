@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "batchId": "B",
+  "attemptedAt": "2026-08-29T07:49:59+08:00",
+  "requestedGameId": 43,
+  "requestedDirectoryName": "43-Lucky-Wheel",
+  "extensionInstanceId": "35d86d21-ac60-4133-9019-8c4645472100",
+  "resolvedBrowserId": "-4c22-4162-b097-cc01188fb7b7",
+  "exactInstanceConnected": true,
+  "ownHmsTabFound": true,
+  "ownHmsTab": {
+    "title": "HMS-PADDLE",
+    "url": "https://hms-paddle.com/#/game3",
+    "tabGroup": "🐉 HMS 批次B abc222 真独占"
+  },
+  "operation": "CLAIM_EXACT_OWN_HMS_TAB_AND_READ_DOM",
+  "result": "BROWSER_CONTROL_BRIDGE_TIMEOUT_AND_SESSION_RESET",
+  "pageDomRead": false,
+  "accountVerified": false,
+  "gameEntered": false,
+  "minimumBetObserved": false,
+  "historyObserved": false,
+  "realSpinAttempted": false,
+  "transactionCreated": false,
+  "formalOriginalHttpPaidRoundStarts": 0,
+  "continuation": "CONTINUE_OFFLINE_ARTIFACT_PREPARATION_WITHOUT_BLIND_BROWSER_RETRY",
+  "completionClaim": false
+}

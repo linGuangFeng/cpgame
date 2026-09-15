@@ -1,0 +1,310 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "rawGameId": 16,
+  "gameName": "Jungle Fruit",
+  "rulesVersion": "jf16-empirical-2026-09-08-v3",
+  "identity": {
+    "slug": "jungle-fruit",
+    "acceptedGid": "16",
+    "identityContract": "RAW_GID_ONLY"
+  },
+  "bet": {
+    "betLevels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "betSizes": [
+      0.05,
+      0.5,
+      2.5
+    ],
+    "minimumAuthorizedInputs": {
+      "bl": 1,
+      "bs": 0.05
+    },
+    "minimumBetAmount": 1,
+    "amountFormula": "bet_level * bet_size * 20",
+    "requestFields": [
+      "bet_level",
+      "bet_size"
+    ],
+    "compatibilityAliases": [
+      "bl",
+      "bs"
+    ],
+    "observedInputs": [
+      {
+        "bet_level": 1,
+        "bet_size": 0.05
+      },
+      {
+        "bet_level": 10,
+        "bet_size": 0.05
+      }
+    ]
+  },
+  "board": {
+    "columns": 6,
+    "rowsPerColumn": 6,
+    "symbolCount": 36,
+    "arrayOrder": "column-major",
+    "arrayIndex": "column*6+row",
+    "wirePosition": "column*10+row",
+    "payingSymbols": [
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "H5",
+      "A",
+      "K",
+      "Q",
+      "J",
+      "T"
+    ],
+    "specialSymbols": [
+      "Scat",
+      "X2",
+      "X3",
+      "X4",
+      "X5",
+      "X7",
+      "X15"
+    ],
+    "newerObservedMultiplierMaximum": {
+      "perBoard": 5,
+      "source": "spin-full-from-box.tgz:spin/round-1230/step-001.response.json",
+      "note": "Round starting at 1228 has terminal 5 X symbols. Generator remains conservatively limited to 4 by its training model."
+    }
+  },
+  "winModel": {
+    "type": "COUNT_ANYWHERE_TUMBLE",
+    "minimumCount": 8,
+    "maximumCount": 36,
+    "matching": "each paying symbol with total board count >=8 wins; win_match_key_list enumerates every occurrence using wirePosition",
+    "awardFormula": "sum(paytable[symbol][count] * bet_size * bet_level)",
+    "paylineCount": "NOT_APPLICABLE",
+    "tumble": "remove all winning positions in each column, preserve non-winning order at the bottom, and prepend newly generated symbols",
+    "evidenceValidation": {
+      "deliveryCount": 2852,
+      "winnerSetMismatches": 0,
+      "winnerPositionMismatches": 0,
+      "winAmountMismatches": 0,
+      "tumbleTransitionsChecked": 1224,
+      "tumbleTransitionMismatches": 0
+    }
+  },
+  "paytableBreakpoints": {
+    "resolution": "for count 8..36, use the value at the greatest breakpoint <= count",
+    "H1": {
+      "8": 40,
+      "9": 60,
+      "10": 80,
+      "11": 100,
+      "12": 150,
+      "14": 200,
+      "15": 300
+    },
+    "H2": {
+      "8": 30,
+      "9": 50,
+      "10": 60,
+      "11": 80,
+      "12": 100,
+      "14": 150,
+      "15": 250
+    },
+    "H3": {
+      "8": 25,
+      "9": 40,
+      "10": 50,
+      "11": 60,
+      "12": 80,
+      "14": 100,
+      "15": 200
+    },
+    "H4": {
+      "8": 20,
+      "9": 30,
+      "10": 40,
+      "11": 50,
+      "12": 60,
+      "14": 80,
+      "15": 150
+    },
+    "H5": {
+      "8": 20,
+      "9": 25,
+      "10": 30,
+      "11": 40,
+      "12": 50,
+      "14": 60,
+      "15": 100
+    },
+    "A": {
+      "8": 10,
+      "9": 15,
+      "10": 20,
+      "11": 30,
+      "12": 40,
+      "14": 50,
+      "15": 80
+    },
+    "K": {
+      "8": 9,
+      "9": 10,
+      "10": 15,
+      "11": 20,
+      "12": 30,
+      "14": 40,
+      "15": 60
+    },
+    "Q": {
+      "8": 8,
+      "9": 9,
+      "10": 10,
+      "11": 15,
+      "12": 20,
+      "14": 30,
+      "15": 50
+    },
+    "J": {
+      "8": 6,
+      "9": 8,
+      "10": 9,
+      "11": 10,
+      "12": 15,
+      "14": 25,
+      "15": 40
+    },
+    "T": {
+      "8": 5,
+      "9": 6,
+      "10": 8,
+      "11": 9,
+      "12": 10,
+      "14": 20,
+      "15": 30
+    }
+  },
+  "deliverySettlement": {
+    "continuation": "spin_status=0",
+    "segmentTerminal": "spin_status=1",
+    "continuationAccumulator": "when spin_status=0, round_win_amount equals previous continuing round_win_amount plus current win_amount; otherwise it begins at current win_amount",
+    "terminalMultiplier": "on the following spin_status=1 Step, round_win_amount equals the preceding accumulator multiplied by sum(numeric X values in terminal win_x_key_list), or x1 when the list is empty",
+    "terminalMultiplierEvidence": {
+      "segmentsChecked": 371,
+      "mismatches": 0
+    },
+    "roundPayout": "sum round_win_amount of every Step whose spin_status==1",
+    "currencyArithmetic": "decimal/integer-cent; never binary floating point",
+    "terminalPayRelationship": "spin_status=0 iff win_amount>0; all 2852 earlier original responses satisfy it"
+  },
+  "specialModes": {
+    "MARY_SMALL_GAME": {
+      "predicate": "any Step small_game_type==1",
+      "observedCompleteRounds": 164,
+      "state": "paid winning Step begins with small_game_type=0 and spin_status=0; subsequent small-game deliveries use small_game_type=1 until a terminal spin_status=1 Step",
+      "payout": "the terminal X multiplier settles the continuing accumulator"
+    },
+    "SCATTER_FREE_ROUNDS": {
+      "predicate": "any Step small_game_type==2 or free_spin_num>0",
+      "observedCompleteRounds": 36,
+      "initialAward": {
+        "3 Scat": 10,
+        "4 Scat": 12,
+        "5 Scat": 14
+      },
+      "retrigger": "during Free mode, exactly 2 Scat on a segment-terminal Step adds 5 to free_spin_num",
+      "retriggerEventsChecked": 26,
+      "retriggerMismatches": 0,
+      "terminal": "now_free_spin_count==free_spin_num on the final Step"
+    }
+  },
+  "round": {
+    "paidStart": "POST /cp/api/v1/jungle-fruit/spin with bet_level/bet_size and raw gid 16 via body or game-id header, while no active Round exists",
+    "generationBoundary": "Loader generates and verifies complete Rounds offline; API only claims one immutable Redis member and projects its Steps",
+    "deliveryBoundary": "one HTTP Spin response projects exactly the next ordered Step",
+    "consumption": "an active session consumes all remaining Deliveries from the same roundKey and may not claim another member",
+    "historyFinalization": "write exactly one History row/detail after all Deliveries have been consumed",
+    "observed": {
+      "paidStarts": 1126,
+      "completeRounds": 1126,
+      "steps": 2852,
+      "historyMatches": 1126
+    }
+  },
+  "history": {
+    "detailStepOrder": "base_spin_list followed by free_spin_list",
+    "exactCorrelationKeys": [
+      "top-level transferId string",
+      "row.tis string",
+      "bid suffix"
+    ],
+    "unsafeCorrelationKey": "row.transfer_id JSON Number",
+    "balanceEquation": "detail.balance_after + row.win_amount == terminal player.balance",
+    "balanceMeaning": "post-bet, pre-payout balance"
+  },
+  "unknowns": {
+    "originSymbolWeights": "UNKNOWN",
+    "originModeProbabilities": "UNKNOWN",
+    "originRedisConsumerContract": "UNKNOWN",
+    "maximumOriginalWin": "UNKNOWN"
+  },
+  "evidence": [
+    "captures/16-Jungle-Fruit/original-http-preflight.json",
+    "captures/16-Jungle-Fruit/original-http-spin-index.jsonl",
+    "captures/16-Jungle-Fruit/round-index.jsonl",
+    "captures/16-Jungle-Fruit/history-1to1.jsonl",
+    "captures/16-Jungle-Fruit/history-finalization.json",
+    "fixtures/16-Jungle-Fruit/spin-full-from-box.tgz",
+    "resources/16-Jungle-Fruit/language-evidence.json",
+    "resources/16-Jungle-Fruit/en/static.cpgame.io/16/assets/main/index.ea468.js"
+  ],
+  "runtimeContract": {
+    "redisHost": "192.168.10.3",
+    "redisPort": 6379,
+    "redisDatabase": 15,
+    "namespace": "cpgame:runtime:16:jungle-fruit:empirical-v1",
+    "paidSelection": "SecureRandom chooses loss/win, then uniformly chooses an existing exact integer payout multiplier; atomically LPOP one member; no generation or fixture fallback",
+    "integerMultiplier": "exact payout/paidBet; fractional candidates excluded from Loader pools; never floor payout into a different bucket",
+    "lossSource": "prewritten Redis member",
+    "exclusiveOrdinaryWin": "UNOBSERVED_NOT_GENERATED",
+    "generatorModelSha256": "0d46ea41b87e22e433f21acdcf5f536b1fbcd1120200b25923a71ae3688757e2"
+  },
+  "generationConstraints": {
+    "source": "reports/16-Jungle-Fruit/distribution-model.json",
+    "trainingCompleteRounds": 1026,
+    "excludedHoldoutRounds": 100,
+    "model": "weighted column blocks by entry/column/exact replacement length; whole-candidate rejection",
+    "maxCascadesPerSegment": 18,
+    "maxFreeSpins": 25,
+    "maxScatterPerColumn": 1,
+    "maxMultiplierPerColumn": 2,
+    "maxScatterPerBoard": 5,
+    "maxMultiplierPerBoard": 4,
+    "scope": "conservative observed bounds; not an assertion of original theoretical limits"
+  },
+  "supportedLanguageCodes": [
+    "bn",
+    "en",
+    "es",
+    "fr",
+    "id",
+    "ko",
+    "pt-br",
+    "th",
+    "tr",
+    "vi"
+  ],
+  "rulesHash": "164088c0440871c9bc33b631a1b6bfa5e00d3012db3b0e3694bb59ac683e1743"
+}

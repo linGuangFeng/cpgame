@@ -1,0 +1,1 @@
+http://192.168.24.37:52809/?ai=luck_single_10229&btt=1&gid=2260&l=pt&language=pt-br&sip=192.168.24.37%3A52809&t=local-replay&token=local-replay

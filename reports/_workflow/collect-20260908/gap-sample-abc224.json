@@ -1,0 +1,44 @@
+{
+  "worker": "abc224",
+  "alive": true,
+  "phase": "DONE",
+  "games": {
+    "1380-Hidden-Realm": {
+      "status": "SAMPLE_DONE",
+      "LOSS": 657,
+      "WIN": 0,
+      "SPECIAL": 243,
+      "paid": 900,
+      "completeSpecial": 243,
+      "history": {
+        "goldDays": 0,
+        "detailLists": [
+          {
+            "day": 1788825600,
+            "n": 0
+          }
+        ]
+      }
+    },
+    "1780-Glacier-Treasure": {
+      "status": "SAMPLE_DONE",
+      "LOSS": 725,
+      "WIN": 122,
+      "SPECIAL": 53,
+      "paid": 900,
+      "completeSpecial": 0,
+      "history": {
+        "goldDays": 0,
+        "detailLists": [
+          {
+            "day": 1788825600,
+            "n": 0
+          }
+        ]
+      }
+    }
+  },
+  "currentGame": null,
+  "updatedAt": "2026-09-08T18:41:23.787Z",
+  "error": null
+}

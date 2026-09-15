@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 2,
+  "gameId": 1407,
+  "cpGameId": 55,
+  "gameName": "Coin Master GO",
+  "basePath": "/cp/api/v1",
+  "transport": {
+    "method": "POST",
+    "requestContentType": "application/x-www-form-urlencoded",
+    "response": "UTF-8 JSON",
+    "successEnvelope": {
+      "code": 200,
+      "info": "ok",
+      "data": "endpoint-specific object"
+    },
+    "clientBehavior": "resolve with data only when HTTP is 2xx and envelope code loosely equals 200; otherwise reject the envelope",
+    "headerAliasBehavior": "the caller supplies web-token and game-id as logical headers, but Http.post copies them into form fields t and gid",
+    "encryption": "none observed"
+  },
+  "requestOrder": [
+    "POST /auth/verify",
+    "POST /go-master/config",
+    "zero or more POST /go-master/spin",
+    "optional POST /go-master/log-list followed by /go-master/log-view",
+    "optional POST /ping only when auth ping.enable is nonzero"
+  ],
+  "endpoints": [
+    {
+      "id": "auth.verify",
+      "path": "/auth/verify",
+      "requestFields": {
+        "ai": "platform application/agent identifier from launch URL",
+        "btt": "launch URL value passed through unchanged",
+        "t": "platform launch token",
+        "gid": "55"
+      },
+      "responseFields": [
+        "player.balance",
+        "player.id",
+        "token",
+        "ping.enable",
+        "ping.seconds",
+        "rc",
+        "gc"
+      ],
+      "next": "config",
+      "evidence": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json#/verify"
+    },
+    {
+      "id": "game.config",
+      "path": "/go-master/config",
+      "requestFields": {
+        "t": "auth.verify response token",
+        "gid": "55"
+      },
+      "responseFields": [
+        "auto",
+        "bll",
+        "bsl",
+        "cc",
+        "cs",
+        "dbl",
+        "dbs",
+        "last",
+        "ls",
+        "spl",
+        "ts"
+      ],
+      "semanticNotes": {
+        "last": "compact resumable game state consumed by the live game",
+        "ls": "history-style last-spin summary with expanded field names",
+        "spl": "authoritative symbol pay multipliers",
+        "dbl": "default bet level",
+        "dbs": "default bet size"
+      },
+      "next": "operational game",
+      "evidence": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json#/config"
+    },
+    {
+      "id": "game.spin",
+      "path": "/go-master/spin",
+      "requestFields": {
+        "bl": "selected bet level",
+        "bs": "selected bet size",
+        "t": "auth token alias",
+        "gid": "55"
+      },
+      "responseFields": [
+        "ba",
+        "frwa",
+        "fsn",
+        "gfl",
+        "gt",
+        "nfsc",
+        "pb",
+        "rpx",
+        "rskl",
+        "rwa",
+        "small_game_type",
+        "ss",
+        "wa",
+        "wmkl",
+        "wskl"
+      ],
+      "stateMachine": "state-machine.json",
+      "evidence": "captures/1407-Coin-Master-GO/step-index.jsonl",
+      "paidSpinIndex": "captures/1407-Coin-Master-GO/spin-index.jsonl"
+    },
+    {
+      "id": "history.list",
+      "path": "/go-master/log-list",
+      "requestFields": {
+        "page_index": "one-based page",
+        "begin_at": "Unix seconds",
+        "end_at": "Unix seconds",
+        "t": "auth token alias",
+        "gid": "55"
+      },
+      "responseFields": [
+        "ba",
+        "end",
+        "lc",
+        "ll",
+        "wa"
+      ],
+      "rowFields": [
+        "ba",
+        "baf",
+        "bid",
+        "ca",
+        "fe",
+        "gm",
+        "gt",
+        "tis",
+        "wa"
+      ],
+      "evidence": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/history-capture.json#/list"
+    },
+    {
+      "id": "history.detail",
+      "path": "/go-master/log-view",
+      "requestFields": {
+        "transfer_id": "history list tis",
+        "t": "auth token alias",
+        "gid": "55"
+      },
+      "responseFields": [
+        "baf",
+        "bid",
+        "bsl",
+        "fsl"
+      ],
+      "normalization": "config.last uses wmkl objects and the client extracts each object's wmk; live spin already returns wmkl as arrays; history detail retains objects containing sk, wa and wmk",
+      "evidence": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/history-capture.json#/detail",
+      "historyStepFields": [
+        "ba",
+        "bid",
+        "bl",
+        "bs",
+        "ca",
+        "frwa",
+        "fsn",
+        "gfl",
+        "gt",
+        "nfsc",
+        "pb",
+        "rpx",
+        "rskl",
+        "rwa",
+        "small_game_type",
+        "ss",
+        "wa",
+        "wmkl",
+        "wskl"
+      ],
+      "freeRoundEvidence": {
+        "confirmed": true,
+        "freeDetails": 19,
+        "retriggerDetails": 4,
+        "evidence": "captures/1407-Coin-Master-GO/history-special-details.jsonl"
+      }
+    },
+    {
+      "id": "session.ping",
+      "path": "/ping",
+      "requestFields": {
+        "t": "auth token alias",
+        "gid": "55"
+      },
+      "condition": "only when ping.enable is true; captured auth returned enable=0",
+      "evidence": "frontend HeartMgr plus session-and-config.json#/verify/response/json/data/ping"
+    }
+  ],
+  "moneyAndSettlement": {
+    "betDebit": "on the paid Step, pb is reduced by ba",
+    "intermediateSteps": "pb remains at the post-debit value even while wa and rwa grow",
+    "finalCredit": "only the final Round terminal Step exposes pb = postDebitBalance + rwa",
+    "verifiedSettlementMismatches": 0
+  },
+  "historyRelation": {
+    "oneHistoryListRowPerPaidRound": true,
+    "listTransferIdField": "tis",
+    "detailTransferIdRequestField": "transfer_id",
+    "detailBaseSteps": "bsl",
+    "detailFreeSteps": "fsl confirmed in 19 current-game History details, including 4 retrigger details",
+    "bidRelation": "top-level history bid identifies the paid Round; continuation Steps receive related but distinct bid values",
+    "capturedDetailScan": {
+      "uniqueTransferIds": 502,
+      "listPages": 51,
+      "evidence": "captures/1407-Coin-Master-GO/history-special-index.json"
+    }
+  },
+  "unknownFieldPolicy": {
+    "notConfirmed": [
+      "fbt",
+      "fcg",
+      "bx",
+      "wsk",
+      "ec"
+    ],
+    "rule": "do not emit these fields in generated runtime responses unless later current-game evidence establishes their contract"
+  },
+  "authoritativeCapabilities": "game-capabilities.json",
+  "fieldMatrix": "../../reports/1407-Coin-Master-GO/field-evidence-matrix.json",
+  "generatedAt": "2026-09-01T18:52:00+08:00",
+  "roundCapture": {
+    "spinCount": 501,
+    "paidRoundCount": 501,
+    "stepCount": 1470,
+    "indexedSteps": 1470,
+    "paidRoundStarts": 501,
+    "completeRounds": 500,
+    "incompletePreservedGaps": 1,
+    "evidence": [
+      "captures/1407-Coin-Master-GO/spin-index.jsonl",
+      "captures/1407-Coin-Master-GO/step-index.jsonl",
+      "captures/1407-Coin-Master-GO/round-index.jsonl"
+    ],
+    "countSemantics": "spinCount counts ba>0 paid Round starts only; stepCount counts all HTTP exchanges assigned to those Rounds",
+    "paidSpinPolicy": {
+      "maximum": 1000,
+      "minimum": null,
+      "stopWhenEvidenceSufficient": true
+    }
+  },
+  "freeSpinEvidence": {
+    "capturedInitialTriggerEvents": 19,
+    "capturedRetriggerRounds": 4,
+    "capturedRetriggerEvents": 5,
+    "observedRetriggerTransitions": [
+      {
+        "transition": "12->24",
+        "count": 3
+      },
+      {
+        "transition": "12->26",
+        "count": 1
+      },
+      {
+        "transition": "24->36",
+        "count": 1
+      }
+    ],
+    "retriggerEvents": [
+      {
+        "roundStartScene": 171,
+        "sceneIndex": 187,
+        "fromFsn": 12,
+        "toFsn": 24,
+        "nfsc": 6,
+        "gt": 2,
+        "ss": 1
+      },
+      {
+        "roundStartScene": 612,
+        "sceneIndex": 636,
+        "fromFsn": 12,
+        "toFsn": 26,
+        "nfsc": 11,
+        "gt": 2,
+        "ss": 1
+      },
+      {
+        "roundStartScene": 813,
+        "sceneIndex": 819,
+        "fromFsn": 12,
+        "toFsn": 24,
+        "nfsc": 3,
+        "gt": 2,
+        "ss": 1
+      },
+      {
+        "roundStartScene": 813,
+        "sceneIndex": 833,
+        "fromFsn": 24,
+        "toFsn": 36,
+        "nfsc": 9,
+        "gt": 2,
+        "ss": 1
+      },
+      {
+        "roundStartScene": 1235,
+        "sceneIndex": 1262,
+        "fromFsn": 12,
+        "toFsn": 24,
+        "nfsc": 10,
+        "gt": 2,
+        "ss": 1
+      }
+    ],
+    "multipleRetriggersInOneRound": true
+  },
+  "rulesVersion": "1407-mac-evidence-v18.4",
+  "rulesHash": "08727f7e5a890dcd1b3cf5ae9559474ef9ea98c6e9a09ac34b7d53598ba1662f",
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "08727f7e5a890dcd1b3cf5ae9559474ef9ea98c6e9a09ac34b7d53598ba1662f",
+    "behaviorCount": 23,
+    "unresolvedBehaviorCount": 7
+  }
+}

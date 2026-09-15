@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "gameId": 1910,
+  "rulesHash": "UNRESOLVED_PRE_COLLECTION",
+  "status": "EVIDENCE_REQUIRED",
+  "redisKeysDeclared": false,
+  "codecDeclared": false,
+  "membersGenerated": 0,
+  "writesPerformed": 0,
+  "reason": "Current-game Redis key, codec and result rules are unknown; no example contract was copied"
+}

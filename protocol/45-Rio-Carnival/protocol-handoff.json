@@ -1,0 +1,1416 @@
+{
+  "schemaVersion": 5,
+  "gameId": 45,
+  "gameName": "Rio Carnival",
+  "rulesHash": "sha256:515ffa3a4f803e36d44a1a50da1ce79b4c1df2e75a79893a18cd404aecc0565c",
+  "behaviorIds": [
+    "B-CATALOG-IDENTITY",
+    "B-AUTHENTICATED-STARTUP",
+    "B-GAME-LANGUAGE-FIRSTLOAD",
+    "B-HTTP-CODEC",
+    "B-INITIALIZATION-SEQUENCE",
+    "B-CONFIG-SEMANTICS",
+    "B-SESSION-RESUME-SNAPSHOT",
+    "B-FIXED-PAYLINES",
+    "B-PAYTABLE-PAYOUT",
+    "B-WILD-RULE",
+    "B-SPIN-REQUEST-CONSTRUCTION",
+    "B-ROUND-DELIVERY-STATE-MACHINE",
+    "B-FREE-SPINS-RULE",
+    "B-ORDINARY-OUTCOMES",
+    "B-BALANCE-SETTLEMENT",
+    "B-HISTORY-ENDPOINTS",
+    "B-ERROR-HANDLING",
+    "B-NO-BUY-ENTRY",
+    "B-FRONTEND-REEL-COUNTS-NOT-RNG"
+  ],
+  "stateDefinitions": {
+    "IDLE": "No active complete Round; the next paid spin claims exactly one Redis member.",
+    "PAID_START_DELIVERED": "Step 0 of one claimed Round was delivered; ba>0, ss=1 and nfsc=0.",
+    "FREE_DELIVERY_ACTIVE": "The same claimed Round is active; continuation Steps have ba=0, gt=2, small_game_type=2 and monotonic nfsc.",
+    "TERMINAL": "The claimed Round ends only when ss=1 and fsn=nfsc; final rwa is settled once and History is appended."
+  },
+  "rulesHashBasis": "SHA-256 of the current-game frontend main bundle index.76d7e.js",
+  "status": "READY_FOR_PROTOCOL_REVIEW",
+  "evidenceInventory": [
+    {
+      "id": "E-CATALOG",
+      "source": "resources/45-Rio-Carnival/source-catalog-evidence.json",
+      "behaviorIds": [
+        "B-CATALOG-IDENTITY"
+      ]
+    },
+    {
+      "id": "E-AUTH-STARTUP",
+      "source": "captures/45-Rio-Carnival/authenticated-startup-evidence.json",
+      "behaviorIds": [
+        "B-CATALOG-IDENTITY",
+        "B-AUTHENTICATED-STARTUP",
+        "B-INITIALIZATION-SEQUENCE"
+      ]
+    },
+    {
+      "id": "E-MAIN-CODE",
+      "source": "resources/45-Rio-Carnival/pt-br/game-first-load/_hosts/static.cpgame.io/45/assets/main/index.76d7e.js",
+      "behaviorIds": [
+        "B-AUTHENTICATED-STARTUP",
+        "B-GAME-LANGUAGE-FIRSTLOAD",
+        "B-HTTP-CODEC",
+        "B-INITIALIZATION-SEQUENCE",
+        "B-CONFIG-SEMANTICS",
+        "B-SESSION-RESUME-SNAPSHOT",
+        "B-FIXED-PAYLINES",
+        "B-PAYTABLE-PAYOUT",
+        "B-WILD-RULE",
+        "B-SPIN-REQUEST-CONSTRUCTION",
+        "B-ROUND-DELIVERY-STATE-MACHINE",
+        "B-FREE-SPINS-RULE",
+        "B-ORDINARY-OUTCOMES",
+        "B-HISTORY-ENDPOINTS",
+        "B-ERROR-HANDLING",
+        "B-NO-BUY-ENTRY",
+        "B-FRONTEND-REEL-COUNTS-NOT-RNG"
+      ]
+    },
+    {
+      "id": "E-RULES-UI",
+      "source": "captures/45-Rio-Carnival/rules-ui-text-pt.json",
+      "behaviorIds": [
+        "B-FIXED-PAYLINES",
+        "B-PAYTABLE-PAYOUT",
+        "B-WILD-RULE",
+        "B-FREE-SPINS-RULE",
+        "B-NO-BUY-ENTRY"
+      ]
+    },
+    {
+      "id": "E-PAYTABLE-UI",
+      "source": "captures/45-Rio-Carnival/paytable-ui-text-pt.json",
+      "behaviorIds": [
+        "B-FIXED-PAYLINES",
+        "B-PAYTABLE-PAYOUT",
+        "B-WILD-RULE",
+        "B-FREE-SPINS-RULE",
+        "B-NO-BUY-ENTRY"
+      ]
+    },
+    {
+      "id": "E-RULES-SCREENSHOT",
+      "source": "screenshots/45-Rio-Carnival/rio-carnival-rules.png",
+      "behaviorIds": [
+        "B-FIXED-PAYLINES"
+      ]
+    },
+    {
+      "id": "E-MAIN-SCREENSHOT",
+      "source": "screenshots/45-Rio-Carnival/rio-carnival-main.png",
+      "behaviorIds": [
+        "B-CATALOG-IDENTITY",
+        "B-CONFIG-SEMANTICS"
+      ]
+    },
+    {
+      "id": "E-VERIFY",
+      "source": "fixtures/45-Rio-Carnival/first-load-api/cp/api/v1/auth/verify.json",
+      "behaviorIds": [
+        "B-INITIALIZATION-SEQUENCE",
+        "B-CONFIG-SEMANTICS",
+        "B-ERROR-HANDLING"
+      ]
+    },
+    {
+      "id": "E-CONFIG",
+      "source": "fixtures/45-Rio-Carnival/first-load-api/cp/api/v1/rio-carnival/config.json",
+      "behaviorIds": [
+        "B-INITIALIZATION-SEQUENCE",
+        "B-CONFIG-SEMANTICS",
+        "B-SESSION-RESUME-SNAPSHOT",
+        "B-FIXED-PAYLINES",
+        "B-PAYTABLE-PAYOUT",
+        "B-SPIN-REQUEST-CONSTRUCTION"
+      ]
+    },
+    {
+      "id": "E-FIRST-SPIN",
+      "source": "fixtures/45-Rio-Carnival/first-load-api/cp/api/v1/rio-carnival/spin.json",
+      "behaviorIds": [
+        "B-HTTP-CODEC",
+        "B-ROUND-DELIVERY-STATE-MACHINE",
+        "B-ORDINARY-OUTCOMES",
+        "B-BALANCE-SETTLEMENT"
+      ]
+    },
+    {
+      "id": "E-FIRSTLOAD-PT",
+      "source": "captures/45-Rio-Carnival/first-load-pt-br-network.json",
+      "behaviorIds": [
+        "B-GAME-LANGUAGE-FIRSTLOAD",
+        "B-INITIALIZATION-SEQUENCE",
+        "B-CONFIG-SEMANTICS"
+      ]
+    },
+    {
+      "id": "E-LANGUAGE-INVENTORY",
+      "source": "reports/45-Rio-Carnival/language-inventory.json",
+      "behaviorIds": [
+        "B-GAME-LANGUAGE-FIRSTLOAD"
+      ]
+    },
+    {
+      "id": "E-FIRSTLOAD-ALL",
+      "source": "captures/45-Rio-Carnival/first-load-all-language-evidence.json",
+      "behaviorIds": [
+        "B-GAME-LANGUAGE-FIRSTLOAD"
+      ]
+    },
+    {
+      "id": "E-SPIN-PROBE",
+      "source": "captures/45-Rio-Carnival/spin-probe-pt-br-network.json",
+      "behaviorIds": [
+        "B-HTTP-CODEC",
+        "B-SPIN-REQUEST-CONSTRUCTION",
+        "B-ROUND-DELIVERY-STATE-MACHINE"
+      ]
+    },
+    {
+      "id": "E-SPIN-INDEX",
+      "source": "captures/45-Rio-Carnival/spin-index.jsonl",
+      "behaviorIds": [
+        "B-ROUND-DELIVERY-STATE-MACHINE",
+        "B-FREE-SPINS-RULE",
+        "B-ORDINARY-OUTCOMES"
+      ]
+    },
+    {
+      "id": "E-COMPLETE-ROUNDS",
+      "source": "fixtures/45-Rio-Carnival/complete-rounds",
+      "behaviorIds": [
+        "B-SESSION-RESUME-SNAPSHOT",
+        "B-FIXED-PAYLINES",
+        "B-PAYTABLE-PAYOUT",
+        "B-WILD-RULE",
+        "B-ROUND-DELIVERY-STATE-MACHINE",
+        "B-FREE-SPINS-RULE",
+        "B-ORDINARY-OUTCOMES",
+        "B-BALANCE-SETTLEMENT",
+        "B-FRONTEND-REEL-COUNTS-NOT-RNG"
+      ]
+    },
+    {
+      "id": "E-ROUND-132",
+      "source": "fixtures/45-Rio-Carnival/complete-rounds/round-000132.json",
+      "behaviorIds": [
+        "B-ROUND-DELIVERY-STATE-MACHINE",
+        "B-FREE-SPINS-RULE",
+        "B-BALANCE-SETTLEMENT"
+      ]
+    },
+    {
+      "id": "E-REGROUP-AUDIT",
+      "source": "captures/45-Rio-Carnival/round-regroup-audit.json",
+      "behaviorIds": [
+        "B-ROUND-DELIVERY-STATE-MACHINE",
+        "B-FREE-SPINS-RULE",
+        "B-ORDINARY-OUTCOMES"
+      ]
+    },
+    {
+      "id": "E-SCENARIO-COVERAGE",
+      "source": "reports/45-Rio-Carnival/scenario-coverage.json",
+      "behaviorIds": [
+        "B-FREE-SPINS-RULE",
+        "B-ORDINARY-OUTCOMES"
+      ]
+    },
+    {
+      "id": "E-PROTOCOL-VALIDATION",
+      "source": "reports/45-Rio-Carnival/protocol-analysis-validation.json",
+      "behaviorIds": [],
+      "disposition": "DERIVED_VALIDATION_REPORT",
+      "reason": "该项用于文档、审计或派生验证，不作为行为的独立原始 oracle。"
+    },
+    {
+      "id": "E-RULE-MATRIX",
+      "source": "protocol/45-Rio-Carnival/rule-evidence-matrix.json",
+      "behaviorIds": [],
+      "disposition": "CROSS_SOURCE_TRACEABILITY",
+      "reason": "Analysis matrix summarizes independent sources and is not itself treated as an oracle."
+    },
+    {
+      "id": "E-PROTOCOL-SPEC",
+      "source": "protocol/45-Rio-Carnival/protocol-spec.json",
+      "behaviorIds": [],
+      "disposition": "DERIVED_SPECIFICATION",
+      "reason": "Specification is derived from the inventoried original evidence and is not circular verification evidence."
+    },
+    {
+      "id": "E-RAW-SEGMENTS",
+      "source": "fixtures/45-Rio-Carnival/rounds",
+      "behaviorIds": [],
+      "disposition": "FORENSIC_RAW_STEP_STREAM_ONLY",
+      "reason": "Collector segments are not complete Rounds; regroup audit assigns each source Step exactly once."
+    },
+    {
+      "id": "E-RULES-NETWORK",
+      "source": "captures/45-Rio-Carnival/rules-pt-br-network.json",
+      "behaviorIds": [],
+      "disposition": "LAZY_LOAD_OBSERVATION",
+      "reason": "Rules UI produced no additional request because its assets were already in the captured first-load bundles."
+    },
+    {
+      "id": "E-PAYTABLE-NETWORK",
+      "source": "captures/45-Rio-Carnival/paytable-pt-br-network.json",
+      "behaviorIds": [],
+      "disposition": "LAZY_LOAD_OBSERVATION",
+      "reason": "Paytable UI produced no additional request because its assets were already in the captured first-load bundles."
+    },
+    {
+      "id": "E-STATIC-VALIDATION",
+      "source": "reports/45-Rio-Carnival/static-publish-validation.json",
+      "behaviorIds": [
+        "B-GAME-LANGUAGE-FIRSTLOAD"
+      ]
+    },
+    {
+      "id": "E-ENTRY-VALIDATION",
+      "source": "reports/45-Rio-Carnival/entry-capture-validation.json",
+      "behaviorIds": [],
+      "disposition": "CAPTURE_INTEGRITY_AUDIT",
+      "reason": "Validates counts and credential redaction; behavioral assertions use the underlying sources above."
+    },
+    {
+      "id": "E-HISTORY-ADJACENT",
+      "source": "captures/45-Rio-Carnival/history-adjacent-evidence.json",
+      "behaviorIds": [
+        "B-HISTORY-ENDPOINTS"
+      ]
+    },
+    {
+      "id": "E-HISTORY-LIST-P1",
+      "source": "fixtures/45-Rio-Carnival/protocol-evidence/history/log-list-page-1.json",
+      "behaviorIds": [
+        "B-HISTORY-ENDPOINTS"
+      ]
+    },
+    {
+      "id": "E-HISTORY-LIST-P2",
+      "source": "fixtures/45-Rio-Carnival/protocol-evidence/history/log-list-page-2.json",
+      "behaviorIds": [
+        "B-HISTORY-ENDPOINTS"
+      ]
+    },
+    {
+      "id": "E-HISTORY-SELECTION",
+      "source": "fixtures/45-Rio-Carnival/protocol-evidence/history/log-list-selection.json",
+      "behaviorIds": [
+        "B-HISTORY-ENDPOINTS"
+      ]
+    },
+    {
+      "id": "E-HISTORY-DETAIL",
+      "source": "fixtures/45-Rio-Carnival/protocol-evidence/history/log-view.json",
+      "behaviorIds": [
+        "B-HISTORY-ENDPOINTS"
+      ]
+    },
+    {
+      "id": "E-SESSION-RESUME-ADJACENT",
+      "source": "captures/45-Rio-Carnival/session-resume-adjacent-evidence.json",
+      "behaviorIds": [
+        "B-SESSION-RESUME-SNAPSHOT"
+      ]
+    },
+    {
+      "id": "E-SESSION-CONFIG-LAST",
+      "source": "fixtures/45-Rio-Carnival/protocol-evidence/recovery/reload-config-active-last.json",
+      "behaviorIds": [
+        "B-SESSION-RESUME-SNAPSHOT"
+      ]
+    },
+    {
+      "id": "E-ROUND-1406",
+      "source": "fixtures/45-Rio-Carnival/complete-rounds/round-001406.json",
+      "behaviorIds": [
+        "B-SESSION-RESUME-SNAPSHOT"
+      ]
+    },
+    {
+      "id": "E-PROTOCOL-SPEC-MD",
+      "source": "protocol/45-Rio-Carnival/protocol-spec.md",
+      "behaviorIds": [],
+      "disposition": "DOCUMENTATION_OR_AUDIT_ONLY",
+      "reason": "该项用于文档、审计或派生验证，不作为行为的独立原始 oracle。"
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-CATALOG-IDENTITY",
+      "category": "ENTRY_IDENTITY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-CATALOG",
+        "E-AUTH-STARTUP",
+        "E-MAIN-SCREENSHOT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "current CP platform catalog"
+        ],
+        "stateFields": [
+          "catalogItemId",
+          "platformGameId",
+          "resourceCode",
+          "iframe gid"
+        ],
+        "transitionRules": [
+          "catalog item 1401 starts provider resource path /45/"
+        ],
+        "outputs": [
+          "gameId=45",
+          "gameName=Rio Carnival",
+          "directoryName=45-Rio-Carnival"
+        ],
+        "terminationRules": [
+          "page title and visible game mark both identify Rio Carnival"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-CATALOG",
+          "E-AUTH-STARTUP"
+        ],
+        "assertions": [
+          "catalog item is 1401",
+          "platform g_id is 447",
+          "resource code is 50045",
+          "provider gid is 45"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-AUTHENTICATED-STARTUP",
+      "category": "ENTRY_STARTUP",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-AUTH-STARTUP",
+        "E-MAIN-CODE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "authenticated isolated assigned-account session",
+          "catalog item 1401 selected"
+        ],
+        "stateFields": [
+          "platform authentication",
+          "game_id",
+          "data.game_url",
+          "iframe src",
+          "provider launch t"
+        ],
+        "transitionRules": [
+          "GET startup for game_id=1401",
+          "load returned /45/ iframe without persisting credentials"
+        ],
+        "outputs": [
+          "Rio Carnival game document"
+        ],
+        "terminationRules": [
+          "provider auth and config sequence completes"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-AUTH-STARTUP"
+        ],
+        "assertions": [
+          "iframe gid equals 45",
+          "provider API base is api.omgapibra.com/cp/api/v1",
+          "tokens are redacted"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "E-AUTH-STARTUP: catalog 1401 -> startup response -> redacted /45/ iframe -> Rio Carnival title"
+        ]
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-GAME-LANGUAGE-FIRSTLOAD",
+      "category": "LOCALIZATION",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-FIRSTLOAD-PT",
+        "E-LANGUAGE-INVENTORY",
+        "E-FIRSTLOAD-ALL",
+        "E-STATIC-VALIDATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "l is one of en,pt,es,th,vi,id,bn,ko,fr,tr"
+        ],
+        "stateFields": [
+          "query l",
+          "secondary language",
+          "LanguageManager current language"
+        ],
+        "transitionRules": [
+          "set l before navigation",
+          "select localized bundle assets",
+          "reuse shared versioned resources"
+        ],
+        "outputs": [
+          "localized playable first load"
+        ],
+        "terminationRules": [
+          "selected language is applied and local static/API first load has no failure"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FIRSTLOAD-ALL",
+          "E-LANGUAGE-INVENTORY",
+          "E-STATIC-VALIDATION"
+        ],
+        "assertions": [
+          "exactly ten supported codes",
+          "all ten original first loads captured",
+          "all ten local browser runs pass"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "l=<each code> navigation -> matching first-load manifest -> browser GameCanvas loaded for all ten codes"
+        ]
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-HTTP-CODEC",
+      "category": "PROTOCOL_CODEC",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-SPIN-PROBE",
+        "E-FIRST-SPIN"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "endpoint and request fields selected"
+        ],
+        "stateFields": [
+          "form fields",
+          "game-id",
+          "web-token",
+          "HTTP status",
+          "envelope code"
+        ],
+        "transitionRules": [
+          "map game-id to gid and web-token to t",
+          "encode form using encodeURIComponent and + spaces",
+          "parse plain JSON envelope",
+          "do not encrypt or decrypt payload"
+        ],
+        "outputs": [
+          "data object on HTTP 2xx/code 200 or structured rejection"
+        ],
+        "terminationRules": [
+          "response reaches readyState 4 and envelope rule is applied"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-MAIN-CODE",
+          "E-SPIN-PROBE"
+        ],
+        "assertions": [
+          "spin body is bl=1&bs=0.02&t=<redacted>&gid=45",
+          "content type is form-urlencoded",
+          "response is plain JSON",
+          "no cipher stage exists in current Http module"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-INITIALIZATION-SEQUENCE",
+      "category": "PROTOCOL_SEQUENCE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-AUTH-STARTUP",
+        "E-MAIN-CODE",
+        "E-VERIFY",
+        "E-FIRSTLOAD-PT",
+        "E-CONFIG"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "iframe query parsed",
+          "game id 45"
+        ],
+        "stateFields": [
+          "launch t",
+          "provider token",
+          "player",
+          "ping",
+          "config"
+        ],
+        "transitionRules": [
+          "load static runtime",
+          "POST auth/verify",
+          "store returned provider token/player",
+          "POST rio-carnival/config with t/gid",
+          "enable play after config"
+        ],
+        "outputs": [
+          "initialized player and game config"
+        ],
+        "terminationRules": [
+          "config succeeds or UI error branch terminates loading"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FIRSTLOAD-PT",
+          "E-VERIFY",
+          "E-CONFIG"
+        ],
+        "assertions": [
+          "auth/verify precedes config in capture",
+          "verify returns player and provider token",
+          "config supplies bet/currency/paytable"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "E-FIRSTLOAD-PT request 39 auth/verify -> request 80 rio-carnival/config"
+        ]
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-CONFIG-SEMANTICS",
+      "category": "INIT_CONFIG",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-VERIFY",
+        "E-CONFIG",
+        "E-FIRSTLOAD-PT",
+        "E-MAIN-SCREENSHOT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "verified provider token"
+        ],
+        "stateFields": [
+          "auto",
+          "bll",
+          "bsl",
+          "cc",
+          "cs",
+          "dbl",
+          "dbs",
+          "spl",
+          "last",
+          "ts"
+        ],
+        "transitionRules": [
+          "set currency and bet lists from config",
+          "select defaults dbs/dbl",
+          "compute total bet as bs*bl*25",
+          "consume only current-game fields"
+        ],
+        "outputs": [
+          "playable config and minimum total bet 0.50 BRL"
+        ],
+        "terminationRules": [
+          "GameLogic initialized with current config"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-CONFIG",
+          "E-MAIN-SCREENSHOT"
+        ],
+        "assertions": [
+          "bsl is 0.02,0.12,0.4,0.8",
+          "bll is 1..10",
+          "minimum is R$0.50",
+          "captured last is null"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-SESSION-RESUME-SNAPSHOT",
+      "category": "SESSION_STATE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-CONFIG",
+        "E-COMPLETE-ROUNDS",
+        "E-SESSION-RESUME-ADJACENT",
+        "E-SESSION-CONFIG-LAST",
+        "E-ROUND-1406"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "a paid Step has activated a nonterminal FREE_SPINS Round",
+          "the same authorized session reloads and requests config"
+        ],
+        "stateFields": [
+          "last.ba",
+          "last.bl",
+          "last.bs",
+          "last.rskl",
+          "last.wmkl",
+          "last.rwa",
+          "last.wa",
+          "last.rpx",
+          "last.fsn",
+          "last.nfsc",
+          "last.ss"
+        ],
+        "transitionRules": [
+          "auth/verify precedes config after reload",
+          "non-null last restores the exact active snapshot",
+          "fsn!=nfsc keeps the Round active",
+          "each following spin is Delivery with ba=0 and monotonically increasing nfsc",
+          "do not start or generate a new paid Round while resumed content is active"
+        ],
+        "outputs": [
+          "restored active snapshot",
+          "ordered continuation Steps from the already active Round"
+        ],
+        "terminationRules": [
+          "only ss==1 && fsn==nfsc terminates the resumed Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-MAIN-CODE",
+          "E-SESSION-RESUME-ADJACENT",
+          "E-SESSION-CONFIG-LAST",
+          "E-ROUND-1406"
+        ],
+        "assertions": [
+          "activation has ba=0.5, ss=1, fsn=8, nfsc=0",
+          "reload auth/verify precedes config",
+          "config.last is non-null and matches activation on ba,fsn,nfsc,rpx,rskl,rwa,ss,wa",
+          "eight resumed calls all have ba=0 and nfsc=1..8",
+          "last continuation has ss=1,fsn=8,nfsc=8 and is the legal terminal",
+          "the canonical Round contains the activation plus all eight continuations"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "captures/45-Rio-Carnival/session-resume-adjacent-evidence.json#/sequence/0 -> /sequence/1 -> /sequence/2 -> /sequence/3..10",
+          "fixtures/45-Rio-Carnival/protocol-evidence/recovery/activation-spin.json -> reload-auth-verify.json -> reload-config-active-last.json -> continuation-001.json..continuation-008.json"
+        ]
+      },
+      "reason": "真实相邻请求证明 FREE_SPINS 激活后重载 config 返回非空 last，随后八次 ba=0 Delivery 续转到合法终止。"
+    },
+    {
+      "id": "B-FIXED-PAYLINES",
+      "category": "WIN_MODEL",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-RULES-UI",
+        "E-PAYTABLE-UI",
+        "E-RULES-SCREENSHOT",
+        "E-CONFIG",
+        "E-COMPLETE-ROUNDS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "15 symbols decoded column-major into 5x3"
+        ],
+        "stateFields": [
+          "25 payline row vectors",
+          "spl",
+          "bs",
+          "bl",
+          "wmkl"
+        ],
+        "transitionRules": [
+          "evaluate 25 fixed lines from left to right",
+          "allow only consecutive leading matches",
+          "pay only highest prize per line"
+        ],
+        "outputs": [
+          "wmkl map and line award sum"
+        ],
+        "terminationRules": [
+          "all 25 lines evaluated once"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-UI",
+          "E-PAYTABLE-UI",
+          "E-COMPLETE-ROUNDS"
+        ],
+        "assertions": [
+          "visible board is 5x3",
+          "payline count is 25",
+          "4483 captured winning-line entries have zero line-semantic violations"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-PAYTABLE-PAYOUT",
+      "category": "PAYOUT_RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-RULES-UI",
+        "E-PAYTABLE-UI",
+        "E-CONFIG",
+        "E-COMPLETE-ROUNDS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "valid wmkl and config spl"
+        ],
+        "stateFields": [
+          "symbol",
+          "matchCount",
+          "bs",
+          "bl",
+          "Wild involvement",
+          "rpx"
+        ],
+        "transitionRules": [
+          "base line award=spl*bs*bl",
+          "multiply by 2 when the winning combination contains Wild",
+          "multiply free award by rpx when nonzero",
+          "sum line awards to wa"
+        ],
+        "outputs": [
+          "Step wa"
+        ],
+        "terminationRules": [
+          "currency award rounded consistently to two decimals"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-CONFIG",
+          "E-COMPLETE-ROUNDS"
+        ],
+        "assertions": [
+          "472 fully evaluable winning Steps have zero payout violations",
+          "43 T-winning Steps form 19 equations that uniquely yield T[3,4,5]=[5,25,100]",
+          "raw redacted config fixture remains unchanged"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-WILD-RULE",
+      "category": "SYMBOL_RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RULES-UI",
+        "E-PAYTABLE-UI",
+        "E-MAIN-CODE",
+        "E-COMPLETE-ROUNDS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "payline contains Wild among leading match cells"
+        ],
+        "stateFields": [
+          "Wild positions",
+          "target symbol",
+          "Scat positions"
+        ],
+        "transitionRules": [
+          "Wild substitutes every symbol except Scat",
+          "any winning line involving Wild receives x2"
+        ],
+        "outputs": [
+          "substituted line match and multiplier"
+        ],
+        "terminationRules": [
+          "line match is maximally consecutive from reel 0"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-UI",
+          "E-PAYTABLE-UI"
+        ],
+        "assertions": [
+          "Wild never substitutes Scat",
+          "Wild multiplier is 2",
+          "3749 captured winning-line entries involve Wild and line semantics remain valid"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-SPIN-REQUEST-CONSTRUCTION",
+      "category": "PROTOCOL_REQUEST",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-CONFIG",
+        "E-SPIN-PROBE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "provider token/player initialized",
+          "sufficient balance or active free Round"
+        ],
+        "stateFields": [
+          "bl",
+          "bs",
+          "t",
+          "gid",
+          "activeRound"
+        ],
+        "transitionRules": [
+          "select bl/bs from config",
+          "map credentials into t/gid form fields",
+          "POST exact rio-carnival/spin path",
+          "use same request shape for free continuation"
+        ],
+        "outputs": [
+          "one ordered Step delivery"
+        ],
+        "terminationRules": [
+          "response envelope succeeds or error handler releases play lock"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-MAIN-CODE",
+          "E-CONFIG",
+          "E-SPIN-PROBE"
+        ],
+        "assertions": [
+          "minimum bl=1",
+          "minimum bs=0.02",
+          "observed charged ba=0.5",
+          "endpoint and request body are exact"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "E-SPIN-PROBE: bl=1&bs=0.02&t=<redacted>&gid=45 -> response ba=0.5/15 rskl",
+          "E-ROUND-132: subsequent same-endpoint deliveries return ba=0"
+        ]
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-ROUND-DELIVERY-STATE-MACHINE",
+      "category": "ROUND_STATE_MACHINE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-FIRST-SPIN",
+        "E-SPIN-PROBE",
+        "E-SPIN-INDEX",
+        "E-COMPLETE-ROUNDS",
+        "E-ROUND-132",
+        "E-REGROUP-AUDIT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "no active prior Round for a paid start"
+        ],
+        "stateFields": [
+          "roundId",
+          "stepIndex",
+          "ba",
+          "ss",
+          "fsn",
+          "nfsc",
+          "gt",
+          "small_game_type"
+        ],
+        "transitionRules": [
+          "create roundId only at ba>0 && ss==1",
+          "append every subsequent ba==0 response to that roundId",
+          "ss==0 is nonterminal",
+          "a paid free trigger with ss==1 remains active while fsn!=nfsc",
+          "never claim a second member or regenerate during Delivery"
+        ],
+        "outputs": [
+          "one paid Round and ordered Step list"
+        ],
+        "terminationRules": [
+          "terminal iff ss==1 && fsn==nfsc"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-SPIN-INDEX",
+          "E-COMPLETE-ROUNDS",
+          "E-REGROUP-AUDIT"
+        ],
+        "assertions": [
+          "1406 index lines equal 1406 paid starts",
+          "1406 complete Rounds contain 2306 Steps",
+          "each source Step is assigned to exactly one complete Round",
+          "all Rounds are terminal",
+          "maximum Step count is 33"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "E-ROUND-132 steps/0..20: paid ba=0.5 -> ordered ba=0 free/retrigger deliveries -> terminal ss=1/fsn=nfsc=20"
+        ]
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-FREE-SPINS-RULE",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULES-UI",
+        "E-PAYTABLE-UI",
+        "E-MAIN-CODE",
+        "E-SPIN-INDEX",
+        "E-COMPLETE-ROUNDS",
+        "E-ROUND-132",
+        "E-REGROUP-AUDIT",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "a paid or free Step produces 3,4,5 Scat"
+        ],
+        "stateFields": [
+          "ba",
+          "ss",
+          "fsn",
+          "nfsc",
+          "rpx",
+          "wa",
+          "rwa",
+          "gt",
+          "small_game_type"
+        ],
+        "transitionRules": [
+          "initial options are 3->[8,12,20],4->[12,16,24],5->[20,24,32]",
+          "rpx is 2,5,8",
+          "free Steps have ba=0/gt=2/small_game_type=2",
+          "retrigger adds 8,12,20 for 3,4,5 Scat"
+        ],
+        "outputs": [
+          "one complete paid Round containing every free and retrigger Step"
+        ],
+        "terminationRules": [
+          "ss==1 && fsn==nfsc"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-UI",
+          "E-PAYTABLE-UI",
+          "E-COMPLETE-ROUNDS"
+        ],
+        "assertions": [
+          "48 complete free-spin Rounds",
+          "900 free Steps",
+          "8 retrigger Rounds",
+          "observed rpx counts cover 2,5,8",
+          "no free Step is an index line"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "E-ROUND-132 steps/6->7: three Scat increase fsn 12->20 while nfsc advances 6->7; steps/19->20 terminate at nfsc=fsn=20"
+        ]
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-ORDINARY-OUTCOMES",
+      "category": "ROUND_OUTCOME",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-FIRST-SPIN",
+        "E-SPIN-INDEX",
+        "E-COMPLETE-ROUNDS",
+        "E-REGROUP-AUDIT",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid response has fsn=nfsc=0"
+        ],
+        "stateFields": [
+          "ba",
+          "wa",
+          "rwa",
+          "wmkl",
+          "rskl",
+          "ss",
+          "rpx"
+        ],
+        "transitionRules": [
+          "LOSS requires wa=rwa=0 and empty wmkl",
+          "WIN requires positive evaluated award and nonempty wmkl",
+          "ordinary Round is a paid independent single Step"
+        ],
+        "outputs": [
+          "ORDINARY_LOSS or ORDINARY_WIN"
+        ],
+        "terminationRules": [
+          "same Step has ss=1 and fsn=nfsc=0"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-COMPLETE-ROUNDS",
+          "E-SCENARIO-COVERAGE"
+        ],
+        "assertions": [
+          "1153 LOSS Rounds",
+          "205 WIN Rounds",
+          "zero ordinary invariant violations",
+          "round-000001 is LOSS and round-000008 is WIN"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-BALANCE-SETTLEMENT",
+      "category": "ACCOUNTING_STATE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FIRST-SPIN",
+        "E-COMPLETE-ROUNDS",
+        "E-ROUND-132"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "ordered Step delivery"
+        ],
+        "stateFields": [
+          "prior.rwa",
+          "wa",
+          "rwa",
+          "pl.balance",
+          "ba",
+          "terminal"
+        ],
+        "transitionRules": [
+          "deduct ba at paid start",
+          "set rwa=prior.rwa+wa",
+          "hold pl.balance unchanged across nonterminal free Steps",
+          "credit final rwa at terminal"
+        ],
+        "outputs": [
+          "cumulative Round award and settled player balance"
+        ],
+        "terminationRules": [
+          "terminal balance reflects complete Round settlement exactly once"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-COMPLETE-ROUNDS"
+        ],
+        "assertions": [
+          "900 free transitions have zero delta-rwa violations",
+          "all intermediate free balances are held",
+          "all 48 terminal free balances increase by final rwa",
+          "ordinary rwa equals wa"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "E-ROUND-132: balance 23950.50 is held through steps/0..19; step/20 settles rwa=102.2 to 24052.70"
+        ]
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-HISTORY-ENDPOINTS",
+      "category": "PROTOCOL_HISTORY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-HISTORY-ADJACENT",
+        "E-HISTORY-LIST-P1",
+        "E-HISTORY-LIST-P2",
+        "E-HISTORY-SELECTION",
+        "E-HISTORY-DETAIL"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "authorized provider token and gid=45",
+          "History UI date range selected"
+        ],
+        "stateFields": [
+          "page_index",
+          "begin_at",
+          "end_at",
+          "lc",
+          "ba",
+          "wa",
+          "end",
+          "ll[]",
+          "ll[].ca",
+          "ll[].tis",
+          "ll[].gt",
+          "ll[].baf",
+          "transfer_id",
+          "baf",
+          "bid",
+          "bsl[]",
+          "fsl[]"
+        ],
+        "transitionRules": [
+          "POST log-list with page_index=1 and selected Unix date bounds",
+          "increment page_index while the returned page permits continuation",
+          "select ll[].tis and pass the identical value as log-view.transfer_id",
+          "never expose persisted raw tis/transfer_id; evidence uses matching SHA-256",
+          "render detail Steps in bsl order followed by fsl order",
+          "history wmkl is an array of {psn,sk,wa,wpk} and must be converted for display without changing result semantics"
+        ],
+        "outputs": [
+          "paged summary with lc,ba,wa,end,ll",
+          "detail with baf,bid,bsl,fsl"
+        ],
+        "terminationRules": [
+          "pagination ends on returned end/no more ll entries",
+          "detail request ends after bsl then fsl conversion completes"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-MAIN-CODE",
+          "E-HISTORY-ADJACENT",
+          "E-HISTORY-LIST-P1",
+          "E-HISTORY-LIST-P2",
+          "E-HISTORY-DETAIL"
+        ],
+        "assertions": [
+          "page 1 request and page 2 request preserve begin_at/end_at and increment page_index",
+          "page 1 contains lc,ba,wa,end,ll and each captured item contains ca,tis,gt plus amount fields",
+          "selected tis hash equals detail transfer_id hash",
+          "log-view contains bsl and fsl arrays and each captured Step exposes the documented 23 fields",
+          "detail rendering order is bsl then fsl",
+          "live-spin gt semantics are not assigned to history list ll[].gt"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "captures/45-Rio-Carnival/history-adjacent-evidence.json#/sequence/0 -> /sequence/1 -> /sequence/2 -> /sequence/3",
+          "fixtures/45-Rio-Carnival/protocol-evidence/history/log-list-page-1.json -> log-list-page-2.json -> log-list-selection.json -> log-view.json"
+        ]
+      },
+      "reason": "真实 History 操作已抓取第一页、第二页/结束、列表选择与同一 transfer_id 的详情响应。"
+    },
+    {
+      "id": "B-ERROR-HANDLING",
+      "category": "PROTOCOL_ERROR",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-VERIFY"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "transport/envelope failure or insufficient balance"
+        ],
+        "stateFields": [
+          "HTTP status",
+          "code",
+          "info",
+          "heartbeat",
+          "autoSpin",
+          "playLock"
+        ],
+        "transitionRules": [
+          "401 stops heartbeat",
+          "non-200 envelope rejects",
+          "C10001/C10002/C10003 map to auth/funds messages",
+          "spin failure cancels auto and releases lock"
+        ],
+        "outputs": [
+          "structured error without advancing Round delivery"
+        ],
+        "terminationRules": [
+          "no Step is consumed on rejected request"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-MAIN-CODE",
+          "E-VERIFY"
+        ],
+        "assertions": [
+          "captured ping is disabled",
+          "error constants are current bundle literals",
+          "malformed/non-JSON uses HTTP<status> fallback"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-NO-BUY-ENTRY",
+      "category": "CAPABILITY_ABSENCE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-RULES-UI",
+        "E-PAYTABLE-UI"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "rules, paytable, menu handlers and routes inspected"
+        ],
+        "stateFields": [
+          "menu entries",
+          "rule entries",
+          "purchase handlers"
+        ],
+        "transitionRules": [
+          "do not expose a buy feature without current-game evidence"
+        ],
+        "outputs": [
+          "buyFeature.supported=false"
+        ],
+        "terminationRules": [
+          "no buy/purchase entry, rule or route is present"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-MAIN-CODE",
+          "E-RULES-UI",
+          "E-PAYTABLE-UI"
+        ],
+        "assertions": [
+          "menu exposes rules/paytable/history/settings only",
+          "rules and paytable contain no buy feature"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    },
+    {
+      "id": "B-FRONTEND-REEL-COUNTS-NOT-RNG",
+      "category": "RNG_EVIDENCE_SCOPE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-MAIN-CODE",
+        "E-COMPLETE-ROUNDS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "downstream chooses runtime symbol generation"
+        ],
+        "stateFields": [
+          "frontend randomReel counts",
+          "server rskl"
+        ],
+        "transitionRules": [
+          "treat randomReel counts as presentation/background reel data only",
+          "append server rskl for actual outcome",
+          "do not configure GameRuleCore weights from observed frequencies or frontend animation counts"
+        ],
+        "outputs": [
+          "symbolWeights.gameplayResultWeights remains unconfigured/unknown"
+        ],
+        "terminationRules": [
+          "runtime result is independently generated and validated, never sourced from fixtures"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-MAIN-CODE",
+          "E-COMPLETE-ROUNDS"
+        ],
+        "assertions": [
+          "frontend code names method randomReel and separately appends response results",
+          "provider config exposes payouts but no result weights",
+          "fixtures are oracle-only"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "当前游戏原始规则、前端判定代码或脱敏运行证据已确认该行为，并已指定独立验收来源。"
+    }
+  ],
+  "unresolvedBehaviors": [],
+  "nonBehaviorDispositions": [
+    {
+      "topic": "provider Redis key/encoding",
+      "status": "NOT_APPLICABLE_TO_CAPTURED_PROVIDER_PROTOCOL",
+      "action": "downstream Java adapter must use its platform contract; do not invent a current-game provider Redis key"
+    },
+    {
+      "topic": "gameplay symbol weights",
+      "status": "UNKNOWN_NOT_EXPOSED",
+      "action": "Vendor weights remain unknown; replica empirical aggregate model is documented in implementationV3 and cannot be edited in production config."
+    }
+  ],
+  "implementationV3": {
+    "schemaVersion": 3,
+    "status": "READY_FOR_ACCEPTANCE",
+    "rulesHash": "sha256:515ffa3a4f803e36d44a1a50da1ce79b4c1df2e75a79893a18cd404aecc0565c",
+    "runtimeGeneration": false,
+    "runtimeFixtureReplay": false,
+    "core": "Shared Java GameRuleCore; production CorePayout separately verified by ResultUtil",
+    "model": "Compiled empirical joint special-symbol shape and conditional three-cell reel windows; 1306 training rounds, 100 excluded holdout rounds",
+    "modelSource": "reports/45-Rio-Carnival/generation-model-source.json",
+    "modelValidation": "reports/45-Rio-Carnival/generation-model-validation.json",
+    "factoryRtpClaim": false,
+    "memberEncoding": "R45C3|initialFree|multiplier|ordered 15-hex-character boards; printable ASCII; no bet or response JSON",
+    "ratioUnit": "award / totalBet * 100, exact integer (0.01x)",
+    "redis": {
+      "host": "192.168.10.3",
+      "port": 6379,
+      "db": 15,
+      "normalIndex": "Rio45:v3:normal:ratios",
+      "specialIndex": "Rio45:v3:special:ratios",
+      "listPatterns": [
+        "Rio45:v3:normal:<integer>",
+        "Rio45:v3:special:<integer>"
+      ],
+      "zeroAwardFree": "special:0 selected only from LOSS branch",
+      "claim": "Choose WIN/LOSS first; choose mode; WIN chooses existing positive integer index; atomically LPOP exactly one member; no fallback",
+      "continuation": "Persist complete decoded round; all deliveries use same roundKey and ordered steps"
+    },
+    "controller": {
+      "descriptor": "server-api/45-Rio-Carnival/demo-controller.properties",
+      "jar": "server-api/45-Rio-Carnival/dist/controller.jar",
+      "port": "Injected --port or PORT, 50000-59999",
+      "listeners": 1
+    },
+    "historyIdentifiers": "Original evidence identifiers were redacted; compact stable local opaque IDs are projected consistently for list/detail; no original ID format claim.",
+    "acceptanceReport": "reports/45-Rio-Carnival/acceptance-final-v3.json"
+  }
+}

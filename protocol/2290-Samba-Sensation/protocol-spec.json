@@ -1,0 +1,377 @@
+{
+  "schemaVersion": 2,
+  "gameId": 2290,
+  "rulesHash": "46ef48cf0977a2785f257825d1e499b8049d293900e2a10d4a0dec7ad1ba2205",
+  "transport": {
+    "scheme": "HTTPS",
+    "contentType": "application/x-www-form-urlencoded",
+    "applicationEncryption": "NONE_OBSERVED",
+    "responseEncoding": "PLAIN_JSON",
+    "tokenHandling": "REDACT_AT_CAPTURE_BOUNDARY"
+  },
+  "endpoints": [
+    {
+      "id": "init",
+      "method": "POST",
+      "path": "/cp/single_game.Game/initRoom",
+      "requestFields": [
+        "token",
+        "gid",
+        "language",
+        "ai"
+      ]
+    },
+    {
+      "id": "result",
+      "method": "POST",
+      "path": "/cp/single_game.Game/gameResult",
+      "requestFields": [
+        "token",
+        "bet",
+        "level",
+        "gid",
+        "type",
+        "bet_type",
+        "language",
+        "ai"
+      ]
+    },
+    {
+      "id": "history-list",
+      "method": "POST",
+      "path": "/cp/goldgame/single_game_user_gold_history",
+      "requestFields": [
+        "token",
+        "gid",
+        "language"
+      ]
+    },
+    {
+      "id": "history-detail",
+      "method": "POST",
+      "path": "/cp/goldgame/single_game_user_history",
+      "requestFields": [
+        "token",
+        "gid",
+        "day",
+        "page_size",
+        "page",
+        "language"
+      ]
+    }
+  ],
+  "sequence": [
+    "initRoom",
+    "type=1 paid OR type=3 purchase",
+    "if frees.st>0 then repeat type=2 until frees.st=0",
+    "otherwise paid response is terminal",
+    "history list -> selected day detail is independent lightweight evidence path"
+  ],
+  "rules": {
+    "gameId": 2290,
+    "gameName": "Samba Sensation",
+    "rulesVersion": "2290-protocol-v3-template39-training4900",
+    "evidenceContract": {
+      "workflowTemplateVersion": 39,
+      "lifecycleSchema": "INITIAL_OR_CONCRETE_SUBSEQUENT_ROLE_V1",
+      "holdoutSchema": "REAL_PROVIDER_COMPLETE_ROUND_V1"
+    },
+    "board": {
+      "rows": 3,
+      "columns": 5,
+      "activeAxisCountByBetType": {
+        "1": 1,
+        "2": 2,
+        "3": 3
+      }
+    },
+    "symbols": {
+      "WILD": 0,
+      "PAYING": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "SCATTER": 10
+    },
+    "winModel": {
+      "type": "FIXED_PAYLINE",
+      "paylineCount": 25,
+      "lines": [
+        [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          2,
+          2
+        ],
+        [
+          2,
+          2,
+          0,
+          2,
+          2
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          2,
+          1,
+          2,
+          1,
+          2
+        ],
+        [
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        [
+          2,
+          1,
+          1,
+          1,
+          2
+        ],
+        [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        [
+          2,
+          1,
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          1,
+          2,
+          1,
+          0
+        ],
+        [
+          2,
+          0,
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          1,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          2,
+          2,
+          0
+        ],
+        [
+          1,
+          2,
+          2,
+          2,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          2,
+          1,
+          2,
+          1
+        ],
+        [
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          2,
+          0,
+          2,
+          1
+        ],
+        [
+          1,
+          0,
+          2,
+          0,
+          1
+        ]
+      ],
+      "direction": "LEFT_TO_RIGHT",
+      "minimumConsecutive": 3,
+      "highestWinOnlyPerLine": true,
+      "wildSubstitutes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "wildDoesNotSubstitute": [
+        10
+      ]
+    },
+    "round": {
+      "paidRequestType": 1,
+      "freeRequestType": 2,
+      "featureBuyRequestType": 3,
+      "ordinaryTermination": "FIRST_RESPONSE_WHEN_FREES_ST_MISSING_OR_ZERO",
+      "freeTermination": "FINAL_TYPE_2_RESPONSE_WHEN_FREES_ST_EQUALS_ZERO"
+    },
+    "freeSpins": {
+      "initialCount": 5,
+      "activeAxes": 3,
+      "eachAxis": {
+        "outerCells": 6,
+        "centerMaterial": "ONE_BIG_SYMBOL_REPEATED_OVER_CENTER_3X3"
+      },
+      "retriggerObserved": false,
+      "maximumDerivedFreeSteps": 5
+    },
+    "featureBuy": {
+      "costMultipleOfBetAmount": 80,
+      "resultClass": "FREE_SPINS",
+      "independentOutcomeClass": false
+    },
+    "scatter": {
+      "collectionThreshold": 30,
+      "naturalPaidGenerationLimitsByBetType": {
+        "1": {
+          "boards": 2378,
+          "maxPerColumn": 3,
+          "maxPerAxisBoard": 4,
+          "maxPerPaidPage": 4
+        },
+        "2": {
+          "boards": 200,
+          "maxPerColumn": 2,
+          "maxPerAxisBoard": 4,
+          "maxPerPaidPage": 5
+        },
+        "3": {
+          "boards": 7263,
+          "maxPerColumn": 3,
+          "maxPerAxisBoard": 6,
+          "maxPerPaidPage": 8
+        }
+      },
+      "featureBuyTriggerPageLimits": {
+        "boards": 3,
+        "maxPerColumn": 3,
+        "maxPerAxisBoard": 11,
+        "maxPerPaidPage": 30
+      },
+      "allowedAxisIndexes": [
+        1,
+        2,
+        3
+      ],
+      "freeGeneration": {
+        "allowed": false,
+        "observedCount": 0
+      }
+    },
+    "coinCollection": {
+      "stateVectorLength": 5,
+      "fullFlag": "props.coins.is_full",
+      "rewardFormula": "bet * level * 25 * props.coins.count",
+      "requestStepCount": 1,
+      "transitionEvidence": "NEWLY_DEALT_POSITIONS_AS_ADJACENT_PROVIDER_STATE_VECTOR_DIFFERENCE"
+    },
+    "integerMultiplier": {
+      "formula": "roundAward / bet",
+      "basis": "BET_SIZE",
+      "integralAcrossCapturedRounds": true
+    }
+  },
+  "fieldMatrix": "reports/2290-Samba-Sensation/field-evidence-matrix.json",
+  "capabilities": "protocol/2290-Samba-Sensation/game-capabilities.json",
+  "handoff": "protocol/2290-Samba-Sensation/protocol-handoff.json"
+}

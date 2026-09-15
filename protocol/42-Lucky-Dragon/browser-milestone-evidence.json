@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "draftEvidence": true,
+  "gameId": 42,
+  "gameName": "Lucky Dragon",
+  "source": "AUTHORIZED_ORIGINAL_BROWSER_MANUAL_MILESTONE",
+  "accountAliasConfirmed": "abc222",
+  "launchIdentity": {
+    "catalogImageResourceCode": 50042,
+    "gameFramePath": "/42/"
+  },
+  "minimumBet": {
+    "amount": "0.50",
+    "currency": "BRL",
+    "betLevel": 1,
+    "minimumIndicatorVisible": true,
+    "decrementControlDisabledAtMinimum": true
+  },
+  "historyBehavior": {
+    "menuExpandable": true,
+    "historyControlClickable": true,
+    "listLoads": true,
+    "rowClickable": true,
+    "detailLoads": true,
+    "returnControlVisible": true,
+    "fieldsObserved": [
+      "roundType",
+      "timestamp",
+      "betId",
+      "transactionId",
+      "bet",
+      "netResult",
+      "endingBalance",
+      "betSize",
+      "betLevel",
+      "terminalReelReplay",
+      "payment"
+    ]
+  },
+  "roundObservation": {
+    "roundType": "NORMAL_SPIN",
+    "observedAt": "2026-08-28T23:29:45+08:00",
+    "betId": "42-2093360393507995648",
+    "transactionId": "2093360393507995648",
+    "bet": "0.50",
+    "payout": "0.00",
+    "netResult": "-0.50",
+    "endingBalance": "5768.90",
+    "terminal": true,
+    "continuationSteps": 0,
+    "specialMode": false
+  },
+  "currentSessionSummary": {
+    "accountAlias": "abc222",
+    "accountId": "74171415",
+    "verifiedAt": "2026-08-29T03:26:09+08:00",
+    "uiHistoryPaidRounds": 10,
+    "ordinaryLossRounds": 9,
+    "ordinaryWinRounds": 1,
+    "historyTotalBet": "5.00",
+    "historyNetResult": "26.50",
+    "formalOriginalHttpPaidRounds": 0,
+    "formalCountReason": "NO_RAW_REQUEST_RESPONSE_EXCHANGE_PERSISTED"
+  },
+  "currentSessionRoundObservations": [
+    {
+      "roundType": "NORMAL_SPIN",
+      "observedAt": "2026-08-29T03:26:09+08:00",
+      "betId": "42-2093419884324749312",
+      "transactionId": "2093419884324749312",
+      "bet": "0.50",
+      "payout": "0.00",
+      "netResult": "-0.50",
+      "endingBalance": "5768.40",
+      "betLevel": 1,
+      "terminal": true,
+      "continuationSteps": 0,
+      "specialMode": false
+    },
+    {
+      "roundType": "NORMAL_SPIN",
+      "observedAt": "2026-08-29T03:35:45+08:00",
+      "betId": "42-2093422299384020992",
+      "transactionId": "2093422299384020992",
+      "bet": "0.50",
+      "payout": "31.50",
+      "netResult": "31.00",
+      "endingBalance": "5795.40",
+      "betLevel": 1,
+      "terminal": true,
+      "continuationSteps": 0,
+      "specialMode": true,
+      "candidateMechanism": "WILD_MULTIPLIER_X3",
+      "paymentDetail": "THREE_SILVER_DRAGON_SYMBOLS",
+      "historyPayment": "31.50"
+    }
+  ],
+  "limitations": [
+    "NO_RAW_REQUEST_RESPONSE_EXCHANGE_PERSISTED",
+    "NO_SPIN_ENDPOINT_OR_FIELD_POINTER_CONFIRMED",
+    "NOT_COUNTED_AS_FORMAL_CAPTURE",
+    "NOT_A_FINAL_PROTOCOL_CONTRACT"
+  ],
+  "sensitiveMaterialPersisted": false
+}

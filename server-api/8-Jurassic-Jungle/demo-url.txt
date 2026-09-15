@@ -1,0 +1,1 @@
+http://127.0.0.1:50008/?gid=8&l=pt&language=pt-br&sip=127.0.0.1:50008&t=local-demo&btt=1

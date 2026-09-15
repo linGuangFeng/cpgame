@@ -1,0 +1,349 @@
+[
+  {
+    "game": "1090-sharpshooter",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "e1b2aa61329f66f99bde3b3093881d9387c3e509d185e9224d66a070b2b2c401",
+    "logTail": "LOAD_COMPLETE complete rounds loss=0 win=2 special=2 rulesHash=e2d48bc36060cfa82c86468e67d20617b0f137bae5ed9986541823c558c7daff buckets={BetLog:000001090:012700=1, BetLog:000001090:012990=1, MaryLog:000001090:029340=1, MaryLog:000001090:030370=1}\n"
+  },
+  {
+    "game": "1380-Hidden-Realm",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "eedc945ba91bf1fd4a85756b6010f38c566cfbbf26a0edc28f2d4b075196288c",
+    "logTail": "Loaded complete rounds loss=0 win=2 special=2 rulesHash=a47cbb826fa130d6cf03c208a992f29789aad2a9870202ea7080145935f2d7db buckets={BetLog:000001380:000002=1, BetLog:000001380:000030=1, MaryLog:000001380:000381=1, MaryLog:000001380:000453=1}\n"
+  },
+  {
+    "game": "1400-Blessing-of-Ice-and-Fire",
+    "redisKeysByDb": {},
+    "exitCode": 0,
+    "jarSha256": "9b58df71df3cb49cd60a591eff604fdf7b5aa48d84328be0f50829c9a65ddbdf",
+    "logTail": "rulesVersion=blessing-1400-realtime-multiplier-r1 rulesHash=6ac10077f98ce4efe1075d00861581da853a06a44235b27afd36639b3f2d71f4\nsingleList size=5 [0, 5, 25, 50, 100]\nbothList size=13 [0, 5, 10, 25, 30, 50, 55, 75, 100, 105, 125, 150, 200]\nsingleFireMap keys=5 combos=5\nsingleIceMap keys=5 combos=5\nbothMap keys=13 combos=25\npageOdd=0 middleCases=37\npageOdd=5 middleCases=24\npageOdd=25 middleCases=1\n  [3, 3, 3]\npageOdd=50 middleCases=1\n  [2, 2, 2]\npageOdd=100 middleCases=1\n  [1, 1, 1]\npayTable={1=100, 2=50, 3=25, 4=5}\nOK realtime multiplier catalog\n"
+  },
+  {
+    "game": "1407-mac-Coin-Master-GO",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "6f74a4398910e58dfce9dc9a3b665640dfebadd62bd71e81ddf6d5588debf660",
+    "logTail": "批次已提交 batch=1 members=4\n生成完成 redisGameId=8001407 普通候选=12 特殊候选=6 普通写入=2 特殊写入=2 0倍写入=0 批次=1 rulesHash=08727f7e5a890dcd1b3cf5ae9559474ef9ea98c6e9a09ac34b7d53598ba1662f\n\nSLF4J: Failed to load class \"org.slf4j.impl.StaticLoggerBinder\".\nSLF4J: Defaulting to no-operation (NOP) logger implementation\nSLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details."
+  },
+  {
+    "game": "16-Jungle-Fruit",
+    "redisKeysByDb": {
+      "0": 2
+    },
+    "exitCode": 0,
+    "jarSha256": "94e211bbcc16e27e0f802069f545cd9f149e3746daa329d50c4bc50b8ab157b0",
+    "logTail": "生成完成：raw gid=16，写入完整局=2，候选=2，rulesHash=164088c0440871c9bc33b631a1b6bfa5e00d3012db3b0e3694bb59ac683e1743\n"
+  },
+  {
+    "game": "1670-Christmas-Gift",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "069ceeb52d5df2c3ea9813ca3dd982f000548da3ab3e50bdb55ace6391fe85ef",
+    "logTail": "生成完成 ordinary=2 feature=2 attempts=11 redisLoaded=4 dryRun=false rulesHash=58d9172c4942e29e629038fb88877ce11564375b1bd69059e5b9a38ab38df14d\n"
+  },
+  {
+    "game": "1780-Glacier-Treasure",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "e9305c85aba74e35b95a6281729c50279cae3f6c8a750394eaff79580aa420cb",
+    "logTail": "CONFIG loss=2 win=2 special=2 boost=10x switchEvery=1000 structures=39\nGENERATION_COMPLETE members=4 writing redis\nREDIS_CONNECTING host=127.0.0.1 port=57314 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=57314 database=0\nBATCH_COMMITTED batch=1 members=4 loaded=4\nLOAD_COMPLETE redisGameId=1780 loss=0 win=2 special=2 batches=1 rulesHash=0139e446c93699f20cd06048145312e652edf09876efc7d4ff26cc207a73172e\n"
+  },
+  {
+    "game": "1809-mac-Freedom-Day",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "5f469a8a47a58a7dbc3d717cb2635bade69baf8640f33561c9615089c9451a79",
+    "logTail": "REDIS_CONNECTING host=127.0.0.1 port=57321 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=57321 database=0 ssl=false\nNATURAL_CLASSIFICATION_COMPLETE normal=2 special=2 normalBuckets=2 specialBuckets=2 capPerMultiplier=300 discardedOverlong=0\nBATCH_COMMITTED batch=1 members=4 loaded=4\nLOAD_COMPLETE redisGameId=8001809 normal=2 special=2 batches=1 maxConsecutiveWins=2 rulesVersion=freedom-day-1809-v2-defect-fix rulesHash=623c36f2909d7cf6e3005d2bd08f3fff50e667b0d218246323a6d9922365e561\n"
+  },
+  {
+    "game": "1810-Treasure-Hunt",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "baf0eb1ffff1d9a55945c6b685ed6e18d7ebe081b4b58296037a99f0eb81595b",
+    "logTail": "PASS rulesHash=b4b91422b13dc7e2eef14ed1eea034b2e0e361385e00134c1f1ffe9001ebc409 normal=2 win=2 special=2 normalBuckets=2 specialBuckets=2\n"
+  },
+  {
+    "game": "1830-Hotpot",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "270493e868906ce1614f33d3ff72bef1df286b64efcf80fe7bbfa30fad06d245",
+    "logTail": "REDIS_CONNECTING host=127.0.0.1 port=58016 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=58016 database=0 ssl=false\nINDEPENDENT_LOSS_PRELOAD loss=0 capPerMultiplier=300\nNATURAL_CLASSIFICATION_COMPLETE normal=2 special=2 lossPreloaded=0 normalBuckets=2 specialBuckets=2 capPerMultiplier=300 discardedCandidateLimit=1\nBATCH_COMMITTED batch=1 members=4 loaded=4\nLOAD_COMPLETE redisGameId=1830 loss=0 normal=2 special=2 batches=1 maxConsecutiveWins=2 rulesVersion=hotpot-1830-result-engine-r1-20260904 rulesHash=725261a0bdda79f9d63bfeec37472febd8be9e1ec304c4a74291388468f9342f protocolHash=01123dc898992e5e38efb1f58b816c844093dfcf07939e2cefa3153022b61c01\n"
+  },
+  {
+    "game": "1910-Churrasco",
+    "redisKeysByDb": {
+      "0": 5
+    },
+    "exitCode": 0,
+    "jarSha256": "9506baaa46e74788004cd17aee3d4a20be4e49eb55ccb2f6d21af6498aeca225",
+    "logTail": "LOAD_COMPLETE COMPLETE_PASS rulesHash=4b8bc4cc855608dffb6069f45cae4ff98f4f07391b7907689d1c303366bf5915 normal=2 loss=1 win=0 small=1 free=2 batch=100 redis=db15\n"
+  },
+  {
+    "game": "1940-beach-fun",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "da843287929822703ed9fb36114f7e19a3874401a2c7836b1e9117504e7118d8",
+    "logTail": "BATCH_COMMITTED batch=1 members=4 loaded=4\n批次已提交 batch=1 members=4 loaded=4\nNATURAL_CLASSIFICATION_COMPLETE normal=2 special=2 normalBuckets=2 specialBuckets=2 capPerMultiplier=300 discardedOverlong=0\nLOAD_COMPLETE redisGameId=1940 normal=2 special=2 batches=1 maxConsecutiveWins=5 rulesHash=sha256:4332cba4e18f7a2dfb8c99d2c5f8969e7650edc3d109f97204af38fb4d1a2af2\n生成完成 redisGameId=1940 普通写入=2 特殊写入=2 批次=1\n"
+  },
+  {
+    "game": "2-Jungle-Kings",
+    "redisKeysByDb": {},
+    "exitCode": 0,
+    "jarSha256": "62cdc732c677ed393d4ffc6918b6c99143bac346973f072b81a27d13fa0a04a7",
+    "logTail": "rulesVersion=jk2-reelstrip-dualboard-20260909 rulesHash=3c1e8d7a9b4f2c6e0a5d8b1f7e4c9a2d6b0e3f8c1a7d4b9e2f5c8a0d3b6e1f4\ngeneration.mode=realtime generation.cache=false\nsingleList size=3 [0, 50, 100]\nbothList size=6 [0, 25, 50, 100, 150, 200]\nsingleMap keys=3 combos=3\nbothMap keys=6 combos=9\nsingle odd=0 combos=[[0]]\nsingle odd=50 combos=[[50]]\nsingle odd=100 combos=[[100]]\nboth odd=0 combos=[[0, 0]]\nboth odd=25 combos=[[0, 50], [50, 0]]\nboth odd=50 combos=[[0, 100], [100, 0]]\nboth odd=100 combos=[[50, 50]]\nboth odd=150 combos=[[50, 100], [100, 50]]\nboth odd=200 combos=[[100, 100]]\nchessboard=0 pageOdd=0 boardCases=61\nchessboard=0 pageOdd=50 boardCases=1\nchessboard=0 pageOdd=100 boardCases=1\nchessboard=1 pageOdd=0 boardCases=61\nchessboard=1 pageOdd=50 boardCases=1\nchessboard=1 pageOdd=100 boardCases=1\npayTable={S00011=100, S00012=50, S00013=25, S00014=5, S00015=0}\nOK realtime multiplier catalog\n"
+  },
+  {
+    "game": "2001007-Magic-Scroll-2",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "1e6b773f96f432e379aea609ecb83316d5bb1b2a00a4bd13dfe9da651d6539fc",
+    "logTail": "REDIS_CONNECTED host=127.0.0.1 port=57355 database=0 ssl=false\nBATCH_COMMITTED batch=1 members=4 loaded=4\nLOAD_COMPLETE redisGameId=2001007 loss=0 win=2 special=2 batches=1 candidates=9 maxDeliveries=3\n普通实际倍率分布={40=1, 30=1}\n特殊实际倍率分布={240=1, 150=1}\nrulesVersion=1.2.6 rulesHash=sha256:ab8f86b20f45615af560b928c2f5bd860ea6abf641d461d2e200a3e4aaed3fcd\n"
+  },
+  {
+    "game": "2010-EDM-Mania",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "5a9f5e4a7560adddaaeb19c9fa745a74fcf7c65282ce5219317bdadc4a17b48c",
+    "logTail": "REDIS_CONNECTING host=127.0.0.1 port=57361 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=57361 database=0 ssl=false\nNATURAL_CLASSIFICATION_COMPLETE normal=2 special=2 normalBuckets=2 specialBuckets=2 capPerMultiplier=300 discardedOverlong=0\nBATCH_COMMITTED batch=1 members=4 loaded=4\nLOAD_COMPLETE redisGameId=2010 normal=2 special=2 batches=1 maxConsecutiveWins=4 rulesVersion=edm-mania-2010-v1 rulesHash=f2f29ebdf63e2442409c1eb600513a949d149d47b30f5797f2643c0a7a4af061\n"
+  },
+  {
+    "game": "2060-Club-Goddess",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "f2e41e13ba50625146fb9587767ff37a8f44adc009766b4b330789fec4af8465",
+    "logTail": "批次已提交 batch=1 members=4\n生成完成 redisGameId=2060 普通生成=2 特殊生成=59 普通写入=2 特殊写入=2 0倍跳过=0 批次=1 rulesHash=sha256:cd9e5bac75dcaee42e78e1298a4e896b3a2b01db98c28027a50d7d3df771016b\n"
+  },
+  {
+    "game": "2110-Bee-Workshop",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "3c47a8f566e8a1d3a533ed84abb752d2c069adbfcd979ea11dfa319b417c7f4e",
+    "logTail": "loaded gid=2110 db=0 complete rounds={FREE_STICKY_SYMBOLS=1, MYSTERY_BOX=1, ORDINARY_WIN=2} rulesHash=bw2110-lines20-paytable-v2-a7afb966-deal-3d5f4e28\n"
+  },
+  {
+    "game": "2110-mac-Bee-Workshop",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "bea4b6273ffc9c31e7c8cefe0ae222af801a02f051a9f650852ceb4b8460f366",
+    "logTail": "REDIS_CONNECTING host=127.0.0.1 port=57378 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=57378 database=0 ssl=false\nNATURAL_CLASSIFICATION_COMPLETE normal=2 special=2 zeroLoss=0 discardedRejected=0\nBATCH_COMMITTED batch=1 members=4 loaded=4\nLOAD_COMPLETE redisGameId=2110 normal=2 special=2 batches=1 zeroLoss=0 rulesVersion=bee-workshop-2110-mac-v1 rulesHash=bw2110-lines20-paytable-v2-a7afb966-deal-3d5f4e28\n"
+  },
+  {
+    "game": "2210-Wu-Kong",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "0fea821b65a8c232bd8b6179cf4a49d5afbd520921aa0a79603e38efa534297c",
+    "logTail": "COMPLETE_PASS sourceGameId=2210 redisGameId=2210 rulesHash=8815bbc4ff5dd45c7ed5d2ccc1d0891183ce5f109f981594ce944a681a9c1516 normal=2 special=2 normalBuckets=2 specialBuckets=2 attempts=57\n"
+  },
+  {
+    "game": "2290-Samba-Sensation",
+    "redisKeysByDb": {
+      "0": 7
+    },
+    "exitCode": 0,
+    "jarSha256": "8b3d337af816e8cfa7b78e73680b2555e0f2e4fa8dbd5863f26b092710f14ee1",
+    "logTail": "Redis已连接 host=127.0.0.1 port=57387 db=0；规则错误不会用网络回退掩盖\n预生成完成 sourceGameId=2290 redisGameId=2290 normal=2 special=2 loss=0 win=2 free=2 coin=0 batches=1 rulesHash=46ef48cf0977a2785f257825d1e499b8049d293900e2a10d4a0dec7ad1ba2205\n"
+  },
+  {
+    "game": "2300-Monster-Slayer",
+    "redisKeysByDb": {
+      "0": 40
+    },
+    "exitCode": 0,
+    "jarSha256": "fd23942364392b66079d387e9dc226ab1370f19aba07f2f4cf3c2850131aebba",
+    "logTail": "LOAD_START target=152 batchSize=100 loss=0 win=2 naturalSpecial=0 buyPerMode=50 config=/tmp/cpgame-loader-audit/2300-Monster-Slayer.isolated.properties\nBATCH_COMMITTED batch=1 members=2 loaded=2 normal=2 special=0 phase=win\nBATCH_COMMITTED batch=2 members=50 loaded=52 normal=2 special=50 phase=buy3\nBATCH_COMMITTED batch=3 members=50 loaded=102 normal=2 special=100 phase=buy4\nBATCH_COMMITTED batch=4 members=50 loaded=152 normal=2 special=150 phase=buy5\nLOAD_COMPLETE loaded=152 normal=2 special=150\nLOADER_OK loss=0 win=2 buy3=50 buy4=50 buy5=50 rulesHash=df686c42f1c1891704b88742db554a38644ff719c46a6de3f436857647a3b781\n"
+  },
+  {
+    "game": "2350-Curupira",
+    "redisKeysByDb": {
+      "0": 8
+    },
+    "exitCode": 0,
+    "jarSha256": "eaec4b07b71e2747a3d5868e94ab224aaaeb5cb50523c98655c28c39eba81a3a",
+    "logTail": "生成完成 sourceGameId=2350 redisGameId=2350 written=4 loss=0 win=2 ew=0 free=1 hold=1 buckets=4 transactions=1 rulesHash=d5421efc347392576699048c0538c72d669056017eb723ae2a046fa7bac71404\n"
+  },
+  {
+    "game": "2410-Electro-Fiesta",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "a2f64024134c46f9a324ebf63e7da1c3dd6199964e7b164c864fccd070a84f1a",
+    "logTail": "完成：普通 2，特殊 2，批次 100，规则 0c99b115e7f083bea9aea3d198ae64bb6b3f1685c31fccdaf84aa159cf1726ac，本进程桶计数 {BetLog:000002410:000020=1, MaryLog:000002410:000025=1, MaryLog:000002410:000330=1, BetLog:000002410:000050=1}\n"
+  },
+  {
+    "game": "2470-Lucky-Night-Market",
+    "redisKeysByDb": {
+      "0": 3
+    },
+    "exitCode": 0,
+    "jarSha256": "c8c32319b6726b2a3ed59f549d094116f9f93b8bf35fa8cc6977c1ccb80f9b5b",
+    "logTail": "{\"gameId\":2470,\"generator\":\"SecureRandom / shared Java GameRuleCore\",\"count\":2,\"validationOnly\":false,\"counts\":{\"ORDINARY_WIN\":2},\"bucketCount\":2,\"rejectedSteps\":2,\"rejectedRounds\":0,\"normalIndex\":\"PerKeyList_000002470\",\"featureIndex\":\"MaryKeyList_000002470\",\"wheelIndex\":\"PreKeyList_100002470\"}\n"
+  },
+  {
+    "game": "32-Jungle-Treasure",
+    "redisKeysByDb": {
+      "0": 2
+    },
+    "exitCode": 0,
+    "jarSha256": "781b9d7403b2907ef2d28481efa1f2d7cea6f6d88fa6524f3f0716db56b83f9a",
+    "logTail": "生成完成：raw gid=32，写入完整局=2，候选=3，rulesHash=0ae93f542908a7391cffe77dc02327ace428c614333bc73d711bf8e66357e68f\n"
+  },
+  {
+    "game": "33-Jungle-Party",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "78daaa60b15ad249a8a12719e3929b87e07c8d297e561b9639a7f4db2bbe96f9",
+    "logTail": "LOAD_COMPLETE gid33 formal loader PASS dryRun=false normal=2 special=2 buckets={WIN:5100=1, WIN:18240=1, SPECIAL:100900=1, SPECIAL:17160=1}\n"
+  },
+  {
+    "game": "41-Lucky-Panda",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "69e9638e99b16f0f15ecfa840ac859faa4fb0969eb4e3a094ad9c0cfd5f7cd18",
+    "logTail": "REDIS_CONNECTING host=127.0.0.1 port=57424 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=57424 database=0 ssl=false\nNATURAL_CLASSIFICATION_COMPLETE normal=2 special=2 ordinaryLoss=0 ordinaryWin=2 normalBuckets=2 specialBuckets=2 capPerMultiplier=300 discardedOverlong=0\nBATCH_COMMITTED batch=1 members=4 loaded=4\nLOAD_COMPLETE redisGameId=41 normal=2 special=2 ordinaryLoss=0 ordinaryWin=2 batches=1 rulesVersion=gid41-protocol-20260904 rulesHash=5f8142ce67bb887905edb625ebfb90128fa872cc0de8e9af0f8017debc2dc50c\n"
+  },
+  {
+    "game": "42-Lucky-Dragon",
+    "redisKeysByDb": {
+      "0": 5
+    },
+    "exitCode": 0,
+    "jarSha256": "4209952f1735ae5afe76337b7bae410a24c705a11939a9b322907e214d851973",
+    "logTail": "[PASS] raw gid42 Redis loaded loss=0 normalWin=2 special=2 written=4 batches=1 buckets=1/2 rulesHash=b80c2bc3d8e9d04305c2808a59843743a3950241842c2dc70b36e1e0012b1a57\n"
+  },
+  {
+    "game": "43-Lucky-Wheel",
+    "redisKeysByDb": {
+      "0": 8
+    },
+    "exitCode": 0,
+    "jarSha256": "1bf0b3976fa80a76dba229bfa3b8a82337be662c64709587624eb9bb44b7c2cf",
+    "logTail": "CLEARED_EXISTING_KEYS gameId=43 scanned=6 deleted=0\nREDIS_POOL PerKeyList_000000043 zcard=1 MaryKeyList_000000043 zcard=1\nREDIS_POOL PerKeyList_100000043 zcard=1 MaryKeyList_100000043 zcard=1\n[成功] Redis 生成完成：sourceGameId=43 redisGameId=43 normal=2 special=2 written=4 batches=1\n[校验] maxConsecutiveWins=1 normalBuckets=2 specialBuckets=2 normalLossMembers=0 rulesHash=sha256:5BD756F5F541F6577977BA3A6FD309AED6BCC45730150E4A687B488157E595D1\n[key] locked ordinary=PerKeyList_000000043 unlocked ordinary=PerKeyList_100000043 locked mary=MaryKeyList_000000043 unlocked mary=MaryKeyList_100000043\n"
+  },
+  {
+    "game": "45-Rio-Carnival",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "ee64c081002e240545582b9ee7e546904c3e4fb9361b460f5431c5789fc202d4",
+    "logTail": "lossMembers=0\nLOAD_COMPLETE gameId=45 loss=0 normalWin=2 special=2 batches=1 candidates=599 zeroSkipped=0 limitSkipped=0 maxFreeSteps=20 rulesHash=sha256:515ffa3a4f803e36d44a1a50da1ce79b4c1df2e75a79893a18cd404aecc0565c\n普通倍率分布={280=1, 400=1}\n特殊倍率分布={240=1, 1520=1}\n"
+  },
+  {
+    "game": "50-Lucky-Cat-II",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "8a0288f019abae8c0104f31a4034ca769b8b9cd9c2cd08a96e69be220d5ecfdc",
+    "logTail": "Lucky Cat II Redis Loader 完成：未中奖=2，普通中奖=2，特殊=2（Lucky=2 Wheel=0），事务批次=1，候选=6\n普通实际倍率分布={0=2, 280=1, 267=1}\n特殊实际倍率分布={0=2}\nrulesHash=4fcb4da38b457ee89e699b66ae9e258af2c73a622fc324202f20b7d7957c95f6\n"
+  },
+  {
+    "game": "52-Cyber-GO",
+    "redisKeysByDb": {
+      "0": 7
+    },
+    "exitCode": 0,
+    "jarSha256": "83d03b920819a7e3d2ffb1a3a58c9bab16feb594e1eff8dd14f964f4cdb0c37a",
+    "logTail": "LOSS_PREWRITTEN=2\nLOAD_COMPLETE redisGameId=52 normal=2 special=2 batches=1 candidates=294 fractionalMultiplierSkipped=9 limitSkipped=0 maxDeliveries=13 rulesHash=ae4823db63a5e8bd1d1f3a06da3ed6f76c04d761aefce10f29de6f6502885cfa\n普通实际倍率分布={96=1, 0=2, 93=1}\n特殊实际倍率分布={134=1, 128=1}\n"
+  },
+  {
+    "game": "54-Fishing-GO",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "80cbbc474afbe57b77c2fd9cc053a6f3a64d9ae6e5f22e2caf0a5c95c59ba3cc",
+    "logTail": "Loaded Fishing GO loss=0 win=2 special=2 rulesHash=23e7a379b8a38d25d638cd0726cab97c49a6c425c88e2dd371c82007f9f81463 buckets={BetLog:000000054:000030=1, BetLog:000000054:000100=1, MaryLog:000000054:000480=1, MaryLog:000000054:000660=1}\n"
+  },
+  {
+    "game": "56-Crazy-Piggy",
+    "redisKeysByDb": {
+      "0": 7
+    },
+    "exitCode": 0,
+    "jarSha256": "840f228b275f218db64fdffcd64755c4c31124d4a209fcf216c512b97961c808",
+    "logTail": "Crazy Piggy Redis Loader 完成：未中奖=2，普通中奖=2，特殊=2，事务批次=1，候选=6\n普通实际倍率分布={0=2, 58=1, 203=1}\n特殊实际倍率分布={320=1, 240=1}\nrulesHash=7edd2945da54923875932aa9feb1bfd657c9c67cca832637060f8419573480ab\n"
+  },
+  {
+    "game": "57-Crazy-777",
+    "redisKeysByDb": {
+      "0": 6
+    },
+    "exitCode": 0,
+    "jarSha256": "f7b64b4fd07c6294cb092b5b1780143c229d5f5452271167f3964a2d44110b57",
+    "logTail": "Crazy 777 Redis Loader 完成：未中奖=2，普通中奖=2，免费=2，事务批次=1，候选=6\n普通实际倍率分布={65=2, 0=2}\n特殊实际倍率分布={268=1, 160=1}\nrulesHash=sha256:852d3021084c1f4117203c4a6eda137747bf9c1f689b30decb9791e46bf66f2b\n"
+  },
+  {
+    "game": "58-Crazy-Gems",
+    "redisKeysByDb": {
+      "0": 3
+    },
+    "exitCode": 0,
+    "jarSha256": "c29013e69b93ecf945a847b81be2f6860186365853d0658c83dd8103dedb7548",
+    "logTail": "REDIS_CONNECTING host=127.0.0.1 port=57469 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=57469 database=0 ssl=false\nCLEARED_EXISTING_KEYS gameId=8000058 lists=3\nNATURAL_CLASSIFICATION_COMPLETE normal=1 special=1 loss=0 win=2 buckets=2 duplicates=0\nBATCH_COMMITTED batch=1 members=2 loaded=2\nLOAD_COMPLETE redisGameId=8000058 normal=1 special=1 batches=1 loss=0 win=2 rulesVersion=crazy-gems-rules-0bf6b8291cfbfe00 rulesHash=0bf6b8291cfbfe0005aacbe5150d64097752cd989da88fb5a384db1e2d3d60ef\n"
+  },
+  {
+    "game": "60-Crazy-Birds",
+    "redisKeysByDb": {
+      "0": 7
+    },
+    "exitCode": 0,
+    "jarSha256": "ff591e283cdce8aa9ca33177bec2b579822f2a040ab126cb471fe19e252d3ae4",
+    "logTail": "Crazy Birds Redis Loader 完成：未中奖=2，普通中奖=2，免费=2，事务批次=1，候选=6\n普通实际倍率分布={91=1, 75=1, 0=2}\n特殊实际倍率分布={951=1, 380=1}\nrulesHash=sha256:60crazybirds-v1510250430-ways4096\n"
+  },
+  {
+    "game": "61-Saci",
+    "redisKeysByDb": {
+      "0": 3
+    },
+    "exitCode": 0,
+    "jarSha256": "346f2d1abca5f3158ac402fb3101250da7368965c5c0f4812d70d1d4f306386d",
+    "logTail": "Saci Redis Loader 完成：未中奖=1，普通中奖=1，特殊=0，事务批次=1，候选=2\n普通实际倍率(百分之一)分布={6000=1, 0=1}\n特殊实际倍率(百分之一)分布={}\nrulesHash=saci-v2-656af5aa-rebuild-20260910\n"
+  },
+  {
+    "game": "8-Jurassic-Jungle",
+    "redisKeysByDb": {
+      "0": 4
+    },
+    "exitCode": 0,
+    "jarSha256": "9dcc38f0cbc0ea55ac6b429f939e7811b2bc1744923675296d1f53b918dbcc15",
+    "logTail": "生成完成：raw gid=8，写入完整局=2，候选=2，rulesHash=8dae3e502d7eb6610086d677915adb0b988b25f2b8210b378d3ba6d313518b04\n"
+  }
+]

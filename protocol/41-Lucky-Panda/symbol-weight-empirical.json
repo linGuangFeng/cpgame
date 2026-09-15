@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "gameId": 41,
+  "directoryName": "41-Lucky-Panda",
+  "rulesHash": "f3b873d1ee56f004089ba1754b88905dad33ba6df8d103d7a03d263d51c0c99b",
+  "disclaimer": "Observed cell and RLE-block counts from authorized complete Rounds. Not original reel-strip probability, RTP or volatility. Do not copy paidStart weights onto cascade refill or free entries.",
+  "source": "captures/41-Lucky-Panda/original-http-spin-index.jsonl (3382 deliveries; round-index paidStarts=1333)",
+  "entries": {
+    "paidStart": {
+      "scene": "first delivery of a paid Round (nfsc=0, step 1)",
+      "denominatorCells": 45322,
+      "denominatorBlocks": 35246,
+      "evidence": "1333 first boards * 34 visible cells",
+      "cells": {
+        "Pan": 719,
+        "H1": 4613,
+        "H2": 4567,
+        "H3": 4331,
+        "H4": 4321,
+        "H5": 4253,
+        "A": 4329,
+        "K": 4299,
+        "Q": 4398,
+        "J": 4265,
+        "T": 4190,
+        "Wild": 185,
+        "Scat": 852
+      },
+      "blocks": {
+        "Pan": 559,
+        "H1": 3608,
+        "H2": 3588,
+        "H3": 3365,
+        "H4": 3388,
+        "H5": 3330,
+        "A": 3370,
+        "K": 3337,
+        "Q": 3375,
+        "J": 3286,
+        "T": 3264,
+        "Wild": 130,
+        "Scat": 646
+      }
+    },
+    "cascadeRefill": {
+      "scene": "ordinary tumble refill after a wa>0 delivery with nfsc=0",
+      "denominatorCells": 42806,
+      "denominatorBlocks": 38822,
+      "cells": {
+        "Pan": 1877,
+        "H1": 4570,
+        "H2": 4144,
+        "H3": 4255,
+        "H4": 4089,
+        "H5": 3863,
+        "A": 3720,
+        "K": 3791,
+        "Q": 3778,
+        "J": 3731,
+        "T": 3353,
+        "Wild": 475,
+        "Scat": 1160
+      },
+      "blocks": {
+        "Pan": 1670,
+        "H1": 4171,
+        "H2": 3769,
+        "H3": 3853,
+        "H4": 3686,
+        "H5": 3444,
+        "A": 3471,
+        "K": 3484,
+        "Q": 3457,
+        "J": 3444,
+        "T": 3075,
+        "Wild": 245,
+        "Scat": 1053
+      }
+    },
+    "freeStart": {
+      "scene": "first delivery of a free spin (nfsc increases)",
+      "denominatorCells": 12920,
+      "denominatorBlocks": 10073,
+      "note": "38 complete free Rounds; 12920/34=380 free-start boards",
+      "cells": {
+        "Pan": 233,
+        "H1": 1262,
+        "H2": 1386,
+        "H3": 1285,
+        "H4": 1179,
+        "H5": 1242,
+        "A": 1157,
+        "K": 1201,
+        "Q": 1189,
+        "J": 1258,
+        "T": 1219,
+        "Wild": 80,
+        "Scat": 229
+      },
+      "blocks": {
+        "Pan": 181,
+        "H1": 987,
+        "H2": 1051,
+        "H3": 1004,
+        "H4": 944,
+        "H5": 988,
+        "A": 898,
+        "K": 961,
+        "Q": 921,
+        "J": 966,
+        "T": 936,
+        "Wild": 60,
+        "Scat": 176
+      }
+    },
+    "freeCascadeRefill": {
+      "scene": "tumble refill inside a free spin after wa>0",
+      "denominatorCells": 13974,
+      "denominatorBlocks": 11922,
+      "cells": {
+        "Pan": 412,
+        "H1": 1346,
+        "H2": 1340,
+        "H3": 1238,
+        "H4": 1375,
+        "H5": 1260,
+        "A": 1249,
+        "K": 1388,
+        "Q": 1298,
+        "J": 1339,
+        "T": 1337,
+        "Wild": 73,
+        "Scat": 319
+      },
+      "blocks": {
+        "Pan": 314,
+        "H1": 1164,
+        "H2": 1136,
+        "H3": 1065,
+        "H4": 1188,
+        "H5": 1118,
+        "A": 1041,
+        "K": 1199,
+        "Q": 1113,
+        "J": 1126,
+        "T": 1124,
+        "Wild": 42,
+        "Scat": 292
+      }
+    }
+  },
+  "generatorWeightHint": {
+    "use": "relative integer weights from the matching entry's cell or block counts",
+    "zeroWeightAllowedOnlyIf": "a symbol is structurally impossible at that entry; none of the 13 symbols are structurally impossible here",
+    "commentExample": "paidStart Pan cells 719/45322 ≈ 1.586426% source original-http-spin-index.jsonl; not original RTP"
+  }
+}

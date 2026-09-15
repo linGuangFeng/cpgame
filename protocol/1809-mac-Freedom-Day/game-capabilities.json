@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 3,
+  "gameId": "1809",
+  "providerGameId": 2260,
+  "directoryName": "1809-mac-Freedom-Day",
+  "gameName": "Freedom Day",
+  "status": "ACCEPTED_FOR_INCREMENTAL_DEFECT_SCOPE",
+  "board": {
+    "main": {"reels": 6, "rows": 5, "order": "REEL_MAJOR_TOP_TO_BOTTOM", "field": "prop"},
+    "top": {"cells": 4, "reels": [2, 3, 4, 5], "field": "trl"},
+    "visibleCellCount": 34,
+    "symbols": {"min": 1, "max": 13, "ballMultiplier": 1, "scatter": 12, "wild": 13},
+    "mergedSymbols": {"supported": true, "field": "grids", "heightRange": [2, 4], "outerReelsHeightOneOnly": true, "goldFrameField": "gf", "silverFrameField": "sl"}
+  },
+  "winModel": {"type": "WAYS", "minimumAdjacentReels": 3, "paylineCount": "NOT_APPLICABLE"},
+  "specialModes": [
+    {"id": "FEATURE_BUY", "request": {"bet_type": 3}, "costBetMultiple": 75, "status": "CONFIRMED"},
+    {"id": "MARY_FREE_SPINS", "triggerScatterCount": 4, "initialSpins": 10, "extraPerAdditionalScatter": 2, "status": "CONFIRMED"}
+  ],
+  "ordinaryPaidIndependentLoss": {"supported": true, "singleStepOnly": true, "requiresIndependentResultUtilZero": true, "requiresNoFollowingState": true, "ballOccurrencePolicy": "50_PERCENT_OF_PRE_FIX_BASELINE"},
+  "supportedLanguages": {"codes": ["bn-bd", "en-us", "es-es", "fr-fr", "id-id", "ko-ko", "pt-br", "pt-pt", "th-th", "tr-tr"]},
+  "controllerContract": {"version": 3, "jar": "dist/controller.jar", "processMode": "managed-process", "portRange": "50000-59999"},
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "235af93ec1e76cecf4816ab889bb1924113501faa79714b372473261367e6986",
+    "behaviorIds": ["FD-INIT-CONFIG", "FD-WAYS-EVALUATION", "FD-CASCADE-ADJACENCY", "FD-MERGED-GRID-PROJECTION", "FD-MARY-ROUND", "FD-ORDINARY-LOSS-BALL-RATE", "FD-ROUND-DELIVERY", "FD-HISTORY-SESSION"]
+  }
+}

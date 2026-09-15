@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0",
+  "workflowTemplateVersion": 15,
+  "gameId": 1830,
+  "directoryName": "1830-Hotpot",
+  "rawGameIdOnly": true,
+  "status": "RULES_WRITTEN_WAITING_CLEAN_ROUNDS",
+  "implementationAllowed": false,
+  "collectionClassificationReady": true,
+  "rulesHash": "01123dc898992e5e38efb1f58b816c844093dfcf07939e2cefa3153022b61c01",
+  "formalPaidRounds": 0,
+  "confirmedEndpoints": [
+    "POST /cp/single_game.Game/initRoom",
+    "POST /cp/single_game.Game/gameResult",
+    "POST /cp/goldgame/single_game_user_gold_history",
+    "POST /cp/goldgame/single_game_user_history"
+  ],
+  "confirmedRequestFields": ["token", "gid", "bet_gold(Bet Size)", "level"],
+  "confirmedResponseFieldsFromCode": [
+    "props[].prop",
+    "props[].win_arr.p/n/wm/odd",
+    "props[].tw",
+    "props[].mult",
+    "frees.st/tt/twa/lwa",
+    "bet_gold",
+    "change_gold",
+    "end_gold",
+    "total_win",
+    "odds",
+    "oid",
+    "type",
+    "level",
+    "prop_odds"
+  ],
+  "confirmedBehaviors": [
+    "6x6 COUNT_ANYWHERE_8",
+    "cascade pages inside one gameResult",
+    "Scatter Free Spins",
+    "no buy mode",
+    "no wild substitute",
+    "Base Bet 20 is not paylineCount"
+  ],
+  "confirmedRules": [
+    "protocol/1830-Hotpot/rules-core-canonical.json",
+    "protocol/1830-Hotpot/round-end.md"
+  ],
+  "unknown": [
+    "clean complete-round HTTP bodies",
+    "initRoom prop_odds numeric values",
+    "start vs fill vs free symbol weights",
+    "integer total_win/bet_gold rate",
+    "history response bodies"
+  ],
+  "quarantined": [
+    "fixtures/1830-Hotpot/spin-dirty-20260903"
+  ],
+  "requiredEvidenceSources": [
+    "ORIGINAL_AUTHORIZED_HTTP",
+    "THIS_GAME_FRONTEND",
+    "THIS_GAME_POLYGLOT_HELP"
+  ],
+  "forbiddenEvidenceSources": [
+    "OFFLINE_GENERATED_NOT_ORIGINAL",
+    "OTHER_GAME_EXAMPLE",
+    "QUARANTINED_DIRTY_FIXTURE_AS_ROUND_COUNT"
+  ],
+  "schedulerGate": "COLLECTION_MAY_START_WITH_THIS_CLASSIFICATION"
+}

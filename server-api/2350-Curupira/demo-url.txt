@@ -1,0 +1,1 @@
+http://127.0.0.1:8500/?ai=local_demo&btt=1&gid=2350&l=en-us&language=en-us&sip=127.0.0.1%3A19500&t=curupira-local-session&token=curupira-local-session

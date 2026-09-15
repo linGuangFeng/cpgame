@@ -1,0 +1,15 @@
+package com.cpgame.monsterslayer.server;
+
+import javax.net.ssl.SSLSocketFactory;import java.io.*;import java.net.InetSocketAddress;import java.net.Socket;import java.nio.charset.StandardCharsets;import java.util.ArrayList;import java.util.List;import java.util.Properties;
+
+final class SocketRedisCommands implements RedisCommands {
+    private final Socket socket;private final BufferedInputStream in;private final BufferedOutputStream out;
+    private SocketRedisCommands(Socket s)throws IOException{socket=s;in=new BufferedInputStream(s.getInputStream());out=new BufferedOutputStream(s.getOutputStream());}
+    static SocketRedisCommands connect(Properties c)throws IOException{String host=c.getProperty("redis.host","18.234.101.161").trim();int port=Integer.parseInt(c.getProperty("redis.port","8021"));int db=Integer.parseInt(c.getProperty("redis.database","0"));if(!host.equals("18.234.101.161")||port!=8021||db < 0)throw new IllegalArgumentException("Invalid Redis endpoint: "+host+":"+port+" db="+db);Socket s=Boolean.parseBoolean(c.getProperty("redis.ssl","false"))?SSLSocketFactory.getDefault().createSocket():new Socket();s.connect(new InetSocketAddress(host,port),Integer.parseInt(c.getProperty("redis.connect-timeout-ms","5000")));s.setSoTimeout(Integer.parseInt(c.getProperty("redis.socket-timeout-ms","30000")));SocketRedisCommands r=new SocketRedisCommands(s);try{String u=c.getProperty("redis.username","").trim(),p=c.getProperty("redis.password","");if(!p.isBlank()&&u.isBlank())r.command("AUTH",p);if(!p.isBlank()&&!u.isBlank())r.command("AUTH",u,p);r.command("SELECT",Integer.toString(db));if(!"PONG".equals(r.command("PING")))throw new IOException("PING did not return PONG");return r;}catch(Exception e){r.close();throw e;}}
+    public synchronized Object command(String...a)throws IOException{out.write(("*"+a.length+"\r\n").getBytes(StandardCharsets.US_ASCII));for(String x:a){byte[]b=x.getBytes(StandardCharsets.UTF_8);out.write(("$"+b.length+"\r\n").getBytes(StandardCharsets.US_ASCII));out.write(b);out.write('\r');out.write('\n');}out.flush();return read();}
+    private Object read()throws IOException{int p=in.read();if(p<0)throw new EOFException();return switch(p){case '+'->line();case '-'->throw new IOException("Redis error: "+line());case ':'->Long.parseLong(line());case '$'->bulk();case '*'->array();default->throw new IOException("invalid RESP");};}
+    private String line()throws IOException{ByteArrayOutputStream b=new ByteArrayOutputStream();int prev=-1;while(true){int cur=in.read();if(cur<0)throw new EOFException();if(prev=='\r'&&cur=='\n')return b.toString(StandardCharsets.UTF_8);if(prev>=0)b.write(prev);prev=cur;}}
+    private Object bulk()throws IOException{int n=Integer.parseInt(line());if(n<0)return null;byte[]b=in.readNBytes(n);if(b.length!=n||in.read()!='\r'||in.read()!='\n')throw new EOFException();return new String(b,StandardCharsets.UTF_8);}
+    private Object array()throws IOException{int n=Integer.parseInt(line());if(n<0)return null;List<Object>v=new ArrayList<>();for(int i=0;i<n;i++)v.add(read());return v;}
+    public void close()throws IOException{socket.close();}
+}

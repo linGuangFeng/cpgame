@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0",
+  "workflowTemplateVersion": 15,
+  "auditKind": "BATCH_D_OFFLINE_PRECAPTURE_V15",
+  "auditedAt": "2026-08-29",
+  "browserPageCallsPerformed": false,
+  "sourceEvidenceClaimed": false,
+  "games": [
+    {
+      "gameId": 58,
+      "directoryName": "58-Crazy-Gems",
+      "tenCategoryDirectoriesPresent": true,
+      "accountVerifiedOnPage": true,
+      "paidRoundStarts": 0,
+      "formalPaidRounds": 0,
+      "historyAcceptance": "PENDING_NO_DURABLE_ROUND_EVIDENCE"
+    },
+    {
+      "gameId": 60,
+      "directoryName": "60-Crazy-Birds",
+      "tenCategoryDirectoriesPresent": true,
+      "accountVerifiedOnPage": false,
+      "paidRoundStarts": 0,
+      "formalPaidRounds": 0,
+      "historyAcceptance": "PENDING"
+    },
+    {
+      "gameId": 1810,
+      "directoryName": "1810-Treasure-Hunt",
+      "tenCategoryDirectoriesPresent": true,
+      "accountVerifiedOnPage": false,
+      "paidRoundStarts": 0,
+      "formalPaidRounds": 0,
+      "historyAcceptance": "PENDING"
+    },
+    {
+      "gameId": 1830,
+      "directoryName": "1830-Hotpot",
+      "tenCategoryDirectoriesPresent": true,
+      "accountVerifiedOnPage": false,
+      "paidRoundStarts": 0,
+      "formalPaidRounds": 0,
+      "historyAcceptance": "PENDING"
+    }
+  ],
+  "rawGidAudit": {
+    "forbiddenDerivedIdsFound": [],
+    "integrationGameIdKeysFound": [],
+    "result": "PASS"
+  },
+  "privacyAudit": {
+    "credentialMaterialPersisted": false,
+    "allowedEphemeralDestination": "api.omgapibra.com",
+    "actionTimeConfirmationRequired": true,
+    "result": "PASS"
+  },
+  "toolValidation": {
+    "offlineAuditSyntax": "PASS",
+    "roundLedgerSyntax": "PASS",
+    "roundLedgerDryRunGameIds": [
+      58,
+      60,
+      1810,
+      1830
+    ],
+    "dryRunWritesSamples": false
+  },
+  "problems": [],
+  "status": "READY_FOR_STABLE_ABC222_EVIDENCE_BACKFILL"
+}

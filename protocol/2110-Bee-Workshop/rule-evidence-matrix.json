@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 3,
+  "gameId": 2110,
+  "directoryName": "2110-Bee-Workshop",
+  "rulesHash": "bw2110-lines20-paytable-v2-a7afb966-deal-3d5f4e28",
+  "behaviorIds": [
+    "BW2110.ORDINARY_LOSS",
+    "BW2110.ORDINARY_WIN",
+    "BW2110.MYSTERY_BOX",
+    "BW2110.FREE_STICKY_SYMBOLS"
+  ],
+  "status": "CORE_VALIDATED_BLOCKED_INTEGRATION_AND_EVIDENCE",
+  "readyForAcceptance": false,
+  "sources": {
+    "gameBundle": {
+      "path": "resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/assets/Game2110/index.1cbca.js",
+      "sha256": "a7afb966d24388b875efa8242f62260a35ad33fb489577d84f6dfa25e2766fce"
+    },
+    "helpPack": {
+      "path": "resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/assets/resources/import/06/0671ab352.10e6d.json",
+      "sha256": "de037cf89975786d23776d60d2bf5ac3c976e51a89db4b39fa8b76cacc0fdf92",
+      "table": "Form/PolyglotGame2110 CSV English column"
+    }
+  },
+  "evidence": [
+    {
+      "rule": "20 paylines, paytable and board transform",
+      "source": "resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/assets/Game2110/index.1cbca.js",
+      "validation": "1476/1476 raw responses match independent Python audit and Java ResultUtil; 248 positive payout responses"
+    },
+    {
+      "rule": "Wild only reels 2,3,4; substitutes paying symbols",
+      "source": "resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/assets/resources/import/06/0671ab352.10e6d.json",
+      "key": "Game2110_9",
+      "validation": "GameRuleCore per-entry legal positions and observed per-reel/board bounds"
+    },
+    {
+      "rule": "3/4/5 Scatter awards 8/10/15 free spins",
+      "source": "resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/assets/resources/import/06/0671ab352.10e6d.json",
+      "key": "Game2110_15",
+      "validation": "38 triggers: 36 three-Scatter, two four-Scatter; five-Scatter rule check passes, generated mode withheld without sample"
+    },
+    {
+      "rule": "Mystery flower baskets 5-10; all reveal one paying symbol excluding Wild/Scatter",
+      "source": "resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/assets/resources/import/06/0671ab352.10e6d.json",
+      "keys": [
+        "Game2110_12",
+        "Game2110_13"
+      ],
+      "validation": "100 indexed complete rounds; empirical mask/target aggregate fit excludes 20 holdout"
+    },
+    {
+      "rule": "Center seed, same revealed sticky symbol, all matching positions become sticky, retain previous positions",
+      "source": "resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/assets/resources/import/06/0671ab352.10e6d.json",
+      "keys": [
+        "Game2110_16",
+        "Game2110_17",
+        "Game2110_18"
+      ],
+      "validation": "one complete History chain; generated rounds enforce exact matching-position mask and observed transition bounds"
+    },
+    {
+      "rule": "At most 15 sticky cells; no Scatter during free",
+      "source": "resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/assets/resources/import/06/0671ab352.10e6d.json",
+      "keys": [
+        "Game2110_19",
+        "Game2110_20"
+      ],
+      "validation": "generator enforces stricter observed entry caps; theoretical maximum does not justify unsupported outcomes"
+    },
+    {
+      "rule": "Highest award per line, left-to-right",
+      "source": "resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/assets/resources/import/06/0671ab352.10e6d.json",
+      "keys": [
+        "Game2110_22",
+        "Game2110_23"
+      ],
+      "validation": "independent candidate enumeration calculator"
+    },
+    {
+      "rule": "Stake and line money",
+      "source": "fixtures/2110-Bee-Workshop/enter/initialData/response.json",
+      "support": "fixtures/2110-Bee-Workshop/spin/round-index.jsonl",
+      "validation": "stake=bet size*level*20; line money=odd*bet size*level; all 1476 response awards verified"
+    },
+    {
+      "rule": "Complete free delivery and terminal remaining zero",
+      "source": "fixtures/2110-Bee-Workshop/history-view/response.json",
+      "validation": "one chain remaining 8,7,6,5,4,3,2,1,0; source insufficient 1/30"
+    },
+    {
+      "rule": "Idle initial board and config",
+      "source": "fixtures/2110-Bee-Workshop/enter/initRoom/response.json",
+      "support": "fixtures/2110-Bee-Workshop/enter/initialData/response.json",
+      "validation": "Magic Scroll is the captured game_info.name for gid2110 and intentionally preserved; buy_free_max_bet=-1"
+    },
+    {
+      "rule": "Original entry HTML and bootstrap provenance",
+      "source": "publish/2110-Bee-Workshop/index.html",
+      "validation": "UNVERIFIED original source HTML; prior browser HTTP200 is not original-entry or animation proof"
+    },
+    {
+      "rule": "History day/page/page_size, unpaginated day statistics and seven daily rows",
+      "source": "fixtures/2110-Bee-Workshop/history-view/request.json",
+      "support": [
+        "fixtures/2110-Bee-Workshop/history-view/response.json",
+        "fixtures/2110-Bee-Workshop/history-list/response.json"
+      ],
+      "observed": "30 detail rows but total_bet_gold=2480; seven-day totals 5752 with rows 2480 and3272; page statistics are not limited to displayed rows",
+      "validation": "31 real Redis loss rounds: pages30/1/0 all total124, seven daily rows PASS",
+      "implementation": "CANDIDATE_ONLY; formal JAR replacement blocked",
+      "report": "reports/2110-Bee-Workshop/history-pagination-validation-20260908.json"
+    }
+  ],
+  "deliveryStatus": "CANDIDATE_VALIDATED_PROMOTION_BLOCKED",
+  "updatedAt": "2026-09-08T07:01:37.510313+00:00"
+}

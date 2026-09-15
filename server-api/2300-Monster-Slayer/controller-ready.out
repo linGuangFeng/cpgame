@@ -1,0 +1,1 @@
+CONTROLLER_READY gameId=2300 port=52300 pid=52760 rulesVersion=2300-monster-slayer-v1 rulesHash=7db7a0bf683d32923c31a001904afc200248478cc5fdb3353017a0630335cbc8 publish=D:\work\hd\cpgame\publish\2300-monster-slayer redis=192.168.10.3:6379 db=15

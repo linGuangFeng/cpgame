@@ -1,0 +1,24 @@
+{
+  "schemaVersion":"3.0","workflowTemplateVersion":40,"gameId":1810,"gameName":"Treasure Hunt","directoryName":"1810-Treasure-Hunt",
+  "rulesVersion":"1810-v40-provider-joint-1","rulesHash":"b4b91422b13dc7e2eef14ed1eea034b2e0e361385e00134c1f1ffe9001ebc409",
+  "winModel":"Ten observed 3-symbol paylines on a 3/4/3 column-major board; Wild=7 substitutes; paytable 1:100,2:50,3:20,4:10,5:5,6:3,7:200; all-reels rounds multiply the whole step by 10.",
+  "boardModel":{"columns":3,"rowCounts":[3,4,3],"positions":"COLUMN_MAJOR_0_TO_9","paylines":[[0,3,7],[0,4,7],[0,4,8],[1,4,7],[1,4,8],[1,5,8],[1,5,9],[2,5,8],[2,5,9],[2,6,9]],"symbols":[1,2,3,4,5,6,7],"wild":7},
+  "roundModel":{"ordinary":"type=1, small_game_type=0, exactly one complete board","treasureHunt":"type=2, small_game_type=3, 2..9 complete newly dealt boards; only terminal board wins","allReels":"type=1, small_game_type=0, all=1, ten winning lines and whole-step x10","settlement":"bet_gold=bet*level*10; total_win=bet*level*integerUnits; odds=integerUnits/10"},
+  "specialModes":[{"id":"TREASURE_HUNT","status":"CONFIRMED","serverType":2,"smallGameType":3,"sampleRoundCount":140},{"id":"ALL_REELS_MULTIPLIER","status":"CONFIRMED","serverType":1,"smallGameType":0,"sampleRoundCount":30}],
+  "runtimeIndependentLoss":{"supported":true,"source":"PREGENERATED_REDIS_COMPLETE_ROUND","runtimeGeneration":false,"artificialBoardConstraint":false},
+  "redisContract":{"host":"192.168.10.3","port":6379,"database":15,"normalMultiplierIndex":"PerKeyList_000001810","specialMultiplierIndex":"MaryKeyList_000001810","normalListPattern":"BetLog:000001810:%06d","specialListPattern":"MaryLog:000001810:%06d","memberSemantics":"one complete round per list member"},
+  "codecContract":{"encoding":"UTF-8_ASCII_MINIMAL_FACT","ordinaryPrefix":"TH40N:","treasurePrefix":"TH40T:","allReelsPrefix":"TH40A:","projection":"shared ResultUtil evaluates each complete fact before provider presentation"},
+  "symbolWeights":{"model":"POSITION_X_PREVIOUS_SYMBOL_HIERARCHICAL","positionEvidenceRounds":3442,"transitionEvidencePairs":30978,"configurationAdjustments":[100,100,100,100,100,100,15]},
+  "generationModel":{"implementationReady":true,"usesIndependentCellMarginalsOnly":false,"artificialLossBoardConstraints":false,
+    "lifecycleEntries":[
+      {"id":"ORDINARY_INITIAL_STATE","role":"INITIAL","countingUnit":"COMPLETE_INITIAL_STATE","sampleRoundCount":3655,"samplePositionCount":36550,"wholeNextStateCountedAsNewDeal":false,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"]},
+      {"id":"TREASURE_INITIAL_STATE","role":"INITIAL_STATE","countingUnit":"COMPLETE_INITIAL_STATE","sampleRoundCount":140,"samplePositionCount":1400,"wholeNextStateCountedAsNewDeal":false,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"]},
+      {"id":"TREASURE_NEXT_STATE","role":"TRANSITION","countingUnit":"NEWLY_DEALT_POSITIONS","sampleRoundCount":140,"samplePositionCount":2380,"wholeNextStateCountedAsNewDeal":true,"retainedPositionCount":0,"positionSelection":"Adjacent props entries each contain a fresh ten-position board; no position is retained from the prior step.","evidenceRefs":["EV-ROUND-STEPS"]},
+      {"id":"ALL_REELS_INITIAL_STATE","role":"INITIAL","countingUnit":"COMPLETE_INITIAL_STATE","sampleRoundCount":30,"samplePositionCount":300,"wholeNextStateCountedAsNewDeal":false,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"]}
+    ],
+    "jointRoundFeatures":[{"id":"ROUND_OUTCOME_CLASS","applicable":true,"evidenceRefs":["EV-SPIN-INDEX"]},{"id":"ROUND_STEP_COUNT","applicable":true,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"]},{"id":"STATE_ELEMENT_COUNT_VECTOR","applicable":true,"evidenceRefs":["EV-ROUND-STEPS"]}],
+    "holdoutPlan":{"source":"REAL_PROVIDER","minimumRounds":100,"actualRounds":383,"selection":"every tenth completed round stratified by outcome","disjointFromTraining":true}},
+  "evidence":["captures/1810-Treasure-Hunt/spin-index.jsonl","captures/1810-Treasure-Hunt/round-steps.jsonl","reports/1810-Treasure-Hunt/scenario-coverage.json","reports/1810-Treasure-Hunt/generation-model-validation.json"],
+  "handoffContract":{"file":"protocol-handoff.json","rulesHash":"b4b91422b13dc7e2eef14ed1eea034b2e0e361385e00134c1f1ffe9001ebc409","behaviorIds":["BHV-ORDINARY-PAYLINES","BHV-TREASURE-HUNT","BHV-ALL-REELS-X10","BHV-REDIS-COMPLETE-ROUND","BHV-PROVIDER-PRESENTATION","BHV-HISTORY-PERSISTENCE","BHV-ORIGINAL-UI-LANGUAGES"]},
+  "fixturePolicy":"Fixtures and captures are independent test oracles only and are never runtime result sources."
+}

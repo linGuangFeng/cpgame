@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 3,
+  "contractVersion": 3,
+  "gameId": 1940,
+  "directoryName": "1940-beach-fun",
+  "rulesHash": "sha256:4332cba4e18f7a2dfb8c99d2c5f8969e7650edc3d109f97204af38fb4d1a2af2",
+  "behaviorIds": ["BF-IDENTITY","BF-INIT","BF-PAID","BF-CASCADE","BF-GOLD","BF-FREE","BF-RETRIGGER","BF-HISTORY","BF-REDIS-ROUND","BF-STATIC-LANGUAGE"],
+  "states": ["IDLE","PAID_START","DELIVERING","CACHE_EMPTY"],
+  "evidenceInventory": [
+    {"id":"E-ENTRY","source":"captures/1940-Beach-Fun/real-entry-launch-evidence.json","behaviorIds":["BF-IDENTITY","BF-STATIC-LANGUAGE"]},
+    {"id":"E-RULES","source":"captures/1940-Beach-Fun/rules-paytable-ui-evidence.json","behaviorIds":["BF-CASCADE","BF-GOLD","BF-FREE","BF-RETRIGGER"]},
+    {"id":"E-ROUNDS","source":"captures/1940-Beach-Fun/round-batches.jsonl","behaviorIds":["BF-PAID","BF-CASCADE","BF-GOLD","BF-FREE","BF-REDIS-ROUND"]},
+    {"id":"E-INIT","source":"fixtures/1940-Beach-Fun/enter/initRoom/response.json","behaviorIds":["BF-INIT","BF-CASCADE","BF-FREE"]},
+    {"id":"E-HISTORY","source":"fixtures/1940-Beach-Fun/HISTORY.md","behaviorIds":["BF-HISTORY"]}
+  ],
+  "behaviorContracts": [
+    {"id":"BF-IDENTITY","status":"CONFIRMED","state":"IDLE"},
+    {"id":"BF-INIT","status":"CONFIRMED","state":"IDLE"},
+    {"id":"BF-PAID","status":"CONFIRMED","transition":"IDLE->PAID_START"},
+    {"id":"BF-CASCADE","status":"CONFIRMED","transition":"PAID_START|DELIVERING->DELIVERING|IDLE"},
+    {"id":"BF-GOLD","status":"CONFIRMED","transition":"winning gold on reels 2..4 becomes Wild in next cascade"},
+    {"id":"BF-FREE","status":"CONFIRMED","transition":"PAID_START->DELIVERING; terminal surplus_times=0"},
+    {"id":"BF-RETRIGGER","status":"SAMPLE_INSUFFICIENT","implemented":true},
+    {"id":"BF-HISTORY","status":"CONFIRMED","state":"IDLE|DELIVERING","readOnly":true},
+    {"id":"BF-REDIS-ROUND","status":"CONFIRMED","transition":"claim one BF1 member once; reuse through termination"},
+    {"id":"BF-STATIC-LANGUAGE","status":"CONFIRMED","state":"IDLE"}
+  ],
+  "implementation": {"uniqueRuleCore":"generator/1940-beach-fun/src/main/java/com/cpgame/beachfun/core/GameRuleCore.java","controller":"server-api/1940-beach-fun/dist/controller.jar","loader":"generator/1940-beach-fun/dist/redis-loader.jar"},
+  "unresolved": [{"id":"U-FREE-RETRIGGER-SAMPLE","status":"SAMPLE_INSUFFICIENT","blocking":false,"reason":"0 observed after 1865 paid complete Rounds; rule itself is explicit in paytable and frontend."}]
+}

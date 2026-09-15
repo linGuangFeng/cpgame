@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 2,
+  "workflowTemplateVersion": 40,
+  "gameId": 1670,
+  "directoryName": "1670-Christmas-Gift",
+  "rulesHash": "58d9172c4942e29e629038fb88877ce11564375b1bd69059e5b9a38ab38df14d",
+  "status": "READY",
+  "redis": {"host":"192.168.10.3","port":6379,"database":15},
+  "normal": {"index":"PerKeyList_000001670","listPattern":"BetLog:000001670:%06d","memberCount":9000},
+  "feature": {"index":"MaryKeyList_000001670","listPattern":"MaryLog:000001670:%06d","memberCount":1000},
+  "memberCodec": "CG38 minimal complete-round fact",
+  "loader": "generator/1670-Christmas-Gift/dist/christmas-gift-loader.jar",
+  "configuration": "generator/1670-Christmas-Gift/dist/generator.properties",
+  "loadMode": "ATOMIC_REPLACE_GAME_1670_KEYS",
+  "runtimeGeneration": false,
+  "fixturesRuntime": false,
+  "emptyPoolBehavior": "FAIL_CLOSED"
+}

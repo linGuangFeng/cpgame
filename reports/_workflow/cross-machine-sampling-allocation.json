@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-08-29T08:15:00+08:00",
+  "identityPolicy": {
+    "gameIdField": "gid",
+    "rawGidOnly": true,
+    "forbiddenFields": [
+      "integrationGameId"
+    ],
+    "forbiddenTransforms": [
+      "8000000+gid"
+    ]
+  },
+  "samplingPolicy": {
+    "ordinaryLossCompleteRounds": 200,
+    "ordinaryWinCompleteRounds": 100,
+    "eachConfirmedSpecialOrRewardCompleteRounds": 30,
+    "maxPaidRoundStartsPerGame": 3000,
+    "rareRewardAbsencePaidRoundThreshold": 1000,
+    "roundHistoryExactOneToOneRequired": true,
+    "shortLivedTokenMemoryOnly": true,
+    "authorizedApiOrigin": "https://api.omgapibra.com"
+  },
+  "credentialPolicy": {
+    "passwordsPersisted": false,
+    "note": "Passwords are intentionally omitted; use the credentials already supplied by the user."
+  },
+  "currentMachine": {
+    "account": "abc222",
+    "collectionMode": "SEQUENTIAL_SINGLE_BROWSER_COLLECTOR",
+    "collectionOrder": [41, 2, 16, 33, 42],
+    "games": [41, 2, 16, 33, 42],
+    "pipeline": "After one game's resources/spin/history collection is complete, start that game's implementation task in parallel while the collector advances to the next gid.",
+    "reason": "User explicitly retained these five games on the current machine; gid 42 also has 10 official UI paid rounds and an existing account History chain on abc222."
+  },
+  "isolatedMachine": [
+    {
+      "profile": "Profile 1",
+      "account": "abc221",
+      "games": [43]
+    },
+    {
+      "profile": "Profile 2",
+      "account": "abc223",
+      "games": [52, 54, 56, 57, 45]
+    },
+    {
+      "profile": "Profile 3",
+      "account": "abc224",
+      "games": [58, 60, 1810, 1830, 50]
+    },
+    {
+      "profile": "Profile 4",
+      "account": "abc225",
+      "games": [1910, 2010, 2110]
+    }
+  ],
+  "migrationBasis": {
+    "startedPaidSamplingGids": [42],
+    "currentMachineRetainedGids": [41, 2, 16, 33, 42],
+    "isolatedMachineGids": [43, 45, 50, 52, 54, 56, 57, 58, 60, 1810, 1830, 1910, 2010, 2110],
+    "notStartedFormalSamplingGids": [41, 2, 16, 33, 43, 45, 50, 52, 54, 56, 57, 58, 60, 1810, 1830, 1910, 2010, 2110],
+    "gid42UiPaidRounds": 10,
+    "gid42FormalOriginalHttpRounds": 0
+  }
+}

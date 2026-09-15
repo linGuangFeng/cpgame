@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 2,
+  "gameId": 41,
+  "gameName": "Lucky Panda",
+  "directoryName": "41-Lucky-Panda",
+  "rulesHash": "5f8142ce67bb887905edb625ebfb90128fa872cc0de8e9af0f8017debc2dc50c",
+  "status": "COMPLETE_FIELD_RULE_SOURCE_CODE_SAMPLE_MATRIX",
+  "columns": [
+    "fieldOrRule",
+    "ruleOrConfigSource",
+    "frontendDecision",
+    "sampleEvidence",
+    "status",
+    "behaviorIds"
+  ],
+  "rows": [
+    {
+      "fieldOrRule": "identity gid / gameName / API path",
+      "ruleOrConfigSource": "41/versionconfig.js document.title Lucky Panda; GameVersion v1.5.10.250430",
+      "frontendDecision": "bundle gameId:41; GameApi paths /api/v1/lucky-panda/{config,spin,log-list,log-view}",
+      "sampleEvidence": "all captured forms gid=41; 1333 paid Rounds",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-IDENTITY"
+      ]
+    },
+    {
+      "fieldOrRule": "supportedLanguages.codes",
+      "ruleOrConfigSource": "launch query l",
+      "frontendDecision": "runtime language selected by l",
+      "sampleEvidence": "ten codes en,pt,es,th,vi,id,bn,ko,fr,tr in language-inventory.json",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-IDENTITY"
+      ]
+    },
+    {
+      "fieldOrRule": "request codec",
+      "ruleOrConfigSource": "Http.encodeFormData",
+      "frontendDecision": "application/x-www-form-urlencoded; encodeURIComponent; %20 -> +; headers web-token->t game-id->gid",
+      "sampleEvidence": "spin form bl,bs,gid; fixtures redact t; no encryption",
+      "status": "CONFIRMED_NO_ENCRYPTION",
+      "behaviorIds": [
+        "B-CODEC-HTTP"
+      ]
+    },
+    {
+      "fieldOrRule": "response envelope code/info/data",
+      "ruleOrConfigSource": "Http._cancelResponseData",
+      "frontendDecision": "plain JSON; code 200 resolves data||{}",
+      "sampleEvidence": "fixtures/spin and history envelopes code=200 info=ok; original-http index stores code+data",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-CODEC-HTTP"
+      ]
+    },
+    {
+      "fieldOrRule": "auth then config then spin",
+      "ruleOrConfigSource": "GameApi.Config / Spin; capture probe",
+      "frontendDecision": "POST /api/v1/auth/verify then /lucky-panda/config then /lucky-panda/spin",
+      "sampleEvidence": "lucky-panda-api-probe.mjs and first-load-en-network.json hit config URL",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-CONFIG-BET"
+      ]
+    },
+    {
+      "fieldOrRule": "Config bll/bsl/cc/cs",
+      "ruleOrConfigSource": "original-http-preflight-round-001.json config",
+      "frontendDecision": "initConfig reads t.bsl as base_multiplier and t.bll as multiplier; Currency=t.cs",
+      "sampleEvidence": "bll=1..10; bsl=[0.02,0.2]; cc=BRL; cs=R$",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-CONFIG-BET"
+      ]
+    },
+    {
+      "fieldOrRule": "Config.spl / paytable",
+      "ruleOrConfigSource": "screenshots/41-Lucky-Panda/original-paytable.png; frontend this.symbol_pay_list=t.spl",
+      "frontendDecision": "win_match_amount = symbol_pay_list[symbol][reelCount] * CurBetmulti",
+      "sampleEvidence": "preflight omitted spl; screenshot Pan 3/4/5/6 = 30/40/50/80 through T=1/2/3/4; 2883 wa matches",
+      "status": "CONFIRMED_FROM_SCREENSHOT_AND_WA_ORACLE_SPL_BODY_NOT_SAVED",
+      "behaviorIds": [
+        "B-WAYS-EVAL",
+        "B-CONFIG-BET"
+      ]
+    },
+    {
+      "fieldOrRule": "ba / stake factor 20",
+      "ruleOrConfigSource": "initConfig payline_count=20 hardcoded; ba on paid start",
+      "frontendDecision": "PlayLineCount getter returns 20; used as stake factor, not ways count",
+      "sampleEvidence": "ba=0.4 = 0.02*1*20 on every paid start; UI footer is WAYS; 2883 awards ignore the 20",
+      "status": "CONFIRMED_NOT_PAYLINE_COUNT",
+      "behaviorIds": [
+        "B-CONFIG-BET",
+        "B-WAYS-EVAL"
+      ]
+    },
+    {
+      "fieldOrRule": "winModel ALL_WAYS / paylineCount NOT_APPLICABLE",
+      "ruleOrConfigSource": "paytable text: adjacent identical symbols from leftmost reel times number of paths",
+      "frontendDecision": "ANIMA_REFRESH_WAYS; no MatchLineIndexData payline map for result logic",
+      "sampleEvidence": "language-en-main.png WAYS; original-menu.png SENTIDOS; 0 PayLineCount hits in result path",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-WAYS-EVAL"
+      ]
+    },
+    {
+      "fieldOrRule": "board rskl RLE [5,6,6,6,6,5]",
+      "ruleOrConfigSource": "frontend parses rskl with s=[5,6,6,6,6,5] and Number(token[0]) as height",
+      "frontendDecision": "inner reels w=1..4 may stack height 2-4; outer height forced 1 in randomReel animation",
+      "sampleEvidence": "2883/2883 boards decode; mismatchCount=0",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-WAYS-EVAL"
+      ]
+    },
+    {
+      "fieldOrRule": "wire position reel*10+row",
+      "ruleOrConfigSource": "wmkl values such as [2,3,4]/[14,15]/[21]",
+      "frontendDecision": "coord padStart 2 used as reel+row",
+      "sampleEvidence": "round 11 H2 wmkl [[[2,3,4],[14,15],[21],[30],[40,42],[54]]] maps onto decoded cells",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-WAYS-EVAL"
+      ]
+    },
+    {
+      "fieldOrRule": "wa award formula",
+      "ruleOrConfigSource": "paytable screenshot plus captured wmkl/wskl/rpx",
+      "frontendDecision": "symbol_pay_list[symbol][reelCount] * CurBetmulti; totalTimes=rpx||1",
+      "sampleEvidence": "H2 6-oak 12 ways * 40 * 0.02 * rpx2 = 19.2 matches round 11 step 5; 2883/2883 mismatchCount=0",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-WAYS-EVAL"
+      ]
+    },
+    {
+      "fieldOrRule": "Wild substitution",
+      "ruleOrConfigSource": "paytable: Wild substitui todos os simbolos, exceto o simbolo do Tesouro",
+      "frontendDecision": "SmybolImgPath.Wild; Wild is not in the paying paytable",
+      "sampleEvidence": "Wild appears in rskl (paidStart 104 blocks) and never as wskl paying symbol. Help: only reels 2-5. Capture wildReel counts [29,135,141,80,59,33] including outer; wildTop=0. Generation follows help: no Wild on outer or inner top.",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-WAYS-EVAL"
+      ]
+    },
+    {
+      "fieldOrRule": "ss spin_status",
+      "ruleOrConfigSource": "spin data.ss; frontend this.spin_status=!ss",
+      "frontendDecision": "ss=1 means current tumble segment terminal; IsFreeGameFirst uses !spin_status && fsn>0 && nfsc==0",
+      "sampleEvidence": "ss in {0,1} only; 1442 ss=1 deliveries; continuation always follows ss=0",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-CASCADE",
+        "B-ROUND-END"
+      ]
+    },
+    {
+      "fieldOrRule": "rwa accumulator / ba on continuation",
+      "ruleOrConfigSource": "spin data.rwa / data.ba",
+      "frontendDecision": "RoundReward += wa",
+      "sampleEvidence": "paid start ba=0.4; 1791 continuations ba=0; rwa non-decreasing on 985 cascade pairs",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-CASCADE"
+      ]
+    },
+    {
+      "fieldOrRule": "rpx multiplier",
+      "ruleOrConfigSource": "spin data.rpx; frontend totalTimes=g||1",
+      "frontendDecision": "Pan first-collect sets times=2 animation; loaclPanInfo.clear on ss=1",
+      "sampleEvidence": "rpx 0 or even 2..26; 0 means x1. Paid 2579/2591 pages: rpx=max(prev, 2*Pan RLE blocks). First free from 0 is 2+2*blocks; later free-spin starts add 2*blocks. Teacher-forced 3297/3382. Top banner totalTimes=rpx||1.",
+      "status": "CONFIRMED_RECONSTRUCTED_FROM_MATRIX",
+      "behaviorIds": [
+        "B-CASCADE",
+        "B-WAYS-EVAL"
+      ]
+    },
+    {
+      "fieldOrRule": "frwa",
+      "ruleOrConfigSource": "spin data.frwa",
+      "frontendDecision": "field copied; free wins still added via wa into RoundReward",
+      "sampleEvidence": "frwa=0 on 2883/2883 deliveries; empty/zero is normal",
+      "status": "CONFIRMED_ALWAYS_ZERO",
+      "behaviorIds": [
+        "B-SCATTER-FREE"
+      ]
+    },
+    {
+      "fieldOrRule": "fsn / nfsc scatter free",
+      "ruleOrConfigSource": "spin data.fsn/nfsc; frontend free_spin_num / now_free_spin_count",
+      "frontendDecision": "IsFreeGame when not (fsn==nfsc && ss==1 or fsn==0); FreeGameTimes=fsn-nfsc",
+      "sampleEvidence": "Capture fsn only 0 or 10 (38 triggers, including 1 five-block page still fsn=10). Help: 4 treasures=10, each additional +2, retrigger allowed. Generation uses help formula on RLE blocks: 4→10, 5→12. max-mary-spins must be >=12 or 5-block triggers are discarded.",
+      "status": "HELP_OVERRIDES_CAPTURE_CONSTANT_10",
+      "behaviorIds": [
+        "B-SCATTER-FREE"
+      ]
+    },
+    {
+      "fieldOrRule": "scatter trigger 4 blocks not 3 cells",
+      "ruleOrConfigSource": "35 fsn=10 paid terminals vs 9 paid terminals with 3 Scat blocks and fsn=0",
+      "frontendDecision": "trigger is server-side; client only reads fsn",
+      "sampleEvidence": "trigger blockCount 4 (34) or 5 (1); reelCount 3 or 4; 3-block terminals do not trigger",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-SCATTER-FREE"
+      ]
+    },
+    {
+      "fieldOrRule": "sfl / gfl",
+      "ruleOrConfigSource": "frontend marks sfl Silver and gfl Gold including TopRollIndex mapping of 10,20,30,40",
+      "frontendDecision": "visual frame types on blocks; not used in the wa formula",
+      "sampleEvidence": "Help: silver on reels 2-5 height 2-4 excluding Wild/Scat; winning silver → random gold-framed paying; winning gold → Wild. Capture cascade pairs: silverWinToGoldNext 354/354; goldWinToWildNext 178/183 (5 gold Pan stayed Pan); non-winning frames persist 100%. gfl never on Wild/Scat. Capture also had 89 sfl-on-Scat and 19 sfl-on-Wild; generation follows help and does not assign frames to Wild/Scat.",
+      "status": "CONFIRMED_HELP_TRANSFORM_AND_CAPTURE_PERSIST",
+      "behaviorIds": [
+        "B-CASCADE"
+      ]
+    },
+    {
+      "fieldOrRule": "gt",
+      "ruleOrConfigSource": "spin data.gt vs history row.gt",
+      "frontendDecision": "spin gt copied; history gt is game id 41",
+      "sampleEvidence": "spin gt=1 on 3382/3382; history row.gt=41 on 1333/1333",
+      "status": "CONFIRMED_SPIN_GT_1_HISTORY_GT_41",
+      "behaviorIds": [
+        "B-CODEC-HTTP",
+        "B-HISTORY"
+      ]
+    },
+    {
+      "fieldOrRule": "wmkl/wskl spin vs history shapes",
+      "ruleOrConfigSource": "spin array-of-arrays plus parallel wskl; history objects {sk,wa,wmk}",
+      "frontendDecision": "GameResults reads h=t.wmkl and u=t.wskl from spin",
+      "sampleEvidence": "3382 spin wmkl are arrays; history bsl uses object form on winning steps",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-WAYS-EVAL",
+        "B-HISTORY"
+      ]
+    },
+    {
+      "fieldOrRule": "round end ss==1 && (fsn==0 || nfsc==fsn)",
+      "ruleOrConfigSource": "frontend isRealEnd=(ss==1 && fsn==nfsc)",
+      "frontendDecision": "IsFreeGame false when that holds or fsn==0",
+      "sampleEvidence": "1333/1333 round-index terminals match; 0 ss!=1 terminals",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-ROUND-END"
+      ]
+    },
+    {
+      "fieldOrRule": "ordinary loss / ordinary win / special",
+      "ruleOrConfigSource": "complete Round classification from this game's captures",
+      "frontendDecision": "no separate buy path; cascade is tumble of a win",
+      "sampleEvidence": "LOSS 1095; ordinary win (no free) 200 cascade=200 singleStep=0; scatter-free 38; buy 0",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-CASCADE",
+        "B-SCATTER-FREE",
+        "B-REDIS-ROUND"
+      ]
+    },
+    {
+      "fieldOrRule": "buy / ec activity",
+      "ruleOrConfigSource": "menu screenshots; frontend may add ec when ActivityData.isFreeGame()",
+      "frontendDecision": "no BuyBonus module; spin headers only bl/bs unless activity free",
+      "sampleEvidence": "0 extra spin fields in 1333 paid starts; buy not in ten-language menu",
+      "status": "NOT_PRESENT",
+      "behaviorIds": []
+    },
+    {
+      "fieldOrRule": "history list ll[]",
+      "ruleOrConfigSource": "POST /lucky-panda/log-list; fixtures/history-list",
+      "frontendDecision": "HistoryLogic renders Time/Bet ID/Bet/Profit from ll",
+      "sampleEvidence": "fields ba,baf,bid,ca,fe,gm,gt,tis,wa; fe=0 and gm=null on 1333/1333 (normal empty)",
+      "status": "CONFIRMED_NULL_GM_ZERO_FE_NORMAL",
+      "behaviorIds": [
+        "B-HISTORY"
+      ]
+    },
+    {
+      "fieldOrRule": "history detail bsl/fsl",
+      "ruleOrConfigSource": "POST /lucky-panda/log-view transfer_id",
+      "frontendDecision": "bsl then fsl concatenated for playback",
+      "sampleEvidence": "1333 details have bsl; fsl key only on 38 scatter-free Rounds; missing fsl is normal for ordinary Rounds",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-HISTORY"
+      ]
+    },
+    {
+      "fieldOrRule": "integer multiplier rwa/(bs*bl)",
+      "ruleOrConfigSource": "award formula uses integer pay, ways and rpx times bs*bl",
+      "frontendDecision": "not a client field",
+      "sampleEvidence": "238/238 positive-rwa complete Rounds have integer rwa/0.02; rwa/ba=0.4 is not integer",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "B-REDIS-ROUND"
+      ]
+    },
+    {
+      "fieldOrRule": "symbol weights three entries",
+      "ruleOrConfigSource": "independent-reanalysis.json paidStart/cascadeRefill/freeStart/freeCascadeRefill",
+      "frontendDecision": "randomReel weights [8,10,15,12,20,12,30,14,30,20,30,2,6] are animation only",
+      "sampleEvidence": "Pan paidStart 719/45322 cells vs cascadeRefill 1877/42806; do not copy start onto refill",
+      "status": "EMPIRICAL_NOT_ORIGINAL_PROBABILITY",
+      "behaviorIds": [
+        "B-REDIS-ROUND"
+      ]
+    },
+    {
+      "fieldOrRule": "Redis keys",
+      "ruleOrConfigSource": "platform consumer + 1809/42 mature structure; not an original-factory field",
+      "frontendDecision": "none; Redis is internal",
+      "sampleEvidence": "PerKeyList_000000041 / MaryKeyList_000000041 / BetLog and MaryLog six-digit multiplier",
+      "status": "CONFIRMED_PLATFORM_CONTRACT",
+      "behaviorIds": [
+        "B-REDIS-ROUND"
+      ]
+    }
+  ]
+}

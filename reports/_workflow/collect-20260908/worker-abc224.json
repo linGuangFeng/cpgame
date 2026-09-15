@@ -1,0 +1,43 @@
+{
+  "worker": "abc224",
+  "alive": true,
+  "phase": "DONE",
+  "currentGame": null,
+  "error": null,
+  "updatedAt": "2026-09-11T16:29:50.058Z",
+  "games": {
+    "45-Rio-Carnival": {
+      "status": "GAME_DONE",
+      "loss": 1153,
+      "win": 205,
+      "special": {
+        "FREE_SPINS": 48
+      },
+      "resourcesReady": true,
+      "apiCatalog": true,
+      "notes": "sampling skipped; existing complete-round quotas already met"
+    },
+    "56-Crazy-Piggy": {
+      "status": "GAME_DONE",
+      "loss": 1068,
+      "win": 200,
+      "special": {
+        "BOOSTER_WHEEL": 37
+      },
+      "resourcesReady": true,
+      "apiCatalog": true,
+      "notes": "sampling skipped; existing complete-round quotas already met"
+    },
+    "2300-Monster-Slayer": {
+      "status": "GAME_DONE",
+      "loss": 1164,
+      "win": 200,
+      "special": {
+        "special_sgt_2": 388
+      },
+      "resourcesReady": true,
+      "apiCatalog": true,
+      "notes": "ordinary reused (loss 1164, win 200); buy buckets {\"100002300\":{\"complete\":20,\"requestType\":4,\"uiIndex\":2},\"200002300\":{\"complete\":20,\"requestType\":5,\"uiIndex\":3},\"000002300\":{\"complete\":20,\"requestType\":3,\"uiIndex\":1}}"
+    }
+  }
+}

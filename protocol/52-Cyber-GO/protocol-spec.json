@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 1,
+  "gameId": 52,
+  "gameName": "Cyber GO",
+  "directoryName": "52-Cyber-GO",
+  "rulesHash": "ae4823db63a5e8bd1d1f3a06da3ed6f76c04d761aefce10f29de6f6502885cfa",
+  "behaviorIds": [
+    "B01_LAUNCH_AUTH_CONFIG",
+    "B02_MINIMUM_PAID_SPIN",
+    "B03_243_WAYS_WIN",
+    "B04_FREE_SPINS",
+    "B05_COMPLETE_ROUND_BOUNDARY",
+    "B06_LANGUAGE_FIRST_LOAD",
+    "B07_RULES_AND_PAYTABLE",
+    "B08_HISTORY_DETAIL",
+    "B09_PROMOTIONAL_ACTIVITY_FREE",
+    "B10_HTTP_FORM_CODEC"
+  ],
+  "scope": "原站HTTP协议、字段语义、完整Round/Step/Delivery状态机；不定义Java实现或平台Redis私有契约",
+  "truthBoundary": {
+    "staticVisualTruth": [
+      "页面标题、规则文本、奖表显示、语言资源、按钮与菜单可见性"
+    ],
+    "interfaceBehaviorTruth": [
+      "端点、请求字段、表单编码、响应字段、相邻Step、Round终止与历史合并"
+    ],
+    "rule": "视觉常量仅在同时有规则、config、前端判定或抓包行为证据时才能成为协议语义；投注因子30不是中奖线数量"
+  },
+  "transport": {
+    "method": "POST",
+    "defaultContentType": "application/x-www-form-urlencoded",
+    "formEncoding": "encodeURIComponent(key/value), replace %20 with +, join with &",
+    "headerAdapter": {
+      "web-token": "t",
+      "game-id": "gid"
+    },
+    "responseEnvelope": {
+      "format": "JSON",
+      "success": "HTTP 2xx AND body.code=200",
+      "payload": "body.data or empty object",
+      "failure": "HTTP non-2xx or body.code!=200"
+    },
+    "encryption": {
+      "customApplicationLayer": "NOT_OBSERVED",
+      "contract": "token is opaque and must never be decoded for game-state logic; no custom request encryption or response decryption may be invented",
+      "transportSecurity": "HTTPS at original origin"
+    },
+    "evidenceRefs": [
+      "E02_FRONTEND_MAIN",
+      "E03_FIRST_LOAD_API",
+      "E09_HTTP_CODEC"
+    ]
+  },
+  "endpoints": [
+    {
+      "id": "AUTH_VERIFY",
+      "path": "/api/v1/auth/verify",
+      "order": "first gameplay API",
+      "requestFormFields": [
+        "ai",
+        "btt",
+        "t",
+        "gid"
+      ],
+      "confirmedResponseFields": [
+        "player.balance",
+        "player.id",
+        "token",
+        "ping.enable",
+        "ping.seconds",
+        "rc",
+        "gc"
+      ],
+      "behaviorId": "B01_LAUNCH_AUTH_CONFIG"
+    },
+    {
+      "id": "CONFIG",
+      "path": "/api/v1/go-cyber/config",
+      "order": "after successful AUTH_VERIFY",
+      "requestFormFields": [
+        "t",
+        "gid"
+      ],
+      "confirmedResponseFields": [
+        "auto",
+        "bll",
+        "bsl",
+        "cc",
+        "cs",
+        "dbl",
+        "dbs",
+        "last",
+        "ls",
+        "spl",
+        "ts"
+      ],
+      "resumeRule": "when last is non-null, frontend treats last.fsn!=last.nfsc as unfinished content",
+      "behaviorId": "B01_LAUNCH_AUTH_CONFIG"
+    },
+    {
+      "id": "SPIN",
+      "path": "/api/v1/go-cyber/spin",
+      "order": "paid start and every free continuation Step",
+      "requestFormFields": [
+        "bl",
+        "bs",
+        "t",
+        "gid"
+      ],
+      "currentGameMinimum": {
+        "bl": 1,
+        "bs": 0.02,
+        "effectiveBa": 0.6,
+        "currency": "BRL"
+      },
+      "optionalPlatformField": {
+        "field": "ec",
+        "status": "NOT_APPLICABLE_TO_CONFIRMED_CYBER_GO_MODES",
+        "reason": "only conditionally sent for platform activityFree; current auth/config did not grant that mode"
+      },
+      "confirmedResponseFields": [
+        "ba",
+        "fsn",
+        "gt",
+        "nfsc",
+        "pl",
+        "rpx",
+        "rskl",
+        "rwa",
+        "small_game_type",
+        "ss",
+        "wa",
+        "wmkl",
+        "wskl"
+      ],
+      "historyVariantOptionalFields": [
+        "bid",
+        "bl",
+        "bs",
+        "ca"
+      ],
+      "behaviorIds": [
+        "B02_MINIMUM_PAID_SPIN",
+        "B03_243_WAYS_WIN",
+        "B04_FREE_SPINS",
+        "B05_COMPLETE_ROUND_BOUNDARY"
+      ]
+    },
+    {
+      "id": "LOG_LIST",
+      "path": "/api/v1/go-cyber/log-list",
+      "requestFormFields": [
+        "page_index",
+        "begin_at",
+        "end_at",
+        "t",
+        "gid"
+      ],
+      "confirmedResponseFields": [
+        "ll",
+        "end",
+        "lc",
+        "ba",
+        "wa"
+      ],
+      "behaviorId": "B08_HISTORY_DETAIL",
+      "pageSize": 10,
+      "timeRange": "inclusive begin_at/end_at epoch seconds",
+      "evidence": "fixtures/52-Cyber-GO/history-list/response.json"
+    },
+    {
+      "id": "LOG_VIEW",
+      "path": "/api/v1/go-cyber/log-view",
+      "requestFormFields": [
+        "transfer_id",
+        "t",
+        "gid"
+      ],
+      "confirmedResponseFields": [
+        "bsl",
+        "fsl",
+        "baf",
+        "bid"
+      ],
+      "mergeRule": "orderedSteps = bsl followed by fsl; every element remains one Step of the same paid Round",
+      "behaviorId": "B08_HISTORY_DETAIL"
+    },
+    {
+      "id": "PING",
+      "path": "/api/v1/ping",
+      "requestFormFields": [
+        "t",
+        "gid"
+      ],
+      "activation": "only when auth response ping.enable is truthy",
+      "behaviorId": "B01_LAUNCH_AUTH_CONFIG"
+    }
+  ],
+  "requestSequences": {
+    "firstLoad": [
+      "AUTH_VERIFY",
+      "CONFIG",
+      "if CONFIG.last is unfinished, restore that state before permitting a new paid Round"
+    ],
+    "ordinaryPaidRound": [
+      "SPIN(bl=1,bs=0.02)",
+      "if fsn=0, terminate the Round after this single Step"
+    ],
+    "freeSpinRound": [
+      "SPIN(bl=1,bs=0.02) paid trigger",
+      "while fsn>nfsc, call the same SPIN request and append response to the same Round",
+      "terminate only when fsn=nfsc"
+    ],
+    "historyReconciliation": [
+      "LOG_LIST(page/range)",
+      "for the selected ll[].tis call LOG_VIEW(transfer_id=tis)",
+      "append bsl then fsl and verify the same fsn/nfsc termination rule"
+    ]
+  },
+  "stateMachine": {
+    "roundIdentity": {
+      "paidRound": "begins at the first SPIN outside an active Round",
+      "roundId": "local capture/delivery identifier and not an original response field",
+      "historyAssociation": "one log-list transfer id tis groups log-view bsl and fsl"
+    },
+    "states": [
+      {
+        "id": "IDLE",
+        "precondition": "no active Round",
+        "allowedRequest": "one paid SPIN"
+      },
+      {
+        "id": "PAID_STEP_RECEIVED",
+        "observedFields": {
+          "ba": 0.6,
+          "gt": 1,
+          "small_game_type": 0,
+          "nfsc": 0
+        },
+        "transitions": [
+          {
+            "when": "fsn=0",
+            "to": "TERMINAL"
+          },
+          {
+            "when": "fsn>nfsc",
+            "to": "FREE_ACTIVE"
+          }
+        ]
+      },
+      {
+        "id": "FREE_ACTIVE",
+        "observedFields": {
+          "ba": 0,
+          "gt": 2,
+          "small_game_type": 2
+        },
+        "transitionRule": "each response increments nfsc by one in captured sequences; keep the Step under the original Round",
+        "transitions": [
+          {
+            "when": "fsn>nfsc",
+            "to": "FREE_ACTIVE"
+          },
+          {
+            "when": "fsn=nfsc",
+            "to": "TERMINAL"
+          }
+        ],
+        "forbidden": [
+          "new paidRoundStarts entry",
+          "new member claim",
+          "temporary independent generation"
+        ]
+      },
+      {
+        "id": "TERMINAL",
+        "predicate": "fsn=0 OR fsn=nfsc",
+        "outputs": "one complete Round ready for one-time member delivery"
+      }
+    ],
+    "stepBoundary": "one SPIN response equals one Step",
+    "roundBoundary": "one paid Step plus zero or more free Steps through the terminal predicate",
+    "deliveryBoundary": "generate/claim once at paid start, then consume stored adjacent Steps; never regenerate the active Round per request",
+    "ssBoundary": "ss=0 was observed on final free Step, but ordinary terminal Steps can have ss=1; ss is not the universal termination predicate",
+    "adjacentStepOracle": "captures/52-Cyber-GO/rounds.jsonl#52-round-00010:step0..step12"
+  },
+  "gameRules": {
+    "board": "5x3 visible",
+    "winModel": "243 fixed Ways, consecutive from leftmost reel",
+    "paylineCount": "NOT_APPLICABLE",
+    "wild": "WILD substitutes all except SC and only appears on reels 2/3/4",
+    "freeSpins": "3/4/5 SC grants 12/15/20; initial x2; consume 3 collected WILD to add 2 and retain the remainder; maximum x20; SC absent during free mode",
+    "purchase": "NOT_DISCOVERED",
+    "behaviorRefs": [
+      "B03_243_WAYS_WIN",
+      "B04_FREE_SPINS"
+    ],
+    "freeWildCarryEvidence": "reports/52-Cyber-GO/free-wild-carry-evidence-20260908.json"
+  },
+  "amountSemantics": {
+    "ba": "Step bet amount; 0.60 on paid start and 0.00 on captured free Steps",
+    "wa": "current Step win amount",
+    "rwa": "observed cumulative win amount of the Round",
+    "rpx": "paid value 1; free multiplier starts at 2 and follows the confirmed Wild-collection rule",
+    "pl.balance": "updated player balance when present in direct spin response"
+  },
+  "unknownAndForbiddenInferences": [
+    "buffer cells are UNKNOWN; do not invent beyond the 15 visible rskl entries",
+    "20 free Spins and multipliers above x10 have rules evidence but no captured complete-Round sample",
+    "fixtures and captured responses are independent test oracles only and may not be runtime result sources",
+    "Original reel strips and RTP unknown; local empirical transition counts are explicitly labelled and do not claim original probabilities",
+    "Local Redis contract follows the user mandate, not an example game or original upstream HTTP evidence"
+  ],
+  "evidenceRefs": [
+    "E01_RULES_PT",
+    "E02_FRONTEND_MAIN",
+    "E03_FIRST_LOAD_API",
+    "E04_COMPLETE_ROUNDS",
+    "E05_SPIN_INDEX",
+    "E08_ENDPOINT_ENUMERATION",
+    "E09_HTTP_CODEC"
+  ],
+  "handoff": {
+    "capabilities": "game-capabilities.json",
+    "fieldMatrix": "field-evidence-matrix.json",
+    "behaviorContracts": "protocol-handoff.json",
+    "rulesHash": "ae4823db63a5e8bd1d1f3a06da3ed6f76c04d761aefce10f29de6f6502885cfa"
+  },
+  "rulesVersion": "evidence-snapshot-e138fe9b94c489b9",
+  "validationRequirements": {
+    "completeRoundStepIndex": "每局stepIndex必须从0连续递增",
+    "freeStepOrder": "FREE_SPINS局在付费Step后，nfsc必须严格为1..fsn，末Step满足nfsc=fsn",
+    "targetedEvidence": "captures/52-Cyber-GO/rounds.jsonl#52-round-00100:step0 then free nfsc=1..12",
+    "independentValidator": "captures/52-Cyber-GO/tools/validate-protocol-rework.mjs"
+  },
+  "runtimeDeliveryContract": {
+    "source": "USER_MANDATE_CONTROLLER_V3_AND_REDIS_COMPLETE_ROUND_DELIVERY",
+    "scope": "local downstream contract, not original upstream protocol",
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "contractVersion": 3,
+    "index": "CyberGo:52:v3:win",
+    "listPattern": "CyberGo:52:v3:round:<integer-multiplier>",
+    "selection": [
+      "SecureRandom win/loss",
+      "uniform existing positive integer multiplier for win, zero for loss",
+      "atomic LPOP of exactly one member",
+      "remaining deliveries only from that member"
+    ],
+    "memberEncoding": "one digit 0..9 per visible cell; 15 cells per board; | between steps",
+    "runtimeGeneration": false,
+    "fixturesAtRuntime": false,
+    "fallback": false,
+    "emptyPool": "503 without charging/advancing",
+    "loaderPrewritesLosses": true,
+    "report": "reports/52-Cyber-GO/redis-pool-integration-20260908.json"
+  },
+  "generationModel": {
+    "status": "EMPIRICAL_MODEL_VALIDATED",
+    "method": "SEQUENTIAL_JOINT_REEL_STATE_COUNTS",
+    "modelFile": "reports/52-Cyber-GO/generation-distribution-model.json",
+    "validationFile": "reports/52-Cyber-GO/generation-model-validation.json",
+    "source": "captures/52-Cyber-GO/rounds.jsonl",
+    "trainingRounds": 1362,
+    "holdoutRounds": 100,
+    "originalReelsOrRtpClaimed": false,
+    "rawSampleFrequenciesSeparateFromGenerated": true
+  },
+  "implementationStatus": "BACKEND_VALIDATED_UI_AND_ORIGINAL_ENTRY_PENDING"
+}

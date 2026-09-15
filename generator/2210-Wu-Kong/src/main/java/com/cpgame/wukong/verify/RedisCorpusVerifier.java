@@ -1,0 +1,14 @@
+package com.cpgame.wukong.verify;
+
+import com.cpgame.wukong.core.*;
+import com.cpgame.wukong.redis.*;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.util.*;
+
+/** 独立读取 db15 全量 2210 member，验证 codec、倍率、池类型、ASCII 与容量。 */
+public final class RedisCorpusVerifier {
+    public static void main(String[] args)throws Exception{Properties p=new Properties();try(InputStream in=Files.newInputStream(Path.of(args.length>0?args[0]:"dist/generator.properties"))){p.load(in);}int gid=Integer.parseInt(p.getProperty("redis.game-id")),capacity=Integer.parseInt(p.getProperty("generation.max-members-per-multiplier"));GameRuleCore rules=new GameRuleCore();RoundCodec codec=new RoundCodec(rules);Map<String,Integer> modes=new TreeMap<>();int total=0,buckets=0,maxLength=0;try(RedisClient redis=RedisClient.connect(p.getProperty("redis.host"),Integer.parseInt(p.getProperty("redis.port")),p.getProperty("redis.username",""),p.getProperty("redis.password",""),Integer.parseInt(p.getProperty("redis.database")),Boolean.parseBoolean(p.getProperty("redis.ssl")),Integer.parseInt(p.getProperty("redis.connect-timeout-ms")),Integer.parseInt(p.getProperty("redis.socket-timeout-ms")))){for(boolean special:new boolean[]{false,true}){Object raw=redis.command("ZRANGE",special?RedisKeys.specialIndex(gid):RedisKeys.normalIndex(gid),"0","-1");if(!(raw instanceof List<?> ratios))throw new IllegalStateException("missing index");for(Object x:ratios){int multiplier=Integer.parseInt(String.valueOf(x));String key=special?RedisKeys.specialList(gid,multiplier):RedisKeys.normalList(gid,multiplier);Object members=redis.command("LRANGE",key,"0","-1");if(!(members instanceof List<?> list)||list.isEmpty()||list.size()>capacity)throw new IllegalStateException("invalid list size "+key);buckets++;maxLength=Math.max(maxLength,list.size());for(Object value:list){String member=String.valueOf(value);if(!StandardCharsets.US_ASCII.newEncoder().canEncode(member)||member.startsWith("{")||member.startsWith("[")||codec.verifyMultiplier(member)!=multiplier)throw new IllegalStateException("bad member "+key);CompleteRound round=codec.decode(member);if(rules.isSpecial(round)!=special)throw new IllegalStateException("wrong pool "+key);modes.merge(rules.classify(round).name(),1,Integer::sum);total++;}}}}if(!modes.keySet().containsAll(List.of("ORDINARY_LOSS","ORDINARY_WIN","SPECIAL_X2","SPECIAL_X5","SPECIAL_RESPIN")))throw new IllegalStateException("coverage missing "+modes);System.out.println("{\"status\":\"PASS\",\"members\":"+total+",\"buckets\":"+buckets+",\"maxBucketLength\":"+maxLength+",\"capacity\":"+capacity+",\"outcomes\":"+json(modes)+"}");}
+    private static String json(Map<String,Integer> m){StringJoiner j=new StringJoiner(",","{","}");m.forEach((k,v)->j.add("\""+k+"\":"+v));return j.toString();}
+}

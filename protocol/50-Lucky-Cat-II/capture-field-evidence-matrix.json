@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 2,
+  "gameId": 50,
+  "gameName": "Lucky Cat II",
+  "rulesHash": "4fcb4da38b457ee89e699b66ae9e258af2c73a622fc324202f20b7d7957c95f6",
+  "status": "COMPLETE_FIELD_RULE_SOURCE_CODE_SAMPLE_MATRIX",
+  "columns": ["fieldOrRule", "ruleOrConfigSource", "frontendDecision", "sampleEvidence", "status"],
+  "rows": [
+    {
+      "fieldOrRule": "identity: gameId/gameName",
+      "ruleOrConfigSource": "versionconfig title; GameConfig._gameId=50; gameRules Rules.Title",
+      "frontendDecision": "GameData.GameId and GameName select current API/assets",
+      "sampleEvidence": "authenticated startup gid=50; 1565 accepted current-game paid Rounds",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "sip/window.GameUrl",
+      "ruleOrConfigSource": "shared /0/versionconfig.js",
+      "frontendDecision": "sip sets launch-scheme://{sip}/cp; GameConfig.getGameUrl prefers window.GameUrl",
+      "sampleEvidence": "authenticated launch sip=api.omgapibra.com and captured API base https://api.omgapibra.com/cp",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Session endpoint branch",
+      "ruleOrConfigSource": "Platform.getCurVersion and GameApi.Login",
+      "frontendDecision": "nonempty query.t -> /api/v1/auth/verify; otherwise /api/v1/auth/session",
+      "sampleEvidence": "current authenticated verify=200; v1 only appeared in public no-t local fallback",
+      "status": "V2_CONFIRMED_V1_STATIC_ONLY"
+    },
+    {
+      "fieldOrRule": "Session v2 request",
+      "ruleOrConfigSource": "portal launch query ai,btt,t,gid,sip",
+      "frontendDecision": "Platform params become form body; logical game-id becomes gid",
+      "sampleEvidence": "authenticated-entry.json records redacted launch and verify=200",
+      "status": "CONFIRMED_REDACTED"
+    },
+    {
+      "fieldOrRule": "Session v2 response player/token/ping",
+      "ruleOrConfigSource": "auth/verify response summary",
+      "frontendDecision": "PlayerData.setUserData, token becomes web-token, HeartMgr.setState(ping)",
+      "sampleEvidence": "playerId 52770454, balance recorded, token redacted, ping.enable=0",
+      "status": "CONFIRMED_REDACTED"
+    },
+    {
+      "fieldOrRule": "logical auth fields",
+      "ruleOrConfigSource": "frontend Http mapping table",
+      "frontendDecision": "game-id -> gid; web-token -> t; unmapped pseudo-headers are not emitted",
+      "sampleEvidence": "Config/Spin/History accepted under isolated authenticated session",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "request codec/encryption",
+      "ruleOrConfigSource": "Http.encodeFormData/post",
+      "frontendDecision": "application/x-www-form-urlencoded, encodeURIComponent, space as +; no encryption",
+      "sampleEvidence": "interface-capture-summary transport; plain request field evidence",
+      "status": "CONFIRMED_NO_ENCRYPTION"
+    },
+    {
+      "fieldOrRule": "response codec",
+      "ruleOrConfigSource": "Http._cancelResponseData",
+      "frontendDecision": "parse plain JSON {code,info,data}; only code 200 resolves data or {}",
+      "sampleEvidence": "Config/Spin/History fixtures contain code=200, info=ok and plain data",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "HTTP/business error path",
+      "ruleOrConfigSource": "Http._cancelResponseData, HeartMgr, Spin.onReqSpin",
+      "frontendDecision": "non-200 rejects; non-JSON maps to HTTP<status>; 401 stops heart; Spin restores UI and stops auto; Ping HTTP0 retries",
+      "sampleEvidence": "code path evidence only; provider-specific error texts were not intentionally triggered",
+      "status": "TRANSITION_CONFIRMED_ERROR_CATALOG_UNKNOWN"
+    },
+    {
+      "fieldOrRule": "Config request",
+      "ruleOrConfigSource": "GameApi.Config",
+      "frontendDecision": "POST /api/v1/golden-cat/config with gid/t after successful Session",
+      "sampleEvidence": "fixtures/config-response.json code=200",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Config.bll/bsl/dbl/dbs",
+      "ruleOrConfigSource": "captured Config",
+      "frontendDecision": "initialize bet level/size selectors and defaults",
+      "sampleEvidence": "bll=1..10, bsl=[0.1,1,10], dbl=10, dbs=0.1",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Config.cc/cs",
+      "ruleOrConfigSource": "captured Config and Rules.Desc4",
+      "frontendDecision": "set currency code/symbol display",
+      "sampleEvidence": "cc=BRL, cs=R$",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Config.spl",
+      "ruleOrConfigSource": "captured Config paytable",
+      "frontendDecision": "getSymbolById supplies per-line payout value",
+      "sampleEvidence": "WILD=80,S1=25,S2=20,S3=15,S4=7,S5=5,S6=2; 1565 award checks",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Config.last",
+      "ruleOrConfigSource": "captured Config last object",
+      "frontendDecision": "restore previous board/bet/balance display on load",
+      "sampleEvidence": "last contains ba/bl/bs/gm/pb/rdri/rdskl/rpx/rskl/wa/wmkl",
+      "status": "CONFIRMED_DISPLAY_RESTORE"
+    },
+    {
+      "fieldOrRule": "Spin request bl/bs",
+      "ruleOrConfigSource": "Config legal values and Spin button code",
+      "frontendDecision": "POST /api/v1/golden-cat/spin with selected bl/bs plus gid/t",
+      "sampleEvidence": "all 1565 paid starts used minimum bl=1, bs=0.1",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "ba",
+      "ruleOrConfigSource": "5 fixed lines and Rules.Desc6",
+      "frontendDecision": "CurBetGold=bl*bs*PayLineCount",
+      "sampleEvidence": "all minimum-bet requests/returns have ba=0.5 where endpoint exposes ba",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "rskl",
+      "ruleOrConfigSource": "Spin/History result board",
+      "frontendDecision": "split reel-major flat list by RowCounts [3,3,3]",
+      "sampleEvidence": "1565/1565 arrays length 9 and current symbol codes only",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "fixed paylines/wmkl",
+      "ruleOrConfigSource": "Rules.Desc1/Desc9; MatchLineIndexData",
+      "frontendDecision": "wmkl line keys map to the five fixed coordinate triples",
+      "sampleEvidence": "independent board evaluation produced 0 wmkl mismatches across 1565 Rounds",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "WILD substitution",
+      "ruleOrConfigSource": "Rules.Desc8 and paytable Payout.Wild",
+      "frontendDecision": "WILD completes non-WILD lines; all-WILD pays WILD",
+      "sampleEvidence": "captured wmkl symbols and 1565 independent line checks",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "wa",
+      "ruleOrConfigSource": "Rules.Desc6 and Config.spl",
+      "frontendDecision": "sum line payout * bs * bl * rpx",
+      "sampleEvidence": "1565/1565 exact within floating tolerance; max delta 7.105427357601002e-15",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "pb/baf",
+      "ruleOrConfigSource": "Spin player balance and History balance-after",
+      "frontendDecision": "pb updates PlayerData.Coins; baf is displayed in History",
+      "sampleEvidence": "1365/1365 History details have Number(baf)=pb",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "tis/bid/ca",
+      "ruleOrConfigSource": "History summary/detail identifiers and timestamp",
+      "frontendDecision": "ll.tis becomes transfer_id; detail binds one provider Round",
+      "sampleEvidence": "1365/1365 bid equals '50-'+tis; index providerRoundId uses tis when available",
+      "status": "CONFIRMED_OPTIONAL_ON_DIRECT_SPIN"
+    },
+    {
+      "fieldOrRule": "gm",
+      "ruleOrConfigSource": "Lucky Respin rules and Spin response",
+      "frontendDecision": "gm=1 sets IsFreeGame and activates exactly one embedded respin transition",
+      "sampleEvidence": "50 gm=1 complete Rounds; 1515 gm=0 Rounds",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "rdri",
+      "ruleOrConfigSource": "Lucky Respin remaining-reel index",
+      "frontendDecision": "selects the one reel replaced between initial and final boards",
+      "sampleEvidence": "50 gm=1 samples cover rdri values 0..2; every adjacency verified",
+      "status": "CONFIRMED_ZERO_BASED_REEL_INDEX"
+    },
+    {
+      "fieldOrRule": "rdskl",
+      "ruleOrConfigSource": "Lucky Respin paid-board symbols for rdri",
+      "frontendDecision": "constructor displays rdskl on rdri while saving rskl; refresh restores saved rskl",
+      "sampleEvidence": "50 S01 boards use rdskl and 50 S02 boards use rskl with zero mismatch",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Lucky trigger stack orientation",
+      "ruleOrConfigSource": "rule text plus full sample corpus",
+      "frontendDecision": "gm is authoritative activation; frontend does not recalculate trigger",
+      "sampleEvidence": "prefix-WILD then repeated compatible symbol on two held reels, no initial win: classifier mismatch 0/1565; suffix-WILD near-matches remained gm=0",
+      "status": "CONFIRMED_FOR_CAPTURED_PROTOCOL"
+    },
+    {
+      "fieldOrRule": "Lucky Round termination",
+      "ruleOrConfigSource": "single free Lucky Respin rule",
+      "frontendDecision": "refreshRespinResult once; no continuation request",
+      "sampleEvidence": "all 50 entries have exactly S01 paid + S02 free terminal; no retrigger/index line",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "rpx",
+      "ruleOrConfigSource": "wheel rule, maximum 10x",
+      "frontendDecision": "GameResults.win_multiple and History payout calculation multiply lines",
+      "sampleEvidence": "48 rpx>1 Rounds; values 2,3,4,5,10; five overlap gm=1",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Wheel trigger",
+      "ruleOrConfigSource": "Rules.Desc3/Wheel.Desc1",
+      "frontendDecision": "wheel presentation consumes delivered rpx; no new Spin",
+      "sampleEvidence": "rpx>1 iff final board contains at most one distinct non-WILD symbol, 0 mismatches/1565",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Wheel probability",
+      "ruleOrConfigSource": "Wheel.Desc3",
+      "frontendDecision": "graphic distribution is presentation only",
+      "sampleEvidence": "48 samples cannot establish probability weights",
+      "status": "UNKNOWN_DO_NOT_INFER"
+    },
+    {
+      "fieldOrRule": "History list request",
+      "ruleOrConfigSource": "History UI",
+      "frontendDecision": "page_index/begin_at/end_at plus gid/t; end=0 advances, otherwise stop",
+      "sampleEvidence": "sanitized history-list oracle records query window and 1365 records",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "History list response",
+      "ruleOrConfigSource": "HistoryData/History UI",
+      "frontendDecision": "lc and ll summaries; list money fields remain strings; ll.tis opens detail",
+      "sampleEvidence": "records expose ba,baf,bid,ca,fe,gm,gt,tis,wa",
+      "status": "CONFIRMED_SANITIZED_ARCHIVE"
+    },
+    {
+      "fieldOrRule": "History detail",
+      "ruleOrConfigSource": "HistoryByID and detail constructors",
+      "frontendDecision": "POST log-view transfer_id and render full result/paylines",
+      "sampleEvidence": "1365 original code=200 detail JSON lines",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Ping",
+      "ruleOrConfigSource": "Session ping object and HeartMgr",
+      "frontendDecision": "enable truthy starts seconds interval POST /api/v1/ping with gid/t",
+      "sampleEvidence": "current ping.enable=0, so 0 Ping requests were expected/emitted",
+      "status": "NOT_APPLICABLE_RUNTIME_DISABLED"
+    },
+    {
+      "fieldOrRule": "language l",
+      "ruleOrConfigSource": "LanguageManager allow-list and language inventory",
+      "frontendDecision": "accept ten exact codes; unsupported retains pt",
+      "sampleEvidence": "ten first-load captures PASS; spa negative probe retains pt",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "SymbolWeightsList",
+      "ruleOrConfigSource": "frontend constant [10,15,15,15,20,20,30]",
+      "frontendDecision": "randomReel uses it only for visual rolling filler strips",
+      "sampleEvidence": "no server generation weights/reel strips in Config or wire evidence",
+      "status": "UNKNOWN_FOR_SERVER_GENERATION"
+    },
+    {
+      "fieldOrRule": "runtime independent LOSS",
+      "ruleOrConfigSource": "round state and fixed-line evaluator",
+      "frontendDecision": "gm=0,rpx=1,wa=0,wmkl={} ends after S01",
+      "sampleEvidence": "1272 complete ordinary LOSS Rounds",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Redis key/encoding/length",
+      "ruleOrConfigSource": "no current-game evidence",
+      "frontendDecision": "not present in current frontend or HTTP protocol",
+      "sampleEvidence": "no Redis evidence in rules, config, bundle or capture inventory",
+      "status": "UNKNOWN_DISABLED_UNTIL_PLATFORM_EVIDENCE"
+    },
+    {
+      "fieldOrRule": "fixture runtime use",
+      "ruleOrConfigSource": "workflow oracle-only contract",
+      "frontendDecision": "not a frontend behavior; applies to downstream Java implementation",
+      "sampleEvidence": "fixtures preserve current-game responses for independent tests only",
+      "status": "RUNTIME_USE_FORBIDDEN"
+    },
+    {
+      "fieldOrRule": "purchase entry",
+      "ruleOrConfigSource": "rules, bundle and authenticated UI search",
+      "frontendDecision": "no purchase node/token/path",
+      "sampleEvidence": "runtimeTreeMatches=0, bundleTokenMatches=0, ruleTextTokenMatches=0",
+      "status": "NOT_APPLICABLE_NOT_DISCOVERED"
+    },
+    {
+      "fieldOrRule": "WebSocket",
+      "ruleOrConfigSource": "first-load network captures and bundle search",
+      "frontendDecision": "current protocol uses XHR POST",
+      "sampleEvidence": "0 connections across 11 probes; 0 WebSocket tokens in main bundle",
+      "status": "NOT_OBSERVED"
+    }
+  ]
+}

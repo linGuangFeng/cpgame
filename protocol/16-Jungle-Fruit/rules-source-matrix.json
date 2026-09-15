@@ -1,0 +1,216 @@
+{
+  "rulesVersion": "jf16-empirical-2026-09-08-v3",
+  "rulesHash": "164088c0440871c9bc33b631a1b6bfa5e00d3012db3b0e3694bb59ac683e1743",
+  "status": "READY_FOR_ACCEPTANCE",
+  "behaviorIds": [
+    "B-RAW-GID-16",
+    "B-HTTP-CODEC-ENDPOINTS",
+    "B-CONFIG-BET-PAYTABLE",
+    "B-COUNT-ANYWHERE-WIN",
+    "B-TUMBLE-X-SETTLEMENT",
+    "B-ORDINARY-INDEPENDENT-LOSS",
+    "B-MARY-SMALL-GAME",
+    "B-SCATTER-FREE-ROUNDS",
+    "B-COMPLETE-ROUND-PAYOUT",
+    "B-BALANCE-LEDGER",
+    "B-HISTORY-LIST-DETAIL-RETURN",
+    "B-REDIS-ATOMIC-ROUND-CLAIM",
+    "B-ORIGIN-PROBABILITY",
+    "B-ORIGIN-REDIS-CONSUMER",
+    "B-SUPPORTED-LANGUAGES",
+    "B-HIGHER-BET-COMBINATIONS"
+  ],
+  "rows": [
+    {
+      "behaviorId": "B-RAW-GID-16",
+      "sourceRefs": [
+        "E-PREFLIGHT",
+        "E-STEPS-2852",
+        "E-ROUND-1126",
+        "E-HISTORY-1126"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "captures/16-Jungle-Fruit/history-1to1.jsonl"
+      ]
+    },
+    {
+      "behaviorId": "B-HTTP-CODEC-ENDPOINTS",
+      "sourceRefs": [
+        "E-PREFLIGHT",
+        "E-STEPS-2852",
+        "E-FIELD-MATRIX"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "captures/16-Jungle-Fruit/original-http-preflight.json",
+        "captures/16-Jungle-Fruit/original-http-spin-index.jsonl"
+      ]
+    },
+    {
+      "behaviorId": "B-CONFIG-BET-PAYTABLE",
+      "sourceRefs": [
+        "E-PREFLIGHT",
+        "E-CANONICAL"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "captures/16-Jungle-Fruit/original-http-preflight.json"
+      ]
+    },
+    {
+      "behaviorId": "B-COUNT-ANYWHERE-WIN",
+      "sourceRefs": [
+        "E-PREFLIGHT",
+        "E-STEPS-2852",
+        "E-CANONICAL"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "fixtures/16-Jungle-Fruit/oracle-summary.json",
+        "captures/16-Jungle-Fruit/original-http-spin-index.jsonl"
+      ]
+    },
+    {
+      "behaviorId": "B-TUMBLE-X-SETTLEMENT",
+      "sourceRefs": [
+        "E-STEPS-2852",
+        "E-CANONICAL"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "captures/16-Jungle-Fruit/original-http-spin-index.jsonl",
+        "fixtures/16-Jungle-Fruit/oracle-summary.json"
+      ]
+    },
+    {
+      "behaviorId": "B-ORDINARY-INDEPENDENT-LOSS",
+      "sourceRefs": [
+        "E-STEPS-2852",
+        "E-ROUND-1126",
+        "E-FINALIZATION",
+        "E-CANONICAL"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "captures/16-Jungle-Fruit/round-index.jsonl",
+        "captures/16-Jungle-Fruit/original-http-spin-index.jsonl"
+      ]
+    },
+    {
+      "behaviorId": "B-MARY-SMALL-GAME",
+      "sourceRefs": [
+        "E-STEPS-2852",
+        "E-ROUND-1126",
+        "E-FINALIZATION",
+        "E-CANONICAL"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "captures/16-Jungle-Fruit/original-http-spin-index.jsonl",
+        "captures/16-Jungle-Fruit/round-index.jsonl"
+      ]
+    },
+    {
+      "behaviorId": "B-SCATTER-FREE-ROUNDS",
+      "sourceRefs": [
+        "E-STEPS-2852",
+        "E-ROUND-1126",
+        "E-FINALIZATION",
+        "E-CANONICAL"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "captures/16-Jungle-Fruit/original-http-spin-index.jsonl",
+        "captures/16-Jungle-Fruit/history-1to1.jsonl"
+      ]
+    },
+    {
+      "behaviorId": "B-COMPLETE-ROUND-PAYOUT",
+      "sourceRefs": [
+        "E-STEPS-2852",
+        "E-ROUND-1126",
+        "E-HISTORY-1126",
+        "E-FINALIZATION",
+        "E-CANONICAL"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "fixtures/16-Jungle-Fruit/oracle-summary.json",
+        "captures/16-Jungle-Fruit/history-1to1.jsonl"
+      ]
+    },
+    {
+      "behaviorId": "B-BALANCE-LEDGER",
+      "sourceRefs": [
+        "E-STEPS-2852",
+        "E-HISTORY-1126"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "captures/16-Jungle-Fruit/history-1to1.jsonl"
+      ]
+    },
+    {
+      "behaviorId": "B-HISTORY-LIST-DETAIL-RETURN",
+      "sourceRefs": [
+        "E-HISTORY-1126",
+        "E-HISTORY-PAGES",
+        "E-FIELD-MATRIX"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "captures/16-Jungle-Fruit/history-1to1.jsonl",
+        "captures/16-Jungle-Fruit/history-list-pages.json"
+      ]
+    },
+    {
+      "behaviorId": "B-REDIS-ATOMIC-ROUND-CLAIM",
+      "sourceRefs": [
+        "E-ROUND-1126",
+        "E-LOCAL-REDIS"
+      ],
+      "evidenceStatus": "CONFIRMED",
+      "independentOracleRefs": [
+        "redis-pack/16-Jungle-Fruit/redis-contract.json",
+        "fixtures/16-Jungle-Fruit/oracle-summary.json"
+      ]
+    },
+    {
+      "behaviorId": "B-ORIGIN-PROBABILITY",
+      "sourceRefs": [
+        "E-FINALIZATION"
+      ],
+      "evidenceStatus": "UNKNOWN",
+      "independentOracleRefs": []
+    },
+    {
+      "behaviorId": "B-ORIGIN-REDIS-CONSUMER",
+      "sourceRefs": [
+        "E-FIELD-MATRIX",
+        "E-LOCAL-REDIS"
+      ],
+      "evidenceStatus": "UNKNOWN",
+      "independentOracleRefs": []
+    },
+    {
+      "behaviorId": "B-SUPPORTED-LANGUAGES",
+      "sourceRefs": [
+        "E-LANGUAGES"
+      ],
+      "evidenceStatus": "CONFIRMED_ARCHIVED_SET",
+      "independentOracleRefs": []
+    },
+    {
+      "behaviorId": "B-HIGHER-BET-COMBINATIONS",
+      "sourceRefs": [
+        "E-PREFLIGHT",
+        "E-FIELD-MATRIX",
+        "E-NEW-SPIN-ARCHIVE"
+      ],
+      "evidenceStatus": "PARTIALLY_CONFIRMED",
+      "independentOracleRefs": []
+    }
+  ],
+  "acceptanceReport": "reports/16-Jungle-Fruit/current-status.json"
+}

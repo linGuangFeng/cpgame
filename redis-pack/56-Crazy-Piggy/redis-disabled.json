@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 56,
+  "directoryName": "56-Crazy-Piggy",
+  "status": "SAFE_DISABLED",
+  "writesEnabled": false,
+  "reason": "当前游戏证据未确认 Redis Key、member 编码或编码长度，禁止猜测。",
+  "protocolUnresolvedBehavior": "U-REDIS-KEY-AND-CODEC",
+  "runtimeGuard": "generator RedisLoader 在写入前安全拒绝",
+  "evidence": [
+    "protocol/56-Crazy-Piggy/protocol-handoff.json#U-REDIS-KEY-AND-CODEC",
+    "generator/56-Crazy-Piggy/src/main/java/com/cpgame/crazypiggy/generator/RedisLoader.java"
+  ]
+}

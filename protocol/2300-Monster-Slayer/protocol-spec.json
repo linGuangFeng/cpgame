@@ -1,0 +1,117 @@
+{
+  "schemaVersion": "3.0",
+  "gameId": 2300,
+  "rulesVersion": "2300-monster-slayer-v3-buy-buckets",
+  "rulesHash": "df686c42f1c1891704b88742db554a38644ff719c46a6de3f436857647a3b781",
+  "behaviorIds": [
+    "B001_ENTRY_BOOTSTRAP",
+    "B002_LANGUAGE",
+    "B003_INITIAL_CONFIG",
+    "B004_USER_INFO",
+    "B005_INIT_ROOM",
+    "B006_ORDINARY_ROUND",
+    "B007_MONSTER_FEATURE_ROUND",
+    "B008_HISTORY",
+    "B009_REDIS_COMPLETE_ROUND",
+    "B010_PURCHASE_BRANCHES",
+    "B011_SUPER_REWARD"
+  ],
+  "states": [
+    {
+      "id": "BOOT",
+      "on": "GET /",
+      "next": "CONFIG"
+    },
+    {
+      "id": "CONFIG",
+      "on": "POST /cp/config/initialData",
+      "next": "USER"
+    },
+    {
+      "id": "USER",
+      "on": "POST /cp/account/getUserInfo",
+      "next": "ROOM"
+    },
+    {
+      "id": "ROOM",
+      "on": "POST /cp/single_game.Game/initRoom",
+      "next": "IDLE"
+    },
+    {
+      "id": "IDLE",
+      "on": "gameResult type=1",
+      "next": "IDLE_OR_FEATURE"
+    },
+    {
+      "id": "FEATURE",
+      "on": "gameResult type=2",
+      "next": "FEATURE_OR_IDLE",
+      "terminalWhen": "f.nt=0"
+    }
+  ],
+  "transport": {
+    "encoding": "application/x-www-form-urlencoded",
+    "envelope": [
+      "code",
+      "data",
+      "msg",
+      "time"
+    ]
+  },
+  "endpoints": [
+    "/cp/config/initialData",
+    "/cp/account/getUserInfo",
+    "/cp/single_game.Game/initRoom",
+    "/cp/single_game.Game/gameResult",
+    "/cp/goldgame/single_game_user_gold_history",
+    "/cp/goldgame/single_game_user_history"
+  ],
+  "round": {
+    "paidType": 1,
+    "followType": 2,
+    "terminal": "f.nt=0",
+    "boardField": "res.ps",
+    "boardLength": 15,
+    "order": "column-major"
+  },
+  "redis": {
+    "db": 15,
+    "multiplierScale": 100,
+    "memberPrefix": "MS1",
+    "runtimeFixtureReplay": false,
+    "ordinaryIndex": "PerKeyList_000002300",
+    "ordinaryList": "BetLog:000002300:%06d",
+    "buy": {
+      "type3": {
+        "prefix": "000002300",
+        "index": "MaryKeyList_000002300",
+        "list": "MaryLog:000002300:%06d",
+        "multiple": 60
+      },
+      "type4": {
+        "prefix": "100002300",
+        "index": ["MaryKeyList_100002300", "PerKeyList_100002300"],
+        "list": "MaryLog:100002300:%06d",
+        "multiple": 500
+      },
+      "type5": {
+        "prefix": "200002300",
+        "index": ["MaryKeyList_200002300", "PerKeyList_200002300"],
+        "list": "MaryLog:200002300:%06d",
+        "multiple": 200
+      }
+    },
+    "claim": "type=1 uses PerKeyList_000002300 then BetLog. type=3/4/5 uses MaryKeyList_{prefix} then MaryLog of that prefix only. Continuations project the same member. Empty Redis fails."
+  },
+  "status": "READY_FOR_ACCEPTANCE",
+  "rulesHashStatus": "VERIFIED_PARTIAL_CONTRACT",
+  "latestAuditRef": "protocol/2300-Monster-Slayer/rule-source-matrix.md",
+  "implementationStatus": {
+    "ordinary": "VERIFIED_COMPONENT",
+    "naturalFeature": "SAMPLE_INSUFFICIENT_BLOCKED",
+    "purchases": "WIRE_EVIDENCED_THREE_PREFIX_BUCKETS",
+    "superReward": "WIRE_EVIDENCED_IN_BUY2",
+    "originalEntry": "ORIGINAL_2300_ENTRY_RESTORED",
+    "controllerContractV3": "VERIFIED_COMPONENT"
+  }
+}

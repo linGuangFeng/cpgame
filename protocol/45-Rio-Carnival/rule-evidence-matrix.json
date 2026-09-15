@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 3,
+  "gameId": 45,
+  "gameName": "Rio Carnival",
+  "rulesHash": "sha256:515ffa3a4f803e36d44a1a50da1ce79b4c1df2e75a79893a18cd404aecc0565c",
+  "matrixPurpose": "字段/规则—原始来源—前端代码判定—真实完整Round样本印证",
+  "matrix": [
+    {
+      "fieldOrRule": "identity",
+      "source": [
+        "resources/45-Rio-Carnival/source-catalog-evidence.json",
+        "captures/45-Rio-Carnival/authenticated-startup-evidence.json"
+      ],
+      "codeDecision": "GameConfig._gameId=45 and GameName='Rio Carnival'; platform item 1401 maps g_id 447 and resource 50045.",
+      "sampleCorroboration": "Authenticated iframe path /45/, document title and visible game mark identify Rio Carnival.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "supportedLanguages.codes",
+      "source": [
+        "main index.76d7e.js#LanguageManager",
+        "reports/45-Rio-Carnival/language-inventory.json"
+      ],
+      "codeDecision": "Allow-list is en,pt,es,th,vi,id,bn,ko,fr,tr and actual selector is query l.",
+      "sampleCorroboration": "Ten original first-load manifests and ten local browser GameCanvas runs pass.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "HTTP codec",
+      "source": [
+        "main index.76d7e.js#Http",
+        "captures/45-Rio-Carnival/spin-probe-pt-br-network.json"
+      ],
+      "codeDecision": "POST uses application/x-www-form-urlencoded; game-id/web-token map to gid/t; response is plain JSON envelope; no encrypt/decrypt stage.",
+      "sampleCorroboration": "Observed body bl=1&bs=0.02&t=<redacted>&gid=45 and plain JSON response.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "initial request sequence",
+      "source": [
+        "captures/45-Rio-Carnival/first-load-pt-br-network.json",
+        "main index.76d7e.js#Main.onLoginRequest"
+      ],
+      "codeDecision": "onAnalysisHerf -> auth/verify -> config -> initialize heartbeat/activity -> playable.",
+      "sampleCorroboration": "Network request 39 auth/verify precedes request 80 rio-carnival/config.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "config bet/currency fields",
+      "source": "fixtures/45-Rio-Carnival/first-load-api/cp/api/v1/rio-carnival/config.json",
+      "codeDecision": "bsl/bll initialize bet controls; dbs/dbl select defaults; cc/cs set BRL/R$; auto supplies auto-spin choices.",
+      "sampleCorroboration": "1406 paid starts use minimum bl=1, bs=0.02 and ba=0.50; UI shows R$0.50.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "winModel.paylineCount",
+      "source": [
+        "captures/45-Rio-Carnival/rules-ui-text-pt.json",
+        "captures/45-Rio-Carnival/paytable-ui-text-pt.json",
+        "main index.76d7e.js#WinMatchKeyList"
+      ],
+      "codeDecision": "ConfigData.payline_count=25 and WinMatchKeyList defines exactly 25 row vectors.",
+      "sampleCorroboration": "Baseline oracle through round-001376: 4483 winning-line entries have zero path violations; all 1406 current Rounds retain wmkl keys within 1..25.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "boardModel visible shape/order",
+      "source": [
+        "rules-ui-text-pt.json",
+        "main index.76d7e.js#GameResults/HistorySpinData"
+      ],
+      "codeDecision": "Rules state 5 reels x 3 rows; code maps result index as 3*reel+row (column-major).",
+      "sampleCorroboration": "All 2306 Step rskl arrays contain exactly 15 symbols; screenshot shows 5x3.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "frontend reel_count=6 scope",
+      "source": "main index.76d7e.js#GameConfigData.initConfig",
+      "codeDecision": "reel_count=6 belongs to frontend animation/data setup; visible outcome decoder and rules remain 5x3/15 cells.",
+      "sampleCorroboration": "No live Step has an 18-cell or 6-visible-reel payload.",
+      "status": "CONFIRMED_NOT_VISIBLE_BOARD"
+    },
+    {
+      "fieldOrRule": "symbol paytable",
+      "source": [
+        "config.json#data.spl",
+        "paytable-ui-text-pt.json"
+      ],
+      "codeDecision": "spl is keyed by symbol and consecutive match count and is multiplied by bs*bl.",
+      "sampleCorroboration": "Baseline oracle through round-001376: 472 fully evaluable winning Steps reproduce wa with zero violations.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "T paytable multipliers",
+      "source": [
+        "config.json preserves T as <redacted>",
+        "complete-rounds T-winning Steps",
+        "main code fixed lines and payout formula"
+      ],
+      "codeDecision": "Derive consecutive T/Wild counts from rskl/paylines and isolate T coefficients after subtracting all non-T line awards.",
+      "sampleCorroboration": "Baseline oracle through round-001376: 43 T-winning Steps yield 19 unique equations; unique solution T3=5,T4=25,T5=100 with zero residual violations.",
+      "status": "CONFIRMED_DERIVED_CURRENT_GAME_EVIDENCE"
+    },
+    {
+      "fieldOrRule": "Wild substitution and multiplier",
+      "source": [
+        "rules-ui-text-pt.json",
+        "paytable-ui-text-pt.json",
+        "main index.76d7e.js#HistoryDetail"
+      ],
+      "codeDecision": "Wild substitutes all except Scat; a winning line containing Wild receives x2 before rpx.",
+      "sampleCorroboration": "Baseline oracle through round-001376: 3749 winning-line entries involving Wild satisfy line and payout semantics.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "wmkl",
+      "source": [
+        "main index.76d7e.js#GameResults",
+        "complete-rounds"
+      ],
+      "codeDecision": "Live shape maps payline number to one {symbol: consecutiveCount}; empty loss is [].",
+      "sampleCorroboration": "Current corpus through round-001406: 523 winning Steps use object maps, 1783 losing Steps use empty arrays, with 4564 line entries.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "spin request",
+      "source": [
+        "main index.76d7e.js#GameApi.Spin/BetLogic/GameLogic",
+        "spin-probe-pt-br-network.json"
+      ],
+      "codeDecision": "POST rio-carnival/spin with bl,bs and mapped t,gid; same shape is used by automatic free continuation.",
+      "sampleCorroboration": "1406 paid starts plus 900 free deliveries were grouped from actual endpoint responses.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "ba",
+      "source": [
+        "main index.76d7e.js#GameResults.consume_integral",
+        "complete-rounds"
+      ],
+      "codeDecision": "ba is Step charge/consumption; round start is recognized by positive ba.",
+      "sampleCorroboration": "Exactly 1406 ba=0.5 paid starts; every one of 900 free continuations has ba=0.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "fsn/nfsc/ss Round boundary",
+      "source": [
+        "main index.76d7e.js#GameResults",
+        "round-regroup-audit.json",
+        "round-000132.json"
+      ],
+      "codeDecision": "FreeGameTimes=fsn-nfsc; active while unequal; ss alone cannot terminate a trigger Step.",
+      "sampleCorroboration": "1406 paid starts become 1406 complete Rounds/2306 Steps; every terminal has ss=1 and fsn=nfsc.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "gt/small_game_type",
+      "source": "fixtures/45-Rio-Carnival/complete-rounds",
+      "codeDecision": "Current frontend consumes game result submode; no other current-game mode value is defined.",
+      "sampleCorroboration": "All 1406 paid starts are gt=1/small_game_type=0; all 900 free Steps are gt=2/small_game_type=2.",
+      "status": "CONFIRMED_OBSERVED_DOMAIN"
+    },
+    {
+      "fieldOrRule": "wa/rwa",
+      "source": [
+        "main index.76d7e.js#GameResults",
+        "complete-rounds"
+      ],
+      "codeDecision": "wa is current Step award; rwa is cumulative Round award.",
+      "sampleCorroboration": "Every free transition satisfies current.rwa-prior.rwa=wa; ordinary Rounds satisfy rwa=wa.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "pl.balance settlement",
+      "source": [
+        "main index.76d7e.js#GameApi.Spin",
+        "complete-rounds",
+        "round-000132.json"
+      ],
+      "codeDecision": "UI assigns each response balance, but server holds free-mode balance until terminal settlement.",
+      "sampleCorroboration": "All 48 free Rounds hold intermediate balance and terminal balance delta equals final rwa; zero violations.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "FREE_SPINS trigger/options/retrigger",
+      "source": [
+        "rules-ui-text-pt.json",
+        "paytable-ui-text-pt.json",
+        "main index.76d7e.js#FreeSpinTimes",
+        "complete-rounds"
+      ],
+      "codeDecision": "3/4/5 Scat initial options are 8/12/20,12/16/24,20/24/32; rpx is 2/5/8; retrigger adds 8/12/20.",
+      "sampleCorroboration": "48 complete special Rounds, 900 free Steps, all rpx values covered, 8 retrigger Rounds (7 three-Scat, 1 four-Scat).",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "config.last session snapshot",
+      "source": [
+        "main index.76d7e.js#GameApi.Config",
+        "captures/45-Rio-Carnival/session-resume-adjacent-evidence.json",
+        "fixtures/45-Rio-Carnival/protocol-evidence/recovery/reload-config-active-last.json"
+      ],
+      "codeDecision": "Non-null last is converted/restored and active while fsn!=nfsc; resumed spin calls deliver the active Round.",
+      "sampleCorroboration": "Round 45-001406 activation fsn=8,nfsc=0 is followed by reload auth/config with matching non-null last, then eight ba=0 Steps to ss=1,fsn=nfsc=8.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "history endpoints",
+      "source": [
+        "main index.76d7e.js#HistoryInfo/HistoryList/GameApi",
+        "captures/45-Rio-Carnival/history-adjacent-evidence.json",
+        "fixtures/45-Rio-Carnival/protocol-evidence/history/log-list-page-1.json",
+        "fixtures/45-Rio-Carnival/protocol-evidence/history/log-list-page-2.json",
+        "fixtures/45-Rio-Carnival/protocol-evidence/history/log-view.json"
+      ],
+      "codeDecision": "log-list consumes lc,ba,wa,end,ll and list ca/tis/gt; selected tis becomes log-view transfer_id; detail concatenates bsl then fsl.",
+      "sampleCorroboration": "Redacted runtime sequence captures page 1, page 2/end, selection and detail; selected tis/transfer_id SHA-256 values match and detail contains one bsl plus eight fsl Steps.",
+      "status": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "error branches",
+      "source": "main index.76d7e.js#Http/ErrorTip/BetLogic",
+      "codeDecision": "401 stops heartbeat; C10001/C10002/C10003 map auth/funds errors; failed spin cancels auto and releases lock.",
+      "sampleCorroboration": "Captured verify sets ping.enable=0; no synthetic error response is asserted.",
+      "status": "CONFIRMED_CODE"
+    },
+    {
+      "fieldOrRule": "symbolWeights",
+      "source": "main index.76d7e.js#GameConfigData.randomReel and provider config",
+      "codeDecision": "randomReel contains frontend presentation counts; actual outcome arrives separately in server rskl. Provider exposes no gameplay generation weights.",
+      "sampleCorroboration": "Captured frequencies are retained only as oracle evidence and are not converted into weights.",
+      "status": "GAMEPLAY_WEIGHTS_UNKNOWN_FRONTEND_COUNTS_PRESENTATION_ONLY"
+    },
+    {
+      "fieldOrRule": "buy feature",
+      "source": [
+        "rules UI",
+        "paytable UI",
+        "menu handlers",
+        "main code routes"
+      ],
+      "codeDecision": "No purchase handler, endpoint, rule or menu entry exists.",
+      "sampleCorroboration": "Rules/paytable were actively opened; menu inventory contains no buy entry.",
+      "status": "NOT_SUPPORTED"
+    },
+    {
+      "fieldOrRule": "redisContract",
+      "source": "captured provider protocol and frontend code",
+      "codeDecision": "Provider HTTP protocol contains no Redis key or encoding contract.",
+      "sampleCorroboration": "No provider Redis evidence exists; downstream Java adapter must use platform contract and fixtures remain oracle-only.",
+      "status": "NOT_APPLICABLE_TO_PROVIDER_PROTOCOL"
+    }
+  ],
+  "implementationV3": {
+    "schemaVersion": 3,
+    "status": "READY_FOR_ACCEPTANCE",
+    "rulesHash": "sha256:515ffa3a4f803e36d44a1a50da1ce79b4c1df2e75a79893a18cd404aecc0565c",
+    "runtimeGeneration": false,
+    "runtimeFixtureReplay": false,
+    "core": "Shared Java GameRuleCore; production CorePayout separately verified by ResultUtil",
+    "model": "Compiled empirical joint special-symbol shape and conditional three-cell reel windows; 1306 training rounds, 100 excluded holdout rounds",
+    "modelSource": "reports/45-Rio-Carnival/generation-model-source.json",
+    "modelValidation": "reports/45-Rio-Carnival/generation-model-validation.json",
+    "factoryRtpClaim": false,
+    "memberEncoding": "R45C3|initialFree|multiplier|ordered 15-hex-character boards; printable ASCII; no bet or response JSON",
+    "ratioUnit": "award / totalBet * 100, exact integer (0.01x)",
+    "redis": {
+      "host": "192.168.10.3",
+      "port": 6379,
+      "db": 15,
+      "normalIndex": "Rio45:v3:normal:ratios",
+      "specialIndex": "Rio45:v3:special:ratios",
+      "listPatterns": [
+        "Rio45:v3:normal:<integer>",
+        "Rio45:v3:special:<integer>"
+      ],
+      "zeroAwardFree": "special:0 selected only from LOSS branch",
+      "claim": "Choose WIN/LOSS first; choose mode; WIN chooses existing positive integer index; atomically LPOP exactly one member; no fallback",
+      "continuation": "Persist complete decoded round; all deliveries use same roundKey and ordered steps"
+    },
+    "controller": {
+      "descriptor": "server-api/45-Rio-Carnival/demo-controller.properties",
+      "jar": "server-api/45-Rio-Carnival/dist/controller.jar",
+      "port": "Injected --port or PORT, 50000-59999",
+      "listeners": 1
+    },
+    "historyIdentifiers": "Original evidence identifiers were redacted; compact stable local opaque IDs are projected consistently for list/detail; no original ID format claim.",
+    "acceptanceReport": "reports/45-Rio-Carnival/acceptance-final-v3.json"
+  }
+}

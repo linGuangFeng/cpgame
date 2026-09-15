@@ -1,0 +1,2619 @@
+{
+  "scatterDiag": {
+    "firstStep3plusCells": {
+      "n": 79,
+      "fsn10": 4,
+      "fsn0": 75,
+      "byReelCount": {
+        "1": 30,
+        "2": 29,
+        "3": 13,
+        "4": 7
+      },
+      "byBlockCount": {
+        "1": 30,
+        "2": 29,
+        "3": 13,
+        "4": 7
+      },
+      "byCellCount": {
+        "3": 48,
+        "4": 20,
+        "5": 7,
+        "6": 3,
+        "9": 1
+      },
+      "sflLen": {
+        "0": 15,
+        "1": 26,
+        "2": 26,
+        "3": 7,
+        "4": 5
+      }
+    },
+    "anyStep3plusCellsFsn0": {
+      "n": 173,
+      "nfsc0": 173,
+      "nfscPos": 0,
+      "firstStep": 75,
+      "laterStep": 98,
+      "examples": [
+        {
+          "roundOrdinal": 34,
+          "step": 1,
+          "idx": 0,
+          "nfsc": 0,
+          "ss": 1,
+          "sfl": [
+            31
+          ],
+          "st": {
+            "cellCount": 3,
+            "reelCount": 1,
+            "blockCount": 1,
+            "cells": [
+              {
+                "pos": 23,
+                "reel": 2,
+                "row": 3,
+                "symbol": "Scat",
+                "height": 3
+              },
+              {
+                "pos": 24,
+                "reel": 2,
+                "row": 4,
+                "symbol": "Scat",
+                "height": 3
+              },
+              {
+                "pos": 25,
+                "reel": 2,
+                "row": 5,
+                "symbol": "Scat",
+                "height": 3
+              }
+            ],
+            "blocks": [
+              {
+                "height": 3,
+                "symbol": "Scat",
+                "reel": 2
+              }
+            ]
+          }
+        },
+        {
+          "roundOrdinal": 53,
+          "step": 1,
+          "idx": 0,
+          "nfsc": 0,
+          "ss": 1,
+          "sfl": [
+            12
+          ],
+          "st": {
+            "cellCount": 3,
+            "reelCount": 1,
+            "blockCount": 1,
+            "cells": [
+              {
+                "pos": 12,
+                "reel": 1,
+                "row": 2,
+                "symbol": "Scat",
+                "height": 3
+              },
+              {
+                "pos": 13,
+                "reel": 1,
+                "row": 3,
+                "symbol": "Scat",
+                "height": 3
+              },
+              {
+                "pos": 14,
+                "reel": 1,
+                "row": 4,
+                "symbol": "Scat",
+                "height": 3
+              }
+            ],
+            "blocks": [
+              {
+                "height": 3,
+                "symbol": "Scat",
+                "reel": 1
+              }
+            ]
+          }
+        },
+        {
+          "roundOrdinal": 56,
+          "step": 1,
+          "idx": 0,
+          "nfsc": 0,
+          "ss": 1,
+          "sfl": [
+            12,
+            22,
+            41
+          ],
+          "st": {
+            "cellCount": 3,
+            "reelCount": 1,
+            "blockCount": 1,
+            "cells": [
+              {
+                "pos": 11,
+                "reel": 1,
+                "row": 1,
+                "symbol": "Scat",
+                "height": 3
+              },
+              {
+                "pos": 12,
+                "reel": 1,
+                "row": 2,
+                "symbol": "Scat",
+                "height": 3
+              },
+              {
+                "pos": 13,
+                "reel": 1,
+                "row": 3,
+                "symbol": "Scat",
+                "height": 3
+              }
+            ],
+            "blocks": [
+              {
+                "height": 3,
+                "symbol": "Scat",
+                "reel": 1
+              }
+            ]
+          }
+        },
+        {
+          "roundOrdinal": 60,
+          "step": 1,
+          "idx": 0,
+          "nfsc": 0,
+          "ss": 1,
+          "sfl": [
+            31
+          ],
+          "st": {
+            "cellCount": 4,
+            "reelCount": 1,
+            "blockCount": 1,
+            "cells": [
+              {
+                "pos": 11,
+                "reel": 1,
+                "row": 1,
+                "symbol": "Scat",
+                "height": 4
+              },
+              {
+                "pos": 12,
+                "reel": 1,
+                "row": 2,
+                "symbol": "Scat",
+                "height": 4
+              },
+              {
+                "pos": 13,
+                "reel": 1,
+                "row": 3,
+                "symbol": "Scat",
+                "height": 4
+              },
+              {
+                "pos": 14,
+                "reel": 1,
+                "row": 4,
+                "symbol": "Scat",
+                "height": 4
+              }
+            ],
+            "blocks": [
+              {
+                "height": 4,
+                "symbol": "Scat",
+                "reel": 1
+              }
+            ]
+          }
+        },
+        {
+          "roundOrdinal": 69,
+          "step": 1,
+          "idx": 0,
+          "nfsc": 0,
+          "ss": 0,
+          "sfl": [],
+          "st": {
+            "cellCount": 3,
+            "reelCount": 3,
+            "blockCount": 3,
+            "cells": [
+              {
+                "pos": 1,
+                "reel": 0,
+                "row": 1,
+                "symbol": "Scat",
+                "height": 1
+              },
+              {
+                "pos": 15,
+                "reel": 1,
+                "row": 5,
+                "symbol": "Scat",
+                "height": 1
+              },
+              {
+                "pos": 53,
+                "reel": 5,
+                "row": 3,
+                "symbol": "Scat",
+                "height": 1
+              }
+            ],
+            "blocks": [
+              {
+                "height": 1,
+                "symbol": "Scat",
+                "reel": 0
+              },
+              {
+                "height": 1,
+                "symbol": "Scat",
+                "reel": 1
+              },
+              {
+                "height": 1,
+                "symbol": "Scat",
+                "reel": 5
+              }
+            ]
+          }
+        },
+        {
+          "roundOrdinal": 74,
+          "step": 1,
+          "idx": 0,
+          "nfsc": 0,
+          "ss": 1,
+          "sfl": [
+            21,
+            32,
+            42
+          ],
+          "st": {
+            "cellCount": 5,
+            "reelCount": 2,
+            "blockCount": 2,
+            "cells": [
+              {
+                "pos": 2,
+                "reel": 0,
+                "row": 2,
+                "symbol": "Scat",
+                "height": 1
+              },
+              {
+                "pos": 21,
+                "reel": 2,
+                "row": 1,
+                "symbol": "Scat",
+                "height": 4
+              },
+              {
+                "pos": 22,
+                "reel": 2,
+                "row": 2,
+                "symbol": "Scat",
+                "height": 4
+              },
+              {
+                "pos": 23,
+                "reel": 2,
+                "row": 3,
+                "symbol": "Scat",
+                "height": 4
+              },
+              {
+                "pos": 24,
+                "reel": 2,
+                "row": 4,
+                "symbol": "Scat",
+                "height": 4
+              }
+            ],
+            "blocks": [
+              {
+                "height": 1,
+                "symbol": "Scat",
+                "reel": 0
+              },
+              {
+                "height": 4,
+                "symbol": "Scat",
+                "reel": 2
+              }
+            ]
+          }
+        },
+        {
+          "roundOrdinal": 84,
+          "step": 1,
+          "idx": 0,
+          "nfsc": 0,
+          "ss": 1,
+          "sfl": [
+            11,
+            23,
+            41
+          ],
+          "st": {
+            "cellCount": 3,
+            "reelCount": 1,
+            "blockCount": 1,
+            "cells": [
+              {
+                "pos": 31,
+                "reel": 3,
+                "row": 1,
+                "symbol": "Scat",
+                "height": 3
+              },
+              {
+                "pos": 32,
+                "reel": 3,
+                "row": 2,
+                "symbol": "Scat",
+                "height": 3
+              },
+              {
+                "pos": 33,
+                "reel": 3,
+                "row": 3,
+                "symbol": "Scat",
+                "height": 3
+              }
+            ],
+            "blocks": [
+              {
+                "height": 3,
+                "symbol": "Scat",
+                "reel": 3
+              }
+            ]
+          }
+        },
+        {
+          "roundOrdinal": 89,
+          "step": 4,
+          "idx": 3,
+          "nfsc": 0,
+          "ss": 1,
+          "sfl": [
+            42
+          ],
+          "st": {
+            "cellCount": 3,
+            "reelCount": 3,
+            "blockCount": 3,
+            "cells": [
+              {
+                "pos": 4,
+                "reel": 0,
+                "row": 4,
+                "symbol": "Scat",
+                "height": 1
+              },
+              {
+                "pos": 12,
+                "reel": 1,
+                "row": 2,
+                "symbol": "Scat",
+                "height": 1
+              },
+              {
+                "pos": 50,
+                "reel": 5,
+                "row": 0,
+                "symbol": "Scat",
+                "height": 1
+              }
+            ],
+            "blocks": [
+              {
+                "height": 1,
+                "symbol": "Scat",
+                "reel": 0
+              },
+              {
+                "height": 1,
+                "symbol": "Scat",
+                "reel": 1
+              },
+              {
+                "height": 1,
+                "symbol": "Scat",
+                "reel": 5
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "triggerBoards": [
+      {
+        "roundOrdinal": 91,
+        "fsn": 10,
+        "ss": 1,
+        "nfsc": 0,
+        "sfl": [
+          12,
+          22,
+          41,
+          42
+        ],
+        "gfl": [],
+        "st": {
+          "cellCount": 5,
+          "reelCount": 4,
+          "blockCount": 4,
+          "cells": [
+            {
+              "pos": 3,
+              "reel": 0,
+              "row": 3,
+              "symbol": "Scat",
+              "height": 1
+            },
+            {
+              "pos": 10,
+              "reel": 1,
+              "row": 0,
+              "symbol": "Scat",
+              "height": 1
+            },
+            {
+              "pos": 21,
+              "reel": 2,
+              "row": 1,
+              "symbol": "Scat",
+              "height": 2
+            },
+            {
+              "pos": 22,
+              "reel": 2,
+              "row": 2,
+              "symbol": "Scat",
+              "height": 2
+            },
+            {
+              "pos": 30,
+              "reel": 3,
+              "row": 0,
+              "symbol": "Scat",
+              "height": 1
+            }
+          ],
+          "blocks": [
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 0
+            },
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 1
+            },
+            {
+              "height": 2,
+              "symbol": "Scat",
+              "reel": 2
+            },
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 3
+            }
+          ]
+        },
+        "rskl": [
+          "1H4",
+          "1H4",
+          "1J",
+          "1Scat",
+          "1A",
+          "1Scat",
+          "1H5",
+          "3T",
+          "1H3",
+          "1J",
+          "2Scat",
+          "3H3",
+          "1Scat",
+          "2T",
+          "1H1",
+          "1H3",
+          "1A",
+          "1H3",
+          "2H3",
+          "2H3",
+          "1T",
+          "1T",
+          "1K",
+          "1A",
+          "1H2",
+          "1Q"
+        ]
+      },
+      {
+        "roundOrdinal": 631,
+        "fsn": 10,
+        "ss": 1,
+        "nfsc": 0,
+        "sfl": [
+          13
+        ],
+        "gfl": [],
+        "st": {
+          "cellCount": 4,
+          "reelCount": 4,
+          "blockCount": 4,
+          "cells": [
+            {
+              "pos": 2,
+              "reel": 0,
+              "row": 2,
+              "symbol": "Scat",
+              "height": 1
+            },
+            {
+              "pos": 11,
+              "reel": 1,
+              "row": 1,
+              "symbol": "Scat",
+              "height": 1
+            },
+            {
+              "pos": 35,
+              "reel": 3,
+              "row": 5,
+              "symbol": "Scat",
+              "height": 1
+            },
+            {
+              "pos": 40,
+              "reel": 4,
+              "row": 0,
+              "symbol": "Scat",
+              "height": 1
+            }
+          ],
+          "blocks": [
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 0
+            },
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 1
+            },
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 3
+            },
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 4
+            }
+          ]
+        },
+        "rskl": [
+          "1H4",
+          "1H4",
+          "1Scat",
+          "1J",
+          "1H1",
+          "1H3",
+          "1Scat",
+          "1Q",
+          "3H2",
+          "1A",
+          "2J",
+          "1H3",
+          "1Q",
+          "1Q",
+          "1H2",
+          "2H1",
+          "1A",
+          "1H3",
+          "1Scat",
+          "1Scat",
+          "3H2",
+          "1H4",
+          "1A",
+          "1H5",
+          "1H1",
+          "1H3",
+          "1H4",
+          "1A"
+        ]
+      },
+      {
+        "roundOrdinal": 819,
+        "fsn": 10,
+        "ss": 1,
+        "nfsc": 0,
+        "sfl": [],
+        "gfl": [],
+        "st": {
+          "cellCount": 6,
+          "reelCount": 4,
+          "blockCount": 4,
+          "cells": [
+            {
+              "pos": 2,
+              "reel": 0,
+              "row": 2,
+              "symbol": "Scat",
+              "height": 1
+            },
+            {
+              "pos": 11,
+              "reel": 1,
+              "row": 1,
+              "symbol": "Scat",
+              "height": 3
+            },
+            {
+              "pos": 12,
+              "reel": 1,
+              "row": 2,
+              "symbol": "Scat",
+              "height": 3
+            },
+            {
+              "pos": 13,
+              "reel": 1,
+              "row": 3,
+              "symbol": "Scat",
+              "height": 3
+            },
+            {
+              "pos": 31,
+              "reel": 3,
+              "row": 1,
+              "symbol": "Scat",
+              "height": 1
+            },
+            {
+              "pos": 40,
+              "reel": 4,
+              "row": 0,
+              "symbol": "Scat",
+              "height": 1
+            }
+          ],
+          "blocks": [
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 0
+            },
+            {
+              "height": 3,
+              "symbol": "Scat",
+              "reel": 1
+            },
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 3
+            },
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 4
+            }
+          ]
+        },
+        "rskl": [
+          "1Q",
+          "1H1",
+          "1Scat",
+          "1H2",
+          "1T",
+          "1H3",
+          "3Scat",
+          "1H4",
+          "1Q",
+          "1K",
+          "3H3",
+          "1T",
+          "1A",
+          "1T",
+          "1Scat",
+          "1H4",
+          "2H1",
+          "1J",
+          "1Scat",
+          "1H5",
+          "1H3",
+          "1H5",
+          "1Q",
+          "1H3",
+          "1H3",
+          "1H1",
+          "1J",
+          "1H2",
+          "1H1"
+        ]
+      },
+      {
+        "roundOrdinal": 871,
+        "fsn": 10,
+        "ss": 1,
+        "nfsc": 0,
+        "sfl": [
+          41
+        ],
+        "gfl": [],
+        "st": {
+          "cellCount": 6,
+          "reelCount": 4,
+          "blockCount": 4,
+          "cells": [
+            {
+              "pos": 3,
+              "reel": 0,
+              "row": 3,
+              "symbol": "Scat",
+              "height": 1
+            },
+            {
+              "pos": 13,
+              "reel": 1,
+              "row": 3,
+              "symbol": "Scat",
+              "height": 1
+            },
+            {
+              "pos": 31,
+              "reel": 3,
+              "row": 1,
+              "symbol": "Scat",
+              "height": 3
+            },
+            {
+              "pos": 32,
+              "reel": 3,
+              "row": 2,
+              "symbol": "Scat",
+              "height": 3
+            },
+            {
+              "pos": 33,
+              "reel": 3,
+              "row": 3,
+              "symbol": "Scat",
+              "height": 3
+            },
+            {
+              "pos": 51,
+              "reel": 5,
+              "row": 1,
+              "symbol": "Scat",
+              "height": 1
+            }
+          ],
+          "blocks": [
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 0
+            },
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 1
+            },
+            {
+              "height": 3,
+              "symbol": "Scat",
+              "reel": 3
+            },
+            {
+              "height": 1,
+              "symbol": "Scat",
+              "reel": 5
+            }
+          ]
+        },
+        "rskl": [
+          "1H4",
+          "1A",
+          "1J",
+          "1Scat",
+          "1K",
+          "1H2",
+          "2H3",
+          "1Scat",
+          "1H1",
+          "1K",
+          "1A",
+          "2H4",
+          "2T",
+          "1H4",
+          "1H4",
+          "3Scat",
+          "1H4",
+          "1T",
+          "1H1",
+          "2Q",
+          "1J",
+          "1H1",
+          "1H4",
+          "1H4",
+          "1Scat",
+          "1A",
+          "1H5",
+          "1T"
+        ]
+      }
+    ]
+  },
+  "sflVsScat": {
+    "compared": 289,
+    "equalSet": 0,
+    "mismatch": 289,
+    "examples": [
+      {
+        "round": 2,
+        "step": 1,
+        "scatPos": [],
+        "sfl": [
+          22
+        ],
+        "rskl": [
+          "1H4",
+          "1H3",
+          "1H4",
+          "1T",
+          "1H1",
+          "1Q",
+          "4J",
+          "1H5",
+          "1T",
+          "2H1",
+          "2H3",
+          "1H2",
+          "1H2",
+          "3H2",
+          "1A",
+          "1Q",
+          "1A",
+          "1T",
+          "3T",
+          "1J",
+          "1Wild",
+          "1J",
+          "1H1",
+          "1T",
+          "1H4"
+        ]
+      },
+      {
+        "round": 3,
+        "step": 1,
+        "scatPos": [
+          2
+        ],
+        "sfl": [
+          11,
+          12
+        ],
+        "rskl": [
+          "1A",
+          "1Q",
+          "1Scat",
+          "1A",
+          "1J",
+          "1K",
+          "2H2",
+          "2K",
+          "1H3",
+          "1H5",
+          "1J",
+          "3H2",
+          "1H2",
+          "1H2",
+          "3K",
+          "1H3",
+          "1T",
+          "1H5",
+          "4T",
+          "1H4",
+          "1H3",
+          "1J",
+          "1H4",
+          "1H3",
+          "1A"
+        ]
+      },
+      {
+        "round": 4,
+        "step": 1,
+        "scatPos": [
+          3
+        ],
+        "sfl": [],
+        "rskl": [
+          "1T",
+          "1Pan",
+          "1H3",
+          "1Scat",
+          "1A",
+          "1T",
+          "2A",
+          "3K",
+          "1K",
+          "1H1",
+          "4J",
+          "1H4",
+          "2H1",
+          "2H1",
+          "1H2",
+          "1H1",
+          "1A",
+          "1H1",
+          "1H5",
+          "1H3",
+          "1Pan",
+          "1K",
+          "1H4",
+          "1Q",
+          "1J",
+          "1J"
+        ]
+      },
+      {
+        "round": 5,
+        "step": 1,
+        "scatPos": [],
+        "sfl": [
+          11
+        ],
+        "rskl": [
+          "1J",
+          "1H1",
+          "1H1",
+          "1H3",
+          "1H4",
+          "1H5",
+          "4A",
+          "1T",
+          "1H2",
+          "1H3",
+          "1H1",
+          "2H2",
+          "1H5",
+          "1H3",
+          "4H5",
+          "1H4",
+          "1H4",
+          "1H1",
+          "1H3",
+          "1H3",
+          "1H2",
+          "1K",
+          "1Q",
+          "1H1",
+          "1K",
+          "1H1",
+          "1H4"
+        ]
+      },
+      {
+        "round": 6,
+        "step": 1,
+        "scatPos": [
+          35
+        ],
+        "sfl": [
+          31,
+          32,
+          42
+        ],
+        "rskl": [
+          "1H2",
+          "1H1",
+          "1T",
+          "1H5",
+          "1H5",
+          "1H2",
+          "2Q",
+          "3H4",
+          "1K",
+          "1T",
+          "3J",
+          "1H3",
+          "1H1",
+          "2K",
+          "2K",
+          "1Scat",
+          "1T",
+          "2T",
+          "3A",
+          "1H3",
+          "1H2",
+          "1T",
+          "1H1",
+          "1T"
+        ]
+      },
+      {
+        "round": 7,
+        "step": 1,
+        "scatPos": [],
+        "sfl": [
+          31,
+          41,
+          42
+        ],
+        "rskl": [
+          "1J",
+          "1T",
+          "1A",
+          "1H5",
+          "1H3",
+          "1H1",
+          "3K",
+          "1H3",
+          "1H2",
+          "1A",
+          "3Pan",
+          "1Q",
+          "1Q",
+          "1H3",
+          "4H1",
+          "1H3",
+          "1K",
+          "2H5",
+          "2H2",
+          "1H3",
+          "1H4",
+          "1H5",
+          "1H3",
+          "1Q",
+          "1A"
+        ]
+      }
+    ]
+  },
+  "gflStats": {
+    "nonempty": 479,
+    "examples": [
+      {
+        "round": 19,
+        "step": 2,
+        "gfl": [
+          14,
+          22
+        ],
+        "rskl": [
+          "1H4",
+          "1H2",
+          "1T",
+          "1H1",
+          "1J",
+          "1A",
+          "1T",
+          "1H5",
+          "1A",
+          "2T",
+          "1H1",
+          "1H1",
+          "2A",
+          "1T",
+          "1H2",
+          "1Q",
+          "1H2",
+          "1H2",
+          "1H4",
+          "1H3",
+          "1J",
+          "1J",
+          "1K",
+          "2H4",
+          "1Scat",
+          "1H4",
+          "1A",
+          "1H2",
+          "1Q",
+          "1H5",
+          "1J"
+        ],
+        "wa": 0.04
+      },
+      {
+        "round": 19,
+        "step": 3,
+        "gfl": [
+          23
+        ],
+        "rskl": [
+          "1A",
+          "1H4",
+          "1H2",
+          "1H1",
+          "1J",
+          "1A",
+          "1Pan",
+          "1H5",
+          "1A",
+          "2Wild",
+          "1H1",
+          "1A",
+          "1H1",
+          "2A",
+          "1H2",
+          "1Q",
+          "1H2",
+          "1H2",
+          "1H4",
+          "1H3",
+          "1J",
+          "1J",
+          "1K",
+          "2H4",
+          "1Scat",
+          "1H4",
+          "1A",
+          "1H2",
+          "1Q",
+          "1H5",
+          "1J"
+        ],
+        "wa": 4.56
+      },
+      {
+        "round": 21,
+        "step": 2,
+        "gfl": [
+          21
+        ],
+        "rskl": [
+          "1Q",
+          "1J",
+          "1H4",
+          "1H1",
+          "1H4",
+          "1H4",
+          "1H2",
+          "1H1",
+          "1H3",
+          "1H3",
+          "1H4",
+          "1H1",
+          "3H4",
+          "1H2",
+          "1J",
+          "1H1",
+          "1H3",
+          "1H3",
+          "1A",
+          "1A",
+          "1H3",
+          "1H1",
+          "3A",
+          "1H5",
+          "1Pan",
+          "1H1",
+          "1H1",
+          "1H3",
+          "1T",
+          "1H4"
+        ],
+        "wa": 4.96
+      },
+      {
+        "round": 26,
+        "step": 4,
+        "gfl": [
+          33,
+          43
+        ],
+        "rskl": [
+          "1H5",
+          "1H5",
+          "1K",
+          "1H4",
+          "1T",
+          "1K",
+          "1H1",
+          "1H1",
+          "1H1",
+          "1H5",
+          "1H5",
+          "1H4",
+          "1A",
+          "1K",
+          "1A",
+          "1H1",
+          "1H1",
+          "1K",
+          "1Scat",
+          "1H5",
+          "3H4",
+          "1A",
+          "1Pan",
+          "1H3",
+          "3H2",
+          "1J",
+          "1H3",
+          "1J",
+          "1H5",
+          "1H1"
+        ],
+        "wa": 0.24
+      },
+      {
+        "round": 26,
+        "step": 5,
+        "gfl": [
+          33,
+          43
+        ],
+        "rskl": [
+          "1H2",
+          "1H5",
+          "1H5",
+          "1H4",
+          "1T",
+          "1H4",
+          "1H1",
+          "1H1",
+          "1H1",
+          "1H5",
+          "1H5",
+          "1A",
+          "1H5",
+          "1A",
+          "1A",
+          "1H1",
+          "1H1",
+          "1H3",
+          "1Scat",
+          "1H5",
+          "3H4",
+          "1Q",
+          "1Pan",
+          "1H3",
+          "3H2",
+          "1J",
+          "1H3",
+          "1J",
+          "1H5",
+          "1H1"
+        ],
+        "wa": 1.6
+      },
+      {
+        "round": 26,
+        "step": 6,
+        "gfl": [
+          33,
+          43
+        ],
+        "rskl": [
+          "1H1",
+          "1A",
+          "1H2",
+          "1H4",
+          "1T",
+          "1H4",
+          "1K",
+          "1A",
+          "1H1",
+          "1H1",
+          "1H1",
+          "1A",
+          "1H4",
+          "1A",
+          "1A",
+          "1H1",
+          "1H1",
+          "1H3",
+          "1H4",
+          "1Scat",
+          "3H4",
+          "1Q",
+          "1Pan",
+          "1H3",
+          "3H2",
+          "1J",
+          "1H3",
+          "1J",
+          "1H5",
+          "1H1"
+        ],
+        "wa": 6.08
+      },
+      {
+        "round": 26,
+        "step": 7,
+        "gfl": [
+          43
+        ],
+        "rskl": [
+          "1T",
+          "1A",
+          "1H3",
+          "1H2",
+          "1T",
+          "1H3",
+          "1H4",
+          "1H3",
+          "1H1",
+          "1Pan",
+          "1K",
+          "1Q",
+          "1J",
+          "1H3",
+          "1H4",
+          "1H5",
+          "1H4",
+          "1H3",
+          "1H5",
+          "1Scat",
+          "3Wild",
+          "1H3",
+          "1Pan",
+          "1H3",
+          "3H2",
+          "1J",
+          "1H3",
+          "1J",
+          "1H5",
+          "1H1"
+        ],
+        "wa": 19.2
+      },
+      {
+        "round": 26,
+        "step": 8,
+        "gfl": [
+          43
+        ],
+        "rskl": [
+          "1H2",
+          "1T",
+          "1A",
+          "1H2",
+          "1T",
+          "1Q",
+          "1Scat",
+          "1H4",
+          "1H1",
+          "1Pan",
+          "1K",
+          "1T",
+          "1J",
+          "1J",
+          "1H4",
+          "1H5",
+          "1H4",
+          "1H1",
+          "1A",
+          "1K",
+          "1A",
+          "1H5",
+          "1Scat",
+          "1Q",
+          "1H5",
+          "1Pan",
+          "3H2",
+          "1J",
+          "1J",
+          "1J",
+          "1H5",
+          "1H1"
+        ],
+        "wa": 0
+      }
+    ]
+  },
+  "rpxProg": {
+    "firstWinRpx": {
+      "0": 94,
+      "2": 90,
+      "4": 45,
+      "6": 39,
+      "8": 23,
+      "10": 25,
+      "12": 23,
+      "14": 22,
+      "16": 6,
+      "18": 4,
+      "20": 6,
+      "22": 4,
+      "24": 2
+    },
+    "laterWinRpxDelta": {
+      "0": 866,
+      "2": 173,
+      "4": 18,
+      "6": 1
+    },
+    "lossWithRpx": 778,
+    "lossRpxValues": {
+      "2": 312,
+      "4": 135,
+      "6": 94,
+      "8": 46,
+      "10": 68,
+      "12": 51,
+      "14": 28,
+      "16": 19,
+      "18": 11,
+      "20": 6,
+      "22": 5,
+      "24": 2,
+      "26": 1
+    }
+  },
+  "histScatter": {
+    "withFsl": 35,
+    "fslLens": {
+      "16": 3,
+      "17": 3,
+      "18": 4,
+      "19": 5,
+      "20": 4,
+      "21": 5,
+      "22": 4,
+      "24": 2,
+      "25": 1,
+      "28": 1,
+      "30": 1,
+      "31": 1,
+      "32": 1
+    },
+    "bslLens": {
+      "1": 4,
+      "2": 12,
+      "3": 6,
+      "4": 4,
+      "5": 8,
+      "6": 1
+    },
+    "fe": {
+      "0": 35
+    },
+    "gm": {},
+    "examples": [
+      {
+        "transferId": "2093920490034462720",
+        "row": {
+          "ba": "0.4",
+          "baf": "7502.74",
+          "bid": "41-2093920490034462720",
+          "ca": 1788064522,
+          "fe": 0,
+          "gm": null,
+          "gt": 41,
+          "tis": "2093920490034462720",
+          "wa": "57.82"
+        },
+        "bslLen": 2,
+        "fslLen": 20,
+        "bslSummary": [
+          {
+            "ss": 0,
+            "wa": 0.5,
+            "rwa": 0.5,
+            "frwa": 0,
+            "fsn": 0,
+            "nfsc": 0,
+            "rpx": 0,
+            "ba": "0.5"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 0.5,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 0,
+            "rpx": 0,
+            "ba": "0"
+          }
+        ],
+        "fslSummary": [
+          {
+            "ss": 0,
+            "wa": 1.92,
+            "rwa": 1.92,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 1,
+            "rpx": 6,
+            "ba": "1.92"
+          },
+          {
+            "ss": 0,
+            "wa": 0.96,
+            "rwa": 2.88,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 1,
+            "rpx": 6,
+            "ba": "0.96"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 2.88,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 1,
+            "rpx": 6,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 0.36,
+            "rwa": 3.24,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 2,
+            "rpx": 6,
+            "ba": "0.36"
+          },
+          {
+            "ss": 0,
+            "wa": 1.2,
+            "rwa": 4.44,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 2,
+            "rpx": 6,
+            "ba": "1.2"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 4.44,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 2,
+            "rpx": 6,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 2.56,
+            "rwa": 7,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 3,
+            "rpx": 8,
+            "ba": "2.56"
+          },
+          {
+            "ss": 0,
+            "wa": 6.56,
+            "rwa": 13.56,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 3,
+            "rpx": 8,
+            "ba": "6.56"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 13.56,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 3,
+            "rpx": 8,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 2.56,
+            "rwa": 16.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 4,
+            "rpx": 8,
+            "ba": "2.56"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 16.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 4,
+            "rpx": 8,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 16.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 5,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 16.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 6,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 7.2,
+            "rwa": 23.32,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 7,
+            "rpx": 10,
+            "ba": "7.2"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 23.32,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 7,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 30,
+            "rwa": 53.32,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 8,
+            "rpx": 10,
+            "ba": "30"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 53.32,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 8,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 4,
+            "rwa": 57.32,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 10,
+            "ba": "4"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 57.32,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 57.32,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 10,
+            "ba": "0"
+          }
+        ]
+      },
+      {
+        "transferId": "2093920847485632512",
+        "row": {
+          "ba": "0.4",
+          "baf": "7764.86",
+          "bid": "41-2093920847485632512",
+          "ca": 1788064608,
+          "fe": 0,
+          "gm": null,
+          "gt": 41,
+          "tis": "2093920847485632512",
+          "wa": "149.68"
+        },
+        "bslLen": 1,
+        "fslLen": 17,
+        "bslSummary": [
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 0,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 0,
+            "rpx": 0,
+            "ba": "0"
+          }
+        ],
+        "fslSummary": [
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 0,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 1,
+            "rpx": 2,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 0,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 2,
+            "rpx": 6,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 0,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 3,
+            "rpx": 6,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 0,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 4,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 0,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 5,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 0,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 6,
+            "rpx": 12,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 1.44,
+            "rwa": 1.44,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 7,
+            "rpx": 12,
+            "ba": "1.44"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 1.44,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 7,
+            "rpx": 12,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 1.44,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 8,
+            "rpx": 12,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 1.68,
+            "rwa": 3.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 12,
+            "ba": "1.68"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 3.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 14,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 2.24,
+            "rwa": 5.36,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 14,
+            "ba": "2.24"
+          },
+          {
+            "ss": 0,
+            "wa": 13.44,
+            "rwa": 18.8,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 14,
+            "ba": "13.44"
+          },
+          {
+            "ss": 0,
+            "wa": 125.44,
+            "rwa": 144.24,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 14,
+            "ba": "125.44"
+          },
+          {
+            "ss": 0,
+            "wa": 5.12,
+            "rwa": 149.36,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 16,
+            "ba": "5.12"
+          },
+          {
+            "ss": 0,
+            "wa": 0.32,
+            "rwa": 149.68,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 16,
+            "ba": "0.32"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 149.68,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 16,
+            "ba": "0"
+          }
+        ]
+      },
+      {
+        "transferId": "2093921203963723776",
+        "row": {
+          "ba": "0.4",
+          "baf": "7982.14",
+          "bid": "41-2093921203963723776",
+          "ca": 1788064693,
+          "fe": 0,
+          "gm": null,
+          "gt": 41,
+          "tis": "2093921203963723776",
+          "wa": "81.54"
+        },
+        "bslLen": 5,
+        "fslLen": 28,
+        "bslSummary": [
+          {
+            "ss": 0,
+            "wa": 0.02,
+            "rwa": 0.02,
+            "frwa": 0,
+            "fsn": 0,
+            "nfsc": 0,
+            "rpx": 0,
+            "ba": "0.02"
+          },
+          {
+            "ss": 0,
+            "wa": 0.8,
+            "rwa": 0.82,
+            "frwa": 0,
+            "fsn": 0,
+            "nfsc": 0,
+            "rpx": 0,
+            "ba": "0.8"
+          },
+          {
+            "ss": 0,
+            "wa": 0.16,
+            "rwa": 0.98,
+            "frwa": 0,
+            "fsn": 0,
+            "nfsc": 0,
+            "rpx": 0,
+            "ba": "0.16"
+          },
+          {
+            "ss": 0,
+            "wa": 0.2,
+            "rwa": 1.18,
+            "frwa": 0,
+            "fsn": 0,
+            "nfsc": 0,
+            "rpx": 0,
+            "ba": "0.2"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 1.18,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 0,
+            "rpx": 0,
+            "ba": "0"
+          }
+        ],
+        "fslSummary": [
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 0,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 1,
+            "rpx": 2,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 1.6,
+            "rwa": 1.6,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 2,
+            "rpx": 4,
+            "ba": "1.6"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 1.6,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 2,
+            "rpx": 4,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 21.6,
+            "rwa": 23.2,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 3,
+            "rpx": 6,
+            "ba": "21.6"
+          },
+          {
+            "ss": 0,
+            "wa": 1.2,
+            "rwa": 24.4,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 3,
+            "rpx": 6,
+            "ba": "1.2"
+          },
+          {
+            "ss": 0,
+            "wa": 0.72,
+            "rwa": 25.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 3,
+            "rpx": 6,
+            "ba": "0.72"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 25.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 3,
+            "rpx": 6,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 25.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 4,
+            "rpx": 8,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 25.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 5,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 25.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 6,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 0.2,
+            "rwa": 25.32,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 7,
+            "rpx": 10,
+            "ba": "0.2"
+          },
+          {
+            "ss": 0,
+            "wa": 1.6,
+            "rwa": 26.92,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 7,
+            "rpx": 10,
+            "ba": "1.6"
+          },
+          {
+            "ss": 0,
+            "wa": 3.6,
+            "rwa": 30.52,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 7,
+            "rpx": 10,
+            "ba": "3.6"
+          },
+          {
+            "ss": 0,
+            "wa": 0.4,
+            "rwa": 30.92,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 7,
+            "rpx": 10,
+            "ba": "0.4"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 30.92,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 7,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 19.2,
+            "rwa": 50.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 8,
+            "rpx": 10,
+            "ba": "19.2"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 50.12,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 8,
+            "rpx": 10,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 0.48,
+            "rwa": 50.6,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 12,
+            "ba": "0.48"
+          },
+          {
+            "ss": 0,
+            "wa": 4.8,
+            "rwa": 55.4,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 12,
+            "ba": "4.8"
+          },
+          {
+            "ss": 0,
+            "wa": 2.4,
+            "rwa": 57.8,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 12,
+            "ba": "2.4"
+          },
+          {
+            "ss": 0,
+            "wa": 0.96,
+            "rwa": 58.76,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 12,
+            "ba": "0.96"
+          },
+          {
+            "ss": 0,
+            "wa": 4.8,
+            "rwa": 63.56,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 12,
+            "ba": "4.8"
+          },
+          {
+            "ss": 0,
+            "wa": 7.2,
+            "rwa": 70.76,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 12,
+            "ba": "7.2"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 70.76,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 9,
+            "rpx": 12,
+            "ba": "0"
+          },
+          {
+            "ss": 0,
+            "wa": 1.92,
+            "rwa": 72.68,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 12,
+            "ba": "1.92"
+          },
+          {
+            "ss": 0,
+            "wa": 4.8,
+            "rwa": 77.48,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 12,
+            "ba": "4.8"
+          },
+          {
+            "ss": 0,
+            "wa": 2.88,
+            "rwa": 80.36,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 12,
+            "ba": "2.88"
+          },
+          {
+            "ss": 1,
+            "wa": 0,
+            "rwa": 80.36,
+            "frwa": 0,
+            "fsn": 10,
+            "nfsc": 10,
+            "rpx": 12,
+            "ba": "0"
+          }
+        ]
+      }
+    ]
+  },
+  "histWin": {
+    "n": 200,
+    "fe": {
+      "0": 200
+    },
+    "gm": {
+      "null": 200
+    },
+    "fslNonEmpty": 35
+  },
+  "histLoss": {
+    "n": 893,
+    "fe": {
+      "0": 893
+    },
+    "gm": {
+      "null": 893
+    },
+    "fslNonEmpty": 0
+  },
+  "flags": {
+    "win": 200,
+    "loss": 893,
+    "winAndCascade": 165,
+    "winAndScatter": 35,
+    "winNeither": 0,
+    "lossAndCascade": 0,
+    "lossAndScatter": 0
+  },
+  "wmklShapes": {
+    "spinArrayOfArrays": 2883,
+    "spinOther": 0,
+    "histBslObject": 1058,
+    "histBslArray": 1093
+  },
+  "contReq": {
+    "n": 1791,
+    "sameBlBs": 1791,
+    "fields": {
+      "bl": 1791,
+      "bs": 1791,
+      "gid": 1791
+    }
+  },
+  "stackWin": {
+    "n": 1835,
+    "onePos": 1673,
+    "manyPos": 162,
+    "examples": [
+      {
+        "round": 11,
+        "symbol": "H5",
+        "posList": [
+          11
+        ],
+        "stacks": [
+          {
+            "pos": 11,
+            "h": 2
+          }
+        ]
+      },
+      {
+        "round": 11,
+        "symbol": "H5",
+        "posList": [
+          21
+        ],
+        "stacks": [
+          {
+            "pos": 21,
+            "h": 3
+          }
+        ]
+      },
+      {
+        "round": 11,
+        "symbol": "H5",
+        "posList": [
+          33
+        ],
+        "stacks": [
+          {
+            "pos": 33,
+            "h": 3
+          }
+        ]
+      },
+      {
+        "round": 11,
+        "symbol": "H5",
+        "posList": [
+          43
+        ],
+        "stacks": [
+          {
+            "pos": 43,
+            "h": 3
+          }
+        ]
+      },
+      {
+        "round": 11,
+        "symbol": "K",
+        "posList": [
+          43
+        ],
+        "stacks": [
+          {
+            "pos": 43,
+            "h": 3
+          }
+        ]
+      }
+    ]
+  },
+  "payoutInteger": {
+    "ordinaryWinRwaOver04": {
+      "n": 165,
+      "integer": 18,
+      "nonInteger": 147
+    },
+    "scatterSumOver04": {
+      "n": 35,
+      "integer": 3,
+      "nonInteger": 32
+    },
+    "scatterRwaOver04": {
+      "n": 35,
+      "integer": 3,
+      "nonInteger": 32
+    },
+    "ordinarySampleRatios": [
+      {
+        "ord": 11,
+        "rwa": 22.66,
+        "ratio": 56.65
+      },
+      {
+        "ord": 15,
+        "rwa": 40.86,
+        "ratio": 102.14999999999999
+      },
+      {
+        "ord": 19,
+        "rwa": 23.8,
+        "ratio": 59.5
+      },
+      {
+        "ord": 21,
+        "rwa": 21,
+        "ratio": 52.5
+      },
+      {
+        "ord": 26,
+        "rwa": 30.12,
+        "ratio": 75.3
+      },
+      {
+        "ord": 29,
+        "rwa": 58.08,
+        "ratio": 145.2
+      },
+      {
+        "ord": 31,
+        "rwa": 50.44,
+        "ratio": 126.1
+      },
+      {
+        "ord": 35,
+        "rwa": 53.4,
+        "ratio": 133.5
+      },
+      {
+        "ord": 41,
+        "rwa": 20.18,
+        "ratio": 50.449999999999996
+      },
+      {
+        "ord": 49,
+        "rwa": 47.96,
+        "ratio": 119.89999999999999
+      },
+      {
+        "ord": 51,
+        "rwa": 29.8,
+        "ratio": 74.5
+      },
+      {
+        "ord": 59,
+        "rwa": 64.28,
+        "ratio": 160.7
+      }
+    ],
+    "scatterSampleRatios": [
+      {
+        "ord": 69,
+        "rwa": 57.32,
+        "frwa": 0,
+        "sum": 143.29999999999998
+      },
+      {
+        "ord": 91,
+        "rwa": 149.68,
+        "frwa": 0,
+        "sum": 374.2
+      },
+      {
+        "ord": 119,
+        "rwa": 80.36,
+        "frwa": 0,
+        "sum": 200.89999999999998
+      },
+      {
+        "ord": 126,
+        "rwa": 44.92,
+        "frwa": 0,
+        "sum": 112.3
+      },
+      {
+        "ord": 153,
+        "rwa": 47.44,
+        "frwa": 0,
+        "sum": 118.6
+      },
+      {
+        "ord": 241,
+        "rwa": 45.76,
+        "frwa": 0,
+        "sum": 114.39999999999999
+      },
+      {
+        "ord": 251,
+        "rwa": 21.92,
+        "frwa": 0,
+        "sum": 54.800000000000004
+      },
+      {
+        "ord": 261,
+        "rwa": 175.64,
+        "frwa": 0,
+        "sum": 439.09999999999997
+      }
+    ]
+  },
+  "preflightConfigKeys": [
+    "bll",
+    "bsl",
+    "cc",
+    "cs"
+  ],
+  "frontendDeep": {
+    "GameGlobalConfig": ",t[t.Slow=2]=\"Slow\"}(n.RollSpeedType||(n.RollSpeedType={})),function(t){t[t.Cons=-1]=\"Cons\",t[t.Pros=1]=\"Pros\"}(n.RollDirectionType||(n.RollDirectionType={})),n.GameConfig={RowCount:6,TotalRowCount:7,ColumnCount:5,TopRowCount:4,RollWidth:708,TopRollIndex:6,RollHeight:588,RollMaxSpeeds:60,SpeedBase:45,SpeedAdd:0,SpeedBaseLevel:1,RollAddSpeeds:[5],RollMinusSpeeds:2,ImgChangeMinSpeed:15,AnimationMorePosY:30,EverOnceMovePosY:3,BlockNums:12,SpecailBlockAddNums:12,QuickBlockNums:4,RollStartDelay:100,AniamTimesScale:1},n.SmybolImgPath={Pan:\"Pan\",H2:\"Icon05\",H3:\"Icon04\",H4:\"Icon03\",H5:\"Icon02\",A:\"A\",K:\"K\",Q:\"Q\",J:\"J\",T:\"10\",H1:\"Icon06\",Scat:\"Scatter\",Wild:\"Wild\"},n.SmybolImgBgColor={Pan:\"#f47a6e\",H1:\"#d897da\",H2:\"#d7c3aa\",H3:\"#d7d2aa\",H4:\"#c8d7aa\",H5:\"#bfe0bd\",A:\"#aad5b3\",K:\"#a1d0c5\",Q:\"#aacad7\",J:\"#a0b0d3\",T:\"#989cc5\",Scat:\"#eb8d78\",Wild:\"#fa6161\"},n.SmybolLowList=[\"T\",\"J\",\"Q\",\"K\",\"A\"],n.DefaultMp4=\"\",cc._RF.pop()},{}],GameInit:[function(t,e,n){\"use strict\";cc._RF.push(e,\"b8619Vq9FNBMq91PB6SR",
+    "GameGlobalConfigAround": "GameGlobalConfig\"),a=t(\"./PrefabMgr\");(function(t){t[t.CUSTOM_INFO=-1]=\"CUSTOM_INFO\",t[t.COINS_NOENOUGH=0]=\"COINS_NOENOUGH\",t[t.QUICK_ISOPEN=1]=\"QUICK_ISOPEN\",t[t.QUICK_ISCLOSE=2]=\"QUICK_ISCLOSE\",t[t.CONNECT_ERROR=3]=\"CONNECT_ERROR\",t[t.DATA_ERROR=4]=\"DATA_ERROR\"})(o=n.ALTERTYPE||(n.ALTERTYPE={}));var r=[\"ErrorLib.InsufficientFundMessage\",\"SettingMenu.TurboSpinEnable\",\"SettingMenu.TurboSpinDisable\",\"ErrorLib.NetworkErrorMessage\",\"ErrorLib.ErrorAndReload\"],c=function(){function t(){this._alterTips=[],this._lock=!1}return t.getInstance=function(){return this._instance||(this._instance=new t),this._instance},t.prototype.addAlter=function(t,e){e=e||r[t],this._curAlterStr!=e&&(this._alterTips.some(function(t){return t==e})||(this._alterTips.push(t==o.CUSTOM_INFO?e:r[t]),this.showAlter()))},t.prototype.showAlter=function(){if(!this._lock&&(this._curAlterStr=this._alterTips.shift(),this._curAlterStr)){this._lock=!0;var t=cc.find(\"/Canvas\");a.default.getInstance().loadPrefab(i.PrefabPath.Alter,t,13,cc.v2(0,-300))}},t.prototype.next=function(){this._lock=!1,this.showAlter()},t.prototype.getCurAlterInfo=function(){return this._curAlterStr},t._instance=null,t}();n.default=c,cc._RF.pop()},{\"../View/Game/GameGlobalConfig\":\"GameGlobalConfig\",\"./PrefabMgr\":\"PrefabMgr\"}],Alter:[function(t,e,n){\"use strict\";cc._RF.push(e,\"76d4eSfwRRDmLNHNxCFh86l\",\"Alter\");var o,i=this&&this.__extends||(o=function(t,e){return(o=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])})(t,e)},function(t,e){function n(){this.constructor=t}o(t,e),t.prototype=null===e?Object.create(e):(n.prototype=e.prototype,new n)}),a=this&&this.__decorate||function(t,e,n,o){var i,a=arguments.length,r=a<3?e:null===o?o=Object.getOwnPropertyDescriptor(e,n):o;if(\"object\"==typeof Reflect&&\"function\"==typeof Reflect.decorate)r=Reflect.decorate(t,e,n,o);else for(var c=t.length-1;c>=0;c--)(i=t[c])&&(r=(a<3?i(r):a>3?i(e,n,r):i(e,n))||r);return a>3&&r&&Object.defineProperty(e,n,r),r};Object.defineProperty(n,\"__esModule\",{value:!0});var r=cc._decorator,c=r.ccclass,s=(r.property,t(\"../../Common/BaseComponent\")),l=t(\"../../GameInit\"),u=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return i(e,t),e.prototype.onLoad=function(){var t,e=cc.find(\"/tips\",this.node);e.opacity=100,e.scale=1,e.getComponentInChildren(cc.Label).string=l.GameApp.I18n(null!==(t=l.GameApp.Alter.getCurAlterInfo())&&vo",
+    "GameConfigAround": "GameConfig.RollWidth/f.GameApp.ConfigData.ReelCount,this._nodes=[]},e.prototype.start=function(){this.initLineInfo()},e.prototype.onGameStart=function(){this.node.zIndex=this._rowIndex},e.prototype.initLineInfo=function(){var t=this;if(!d.default.isNull(this._rowIndex))for(var e=h.GameData.getInstance().BlockSize.height,n=-3.5*e,o=0,i=function(i){var r=m.GameLogic.getInstance().getIndexByBlockShowData(a._rowIndex),c=r.nums*e/2+o/2,s=n+c;n=s,o=r.nums*e,A.default.getInstance().loadPrefab(p.PrefabPath.Block,a.node.parent,null,null,null,function(e){var n=e.getComponent(\"BlockLogic\");n.LineIndex=t._rowIndex,n.CurIndex=i,n.SmybolId=r.symbol_id,n.SymbolData=r,e.y=s,e.x=t.node.x,t._nodes.push(e)}),a._initPosY.push(s)},a=this,r=p.GameConfig.ColumnCount+1;r>=0;r--)i(r)},e.prototype.setBlurImg=function(){this._nodes.forEach(function(t){return t.getComponent(\"BlockLogic\").setBlurImg()})},e.prototype.setNormalImg=function(){this._nodes.forEach(function(t){return t.getComponent(\"BlockLogic\").setNormalImg()})},e.prototype.onShowPanDouble=function(){this._nodes.forEach(function(t){t.getComponent(\"BlockLogic\")._symbolData.times&&(t.getComponent(\"BlockLogic\").onShowPanDouble(),t.getComponent(\"BlockLogic\")._symbolData.times=0)})},e.prototype.updateBlockLine=function(){var t=this,e=0,n=function(){++e==t._nodes.length&&h.GameData.getInstance().setRollStatus(h.RollStatusType.Slow,t._rowIndex)},o=null,i=function(e){o=e;var n=t._nodes.concat(),i=null,a=0;n.forEach(function(t){if(!i)return i=t.y,void",
+    "GameApiAround": "GameApi\"),C=t(\"../../ErrorTip/ErrorTip\"),b=t(\"../../../Utils/Adapter\"),v=t(\"../GameEventConfig\"),I=function(t){function e(){var e=null!==t&&t.apply(this,arguments)||this;return e.btnPlay=null,e.btnTurbo=null,e.btnMinus=null,e.btnAdd=null,e.btnAuto=null,e.myCoins=null,e.myBets=null,e.myWins=null,e._curSpeed=0,e._playBtnDownState=!1,e._waitBtnPlay=!1,e._waitBtnAuto=!1,e._isFreeGmaeShow=!1,e._menuShow=!1,e._lockMenu=!1,e._menuNode=null,e._autoPlayId=0,e._times=0,e._lockPlay=!1,e._reqErrorTimes=0,e}return i(e,t),Object.defineProperty(e.prototype,\"BtnPlayAnima\",{get:function(){return cc.find(\"/contorl/play/play_anima\",this.node)||null},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,\"BtnMenu\",{get:function(){return cc.find(\"/menu\",this.node)||null},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,\"MenuNode\",{get:function(){return cc.find(\"/menuArea\",this.node)||null},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,\"MaskNode\",{get:function(){return cc.find(\"/mask\",this.node)||null},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,\"ActivityTimes\",{get:function(){return cc.find(\"/contorl/play/activityTimes\",this.node)||null},enumerable:!1,configurable:!0}),e.prototype.onLoad=function(){this.init(),this.onRreshBets(),this.onRreshCoins(),this.onRreshWins(),h.default.getHrefParam()},e.prototype.init=function(){var t=this;this.btnPlay=cc.find(\"/contorl/play\",this.node),this.addBtnCliclEvent(this.btnPlay,this.node,\"BetLogic\",\"onPlayBet\"),this.btnTurbo=cc.find(\"/contorl/i\",this.node),this.addBtnCliclEvent(this.btnTurbo,this.node,\"BetLogic\",\"onBtnTurbo\"),this.btnMinus=cc.find(\"/contorl/minus\",this.node),this.addBtnCliclEvent(this.btnMinus,this.node,\"BetLogic\",\"onBtnMinus\"),this.btnAdd=cc.find(\"/contorl/add\",this.node),this.addBtnCliclEvent(this.btnAdd,this.node,\"BetLogic\",\"onBtnAdd\"),this.btnAuto=cc.find(\"/contorl/auto\",this.node),this.addBtnCliclEvent(this.btnAuto,this.node,\"BetLogic\",\"onBtnAuto\");var e=cc.find(\"/goldInfo/bet\",this.node);this.addBtnCliclEvent(e,this.node,\"BetLogic\",\"onBetAreaClick\");var n=cc.find(\"/goldInfo/win\",this.node);this.addBtnCliclEvent(n,this.node,\"BetLogic\",\"onMenuHistoryClick\");var o=cc.find(\"/goldInfo/mine\",this.node);this.addBtnCliclEvent(o,this.node,\"BetLogic\",\"onMineWallet\"),this.addBtnCliclEvent(this.BtnMenu,this.node,\"BetLogic\",\"onMenuClick\");var i=cc.find(\"/goldInfo/mine/num\",this.node);i&&(this.myCoins=i.getComponent(cc.Label));var a=cc.find(\"/goldInfo/bet/num\",this",
+    "GameConfigDataSpl": "is.multiplier=t.bll,i.GameLogic.getInstance().minBetLeave=String(this.multiplier[0]),i.GameLogic.getInstance().maxBetLeave=String(this.multiplier[this.multiplier.length-1]),this.autoTimes=t.auto,this.symbol_pay_list=t.spl,this.reels=this.randomReel()},Object.defineProperty(t.prototype,\"PlayLineCount\",{get:function(){return this.payline_count},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"BaseMultiplier\",{get:function(){return this.base_multiplier},enumerable:!1,configurable:!0}),t.prototype.getBaseMultiplierByIndex=function(t){return this.BaseMultiplier[t]},t.prototype.getMultiplierByIndex=function(t){return this.Multiplier[t]},Object.defineProperty(t.prototype,\"Multiplier\",{get:function(){return this.multiplier},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"ReelCount\",{get:function(){return this.reel_count},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"LineCount\",{get:function(){return this.reel_count},enumerable:!1,config",
+    "GameApi": "tance().CurMultiplierIndex=r.GameApp.ConfigData.getIndexByMultiplier(t.fbl)),c.GameLogic.getInstance().init(),t;r.GameApp.Alter.addAlter(s.ALTERTYPE.DATA_ERROR)})},n.Spin=function(t){var e=h(\"/api/v1/lucky-panda/spin\",t.BaseUrl);return o.Http.post(e,t.Params,t.Headers,t.DataType).then(function(t){return d.default.isNull(t.fbt)?l.GameData.getInstance().setFreeData(\"times\",0):l.GameData.getInstance().setFreeData(\"times\",t.fbt),a.PlayerData.getInstance().Coins=t.pb,l.GameData.getInstance().CurGameResult=t,globalThis.SymbolList=t.rskl,u.default.getInstance().dispatchGameEvents(\"refreshresult\"),t})},n.History=function(t){var e=h(\"/api/v1/lucky-panda/log-list\",t.BaseUrl);return o.Http.post(e,t.Params,t.Headers,t.DataType)},n.HistoryByID=function(t){var e=h(\"/api/v1/lucky-panda/log-view\",t.BaseUrl);return o.Http.post(e,t.Params,t.Headers,t.DataType).then(function(t){var e,n=[];return t.bsl&&n.push.apply(n,t.bsl),t.fsl&&n.push.apply(n,null!==(e=t.fsl)&&void 0!==e?e:[]),r.GameApp.HistotyData.se",
+    "waysHits": [
+      ".getInstance().dispatchGameEvents(i.Event_Key.ANIMA_REFRESH_WAYS)},t.playMenuShow=function(t){o.default.getInstance().dispatchGameEvents(i.E",
+      "REFRESH_ROUNDTIMES:\"ANIMA_REFRESH_ROUNDTIMES\",ANIMA_REFRESH_WAYS:\"ANIMA_REFRESH_WAYS\",EVENT_BET_MENU_HIDE:\"EVENT_BET_MENU_HIDE\",EVENT_ACTIVI",
+      "ANIMA_REFRESH_ROUNDTIMES\",ANIMA_REFRESH_WAYS:\"ANIMA_REFRESH_WAYS\",EVENT_BET_MENU_HIDE:\"EVENT_BET_MENU_HIDE\",EVENT_ACTIVITY_INVITE:\"EVENT_ACT",
+      "rt.bind(this)),this.registerEvent(u.Event_Key.ANIMA_REFRESH_WAYS,this.onRefreshWays.bind(this)),this.onGameStart();var t=cc.find(\"/sp\",this."
+    ],
+    "rowCountsHits": [
+      "),this.rpx=t.rpx?t.rpx:1,this.now_free_spin_count=t.nfsc;var o=[],a=0,r=0,c=0,s=[5,6,6,6,6,5];for(var l in t.rskl){var p=t.rskl[l],A=Number(p[0]);a+=A;var d=NaN"
+    ],
+    "symbolPay": [
+      "ve=String(this.multiplier[this.multiplier.length-1]),this.autoTimes=t.auto,this.symbol_pay_list=t.spl,this.reels=this.randomReel()},Object.defineProperty(t.prototype,\"PlayLineCount\",{get:function(){return this.payline_count},enumerable:!1,configurable:!0}),Object.defineProperty(t",
+      "eturn e==t});return-1==e?0:e},t.prototype.getSymbolById=function(t){return this.symbol_pay_list[t]},Object.defineProperty(t.prototype,\"isCanTurbo\",{get:function(){return this._isCanTurbo},set:function(t){this._isCanTurbo=t},enumerable:!1,configurable:!0}),t}();n.GameConfigData=s,",
+      "ng(C).padStart(2,\"0\");var b=u[y];this.win_match_amount[C]=(i.GameApp.ConfigData.symbol_pay_list[b][_.length]*s.GameLogic.getInstance().CurBetmulti).toFixed(2)}var v={};if(d){var I=0,G=[];this.seed_largerModel_symbol_list=[];var S=0,w=0,E=0,R=[10,20,30,40];for(var y in d){var B=d["
+    ],
+    "fsnField": [
+      ".ctrl_log_id=0,this.control_key=\"\",this.free_spin_num=0,this.win_amount=0,this.bet_amount=0,this.now_free_spin_count=0,this.all_free_win_amo",
+      "ndReward)+Number(t.wa)).toFixed(2),this.free_spin_num=t.fsn,this.now_free_spin_count=t.nfsc,c.GameData.getInstance().FreeGameTimes=this.free",
+      "meData.getInstance().FreeGameTimes=this.free_spin_num-this.now_free_spin_count,this.free_spin_num==this.now_free_spin_count&&1==m||0==this.f",
+      "_spin_num-this.now_free_spin_count,this.free_spin_num==this.now_free_spin_count&&1==m||0==this.free_spin_num?s.GameLogic.getInstance().IsFre",
+      "this.now_free_spin_count&&1==m||0==this.free_spin_num?s.GameLogic.getInstance().IsFreeGame=!1:s.GameLogic.getInstance().IsFreeGame=!0,s.Game"
+    ],
+    "nowFree": [
+      "his.win_amount=0,this.bet_amount=0,this.now_free_spin_count=0,this.all_free_win_amount=\"\",this.wmkl_count=0,n.ctorCopyData.call(this,t);var ",
+      "oFixed(2),this.free_spin_num=t.fsn,this.now_free_spin_count=t.nfsc,c.GameData.getInstance().FreeGameTimes=this.free_spin_num-this.now_free_s",
+      ").FreeGameTimes=this.free_spin_num-this.now_free_spin_count,this.free_spin_num==this.now_free_spin_count&&1==m||0==this.free_spin_num?s.Game",
+      "ree_spin_count,this.free_spin_num==this.now_free_spin_count&&1==m||0==this.free_spin_num?s.GameLogic.getInstance().IsFreeGame=!1:s.GameLogic",
+      "n_status&&this.free_spin_num>0&&0==this.now_free_spin_count},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"ReelRewardIn"
+    ],
+    "winMultiple": [],
+    "spinStatus": [
+      "pe=o.Gold;if(a.default.isNull(m)||(this.spin_status=!m),this.seed_reel_symbol_list=G,this.win_match_number=new Array(r.GameConfig.TotalRowCount).fill(0),this.ba",
+      "eGameFirst\",{get:function(){return!this.spin_status&&this.free_spin_num>0&&0==this.now_free_spin_count},enumerable:!1,configurable:!0}),Object.defineProperty(t.",
+      "!u.GameData.getInstance().CurGameResult.spin_status)return this.IsLiveTimesNums&&this.IsLiveTimesNums!=this._preLiveTimes&&this.IsFreeGame&&(this.addOneAnimaTim",
+      "return a.roundIndex=i,a.curIndex=o,1==a.spin_status?(n.curTotalRound=o,n.curRoundMap[o]=i,o++,i=1):i++,a})},t.prototype.getCurItemData=function(){return r.defau",
+      "unt=0,this.rand_symbol_key_list=[],this.spin_status=0,this.win_amount=\"\",this.win_match_key_list=[],this.wskl=[],this.round_win_amount=\"\",this.win_x_key_list=[]"
+    ],
+    "seedReel": [
+      "=h.GameData.getInstance().CurGameResult.seed_reel_symbol_list)[this._rowIndex].length-1;n.forEach(function(n,i){0!=i&&o>",
+      "is.seed_largerModel_symbol_list=[],this.seed_reel_symbol_list=[],this.effect_ctrl_type=\"\",this.effect_ctrl_id=0,this.eff",
+      "t.isNull(m)||(this.spin_status=!m),this.seed_reel_symbol_list=G,this.win_match_number=new Array(r.GameConfig.TotalRowCou"
+    ],
+    "randSymbol": [
+      "{t&&t.length?(t.length>1&&t[t.length-1].rand_symbol_key_list.every(function(e,n){return e==t[t.length-2].rand_symbol_key",
+      "y(function(e,n){return e==t[t.length-2].rand_symbol_key_list[n]})&&t.splice(t.length-2,1),this._freeGame=t.map(function(",
+      "_type=1,this.now_free_spin_count=0,this.rand_symbol_key_list=[],this.spin_status=0,this.win_amount=\"\",this.win_match_key"
+    ],
+    "roundWin": [
+      "bol_list=[],this.award_balance=\"0\",this.round_win_amount=\"0\",this.consume_integral=\"0\",this.free_list=[],this.seed_large",
+      "ward_balance=String(t.wa)),t.rwa&&(this.round_win_amount=t.rwa),t.frwa&&(this.all_free_win_amount=String(t.frwa)),c.Game",
+      "unt\",{get:function(){return Number(this.round_win_amount)},enumerable:!1,configurable:!0}),Object.defineProperty(t.proto"
+    ],
+    "PayLine": [
+      "sh=!1,e._curImgState=r.Normal,e.freeGamePayLine=[],e.blockImg=null,e._localImgSize=null,e._firstGame=!0,e._curZIndex=0,e",
+      "ART\",function(){t.onResever(),t.freeGamePayLine=[],t._spineNode&&(t._spineNode.removeFromParent(),t._spineNode=null)})},",
+      "Type=n.RollSpeedType=n.SpecialEffects=n.PayLineMap=n.PylineInfo=n.SmbolidSpinesPath=n.SpinesPath=n.PrefabPath=n.GameName",
+      ",a2:\"B_Shand\",a3:\"B_Idle2\",angle:-4}},n.PayLineMap=function(t){var e;return null!==(e={PL4006:\"PL4001\",PL4007:\"PL4002\",P",
+      "0}),n.HistoryItemDetailWin=n.HistoryItemPayLineData=n.HistoryData=n.HistoryDataType=void 0;var o,i=t(\"../../GameData/Gam"
+    ],
+    "buyHits": []
+  }
+}

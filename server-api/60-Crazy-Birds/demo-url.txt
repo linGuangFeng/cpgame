@@ -1,0 +1,1 @@
+http://127.0.0.1:55060/?gid=60&t=demo-launch&ai=luck_single_10229&btt=1&l=pt&language=pt-br

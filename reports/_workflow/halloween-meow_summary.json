@@ -1,0 +1,15 @@
+{
+  "slug": "halloween-meow",
+  "folder": "2220-Halloween-Meow",
+  "gid": 2220,
+  "runId": "20260902T093210000Z",
+  "stage": "/Users/a1/Downloads/halloween-meow-stage/20260902T093210000Z",
+  "hdDest": "/Volumes/hd/cpgame/resources/2220-Halloween-Meow/programmatic-http/20260902T093210000Z",
+  "succeeded": 134,
+  "failed": 0,
+  "bytes": 26635000,
+  "total": 134,
+  "gameDirs": [
+    "Game2220"
+  ]
+}

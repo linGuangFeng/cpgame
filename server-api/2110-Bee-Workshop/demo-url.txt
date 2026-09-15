@@ -1,0 +1,1 @@
+http://192.168.24.37:52112/fixed/?ai=luck_single_10229&btt=1&gid=2110&l=pt&language=pt-br&sip=192.168.24.37:52112&token=demo

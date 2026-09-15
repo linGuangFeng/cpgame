@@ -1,0 +1,26 @@
+{
+  "rawGameId": 32,
+  "rulesVersion": "jt32-empirical-2026-09-09-v1",
+  "rulesHash": "0ae93f542908a7391cffe77dc02327ace428c614333bc73d711bf8e66357e68f",
+  "paidBet": "20*bet_size*bet_level",
+  "betLevels": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+  "betSizes": ["0.02", "0.1", "0.2"],
+  "reels": [5, 6, 6, 6, 6, 5],
+  "paytable": {
+    "H1": { "3": 30, "4": 40, "5": 60, "6": 80 },
+    "H2": { "3": 20, "4": 25, "5": 50, "6": 70 },
+    "H3": { "3": 10, "4": 25, "5": 40, "6": 60 },
+    "H4": { "3": 8, "4": 15, "5": 20, "6": 30 },
+    "H5": { "3": 6, "4": 10, "5": 12, "6": 15 },
+    "H6": { "3": 6, "4": 10, "5": 12, "6": 15 },
+    "A": { "3": 4, "4": 6, "5": 8, "6": 10 },
+    "K": { "3": 4, "4": 6, "5": 8, "6": 10 },
+    "Q": { "3": 1, "4": 2, "5": 3, "6": 4 },
+    "J": { "3": 1, "4": 2, "5": 3, "6": 4 },
+    "T": { "3": 1, "4": 2, "5": 3, "6": 4 }
+  },
+  "win": "left-to-right ways, wild substitutes except scatter, wa=rpx*sum(pay[len]*bs*bl*ways)",
+  "rpx": { "baseStart": 1, "baseStep": 1, "freeStart": 2, "freeStep": 2, "stickyAcrossFreeSpins": true, "max": 30 },
+  "scatter": { "tokens": 4, "grant": 10, "retriggerObserved": false },
+  "caps": { "scatter": 4, "wild": 2, "h1": 2, "cascades": 12 }
+}

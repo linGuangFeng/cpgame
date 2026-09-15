@@ -1,0 +1,26 @@
+{
+  "ok": true,
+  "state": "COMPLETED",
+  "directoryName": "1830-Hotpot",
+  "commandName": null,
+  "jarName": "hotpot-redis-loader.jar",
+  "configName": "generator.properties",
+  "commandLine": "java -jar hotpot-redis-loader.jar generator.properties",
+  "processId": 94341,
+  "startedAt": 1789441029918,
+  "finishedAt": 1789441030128,
+  "exitCode": 0,
+  "message": "runRedis 已完成",
+  "counts": {
+    "loaded": 500,
+    "batches": 17,
+    "normal": 400,
+    "special": 100,
+    "targetNormal": 400,
+    "targetSpecial": 100,
+    "targetTotal": 500
+  },
+  "logTail": "REDIS_CONNECTING host=127.0.0.1 port=57716 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=57716 database=0 ssl=false\nINDEPENDENT_LOSS_PRELOAD loss=0 capPerMultiplier=300\nBATCH_COMMITTED batch=1 members=31 loaded=31\nBATCH_COMMITTED batch=2 members=31 loaded=62\nBATCH_COMMITTED batch=3 members=31 loaded=93\nBATCH_COMMITTED batch=4 members=31 loaded=124\nBATCH_COMMITTED batch=5 members=31 loaded=155\nBATCH_COMMITTED batch=6 members=31 loaded=186\nBATCH_COMMITTED batch=7 members=31 loaded=217\nBATCH_COMMITTED batch=8 members=31 loaded=248\nBATCH_COMMITTED batch=9 members=31 loaded=279\nBATCH_COMMITTED batch=10 members=31 loaded=310\nBATCH_COMMITTED batch=11 members=31 loaded=341\nBATCH_COMMITTED batch=12 members=31 loaded=372\nBATCH_COMMITTED batch=13 members=31 loaded=403\nBATCH_COMMITTED batch=14 members=31 loaded=434\nBATCH_COMMITTED batch=15 members=31 loaded=465\nBATCH_COMMITTED batch=16 members=31 loaded=496\nNATURAL_CLASSIFICATION_COMPLETE normal=400 special=100 lossPreloaded=0 normalBuckets=84 specialBuckets=94 capPerMultiplier=300 discardedCandidateLimit=368\nBATCH_COMMITTED batch=17 members=4 loaded=500\nLOAD_COMPLETE redisGameId=1830 loss=0 normal=400 special=100 batches=17 maxConsecutiveWins=2 rulesVersion=hotpot-1830-result-engine-r1-20260904 rulesHash=725261a0bdda79f9d63bfeec37472febd8be9e1ec304c4a74291388468f9342f protocolHash=01123dc898992e5e38efb1f58b816c844093dfcf07939e2cefa3153022b61c01\n\n[exit] state=COMPLETED code=0\n",
+  "logBytes": 1449,
+  "stateLabel": "已完成"
+}

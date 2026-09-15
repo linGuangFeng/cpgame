@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "gid": 1380,
+  "rulesVersion": "1380-rules-v2",
+  "rulesHash": "a47cbb826fa130d6cf03c208a992f29789aad2a9870202ea7080145935f2d7db",
+  "rulesCanonical": "gid=1380\nboard=5x5-column-major-row0-bottom\nsymbols=1-4-low-5-8-high-9-wild\ncluster=orthogonal>=4-wild-substitutes-start-from-symbol-wild-may-join-multiple-wild-only-no-pay\npay=initRoom-prop_odds\nmoney=odd*betSize*betLevel\ncharged=betSize*betLevel*10\ncollection=exploded-winning-cells\ngrass@10-water@30-fire@50-lord@70\nwater=1,1|1,3|3,1|3,3\nfire=even-parity-keep-wild\nlord-transform=5-8-only-no-score-while-lows\nterminal=type_skill==total_skill_type\npaid=type1-type_skill0-change=tw-bet\ncont=type2-change=tw\nno-buy",
+  "trainingTruePaid": 695,
+  "holdoutTruePaid": 100,
+  "trainingKinds": {
+    "LOSS": 576,
+    "WIN": 0,
+    "SPECIAL": 119
+  },
+  "trainingSpecialPhase": {
+    "1": 23,
+    "2": 24,
+    "3": 24,
+    "4": 48
+  },
+  "caps": {
+    "wildInitialColumnMax": 3,
+    "wildInitialPageMax": 5,
+    "wildColumnMax": 3,
+    "wildPageMax": 6,
+    "lordTransformAllowsWild": false
+  },
+  "entries": {
+    "paid_initial": {
+      "denominator": 17375,
+      "symbols": [
+        {
+          "symbol": 1,
+          "count": 2120,
+          "percentage": 12.2014
+        },
+        {
+          "symbol": 2,
+          "count": 2073,
+          "percentage": 11.9309
+        },
+        {
+          "symbol": 3,
+          "count": 2150,
+          "percentage": 12.3741
+        },
+        {
+          "symbol": 4,
+          "count": 2077,
+          "percentage": 11.954
+        },
+        {
+          "symbol": 5,
+          "count": 2102,
+          "percentage": 12.0978
+        },
+        {
+          "symbol": 6,
+          "count": 2089,
+          "percentage": 12.023
+        },
+        {
+          "symbol": 7,
+          "count": 2180,
+          "percentage": 12.5468
+        },
+        {
+          "symbol": 8,
+          "count": 2204,
+          "percentage": 12.6849
+        },
+        {
+          "symbol": 9,
+          "count": 380,
+          "percentage": 2.1871
+        }
+      ]
+    },
+    "cascade_refill": {
+      "denominator": 2260,
+      "symbols": [
+        {
+          "symbol": 1,
+          "count": 284,
+          "percentage": 12.5664
+        },
+        {
+          "symbol": 2,
+          "count": 252,
+          "percentage": 11.1504
+        },
+        {
+          "symbol": 3,
+          "count": 265,
+          "percentage": 11.7257
+        },
+        {
+          "symbol": 4,
+          "count": 224,
+          "percentage": 9.9115
+        },
+        {
+          "symbol": 5,
+          "count": 264,
+          "percentage": 11.6814
+        },
+        {
+          "symbol": 6,
+          "count": 282,
+          "percentage": 12.4779
+        },
+        {
+          "symbol": 7,
+          "count": 277,
+          "percentage": 12.2566
+        },
+        {
+          "symbol": 8,
+          "count": 308,
+          "percentage": 13.6283
+        },
+        {
+          "symbol": 9,
+          "count": 104,
+          "percentage": 4.6018
+        }
+      ]
+    },
+    "feature_refill": {
+      "denominator": 7280,
+      "symbols": [
+        {
+          "symbol": 1,
+          "count": 791,
+          "percentage": 10.8654
+        },
+        {
+          "symbol": 2,
+          "count": 900,
+          "percentage": 12.3626
+        },
+        {
+          "symbol": 3,
+          "count": 886,
+          "percentage": 12.1703
+        },
+        {
+          "symbol": 4,
+          "count": 921,
+          "percentage": 12.6511
+        },
+        {
+          "symbol": 5,
+          "count": 865,
+          "percentage": 11.8819
+        },
+        {
+          "symbol": 6,
+          "count": 915,
+          "percentage": 12.5687
+        },
+        {
+          "symbol": 7,
+          "count": 878,
+          "percentage": 12.0604
+        },
+        {
+          "symbol": 8,
+          "count": 931,
+          "percentage": 12.7885
+        },
+        {
+          "symbol": 9,
+          "count": 193,
+          "percentage": 2.6511
+        }
+      ]
+    },
+    "lord_transform": {
+      "denominator": 1932,
+      "symbols": [
+        {
+          "symbol": 1,
+          "count": 0,
+          "percentage": 0
+        },
+        {
+          "symbol": 2,
+          "count": 0,
+          "percentage": 0
+        },
+        {
+          "symbol": 3,
+          "count": 0,
+          "percentage": 0
+        },
+        {
+          "symbol": 4,
+          "count": 0,
+          "percentage": 0
+        },
+        {
+          "symbol": 5,
+          "count": 486,
+          "percentage": 25.1553
+        },
+        {
+          "symbol": 6,
+          "count": 465,
+          "percentage": 24.0683
+        },
+        {
+          "symbol": 7,
+          "count": 480,
+          "percentage": 24.8447
+        },
+        {
+          "symbol": 8,
+          "count": 501,
+          "percentage": 25.9317
+        },
+        {
+          "symbol": 9,
+          "count": 0,
+          "percentage": 0
+        }
+      ]
+    },
+    "fire_symbol": {
+      "denominator": 72,
+      "symbols": [
+        {
+          "symbol": 1,
+          "count": 6,
+          "percentage": 8.3333
+        },
+        {
+          "symbol": 2,
+          "count": 8,
+          "percentage": 11.1111
+        },
+        {
+          "symbol": 3,
+          "count": 3,
+          "percentage": 4.1667
+        },
+        {
+          "symbol": 4,
+          "count": 11,
+          "percentage": 15.2778
+        },
+        {
+          "symbol": 5,
+          "count": 7,
+          "percentage": 9.7222
+        },
+        {
+          "symbol": 6,
+          "count": 9,
+          "percentage": 12.5
+        },
+        {
+          "symbol": 7,
+          "count": 11,
+          "percentage": 15.2778
+        },
+        {
+          "symbol": 8,
+          "count": 17,
+          "percentage": 23.6111
+        },
+        {
+          "symbol": 9,
+          "count": 0,
+          "percentage": 0
+        }
+      ]
+    }
+  },
+  "source": "captures/1380-Hidden-Realm/origin-gap-fill-20260908 true paid type=1 type_skill=0; last 100 held out"
+}

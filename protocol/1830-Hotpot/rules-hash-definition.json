@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 1830,
+  "directoryName": "1830-Hotpot",
+  "rulesFile": "protocol/1830-Hotpot/rules-core-canonical.json",
+  "rulesHash": "01123dc898992e5e38efb1f58b816c844093dfcf07939e2cefa3153022b61c01",
+  "algorithm": "sha256",
+  "byteLength": 7973
+}

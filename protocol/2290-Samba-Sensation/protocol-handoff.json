@@ -1,0 +1,828 @@
+{
+  "schemaVersion": 2,
+  "gameId": 2290,
+  "directoryName": "2290-Samba-Sensation",
+  "rulesHash": "46ef48cf0977a2785f257825d1e499b8049d293900e2a10d4a0dec7ad1ba2205",
+  "implementationReady": true,
+  "evidenceInventory": [
+    {
+      "id": "EVID-RESOURCE-VALIDATION",
+      "source": "reports/2290-Samba-Sensation/resource-capture-validation.json",
+      "behaviorIds": [
+        "BHV-SESSION-INIT",
+        "BHV-HISTORY"
+      ]
+    },
+    {
+      "id": "EVID-RESOURCE-STAGE-V39",
+      "source": "reports/2290-Samba-Sensation/resource-stage-status.json",
+      "behaviorIds": [
+        "BHV-SESSION-INIT",
+        "BHV-BET-AXIS",
+        "BHV-FEATURE-BUY",
+        "BHV-HISTORY"
+      ]
+    },
+    {
+      "id": "EVID-CURRENT-BUNDLE",
+      "source": "publish/2290-Samba-Sensation/assets/Game2290/index.5d956.js",
+      "sha256": "e629a2aa63c2fd994f162b2e64df82d86e15b72f24f2ffd15665948e8ec1c0f1",
+      "behaviorIds": [
+        "BHV-SESSION-INIT",
+        "BHV-BET-AXIS",
+        "BHV-PAID-ROUND",
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-PAYLINE-WILD",
+        "BHV-SCATTER-COLLECTION",
+        "BHV-FREE-SPINS",
+        "BHV-FEATURE-BUY",
+        "BHV-COIN-COLLECTION-REWARD",
+        "BHV-HISTORY"
+      ]
+    },
+    {
+      "id": "EVID-CURRENT-HELP",
+      "source": "publish/2290-Samba-Sensation/assets/resources/import/06/0671ab352.10e6d.json",
+      "sha256": "de037cf89975786d23776d60d2bf5ac3c976e51a89db4b39fa8b76cacc0fdf92",
+      "behaviorIds": [
+        "BHV-BET-AXIS",
+        "BHV-PAYLINE-WILD",
+        "BHV-SCATTER-COLLECTION",
+        "BHV-FREE-SPINS",
+        "BHV-FEATURE-BUY",
+        "BHV-COIN-COLLECTION-REWARD"
+      ]
+    },
+    {
+      "id": "EVID-INIT",
+      "source": "captures/2290-Samba-Sensation/session-and-config-redacted.json",
+      "behaviorIds": [
+        "BHV-SESSION-INIT",
+        "BHV-BET-AXIS"
+      ]
+    },
+    {
+      "id": "EVID-SPIN-RAW",
+      "source": "captures/2290-Samba-Sensation/spin-raw.jsonl",
+      "behaviorIds": [
+        "BHV-PAID-ROUND",
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-PAYLINE-WILD",
+        "BHV-SCATTER-COLLECTION",
+        "BHV-FREE-SPINS",
+        "BHV-FEATURE-BUY",
+        "BHV-COIN-COLLECTION-REWARD"
+      ]
+    },
+    {
+      "id": "EVID-ROUND-INDEX",
+      "source": "captures/2290-Samba-Sensation/round-index.jsonl",
+      "behaviorIds": [
+        "BHV-PAID-ROUND",
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-FREE-SPINS",
+        "BHV-FEATURE-BUY",
+        "BHV-COIN-COLLECTION-REWARD"
+      ]
+    },
+    {
+      "id": "EVID-TRAINING-MANIFEST",
+      "source": "captures/2290-Samba-Sensation/training-manifest.json",
+      "behaviorIds": [
+        "BHV-PAID-ROUND",
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-PAYLINE-WILD",
+        "BHV-SCATTER-COLLECTION",
+        "BHV-FREE-SPINS",
+        "BHV-FEATURE-BUY",
+        "BHV-COIN-COLLECTION-REWARD"
+      ]
+    },
+    {
+      "id": "EVID-SYMBOL-ANALYSIS",
+      "source": "reports/2290-Samba-Sensation/symbol-generation-evidence.json",
+      "behaviorIds": [
+        "BHV-BET-AXIS",
+        "BHV-PAID-ROUND",
+        "BHV-PAYLINE-WILD",
+        "BHV-SCATTER-COLLECTION",
+        "BHV-FREE-SPINS"
+      ]
+    },
+    {
+      "id": "EVID-COIN-DELTA",
+      "source": "reports/2290-Samba-Sensation/coin-vector-delta-evidence.json",
+      "behaviorIds": [
+        "BHV-COIN-COLLECTION-REWARD"
+      ]
+    },
+    {
+      "id": "EVID-HOLDOUT",
+      "source": "captures/2290-Samba-Sensation/holdout-round-index.jsonl",
+      "behaviorIds": [
+        "BHV-PAID-ROUND",
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-FREE-SPINS",
+        "BHV-COIN-COLLECTION-REWARD"
+      ]
+    },
+    {
+      "id": "EVID-HISTORY-BN",
+      "source": "captures/2290-Samba-Sensation/history-lightweight.json",
+      "behaviorIds": [
+        "BHV-HISTORY"
+      ]
+    },
+    {
+      "id": "EVID-HISTORY-ROUND-INDEX",
+      "source": "captures/2290-Samba-Sensation/history-round-index.jsonl",
+      "behaviorIds": [
+        "BHV-HISTORY",
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-FREE-SPINS",
+        "BHV-COIN-COLLECTION-REWARD"
+      ]
+    },
+    {
+      "id": "EVID-HISTORY-DETAIL-OUTCOMES",
+      "source": "captures/2290-Samba-Sensation/history-evidence.jsonl",
+      "behaviorIds": [
+        "BHV-HISTORY",
+        "BHV-ORDINARY-LOSS",
+        "BHV-ORDINARY-WIN",
+        "BHV-FREE-SPINS",
+        "BHV-COIN-COLLECTION-REWARD"
+      ]
+    },
+    {
+      "id": "EVID-HISTORY-SUPPLEMENT",
+      "source": "captures/2290-Samba-Sensation/history-supplement-summary.json",
+      "behaviorIds": [
+        "BHV-HISTORY"
+      ]
+    },
+    {
+      "id": "EVID-REFERENCE-REPAIR",
+      "source": "captures/2290-Samba-Sensation/quarantine-reference-repair-20260905/manifest.json",
+      "behaviorIds": [
+        "BHV-PAID-ROUND"
+      ]
+    },
+    {
+      "id": "EVID-OVERLAP-QUARANTINE",
+      "source": "captures/2290-Samba-Sensation/quarantine-overlap-20260905/manifest.json",
+      "disposition": "QUARANTINED_NOT_COUNTED",
+      "reason": "36 concurrent-write overlap rounds were removed from canonical indexes; originals and rejected rows remain recoverable."
+    },
+    {
+      "id": "EVID-PREEXISTING-DIRTY-FIXTURE",
+      "source": "fixtures/2290-Samba-Sensation/spin-dirty-20260903/round-001",
+      "disposition": "NOT_COUNTED",
+      "reason": "Account provenance and complete-round boundary were not established; retained only as historical diagnostic evidence."
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "BHV-SESSION-INIT",
+      "category": "SESSION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVID-INIT",
+        "EVID-CURRENT-BUNDLE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "valid assigned-session token and game id 2290"
+        ],
+        "stateFields": [
+          "bet",
+          "level",
+          "bet_type",
+          "props.coins",
+          "props.scatter"
+        ],
+        "transitionRules": [
+          "POST initRoom before result requests"
+        ],
+        "outputs": [
+          "initial balance, bet options, persistent collection state"
+        ],
+        "terminationRules": [
+          "init response accepted when code=0"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-INIT"
+        ],
+        "assertions": [
+          "request is form-urlencoded; response is plain JSON; tokens remain redacted"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-BET-AXIS",
+      "category": "GAME_STRUCTURE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVID-CURRENT-HELP",
+        "EVID-SYMBOL-ANALYSIS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid state"
+        ],
+        "stateFields": [
+          "bet_type",
+          "props.props"
+        ],
+        "transitionRules": [
+          "bet_type 1/2/3 selects exactly 1/2/3 active 5x3 axes"
+        ],
+        "outputs": [
+          "one board array per active axis"
+        ],
+        "terminationRules": [
+          "settles with the enclosing paid response"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-CURRENT-HELP",
+          "EVID-SYMBOL-ANALYSIS"
+        ],
+        "assertions": [
+          "all three bet types have 100 or more complete original rounds; each board length is 15"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-PAID-ROUND",
+      "category": "ROUND_LIFECYCLE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVID-SPIN-RAW",
+        "EVID-ROUND-INDEX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "IDLE and no active free step"
+        ],
+        "stateFields": [
+          "type",
+          "oid",
+          "frees.st",
+          "props.is_free",
+          "total_win",
+          "props.coins.is_full"
+        ],
+        "transitionRules": [
+          "send type=1; branch exclusively to ordinary terminal, free sequence, or coin-reward tagged terminal"
+        ],
+        "outputs": [
+          "one complete Round linked to all response steps"
+        ],
+        "terminationRules": [
+          "ordinary/coin ends after first response; free ends only after final type=2 with frees.st=0"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-SPIN-RAW",
+          "EVID-ROUND-INDEX"
+        ],
+        "assertions": [
+          "one spin-index row per paid start; round-index complete=true; no history-derived quota"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "fromRawSha256": "abec590335ae86a0af9411b214bd8d4f166c8201c43905a12d338a411b79a894",
+            "toRawSha256": "57ed2f20475104a7a68045afd1c107ad3e08264153fa49f89402a08a003ae8d2",
+            "assertion": "paid response with frees.st=5 is followed by type=2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BHV-ORDINARY-LOSS",
+      "category": "OUTCOME",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVID-ROUND-INDEX",
+        "EVID-HOLDOUT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid response does not activate frees and coin full is false"
+        ],
+        "stateFields": [
+          "total_win",
+          "win_arr",
+          "frees.st",
+          "props.coins.is_full"
+        ],
+        "transitionRules": [
+          "classify loss iff total_win=0"
+        ],
+        "outputs": [
+          "complete one-step loss Round"
+        ],
+        "terminationRules": [
+          "first response"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-ROUND-INDEX",
+          "EVID-HOLDOUT"
+        ],
+        "assertions": [
+          "at least 200 complete loss rounds; integerMultiplier=0"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-ORDINARY-WIN",
+      "category": "OUTCOME",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVID-ROUND-INDEX",
+        "EVID-HOLDOUT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid response does not activate frees and coin full is false"
+        ],
+        "stateFields": [
+          "total_win",
+          "win_arr",
+          "odds"
+        ],
+        "transitionRules": [
+          "classify win iff total_win>0"
+        ],
+        "outputs": [
+          "complete one-step winning Round"
+        ],
+        "terminationRules": [
+          "first response"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-ROUND-INDEX",
+          "EVID-HOLDOUT"
+        ],
+        "assertions": [
+          "at least 200 complete win rounds; win_arr lines are 1..25"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-PAYLINE-WILD",
+      "category": "PAYOUT",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "EVID-CURRENT-HELP",
+        "EVID-CURRENT-BUNDLE",
+        "EVID-SPIN-RAW"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "one active 5x3 axis"
+        ],
+        "stateFields": [
+          "props.props",
+          "props.win_arr[].line/count/symbol/pay_out/reward"
+        ],
+        "transitionRules": [
+          "evaluate 25 fixed lines left-to-right; only highest win on each line; Wild 0 substitutes 1..9 but not Scatter 10"
+        ],
+        "outputs": [
+          "win_arr grouped by 1-based axis key"
+        ],
+        "terminationRules": [
+          "per response"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-CURRENT-HELP",
+          "EVID-SPIN-RAW"
+        ],
+        "assertions": [
+          "all 25 line ids and counts 3..5 occur in provider samples"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BHV-SCATTER-COLLECTION",
+      "category": "CROSS_ROUND_COLLECTION",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVID-CURRENT-HELP",
+        "EVID-CURRENT-BUNDLE",
+        "EVID-SYMBOL-ANALYSIS",
+        "EVID-SPIN-RAW"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid initial board"
+        ],
+        "stateFields": [
+          "props.scatter",
+          "symbol 10",
+          "frees.st"
+        ],
+        "transitionRules": [
+          "paid Scatter updates 30-unit collection meter; do not infer free activation from meter alone; explicit frees.st controls protocol branch"
+        ],
+        "outputs": [
+          "persistent scatter progress plus possible free-state fields"
+        ],
+        "terminationRules": [
+          "collection state persists across paid rounds; free protocol terminates independently"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-CURRENT-HELP",
+          "EVID-SYMBOL-ANALYSIS",
+          "EVID-SPIN-RAW"
+        ],
+        "assertions": [
+          "enforce per-column/per-axis/per-page observed maxima and allowed axes; free entry generates zero Scatter"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "fromRoundId": "2290-2095968468785385472",
+            "toRoundId": "2290-2095968471452962816",
+            "fromRawSha256": "331f2b92025db9ea7f03416a5dfdf60753d3316b861dbe6f9db34526830fefc3",
+            "toRawSha256": "bab0fcf073163afc2fa8d44c4e5511e4a36fac3cfb02aaa7079f0bfb95566d75",
+            "fromProgress": 0,
+            "toProgress": 2,
+            "assertion": "props.scatter is a cross-paid-round collection state"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BHV-FREE-SPINS",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVID-CURRENT-HELP",
+        "EVID-CURRENT-BUNDLE",
+        "EVID-SPIN-RAW",
+        "EVID-ROUND-INDEX",
+        "EVID-HOLDOUT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid or feature-buy response has frees.st=5"
+        ],
+        "stateFields": [
+          "type",
+          "props.is_free",
+          "small_game_type",
+          "frees.st",
+          "frees.tt",
+          "frees.twa",
+          "props.props"
+        ],
+        "transitionRules": [
+          "request type=2 while frees.st>0; each response decrements remaining 5->4->3->2->1->0"
+        ],
+        "outputs": [
+          "three axes; each contains six outer cells and one 3x3 big-symbol material encoded as repeated cells"
+        ],
+        "terminationRules": [
+          "terminal response has frees.st=0 and total award in frees.twa"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-CURRENT-HELP",
+          "EVID-SPIN-RAW",
+          "EVID-ROUND-INDEX",
+          "EVID-HOLDOUT"
+        ],
+        "assertions": [
+          "at least 30 complete six-step rounds; every captured terminal remaining is zero; center geometry invariant holds"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "fromRawSha256": "abec590335ae86a0af9411b214bd8d4f166c8201c43905a12d338a411b79a894",
+            "toRawSha256": "57ed2f20475104a7a68045afd1c107ad3e08264153fa49f89402a08a003ae8d2",
+            "expectedRemainingTransition": "5->4"
+          },
+          {
+            "fromRawSha256": "57ed2f20475104a7a68045afd1c107ad3e08264153fa49f89402a08a003ae8d2",
+            "toRawSha256": "7bece728bea9057a27895cf51c92c930e46594eddfe7cd0cc5cb0b2bc64320fd",
+            "expectedRemainingTransition": "4->3"
+          },
+          {
+            "fromRawSha256": "7bece728bea9057a27895cf51c92c930e46594eddfe7cd0cc5cb0b2bc64320fd",
+            "toRawSha256": "b9448948e007a7acdd9e7ab588243a9220fe5641da629f4ea6ce389e7f2bb975",
+            "expectedRemainingTransition": "3->2"
+          },
+          {
+            "fromRawSha256": "b9448948e007a7acdd9e7ab588243a9220fe5641da629f4ea6ce389e7f2bb975",
+            "toRawSha256": "71a028da80f2847f4725b87458f90bd291ddc1da736deded9b2dc4ebf09b20a1",
+            "expectedRemainingTransition": "2->1"
+          },
+          {
+            "fromRawSha256": "71a028da80f2847f4725b87458f90bd291ddc1da736deded9b2dc4ebf09b20a1",
+            "toRawSha256": "3b8281b4d17c5559a011da03cdc271fa7e6cfbf96ac678ea3f03ae74dc712e48",
+            "expectedRemainingTransition": "1->0"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BHV-FEATURE-BUY",
+      "category": "SPECIAL_ENTRY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVID-CURRENT-HELP",
+        "EVID-CURRENT-BUNDLE",
+        "EVID-SPIN-RAW",
+        "EVID-ROUND-INDEX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "IDLE, sufficient balance, current bet and level"
+        ],
+        "stateFields": [
+          "request type=3",
+          "frees.st",
+          "frees.tt",
+          "frees.twa"
+        ],
+        "transitionRules": [
+          "type=3 enters BHV-FREE-SPINS; it is not a separate mutually exclusive gameplay result"
+        ],
+        "outputs": [
+          "same Free Spins response/state shape"
+        ],
+        "terminationRules": [
+          "same frees.st=0 rule"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-CURRENT-HELP",
+          "EVID-SPIN-RAW",
+          "EVID-ROUND-INDEX"
+        ],
+        "assertions": [
+          "feature-buy round uses type=3 then type=2 adjacency; cost multiplier is 80"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "fromRawSha256": "5504166ee22b44c16351183cd1da72efe62b7ba7dd77b6c0ea90af1a2ae4c3f7",
+            "toRawSha256": "57cc145be14dbd43b7d23fc0f22b86e92fd33869bab042c05b34f27dcddeb69d"
+          },
+          {
+            "fromRawSha256": "57cc145be14dbd43b7d23fc0f22b86e92fd33869bab042c05b34f27dcddeb69d",
+            "toRawSha256": "dc7ebd3654376317efb0daac490f0f4cec19d5d659d4617f058fe8c37c5cf8e6"
+          },
+          {
+            "fromRawSha256": "dc7ebd3654376317efb0daac490f0f4cec19d5d659d4617f058fe8c37c5cf8e6",
+            "toRawSha256": "e7d80cd6b746f795265321fd2becda647a2886c9f20cab254924cfe95169890b"
+          },
+          {
+            "fromRawSha256": "e7d80cd6b746f795265321fd2becda647a2886c9f20cab254924cfe95169890b",
+            "toRawSha256": "1ec7d142452b37278ee49df6699ccf7cadf742fd73c7da3340de791e2532b9bd"
+          },
+          {
+            "fromRawSha256": "1ec7d142452b37278ee49df6699ccf7cadf742fd73c7da3340de791e2532b9bd",
+            "toRawSha256": "25f5b11b64207bb07dce1ce1973c5330667e55b3856f81b242d471ee5525e086"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BHV-COIN-COLLECTION-REWARD",
+      "category": "CROSS_ROUND_REWARD",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVID-CURRENT-HELP",
+        "EVID-CURRENT-BUNDLE",
+        "EVID-SPIN-RAW",
+        "EVID-ROUND-INDEX",
+        "EVID-COIN-DELTA",
+        "EVID-TRAINING-MANIFEST"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid non-free result"
+        ],
+        "stateFields": [
+          "props.coins.coins[5]",
+          "props.coins.count",
+          "props.coins.is_full"
+        ],
+        "transitionRules": [
+          "carry vector across paid rounds; derive newly changed positions only from adjacent provider state vectors; when is_full=true display reward and reset client collection view"
+        ],
+        "outputs": [
+          "one-step result with additive reward bet*level*25*count"
+        ],
+        "terminationRules": [
+          "same first paid response; no follow-up API step"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-CURRENT-HELP",
+          "EVID-SPIN-RAW",
+          "EVID-ROUND-INDEX",
+          "EVID-COIN-DELTA",
+          "EVID-TRAINING-MANIFEST"
+        ],
+        "assertions": [
+          "five-slot vector present in 5690 training states",
+          "full=true training observations=17",
+          "adjacent delta denominator=4874"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "fromRoundId": "2290-2095987792174600192",
+            "toRoundId": "2290-2095987795571986432",
+            "fromRawSha256": "321cc77f7b29b4a50dd2ede59eac3b8cbd1e425e1507536bf2bd2eb86d9a3bad",
+            "toRawSha256": "5d110430d5362c4adde5036e30fa44bc3dff3bf10487c59f75bf8b0086778630",
+            "fromVector": [
+              128,
+              121,
+              119,
+              1,
+              128
+            ],
+            "toVector": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "delta": [
+              -128,
+              -121,
+              -119,
+              -1,
+              -128
+            ],
+            "fromCount": 497,
+            "toCount": 0,
+            "fromFull": true,
+            "toFull": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "BHV-HISTORY",
+      "category": "HISTORY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "EVID-HISTORY-BN",
+        "EVID-HISTORY-ROUND-INDEX",
+        "EVID-HISTORY-DETAIL-OUTCOMES",
+        "EVID-HISTORY-SUPPLEMENT",
+        "EVID-CURRENT-BUNDLE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "valid session"
+        ],
+        "stateFields": [
+          "day",
+          "page",
+          "page_size",
+          "results",
+          "props",
+          "frees",
+          "oid",
+          "order_id"
+        ],
+        "transitionRules": [
+          "request daily summary then paginate selected day detail; join detail order identifier to canonical provider Round"
+        ],
+        "outputs": [
+          "one real matching detail record for each confirmed outcome class"
+        ],
+        "terminationRules": [
+          "all four outcome detail records retained and indexed"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "EVID-HISTORY-BN",
+          "EVID-HISTORY-ROUND-INDEX",
+          "EVID-HISTORY-DETAIL-OUTCOMES",
+          "EVID-HISTORY-SUPPLEMENT"
+        ],
+        "assertions": [
+          "bn-bd list and detail present; all four history index rows have matchingDetailRecordPresent=true; History is not used for sampling quotas"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "fromResponseSha256": "6cf17c20d57c05448325b74dbb03ef64171e61ede8156966bb5a15e656fac593",
+            "toResponseSha256": "87ee428ec2b8d174316a7f1c4795005ad750e123230d33e62c79d96d8daf777f",
+            "roundId": "2290-2095993800875790336",
+            "historyRef": "captures/2290-Samba-Sensation/history-evidence.jsonl#line-1",
+            "assertion": "ORDINARY_LOSS has a real matching History detail row"
+          },
+          {
+            "fromResponseSha256": "6cf17c20d57c05448325b74dbb03ef64171e61ede8156966bb5a15e656fac593",
+            "toResponseSha256": "87ee428ec2b8d174316a7f1c4795005ad750e123230d33e62c79d96d8daf777f",
+            "roundId": "2290-2095993797465821184",
+            "historyRef": "captures/2290-Samba-Sensation/history-evidence.jsonl#line-2",
+            "assertion": "ORDINARY_WIN has a real matching History detail row"
+          },
+          {
+            "fromResponseSha256": "6cf17c20d57c05448325b74dbb03ef64171e61ede8156966bb5a15e656fac593",
+            "toResponseSha256": "87ee428ec2b8d174316a7f1c4795005ad750e123230d33e62c79d96d8daf777f",
+            "roundId": "2290-2095993803501424640",
+            "historyRef": "captures/2290-Samba-Sensation/history-evidence.jsonl#line-3",
+            "assertion": "FREE_SPINS_SPECIAL has a real matching History detail row"
+          },
+          {
+            "fromResponseSha256": "6cf17c20d57c05448325b74dbb03ef64171e61ede8156966bb5a15e656fac593",
+            "toResponseSha256": "87ee428ec2b8d174316a7f1c4795005ad750e123230d33e62c79d96d8daf777f",
+            "roundId": "2290-2095993756940455936",
+            "historyRef": "captures/2290-Samba-Sensation/history-evidence.jsonl#line-4",
+            "assertion": "COIN_COLLECTION_REWARD has a real matching History detail row"
+          }
+        ]
+      }
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "UNR-PROVIDER-LONG-RUN-PROBABILITY",
+      "description": "Empirical entry-specific weights are not claimed to equal provider long-run probability or RTP.",
+      "reason": "The provider does not publish RNG weights; finite observed training frequencies are only empirical.",
+      "disposition": "USE_CAPTURE_COUNTS_AS_ADJUSTABLE_RELATIVE_WEIGHTS_AND_REQUIRE_10000_ROUND_HOLDOUT_VALIDATION",
+      "blocksGeneration": false,
+      "evidenceRefs": [
+        "EVID-SYMBOL-ANALYSIS",
+        "EVID-HOLDOUT",
+        "EVID-TRAINING-MANIFEST"
+      ]
+    },
+    {
+      "id": "UNR-SCATTER-TO-FREE-CAUSAL-TIMING",
+      "description": "Help says 30 collected Scatter enters Free Game, while observed frees activation is not reliably inferable from adjacent progress values.",
+      "reason": "Captured progress-bar values alone do not establish the exact server-side award instant.",
+      "disposition": "PROTOCOL_BRANCH_MUST_USE_EXPLICIT_FREES_ST; DO_NOT_DERIVE_FROM_PROGRESS_BAR",
+      "blocksGeneration": false,
+      "evidenceRefs": [
+        "EVID-CURRENT-HELP",
+        "EVID-SPIN-RAW"
+      ]
+    },
+    {
+      "id": "UNR-COIN-REWARD-RARITY",
+      "description": "Only 22/30 complete coin-full reward rounds occurred by the paid-start cap.",
+      "reason": "The 5000-paid-start safety cap was reached before 30 naturally occurring full-meter rewards.",
+      "disposition": "SAMPLE_INSUFFICIENT_AT_5000; retain confirmed field/formula contract and mark empirical frequency insufficient",
+      "blocksGeneration": false,
+      "evidenceRefs": [
+        "EVID-CURRENT-BUNDLE",
+        "EVID-SPIN-RAW",
+        "EVID-ROUND-INDEX",
+        "EVID-COIN-DELTA"
+      ]
+    }
+  ]
+}

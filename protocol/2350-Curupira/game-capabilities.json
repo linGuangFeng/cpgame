@@ -1,0 +1,275 @@
+{
+  "schemaVersion": "1.2",
+  "gameId": 2350,
+  "directoryName": "2350-Curupira",
+  "gameName": "Curupira",
+  "rulesHash": "d5421efc347392576699048c0538c72d669056017eb723ae2a046fa7bac71404",
+  "rulesVersion": "2350-curupira-rules-d5421efc",
+  "status": "ORDINARY_PROTOCOL_CONFIRMED_RARE_SPECIAL_PROTOCOL_UNRESOLVED",
+  "identityEvidence": {
+    "idName": "2350-Curupira",
+    "confirmed": [
+      "HMS CP launcher item Curupira with asset 52350",
+      "authenticated loading canvas title CURUPIRA",
+      "current 2350 title atlas"
+    ],
+    "conflict": {
+      "source": "authenticated initialData data.game_info.name",
+      "value": "Magic Scroll",
+      "disposition": "stale or mismatched backend metadata; rejected because launcher, live canvas and current 2350 resources consistently identify Curupira"
+    }
+  },
+  "supportedLanguages": {
+    "codes": ["hi-in","fr-fr","ko-ko","es-es","vi-vn","ru-ru","th-th","id-id","bn-bd","zh-cn","in-marathi","in-telugu","zh-hk","en-us","tr-tr","pt-pt"],
+    "requestedAliasesNotListed": ["pt-br"],
+    "fallbacks": [
+      {"requested":"ru-ru","actual":"en-us","scope":"browser first load"},
+      {"requested":"pt-br","actual":"en-us","scope":"authenticated initialData"}
+    ],
+    "evidence": [
+      "resources/2350-Curupira/shared/static.cpgame.io/v2/2350/assets/language/config.c1cad.json",
+      "captures/2350-Curupira/browser-first-load-evidence.json",
+      "captures/2350-Curupira/authenticated-http/001-cp-config-initialData.json",
+      "reports/2350-Curupira/language-inventory.json"
+    ]
+  },
+  "boardModel": {
+    "type": "FIXED_5X3",
+    "columns": 5,
+    "rows": 3,
+    "visibleCells": 15,
+    "bufferCells": "UNKNOWN_NOT_IN_PROTOCOL_EVIDENCE",
+    "responseField": "res.ps",
+    "storageOrder": "COLUMN_MAJOR_THREE_CELLS_PER_REEL",
+    "indexRule": "wire index = column * 3 + row; front-end visual row is inverted by getPos, but payline row patterns use logical rows 0,1,2",
+    "paylineRowPatterns": {
+      "1":[1,1,1,1,1],"2":[2,2,2,2,2],"3":[0,0,0,0,0],"4":[2,1,0,1,2],"5":[0,1,2,1,0],
+      "6":[1,2,2,2,1],"7":[1,0,0,0,1],"8":[2,2,1,0,0],"9":[0,0,1,2,2],"10":[1,0,1,2,1],
+      "11":[1,2,1,0,1],"12":[2,1,1,1,2],"13":[0,1,1,1,0],"14":[2,1,2,1,2],"15":[0,1,0,1,0],
+      "16":[1,1,2,1,1],"17":[1,1,0,1,1],"18":[2,2,0,2,2],"19":[0,0,2,0,0],"20":[2,0,0,0,2],
+      "21":[0,2,2,2,0],"22":[1,0,2,0,1],"23":[1,2,0,2,1],"24":[2,0,2,0,2],"25":[0,2,0,2,0]
+    },
+    "evidence": [
+      "GameConstant.COL_NUM=5, ROW_NUM=3",
+      "GameSymbolArea getPos/getPosIdx and winLine2SymbolIdx",
+      "all ten captured res.ps arrays have length 15",
+      "runtime Help payline diagrams 1 through 25"
+    ]
+  },
+  "grid": {
+    "columns": 5,
+    "rows": 3,
+    "visibleCells": 15,
+    "bufferCells": "UNKNOWN_NOT_IN_PROTOCOL_EVIDENCE",
+    "storageOrder": "COLUMN_MAJOR_THREE_CELLS_PER_REEL",
+    "canonicalSource": "boardModel"
+  },
+  "winModel": "FIXED_PAYLINES",
+  "paylineCount": 25,
+  "winModelDetails": {
+    "type": "FIXED_PAYLINES",
+    "paylineCount": 25,
+    "paylineCountApplicable": true,
+    "evaluationDirection": "LEFT_TO_RIGHT",
+    "highestWinPerPaylineOnly": true,
+    "awardFormula": "lineWin = b * l * wa.o; tw = sum(lineWin); captured minimum uses b=0.02 and l=1",
+    "round10IndependentCheck": "sum(wa.o)=1303 and 0.02 * 1 * 1303 = 26.06 = res.tws = tw",
+    "evidence": [
+      "GameConstant.LINE=25",
+      "front-end winLine2SymbolIdx map contains lines 1-25",
+      "RecordMgr computes ordinary line win as e.b * e.l * award.o",
+      "runtime Help states 25 fixed paylines",
+      "round-0010 wa line identifiers and multiplier sum"
+    ]
+  },
+  "minimumBet": {
+    "lineBet": 0.02,
+    "level": 1,
+    "paylineCount": 25,
+    "totalBet": 0.5,
+    "formula": "b * l * 25",
+    "evidence": [
+      "screenshots/2350-Curupira/minimum-bet-screen.png",
+      "gameResult request bet=0.02 level=1",
+      "gameResult response b=0.02 l=1 bg=0.5"
+    ]
+  },
+  "symbols": {
+    "ids": {"S1":1,"S2":2,"S3":3,"S4":4,"A":11,"K":12,"Q":13,"J":14,"Wild":21,"Scatter":31},
+    "wild": {"id":21,"substitutesFor":"all paying symbols except Scatter","evidence":["runtime Help","GamePropType enum"]},
+    "scatter": {"id":31,"triggerThreshold":3,"evidence":["runtime Help says 3 or more","Help11","GameConstant.SCATTER_THRESHOLD=3"],"conflictDisposition":{"source":"isolated Game_scatter localized text","value":"4 or more","disposition":"stale text rejected in favor of runtime Help plus code constant"}},
+    "numericPayoutTable": {
+      "basis": "wa.o multiplier applied to b*l for an ordinary fixed-line award",
+      "values": {
+        "21":{"3":500,"4":1000,"5":3000},
+        "1":{"3":50,"4":80,"5":120},
+        "2":{"3":20,"4":50,"5":80},
+        "3":{"3":15,"4":30,"5":60},
+        "4":{"3":10,"4":25,"5":50},
+        "11":{"3":8,"4":10,"5":15},
+        "12":{"3":4,"4":8,"5":12},
+        "13":{"3":2,"4":5,"5":8},
+        "14":{"3":1,"4":3,"5":5}
+      },
+      "evidence": ["authenticated rules screenshots","GamePropType enum","round-0010 wa awards"]
+    }
+  },
+  "symbolWeights": {
+    "status": "UNKNOWN_NO_REEL_STRIP_OR_SERVER_WEIGHT_EVIDENCE",
+    "weights": null,
+    "reelStrips": null,
+    "frontEndRandomArrayDisposition": "GameScrollSymbol.arr and SlotDataMgr.ramdomSymbol drive display/animation substitutions, not server outcome probability, and must not be treated as symbol weights",
+    "implementationRestriction": "do not inherit weights from another game and do not claim original RTP distribution"
+  },
+  "roundModel": {
+    "paidRoundStart": {"endpoint":"/cp/single_game.Game/gameResult","type":1,"game_type":1,"indexRule":"one real request equals one paid Round start"},
+    "ordinarySingleStepTerminal": {"gt":1,"small_game_type":0,"f":"empty array","conditions":["no active special mode","response is not an empty retry sentinel"],"balanceRules":["eg = sg + cg","cg = tw - bg"]},
+    "identityFields": {
+      "wireFields": ["rid","oid"],
+      "observedRelation": "rid equals oid in all ordinary samples",
+      "precisionRule": "values exceed JavaScript safe integer; Java long or decimal strings are mandatory",
+      "canonicalCapturedCorrelation": "History order_id decimal prefix"
+    },
+    "initReplay": "initRoom restores the current/last room result and must never add a spin-index line",
+    "historyGrouping": "one History list row per paid Round; captured ordinary row contains one element in results; future special Steps must remain under the originating paid Round, but their wire grouping is unresolved until captured",
+    "specialStateEnvelopeFromFrontEndCodeOnly": {
+      "status": "CODE_PATH_ONLY_NOT_WIRE_CONFIRMED",
+      "fFields": {"t":"mode","st":"remaining count","tt":"total count","twa":"cumulative feature win","fcc":"held coin count","fcp":"coin multiplier/position array","fcn":"new coin positions"},
+      "requestTypes": {"paid":1,"freeStep":2,"buy":3},
+      "gameTypes": {"normal":1,"freeExpandingWild":2,"holdAndSpins":3}
+    },
+    "evidence": [
+      "PlayerMgr initRoom/reqBet/retry code",
+      "SlotDataMgr state getters",
+      "ten gameResult exchanges",
+      "spin-index.jsonl",
+      "History results arrays"
+    ]
+  },
+  "specialModes": [
+    {
+      "id": "MAIN_GAME_EXPANDING_WILD",
+      "discoveryStatus": "RULE_CODE_AND_RUNTIME_CONFIRMED",
+      "runtimeEvidenceStatus": "CONFIRMED",
+      "triggerMapping": "for each column c, res.ps[c*3], res.ps[c*3+1] and res.ps[c*3+2] are all Wild(21)",
+      "frontEndAction": "setExpandingWildCols records the column, replaces the three displayed symbols locally for attack animation, then playExpandingWild renders the expanded Curupira reel",
+      "capturedExample": {"paidRoundIndex":10,"columnZeroBased":2,"wireCells":[21,21,21],"tw":26.06},
+      "evidence": ["SlotDataMgr.setExpandingWildCols","GameSymbolArea.playExpandingWild","round-0010 gameResult","same-Round initRoom replay","authenticated-main-screen.png","History row"]
+    },
+    {
+      "id": "FREE_EXPANDING_WILD",
+      "discoveryStatus": "RULE_AND_FRONT_END_STATE_PATH_CONFIRMED",
+      "runtimeEvidenceStatus": "NOT_CAPTURED_IN_10_PAID_ROUNDS",
+      "knownRule": "3+ Scatter opens feature selection; this selection starts six free spins and each free spin contains one expanding Curupira reel",
+      "knownRequestPath": {"type":2,"game_type":2},
+      "codeExpectedStateFields": ["f.t","f.st","f.tt","f.twa"],
+      "wireContractStatus": "UNRESOLVED_DO_NOT_IMPLEMENT",
+      "missingEvidence": "trigger response, selected-mode request/response, six adjacent Steps, state transitions and terminal response",
+      "evidence": ["runtime Help","GameFreeFeatures","GameMain free loop","SlotDataMgr getters","GameBetType.Free=2","GameType.FREE_EXPANDING_WILD=2","FREE_EXPANDING_WILD_COUNT=6"]
+    },
+    {
+      "id": "HOLD_AND_SPINS",
+      "discoveryStatus": "RULE_AND_FRONT_END_STATE_PATH_CONFIRMED",
+      "runtimeEvidenceStatus": "NOT_CAPTURED_IN_10_PAID_ROUNDS",
+      "knownRule": "starts with three spins; each newly landed Coin adds one spin; each Coin is up to 10x; filling all 15 positions ends early",
+      "knownRequestPath": {"type":2,"game_type":3},
+      "codeExpectedStateFields": ["f.t","f.st","f.tt","f.twa","f.fcc","f.fcp","f.fcn"],
+      "wireContractStatus": "UNRESOLVED_DO_NOT_IMPLEMENT",
+      "missingEvidence": "activation response, coin payload types, adjacent respins, count transition and terminal response",
+      "evidence": ["runtime Help","GameMain.onBunesFree","SlotDataMgr getters","GameBetType.Free=2","GameType.FREE_BOUNES=3","FREE_BOUNES_COUNT=3","COIN_TOTAL_COUNT=15"]
+    },
+    {
+      "id": "FEATURE_BUY",
+      "discoveryStatus": "ENTRY_AND_REQUEST_BUILDER_CONFIRMED",
+      "runtimeEvidenceStatus": "ENTRY_OPENED_PURCHASE_NOT_SENT",
+      "knownRequestPath": {"type":3,"game_typeValues":[2,3]},
+      "staticCostMultiple": 40,
+      "liveConfig": {"buy_free_max_bet":0,"codeInterpretation":"isShowBetBuy returns true when the value is zero; zero is not evidence of disabled purchase"},
+      "authorizationDisposition": "no feature purchase request was sent because authorization covers minimum-bet paid Spins, not a 40x special purchase",
+      "wireContractStatus": "UNRESOLVED_DO_NOT_IMPLEMENT",
+      "missingEvidence": "purchase request/response, exact charge semantics and complete purchased Round",
+      "evidence": ["feature-buy-entry.png","GameFreeBuy.onClick","GameBetType.Buy=3","BuyFreeMultiple=40","SlotDataMgr.isShowBetBuy","authenticated initialData"]
+    }
+  ],
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "scope": "ordinary paid type=1 game_type=1 single-step Round only",
+    "preconditions": ["no active free/reward/buy Round","minimum or selected valid bet","new rid/oid"],
+    "requiredResultAssertions": ["res.ps has 15 current-game symbols","res.wa is empty","res.tws=0","tw=0","cg=-bg","eg=sg-bg","f is empty array","gt=1","small_game_type=0","Scatter count remains below the proven trigger threshold"],
+    "distributionCaveat": "symbol weights are unknown; this capability proves a valid independent LOSS state, not the original probability distribution",
+    "evidence": ["paid Rounds 1-9","fixed-line and Scatter rules"]
+  },
+  "apiRequestConstruction": {
+    "apiBase": "window.location.protocol + '//' + sip + '/cp' from versionconfig.js",
+    "sequence": ["POST /config/initialData","POST /account/getUserInfo","POST /single_game.Game/initRoom","load runtime resources and show game","optional /activity/getActivity","paid /single_game.Game/gameResult","on-demand /Goldgame/user_game_history"],
+    "initialData": {"method":"POST","path":"/config/initialData","capturedPath":"/cp/config/initialData","fields":["currency","gid","language","ai","signapt","expire"]},
+    "getUserInfo": {"method":"POST","path":"/account/getUserInfo","capturedPath":"/cp/account/getUserInfo","fields":["token","gid","language","ai","signapt","expire"]},
+    "initRoom": {"method":"POST","path":"/single_game.Game/initRoom","capturedPath":"/cp/single_game.Game/initRoom","fields":["token","gid","language","signapt","expire"]},
+    "gameResult": {"method":"POST","path":"/single_game.Game/gameResult","capturedPath":"/cp/single_game.Game/gameResult","fields":["token","gid","language","bet","level","type","game_type","signapt","expire"]},
+    "historyRange": {"method":"POST","path":"/Goldgame/user_game_history","capturedPath":"/cp/Goldgame/user_game_history","fields":["start","end","page_size","page","token","gid","language","zone_time","signapt","expire"]}
+  },
+  "codecContract": {
+    "httpRequestEncoding": "application/x-www-form-urlencoded;charset=utf-8",
+    "httpResponseEncoding": "JSON UTF-8",
+    "encryption": "NONE_OBSERVED",
+    "requestSignature": {
+      "field": "signapt",
+      "hash": "MD5 lowercase hex",
+      "secretFromCurrentBundle": "3fZ8kL2qW9xA4pT7vJ1rQ6yB0sN5mX8h",
+      "expire": "server-adjusted epoch milliseconds from GetServerMSTime",
+      "canonicalParameters": "original request fields sorted by key and joined as key=value with ':'",
+      "formula": "MD5(secret + expire + canonicalParameters + 'aptsignature')",
+      "ordering": "calculate signapt before adding signapt and expire; then append both to the form body"
+    },
+    "nestedParameterEncoding": "objects and arrays use JSON.stringify in the form body; no captured gameplay request uses nested input",
+    "roundIdPrecision": "rid/oid exceed 2^53-1; preserve as Java long or decimal string and never route through double",
+    "redisCodec": "UNKNOWN_NO_CURRENT_GAME_REDIS_EVIDENCE",
+    "evidence": ["HttpRequest.getParamString/calc","versionconfig.js","authenticated request/response captures","round-id-precision-evidence.json"]
+  },
+  "redisContract": {
+    "status": "UNKNOWN_NO_CURRENT_GAME_REDIS_EVIDENCE",
+    "keyPattern": null,
+    "memberEncoding": null,
+    "memberLength": null,
+    "scoreSemantics": null,
+    "roundPackagingRule": "workflow requires one complete Round per member, but no current-game Redis key or codec was observed",
+    "implementationRestriction": "do not inherit Redis keys, lengths or encoding from a sample game; downstream Loader must remain disabled until a current-game delivery contract is established"
+  },
+  "fixturePolicy": {
+    "oracleOnly": true,
+    "runtimeSourceAllowed": false,
+    "prohibitedUses": ["replay captured Spin responses","rotate fixed result lists","copy History rows as generated results","derive runtime identity or balance from fixture credentials/session data"],
+    "requiredRuntimeSource": "local Java GameRuleCore for every init/spin/balance/session result"
+  },
+  "responseFields": {
+    "initialData": ["code","data.game_address","data.game_info","data.game_server","data.initial_config","data.language","data.r","data.zone","msg","time"],
+    "userInfoData": ["currency_symbol","day_first_login","first_gold","gid","gold","is_guide","nickname","token","total_recharge","uid","user_config"],
+    "initRoomAndGameResultData": ["b","bg","cg","cl","eg","f","gt","l","o","oid","res","rid","sg","small_game_type","start_gold","t","tw","u"],
+    "resultData": ["res.gt","res.ps","res.sc","res.tws","res.wa"],
+    "winningAwardData": ["res.wa[].c","res.wa[].ln","res.wa[].o","res.wa[].s"],
+    "historyData": ["data.list","data.list[].order_id","data.list[].results","data.totals.bet_golds","data.totals.change_golds","data.totals.total"]
+  },
+  "spinCount": 10,
+  "missingModes": [
+    {"target":"FREE_EXPANDING_WILD","actualPaidRounds":10,"searchEntry":"natural minimum-bet trigger, rules UI, GameFreeFeatures and type=2/game_type=2 code path","missingEvidence":"activation response and all adjacent free Steps through termination"},
+    {"target":"HOLD_AND_SPINS","actualPaidRounds":10,"searchEntry":"natural minimum-bet trigger, rules UI, GameMain.onBunesFree and type=2/game_type=3 code path","missingEvidence":"activation response, coin-state transitions, adjacent respins and termination"},
+    {"target":"FEATURE_BUY","actualPaidRounds":10,"searchEntry":"feature-buy dialog, GameFreeBuy builder and authenticated initialData","missingEvidence":"purchase response, charge and complete purchased Round; no 40x purchase was authorized or sent"}
+  ],
+  "evidence": [
+    "protocol/2350-Curupira/evidence-matrix.json",
+    "protocol/2350-Curupira/protocol-spec.json",
+    "protocol/2350-Curupira/protocol-spec.md",
+    "captures/2350-Curupira/spin-index.jsonl",
+    "captures/2350-Curupira/round-id-precision-evidence.json",
+    "captures/2350-Curupira/history-after-spins.json",
+    "resources/2350-Curupira/shared/static.cpgame.io/v2/2350/assets/main/index.ef0c9.js"
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "d5421efc347392576699048c0538c72d669056017eb723ae2a046fa7bac71404",
+    "rulesVersion": "2350-curupira-rules-d5421efc",
+    "behaviorIds": [
+      "B001_ENTRY_BOOTSTRAP","B002_LANGUAGE_LOAD","B003_FIXED_PAYLINES","B004_WILD_SCATTER_RULES","B005_FREE_EXPANDING_WILD","B006_HOLD_AND_SPINS","B007_FEATURE_BUY","B008_INITIAL_CONFIG_REQUEST","B009_ROOM_INIT","B010_PAID_ROUND","B011_HISTORY_REQUESTS","B012_GAME_IDENTITY","B013_MAIN_GAME_EXPANDING_WILD","B014_HTTP_SIGNING_CODEC","B015_USER_INFO_REQUEST"
+    ]
+  }
+}

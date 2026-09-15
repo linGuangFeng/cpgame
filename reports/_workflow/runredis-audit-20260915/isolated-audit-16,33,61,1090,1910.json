@@ -1,0 +1,32 @@
+[
+  {
+    "game": "1090-sharpshooter",
+    "exitCode": 0,
+    "jarSha256": "e1b2aa61329f66f99bde3b3093881d9387c3e509d185e9224d66a070b2b2c401",
+    "logTail": "LOAD_COMPLETE complete rounds loss=0 win=2 special=2 rulesHash=e2d48bc36060cfa82c86468e67d20617b0f137bae5ed9986541823c558c7daff buckets={BetLog:000001090:006130=1, BetLog:000001090:009190=1, MaryLog:000001090:025935=1, MaryLog:000001090:027040=1}\n"
+  },
+  {
+    "game": "16-Jungle-Fruit",
+    "exitCode": 0,
+    "jarSha256": "94e211bbcc16e27e0f802069f545cd9f149e3746daa329d50c4bc50b8ab157b0",
+    "logTail": "生成完成：raw gid=16，写入完整局=2，候选=4，rulesHash=164088c0440871c9bc33b631a1b6bfa5e00d3012db3b0e3694bb59ac683e1743\n"
+  },
+  {
+    "game": "1910-Churrasco",
+    "exitCode": 0,
+    "jarSha256": "9506baaa46e74788004cd17aee3d4a20be4e49eb55ccb2f6d21af6498aeca225",
+    "logTail": "LOAD_COMPLETE COMPLETE_PASS rulesHash=4b8bc4cc855608dffb6069f45cae4ff98f4f07391b7907689d1c303366bf5915 normal=2 loss=0 win=2 small=0 free=2 batch=100 redis=db15\n"
+  },
+  {
+    "game": "33-Jungle-Party",
+    "exitCode": 0,
+    "jarSha256": "78daaa60b15ad249a8a12719e3929b87e07c8d297e561b9639a7f4db2bbe96f9",
+    "logTail": "LOAD_COMPLETE gid33 formal loader PASS dryRun=false normal=2 special=2 buckets={SPECIAL:69900=1, WIN:5680=1, WIN:23240=1, SPECIAL:17920=1}\n"
+  },
+  {
+    "game": "61-Saci",
+    "exitCode": 0,
+    "jarSha256": "346f2d1abca5f3158ac402fb3101250da7368965c5c0f4812d70d1d4f306386d",
+    "logTail": "Saci Redis Loader 完成：未中奖=1，普通中奖=1，特殊=0，事务批次=1，候选=2\n普通实际倍率(百分之一)分布={5495=1, 0=1}\n特殊实际倍率(百分之一)分布={}\nrulesHash=saci-v2-656af5aa-rebuild-20260910\n"
+  }
+]

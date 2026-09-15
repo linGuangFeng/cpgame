@@ -1,0 +1,9 @@
+﻿{
+    "directoryName":  "43-Lucky-Wheel",
+    "validatedPid":  78096,
+    "port":  50090,
+    "bindAddress":  "::",
+    "startTime":  "\/Date(1789022477351)\/",
+    "commandLine":  "D:\\non-install\\java\\jdk-21\\bin\\java.exe --add-exports=jdk.httpserver/sun.net.httpserver=ALL-UNNAMED -Dcom.sun.net.httpserver.HttpServerProvider=com.cpgame.admin.CpgameSharedHttpServerProvider -cp D:\\work\\hd\\cpgame\\admin\\target\\cpgame-admin-0.1.0-SNAPSHOT.jar com.cpgame.admin.CpgameSharedDemoHostMain --root=D:\\work\\hd\\cpgame --port=50090 --token=d581add9-19b9-41ef-9bb5-f914f24e8037",
+    "demoUrl":  "http://192.168.10.3:50090/play/43-Lucky-Wheel/index.html?gid=43\u0026l=en\u0026ai=local_43\u0026btt=0\u0026t=local-demo\u0026sip=192.168.10.3%3A50090\u0026apiPort=50090\u0026apiHost=192.168.10.3%3A50090"
+}

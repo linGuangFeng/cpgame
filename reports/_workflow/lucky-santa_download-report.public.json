@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 40,
+  "gameName": "Lucky Santa",
+  "runId": "20260902T093023000Z",
+  "startedAt": "2026-09-02T09:30:24.443Z",
+  "finishedAt": "2026-09-02T09:32:10.226Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 134,
+    "exactStaticUrls": 131,
+    "excludedDynamicApiUrls": 3,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 131,
+    "succeeded": 131,
+    "failed": 0,
+    "downloadedBytes": 11856348,
+    "statusCounts": {
+      "200": 131
+    },
+    "contentTypeCounts": {
+      "application/javascript": 9,
+      "image/png": 45,
+      "application/json": 6,
+      "image/jpeg": 13,
+      "application/octet-stream": 23,
+      "audio/mpeg": 35
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/40-Lucky-Santa/programmatic-http/20260902T093023000Z/download-items.public.jsonl",
+      "sha256": "0e999f687746d9495bb4df2b2659fa2636f949b585936f0303d2a08006f2424d",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/40-Lucky-Santa/programmatic-http/20260902T093023000Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "failedUrls": [],
+  "stageDirectory": "/Users/a1/Downloads/lucky-santa-stage/20260902T093023000Z",
+  "resourceFolder": "40-Lucky-Santa"
+}

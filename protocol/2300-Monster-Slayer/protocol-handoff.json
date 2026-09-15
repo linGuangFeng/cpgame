@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "3.0",
+  "gameId": 2300,
+  "gameName": "Monster Slayer",
+  "rulesVersion": "2300-monster-slayer-v3-buy-buckets",
+  "rulesHash": "df686c42f1c1891704b88742db554a38644ff719c46a6de3f436857647a3b781",
+  "behaviorIds": [
+    "B001_ENTRY_BOOTSTRAP",
+    "B002_LANGUAGE",
+    "B003_INITIAL_CONFIG",
+    "B004_USER_INFO",
+    "B005_INIT_ROOM",
+    "B006_ORDINARY_ROUND",
+    "B007_MONSTER_FEATURE_ROUND",
+    "B008_HISTORY",
+    "B009_REDIS_COMPLETE_ROUND",
+    "B010_PURCHASE_BRANCHES",
+    "B011_SUPER_REWARD"
+  ],
+  "states": [
+    {
+      "id": "BOOT",
+      "on": "GET /",
+      "next": "CONFIG"
+    },
+    {
+      "id": "CONFIG",
+      "on": "POST /cp/config/initialData",
+      "next": "USER"
+    },
+    {
+      "id": "USER",
+      "on": "POST /cp/account/getUserInfo",
+      "next": "ROOM"
+    },
+    {
+      "id": "ROOM",
+      "on": "POST /cp/single_game.Game/initRoom",
+      "next": "IDLE"
+    },
+    {
+      "id": "IDLE",
+      "on": "gameResult type=1",
+      "next": "IDLE_OR_FEATURE"
+    },
+    {
+      "id": "FEATURE",
+      "on": "gameResult type=2",
+      "next": "FEATURE_OR_IDLE",
+      "terminalWhen": "f.nt=0"
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B001_ENTRY_BOOTSTRAP",
+      "status": "CONFIRMED",
+      "evidenceRefs": [
+        "resources/2300-Monster-Slayer/programmatic-http/collect-20260908/files/static.cpgame.io/v2/2300/index.html",
+        "publish/2300-monster-slayer/index.html"
+      ]
+    },
+    {
+      "id": "B002_LANGUAGE",
+      "status": "CONFIRMED",
+      "evidenceRefs": [
+        "resources/2300-Monster-Slayer/*/static.cpgame.io/v2/2300/assets/language"
+      ]
+    },
+    {
+      "id": "B003_INITIAL_CONFIG",
+      "status": "CONFIRMED",
+      "evidenceRefs": [
+        "fixtures/2300-Monster-Slayer/enter/initialData"
+      ]
+    },
+    {
+      "id": "B004_USER_INFO",
+      "status": "CONFIRMED",
+      "evidenceRefs": [
+        "fixtures/2300-Monster-Slayer/enter/getUserInfo"
+      ]
+    },
+    {
+      "id": "B005_INIT_ROOM",
+      "status": "CONFIRMED",
+      "evidenceRefs": [
+        "fixtures/2300-Monster-Slayer/enter/initRoom"
+      ]
+    },
+    {
+      "id": "B006_ORDINARY_ROUND",
+      "status": "VERIFIED_COMPONENT",
+      "evidenceRefs": [
+        "reports/2300-Monster-Slayer/ordinary-repair-validation-20260908.json"
+      ]
+    },
+    {
+      "id": "B007_MONSTER_FEATURE_ROUND",
+      "status": "SAMPLE_INSUFFICIENT_NATURAL_BUY_TEMPLATES_USED",
+      "evidenceRefs": [
+        "reports/2300-Monster-Slayer/evidence-summary-20260908.json"
+      ],
+      "completeRounds": 56,
+      "reconstructedRounds": 57,
+      "quarantinedRounds": 1
+    },
+    {
+      "id": "B008_HISTORY",
+      "status": "CONFIRMED",
+      "evidenceRefs": [
+        "fixtures/2300-Monster-Slayer/history-list",
+        "fixtures/2300-Monster-Slayer/history-view"
+      ]
+    },
+    {
+      "id": "B009_REDIS_COMPLETE_ROUND",
+      "status": "CONFIRMED_THREE_PREFIX_BUCKETS",
+      "evidenceRefs": [
+        "generator/2300-Monster-Slayer",
+        "server-api/2300-Monster-Slayer"
+      ]
+    },
+    {
+      "id": "B010_PURCHASE_BRANCHES",
+      "status": "CONFIRMED",
+      "runtimeEnabled": true,
+      "evidenceRefs": [
+        "captures/2300-Monster-Slayer/buy-modes/000002300",
+        "captures/2300-Monster-Slayer/buy-modes/100002300",
+        "captures/2300-Monster-Slayer/buy-modes/200002300"
+      ]
+    },
+    {
+      "id": "B011_SUPER_REWARD",
+      "status": "WIRE_EVIDENCED_IN_BUY2",
+      "runtimeEnabled": true,
+      "evidenceRefs": [
+        "captures/2300-Monster-Slayer/buy-modes/100002300/rounds/round-007/step-014.response.json"
+      ]
+    }
+  ],
+  "runtimeRules": {
+    "singleRuleCoreClass": "com.cpgame.monsterslayer.core.GameRuleCore",
+    "controllerContract": "v3",
+    "fixtureRuntimeUse": false,
+    "redisSelection": "choose win/loss class, choose integer centi-multiplier bucket, atomically LPOP one complete-round ASCII member; retain all remaining steps in session",
+    "emptyRedis": "explicit 503 envelope; no fallback"
+  },
+  "status": "READY_FOR_ACCEPTANCE",
+  "rulesHashStatus": "VERIFIED_PARTIAL_CONTRACT",
+  "latestAuditRef": "protocol/2300-Monster-Slayer/rule-source-matrix.md",
+  "implementationStatus": {
+    "ordinary": "VERIFIED_COMPONENT",
+    "naturalFeature": "SAMPLE_INSUFFICIENT_BLOCKED",
+    "purchases": "WIRE_EVIDENCED_THREE_PREFIX_BUCKETS",
+    "superReward": "WIRE_EVIDENCED_IN_BUY2",
+    "originalEntry": "ORIGINAL_2300_ENTRY_RESTORED",
+    "controllerContractV3": "VERIFIED_COMPONENT"
+  }
+}

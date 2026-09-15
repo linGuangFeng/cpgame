@@ -1,0 +1,1 @@
+http://127.0.0.1:50110/play/2-Jungle-Kings/index.html?gid=2&l=pt&language=pt-br&ai=luck_single_10229&btt=1&t=demo-gid2&sip=127.0.0.1:50110&apiHost=127.0.0.1:50110

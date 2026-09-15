@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "gameId": "1809",
+  "runtimeGameId": "2260",
+  "directoryName": "1809-Freedom-Day",
+  "gameName": "Freedom Day",
+  "stage": "CAPTURE_STAGE_ONLY",
+  "status": "PENDING_PROTOCOL_ANALYSIS",
+  "entry": {
+    "sourceOrigin": "https://static.cpgame.io",
+    "sourcePath": "/fixed/",
+    "startupEndpoint": "https://api.hmsgame3.com/api/game/startup",
+    "queryKeys": [
+      "ai",
+      "btt",
+      "gid",
+      "l",
+      "language",
+      "sip",
+      "t",
+      "token"
+    ],
+    "evidence": [
+      "captures/1809-Freedom-Day/parallel-abc224/network.jsonl",
+      "captures/1809-Freedom-Day/parallel-abc224/bodies/000004-_api_game_startup.json"
+    ]
+  },
+  "supportedLanguages": {
+    "codes": [
+      "bn-bd",
+      "en-us",
+      "es-es",
+      "fr-fr",
+      "id-id",
+      "ko-ko",
+      "pt-br",
+      "pt-pt",
+      "th-th",
+      "tr-tr"
+    ],
+    "evidence": "reports/1809-Freedom-Day/language-inventory.json"
+  },
+  "winModel": {
+    "type": "WAYS",
+    "paylineCount": "NOT_APPLICABLE",
+    "minimumAdjacentReels": 3,
+    "status": "CAPTURE_CONFIRMED_PROTOCOL_PENDING",
+    "evidence": [
+      "Game2260 win_arr.way/way_n",
+      "REAL_PROVIDER props.win_arr"
+    ]
+  },
+  "specialModes": [
+    {
+      "id": "FREE_FEATURE",
+      "behaviorId": "BHV-FREE-SPIN-FEATURE",
+      "status": "CONFIRMED",
+      "completeRoundCount": 48
+    },
+    {
+      "id": "FEATURE_BUY",
+      "behaviorId": "BHV-FEATURE-BUY",
+      "status": "CONFIRMED",
+      "completeRoundCount": 82,
+      "request": {
+        "bet_type": 3
+      },
+      "minimumStakeCost": 30
+    },
+    {
+      "id": "RETRIGGER",
+      "behaviorId": "BHV-FREE-SPIN-RETRIGGER",
+      "status": "COLLECTION_REQUIRED",
+      "completeRoundCount": 17
+    }
+  ],
+  "resultMechanics": [
+    "silver-change",
+    "gold-change",
+    "long-symbol",
+    "horizontal-strip",
+    "multiplier-flower",
+    "multi-cascade"
+  ],
+  "roundSampleCoverage": {
+    "ordinaryTargetPerCategory": 200,
+    "specialTargetPerCategory": 30,
+    "maxPaidRounds": 5000,
+    "paidRoundStarts": 1406,
+    "completedRoundCount": 1406,
+    "categories": [
+      {
+        "scenarioId": "ordinary-loss",
+        "behaviorId": "BHV-ORDINARY-LOSS",
+        "completeRoundCount": 1076,
+        "target": 200,
+        "status": "SUFFICIENT",
+        "sourceType": "REAL_PROVIDER"
+      },
+      {
+        "scenarioId": "ordinary-win",
+        "behaviorId": "BHV-ORDINARY-WIN",
+        "completeRoundCount": 200,
+        "target": 200,
+        "status": "SUFFICIENT",
+        "sourceType": "REAL_PROVIDER"
+      },
+      {
+        "scenarioId": "free-feature",
+        "behaviorId": "BHV-FREE-SPIN-FEATURE",
+        "completeRoundCount": 48,
+        "target": 30,
+        "status": "SUFFICIENT",
+        "sourceType": "REAL_PROVIDER"
+      },
+      {
+        "scenarioId": "feature-buy",
+        "behaviorId": "BHV-FEATURE-BUY",
+        "completeRoundCount": 82,
+        "target": 30,
+        "status": "SUFFICIENT",
+        "sourceType": "REAL_PROVIDER"
+      },
+      {
+        "scenarioId": "retrigger",
+        "behaviorId": "BHV-FREE-SPIN-RETRIGGER",
+        "completeRoundCount": 17,
+        "target": 30,
+        "status": "COLLECTION_REQUIRED",
+        "sourceType": "REAL_PROVIDER"
+      },
+      {
+        "scenarioId": "silver-change",
+        "behaviorId": "BHV-SILVER-CHANGE",
+        "completeRoundCount": 1213,
+        "target": 30,
+        "status": "SUFFICIENT",
+        "sourceType": "REAL_PROVIDER"
+      },
+      {
+        "scenarioId": "gold-change",
+        "behaviorId": "BHV-GOLD-CHANGE",
+        "completeRoundCount": 169,
+        "target": 30,
+        "status": "SUFFICIENT",
+        "sourceType": "REAL_PROVIDER"
+      },
+      {
+        "scenarioId": "long-symbol",
+        "behaviorId": "BHV-LONG-SYMBOL",
+        "completeRoundCount": 1271,
+        "target": 30,
+        "status": "SUFFICIENT",
+        "sourceType": "REAL_PROVIDER"
+      },
+      {
+        "scenarioId": "horizontal-strip",
+        "behaviorId": "BHV-HORIZONTAL-STRIP",
+        "completeRoundCount": 1271,
+        "target": 30,
+        "status": "SUFFICIENT",
+        "sourceType": "REAL_PROVIDER"
+      },
+      {
+        "scenarioId": "multiplier-flower",
+        "behaviorId": "BHV-MULTIPLIER-FLOWER",
+        "completeRoundCount": 323,
+        "target": 30,
+        "status": "SUFFICIENT",
+        "sourceType": "REAL_PROVIDER"
+      },
+      {
+        "scenarioId": "multi-cascade",
+        "behaviorId": "BHV-MULTI-CASCADE",
+        "completeRoundCount": 193,
+        "target": 30,
+        "status": "SUFFICIENT",
+        "sourceType": "REAL_PROVIDER"
+      }
+    ],
+    "stopReason": "NOT_STOPPED_TARGET_PENDING"
+  },
+  "upstreamProbabilityDisclosure": "真实完整局样本只能提供样本频率；不代表原厂长期概率或 RTP。正式权重须由后续规则/生成器节点按逐格统计报告处理，禁止猜测。",
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "ff636cada37978caa1b427fb2c41fe6e4b75b3acb215b5726344da1bfaafcf12",
+    "behaviorIds": [
+      "BHV-PAID-ROUND",
+      "BHV-ORDINARY-LOSS",
+      "BHV-ORDINARY-WIN",
+      "BHV-FREE-SPIN-FEATURE",
+      "BHV-FEATURE-BUY",
+      "BHV-FREE-SPIN-RETRIGGER",
+      "BHV-SILVER-CHANGE",
+      "BHV-GOLD-CHANGE",
+      "BHV-LONG-SYMBOL",
+      "BHV-HORIZONTAL-STRIP",
+      "BHV-MULTIPLIER-FLOWER",
+      "BHV-MULTI-CASCADE"
+    ],
+    "status": "PENDING_PROTOCOL_ANALYSIS"
+  }
+}

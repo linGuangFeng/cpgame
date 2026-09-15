@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "rawGameId": 2,
+  "redisHost": "192.168.10.3",
+  "redisPort": 6379,
+  "redisDatabase": 15,
+  "indexKey0": "PerKeyList_000000002",
+  "indexKey1": "PerKeyList_100000002",
+  "listKeyPattern0": "BetLog:000000002:%06d",
+  "listKeyPattern1": "BetLog:100000002:%06d",
+  "memberCodec": "JK2V1|<ckl>|<reel0,reel1,reel2>|...",
+  "memberEncoding": "US-ASCII",
+  "layouts": {
+    "PerKeyList_0": ["CB0002", "CB0003"],
+    "PerKeyList_1": ["CB0002,CB0003"]
+  },
+  "claim": "unused. Demo and loader are realtime catalog; generation.cache=false.",
+  "runtimeGeneration": true,
+  "zeroMultiplierWritten": false,
+  "sourceGameId": 2
+}

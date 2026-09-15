@@ -1,0 +1,27 @@
+{
+  "requestedGameId": 1809,
+  "internalGid": 2260,
+  "gameName": "Freedom-Day",
+  "platformAlias": { "pt-br": "pt-pt" },
+  "resourceLanguages": ["bn-bd", "en-us", "es-es", "fr-fr", "id-id", "ko-ko", "pt-pt", "th-th", "tr-tr"],
+  "entryLanguages": ["pt-br", "bn-bd", "en-us", "es-es", "fr-fr", "id-id", "ko-ko", "pt-pt", "th-th", "tr-tr"],
+  "commonHiddenResourceChecks": ["spin", "history", "feature-buy", "free-spins", "big-win", "paytable-full-scroll"],
+  "paytableResourcesAdded": 5,
+  "onlineSpinUsed": false,
+  "nonCriticalMissing": ["/favicon.ico"],
+  "localPort": 18090,
+  "resourceUnionDirectory": "resources/1809-Freedom-Day/all-languages/static.cpgame.io/fixed"
+  ,"resourceCounts": {
+    "all-languages": {"files": 193, "bytes": 39953731},
+    "pt-br": {"files": 186, "bytes": 38535295},
+    "bn-bd": {"files": 186, "bytes": 38483296},
+    "en-us": {"files": 185, "bytes": 38293425},
+    "es-es": {"files": 186, "bytes": 38530511},
+    "fr-fr": {"files": 186, "bytes": 38514469},
+    "id-id": {"files": 186, "bytes": 38513662},
+    "ko-ko": {"files": 186, "bytes": 38411280},
+    "pt-pt": {"files": 186, "bytes": 38535295},
+    "th-th": {"files": 186, "bytes": 38501057},
+    "tr-tr": {"files": 186, "bytes": 38518136}
+  }
+}

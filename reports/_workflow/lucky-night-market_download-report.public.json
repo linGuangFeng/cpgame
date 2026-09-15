@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 2470,
+  "gameName": "Lucky Night Market",
+  "runId": "20260902T084637000Z",
+  "startedAt": "2026-09-02T08:46:39.001Z",
+  "finishedAt": "2026-09-02T08:49:55.764Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 246,
+    "exactStaticUrls": 242,
+    "excludedDynamicApiUrls": 4,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 242,
+    "succeeded": 242,
+    "failed": 0,
+    "downloadedBytes": 20523747,
+    "statusCounts": {
+      "200": 242
+    },
+    "contentTypeCounts": {
+      "application/javascript": 21,
+      "image/png": 52,
+      "application/json": 110,
+      "application/wasm": 2,
+      "audio/mpeg": 1,
+      "application/octet-stream": 46,
+      "image/jpeg": 10
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/2470-Lucky-Night-Market/programmatic-http/20260902T084637000Z/download-items.public.jsonl",
+      "sha256": "e78e292754f52160e2bc96f4d3173714138afe5535152fa7a5b09b88700b5dd3",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/2470-Lucky-Night-Market/programmatic-http/20260902T084637000Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "failedUrls": [],
+  "stageDirectory": "/Users/a1/Downloads/lucky-night-market-stage/20260902T084637000Z",
+  "resourceFolder": "2470-Lucky-Night-Market"
+}

@@ -1,0 +1,767 @@
+{
+  "capturedAt": "2026-09-08T03:05:23.974Z",
+  "abc223": {
+    "username": "abc223",
+    "url": "https://hms-paddle.com/#/index",
+    "hash": "#/index",
+    "match": true,
+    "textHead": "Baixar App 418107.86 Bem-vindo ao Hermes, o parceiro oficial do PG-Slots. Hermes é o parceiro oficial do PG-Slots. Convide amigos e ganhe 10 reais cada, além de descontos PG CP PP WG JILI TADA FC RedTiger HSG CQ9 Popular Todos 829 Mais 909 856 680 501 554 917 677 751 597 919 954 586 938 700 817 592 590 780 987 668 692 852 671 791 882 920 866 889 742 602 951 765 972 702 694 604 855 740 768 849 533 807 558 623 702 556 835 533 766 682 543 633 943 538 517 652 776 927 993 608 871 677 883 960 512 650 793 515 511 931 550 534 554 656 811 549 602 941 712 786 597 661 703 821 701 561 504 633 903 884 612 531 830 602 859 790 571 593 648 654 775 721 590 535 983 734 641 539 547 944 964 862 789 565 709 688 674 697 767 506 776 977 792 881 741 629 949 667 544 943 825 553 946 711 786 885 617 998 658 640 919 704 670 592 595 966 784 949 659 752 863 743 780 729 746 508 841 938 884 812 508 783 655 507 766 976 675 517 537 848 556 797 585 813 728 953 887 853 849 743 823 708 615 796 632 685 553 802 921 774 758 880 624 789 984 789 668 797 979 897 607 510 693 739 662 569 755 615 578 512 909 779 882 557 982 736 602 664 525 827 837 930 561 850 858 624 665 597 722 819 797 829 793 571 943 780 780 762 630 829 542 732 891 642 839 968 712 677 693 581 613 729 979 573 716 988 865 561 963 972 763 943 967 524 672 785 790 532 739 534 583 625 512 979 871 778 777 952 512 681 962 594 904 964 630 738 796 869 644 509 969 537 837 988 780 935 885 836 617 749 972 800 656 600 607 909 744 823 502 932 544 992 584 723 845 592 ",
+    "buttons": [
+      {
+        "tag": "DIV",
+        "className": "tabs tabActive",
+        "text": "PG",
+        "rect": {
+          "x": 423,
+          "y": 620,
+          "w": 90,
+          "h": 104
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "tab_text",
+        "text": "PG",
+        "rect": {
+          "x": 437,
+          "y": 697,
+          "w": 61,
+          "h": 22
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "CP",
+        "rect": {
+          "x": 521,
+          "y": 623,
+          "w": 90,
+          "h": 104
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "tab_text",
+        "text": "CP",
+        "rect": {
+          "x": 535,
+          "y": 700,
+          "w": 61,
+          "h": 22
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "game_title_left case_5",
+        "text": "PG",
+        "rect": {
+          "x": 424,
+          "y": 1626,
+          "w": 118,
+          "h": 29
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "PG",
+        "rect": {
+          "x": 511,
+          "y": 1627,
+          "w": 31,
+          "h": 26
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "game_title_left case_5",
+        "text": "CP",
+        "rect": {
+          "x": 424,
+          "y": 3376,
+          "w": 117,
+          "h": 31
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "CP",
+        "rect": {
+          "x": 511,
+          "y": 3378,
+          "w": 30,
+          "h": 26
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "footer_item active",
+        "text": "Início",
+        "rect": {
+          "x": 407,
+          "y": 731,
+          "w": 120,
+          "h": 74
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "footer_item",
+        "text": "Promoção",
+        "rect": {
+          "x": 527,
+          "y": 731,
+          "w": 120,
+          "h": 74
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "footer_item",
+        "text": "Pessoal",
+        "rect": {
+          "x": 887,
+          "y": 731,
+          "w": 120,
+          "h": 74
+        }
+      }
+    ],
+    "inputs": [],
+    "overlays": [
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/5b027571814ea558515e1b74a5c507f4.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "logo",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/5b027571814ea558515e1b74a5c507f4.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "jinbi",
+        "src": "img/a04.e82b8fb3.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "img/kefu.47b1cc23.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/e9f3b87b30f4252345a0cd9234186cd7.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/900b5b014147eb922566e53d87df2037.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/9049b0005c33906a52d5b3dc1927b110.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/9459c62fa6b4399b20163a906bcbe01f.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/f6e0f8bd55590c08285f2315b19dce99.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/8f5c1bb1c8c7d54e30e3ac175a2ba732.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "notice_icon",
+        "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAiCAMAAADvReCJAAAACGFjVEwAAAADAAAAAM7tusAAAABFUExURQAAAP/v3//v5//v5P"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/pg.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/cp.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/pp.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav/95fd63e844644c7c3ac24a3f02825ae2.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/jili.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/tada.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav/7dd88fb2e893fcbe57e5c0110f3c8771.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav/7555194d7069b6beec39d1ec3b39de10.png?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav/44dce53db9aeb1ca58e096a8ad52c0c0.png?v=1.0.627"
+      }
+    ],
+    "covers": [
+      "https://img.hmsgame.com/uploads/game/pg/v1/big/1850016.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/52300.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/51090.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50016.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50045.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50052.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50056.png",
+      "https://img.hmsgame.com/uploads/game/pg/v1/big/1850016.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/52300.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/51090.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50016.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50045.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50052.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50056.png"
+    ],
+    "gameTitles": [
+      {
+        "className": "tabs tabActive",
+        "text": "PG"
+      },
+      {
+        "className": "tabs",
+        "text": "CP"
+      },
+      {
+        "className": "tabs",
+        "text": "PP"
+      },
+      {
+        "className": "tabs",
+        "text": "WG"
+      },
+      {
+        "className": "tabs",
+        "text": "JILI"
+      },
+      {
+        "className": "tabs",
+        "text": "TADA"
+      },
+      {
+        "className": "tabs",
+        "text": "FC"
+      },
+      {
+        "className": "tabs",
+        "text": "RedTiger"
+      },
+      {
+        "className": "tabs",
+        "text": "HSG"
+      },
+      {
+        "className": "tabs",
+        "text": "CQ9"
+      },
+      {
+        "className": "game_title",
+        "text": "Popular Todos 829 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "Popular"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 829 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "PG Todos 131 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "PG"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 131 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "ASK Todos 45 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "ASK"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 45 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "CP Todos 49 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "CP"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 49 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "PP Todos 183 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "PP"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 183 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "Wg Todos 26 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "Wg"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 26 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "JILI Todos 85 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "JILI"
+      }
+    ]
+  },
+  "abc224": {
+    "username": null,
+    "url": "https://hms-paddle.com/#/index",
+    "hash": "#/index",
+    "match": false,
+    "textHead": "Entrar Registrar Bem-vindo ao Hermes, o parceiro oficial do PG-Slots. Hermes é o parceiro oficial do PG-Slots. Convide amigos e ganhe 10 reais cada, além de descontos PG CP PP WG JILI TADA FC RedTiger HSG CQ9 Popular Todos 829 Mais 938 742 852 904 595 706 641 687 622 945 793 695 509 931 782 946 654 992 745 677 724 626 979 936 988 912 784 684 971 989 845 908 575 774 972 554 578 948 670 612 685 815 562 870 531 781 632 625 555 936 654 594 995 955 515 746 570 688 938 845 595 650 955 999 650 891 929 505 803 844 567 562 886 552 764 781 608 966 980 828 779 599 935 939 963 645 948 795 844 693 545 548 966 607 519 556 771 939 704 665 541 728 632 919 528 604 559 671 905 807 627 920 792 810 503 658 698 561 544 800 613 776 871 999 981 947 923 908 676 979 604 781 875 972 590 892 778 985 640 547 946 529 752 849 857 623 654 867 914 858 932 798 722 534 788 555 915 988 750 997 627 915 815 943 705 686 731 747 672 650 613 782 780 590 944 527 983 972 873 736 705 659 503 654 588 671 907 594 855 803 1000 777 812 845 791 826 751 1000 782 986 831 861 788 788 598 670 529 765 597 790 845 599 725 678 857 973 847 533 629 573 983 680 760 616 503 788 888 909 735 522 911 721 714 986 559 635 661 820 623 865 926 771 755 854 541 518 855 681 668 631 972 838 610 775 899 892 560 627 900 672 503 869 781 707 766 833 712 510 661 854 837 755 913 675 973 909 786 678 780 771 873 737 712 952 981 598 854 829 978 903 752 996 960 883 851 540 657 951 983 963 968 837 742 974 915 616 761 519 763 510 716 890 687 530 873 545 59",
+    "buttons": [
+      {
+        "tag": "DIV",
+        "className": "login-btn",
+        "text": "Entrar",
+        "rect": {
+          "x": 791,
+          "y": 21,
+          "w": 87,
+          "h": 37
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "register-btn",
+        "text": "Registrar",
+        "rect": {
+          "x": 886,
+          "y": 21,
+          "w": 108,
+          "h": 37
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs tabActive",
+        "text": "PG",
+        "rect": {
+          "x": 419,
+          "y": 569,
+          "w": 90,
+          "h": 104
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "tab_text",
+        "text": "PG",
+        "rect": {
+          "x": 433,
+          "y": 646,
+          "w": 61,
+          "h": 22
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "CP",
+        "rect": {
+          "x": 517,
+          "y": 569,
+          "w": 90,
+          "h": 104
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "tab_text",
+        "text": "CP",
+        "rect": {
+          "x": 531,
+          "y": 646,
+          "w": 61,
+          "h": 22
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "game_title_left case_5",
+        "text": "PG",
+        "rect": {
+          "x": 420,
+          "y": 1574,
+          "w": 118,
+          "h": 29
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "PG",
+        "rect": {
+          "x": 507,
+          "y": 1576,
+          "w": 31,
+          "h": 26
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "game_title_left case_5",
+        "text": "CP",
+        "rect": {
+          "x": 420,
+          "y": 3325,
+          "w": 117,
+          "h": 31
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "CP",
+        "rect": {
+          "x": 507,
+          "y": 3327,
+          "w": 30,
+          "h": 26
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "footer_item active",
+        "text": "Início",
+        "rect": {
+          "x": 403,
+          "y": 734,
+          "w": 120,
+          "h": 74
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "footer_item",
+        "text": "Promoção",
+        "rect": {
+          "x": 523,
+          "y": 734,
+          "w": 120,
+          "h": 74
+        }
+      },
+      {
+        "tag": "DIV",
+        "className": "footer_item",
+        "text": "Pessoal",
+        "rect": {
+          "x": 883,
+          "y": 734,
+          "w": 120,
+          "h": 74
+        }
+      }
+    ],
+    "inputs": [],
+    "overlays": [
+      {
+        "tag": "IMG",
+        "className": "logo",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/5b027571814ea558515e1b74a5c507f4.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/e9f3b87b30f4252345a0cd9234186cd7.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/900b5b014147eb922566e53d87df2037.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/9049b0005c33906a52d5b3dc1927b110.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/9459c62fa6b4399b20163a906bcbe01f.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/f6e0f8bd55590c08285f2315b19dce99.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/assets/hmspaddle/8f5c1bb1c8c7d54e30e3ac175a2ba732.png"
+      },
+      {
+        "tag": "IMG",
+        "className": "notice_icon",
+        "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACUAAAAiCAMAAADvReCJAAAACGFjVEwAAAADAAAAAM7tusAAAABFUExURQAAAP/v3//v5//v5P"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/pg.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/cp.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/pp.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav/95fd63e844644c7c3ac24a3f02825ae2.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/jili.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/tada.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav/7dd88fb2e893fcbe57e5c0110f3c8771.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav/7555194d7069b6beec39d1ec3b39de10.png?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav/44dce53db9aeb1ca58e096a8ad52c0c0.png?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "posImg",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/cq.svg?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "",
+        "src": "https://img.hmsgame.com/uploads/cate/nav_05/popular.png?v=1.0.627"
+      },
+      {
+        "tag": "IMG",
+        "className": "like_icon",
+        "src": "img/collection_m1.db61d159.svg"
+      }
+    ],
+    "covers": [
+      "https://img.hmsgame.com/uploads/game/pg/v1/big/1850016.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/52300.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/51090.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50016.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50045.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50052.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50056.png",
+      "https://img.hmsgame.com/uploads/game/pg/v1/big/1850016.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/52300.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/51090.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50016.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50045.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50052.png",
+      "https://img.hmsgame.com/uploads/game/cp/v1/big/50056.png"
+    ],
+    "gameTitles": [
+      {
+        "className": "tabs tabActive",
+        "text": "PG"
+      },
+      {
+        "className": "tabs",
+        "text": "CP"
+      },
+      {
+        "className": "tabs",
+        "text": "PP"
+      },
+      {
+        "className": "tabs",
+        "text": "WG"
+      },
+      {
+        "className": "tabs",
+        "text": "JILI"
+      },
+      {
+        "className": "tabs",
+        "text": "TADA"
+      },
+      {
+        "className": "tabs",
+        "text": "FC"
+      },
+      {
+        "className": "tabs",
+        "text": "RedTiger"
+      },
+      {
+        "className": "tabs",
+        "text": "HSG"
+      },
+      {
+        "className": "tabs",
+        "text": "CQ9"
+      },
+      {
+        "className": "game_title",
+        "text": "Popular Todos 829 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "Popular"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 829 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "PG Todos 131 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "PG"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 131 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "ASK Todos 45 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "ASK"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 45 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "CP Todos 49 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "CP"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 49 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "PP Todos 183 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "PP"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 183 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "Wg Todos 26 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "Wg"
+      },
+      {
+        "className": "game_title_right",
+        "text": "Todos 26 Mais"
+      },
+      {
+        "className": "game_title",
+        "text": "JILI Todos 85 Mais"
+      },
+      {
+        "className": "game_title_left case_5",
+        "text": "JILI"
+      }
+    ]
+  }
+}

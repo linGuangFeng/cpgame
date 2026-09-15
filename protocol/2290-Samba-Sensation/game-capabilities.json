@@ -1,0 +1,1211 @@
+{
+  "schemaVersion": 3,
+  "gameId": 2290,
+  "gameName": "Samba Sensation",
+  "directoryName": "2290-Samba-Sensation",
+  "rulesVersion": "2290-protocol-v3-template39-training4900",
+  "rulesHash": "46ef48cf0977a2785f257825d1e499b8049d293900e2a10d4a0dec7ad1ba2205",
+  "supportedLanguages": {
+    "codes": [
+      "bn-bd",
+      "en-us",
+      "es-es",
+      "fr-fr",
+      "id-id",
+      "ko-ko",
+      "pt-pt",
+      "th-th",
+      "tr-tr"
+    ],
+    "count": 9,
+    "evidence": "reports/2290-Samba-Sensation/language-inventory.json"
+  },
+  "boardModel": {
+    "rows": 3,
+    "columns": 5,
+    "activeAxisCountByBetType": {
+      "1": 1,
+      "2": 2,
+      "3": 3
+    }
+  },
+  "symbols": {
+    "WILD": 0,
+    "PAYING": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "SCATTER": 10
+  },
+  "winModel": "FIXED_PAYLINE",
+  "winModelDetails": {
+    "type": "FIXED_PAYLINE",
+    "paylineCount": 25,
+    "lines": [
+      [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      [
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      [
+        2,
+        1,
+        2,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      [
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      [
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      [
+        2,
+        0,
+        2,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      [
+        2,
+        0,
+        1,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        1,
+        2,
+        0
+      ],
+      [
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        2,
+        2,
+        2,
+        0
+      ],
+      [
+        1,
+        2,
+        2,
+        2,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        2,
+        1,
+        2,
+        1
+      ],
+      [
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      [
+        1,
+        0,
+        2,
+        0,
+        1
+      ]
+    ],
+    "direction": "LEFT_TO_RIGHT",
+    "minimumConsecutive": 3,
+    "highestWinOnlyPerLine": true,
+    "wildSubstitutes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "wildDoesNotSubstitute": [
+      10
+    ],
+    "paylineCountEvidence": [
+      "EVID-CURRENT-BUNDLE",
+      "EVID-CURRENT-HELP",
+      "EVID-SPIN-RAW"
+    ],
+    "ways": {
+      "applicable": false
+    },
+    "cluster": {
+      "applicable": false
+    }
+  },
+  "redisContract": {
+    "required": true,
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "gameId": 2290,
+    "completeRoundMembers": true,
+    "preloadedLossPoolRequired": true,
+    "selectionOrder": "WIN_OR_LOSS_THEN_INTEGER_MULTIPLIER",
+    "source": "WORKFLOW_DOWNSTREAM_CONTRACT_NOT_PROVIDER_PROTOCOL"
+  },
+  "codecContract": {
+    "memberEncoding": "MINIMAL_ASCII",
+    "mustReconstructCompleteRound": true,
+    "integerMultiplierBasis": "roundAward / bet",
+    "fullJsonForbidden": true,
+    "fixtureOrHistoryRuntimeSourceForbidden": true,
+    "source": "WORKFLOW_DOWNSTREAM_CONTRACT_ADAPTED_TO_CURRENT_GAME"
+  },
+  "symbolWeights": {
+    "sourceType": "REAL_PROVIDER_TRAINING_EMPIRICAL_COUNTS",
+    "trainingRoundCount": 4900,
+    "holdoutExcluded": true,
+    "representsProviderLongRunProbabilityOrRtp": false,
+    "paidCompleteInitialState": {
+      "BET_TYPE_1_AXIS_1": {
+        "boards": 2378,
+        "cells": 35670,
+        "counts": {
+          "0": 1537,
+          "1": 4425,
+          "2": 4132,
+          "3": 3642,
+          "4": 3565,
+          "5": 3583,
+          "6": 3518,
+          "7": 3560,
+          "8": 3571,
+          "9": 3592,
+          "10": 545
+        },
+        "percentages": {
+          "0": 4.3089,
+          "1": 12.4054,
+          "2": 11.584,
+          "3": 10.2103,
+          "4": 9.9944,
+          "5": 10.0449,
+          "6": 9.8626,
+          "7": 9.9804,
+          "8": 10.0112,
+          "9": 10.0701,
+          "10": 1.5279
+        }
+      },
+      "BET_TYPE_2_AXIS_1": {
+        "boards": 100,
+        "cells": 1500,
+        "counts": {
+          "0": 46,
+          "1": 176,
+          "2": 152,
+          "3": 149,
+          "4": 146,
+          "5": 163,
+          "6": 172,
+          "7": 172,
+          "8": 144,
+          "9": 171,
+          "10": 9
+        },
+        "percentages": {
+          "0": 3.0667,
+          "1": 11.7333,
+          "2": 10.1333,
+          "3": 9.9333,
+          "4": 9.7333,
+          "5": 10.8667,
+          "6": 11.4667,
+          "7": 11.4667,
+          "8": 9.6,
+          "9": 11.4,
+          "10": 0.6
+        }
+      },
+      "BET_TYPE_2_AXIS_2": {
+        "boards": 100,
+        "cells": 1500,
+        "counts": {
+          "0": 63,
+          "1": 196,
+          "2": 159,
+          "3": 154,
+          "4": 138,
+          "5": 142,
+          "6": 160,
+          "7": 160,
+          "8": 146,
+          "9": 172,
+          "10": 10
+        },
+        "percentages": {
+          "0": 4.2,
+          "1": 13.0667,
+          "2": 10.6,
+          "3": 10.2667,
+          "4": 9.2,
+          "5": 9.4667,
+          "6": 10.6667,
+          "7": 10.6667,
+          "8": 9.7333,
+          "9": 11.4667,
+          "10": 0.6667
+        }
+      },
+      "BET_TYPE_3_AXIS_1": {
+        "boards": 2421,
+        "cells": 36315,
+        "counts": {
+          "0": 931,
+          "1": 4228,
+          "2": 3958,
+          "3": 3812,
+          "4": 3865,
+          "5": 3756,
+          "6": 3736,
+          "7": 3996,
+          "8": 3905,
+          "9": 3817,
+          "10": 311
+        },
+        "percentages": {
+          "0": 2.5637,
+          "1": 11.6426,
+          "2": 10.8991,
+          "3": 10.497,
+          "4": 10.643,
+          "5": 10.3428,
+          "6": 10.2878,
+          "7": 11.0037,
+          "8": 10.7531,
+          "9": 10.5108,
+          "10": 0.8564
+        }
+      },
+      "BET_TYPE_3_AXIS_2": {
+        "boards": 2421,
+        "cells": 36315,
+        "counts": {
+          "0": 879,
+          "1": 4404,
+          "2": 4068,
+          "3": 3804,
+          "4": 3823,
+          "5": 3865,
+          "6": 3848,
+          "7": 3694,
+          "8": 3864,
+          "9": 3880,
+          "10": 186
+        },
+        "percentages": {
+          "0": 2.4205,
+          "1": 12.1272,
+          "2": 11.202,
+          "3": 10.475,
+          "4": 10.5273,
+          "5": 10.643,
+          "6": 10.5962,
+          "7": 10.1721,
+          "8": 10.6402,
+          "9": 10.6843,
+          "10": 0.5122
+        }
+      },
+      "BET_TYPE_3_AXIS_3": {
+        "boards": 2421,
+        "cells": 36315,
+        "counts": {
+          "0": 962,
+          "1": 4293,
+          "2": 3990,
+          "3": 3785,
+          "4": 3875,
+          "5": 3782,
+          "6": 3911,
+          "7": 3843,
+          "8": 3849,
+          "9": 3903,
+          "10": 122
+        },
+        "percentages": {
+          "0": 2.649,
+          "1": 11.8216,
+          "2": 10.9872,
+          "3": 10.4227,
+          "4": 10.6705,
+          "5": 10.4144,
+          "6": 10.7697,
+          "7": 10.5824,
+          "8": 10.5989,
+          "9": 10.7476,
+          "10": 0.3359
+        }
+      },
+      "FEATURE_BUY_INITIAL_AXIS_1": {
+        "boards": 1,
+        "cells": 15,
+        "counts": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 2,
+          "4": 1,
+          "5": 1,
+          "6": 2,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 9
+        },
+        "percentages": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 13.3333,
+          "4": 6.6667,
+          "5": 6.6667,
+          "6": 13.3333,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 60
+        }
+      },
+      "FEATURE_BUY_INITIAL_AXIS_2": {
+        "boards": 1,
+        "cells": 15,
+        "counts": {
+          "0": 0,
+          "1": 0,
+          "2": 1,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 1,
+          "8": 2,
+          "9": 1,
+          "10": 10
+        },
+        "percentages": {
+          "0": 0,
+          "1": 0,
+          "2": 6.6667,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 6.6667,
+          "8": 13.3333,
+          "9": 6.6667,
+          "10": 66.6667
+        }
+      },
+      "FEATURE_BUY_INITIAL_AXIS_3": {
+        "boards": 1,
+        "cells": 15,
+        "counts": {
+          "0": 0,
+          "1": 0,
+          "2": 1,
+          "3": 0,
+          "4": 3,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 11
+        },
+        "percentages": {
+          "0": 0,
+          "1": 0,
+          "2": 6.6667,
+          "3": 0,
+          "4": 20,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 73.3333
+        }
+      }
+    },
+    "freeCompleteStateRawGrid": {
+      "FREE_AXIS_1": {
+        "boards": 790,
+        "cells": 11850,
+        "counts": {
+          "0": 312,
+          "1": 926,
+          "2": 827,
+          "3": 976,
+          "4": 1037,
+          "5": 1140,
+          "6": 1349,
+          "7": 1461,
+          "8": 1886,
+          "9": 1936,
+          "10": 0
+        },
+        "percentages": {
+          "0": 2.6329,
+          "1": 7.8143,
+          "2": 6.9789,
+          "3": 8.2363,
+          "4": 8.7511,
+          "5": 9.6203,
+          "6": 11.384,
+          "7": 12.3291,
+          "8": 15.9156,
+          "9": 16.3376,
+          "10": 0
+        }
+      },
+      "FREE_AXIS_2": {
+        "boards": 790,
+        "cells": 11850,
+        "counts": {
+          "0": 203,
+          "1": 742,
+          "2": 923,
+          "3": 898,
+          "4": 957,
+          "5": 1248,
+          "6": 1538,
+          "7": 1488,
+          "8": 1927,
+          "9": 1926,
+          "10": 0
+        },
+        "percentages": {
+          "0": 1.7131,
+          "1": 6.2616,
+          "2": 7.789,
+          "3": 7.5781,
+          "4": 8.0759,
+          "5": 10.5316,
+          "6": 12.9789,
+          "7": 12.557,
+          "8": 16.2616,
+          "9": 16.2532,
+          "10": 0
+        }
+      },
+      "FREE_AXIS_3": {
+        "boards": 790,
+        "cells": 11850,
+        "counts": {
+          "0": 276,
+          "1": 794,
+          "2": 941,
+          "3": 869,
+          "4": 1013,
+          "5": 1232,
+          "6": 1584,
+          "7": 1516,
+          "8": 1786,
+          "9": 1839,
+          "10": 0
+        },
+        "percentages": {
+          "0": 2.3291,
+          "1": 6.7004,
+          "2": 7.9409,
+          "3": 7.3333,
+          "4": 8.5485,
+          "5": 10.3966,
+          "6": 13.3671,
+          "7": 12.7932,
+          "8": 15.0717,
+          "9": 15.519,
+          "10": 0
+        }
+      }
+    },
+    "freeVisibleMaterials": {
+      "FREE_AXIS_1": {
+        "boards": 790,
+        "outerCounts": {
+          "0": 105,
+          "1": 584,
+          "2": 494,
+          "3": 562,
+          "4": 533,
+          "5": 483,
+          "6": 476,
+          "7": 471,
+          "8": 527,
+          "9": 505,
+          "10": 0
+        },
+        "outerPercentages": {
+          "0": 2.2152,
+          "1": 12.3207,
+          "2": 10.4219,
+          "3": 11.8565,
+          "4": 11.2447,
+          "5": 10.1899,
+          "6": 10.0422,
+          "7": 9.9367,
+          "8": 11.1181,
+          "9": 10.654,
+          "10": 0
+        },
+        "bigCounts": {
+          "0": 23,
+          "1": 38,
+          "2": 37,
+          "3": 46,
+          "4": 56,
+          "5": 73,
+          "6": 97,
+          "7": 110,
+          "8": 151,
+          "9": 159,
+          "10": 0
+        },
+        "bigPercentages": {
+          "0": 2.9114,
+          "1": 4.8101,
+          "2": 4.6835,
+          "3": 5.8228,
+          "4": 7.0886,
+          "5": 9.2405,
+          "6": 12.2785,
+          "7": 13.9241,
+          "8": 19.1139,
+          "9": 20.1266,
+          "10": 0
+        }
+      },
+      "FREE_AXIS_2": {
+        "boards": 790,
+        "outerCounts": {
+          "0": 113,
+          "1": 481,
+          "2": 545,
+          "3": 520,
+          "4": 525,
+          "5": 528,
+          "6": 503,
+          "7": 507,
+          "8": 514,
+          "9": 504,
+          "10": 0
+        },
+        "outerPercentages": {
+          "0": 2.384,
+          "1": 10.1477,
+          "2": 11.4979,
+          "3": 10.9705,
+          "4": 11.0759,
+          "5": 11.1392,
+          "6": 10.6118,
+          "7": 10.6962,
+          "8": 10.8439,
+          "9": 10.6329,
+          "10": 0
+        },
+        "bigCounts": {
+          "0": 10,
+          "1": 29,
+          "2": 42,
+          "3": 42,
+          "4": 48,
+          "5": 80,
+          "6": 115,
+          "7": 109,
+          "8": 157,
+          "9": 158,
+          "10": 0
+        },
+        "bigPercentages": {
+          "0": 1.2658,
+          "1": 3.6709,
+          "2": 5.3165,
+          "3": 5.3165,
+          "4": 6.0759,
+          "5": 10.1266,
+          "6": 14.557,
+          "7": 13.7975,
+          "8": 19.8734,
+          "9": 20,
+          "10": 0
+        }
+      },
+      "FREE_AXIS_3": {
+        "boards": 790,
+        "outerCounts": {
+          "0": 132,
+          "1": 524,
+          "2": 545,
+          "3": 536,
+          "4": 500,
+          "5": 494,
+          "6": 495,
+          "7": 490,
+          "8": 499,
+          "9": 525,
+          "10": 0
+        },
+        "outerPercentages": {
+          "0": 2.7848,
+          "1": 11.0549,
+          "2": 11.4979,
+          "3": 11.308,
+          "4": 10.5485,
+          "5": 10.4219,
+          "6": 10.443,
+          "7": 10.3376,
+          "8": 10.5274,
+          "9": 11.0759,
+          "10": 0
+        },
+        "bigCounts": {
+          "0": 16,
+          "1": 30,
+          "2": 44,
+          "3": 37,
+          "4": 57,
+          "5": 82,
+          "6": 121,
+          "7": 114,
+          "8": 143,
+          "9": 146,
+          "10": 0
+        },
+        "bigPercentages": {
+          "0": 2.0253,
+          "1": 3.7975,
+          "2": 5.5696,
+          "3": 4.6835,
+          "4": 7.2152,
+          "5": 10.3797,
+          "6": 15.3165,
+          "7": 14.4304,
+          "8": 18.1013,
+          "9": 18.481,
+          "10": 0
+        }
+      }
+    },
+    "evidence": "reports/2290-Samba-Sensation/symbol-generation-evidence.json"
+  },
+  "evidence": [
+    "reports/2290-Samba-Sensation/protocol-evidence-analysis.json",
+    "reports/2290-Samba-Sensation/symbol-generation-evidence.json",
+    "reports/2290-Samba-Sensation/coin-vector-delta-evidence.json",
+    "captures/2290-Samba-Sensation/training-manifest.json",
+    "captures/2290-Samba-Sensation/round-index.jsonl"
+  ],
+  "roundModel": {
+    "paidRequestType": 1,
+    "freeRequestType": 2,
+    "featureBuyRequestType": 3,
+    "ordinaryTermination": "FIRST_RESPONSE_WHEN_FREES_ST_MISSING_OR_ZERO",
+    "freeTermination": "FINAL_TYPE_2_RESPONSE_WHEN_FREES_ST_EQUALS_ZERO"
+  },
+  "outcomePartition": [
+    {
+      "id": "ORDINARY_LOSS",
+      "predicate": "no frees; coins.is_full=false; total_win=0",
+      "completeRounds": 4144
+    },
+    {
+      "id": "ORDINARY_WIN",
+      "predicate": "no frees; coins.is_full=false; total_win>0",
+      "completeRounds": 666
+    },
+    {
+      "id": "FREE_SPINS_SPECIAL",
+      "predicate": "frees.st>0 at paid/feature-buy start; continue type=2 through st=0",
+      "completeRounds": 168
+    },
+    {
+      "id": "COIN_COLLECTION_REWARD",
+      "predicate": "paid non-free props.coins.is_full=true",
+      "completeRounds": 22,
+      "status": "SAMPLE_INSUFFICIENT"
+    }
+  ],
+  "specialModes": [
+    {
+      "id": "FREE_SPINS",
+      "supported": true,
+      "entryRequestTypes": [
+        1,
+        3
+      ],
+      "continuationRequestType": 2,
+      "freeSteps": 5,
+      "purchaseIsIndependentMode": false,
+      "evidence": [
+        "EVID-CURRENT-HELP",
+        "EVID-CURRENT-BUNDLE",
+        "EVID-ROUND-INDEX"
+      ]
+    },
+    {
+      "id": "COIN_COLLECTION_REWARD",
+      "supported": true,
+      "multiRequestWithinRound": false,
+      "crossRoundState": true,
+      "rewardFormula": "bet * level * 25 * props.coins.count",
+      "sampleStatus": "SAMPLE_INSUFFICIENT",
+      "evidence": [
+        "EVID-CURRENT-HELP",
+        "EVID-CURRENT-BUNDLE",
+        "EVID-ROUND-INDEX"
+      ]
+    }
+  ],
+  "triggerSymbolConstraints": {
+    "scatter": {
+      "symbol": 10,
+      "collectionThreshold": 30,
+      "naturalPaidByBetType": {
+        "1": {
+          "boards": 2378,
+          "maxPerColumn": 3,
+          "maxPerAxisBoard": 4,
+          "maxPerPaidPage": 4
+        },
+        "2": {
+          "boards": 200,
+          "maxPerColumn": 2,
+          "maxPerAxisBoard": 4,
+          "maxPerPaidPage": 5
+        },
+        "3": {
+          "boards": 7263,
+          "maxPerColumn": 3,
+          "maxPerAxisBoard": 6,
+          "maxPerPaidPage": 8
+        }
+      },
+      "featureBuyTriggerPage": {
+        "boards": 3,
+        "maxPerColumn": 3,
+        "maxPerAxisBoard": 11,
+        "maxPerPaidPage": 30,
+        "observedAxisTotals": [
+          9,
+          10,
+          11
+        ],
+        "exactObservedPageTotal": 30,
+        "sampleCount": 1
+      },
+      "allowedAxisIndexes": [
+        1,
+        2,
+        3
+      ],
+      "freeStepGenerationAllowed": false,
+      "freeStepObservedCount": 0,
+      "maximumDerivedFreeSteps": 5,
+      "enforcement": "APPLY_ENTRY_SPECIFIC_LIMITS_AND_REJECT_COMPLETE_ROUND_IF_ANY_LIMIT_EXCEEDED"
+    }
+  },
+  "integerMultiplier": {
+    "basis": "roundAward / data.bet",
+    "allIntegral": true,
+    "distinctCount": 560,
+    "min": 0,
+    "max": 12480,
+    "wagerMultipleNonIntegerCount": 656
+  },
+  "generationModel": {
+    "implementationReady": true,
+    "usesIndependentCellMarginalsOnly": false,
+    "artificialLossBoardConstraints": false,
+    "probabilityCaution": "Empirical evidence is entry-specific and is not the provider long-run probability or RTP.",
+    "lifecycleEntries": [
+      {
+        "id": "PAID_INITIAL",
+        "entryType": "INITIAL",
+        "lifecyclePhase": "INITIAL",
+        "isInitialEntry": true,
+        "role": "INITIAL",
+        "countingUnit": "COMPLETE_INITIAL_STATE",
+        "observationUnit": "COMPLETE_INITIAL_STATE",
+        "newlyDealtPositionsOnly": false,
+        "sampleRoundCount": 4899,
+        "samplePositionCount": 147615,
+        "evidenceRefs": [
+          "EVID-TRAINING-MANIFEST",
+          "EVID-SYMBOL-ANALYSIS"
+        ],
+        "wholeNextStateCountedAsNewDeal": false,
+        "positionSelection": "ALL_POSITIONS_IN_COMPLETE_INITIAL_STATE",
+        "partitions": "bet_type then axis index"
+      },
+      {
+        "id": "FEATURE_BUY_INITIAL",
+        "entryType": "INITIAL",
+        "lifecyclePhase": "INITIAL",
+        "isInitialEntry": true,
+        "role": "INITIAL",
+        "countingUnit": "COMPLETE_INITIAL_STATE",
+        "observationUnit": "COMPLETE_INITIAL_STATE",
+        "newlyDealtPositionsOnly": false,
+        "sampleRoundCount": 1,
+        "samplePositionCount": 45,
+        "evidenceRefs": [
+          "EVID-TRAINING-MANIFEST",
+          "EVID-SYMBOL-ANALYSIS",
+          "EVID-SPIN-RAW"
+        ],
+        "wholeNextStateCountedAsNewDeal": false,
+        "positionSelection": "ALL_POSITIONS_IN_COMPLETE_INITIAL_STATE",
+        "partitions": "three trigger axes despite request bet_type=1"
+      },
+      {
+        "id": "FREE_STEP_COMPLETE_STATE",
+        "entryType": "SUBSEQUENT",
+        "lifecyclePhase": "SUBSEQUENT",
+        "isInitialEntry": false,
+        "role": "FREE_SPIN",
+        "countingUnit": "NEWLY_DEALT_POSITIONS",
+        "observationUnit": "NEWLY_DEALT_POSITIONS",
+        "newlyDealtPositionsOnly": true,
+        "sampleRoundCount": 158,
+        "samplePositionCount": 35550,
+        "evidenceRefs": [
+          "EVID-TRAINING-MANIFEST",
+          "EVID-SYMBOL-ANALYSIS",
+          "EVID-SPIN-RAW"
+        ],
+        "wholeNextStateCountedAsNewDeal": true,
+        "retainedPositionCount": 0,
+        "positionSelection": "ALL_POSITIONS_CONFIRMED_NEW_BY_ADJACENT_TYPE_2_RESPONSE_BOUNDARIES",
+        "stateBoundary": "EACH_TYPE_2_RESPONSE_IS_A_NEW_FREE_STATE"
+      },
+      {
+        "id": "COIN_VECTOR_DELTA",
+        "entryType": "SUBSEQUENT",
+        "lifecyclePhase": "SUBSEQUENT",
+        "isInitialEntry": false,
+        "role": "STATE_TRANSITION",
+        "countingUnit": "NEWLY_DEALT_POSITIONS",
+        "observationUnit": "NEWLY_DEALT_POSITIONS",
+        "newlyDealtPositionsOnly": true,
+        "sampleRoundCount": 4874,
+        "samplePositionCount": 717,
+        "evidenceRefs": [
+          "EVID-TRAINING-MANIFEST",
+          "EVID-COIN-DELTA",
+          "EVID-SPIN-RAW"
+        ],
+        "wholeNextStateCountedAsNewDeal": false,
+        "retainedPositionCount": 5,
+        "positionSelection": "ONLY_VECTOR_POSITIONS_CHANGED_BY_ADJACENT_STATE_DIFFERENCE",
+        "derivation": "ADJACENT_STATE_VECTOR_DIFFERENCE",
+        "vectorLength": 5,
+        "branches": {
+          "UNCHANGED": 4141,
+          "INCREMENT_NONDECREASING": 699,
+          "FULL_TRIGGER": 17,
+          "RESET_AFTER_FULL": 17,
+          "RESET_OR_DECREASE": 0
+        }
+      }
+    ],
+    "lifecycleEntrances": [
+      "PAID_INITIAL",
+      "FEATURE_BUY_INITIAL",
+      "FREE_STEP_COMPLETE_STATE",
+      "COIN_VECTOR_DELTA"
+    ],
+    "unsupportedEntrances": [
+      {
+        "id": "CASCADE",
+        "reason": "no cascade transition in current code or 5000-start corpus"
+      },
+      {
+        "id": "RESPIN",
+        "reason": "no respin transition in current code or 5000-start corpus"
+      }
+    ],
+    "jointRoundFeatures": [
+      {
+        "id": "ROUND_OUTCOME_CLASS",
+        "applicable": true,
+        "role": "WHOLE_ROUND_JOINT_FEATURE",
+        "countingUnit": "COMPLETE_ROUND",
+        "sampleRoundCount": 4900,
+        "distribution": {
+          "ORDINARY_LOSS": 4079,
+          "ORDINARY_WIN": 646,
+          "FREE_SPINS_SPECIAL": 158,
+          "COIN_COLLECTION_REWARD": 17
+        },
+        "evidenceRefs": [
+          "EVID-TRAINING-MANIFEST",
+          "EVID-ROUND-INDEX"
+        ]
+      },
+      {
+        "id": "ROUND_STEP_COUNT",
+        "applicable": true,
+        "role": "WHOLE_ROUND_JOINT_FEATURE",
+        "countingUnit": "COMPLETE_ROUND",
+        "sampleRoundCount": 4900,
+        "distribution": {
+          "1": 4742,
+          "6": 158
+        },
+        "evidenceRefs": [
+          "EVID-TRAINING-MANIFEST",
+          "EVID-ROUND-INDEX"
+        ]
+      },
+      {
+        "id": "STATE_ELEMENT_COUNT_VECTOR",
+        "applicable": true,
+        "role": "WHOLE_ROUND_JOINT_FEATURE",
+        "countingUnit": "COMPLETE_ROUND",
+        "sampleRoundCount": 4900,
+        "distribution": {
+          "ORDINARY_LOSS|1|PAID:1x15": 1983,
+          "ORDINARY_WIN|1|PAID:1x15": 310,
+          "FREE_SPINS_SPECIAL|6|PAID:1x15;FREE:5x3x(OUTER6+BIG1)": 86,
+          "ORDINARY_LOSS|1|PAID:2x15": 80,
+          "ORDINARY_WIN|1|PAID:2x15": 15,
+          "FREE_SPINS_SPECIAL|6|PAID:2x15;FREE:5x3x(OUTER6+BIG1)": 5,
+          "ORDINARY_LOSS|1|PAID:3x15": 2016,
+          "ORDINARY_WIN|1|PAID:3x15": 321,
+          "FREE_SPINS_SPECIAL|6|PAID:3x15;FREE:5x3x(OUTER6+BIG1)": 67,
+          "COIN_COLLECTION_REWARD|1|PAID:3x15": 17
+        },
+        "evidenceRefs": [
+          "EVID-TRAINING-MANIFEST",
+          "EVID-SYMBOL-ANALYSIS"
+        ]
+      }
+    ],
+    "jointRoundFeatureDistributions": {
+      "ROUND_OUTCOME_CLASS": {
+        "ORDINARY_LOSS": 4079,
+        "ORDINARY_WIN": 646,
+        "FREE_SPINS_SPECIAL": 158,
+        "COIN_COLLECTION_REWARD": 17
+      },
+      "ROUND_STEP_COUNT": {
+        "1": 4742,
+        "6": 158
+      },
+      "STATE_ELEMENT_COUNT_VECTOR": {
+        "ORDINARY_LOSS|1|PAID:1x15": 1983,
+        "ORDINARY_WIN|1|PAID:1x15": 310,
+        "FREE_SPINS_SPECIAL|6|PAID:1x15;FREE:5x3x(OUTER6+BIG1)": 86,
+        "ORDINARY_LOSS|1|PAID:2x15": 80,
+        "ORDINARY_WIN|1|PAID:2x15": 15,
+        "FREE_SPINS_SPECIAL|6|PAID:2x15;FREE:5x3x(OUTER6+BIG1)": 5,
+        "ORDINARY_LOSS|1|PAID:3x15": 2016,
+        "ORDINARY_WIN|1|PAID:3x15": 321,
+        "FREE_SPINS_SPECIAL|6|PAID:3x15;FREE:5x3x(OUTER6+BIG1)": 67,
+        "COIN_COLLECTION_REWARD|1|PAID:3x15": 17
+      },
+      "population": "4900_REAL_PROVIDER_TRAINING_COMPLETE_ROUNDS",
+      "holdoutExcluded": true
+    },
+    "requiredJointDistributions": [
+      "ROUND_OUTCOME_CLASS",
+      "ROUND_STEP_COUNT",
+      "STATE_ELEMENT_COUNT_VECTOR"
+    ],
+    "holdoutPlan": {
+      "source": "REAL_PROVIDER",
+      "sourceType": "REAL_PROVIDER",
+      "evidenceType": "REAL_PROVIDER_HOLDOUT",
+      "minimumRounds": 100,
+      "actualRounds": 100,
+      "count": 100,
+      "roundCount": 100,
+      "sampleRoundCount": 100,
+      "minimumCount": 100,
+      "minimumRoundCount": 100,
+      "selection": "FROZEN_BEFORE_ANALYSIS_FROM_COMPLETE_PROVIDER_ROUNDS",
+      "selectionMethod": "FROZEN_BEFORE_ANALYSIS_FROM_COMPLETE_PROVIDER_ROUNDS",
+      "completeRoundOnly": true,
+      "completeRoundsOnly": true,
+      "frozenBeforeAnalysis": true,
+      "disjointFromTraining": true,
+      "intersectionCount": 0,
+      "trainingOverlapCount": 0,
+      "trainingCompleteRounds": 4900,
+      "file": "captures/2290-Samba-Sensation/holdout-round-index.jsonl",
+      "indexFile": "captures/2290-Samba-Sensation/holdout-round-index.jsonl",
+      "indexRowsExplicitSourceType": true,
+      "indexRowsExplicitCompleteRound": true,
+      "trainingManifest": "captures/2290-Samba-Sensation/training-manifest.json",
+      "usesImplementationGeneratedExpected": false,
+      "minimumGeneratedRoundsForValidation": 10000,
+      "requiredResult": "PASS"
+    },
+    "holdout": {
+      "originalCompleteRounds": 100,
+      "disjointFromTraining": true,
+      "trainingCompleteRounds": 4900,
+      "file": "captures/2290-Samba-Sensation/holdout-round-index.jsonl",
+      "minimumGeneratedRoundsForValidation": 10000,
+      "requiredResult": "PASS"
+    }
+  },
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "demoMayGenerateAtRuntime": false,
+    "completeLossRoundsMustBePreloaded": true
+  },
+  "history": {
+    "listAndDetail": true,
+    "lightweightOnly": true,
+    "bnBdDetailGapClosed": true,
+    "perRoundHistoryPolling": false,
+    "perOutcomeIndex": "captures/2290-Samba-Sensation/history-round-index.jsonl",
+    "matchingDetailRows": {
+      "ORDINARY_LOSS": true,
+      "ORDINARY_WIN": true,
+      "FREE_SPINS_SPECIAL": true,
+      "COIN_COLLECTION_REWARD": true
+    }
+  },
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "46ef48cf0977a2785f257825d1e499b8049d293900e2a10d4a0dec7ad1ba2205",
+    "behaviorIds": [
+      "BHV-SESSION-INIT",
+      "BHV-BET-AXIS",
+      "BHV-PAID-ROUND",
+      "BHV-ORDINARY-LOSS",
+      "BHV-ORDINARY-WIN",
+      "BHV-PAYLINE-WILD",
+      "BHV-SCATTER-COLLECTION",
+      "BHV-FREE-SPINS",
+      "BHV-FEATURE-BUY",
+      "BHV-COIN-COLLECTION-REWARD",
+      "BHV-HISTORY"
+    ]
+  }
+}

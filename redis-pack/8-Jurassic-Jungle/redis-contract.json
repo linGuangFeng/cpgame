@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "gameId": 8,
+  "status": "LOCAL_FORMAL_REPLICA_CONTRACT_ORIGIN_CONSUMER_UNKNOWN",
+  "host": "192.168.10.3",
+  "port": 6379,
+  "database": 15,
+  "codec": "JJ8V1",
+  "claim": "LPOP",
+  "write": ["MULTI", "ZADD", "RPUSH", "LTRIM", "EXEC"],
+  "indexes": ["PerKeyList_000000008", "MaryKeyList_000000008"],
+  "lists": {
+    "ordinary": "BetLog:000000008:%06d",
+    "dragon": "MaryLog:000000008:%06d"
+  },
+  "ratio": "integer paytable-unit sum (payout/bet*10); LOSS uses 0",
+  "zeroMultiplierWritten": true,
+  "runtimeGenerationForbidden": true
+}

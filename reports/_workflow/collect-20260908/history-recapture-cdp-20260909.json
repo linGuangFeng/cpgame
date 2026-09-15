@@ -1,0 +1,47 @@
+[
+  {
+    "id": "2110-Bee-Workshop",
+    "iframe": "https://static.cpgame.io/fixed/?ai=luck_single_10229&btt=<redacted>&gid=2110&l=pt&language=pt-br&sip=api.omgapibra.com&t=<redacted>&token=<redacted>",
+    "probe": {
+      "hasApp": true,
+      "hasCC": true,
+      "jwtHits": [],
+      "names": []
+    },
+    "gold": {
+      "via": "xhr",
+      "code": 10011,
+      "days": 0,
+      "info": "atk error:token contains an invalid number of segments"
+    },
+    "details": [],
+    "historyView": false,
+    "at": "2026-09-09T02:27:23.993Z"
+  },
+  {
+    "id": "1780-Glacier-Treasure",
+    "iframe": "https://static.cpgame.io/v2/1780/?ai=luck_single_10229&btt=<redacted>&gid=1780&l=pt&language=pt-br&sip=api.omgapibra.com&t=<redacted>&token=<redacted>",
+    "probe": {
+      "hasApp": true,
+      "hasCC": true,
+      "jwtHits": [],
+      "names": [
+        "btn_history1"
+      ]
+    },
+    "gold": {
+      "via": "xhr",
+      "code": 10011,
+      "days": 0,
+      "info": "atk error:token contains an invalid number of segments"
+    },
+    "details": [],
+    "historyView": false,
+    "at": "2026-09-09T02:27:31.399Z"
+  },
+  {
+    "id": "1380-Hidden-Realm",
+    "error": "IFRAME_NOT_OPEN",
+    "at": "2026-09-09T02:27:31.407Z"
+  }
+]

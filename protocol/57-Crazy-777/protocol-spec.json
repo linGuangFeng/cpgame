@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "gameId": 57,
+  "gameName": "Crazy 777",
+  "directoryName": "57-Crazy-777",
+  "protocolRevision": "protocol-r3-20260829",
+  "rulesVersion": "v1.5.10.250430",
+  "rulesHash": "sha256:852d3021084c1f4117203c4a6eda137747bf9c1f689b30decb9791e46bf66f2b",
+  "scope": "当前游戏HTTP协议、字段语义和Round/Delivery/Step状态机；不包含Java实现",
+  "identity": {
+    "platformRecord": {"id": 2518, "g_id": 455, "game_name": "crazy 777"},
+    "nativeGame": {"gid": 57, "name": "Crazy 777"},
+    "warning": "平台启动记录、平台g_id和原生gid是不同命名空间；不得把其他平台记录的g_id=57映射到本游戏。"
+  },
+  "transport": {
+    "protocol": "HTTPS",
+    "apiOriginSource": "launch query sip",
+    "observedOrigin": "https://api.omgapibra.com",
+    "basePath": "/cp",
+    "websocketObserved": false,
+    "requestEncoding": "application/x-www-form-urlencoded; charset behavior follows encodeURIComponent with spaces encoded as +",
+    "responseEncoding": "JSON envelope {code,data,info}",
+    "encryption": {
+      "providerPayloadEncryption": "NONE",
+      "evidence": "bundle Http.encodeFormData/Http.post sends plain form data; captured provider requests and JSON responses match; no encrypt/decrypt transform exists in the provider HTTP helper",
+      "secretHandling": "t/token values remain redacted in human-readable artifacts"
+    },
+    "virtualHeaderMapping": {
+      "description": "GameApi callers pass header-shaped state, but Http.post copies these values into form parameters and does not emit them as HTTP headers.",
+      "map": {"web-token": "t", "game-id": "gid"},
+      "actualCustomHeaders": []
+    },
+    "successRule": "HTTP 2xx plus JSON code numerically/string-equal to 200 resolves data; other codes reject; HTTP/non-JSON errors become HTTP<status>."
+  },
+  "endpointSequence": [
+    {
+      "order": 1,
+      "owner": "platform",
+      "method": "POST",
+      "endpoint": "https://api.hmsgame3.com/api/game/list",
+      "purpose": "locate platform Crazy 777 record id=2518/g_id=455"
+    },
+    {
+      "order": 2,
+      "owner": "platform",
+      "method": "GET",
+      "endpoint": "https://api.hmsgame3.com/api/game/startup?game_id=2518",
+      "purpose": "obtain native launch URL containing /57/, gid=57, l, sip and redacted session values"
+    },
+    {
+      "order": 3,
+      "owner": "provider",
+      "method": "POST",
+      "endpoint": "/cp/api/v1/auth/verify",
+      "requestFields": ["ai", "btt", "t", "gid"],
+      "requestFieldEvidence": "Platform.getSessionArgm keeps recognized launch fields; Http.post maps game-id to gid",
+      "responseFields": ["player.id", "player.balance", "token", "ping.enable", "ping.seconds", "rc", "gc"],
+      "purpose": "exchange launch session for provider player state and provider token"
+    },
+    {
+      "order": 4,
+      "owner": "provider",
+      "method": "POST",
+      "endpoint": "/cp/api/v1/crazy-seven/config",
+      "requestFields": ["t", "gid"],
+      "responseFields": ["auto", "bll", "bsl", "cc", "cs", "dbl", "dbs", "last", "spl", "ts"],
+      "purpose": "initialize bet, paytable, currency and last-result state"
+    },
+    {
+      "order": 5,
+      "owner": "provider",
+      "method": "POST",
+      "endpoint": "/cp/api/v1/crazy-seven/spin",
+      "requestFields": ["bl", "bs", "t", "gid"],
+      "purpose": "paid step and every continuation/free step use the same endpoint"
+    },
+    {
+      "order": 6,
+      "owner": "provider-optional",
+      "method": "POST",
+      "endpoint": "/cp/api/v1/ping",
+      "requestFields": ["t", "gid"],
+      "purpose": "only scheduled when auth ping.enable is truthy; captured auth had enable=0, seconds=0"
+    },
+    {
+      "order": 7,
+      "owner": "provider-history",
+      "method": "POST",
+      "endpoint": "/cp/api/v1/crazy-seven/log-list",
+      "requestFields": ["page_index", "begin_at", "end_at", "t", "gid"],
+      "status": "CODE_CONFIRMED_SAMPLE_MISSING"
+    },
+    {
+      "order": 8,
+      "owner": "provider-history",
+      "method": "POST",
+      "endpoint": "/cp/api/v1/crazy-seven/log-view",
+      "requestFields": ["transfer_id", "t", "gid"],
+      "status": "CODE_CONFIRMED_SAMPLE_MISSING"
+    }
+  ],
+  "spinResponse": {
+    "requiredObservedFields": ["ba", "bl", "bs", "fsn", "gt", "nfsc", "pb", "rpx", "rskl", "rwa", "small_game_type", "ss", "wa", "wmkl"],
+    "fieldSemantics": {
+      "ba": "本Step扣注额；付费起点为bl*bs，逐步免费Spin为0；7个聚合免费终局样本在同一付费响应中为0.5",
+      "bl": "bet level",
+      "bs": "bet size/base amount",
+      "pb": "本Step结算后的玩家余额；客户端每次响应直接刷新PlayerData.Coins",
+      "rskl": "长度15、按卷轴分成3组、每组5个原始符号/BLANK的reel-major编码",
+      "wmkl": "中奖映射；键0..4为5条固定线，特殊键5表示SC触发奖，不是第6条线；值为用于spl查表的结果代码",
+      "wa": "当前Step中奖额",
+      "rwa": "当前阶段累计中奖额；免费阶段样本从首个免费Step重新累计，不包含付费触发Step的SC奖",
+      "fsn": "本Round授予的免费Spin总数；普通为0，确认的免费模式为10",
+      "nfsc": "已交付/当前免费Spin序号；触发为0，逐步免费为1..10",
+      "ss": "服务端步骤/序列结束标志；不能单独当完整Round终止标志，因为免费触发Step可为1但fsn!=nfsc",
+      "rpx": "当前Step中奖倍率；普通/触发为1，免费Spin为3",
+      "gt": "1=付费普通或付费触发Step，2=免费Step/聚合免费终局（仅对已捕获值作此解释）",
+      "small_game_type": "0=普通结果，2=FREE_SPINS相关结果（仅对已捕获值作此解释）"
+    },
+    "payoutEquation": "wa = sum(spl[wmkl[lineKey]] * bl * bs * rpx) for observed winning entries; SC key 5 follows the same equation with spl.SC=7",
+    "unknownOptionalFields": [
+      {"field": "frwa", "status": "FRONTEND_CODE_ONLY_NOT_PRESENT_IN_1751_CAPTURED_STEPS"},
+      {"field": "wsk/wskl/gfl", "status": "PARSER_REFERENCES_ONLY_NOT_CAPTURED"},
+      {"field": "fbt", "status": "AUTH/SPIN_ACTIVITY_FIELD_CODE_ONLY_NOT_CAPTURED_IN_SPIN_SAMPLES"}
+    ]
+  },
+  "boardAndWinModel": {
+    "winModel": "FIXED_PAYLINES",
+    "paylineCount": 5,
+    "logicalPaylines": {
+      "0": ["01", "11", "21"],
+      "1": ["02", "12", "22"],
+      "2": ["03", "13", "23"],
+      "3": ["01", "12", "23"],
+      "4": ["03", "12", "21"]
+    },
+    "coordinateMeaning": "bundle坐标为<reelIndex 0..2><logicalRow 1..3>",
+    "rawEncodingWarning": "rskl不是普通3x3数组。每卷轴5个交替符号/BLANK，客户端移除BLANK后追加到动画卷轴；规则允许每卷轴2或3个BLANK。",
+    "symbols": ["H1", "H2", "H3", "H4", "H5", "H6", "WILD", "SC", "BLANK"],
+    "substitution": {
+      "WILD": {"substitutes": ["H1", "H2", "H3", "H4", "H5", "H6"], "doesNotSubstitute": ["SC"]},
+      "gradientPairs": [
+        {"substitute": "H1", "target": "H4", "color": "yellow"},
+        {"substitute": "H2", "target": "H5", "color": "pink"},
+        {"substitute": "H3", "target": "H6", "color": "blue"}
+      ]
+    }
+  },
+  "roundDeliveryStepStateMachine": {
+    "upstreamIdentifiers": "Spin响应未观察到roundId/deliveryId/stepId；captures中的roundId和stepIndex是采集器合成字段",
+    "states": ["IDLE", "PAID_REQUESTED", "ORDINARY_TERMINAL", "FREE_TRIGGER_DELIVERED", "FREE_CONTINUATION", "FREE_TERMINAL", "AGGREGATED_FREE_TERMINAL"],
+    "transitions": [
+      {"from": "IDLE", "to": "PAID_REQUESTED", "condition": "接受一个付费/spin；paidRoundStarts加1"},
+      {"from": "PAID_REQUESTED", "to": "ORDINARY_TERMINAL", "condition": "fsn==0"},
+      {"from": "PAID_REQUESTED", "to": "FREE_TRIGGER_DELIVERED", "condition": "fsn=10,nfsc=0；即使ss=1仍未终局"},
+      {"from": "FREE_TRIGGER_DELIVERED", "to": "FREE_CONTINUATION", "condition": "后续同端点响应nfsc=1..9,ss=0,rpx=3,ba=0"},
+      {"from": "FREE_CONTINUATION", "to": "FREE_TERMINAL", "condition": "nfsc=10,ss=1,rpx=3"},
+      {"from": "PAID_REQUESTED", "to": "AGGREGATED_FREE_TERMINAL", "condition": "单响应fsn=10,nfsc=10,ss=1,rpx=3；已观察7局"}
+    ],
+    "completeRoundTermination": "fsn==0 OR (fsn==nfsc AND ss==1)",
+    "deliveryContractForJava": {
+      "generation": "中奖及特殊模式一次生成完整Round；fixtures不得作为运行时结果源",
+      "memberClaim": "一个Round仅领取一次member",
+      "delivery": "每次请求只交付pendingRound的nextStep；不得为活动Round临时重生结果",
+      "implementationOnlyState": ["pendingRound", "nextStepIndex", "memberClaimed"],
+      "prohibitedInference": "不得把合成roundId/stepIndex输出成声称来自原站的字段"
+    }
+  },
+  "historyStateMachine": {
+    "status": "CONFIRMED",
+    "listRequest": {"page_index": 1, "begin_at": "epoch-seconds day/range start", "end_at": "epoch-seconds day/range end"},
+    "listResponseFieldsUsedByCode": ["lc", "ba", "wa", "end", "ll[].ba", "ll[].ca", "ll[].tis", "ll[].bid", "ll[].wa", "ll[].gt", "ll[].win_spin_num", "ll[].win_free_spin_num"],
+    "detailRequest": {"transfer_id": "selected ll[].tis"},
+    "detailResponseFieldsUsedByCode": ["bsl", "fsl", "baf", "step.ba", "step.bl", "step.bs", "step.ca", "step.frwa", "step.fsn", "step.rpx", "step.bx", "step.rskl", "step.wa", "step.wmkl", "step.ss"],
+    "observedTransition": "enable history -> log-list -> select ll[0].tis=2093578569416081408 -> first log-view -> detail prefab issues second log-view with the same transfer_id -> concatenate bsl then fsl -> render detail -> close sets CurId=null and dispatches HISTORY_DETAIL_BACK -> existing list opacity restored to 255",
+    "observedRequestCount": {"logList": 1, "logView": 2},
+    "termination": "detail close/back returns to existing list state; list pagination stops when response.end is truthy",
+    "adjacentEvidence": "captures/57-Crazy-777/history-adjacent-evidence.json; sequence 1 log-list, sequences 2-3 log-view, followed by observed HISTORY_DETAIL_BACK state"
+  },
+  "evidence": [
+    "resources/57-Crazy-777/pt-BR/_hosts/static.cpgame.io/57/assets/main/index.7eb25.js",
+    "fixtures/57-Crazy-777/auth-verify-redacted.json",
+    "fixtures/57-Crazy-777/game-config.json",
+    "captures/57-Crazy-777/rules-page-evidence.json",
+    "captures/57-Crazy-777/symbol-asset-evidence.json",
+    "captures/57-Crazy-777/history-adjacent-evidence.json",
+    "fixtures/57-Crazy-777/history-list-adjacent.json",
+    "fixtures/57-Crazy-777/history-detail-adjacent.json",
+    "captures/57-Crazy-777/rounds.jsonl#r000013",
+    "captures/57-Crazy-777/rounds.jsonl#r000529",
+    "captures/57-Crazy-777/spin-index.jsonl",
+    "captures/57-Crazy-777/round-coverage-validation.json"
+  ]
+}

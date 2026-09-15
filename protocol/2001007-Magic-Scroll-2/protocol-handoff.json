@@ -1,0 +1,1319 @@
+{
+  "schemaVersion": "1.1",
+  "gameId": "2001007",
+  "directoryName": "2001007-Magic-Scroll-2",
+  "rulesHash": "sha256:ab8f86b20f45615af560b928c2f5bd860ea6abf641d461d2e200a3e4aaed3fcd",
+  "handoffStage": "PROTOCOL_AND_STATE_MACHINE_REVIEWED",
+  "evidenceInventory": [
+    {
+      "id": "E-ENTRY",
+      "source": "resources/2001007-Magic-Scroll-2/pt/index.html; SHA-256 e78bf260f381e6b6f3115e17b5b1abb1f2c90128099170f7b945ba866cb49076",
+      "behaviorIds": [
+        "B-IDENTITY-LANGUAGE",
+        "B-SESSION-INIT"
+      ]
+    },
+    {
+      "id": "E-LANGUAGE",
+      "source": "resources/2001007-Magic-Scroll-2/pt/assets/resources/import/09/09b37d4f0.a8485.json plus real l=en/l=pt first loads",
+      "behaviorIds": [
+        "B-IDENTITY-LANGUAGE"
+      ]
+    },
+    {
+      "id": "E-INIT",
+      "source": "captures/2001007-Magic-Scroll-2/init-api-capture.json and fixtures/2001007-Magic-Scroll-2/01-v3-verifySession.json",
+      "behaviorIds": [
+        "B-SESSION-INIT",
+        "B-TRANSPORT-CODEC"
+      ]
+    },
+    {
+      "id": "E-GAMEINFO",
+      "source": "fixtures/2001007-Magic-Scroll-2/02-GameInfo-Get.json",
+      "behaviorIds": [
+        "B-SESSION-INIT",
+        "B-WAGER-NORMALIZATION",
+        "B-BOARD-CODEC",
+        "B-TRANSPORT-CODEC"
+      ]
+    },
+    {
+      "id": "E-BUNDLE-TRANSPORT",
+      "source": "resources/2001007-Magic-Scroll-2/pt/assets/main/index.b9a82.js Global.post/entGame; bundle SHA-256 equals rulesHash",
+      "behaviorIds": [
+        "B-SESSION-INIT",
+        "B-TRANSPORT-CODEC",
+        "B-HISTORY",
+        "B-HISTORY-DATE",
+        "B-TOP"
+      ]
+    },
+    {
+      "id": "E-BUNDLE-WAGER",
+      "source": "same bundle DataMgr.init, getNowBet and LineMgrBase.LineCount=20",
+      "behaviorIds": [
+        "B-WAGER-NORMALIZATION",
+        "B-WAYS-PAYOUT"
+      ]
+    },
+    {
+      "id": "E-BUNDLE-LINEMGR",
+      "source": "same bundle LineMgr: COLS/ROWS, parseFormation, matrixToGridMatrix, checkWinGridLines, lineMulti",
+      "behaviorIds": [
+        "B-BOARD-CODEC",
+        "B-WAYS-PAYOUT",
+        "B-RUNTIME-INDEPENDENT-LOSS",
+        "B-MAGIC-MINING",
+        "B-XSPLIT",
+        "B-XBOMB-WILD",
+        "B-SYMBOL-WEIGHTS"
+      ]
+    },
+    {
+      "id": "E-BUNDLE-ROUND",
+      "source": "same bundle GlobalEx.spinGame recursive request and derived Delivery construction",
+      "behaviorIds": [
+        "B-BASE-ROUND",
+        "B-RUNTIME-INDEPENDENT-LOSS",
+        "B-MAGIC-MINING",
+        "B-XSPLIT",
+        "B-XBOMB-WILD",
+        "B-LUCKY-WAGON"
+      ]
+    },
+    {
+      "id": "E-BUNDLE-HISTORY",
+      "source": "same bundle History/HistoryDate callers and detail view field consumers",
+      "behaviorIds": [
+        "B-HISTORY",
+        "B-HISTORY-DATE"
+      ]
+    },
+    {
+      "id": "E-BUNDLE-BUY",
+      "source": "same bundle MS2BuyView needValues [70,200,600,3600,175], selected index to gameType+2, and gameType references",
+      "behaviorIds": [
+        "B-FEATURE-BUY",
+        "B-XBET"
+      ]
+    },
+    {
+      "id": "E-RULES-PAYTABLE",
+      "source": "screenshots/2001007-Magic-Scroll-2/rules-pt-01.png; paytable cross-matches LineMgr.lineMulti",
+      "behaviorIds": [
+        "B-WAYS-PAYOUT"
+      ]
+    },
+    {
+      "id": "E-RULES-WAYS",
+      "source": "screenshots/2001007-Magic-Scroll-2/rules-pt-09.png through rules-pt-12.png; current-game rules state left-to-right Ways payout, highest win per bet way and a maximum of 46,656 Ways",
+      "behaviorIds": [
+        "B-WAYS-PAYOUT"
+      ]
+    },
+    {
+      "id": "E-RULE-METADATA",
+      "source": "screenshots/2001007-Magic-Scroll-2/rules-pt-12.png and rules-pt-18.png; current-game rules display RTP 96.04% and version v1.2.6",
+      "behaviorIds": [
+        "B-RULE-METADATA"
+      ]
+    },
+    {
+      "id": "E-RULES-COLLAPSE",
+      "source": "screenshots/2001007-Magic-Scroll-2/rules-pt-02.png and rules-pt-09.png through rules-pt-12.png",
+      "behaviorIds": [
+        "B-BOARD-CODEC",
+        "B-WAYS-PAYOUT",
+        "B-BASE-ROUND",
+        "B-RUNTIME-INDEPENDENT-LOSS"
+      ]
+    },
+    {
+      "id": "E-RULES-WAGON",
+      "source": "screenshots/2001007-Magic-Scroll-2/rules-pt-03.png through rules-pt-05.png",
+      "behaviorIds": [
+        "B-LUCKY-WAGON"
+      ]
+    },
+    {
+      "id": "E-RULES-XBOMB",
+      "source": "screenshots/2001007-Magic-Scroll-2/rules-pt-06.png",
+      "behaviorIds": [
+        "B-XBOMB-WILD"
+      ]
+    },
+    {
+      "id": "E-RULES-MINING",
+      "source": "screenshots/2001007-Magic-Scroll-2/rules-pt-07.png",
+      "behaviorIds": [
+        "B-MAGIC-MINING"
+      ]
+    },
+    {
+      "id": "E-RULES-XSPLIT-XBET",
+      "source": "screenshots/2001007-Magic-Scroll-2/rules-pt-08.png",
+      "behaviorIds": [
+        "B-XSPLIT",
+        "B-XBET"
+      ]
+    },
+    {
+      "id": "E-SPIN-INDEX",
+      "source": "captures/2001007-Magic-Scroll-2/spin-index.jsonl (2026-08-29 complete-Round follow-up) and network-spin-ledger.json (retained baseline)",
+      "behaviorIds": [
+        "B-BASE-ROUND",
+        "B-RUNTIME-INDEPENDENT-LOSS",
+        "B-MAGIC-MINING",
+        "B-XSPLIT",
+        "B-XBOMB-WILD",
+        "B-LUCKY-WAGON"
+      ]
+    },
+    {
+      "id": "E-VALID-LOSS",
+      "source": "fixtures/2001007-Magic-Scroll-2/03-spin-valid-min-loss.json; live request 560",
+      "behaviorIds": [
+        "B-WAGER-NORMALIZATION",
+        "B-BASE-ROUND",
+        "B-RUNTIME-INDEPENDENT-LOSS",
+        "B-BOARD-CODEC"
+      ]
+    },
+    {
+      "id": "E-VALID-WIN",
+      "source": "fixtures/2001007-Magic-Scroll-2/04-spin-valid-min-win-multistep.json; live requests 562-567",
+      "behaviorIds": [
+        "B-WAGER-NORMALIZATION",
+        "B-WAYS-PAYOUT",
+        "B-BASE-ROUND",
+        "B-BOARD-CODEC",
+        "B-XSPLIT",
+        "B-XBOMB-WILD"
+      ]
+    },
+    {
+      "id": "E-FOLLOWUP-ADJACENT",
+      "source": "captures/2001007-Magic-Scroll-2/followup-20260829/original-rounds.jsonl and adjacent-step-evidence.json; legal minimum 0.40 complete Rounds with deliveryIndex and raw response bodies",
+      "behaviorIds": [
+        "B-BASE-ROUND",
+        "B-MAGIC-MINING",
+        "B-XSPLIT",
+        "B-XBOMB-WILD",
+        "B-LUCKY-WAGON"
+      ]
+    },
+    {
+      "id": "E-FOLLOWUP-HISTORY",
+      "source": "captures/2001007-Magic-Scroll-2/followup-history-recheck.json; current-date History returned all_num=2042 and 20 items, matched new ordinary LOSS/WIN/special complete Rounds, while HistoryDate returned HTTP 404",
+      "behaviorIds": [
+        "B-HISTORY",
+        "B-HISTORY-DATE"
+      ]
+    },
+    {
+      "id": "E-LOCAL-HISTORY-TEST",
+      "source": "server-api/2001007-Magic-Scroll-2/src/test/java/com/hd/cpgame/magicscroll2/api/HistoryPersistenceTest.java and reports/2001007-Magic-Scroll-2/history-persistence-validation.json",
+      "behaviorIds": [
+        "B-HISTORY"
+      ]
+    },
+    {
+      "id": "E-HISTORY-EMPTY",
+      "source": "fixtures/2001007-Magic-Scroll-2/05-history-empty.json",
+      "behaviorIds": [
+        "B-HISTORY"
+      ]
+    },
+    {
+      "id": "E-BELOW-MIN",
+      "source": "captures/2001007-Magic-Scroll-2/spin-index.jsonl Rounds 2-26",
+      "behaviorIds": [
+        "B-LUCKY-WAGON"
+      ],
+      "disposition": "EXCLUDED_FROM_LEGAL_MINIMUM_CONFIRMATION",
+      "reason": "Real charged Rounds used total bet 0.02 below UI minimum 0.40; only audit/index facts are retained."
+    },
+    {
+      "id": "E-CN-ORPHAN",
+      "source": "resources config contains i18n/label/cn",
+      "behaviorIds": [
+        "B-IDENTITY-LANGUAGE"
+      ],
+      "disposition": "REJECTED_AS_LANGUAGE_CAPABILITY",
+      "reason": "cn is absent from LanguageData/runtime list and selectLang(cn) returned false."
+    },
+    {
+      "id": "E-BUNDLE-DIAGNOSTIC",
+      "source": "main bundle embeds TestMsgs/TestRoundListData and a frontend getRandomType helper",
+      "disposition": "PROHIBITED_RUNTIME_SOURCE",
+      "reason": "Diagnostic/example data and animation randomness are not server rules, symbol weights, fixtures for runtime use or permissible generation inputs."
+    },
+    {
+      "id": "E-REDIS-SEARCH",
+      "source": "current-game rules, resources config, main bundle and captures contain no Redis key/member/codec",
+      "behaviorIds": [
+        "B-REDIS-CONTRACT"
+      ]
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-IDENTITY-LANGUAGE",
+      "category": "ENTRY_AND_LOCALIZATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-ENTRY",
+        "E-LANGUAGE",
+        "E-CN-ORPHAN"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "gameId=2001007"
+        ],
+        "stateFields": [
+          "requestedLanguage",
+          "activeLanguage"
+        ],
+        "transitionRules": [
+          "Accept en or pt only",
+          "Do not advertise orphan cn asset"
+        ],
+        "outputs": [
+          "Magic Scroll 2",
+          "supported codes [en,pt]"
+        ],
+        "terminationRules": [
+          "First load is ready only after supported-language init succeeds"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ENTRY",
+          "E-LANGUAGE"
+        ],
+        "assertions": [
+          "l=en and l=pt initialize",
+          "cn is not advertised",
+          "ID-name is 2001007-Magic-Scroll-2"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-SESSION-INIT",
+      "category": "PROTOCOL_INIT",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-ENTRY",
+        "E-INIT",
+        "E-GAMEINFO",
+        "E-BUNDLE-TRANSPORT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "entry supplies gi=2001007, otk and supported l"
+        ],
+        "stateFields": [
+          "gi",
+          "otk",
+          "language",
+          "atk",
+          "gdr",
+          "cc",
+          "balance",
+          "betList",
+          "multList",
+          "formation",
+          "round"
+        ],
+        "transitionRules": [
+          "POST verifySession",
+          "copy dt.atk and dt.gdr",
+          "POST gdr+v2/GameInfo/Get with atk",
+          "Do not fabricate on err/failure"
+        ],
+        "outputs": [
+          "session identity",
+          "BRL balance",
+          "wager config",
+          "initial formation"
+        ],
+        "terminationRules": [
+          "Ready after both calls succeed",
+          "Any error terminates init"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-INIT",
+          "E-GAMEINFO"
+        ],
+        "assertions": [
+          "verifySession precedes GameInfo",
+          "atk is transferred unchanged",
+          "gdr is /game-api/cp-magic-scroll2/",
+          "cc is BRL"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "from": "live request 425 verifySession",
+            "to": "live request 426 GameInfo/Get",
+            "stateTransfer": "atk and gdr"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-TRANSPORT-CODEC",
+      "category": "HTTP_CODEC",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-INIT",
+        "E-GAMEINFO",
+        "E-BUNDLE-TRANSPORT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "HTTP endpoint selected"
+        ],
+        "stateFields": [
+          "FormData fields",
+          "dt",
+          "err"
+        ],
+        "transitionRules": [
+          "POST multipart/form-data",
+          "parse JSON envelope",
+          "dispatch dt only when err is falsy"
+        ],
+        "outputs": [
+          "decoded dt payload or error"
+        ],
+        "terminationRules": [
+          "No application decrypt step is applied because none is observed"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-INIT",
+          "E-GAMEINFO",
+          "E-BUNDLE-TRANSPORT"
+        ],
+        "assertions": [
+          "requests are FormData",
+          "responses use dt/err",
+          "captured bodies are readable",
+          "no current-bundle CryptoJS/AES path"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-WAGER-NORMALIZATION",
+      "category": "WAGER",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-GAMEINFO",
+        "E-BUNDLE-WAGER",
+        "E-VALID-LOSS",
+        "E-VALID-WIN"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "GameInfo wager arrays available"
+        ],
+        "stateFields": [
+          "betListWire",
+          "multListWire",
+          "normalizedBet",
+          "normalizedMult",
+          "totalBet"
+        ],
+        "transitionRules": [
+          "betList/1000",
+          "multList/10000",
+          "totalBet=normalizedBet*normalizedMult*20"
+        ],
+        "outputs": [
+          "minimum total bet 0.40 BRL",
+          "Spin bet/mult decimals"
+        ],
+        "terminationRules": [
+          "Reject totals below evidenced UI minimum for legal coverage"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-GAMEINFO",
+          "E-VALID-LOSS"
+        ],
+        "assertions": [
+          "20 -> 0.02",
+          "10000 -> 1",
+          "0.02*1*20=0.40",
+          "20 is not a payline count"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-RULE-METADATA",
+      "category": "RULE_METADATA",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RULE-METADATA"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "current-game captured rule pages are selected"
+        ],
+        "stateFields": [
+          "rulesVersion",
+          "rtpPercent"
+        ],
+        "transitionRules": [
+          "Read only the displayed current-game values",
+          "Do not inherit metadata from another game"
+        ],
+        "outputs": [
+          "rulesVersion=1.2.6",
+          "rtpPercent=96.04"
+        ],
+        "terminationRules": [
+          "Metadata is accepted only when the evidence reference resolves to the captured rule pages"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULE-METADATA"
+        ],
+        "assertions": [
+          "captured rules display v1.2.6",
+          "captured rules display RTP 96.04%"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-BOARD-CODEC",
+      "category": "BOARD_CODEC",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-GAMEINFO",
+        "E-BUNDLE-LINEMGR",
+        "E-RULES-COLLAPSE",
+        "E-VALID-LOSS",
+        "E-VALID-WIN"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "base-mode formation string available"
+        ],
+        "stateFields": [
+          "rawCells",
+          "symbolId",
+          "count",
+          "muban",
+          "activeRows"
+        ],
+        "transitionRules": [
+          "Require 36 comma integers",
+          "map column-major 6x6",
+          "symbolId=raw%100",
+          "count=2^floor(raw/1000)",
+          "muban=floor((raw%1000)/100)",
+          "visible active rows start 3 and cap 6"
+        ],
+        "outputs": [
+          "decoded grid objects"
+        ],
+        "terminationRules": [
+          "Reject malformed base formation",
+          "Do not treat derived counter 7 as a seventh row"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-BUNDLE-LINEMGR",
+          "E-GAMEINFO",
+          "E-VALID-WIN"
+        ],
+        "assertions": [
+          "all retained base formations have 36 cells",
+          "1009 decodes symbol 9 count 2 muban 0",
+          "199 decodes empty with block marker 1"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-WAYS-PAYOUT",
+      "category": "WIN_EVALUATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-BUNDLE-WAGER",
+        "E-BUNDLE-LINEMGR",
+        "E-RULES-PAYTABLE",
+        "E-RULES-WAYS",
+        "E-RULES-COLLAPSE",
+        "E-VALID-WIN"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "decoded grid",
+          "active rows",
+          "baseBet",
+          "globalMultiplier"
+        ],
+        "stateFields": [
+          "symbol",
+          "matchedColumns",
+          "countPerColumn",
+          "paytableMultiplier",
+          "ways",
+          "baseWin",
+          "stepWin"
+        ],
+        "transitionRules": [
+          "Evaluate regular symbols 3..12 left-to-right over consecutive columns",
+          "Wild 0 substitutes non-Bonus symbols",
+          "Require at least 3 columns",
+          "ways=product counts",
+          "baseWin=baseBet*paytable*ways",
+          "stepWin=baseWin*globalMultiplier",
+          "No fixed paylines"
+        ],
+        "outputs": [
+          "winning groups",
+          "step and cumulative wins"
+        ],
+        "terminationRules": [
+          "Stop a combination at the first missing column",
+          "ways must not exceed 46656"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-PAYTABLE",
+          "E-RULES-WAYS",
+          "E-RULES-COLLAPSE",
+          "E-BUNDLE-LINEMGR",
+          "E-VALID-WIN"
+        ],
+        "assertions": [
+          "paytable code equals screenshot",
+          "rules identify Ways, left-to-right evaluation and maximum 46,656 Ways",
+          "paylineCount is NOT_APPLICABLE",
+          "Round 29 cumulative win ends 1.48"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-BASE-ROUND",
+      "category": "PAID_ROUND_STATE_MACHINE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-BUNDLE-ROUND",
+        "E-SPIN-INDEX",
+        "E-VALID-LOSS",
+        "E-VALID-WIN",
+        "E-FOLLOWUP-ADJACENT",
+        "E-RULES-COLLAPSE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "no unfinished Round",
+          "paid start bet>0,mult>0",
+          "legal minimum total bet 0.40"
+        ],
+        "stateFields": [
+          "roundKey",
+          "member",
+          "orderedRawSteps",
+          "orderedDeliverySteps",
+          "deliveryIndex",
+          "bet",
+          "mult",
+          "gameType",
+          "activeRowsCounter",
+          "globalMultiplier",
+          "cumulativeWin",
+          "terminalBalance",
+          "derivedEnd"
+        ],
+        "transitionRules": [
+          "Paid request claims one member and generates the entire ordered Round exactly once",
+          "Every later request projects only deliveryIndex+1 from that same Round",
+          "Winning and evidenced xBomb cells are removed",
+          "Every non-removed child, including dirt/block in the newly opened row, retains its raw value and column order and compacts toward the higher row index exactly as frontend fallOld",
+          "Only vacancies inside the new active-row range receive new symbols as frontend fallNew; cells outside that range retain their exact prior raw value",
+          "If derivedEnd=false request bet=0,mult=0,gameType=1",
+          "Never regenerate a whole board, change member, change roundKey or read fixtures/history during continuation"
+        ],
+        "outputs": [
+          "single terminal LOSS or complete ordered Round",
+          "stable roundKey and monotonic deliveryIndex",
+          "authoritative terminal balance",
+          "cumulative win"
+        ],
+        "terminationRules": [
+          "frontend-derived no-win/no-xSplit/no-xBomb/no-combine/no-free state terminates",
+          "wire balance alone is not the Round boundary",
+          "no continuation after terminal",
+          "no second member/Round start for continuation"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-SPIN-INDEX",
+          "E-VALID-LOSS",
+          "E-VALID-WIN",
+          "E-FOLLOWUP-ADJACENT"
+        ],
+        "assertions": [
+          "fresh Round 18 Delivery 0 to 1 removes the four symbol-11 win cells, preserves survivor order and refills only vacancies",
+          "buffer dirt/block outside fallOld range remains byte-for-byte unchanged",
+          "Round 29 request 562 to 563 is the exact xSplit row transform",
+          "an unrelated replacement board is rejected"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "roundIndex": 29,
+            "requests": [
+              562,
+              563,
+              564,
+              565,
+              566,
+              567
+            ],
+            "responseContentRef": "E-VALID-WIN",
+            "derivedEnd": [
+              false,
+              false,
+              false,
+              false,
+              false,
+              true
+            ]
+          },
+          {
+            "roundIndex": 18,
+            "deliveries": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "responseContentRef": "E-FOLLOWUP-ADJACENT",
+            "transition": "three independently checked eliminate/fall/refill steps"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-RUNTIME-INDEPENDENT-LOSS",
+      "category": "GENERATION_GATE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RULES-COLLAPSE",
+        "E-BUNDLE-LINEMGR",
+        "E-BUNDLE-ROUND",
+        "E-VALID-LOSS",
+        "E-SPIN-INDEX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "gameType=1",
+          "no active Round",
+          "base paid request"
+        ],
+        "stateFields": [
+          "decoded grid",
+          "wins",
+          "xSplit",
+          "xBomb",
+          "miningCombines",
+          "bonusCount",
+          "derivedEnd"
+        ],
+        "transitionRules": [
+          "Generate using formal GameRuleCore randomness",
+          "independently reject any WAYS win or continuation trigger",
+          "accept only derivedEnd=true"
+        ],
+        "outputs": [
+          "ordinary single-step LOSS"
+        ],
+        "terminationRules": [
+          "Never use for active/special Round",
+          "Never read fixture/history as runtime result",
+          "Retry generation only within bounded internal generation policy"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-VALID-LOSS",
+          "E-RULES-COLLAPSE",
+          "E-BUNDLE-LINEMGR"
+        ],
+        "assertions": [
+          "ResultUtil finds no win",
+          "no xSplit/xBomb/Mining/Bonus trigger",
+          "36-cell codec valid",
+          "derived end=true"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-MAGIC-MINING",
+      "category": "SPECIAL_COLLAPSE",
+      "status": "UNKNOWN",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULES-MINING",
+        "E-BUNDLE-LINEMGR",
+        "E-BUNDLE-ROUND",
+        "E-SPIN-INDEX",
+        "E-FOLLOWUP-ADJACENT"
+      ],
+      "reason": "Fresh legal-minimum complete Rounds now retain raw adjacent states and Round 7 has an exact combine/fall/refill mapping, but this follow-up is locked to the already implemented BASE/XSPLIT/XBOMB adjacency defect and does not authorize adding the previously gated Magic Mining runtime mode.",
+      "knownContract": [
+        "Rules and frontend checkCombineCol/checkCombineRow describe horizontal/vertical no-win alignments of 3/4/5/6 producing 1/2/3/4 Wilds",
+        "follow-up Round 7 Delivery 0 to 1 records eliminationPositions, retained raw symbols, movementMapping, refillSymbols and terminal condition in adjacent-step-evidence.json"
+      ],
+      "unknowns": [
+        "authoritative server probability/selection contract",
+        "formal local runtime mode remains outside this follow-up baseline"
+      ],
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-MINING",
+          "E-BUNDLE-LINEMGR",
+          "E-FOLLOWUP-ADJACENT"
+        ],
+        "assertions": [
+          "original Round 7 Delivery 0 contains the evidenced column combine",
+          "Delivery 0 to 1 removes the seven evidenced positions, preserves 14 raw survivors with exact movement mapping and refills ten vacancies",
+          "Delivery 1 is terminal and no extra paid boundary is introduced",
+          "the evidence is an original response chain and is not generated by the implementation"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "roundIndex": 7,
+            "deliveries": [
+              0,
+              1
+            ],
+            "responseContentRef": "E-FOLLOWUP-ADJACENT",
+            "transition": "Magic Mining eliminate/fall/refill exact mapping",
+            "terminationDeliveryIndex": 1
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "implementationAllowed": false
+    },
+    {
+      "id": "B-XSPLIT",
+      "category": "SPECIAL_COLLAPSE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULES-XSPLIT-XBET",
+        "E-BUNDLE-LINEMGR",
+        "E-BUNDLE-ROUND",
+        "E-VALID-WIN",
+        "E-FOLLOWUP-ADJACENT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "active base Round",
+          "active xSplit symbol"
+        ],
+        "stateFields": [
+          "SplitGrids",
+          "symbolCounts",
+          "muban",
+          "orderedSteps",
+          "derivedEnd"
+        ],
+        "transitionRules": [
+          "Split eligible symbols in its line",
+          "exclude Bonus and xSplit",
+          "do not pay ordinary win on activation step",
+          "convert activated xSplit to regular symbol",
+          "remove affected dirt on collapse",
+          "request adjacent continuation"
+        ],
+        "outputs": [
+          "split Delivery then collapsed Delivery"
+        ],
+        "terminationRules": [
+          "all activated xSplit symbols resolved before normal continuation decision"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-XSPLIT-XBET",
+          "E-VALID-WIN",
+          "E-FOLLOWUP-ADJACENT"
+        ],
+        "assertions": [
+          "Round 29 first Delivery has one xSplit",
+          "next Delivery replaces each active xSplit by a regular symbol and adds 1000 to every eligible regular raw cell on the same row",
+          "Bonus/xSplit/dirt and every unrelated cell are unchanged",
+          "follow-up complete-Round chains retain delivery order and one paid boundary"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "roundIndex": 29,
+            "fromRequest": 562,
+            "toRequest": 563,
+            "transition": "exact xSplit-row cell transform"
+          },
+          {
+            "source": "E-FOLLOWUP-ADJACENT",
+            "transition": "legal-minimum complete XSPLIT Round chains"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-XBOMB-WILD",
+      "category": "SPECIAL_SYMBOL_MULTIPLIER",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULES-XBOMB",
+        "E-BUNDLE-LINEMGR",
+        "E-BUNDLE-ROUND",
+        "E-VALID-WIN",
+        "E-FOLLOWUP-ADJACENT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "active base Round",
+          "decoded active Wild/xBomb"
+        ],
+        "stateFields": [
+          "wildGrids",
+          "wildCountValues",
+          "globalMultiplier",
+          "wins",
+          "orderedSteps",
+          "derivedEnd"
+        ],
+        "transitionRules": [
+          "Wild substitutes all except Bonus",
+          "remove adjacent non-Bonus symbols",
+          "add Wild count value to multiplier used on next win",
+          "explode before next collapse unless Magic Mining activates",
+          "request adjacent continuation"
+        ],
+        "outputs": [
+          "blast/collapse Delivery",
+          "updated multiplier and cumulative win"
+        ],
+        "terminationRules": [
+          "resolve all active xBomb Wilds before terminal decision"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-XBOMB",
+          "E-VALID-WIN",
+          "E-FOLLOWUP-ADJACENT"
+        ],
+        "assertions": [
+          "Round 29 contains one active Wild",
+          "global multiplier changes 1 to 2",
+          "fresh Round 9 records the six removed cells, 13 retained movements and 11 refills",
+          "buffer cells outside the active range are unchanged"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "roundIndex": 29,
+            "requests": [
+              564,
+              565,
+              566
+            ],
+            "stateTransitions": [
+              "Wild present/cumulative 0.96",
+              "multiplier 2/cumulative 1.28",
+              "cumulative 1.48"
+            ]
+          },
+          {
+            "roundIndex": 9,
+            "deliveries": [
+              0,
+              1
+            ],
+            "responseContentRef": "E-FOLLOWUP-ADJACENT",
+            "transition": "xBomb elimination/fall/refill exact mapping"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HISTORY",
+      "category": "HISTORY_QUERY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-BUNDLE-TRANSPORT",
+        "E-BUNDLE-HISTORY",
+        "E-HISTORY-EMPTY",
+        "E-FOLLOWUP-HISTORY",
+        "E-LOCAL-HISTORY-TEST"
+      ],
+      "reason": "Original current-date History mapping and local durable one-record-per-paid-Round behavior are independently evidenced; this enum normalization does not change the implementation or evidence level.",
+      "implementationContract": {
+        "preconditions": [
+          "terminal complete local Round",
+          "authenticated local session",
+          "active frontend query supplies page,size,time_begin,time_end"
+        ],
+        "stateFields": [
+          "roundKey",
+          "created_at",
+          "psid",
+          "bet",
+          "transfer",
+          "balance",
+          "mult",
+          "formation",
+          "gameType",
+          "mode",
+          "deliveryCount"
+        ],
+        "transitionRules": [
+          "Append exactly one durable record when the complete Round settles",
+          "formation is the ordered list of every Delivery formation in that Round",
+          "transfer equals payout minus paid bet, so a complete LOSS is -0.40",
+          "continued Delivery and idempotency replay never append",
+          "sort created_at descending",
+          "apply page,size,time_begin,time_end without mutating storage",
+          "project all_num/all_bet/all_win/historyItem fields consumed by the current frontend"
+        ],
+        "outputs": [
+          "v2/History dt envelope",
+          "current actual epoch-second date",
+          "one psid/roundKey per paid complete Round",
+          "original fields psid,created_at,bet,mult,transfer,balance,gameType,formation plus documented local metadata"
+        ],
+        "terminationRules": [
+          "record survives safe service restart",
+          "query and replay are side-effect free",
+          "do not synthesize an original item status/currency/gameId field that was not observed"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-BUNDLE-HISTORY",
+          "E-FOLLOWUP-HISTORY",
+          "E-LOCAL-HISTORY-TEST"
+        ],
+        "assertions": [
+          "current-date time-filtered original query returned 2042 items in all_num and 20 current items",
+          "captured ordinary LOSS, ordinary WIN and special history formations each exactly match the full raw Step array of one follow-up paid Round",
+          "original LOSS transfer is -0.40 and transfer=payout-bet",
+          "one controlled local multi-step Round creates one record containing all formations",
+          "duplicate paid/continuation keys create no duplicate",
+          "record remains after FileSessionRepository reload"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "source": "E-FOLLOWUP-HISTORY",
+            "transition": "one original psid formation array equals every Delivery of one captured paid Round"
+          },
+          {
+            "source": "E-LOCAL-HISTORY-TEST",
+            "transition": "all Deliveries of one local roundKey map to one durable History record"
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HISTORY-DATE",
+      "category": "HISTORY_QUERY",
+      "status": "NOT_APPLICABLE",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-BUNDLE-TRANSPORT",
+        "E-BUNDLE-HISTORY",
+        "E-FOLLOWUP-HISTORY"
+      ],
+      "reason": "Fresh original-site requests return HTTP 404 and the active frontend uses v2/History with date filters, so no HistoryDate response contract is applicable.",
+      "implementationContract": {
+        "preconditions": [
+          "request v2/HistoryDate"
+        ],
+        "stateFields": [
+          "HTTP status"
+        ],
+        "transitionRules": [
+          "Do not synthesize a response schema absent from the original service"
+        ],
+        "outputs": [
+          "HTTP 404 matching the fresh original-site request"
+        ],
+        "terminationRules": [
+          "Current CPHistoryTY2 continues to use v2/History with time_begin/time_end"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FOLLOWUP-HISTORY",
+          "E-BUNDLE-HISTORY"
+        ],
+        "assertions": [
+          "fresh original v2/HistoryDate requests return HTTP 404",
+          "active frontend history UI calls v2/History"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-LUCKY-WAGON",
+      "category": "BONUS_MODE",
+      "status": "UNKNOWN",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULES-WAGON",
+        "E-BUNDLE-ROUND",
+        "E-SPIN-INDEX",
+        "E-FOLLOWUP-ADJACENT"
+      ],
+      "reason": "Fresh legal-minimum capture proves complete paid-Round boundaries and pipe-delimited adjacent special states, but the previously gated Lucky Wagon runtime mode is outside the allowed implementation expansion of this follow-up.",
+      "knownContract": [
+        "3 starting spins reset to 3 when a coin lands",
+        "3/4/5 Bonus symbols open 2/3/4 reel rows",
+        "follow-up Round 24 records 23 ordered Deliveries with raw pipe-delimited pre/post states and terminal balance"
+      ],
+      "unknowns": [
+        "authoritative server probability/selection contract",
+        "formal local runtime encoding remains outside this follow-up baseline"
+      ],
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-WAGON",
+          "E-BUNDLE-ROUND",
+          "E-FOLLOWUP-ADJACENT"
+        ],
+        "assertions": [
+          "original Round 24 is one paid start followed by 22 ordered continuations",
+          "every adjacent raw state and deliveryIndex is retained without synthesizing missing fields",
+          "the final Delivery returns terminal balance and no later continuation",
+          "implementation remains gated because original state encoding/probability is not fully confirmed"
+        ],
+        "adjacentStepEvidence": [
+          {
+            "roundIndex": 24,
+            "deliveryRange": [
+              0,
+              22
+            ],
+            "responseContentRef": "E-FOLLOWUP-ADJACENT",
+            "transition": "23 ordered original Deliveries including pipe-delimited Lucky Wagon states",
+            "terminationDeliveryIndex": 22
+          }
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "implementationAllowed": false
+    },
+    {
+      "id": "B-FEATURE-BUY",
+      "category": "PURCHASE_ENTRY",
+      "status": "UNKNOWN",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-BUNDLE-BUY"
+      ],
+      "reason": "The purchase UI mapping is known, but no purchase request, response or resulting mode execution was captured.",
+      "knownContract": [
+        "five choices",
+        "needValues [70,200,600,3600,175]",
+        "selection index maps to gameType 2..6"
+      ],
+      "unknowns": [
+        "purchase request/response",
+        "mode execution fields",
+        "Round termination for each choice"
+      ],
+      "implementationAllowed": false
+    },
+    {
+      "id": "B-XBET",
+      "category": "OPTIONAL_WAGER_MODE",
+      "status": "UNKNOWN",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-BUNDLE-BUY",
+        "E-RULES-XSPLIT-XBET"
+      ],
+      "reason": "Rules and a frontend gameType reference exist, but activation, cost enforcement and runtime responses are absent.",
+      "knownContract": [
+        "rules mention xBET",
+        "frontend references gameType 7"
+      ],
+      "unknowns": [
+        "activation request",
+        "cost enforcement",
+        "runtime response and state machine"
+      ],
+      "implementationAllowed": false
+    },
+    {
+      "id": "B-TOP",
+      "category": "OPTIONAL_ENDPOINT",
+      "status": "UNKNOWN",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-BUNDLE-TRANSPORT"
+      ],
+      "reason": "The conditional endpoint is enumerated in code, but current-game enablement and request/response schema were not observed.",
+      "knownContract": [
+        "bundle enumerates v2/Top",
+        "jackpot path is conditional"
+      ],
+      "unknowns": [
+        "whether enabled for this game",
+        "request/response schema"
+      ],
+      "implementationAllowed": false
+    },
+    {
+      "id": "B-SYMBOL-WEIGHTS",
+      "category": "GENERATION_INPUT",
+      "status": "UNKNOWN",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-BUNDLE-LINEMGR"
+      ],
+      "reason": "No authoritative server reel or symbol-weight distribution exists in current-game evidence.",
+      "knownContract": [
+        "No authoritative server weights are present"
+      ],
+      "unknowns": [
+        "server reel/weight distribution"
+      ],
+      "implementationAllowed": false
+    },
+    {
+      "id": "B-REDIS-CONTRACT",
+      "category": "PLATFORM_STORAGE",
+      "status": "UNKNOWN",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-REDIS-SEARCH"
+      ],
+      "reason": "No current-game Redis key, member schema, value codec or Round encoding is evidenced.",
+      "knownContract": [
+        "No current-game Redis contract is evidenced"
+      ],
+      "unknowns": [
+        "key pattern",
+        "member schema",
+        "value codec",
+        "Round encoding"
+      ],
+      "implementationAllowed": false
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "U-FEATURE-BUY-EXECUTION",
+      "behaviorId": "B-FEATURE-BUY",
+      "target": "GAMETYPES_2_TO_6_EXECUTION",
+      "actualPaidRoundAttempts": 3886,
+      "purchaseAttempts": 0,
+      "entry": "MS2BuyView",
+      "missingEvidence": "purchase and execution responses",
+      "reason": "3886 normal gameType=1 starts were observed, but no feature purchase was executed.",
+      "evidenceRefs": [
+        "E-BUNDLE-BUY",
+        "E-FOLLOWUP-ADJACENT"
+      ],
+      "disposition": "DO_NOT_IMPLEMENT"
+    },
+    {
+      "id": "U-XBET-EXECUTION",
+      "behaviorId": "B-XBET",
+      "target": "GAMETYPE7_EXECUTION",
+      "actualPaidRoundAttempts": 3886,
+      "purchaseAttempts": 0,
+      "entry": "xBET rules/frontend",
+      "missingEvidence": "runtime evidence",
+      "reason": "3886 normal gameType=1 starts were observed; no gameType=7 activation, price enforcement or runtime result was captured.",
+      "evidenceRefs": [
+        "E-BUNDLE-BUY",
+        "E-RULES-XSPLIT-XBET",
+        "E-FOLLOWUP-ADJACENT"
+      ],
+      "disposition": "RARE_DO_NOT_IMPLEMENT"
+    },
+    {
+      "id": "U-TOP-SCHEMA",
+      "behaviorId": "B-TOP",
+      "target": "TOP_ENDPOINT_SCHEMA",
+      "actualPaidRoundAttempts": 3886,
+      "endpointActivationAttempts": 0,
+      "entry": "conditional bundle endpoint",
+      "missingEvidence": "current-game activation and response",
+      "reason": "Normal Spin sampling did not activate the conditional caller; endpoint enumeration alone does not establish current-game availability or schema.",
+      "evidenceRefs": [
+        "E-BUNDLE-TRANSPORT"
+      ],
+      "disposition": "DO_NOT_IMPLEMENT"
+    },
+    {
+      "id": "U-SYMBOL-WEIGHTS",
+      "behaviorId": "B-SYMBOL-WEIGHTS",
+      "target": "SERVER_SYMBOL_WEIGHTS",
+      "actualPaidRoundAttempts": 3886,
+      "entry": "rules/config/bundle/captures",
+      "missingEvidence": "authoritative weight table",
+      "reason": "No authoritative server distribution was found and 3886 observed paid starts are not a valid substitute for a server weight table.",
+      "evidenceRefs": [
+        "E-BUNDLE-LINEMGR",
+        "E-FOLLOWUP-ADJACENT"
+      ],
+      "disposition": "DO_NOT_INFER_FROM_FREQUENCY_OR_FRONTEND_HELPER"
+    },
+    {
+      "id": "U-REDIS-CONTRACT",
+      "behaviorId": "B-REDIS-CONTRACT",
+      "target": "REDIS_KEY_VALUE_CODEC",
+      "actualPaidRoundAttempts": 3886,
+      "entry": "current-game evidence search",
+      "missingEvidence": "platform-side Redis contract",
+      "reason": "Current-game rules and 3886 paid Spin starts contain no Redis key, member schema or value codec.",
+      "evidenceRefs": [
+        "E-REDIS-SEARCH",
+        "E-FOLLOWUP-ADJACENT"
+      ],
+      "disposition": "DO_NOT_INHERIT_FROM_OTHER_GAME"
+    }
+  ]
+}

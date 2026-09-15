@@ -1,0 +1,522 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 2060,
+  "directoryName": "2060-Club-Goddess",
+  "rulesHash": "sha256:dab39055275e95492f5e8339ce38fdff37e09f02f00a38140a0583cb2c1b4d34",
+  "matrixPolicy": "A field is implementable only where current-game source, frontend consumption, and/or captured samples establish its semantics. UNKNOWN fields must be preserved as unknown and may not inherit meanings from another game.",
+  "rows": [
+    {
+      "fieldOrRule": "launch.query.sip",
+      "semantic": "API host selector; versionconfig.js builds window.ApiURL as <page-protocol>//<sip>/cp.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/versionconfig.js"
+      ],
+      "frontendDecision": "When sip is absent the source fallback is http://127.0.0.1:9500/cp.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/network-manifest.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "request.language",
+      "semantic": "Actual local language code is injected into every normal HTTP form request by SendHttpPack/SendHttpCB.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/main/index.f8fbc.js"
+      ],
+      "frontendDecision": "app.LanguageManager().GetLocalLanguage(true) overwrites/adds language before transport.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/network/0182-api.omgapibra.com_cp_single_game.Game_gameResult.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "request.token",
+      "semantic": "Authenticated session credential obtained from getUserInfo and then sent to init, result and History requests.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/main/index.f8fbc.js",
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "Game2060Mgr reads app.UserManager().UserInfo.token.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/network/0071-api.omgapibra.com_cp_account_getUserInfo.json",
+        "captures/2060-Club-Goddess/network/0127-api.omgapibra.com_cp_single_game.Game_initRoom.json"
+      ],
+      "confidence": "CONFIRMED",
+      "security": "Never copy captured credential values into generated documents or fixtures."
+    },
+    {
+      "fieldOrRule": "request.signapt / request.expire",
+      "semantic": "expire is client adjusted epoch milliseconds; signapt is MD5(secret + expire + colon-joined sorted original key/value pairs + 'aptsignature'). Objects/arrays use JSON.stringify. signapt and expire are appended after signing.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/main/index.f8fbc.js",
+        "publish/2060-Club-Goddess/src/assets/Common/Lib/MD5Tool.076fa.js"
+      ],
+      "frontendDecision": "HttpRequest.formatParams performs the signing and form serialization.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/network/0182-api.omgapibra.com_cp_single_game.Game_gameResult.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "request.bet_gold",
+      "semantic": "Requested bet size, not the charged total and not a payline count. Captured value is 0.01.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+        "fixtures/2060-Club-Goddess/oracle/initial-data.response.json"
+      ],
+      "frontendDecision": "Game2060Mgr sends getBetSize(); SlotBetAmountData uses base-bet factor 30 and levels 1..10.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.request.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "request.level",
+      "semantic": "Selected bet level; captured paid rounds used 10.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "Sent from getBetLevel(); frontend declares levels 10 down to 1.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.request.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "request.act_id",
+      "semantic": "Promotional free-bet activity identifier; normal paid requests captured value '0'. It is distinct from the game's Scatter-triggered Free Spins mode.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+        "captures/2060-Club-Goddess/network/0174-api.omgapibra.com_cp_activity_getActivity.json"
+      ],
+      "frontendDecision": "Game2060Mgr sends app.GameActivityMgr().FreeBetActId.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.request.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "response.code / msg / time",
+      "semantic": "JSON envelope status, message and server epoch-seconds string. code=0 is success.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/main/index.f8fbc.js"
+      ],
+      "frontendDecision": "Callbacks process data only on code=0; token, maintenance and network codes have dedicated handling.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/init-room.response.json",
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "data.type",
+      "semantic": "Step mode discriminator: 1 is paid/base; frontend code treats 2 as a Free Spins step. Only type=1 was captured at runtime.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "getBetGold charges only when type==1; History detail activates free-step UI when type==2.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json",
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "BASE_CONFIRMED_FREE_CODE_ONLY",
+      "implementationDisposition": "Do not implement type=2 until adjacent runtime evidence exists."
+    },
+    {
+      "fieldOrRule": "data.small_game_type",
+      "semantic": "Opaque submode discriminator. All captured values are 0; no current-game branch meaning was found.",
+      "sourceEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/init-room.response.json"
+      ],
+      "frontendDecision": "No Game2060 gameplay branch consuming a nonzero value was evidenced.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "confidence": "UNKNOWN_NONZERO",
+      "implementationDisposition": "Emit 0 only for confirmed base behavior; reject/disable nonzero modes."
+    },
+    {
+      "fieldOrRule": "data.bet",
+      "semantic": "Bet size used by the result; 0.01 in captured rounds.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "Used with level, symbol odd and ways in payout explanation.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "data.bet_gold",
+      "semantic": "Charged total stake for a paid step. Captured formula is bet * level * baseBetFactor = 0.01 * 10 * 30 = 3.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "getBetGold returns it for type=1 only; baseBetFactor 30 is bet-unit configuration, not paylines.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json",
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "data.start_gold / end_gold / change_gold",
+      "semantic": "Step ledger values. For captured type=1: end_gold = start_gold - bet_gold + total_win and change_gold = total_win - bet_gold.",
+      "sourceEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json",
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "frontendDecision": "Client subtracts charged bet on result receipt and later adds total_win; History renders change_gold and end_gold.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl",
+        "fixtures/2060-Club-Goddess/oracle/history-after-10-rounds.response.json"
+      ],
+      "confidence": "CONFIRMED_FOR_TYPE_1"
+    },
+    {
+      "fieldOrRule": "data.total_win",
+      "semantic": "Current step gross win. Equals props.tw in all captured type=1 samples.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "Displayed as win and added to client balance after result animation.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json",
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "CONFIRMED_FOR_TYPE_1"
+    },
+    {
+      "fieldOrRule": "data.odds",
+      "semantic": "Captured as total_win / bet_gold (186.4 / 3 = 62.13333333333333; 0 on losses).",
+      "sourceEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "frontendDecision": "History displays server value; game result logic does not use it to decide wins.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/history-after-10-rounds.response.json"
+      ],
+      "confidence": "CONFIRMED_FOR_CAPTURED_BASE"
+    },
+    {
+      "fieldOrRule": "data.oid",
+      "semantic": "Paid result/order identifier and continuity key. Paid results have unique nonzero decimal strings; init snapshot used '0'.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "Recovery compares initRoom oid with current oid to detect a stale/same result.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl",
+        "fixtures/2060-Club-Goddess/oracle/init-room.response.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "data.setting_id",
+      "semantic": "Opaque server-selected setting identifier. Values 1 and 2 were observed but no rule meaning is established.",
+      "sourceEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json",
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "frontendDecision": "No result-validation branch was located.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "confidence": "UNKNOWN_SEMANTIC",
+      "implementationDisposition": "Do not use as a scenario selector."
+    },
+    {
+      "fieldOrRule": "data.props.prop",
+      "semantic": "Fifteen symbol IDs in column-major order: index = reel * 3 + row, five reels by three visible rows.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "ROW_NUM=3, COL_NUM=5 and convertPosToCol=floor(pos/3).",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json",
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "symbol IDs 1..10",
+      "semantic": "1..8 are paying regular symbols in paytable order; 9=Scatter; 10=Wild.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+        "screenshots/2060-Club-Goddess/rules-page-1-pt-br.png"
+      ],
+      "frontendDecision": "PropType enum assigns PropScatter=9 and PropWild=10.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "data.props.frees_prop",
+      "semantic": "Scatter count in the base window; values match the number of symbol 9 entries in all ten captured props.prop arrays.",
+      "sourceEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "frontendDecision": "Client independently counts Scatter symbols from props.prop when presenting triggers.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json",
+        "fixtures/2060-Club-Goddess/oracle/history-after-10-rounds.response.json"
+      ],
+      "confidence": "CONFIRMED_BY_ALL_CAPTURED_BASE_SAMPLES"
+    },
+    {
+      "fieldOrRule": "data.props.m",
+      "semantic": "Base result multiplier; captured value is always 1.",
+      "sourceEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "frontendDecision": "No non-1 base branch was evidenced.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "CONFIRMED_VALUE_RANGE_ONLY"
+    },
+    {
+      "fieldOrRule": "data.props.spe_num",
+      "semantic": "Opaque per-step special count; captured value is 0. It must not be conflated with frees.spe_num.",
+      "sourceEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "frontendDecision": "No base-mode consuming branch was evidenced.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json"
+      ],
+      "confidence": "UNKNOWN_NONZERO"
+    },
+    {
+      "fieldOrRule": "data.props.tw",
+      "semantic": "Sum of win_arr[*].tw for the current result; equals total_win in captured type=1 results.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "History and payout detail use result.tw as the step gross win.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "CONFIRMED_FOR_CAPTURED_BASE"
+    },
+    {
+      "fieldOrRule": "data.props.win_arr[]",
+      "semantic": "One record per winning symbol: wp symbol ID, odd paytable multiplier, pos_arr participating cell indices, ways combination count, tw award.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+        "screenshots/2060-Club-Goddess/rules-page-23-pt-br.png"
+      ],
+      "frontendDecision": "History selects symbol sprite by wp-1, derives last reel from pos_arr, displays ways and checks payout expression.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Ways evaluation",
+      "semantic": "Wins start on the leftmost reel, continue across adjacent reels, require at least three reels, and ways is the product of matching positions per consecutive reel.",
+      "sourceEvidence": [
+        "screenshots/2060-Club-Goddess/rules-page-23-pt-br.png",
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "Payout detail converts positions with floor(pos/3), labels 3/4/5-of-a-kind, and displays ways.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Base payout formula",
+      "semantic": "win.tw = bet * level * odd * ways. Captured lines: 0.01*10*8*8=6.4 and 0.01*10*150*12=180.",
+      "sourceEvidence": [
+        "screenshots/2060-Club-Goddess/rules-page-23-pt-br.png",
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "History tooltip renders bet x level x odd x ways.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "Wild rule",
+      "semantic": "Wild substitutes for all symbols except Scatter and appears only on reels 2, 3 and 4.",
+      "sourceEvidence": [
+        "screenshots/2060-Club-Goddess/rules-page-1-pt-br.png"
+      ],
+      "frontendDecision": "PropWild=10; no independent client win calculator is present.",
+      "sampleEvidence": [],
+      "confidence": "RULE_CONFIRMED_RUNTIME_WIN_NOT_CAPTURED"
+    },
+    {
+      "fieldOrRule": "data.frees.st",
+      "semantic": "Free Spins remaining/available state. Base response st>0 starts Free mode; before a free request client decrements prior st; the response st controls retrigger, continuation or termination.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "st>oldFreeTimes means awarded extra spins; st>0 continues; st==0 terminates.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "confidence": "CODE_CONFIRMED_RUNTIME_ONLY_ZERO",
+      "implementationDisposition": "Special-mode delivery remains disabled until adjacent nonzero runtime steps are captured."
+    },
+    {
+      "fieldOrRule": "data.frees.m",
+      "semantic": "Current Free Spins win multiplier. Base/default snapshots contain 2; rules say Free wins begin x2, increase by 2 per three collected Wilds, maximum x20.",
+      "sourceEvidence": [
+        "screenshots/2060-Club-Goddess/rules-page-17-pt-br.png",
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "Type=2 payout detail divides tw by frees.m and displays x frees.m; progress targets m+2.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/init-room.response.json"
+      ],
+      "confidence": "RULE_AND_CODE_CONFIRMED_RUNTIME_PROGRESSION_NOT_CAPTURED"
+    },
+    {
+      "fieldOrRule": "data.frees.spe_num",
+      "semantic": "Collected-Wild progress counter used modulo 3; every completed group raises m by 2 and resets displayed progress. Exact server cumulative/reset representation lacks adjacent runtime evidence.",
+      "sourceEvidence": [
+        "screenshots/2060-Club-Goddess/rules-page-17-pt-br.png",
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "Progress uses frees.spe_num % 3 / 3 unless m>=20.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "confidence": "CODE_CONFIRMED_RUNTIME_ONLY_ZERO",
+      "implementationDisposition": "Do not guess reset/cumulative wire semantics."
+    },
+    {
+      "fieldOrRule": "data.frees.twa",
+      "semantic": "Accumulated total win for the active/completed Free Spins feature; shown on feature exit.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "When final free step has st==0, client displays frees.twa; init during an active mode also displays it.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "confidence": "CODE_CONFIRMED_RUNTIME_ONLY_ZERO"
+    },
+    {
+      "fieldOrRule": "data.frees.tt",
+      "semantic": "Total Free Spins awarded for a triggering result; History trigger presentation displays frees.tt. All captured base values are zero because no trigger occurred.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+        "screenshots/2060-Club-Goddess/rules-page-6-pt-br.png"
+      ],
+      "frontendDecision": "On base type=1 with frees.st>0, History labels the Scatter feature using frees.tt; rule award values are 12/15/20.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "confidence": "CODE_AND_RULE_CONFIRMED_RUNTIME_ONLY_ZERO"
+    },
+    {
+      "fieldOrRule": "data.frees.ba / bet / l",
+      "semantic": "Present numeric Free-mode fields; all captured values are zero and no current-game consumer established their meaning.",
+      "sourceEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/init-room.response.json",
+        "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json"
+      ],
+      "frontendDecision": "No semantic branch located in Game2060 code.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "confidence": "UNKNOWN",
+      "implementationDisposition": "Preserve schema defaults only for confirmed base results; do not assign semantics."
+    },
+    {
+      "fieldOrRule": "History aggregate list[].day / bet_gold / change_gold",
+      "semantic": "Per-day epoch bucket with total stake and net change. statistics repeats totals for the returned range.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "Day list renders amounts and requests detail using selected day.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/history-after-10-rounds.response.json",
+        "captures/2060-Club-Goddess/network/0201-api.omgapibra.com_cp_goldgame_single_game_user_gold_history.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "History detail list[] / results[]",
+      "semantic": "Each paid order is keyed by oid/order_id and contains one or more adjacent result steps. Captured ordinary rounds have results.length=1 and results[0] mirrors the top-level result fields.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "History detail paginates results as initial result plus respin/free steps and marks type=2 as Free mode.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/network/0202-api.omgapibra.com_cp_goldgame_single_game_user_history.json"
+      ],
+      "confidence": "ORDINARY_CONFIRMED_SPECIAL_SHAPE_CODE_ONLY"
+    },
+    {
+      "fieldOrRule": "History currency/time aliases",
+      "semantic": "cc='BRL', cs='R$', created_at/time are server epoch seconds, balance_after is a string rendering of end_gold, bet_size mirrors bet, and bet_level mirrors level.",
+      "sourceEvidence": [
+        "captures/2060-Club-Goddess/network/0202-api.omgapibra.com_cp_goldgame_single_game_user_history.json"
+      ],
+      "frontendDecision": "History renders currency, timestamp, bet size/level and balance from these aliases.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/history-after-10-rounds.response.json"
+      ],
+      "confidence": "CONFIRMED"
+    },
+    {
+      "fieldOrRule": "History results[].bet",
+      "semantic": "Boolean field observed as false in every captured ordinary paid result despite nonzero bet_gold; no current-game semantic was established.",
+      "sourceEvidence": [
+        "captures/2060-Club-Goddess/network/0202-api.omgapibra.com_cp_goldgame_single_game_user_history.json"
+      ],
+      "frontendDecision": "Game2060 History detail does not use it for paid/free classification; it uses result type and frees fields.",
+      "sampleEvidence": [
+        "fixtures/2060-Club-Goddess/oracle/history-after-10-rounds.response.json"
+      ],
+      "confidence": "UNKNOWN_SEMANTIC",
+      "implementationDisposition": "Preserve captured schema type if compatibility requires it; do not interpret false as no stake."
+    },
+    {
+      "fieldOrRule": "symbolWeights",
+      "semantic": "No reel strips, symbol probability table or weighted selector was found in current game assets/config/captures.",
+      "sourceEvidence": [
+        "publish/2060-Club-Goddess/assets/Game2060/config.88d42.json",
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+      ],
+      "frontendDecision": "Frontend consumes server boards and does not generate them.",
+      "sampleEvidence": [
+        "captures/2060-Club-Goddess/spin-index.jsonl"
+      ],
+      "confidence": "UNKNOWN",
+      "implementationDisposition": "Ten observed rounds must not be converted into guessed weights."
+    },
+    {
+      "fieldOrRule": "Redis key / encoding",
+      "semantic": "No current-game Redis key, member envelope, list/set type, payload compression or binary encoding was captured or present in frontend sources.",
+      "sourceEvidence": [
+        "protocol/2060-Club-Goddess/rules-source-manifest.json"
+      ],
+      "frontendDecision": "Not a frontend protocol.",
+      "sampleEvidence": [],
+      "confidence": "UNKNOWN",
+      "implementationDisposition": "Do not invent a Redis contract in this node."
+    }
+  ],
+  "generationModel": {
+    "method": "joint special-count signature and conditional three-cell columns by paid/free entry",
+    "runtimeFullBoardReplay": false,
+    "runtimeFixtureReads": false,
+    "source": "generator/2060-Club-Goddess/src/main/resources/com/cpgame/clubgoddess/core/reel-model.json",
+    "validation": "reports/2060-Club-Goddess/generation-model-validation.json",
+    "limits": {
+      "wildPerBoard": 2,
+      "scatterPerReel": 1,
+      "freeScatters": 0,
+      "cumulativeFreeWilds": 15
+    },
+    "freeSampleStatus": "SAMPLE_INSUFFICIENT_21_OF_30"
+  }
+}

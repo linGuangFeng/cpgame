@@ -1,0 +1,439 @@
+{
+  "schemaVersion": 2,
+  "gameId": 50,
+  "gameName": "Lucky Cat II",
+  "directoryName": "50-Lucky-Cat-II",
+  "rulesHash": "4fcb4da38b457ee89e699b66ae9e258af2c73a622fc324202f20b7d7957c95f6",
+  "status": "PROTOCOL_ACCEPTED_READY_FOR_IMPLEMENTATION",
+  "evidenceInventory": [
+    {
+      "id": "E-RULES-CORE",
+      "source": "protocol/50-Lucky-Cat-II/rules-core-canonical.json",
+      "behaviorIds": ["RULES_PAYTABLE_UI", "FIXED_PAYLINE_EVALUATION", "PAID_SPIN_ROUND", "LUCKY_RESPIN", "MULTIPLIER_WHEEL", "REDIS_PACKAGING_BOUNDARY"],
+      "facts": ["rulesHash input", "3x3 board", "5 fixed paylines", "current-game paytable", "complete-Round boundary"]
+    },
+    {
+      "id": "E-ID-VERSION",
+      "source": "resources/50-Lucky-Cat-II/en/static.cpgame.io/50/versionconfig.js",
+      "behaviorIds": ["RULES_PAYTABLE_UI"],
+      "facts": ["document.title=Lucky Cat II", "GameVersion=v1.5.10.250430"]
+    },
+    {
+      "id": "E-BASEURL",
+      "source": "resources/50-Lucky-Cat-II/en/static.cpgame.io/0/versionconfig.js",
+      "behaviorIds": ["SESSION_BOOTSTRAP_V2", "SESSION_V1_FALLBACK"],
+      "facts": ["sip sets window.GameUrl to launch-scheme://sip/cp", "no-sip fallback is local capture/development behavior"]
+    },
+    {
+      "id": "E-RULES-EN",
+      "source": "resources/50-Lucky-Cat-II/extracted/text-assets/en/gameRules.json",
+      "behaviorIds": ["RULES_PAYTABLE_UI", "FIXED_PAYLINE_EVALUATION", "PAID_SPIN_ROUND", "LUCKY_RESPIN", "MULTIPLIER_WHEEL"]
+    },
+    {
+      "id": "E-PAYTABLE-EN",
+      "source": "resources/50-Lucky-Cat-II/extracted/text-assets/en/paytable.json",
+      "behaviorIds": ["RULES_PAYTABLE_UI", "FIXED_PAYLINE_EVALUATION", "MULTIPLIER_WHEEL"]
+    },
+    {
+      "id": "E-FRONTEND-MAIN",
+      "source": "resources/50-Lucky-Cat-II/en/static.cpgame.io/50/assets/main/index.b4be9.js",
+      "behaviorIds": ["LANGUAGE_SELECTION", "SESSION_BOOTSTRAP_V2", "SESSION_V1_FALLBACK", "HTTP_CODEC_AND_ERRORS", "CONFIG_LOAD", "HEARTBEAT", "RULES_PAYTABLE_UI", "FIXED_PAYLINE_EVALUATION", "PAID_SPIN_ROUND", "LUCKY_RESPIN", "MULTIPLIER_WHEEL", "HISTORY_LIST_VIEW"]
+    },
+    {
+      "id": "E-LANGUAGE-INVENTORY",
+      "source": "reports/50-Lucky-Cat-II/language-inventory.json",
+      "behaviorIds": ["LANGUAGE_SELECTION"]
+    },
+    {
+      "id": "E-FIRST-LOADS",
+      "source": "captures/50-Lucky-Cat-II/first-load-summary.json",
+      "behaviorIds": ["LANGUAGE_SELECTION", "SESSION_V1_FALLBACK"],
+      "facts": ["ten supported language first loads", "zero WebSocket connections", "public no-t run selects v1 static branch"]
+    },
+    {
+      "id": "E-SPA-NEGATIVE",
+      "source": "captures/50-Lucky-Cat-II/first-load-spa.json",
+      "behaviorIds": ["LANGUAGE_SELECTION"]
+    },
+    {
+      "id": "E-AUTH-ENTRY",
+      "source": "captures/50-Lucky-Cat-II/authenticated-entry.json",
+      "behaviorIds": ["SESSION_BOOTSTRAP_V2", "CONFIG_LOAD", "HEARTBEAT"],
+      "facts": ["isolated account abc224", "startup launch gid=50 and sip", "auth/verify=200", "player and token returned", "ping.enable=0"]
+    },
+    {
+      "id": "E-CONFIG-WIRE",
+      "source": "fixtures/50-Lucky-Cat-II/config-response.json",
+      "behaviorIds": ["CONFIG_LOAD", "FIXED_PAYLINE_EVALUATION", "PAID_SPIN_ROUND"],
+      "facts": ["oracleOnly/runtimeUseForbidden", "bll 1..10", "bsl 0.1,1,10", "BRL", "spl paytable"]
+    },
+    {
+      "id": "E-SPIN-INDEX",
+      "source": "captures/50-Lucky-Cat-II/spin-index.jsonl",
+      "behaviorIds": ["FIXED_PAYLINE_EVALUATION", "PAID_SPIN_ROUND", "LUCKY_RESPIN", "MULTIPLIER_WHEEL", "HISTORY_LIST_VIEW"],
+      "facts": ["1565 paid starts", "1565 completed Rounds", "1615 logical board steps", "50 free S02 steps stay within their paid roundId"]
+    },
+    {
+      "id": "E-SPIN-RAW",
+      "source": "fixtures/50-Lucky-Cat-II/spin-responses.jsonl",
+      "behaviorIds": ["HTTP_CODEC_AND_ERRORS", "FIXED_PAYLINE_EVALUATION", "PAID_SPIN_ROUND", "LUCKY_RESPIN", "MULTIPLIER_WHEEL"],
+      "facts": ["oracleOnly/runtimeUseForbidden", "1365 history-reconciled responses", "200 direct live Spin responses"]
+    },
+    {
+      "id": "E-HISTORY-LIST",
+      "source": "fixtures/50-Lucky-Cat-II/history-list.json",
+      "behaviorIds": ["HISTORY_LIST_VIEW", "PAID_SPIN_ROUND"],
+      "facts": ["sanitized consolidated oracle archive", "1365 list records", "not a runtime result source"]
+    },
+    {
+      "id": "E-HISTORY-DETAIL",
+      "source": "fixtures/50-Lucky-Cat-II/history-details.jsonl",
+      "behaviorIds": ["HISTORY_LIST_VIEW", "FIXED_PAYLINE_EVALUATION", "PAID_SPIN_ROUND", "LUCKY_RESPIN", "MULTIPLIER_WHEEL"],
+      "facts": ["1365 code=200 detail responses", "bid=50-tis on all 1365", "pb equals numeric baf on all 1365"]
+    },
+    {
+      "id": "E-UI-ACCESS",
+      "source": "captures/50-Lucky-Cat-II/ui-access-evidence.json",
+      "behaviorIds": ["RULES_PAYTABLE_UI", "LUCKY_RESPIN", "MULTIPLIER_WHEEL"]
+    },
+    {
+      "id": "E-INTERFACE-SUMMARY",
+      "source": "captures/50-Lucky-Cat-II/interface-capture-summary.json",
+      "behaviorIds": ["SESSION_BOOTSTRAP_V2", "HTTP_CODEC_AND_ERRORS", "CONFIG_LOAD", "HEARTBEAT", "PAID_SPIN_ROUND", "HISTORY_LIST_VIEW"]
+    },
+    {
+      "id": "E-CAPTURE-VALIDATION",
+      "source": "reports/50-Lucky-Cat-II/capture-node-validation.json",
+      "behaviorIds": ["PAID_SPIN_ROUND", "LUCKY_RESPIN", "MULTIPLIER_WHEEL"],
+      "facts": ["capture validation PASS", "round and adjacency assertions PASS"]
+    },
+    {
+      "id": "E-SCENARIO-COVERAGE",
+      "source": "reports/50-Lucky-Cat-II/scenario-coverage.json",
+      "behaviorIds": ["PAID_SPIN_ROUND", "LUCKY_RESPIN", "MULTIPLIER_WHEEL"]
+    },
+    {
+      "id": "E-STATIC-VALIDATION",
+      "source": "reports/50-Lucky-Cat-II/static-publish-validation.json",
+      "behaviorIds": [],
+      "disposition": "UPSTREAM_GATE_ONLY",
+      "reason": "Static package PASS is a protocol-node prerequisite but is not an independent protocol oracle."
+    },
+    {
+      "id": "E-AUTH-BLOCK-HISTORICAL",
+      "source": "captures/50-Lucky-Cat-II/authentication-blocker.json",
+      "behaviorIds": [],
+      "disposition": "SUPERSEDED",
+      "reason": "Later isolated authentication and 1565 paid starts are recorded in authentication-resolution.json and current-status.json."
+    },
+    {
+      "id": "E-PURCHASE-SEARCH",
+      "source": "captures/50-Lucky-Cat-II/ui-access-evidence.json#purchaseEntry",
+      "behaviorIds": [],
+      "disposition": "NOT_APPLICABLE_NOT_DISCOVERED",
+      "reason": "Rules, bundle tokens and authenticated runtime tree contain no purchase entry."
+    },
+    {
+      "id": "E-PROTOCOL-VALIDATION",
+      "source": "reports/50-Lucky-Cat-II/protocol-analysis-validation.json",
+      "behaviorIds": [],
+      "disposition": "DERIVED_VALIDATION",
+      "reason": "Cross-reference and invariant report; not used as the sole independent oracle for any behavior."
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "LANGUAGE_SELECTION",
+      "category": "LOCALIZATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-FRONTEND-MAIN", "E-LANGUAGE-INVENTORY", "E-FIRST-LOADS", "E-SPA-NEGATIVE"],
+      "implementationContract": {
+        "preconditions": ["entry query may contain l"],
+        "stateFields": ["query.l", "LanguageManager._curLanguage"],
+        "transitionRules": ["accept en,pt,es,th,vi,id,bn,ko,fr,tr", "unsupported l retains pt", "spa is not aliased to es"],
+        "outputs": ["selected localized rules, paytable, errors, text and images"],
+        "terminationRules": ["selected language bundle assets load or load failure is surfaced"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-FIRST-LOADS", "E-FRONTEND-MAIN", "E-SPA-NEGATIVE"],
+        "assertions": ["all ten supported codes first-load", "spa retains pt and is never converted to es"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "SESSION_BOOTSTRAP_V2",
+      "category": "SESSION",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-BASEURL", "E-FRONTEND-MAIN", "E-AUTH-ENTRY", "E-INTERFACE-SUMMARY"],
+      "implementationContract": {
+        "preconditions": ["portal launch contains gid=50, sip and nonempty t", "account session belongs to isolated abc224 profile"],
+        "stateFields": ["query.ai", "query.btt", "query.t", "query.gid", "query.sip", "window.GameUrl", "player.id", "player.balance", "token", "ping.enable", "ping.seconds"],
+        "transitionRules": ["sip selects launch-scheme://sip/cp", "nonempty t selects /api/v1/auth/verify", "platform query params form the request body and logical game-id maps to gid", "code=200 data populates PlayerData and bearer-like web token", "CONFIG_LOAD follows only when token is nonempty"],
+        "outputs": ["player id and balance", "session token for current game API", "heartbeat state", "API base"],
+        "terminationRules": ["success requires code=200 data containing player and token", "failure shows provider error and prevents Config/Spin"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-AUTH-ENTRY", "E-FRONTEND-MAIN", "E-INTERFACE-SUMMARY"],
+        "assertions": ["captured /auth/verify returned HTTP 200", "account alias is abc224", "credential and token values remain redacted", "Config occurs only after verify"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["E-AUTH-ENTRY startup launch -> /auth/verify", "E-FRONTEND-MAIN onLoginRequest awaits onLogin then onGetGameConfig", "E-AUTH-ENTRY verify -> E-CONFIG-WIRE"]
+      }
+    },
+    {
+      "id": "SESSION_V1_FALLBACK",
+      "category": "SESSION",
+      "status": "UNKNOWN",
+      "reason": "The current authenticated launch used Session v2; Session v1 exists only as a static code branch and public local fallback, without a production wire response.",
+      "multiStep": false,
+      "evidenceRefs": ["E-BASEURL", "E-FRONTEND-MAIN", "E-FIRST-LOADS"],
+      "verificationContract": {
+        "independentOracleRefs": ["E-FRONTEND-MAIN", "E-FIRST-LOADS"],
+        "assertions": ["query without t selects /api/v1/auth/session in code", "public no-sip localhost request is not production wire evidence"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "HTTP_CODEC_AND_ERRORS",
+      "category": "CODEC",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-FRONTEND-MAIN", "E-SPIN-RAW", "E-INTERFACE-SUMMARY"],
+      "implementationContract": {
+        "preconditions": ["endpoint request object is available"],
+        "stateFields": ["Params", "Headers.game-id", "Headers.web-token", "gid", "t", "HTTP status", "response.code", "response.info", "response.data"],
+        "transitionRules": ["map game-id to gid and web-token to t", "encode form fields with encodeURIComponent and spaces as +", "send application/x-www-form-urlencoded", "perform no request or response encryption", "on 2xx/code=200 resolve data or {}", "otherwise reject parsed wrapper", "non-JSON/no-code becomes HTTP<status>", "401 stops heartbeat"],
+        "outputs": ["plain JSON data on success", "structured provider/HTTP error on failure"],
+        "terminationRules": ["each XHR settles once at readyState=4"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-FRONTEND-MAIN", "E-SPIN-RAW"],
+        "assertions": ["content type is form-urlencoded", "logical auth mapping is exact", "no CryptoJS/AES/DES/encrypt/decrypt path exists in current main bundle", "oracle wrappers are plain JSON code/info/data"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "CONFIG_LOAD",
+      "category": "CONFIG",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-FRONTEND-MAIN", "E-AUTH-ENTRY", "E-CONFIG-WIRE", "E-INTERFACE-SUMMARY"],
+      "implementationContract": {
+        "preconditions": ["SESSION_BOOTSTRAP_V2 completed with nonempty token"],
+        "stateFields": ["gid", "t", "auto", "bll", "bsl", "cc", "cs", "dbl", "dbs", "spl", "last", "ts"],
+        "transitionRules": ["POST /api/v1/golden-cat/config", "bll/bsl initialize selectors", "dbl/dbs initialize defaults", "spl initializes paytable", "last restores board/bet/balance display when present"],
+        "outputs": ["bll 1..10", "bsl 0.1,1,10", "default bl=10", "default bs=0.1", "BRL/R$", "symbol payouts", "last result"],
+        "terminationRules": ["success requires code=200 and usable bll/bsl/spl", "failure prevents normal game start"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-CONFIG-WIRE", "E-FRONTEND-MAIN"],
+        "assertions": ["minimum legal total bet is 1*0.1*5=0.5", "bl is bet level and never payline count", "spl equals the current seven-symbol paytable"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["E-FRONTEND-MAIN awaits Login then Config", "E-AUTH-ENTRY token output -> E-CONFIG-WIRE gid/t authenticated request"]
+      }
+    },
+    {
+      "id": "HEARTBEAT",
+      "category": "SESSION",
+      "status": "NOT_APPLICABLE",
+      "reason": "The authenticated Session returned ping.enable=0, so Ping is disabled for this captured current-game session and no wire response is expected.",
+      "multiStep": false,
+      "evidenceRefs": ["E-FRONTEND-MAIN", "E-AUTH-ENTRY", "E-INTERFACE-SUMMARY"],
+      "verificationContract": {
+        "independentOracleRefs": ["E-AUTH-ENTRY", "E-FRONTEND-MAIN"],
+        "assertions": ["endpoint is POST /api/v1/ping with gid/t", "ping.enable=0 means no timer and no wire request", "if enabled, seconds controls interval, HTTP0 retries and 401 stops"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "RULES_PAYTABLE_UI",
+      "category": "RULES_UI",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-RULES-CORE", "E-ID-VERSION", "E-RULES-EN", "E-PAYTABLE-EN", "E-FRONTEND-MAIN", "E-UI-ACCESS"],
+      "implementationContract": {
+        "preconditions": ["game main scene loaded"],
+        "stateFields": ["ControlRule prefab", "RewardRule prefab", "selected language"],
+        "transitionRules": ["rules button opens localized controlRule", "paytable button opens localized rewardRule"],
+        "outputs": ["3x3/5-line rules", "WILD rule", "paytable", "Lucky Respin and wheel explanations"],
+        "terminationRules": ["requested prefab is active or the load error is surfaced"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-RULES-EN", "E-PAYTABLE-EN", "E-UI-ACCESS"],
+        "assertions": ["rules and paytable were explicitly opened", "displayed rule identity is Lucky Cat II"] ,
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "FIXED_PAYLINE_EVALUATION",
+      "category": "GAME_RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-RULES-CORE", "E-RULES-EN", "E-PAYTABLE-EN", "E-FRONTEND-MAIN", "E-CONFIG-WIRE", "E-SPIN-RAW", "E-HISTORY-DETAIL", "E-SPIN-INDEX"],
+      "implementationContract": {
+        "preconditions": ["final rskl has exactly 9 current symbol codes", "bl, bs, spl and rpx are available"],
+        "stateFields": ["rskl", "wmkl", "wa", "bl", "bs", "spl", "rpx"],
+        "transitionRules": ["split rskl into three contiguous 3-row reels", "evaluate paylines 1:[0,0,0],2:[1,1,1],3:[2,2,2],4:[0,1,2],5:[2,1,0]", "WILD substitutes all non-WILD symbols", "all-WILD line uses WILD payout", "wmkl maps winning line number to paid symbol", "wa=sum(spl[symbol]*bs*bl)*rpx"],
+        "outputs": ["wmkl winning-line map", "wa Round award"],
+        "terminationRules": ["all five lines evaluated exactly once; only highest prize per line is paid"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-RULES-EN", "E-PAYTABLE-EN", "E-CONFIG-WIRE", "E-SPIN-RAW"],
+        "assertions": ["1565 boards checked", "wmkl mismatches=0", "award formula mismatches=0", "do not use frontend animation SymbolWeightsList as server probability"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "PAID_SPIN_ROUND",
+      "category": "ROUND_STATE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-RULES-CORE", "E-RULES-EN", "E-FRONTEND-MAIN", "E-CONFIG-WIRE", "E-SPIN-INDEX", "E-SPIN-RAW", "E-HISTORY-LIST", "E-HISTORY-DETAIL", "E-CAPTURE-VALIDATION", "E-SCENARIO-COVERAGE", "E-INTERFACE-SUMMARY"],
+      "implementationContract": {
+        "preconditions": ["authenticated Config completed", "no active undelivered Round", "balance covers bl*bs*5"],
+        "stateFields": ["roundId", "bl", "bs", "ba", "pb", "gm", "rskl", "wmkl", "wa", "rpx", "rdri", "rdskl", "tis", "bid"],
+        "transitionRules": ["one POST /spin starts one paid Round", "gm=0 yields paid S01 and terminal", "gm=1 yields paid S01 then embedded free S02 under the same roundId", "rpx>1 adds wheel presentation in the same delivery", "ordinary LOSS is gm=0,rpx=1,wa=0,wmkl={}", "ordinary WIN is gm=0,rpx=1,wa>0", "free/respin/wheel phases never create spin-index lines"],
+        "outputs": ["complete ordered Round steps", "final board", "winning lines", "award", "post-round balance", "mode and multiplier"],
+        "terminationRules": ["gm=0 terminates after S01", "gm=1 terminates after exactly one S02", "no continuation Spin request exists", "wheel completes inside the same response delivery"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-SPIN-INDEX", "E-SPIN-RAW", "E-HISTORY-LIST", "E-HISTORY-DETAIL", "E-FRONTEND-MAIN"],
+        "assertions": ["1565 index lines=1565 paid starts=1565 complete Rounds", "each Round has exactly one paid step", "50 free S02 steps are not paid starts", "1272 ordinary LOSS and 200 ordinary WIN targets met", "fixtures are oracle-only"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["E-SPIN-INDEX gm=1 entries contain adjacent S01/S02 with shared roundId", "E-FRONTEND-MAIN GameResults constructor -> refreshRespinResult", "E-HISTORY-LIST tis -> E-HISTORY-DETAIL -> E-SPIN-INDEX providerRoundId for reconciled rounds"]
+      }
+    },
+    {
+      "id": "LUCKY_RESPIN",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-RULES-CORE", "E-RULES-EN", "E-FRONTEND-MAIN", "E-SPIN-INDEX", "E-SPIN-RAW", "E-HISTORY-DETAIL", "E-UI-ACCESS", "E-CAPTURE-VALIDATION", "E-SCENARIO-COVERAGE"],
+      "implementationContract": {
+        "preconditions": ["paid initial board has no fixed-payline win", "two held reels satisfy the captured compatible prefix-WILD stack predicate", "server/result marks gm=1"],
+        "stateFields": ["roundId", "gm", "rdri", "rdskl", "rskl", "wmkl", "wa", "rpx"],
+        "transitionRules": ["rdri is the single respinning reel", "S01 board is final rskl with rdri positions replaced by rdskl", "the other two reels remain byte-for-byte unchanged", "S02 board is rskl", "S02 is free and shares roundId", "WILD-prefix stack orientation follows captured reel-major order", "do not recursively retrigger another Lucky Respin"] ,
+        "outputs": ["S01 PAID_SPIN_START", "S02 LUCKY_RESPIN_FINAL", "final award and optional wheel phase"],
+        "terminationRules": ["exactly one refreshRespinResult transition", "S02 is terminal even when its final board would still satisfy held-stack shape", "no second HTTP request"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-RULES-EN", "E-FRONTEND-MAIN", "E-SPIN-INDEX", "E-SPIN-RAW"],
+        "assertions": ["50 complete Lucky Respin Rounds", "all have exactly two ordered steps", "S01/S02 non-rdri reels are unchanged", "S01 rdri equals rdskl and S02 rdri equals rskl", "captured prefix-WILD trigger classifier has zero mismatch across 1565 Rounds", "S02 never appears as a paid start"] ,
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["E-SPIN-INDEX steps[0].board -> steps[1].board", "E-SPIN-RAW gm/rdri/rdskl/rskl fields", "E-FRONTEND-MAIN constructor saves final rskl reel, displays rdskl, then refreshRespinResult restores it"]
+      }
+    },
+    {
+      "id": "MULTIPLIER_WHEEL",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-RULES-CORE", "E-RULES-EN", "E-PAYTABLE-EN", "E-FRONTEND-MAIN", "E-SPIN-INDEX", "E-SPIN-RAW", "E-HISTORY-DETAIL", "E-UI-ACCESS", "E-CAPTURE-VALIDATION", "E-SCENARIO-COVERAGE"],
+      "implementationContract": {
+        "preconditions": ["final 3x3 board contains at most one distinct non-WILD symbol", "rpx>1", "wmkl/wa are present in the same response"],
+        "stateFields": ["roundId", "rskl", "wmkl", "rpx", "wa", "gm", "wheelPhase"],
+        "transitionRules": ["evaluate final board", "apply rpx to every winning line and total award", "transition delivery phase BOARD_RESULT -> WHEEL_AWARD -> ROUND_TERMINAL", "do not issue another Spin", "allow overlap with Lucky S02 without creating a Round"] ,
+        "outputs": ["captured rpx values 2,3,4,5,10", "multiplied wa", "wheel presentation phase"],
+        "terminationRules": ["wheel animation consumes already delivered rpx/wa", "same response becomes terminal after presentation"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-RULES-EN", "E-PAYTABLE-EN", "E-SPIN-RAW", "E-SPIN-INDEX"],
+        "assertions": ["48 complete Wheel Rounds", "rpx>1 iff final board has one compatible non-WILD symbol/WILD across all cells", "trigger mismatches=0", "award formula includes rpx", "5 Wheel Rounds overlap Lucky Respin", "wheel phase never creates an index line"] ,
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["E-SPIN-RAW final rskl/wmkl -> rpx/wa in the same response", "E-FRONTEND-MAIN GameResults.win_multiple -> TurnTable presentation", "E-SPIN-INDEX shared roundId remains terminal"]
+      }
+    },
+    {
+      "id": "HISTORY_LIST_VIEW",
+      "category": "HISTORY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-FRONTEND-MAIN", "E-HISTORY-LIST", "E-HISTORY-DETAIL", "E-SPIN-INDEX", "E-INTERFACE-SUMMARY"],
+      "implementationContract": {
+        "preconditions": ["authenticated session token exists"],
+        "stateFields": ["page_index", "begin_at", "end_at", "end", "lc", "ll", "tis", "transfer_id", "bid", "baf", "ca"],
+        "transitionRules": ["POST log-list with page_index/begin_at/end_at/gid/t", "end=0 advances page and nonzero end stops pagination", "ll.tis becomes log-view transfer_id", "log-view detail is displayed and may reconcile captured paid Round IDs", "preserve string monetary types on list endpoint"] ,
+        "outputs": ["paged summary records", "detail by transfer ID"],
+        "terminationRules": ["pagination stops when end is nonzero", "each detail request settles independently"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-HISTORY-LIST", "E-HISTORY-DETAIL", "E-SPIN-INDEX", "E-FRONTEND-MAIN"],
+        "assertions": ["1365 list/detail reconciled Rounds", "bid=50-tis for all captured details", "pb equals baf numerically", "History evidence remains oracle-only"] ,
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": ["E-FRONTEND-MAIN log-list ll.tis -> transfer_id", "E-HISTORY-LIST record.tis -> E-HISTORY-DETAIL data.tis", "E-HISTORY-DETAIL data.tis -> E-SPIN-INDEX providerRoundId"]
+      }
+    },
+    {
+      "id": "REDIS_PACKAGING_BOUNDARY",
+      "category": "REDIS",
+      "status": "CONFIRMED",
+      "reason": "Platform remake contract v3 supplies Redis 192.168.10.3:6379 db=15 complete-round ASCII members.",
+      "multiStep": false,
+      "evidenceRefs": ["E-RULES-CORE"],
+      "verificationContract": {
+        "independentOracleRefs": ["E-RULES-CORE"],
+        "assertions": ["result boundary is complete Round", "no current evidence authorizes a Redis key, encoding or fixed length", "fixtures may not be packaged as runtime outcomes"] ,
+        "usesImplementationGeneratedExpected": false
+      }
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "U-SESSION-V1-WIRE",
+      "behaviorIds": ["SESSION_V1_FALLBACK"],
+      "evidenceRefs": ["E-BASEURL", "E-FRONTEND-MAIN", "E-FIRST-LOADS", "E-AUTH-ENTRY"],
+      "reason": "The current authenticated launch had t and therefore selected v2; v1 is confirmed only as a frontend alternate and public local-fallback request.",
+      "disposition": "DO_NOT_EMULATE_AS_CONFIRMED_PRODUCTION_SESSION"
+    },
+    {
+      "id": "U-HEARTBEAT-DISABLED",
+      "behaviorIds": ["HEARTBEAT"],
+      "evidenceRefs": ["E-AUTH-ENTRY", "E-FRONTEND-MAIN", "E-INTERFACE-SUMMARY"],
+      "reason": "Authenticated verify returned ping.enable=0, so no Ping wire response was emitted.",
+      "disposition": "RUNTIME_DISABLED_NO_WIRE_REQUEST_EXPECTED"
+    },
+    {
+      "id": "U-ERROR-CATALOG",
+      "behaviorIds": ["HTTP_CODEC_AND_ERRORS"],
+      "evidenceRefs": ["E-FRONTEND-MAIN", "E-INTERFACE-SUMMARY"],
+      "reason": "Generic code/HTTP error transitions are confirmed in frontend code, but provider-specific error info strings were not deliberately provoked.",
+      "disposition": "PRESERVE_PROVIDER_CODE_AND_INFO; DO_NOT_INVENT_TEXT"
+    },
+    {
+      "id": "U-SERVER-SYMBOL-WEIGHTS",
+      "behaviorIds": ["FIXED_PAYLINE_EVALUATION", "PAID_SPIN_ROUND"],
+      "evidenceRefs": ["E-FRONTEND-MAIN", "E-CONFIG-WIRE", "E-SPIN-RAW"],
+      "reason": "Frontend SymbolWeightsList only builds visual rolling filler strips; no server reel strips or generation probabilities are present.",
+      "disposition": "UNKNOWN_NOT_AUTHORIZED_FOR_JAVA_GENERATION_CONFIG"
+    },
+    {
+      "id": "U-MULTIPLIER-PROBABILITY",
+      "behaviorIds": ["MULTIPLIER_WHEEL"],
+      "evidenceRefs": ["E-RULES-EN", "E-PAYTABLE-EN", "E-SPIN-RAW"],
+      "reason": "Rules explicitly state the wheel graphic does not represent actual probability; sample frequency cannot establish weights.",
+      "disposition": "UNKNOWN_DO_NOT_INFER_FROM_48_SAMPLES"
+    },
+    {
+      "id": "U-REDIS-CONTRACT",
+      "behaviorIds": ["REDIS_PACKAGING_BOUNDARY"],
+      "evidenceRefs": ["E-RULES-CORE"],
+      "reason": "Original capture has no Redis wire; platform remake contract v3 now supplies host/db/keys/ASCII encoding.",
+      "disposition": "IMPLEMENTED_FROM_PLATFORM_CONTRACT_V3"
+    },
+    {
+      "id": "U-PURCHASE",
+      "behaviorIds": [],
+      "evidenceRefs": ["E-PURCHASE-SEARCH", "E-RULES-EN", "E-FRONTEND-MAIN", "E-UI-ACCESS"],
+      "reason": "No purchase feature exists in current rules, bundle tokens or authenticated runtime tree.",
+      "disposition": "NOT_APPLICABLE_NOT_DISCOVERED"
+    },
+    {
+      "id": "U-GENERIC-FREE-FIELDS",
+      "behaviorIds": [],
+      "evidenceRefs": ["E-FRONTEND-MAIN", "E-RULES-EN", "E-SPIN-RAW"],
+      "reason": "Generic fbt/fcg framework fields do not prove a multi-free-spin series for Lucky Cat II.",
+      "disposition": "FRAMEWORK_ONLY_NOT_CURRENT_CAPABILITY"
+    }
+  ]
+}

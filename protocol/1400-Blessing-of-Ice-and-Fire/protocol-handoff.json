@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 4,
+  "gameId": "1400",
+  "directoryName": "1400-Blessing-of-Ice-and-Fire",
+  "status": "READY_FOR_ACCEPTANCE",
+  "rulesVersion": "blessing-1400-realtime-multiplier-r1",
+  "rulesHash": "6ac10077f98ce4efe1075d00861581da853a06a44235b27afd36639b3f2d71f4",
+  "behaviorContracts": [
+    {
+      "id": "B1400-INIT-CONFIG",
+      "category": "API",
+      "status": "CONFIRMED",
+      "evidenceRefs": ["EV-INITROOM", "EV-INITIALDATA"]
+    },
+    {
+      "id": "B1400-MIDDLE-ROW",
+      "category": "RULE",
+      "status": "CONFIRMED",
+      "evidenceRefs": ["EV-FRONTEND", "EV-SPINS-20X3"]
+    },
+    {
+      "id": "B1400-DUAL-X2",
+      "category": "RULE",
+      "status": "CONFIRMED",
+      "evidenceRefs": ["EV-SPINS-20X3", "EV-FRONTEND"]
+    },
+    {
+      "id": "B1400-REALTIME-ODD-MAP",
+      "category": "GENERATION",
+      "status": "CONFIRMED",
+      "evidenceRefs": ["EV-CATALOG", "EV-RESULTUTIL"]
+    }
+  ],
+  "evidenceInventory": [
+    {
+      "id": "EV-INITROOM",
+      "source": "captures/1400-Blessing-of-Ice-and-Fire/initRoom.redacted.json",
+      "facts": ["prop_odds 1=100 2=50 3=25 4=5", "pr.1 and pr.2"]
+    },
+    {
+      "id": "EV-INITIALDATA",
+      "source": "captures/1400-Blessing-of-Ice-and-Fire/initialData-origin.redacted.json",
+      "facts": ["bet_gold [0.5,5,15,50]", "buy_free_max_bet=-1", "default_level=10"]
+    },
+    {
+      "id": "EV-FRONTEND",
+      "source": "resources/1400-Blessing-of-Ice-and-Fire/en/static.cpgame.io/v2/1400/assets/Game1400/index.49bc2.js",
+      "facts": ["COL_NUM=3", "transformSymbolIdList column-major skip 0", "bet_type 1/2/3", "x2 when both tw>0"]
+    },
+    {
+      "id": "EV-SPINS-20X3",
+      "source": "captures/1400-Blessing-of-Ice-and-Fire/spins-20x3.json",
+      "facts": ["60 paid rounds", "no frees/mali/sg keys", "both-win total=(tw1+tw2)*2"]
+    },
+    {
+      "id": "EV-CATALOG",
+      "source": "generator/1400-Blessing-of-Ice-and-Fire/src/main/java/com/hd/pg/appapi/business/vo/cpgame/blessing/BlessingMultiplierCatalog.java",
+      "facts": ["every middle triplet mapped to odd 0/5/25/50/100"]
+    },
+    {
+      "id": "EV-RESULTUTIL",
+      "source": "generator/1400-Blessing-of-Ice-and-Fire/src/test/java/com/hd/pg/appapi/business/vo/cpgame/blessing/BlessingResultUtilTest.java",
+      "facts": ["captured boards match oracle", "10000 generated rounds"]
+    }
+  ]
+}

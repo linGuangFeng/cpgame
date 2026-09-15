@@ -1,0 +1,15 @@
+{
+  "slug": "magic-scroll",
+  "folder": "1990-Magic-Scroll",
+  "gid": 1990,
+  "runId": "20260902T085111000Z",
+  "stage": "/Users/a1/Downloads/magic-scroll-stage/20260902T085111000Z",
+  "hdDest": "/Volumes/hd/cpgame/resources/1990-Magic-Scroll/programmatic-http/20260902T085111000Z",
+  "succeeded": 150,
+  "failed": 0,
+  "bytes": 27558022,
+  "total": 150,
+  "gameDirs": [
+    "Game1990"
+  ]
+}

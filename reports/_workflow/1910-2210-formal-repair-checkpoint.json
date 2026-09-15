@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 40,
+  "checkpointAt": "2026-09-05T14:23:02Z",
+  "reason": "MONITOR_REPAIR_AFTER_STATIC_READY_WITHOUT_FORMAL_ROUND_EVIDENCE",
+  "status": "READY_FOR_REPLICATION",
+  "games": [
+    {
+      "gameId": 1910,
+      "directoryName": "1910-Churrasco",
+      "formalEvidenceGate": "PASS",
+      "paidRoundStarts": 1399,
+      "historyComplete": true,
+      "nextStage": "REPLICATION"
+    },
+    {
+      "gameId": 2210,
+      "directoryName": "2210-Wu-Kong",
+      "formalEvidenceGate": "PASS",
+      "paidRoundStarts": 1122,
+      "historyComplete": true,
+      "nextStage": "REPLICATION"
+    }
+  ],
+  "preservedAcceptedGames": [
+    {
+      "gameId": 1809,
+      "action": "UNCHANGED"
+    },
+    {
+      "gameId": 2470,
+      "action": "UNCHANGED_COMPLETE_PASS"
+    }
+  ],
+  "credentialMaterialPersisted": false
+}

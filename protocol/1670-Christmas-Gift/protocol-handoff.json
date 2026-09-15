@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "3.0",
+  "workflowTemplateVersion": 40,
+  "gameId": 1670,
+  "rulesHash": "58d9172c4942e29e629038fb88877ce11564375b1bd69059e5b9a38ab38df14d",
+  "evidenceInventory": [
+    {"id":"EV-SPIN-INDEX","source":"captures/1670-Christmas-Gift/spin-index.jsonl","behaviorIds":["BHV-ORDINARY-PAYLINES","BHV-CHRISTMAS-GIFT-RESPIN","BHV-PROVIDER-PRESENTATION"]},
+    {"id":"EV-ROUND-STEPS","source":"captures/1670-Christmas-Gift/round-steps.jsonl","behaviorIds":["BHV-ORDINARY-PAYLINES","BHV-CHRISTMAS-GIFT-RESPIN","BHV-PROVIDER-PRESENTATION"]},
+    {"id":"EV-BROWSER","source":"reports/1670-Christmas-Gift/browser-live-result.json","behaviorIds":["BHV-HISTORY-PERSISTENCE","BHV-ORIGINAL-UI-LANGUAGES","BHV-PROVIDER-PRESENTATION"]},
+    {"id":"EV-JAVA-CORE","source":"generator/1670-Christmas-Gift/src/main/java/com/cpgame/christmasgift/core/GameRuleCore.java","behaviorIds":["BHV-REDIS-COMPLETE-ROUND","BHV-HISTORY-PERSISTENCE"]},
+    {"id":"EV-GENERATION-VALIDATION","source":"reports/1670-Christmas-Gift/generation-model-validation.json","behaviorIds":["BHV-REDIS-COMPLETE-ROUND"]}
+  ],
+  "behaviorContracts": [
+    {
+      "id":"BHV-ORDINARY-PAYLINES","category":"GAME_RULE","status":"CONFIRMED","multiStep":false,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"],
+      "implementationContract":{"preconditions":["type=1 complete round"],"stateFields":["positions 1..9","symbols 1..7"],"transitionRules":["evaluate five fixed paylines with Wild substitution"],"outputs":["win_arrs and integer multiplier"],"terminationRules":["single step settles immediately"]},
+      "verificationContract":{"independentOracleRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"],"assertions":["payline, paytable and amount equations match provider samples"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"BHV-CHRISTMAS-GIFT-RESPIN","category":"SPECIAL_MODE","status":"CONFIRMED","multiStep":true,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"],
+      "implementationContract":{"preconditions":["type=2 and small_game_type=3"],"stateFields":["luck_prop target","held positions","ordered increments"],"transitionRules":["hold target/Wild","add only newly dealt positions","terminal zero sentinel only on non-full board","apply x10 to every win on full board"],"outputs":["complete ordered props step list"],"terminationRules":["full nine-position board or terminal sentinel"]},
+      "verificationContract":{"independentOracleRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS"],"assertions":["4..8 steps","no held-position overwrite","target/Wild only","full-screen multiplier"],"adjacentStepEvidence":["captures/1670-Christmas-Gift/round-steps.jsonl"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"BHV-REDIS-COMPLETE-ROUND","category":"RUNTIME_SOURCE","status":"CONFIRMED","multiStep":false,"evidenceRefs":["EV-JAVA-CORE","EV-GENERATION-VALIDATION"],
+      "implementationContract":{"preconditions":["Redis db15 pool populated"],"stateFields":["pool category","integer multiplier","minimal round fact"],"transitionRules":["select category then existing multiplier","LPOP complete fact","verify and project once"],"outputs":["one complete verified round"],"terminationRules":["empty cache fails closed"]},
+      "verificationContract":{"independentOracleRefs":["EV-GENERATION-VALIDATION"],"assertions":["10,000 Java-generated complete rounds validate","no runtime dealing or fixture fallback"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"BHV-PROVIDER-PRESENTATION","category":"PROTOCOL","status":"CONFIRMED","multiStep":false,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS","EV-BROWSER"],
+      "implementationContract":{"preconditions":["verified complete round and bet/level"],"stateFields":["start_gold","bet_gold","change_gold","end_gold","oid"],"transitionRules":["charge exactly once","project original field names"],"outputs":["original init/config/account/gameResult envelopes"],"terminationRules":["settlement persisted atomically"]},
+      "verificationContract":{"independentOracleRefs":["EV-SPIN-INDEX","EV-BROWSER"],"assertions":["original frontend completes real spins","idempotency response is byte-identical"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"BHV-HISTORY-PERSISTENCE","category":"PERSISTENCE","status":"CONFIRMED","multiStep":false,"evidenceRefs":["EV-JAVA-CORE","EV-BROWSER"],
+      "implementationContract":{"preconditions":["settled round"],"stateFields":["balance","next oid","history","idempotency map"],"transitionRules":["atomic state-file replace after settlement"],"outputs":["history list and detail"],"terminationRules":["restart restores identical balance, history and retry response"]},
+      "verificationContract":{"independentOracleRefs":["EV-BROWSER"],"assertions":["history list/detail/back work","restart does not double settle"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"BHV-ORIGINAL-UI-LANGUAGES","category":"PRESENTATION","status":"CONFIRMED","multiStep":false,"evidenceRefs":["EV-BROWSER"],
+      "implementationContract":{"preconditions":["platform game-center entry"],"stateFields":["language query","original Cocos scene"],"transitionRules":["serve flattened original static assets only"],"outputs":["original game canvas in ten languages"],"terminationRules":["spin button recovers after each real response"]},
+      "verificationContract":{"independentOracleRefs":["EV-BROWSER"],"assertions":["bn,en,es,fr,id,ko,pt-br,th,tr,vi all load and spin","no external network request"],"usesImplementationGeneratedExpected":false}
+    }
+  ],
+  "unresolvedBehaviors": [
+    {"id":"UPSTREAM-RNG-INTERNALS","reason":"The provider's proprietary PRNG implementation is not observable; the replica uses measured joint state and lifecycle distributions with a real-provider holdout oracle.","blocksGeneration":false,"evidenceRefs":["EV-SPIN-INDEX","EV-ROUND-STEPS","EV-GENERATION-VALIDATION"]}
+  ]
+}

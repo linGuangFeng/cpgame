@@ -1,0 +1,130 @@
+{
+  "schemaVersion": "1.0",
+  "workflowTemplateVersion": 15,
+  "checkpointTime": "2026-08-29T07:59:56+08:00",
+  "checkpointKind": "CROSS_MACHINE_WRITE_FREEZE",
+  "localMachineRole": "READ_ONLY_AFTER_CHECKPOINT",
+  "newOwner": "ISOLATED_MACHINE_ABC224",
+  "writeFrozenGameIds": [
+    50,
+    58,
+    60,
+    1810,
+    1830
+  ],
+  "localTaskState": "UNARCHIVED_INCOMPLETE_WRITE_FROZEN",
+  "completionClaimAllowed": false,
+  "formalOriginalSamples": {
+    "50": "NOT_OWNED_OR_MODIFIED_BY_LOCAL_BATCH_D",
+    "58": 0,
+    "60": 0,
+    "1810": 0,
+    "1830": 0
+  },
+  "completedOfflineMilestones": [
+    "GAME_REPLICATION v15 and both Java platform services fully read",
+    "fixed-path ten-category audit for raw gids 58/60/1810/1830",
+    "credential rejection and History exact-1:1 ledger dry-run gates",
+    "four raw-gid-specific Java evidence-gated generator scaffolds",
+    "four self-contained executable Loader JAR distributions with external no-seed configuration and Windows launchers",
+    "four administrative server-api scaffold JARs with 0.0.0.0 bind default and no guessed game protocol endpoints",
+    "repeatable fixed-path build and scaffold verification"
+  ],
+  "lastValidation": {
+    "offlineAudit": "PASS_PROBLEMS_EMPTY_FORMAL_SAMPLES_0",
+    "scaffoldBuild": "PASS_ALL_EVIDENCE_GATED_SCAFFOLDS",
+    "loaderVerifyExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "loaderDefaultSafeRefusalExitCodes": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "administrativeServerHealthAndStatus": "PASS_4",
+    "roundLedgerDryRuns": "PASS_4_NO_WRITES"
+  },
+  "importantCommonArtifacts": [
+    "tools/batch-d-offline-audit.mjs",
+    "tools/batch-d-round-ledger.mjs",
+    "tools/batch-d-scaffold-verify.mjs",
+    "tools/build-batch-d-scaffolds.sh",
+    "reports/_workflow/batch-d-capture-privacy-design.md",
+    "reports/_workflow/batch-d-offline-audit.json",
+    "reports/_workflow/batch-d-scaffold-validation.json",
+    "reports/_workflow/batch-d-evidence-backfill-contract.json"
+  ],
+  "perGameArtifactFamilies": {
+    "captures": [
+      "capture-session.json",
+      "collector-config.json"
+    ],
+    "protocol": [
+      "game-capabilities.json",
+      "protocol-handoff.json",
+      "protocol-spec.md",
+      "evidence-gap-register.json"
+    ],
+    "reports": [
+      "current-status.json",
+      "round-sample-coverage.json",
+      "scenario-coverage.json",
+      "v15-manual-acceptance-matrix.json",
+      "scaffold-validation.json",
+      "artifact-gap-register.json"
+    ],
+    "generator": [
+      "pom.xml",
+      "unique raw-gid Java evidence gate",
+      "dist executable Loader JAR",
+      "dist loader.properties",
+      "dist run-loader.cmd"
+    ],
+    "serverApi": [
+      "pom.xml",
+      "Java administrative scaffold source",
+      "dist executable scaffold-server JAR",
+      "dist server.properties"
+    ],
+    "redisPack": [
+      "README.md safe-refusal contract"
+    ]
+  },
+  "knownStaleAfterCrossMachineHandoff": [
+    "Per-gid local scheduler/browser fields still describe the immediately preceding abc222-backfill strategy. They are intentionally not rewritten after the cross-machine freeze.",
+    "The new isolated abc224 machine is authoritative for all sampling and subsequent per-gid writes after this checkpoint.",
+    "No local browser profile should be connected or retried for these gids."
+  ],
+  "unfinishedRequiredWork": [
+    "original authenticated resource and network capture",
+    "minimum paid Round through legal terminal state",
+    "History list/detail/click/back exact 1:1 evidence",
+    "LOSS/WIN 200 each and each confirmed Mary/special/reward category 30 within 5000 paid starts",
+    "language/rules/paytable/hidden-resource archive",
+    "field-level protocol and behavior contracts with adjacent-Step evidence",
+    "confirmed unique GameRuleCore and shared server/generator implementation",
+    "publish package",
+    "real server API and codec",
+    "Redis consumer contract/members/Verifier",
+    "management center and non-loopback LAN acceptance"
+  ],
+  "browserState": {
+    "localBrowserAttemptsStopped": true,
+    "selectionAfterFinalStrategy": false,
+    "pageCallsAfterFinalStrategy": false,
+    "lastDiscoveryOutcome": "NO_DISCOVERED_CHROME_INSTANCE_ATTRIBUTABLE_TO_ABC224"
+  },
+  "writeFreezePolicy": {
+    "afterCheckpointNoLocalWritesToSpecifiedGids": true,
+    "noBuildOutputsForSpecifiedGids": true,
+    "noStatusOrEvidenceMutationForSpecifiedGids": true,
+    "noArchive": true,
+    "noCompletionClaim": true,
+    "avoidDualWrite": true
+  }
+}
+

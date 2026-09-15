@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 5,
+  "workflowTemplateVersion": 40,
+  "controllerContractVersion": 3,
+  "gameId": 32,
+  "rawGameId": 32,
+  "rulesVersion": "jt32-empirical-2026-09-09-v1",
+  "rulesHash": "0ae93f542908a7391cffe77dc02327ace428c614333bc73d711bf8e66357e68f",
+  "behaviorIds": [
+    "B-RAW-GID-32",
+    "B-HTTP-CODEC-ENDPOINTS",
+    "B-CONFIG-BET-PAYTABLE",
+    "B-WAYS-LEFT-TO-RIGHT",
+    "B-MEGA-SYMBOL-HEIGHT",
+    "B-WILD-SUBSTITUTE",
+    "B-SILVER-GOLD-TRANSFORM",
+    "B-RPX-BASE-AND-FREE",
+    "B-SCATTER-FREE-10",
+    "B-COMPLETE-ROUND-PAYOUT",
+    "B-BALANCE-LEDGER",
+    "B-HISTORY-LIST-DETAIL-RETURN",
+    "B-REDIS-ATOMIC-ROUND-CLAIM",
+    "B-ORIGIN-PROBABILITY",
+    "B-SUPPORTED-LANGUAGES"
+  ],
+  "artifacts": {
+    "publish": "publish/32-Jungle-Treasure",
+    "loaderJar": "generator/32-Jungle-Treasure/dist/jungle-treasure-loader.jar",
+    "loaderCmd": "generator/32-Jungle-Treasure/dist/start-loader.cmd",
+    "controllerJar": "server-api/32-Jungle-Treasure/dist/controller.jar",
+    "controllerConfig": "server-api/32-Jungle-Treasure/demo-controller.properties",
+    "protocolSpec": "protocol/32-Jungle-Treasure/protocol-spec.md",
+    "capabilities": "protocol/32-Jungle-Treasure/game-capabilities.json"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 3,
+  "gameId": 45,
+  "rulesHash": "sha256:515ffa3a4f803e36d44a1a50da1ce79b4c1df2e75a79893a18cd404aecc0565c",
+  "status": "READY",
+  "endpoint": {
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15
+  },
+  "memberCodec": {
+    "format": "R45C3|initialFreeSpins|freeMultiplier|orderedBoardsHex",
+    "encoding": "minimal printable ASCII",
+    "boardCells": 15,
+    "completeRoundPerMember": true,
+    "sameMemberForAllDeliverySteps": true,
+    "symbolAlphabet": {
+      "0": "9",
+      "1": "A",
+      "2": "H1",
+      "3": "H2",
+      "4": "H3",
+      "5": "H4",
+      "6": "H5",
+      "7": "J",
+      "8": "K",
+      "9": "Q",
+      "A": "Scat",
+      "B": "T",
+      "C": "Wild"
+    },
+    "betEncoding": "No bet fields; decode and rebase to validated requested bs/bl using the shared rule core"
+  },
+  "keys": {
+    "ordinaryRatioIndex": "Rio45:v3:normal:ratios",
+    "ordinaryList": "Rio45:v3:normal:<integerRatio>",
+    "specialRatioIndex": "Rio45:v3:special:ratios",
+    "specialList": "Rio45:v3:special:<integerRatio>"
+  },
+  "ratioUnit": "0.01x",
+  "lossRatio": 0,
+  "write": "MULTI/EXEC: ZADD + RPUSH + LTRIM",
+  "claim": "LPOP one member; remove empty ratio bucket; null member fails closed",
+  "runtimeGeneration": false,
+  "runtimeFixtureReplay": false,
+  "lastControlledLoad": {
+    "ordinaryLoss": 2000,
+    "ordinaryWin": 2000,
+    "special": 150,
+    "specialZero": 3
+  },
+  "validation": "reports/45-Rio-Carnival/generation-model-validation.json",
+  "selection": {
+    "first": "WIN or LOSS",
+    "win": "Choose ordinary/special then an existing strictly positive integer ratio",
+    "loss": "Choose between indexed normal:0 and special:0 according to existing zero-member counts",
+    "empty": "Fail with POOL_EMPTY; never choose another bucket or generate at runtime"
+  },
+  "validationReports": [
+    "reports/45-Rio-Carnival/generation-model-validation.json",
+    "reports/45-Rio-Carnival/formal-loader-v3-run-20260908.json",
+    "reports/45-Rio-Carnival/outcome-selection-v3-validation.json",
+    "reports/45-Rio-Carnival/controller-final-restart-v3.json"
+  ]
+}

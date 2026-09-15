@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 1400,
+  "gameName": "Blessing of Ice and Fire",
+  "runId": "20260902T103752712Z",
+  "startedAt": "2026-09-02T10:37:52.712Z",
+  "finishedAt": "2026-09-02T10:38:09.156Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 190,
+    "exactStaticUrls": 186,
+    "excludedDynamicApiUrls": 4,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 186,
+    "succeeded": 182,
+    "failed": 4,
+    "downloadedBytes": 15419905,
+    "statusCounts": {
+      "200": 182,
+      "404": 4
+    },
+    "contentTypeCounts": {
+      "application/javascript": 14,
+      "image/png": 79,
+      "application/json": 85,
+      "image/jpeg": 3,
+      "application/octet-stream": 1
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/1400-Blessing-of-Ice-and-Fire/programmatic-http/20260902T103752712Z/download-items.public.jsonl",
+      "sha256": "c47ac287bea67015383ebe3e7cb7fdb718ead0e1faa7f1f1f02f444ef9c08eb0",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/1400-Blessing-of-Ice-and-Fire/programmatic-http/20260902T103752712Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "stageDirectory": "/Users/a1/Downloads/blessing-of-ice-and-fire-stage/20260902T103752712Z",
+  "resourceFolder": "1400-Blessing-of-Ice-and-Fire"
+}

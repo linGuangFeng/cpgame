@@ -1,0 +1,288 @@
+{
+  "capturedAt": "2026-09-08T08:28:51.087Z",
+  "tokenPersisted": false,
+  "results": [
+    {
+      "kind": "copy-index",
+      "game": "1380-Hidden-Realm",
+      "lang": "bn",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/bn/static.cpgame.io/v2/1380/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1380-Hidden-Realm",
+      "lang": "en",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/en/static.cpgame.io/v2/1380/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1380-Hidden-Realm",
+      "lang": "es",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/es/static.cpgame.io/v2/1380/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1380-Hidden-Realm",
+      "lang": "fr",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/fr/static.cpgame.io/v2/1380/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1380-Hidden-Realm",
+      "lang": "id",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/id/static.cpgame.io/v2/1380/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1380-Hidden-Realm",
+      "lang": "ko",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/ko/static.cpgame.io/v2/1380/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1380-Hidden-Realm",
+      "lang": "th",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/th/static.cpgame.io/v2/1380/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1380-Hidden-Realm",
+      "lang": "tr",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/tr/static.cpgame.io/v2/1380/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1380-Hidden-Realm",
+      "lang": "vi",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/vi/static.cpgame.io/v2/1380/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1380-Hidden-Realm",
+      "lang": "zh",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/zh/static.cpgame.io/v2/1380/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1780-Glacier-Treasure",
+      "lang": "bn",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/bn/static.cpgame.io/v2/1780/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1780-Glacier-Treasure",
+      "lang": "en",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/en/static.cpgame.io/v2/1780/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1780-Glacier-Treasure",
+      "lang": "es",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/es/static.cpgame.io/v2/1780/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1780-Glacier-Treasure",
+      "lang": "fr",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/fr/static.cpgame.io/v2/1780/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1780-Glacier-Treasure",
+      "lang": "id",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/id/static.cpgame.io/v2/1780/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1780-Glacier-Treasure",
+      "lang": "ko",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/ko/static.cpgame.io/v2/1780/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1780-Glacier-Treasure",
+      "lang": "th",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/th/static.cpgame.io/v2/1780/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1780-Glacier-Treasure",
+      "lang": "tr",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/tr/static.cpgame.io/v2/1780/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1780-Glacier-Treasure",
+      "lang": "vi",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/vi/static.cpgame.io/v2/1780/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1780-Glacier-Treasure",
+      "lang": "zh",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/zh/static.cpgame.io/v2/1780/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1940-Beach-Fun",
+      "lang": "bn",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/bn/static.cpgame.io/v2/1940/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1940-Beach-Fun",
+      "lang": "en",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/en/static.cpgame.io/v2/1940/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1940-Beach-Fun",
+      "lang": "es",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/es/static.cpgame.io/v2/1940/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1940-Beach-Fun",
+      "lang": "fr",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/fr/static.cpgame.io/v2/1940/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1940-Beach-Fun",
+      "lang": "id",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/id/static.cpgame.io/v2/1940/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1940-Beach-Fun",
+      "lang": "ko",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/ko/static.cpgame.io/v2/1940/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1940-Beach-Fun",
+      "lang": "th",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/th/static.cpgame.io/v2/1940/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1940-Beach-Fun",
+      "lang": "tr",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/tr/static.cpgame.io/v2/1940/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1940-Beach-Fun",
+      "lang": "vi",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/vi/static.cpgame.io/v2/1940/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "copy-index",
+      "game": "1940-Beach-Fun",
+      "lang": "zh",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/zh/static.cpgame.io/v2/1940/index.html",
+      "bytes": 8540
+    },
+    {
+      "kind": "1940-runtime",
+      "url": "https://static.cpgame.io/v2/1940/assets/resources/native/16/16e84d391.33f8c.png",
+      "status": 200,
+      "bytes": 675775,
+      "sha256": "d46d80a48ba6cc4e1fd87c1230361da192c36605507af6449f41a88ecbbc691a",
+      "filled": 13
+    },
+    {
+      "kind": "1940-runtime",
+      "url": "https://static.cpgame.io/v2/1940/assets/Game1940/native/e0/e0b88463-cea4-46ed-bde3-ee617f485f12.9b277.mp3",
+      "status": 200,
+      "bytes": 7985,
+      "sha256": "6ba6a7af055f0a4f902833cdcaf1227cf11b4a42e752f623202a8d6302608166",
+      "filled": 13
+    },
+    {
+      "kind": "1940-runtime",
+      "url": "https://static.cpgame.io/v2/1940/assets/Game1940/native/1b/1b665b96-6ca3-4895-a7b9-406f01805fe5.4c7f5.png",
+      "status": 200,
+      "bytes": 269851,
+      "sha256": "a70e68c7c55b071dcca06a135b0289b7f4ccf7e978a3c29ef4dbdba0c1f27c31",
+      "filled": 13
+    },
+    {
+      "kind": "1940-runtime",
+      "url": "https://static.cpgame.io/v2/1940/assets/Game1940/native/a8/a88e4e91-4d74-4e59-8d80-522498b6a4f5.2200d.png",
+      "status": 200,
+      "bytes": 588893,
+      "sha256": "c0545963a497dfa4997aba7c5281fb20a2b81baa626921a5cd67140aef28c3a7",
+      "filled": 13
+    },
+    {
+      "kind": "1940-runtime",
+      "url": "https://static.cpgame.io/v2/1940/assets/Game1940/native/22/223c32c0-79f3-40f6-90b9-8b2113c1b9b7.b4929.png",
+      "status": 200,
+      "bytes": 174771,
+      "sha256": "8d3543d6695b212a2d586923c179ce8c8573b7503e51587508fa3dc290234268",
+      "filled": 13
+    },
+    {
+      "kind": "1940-runtime",
+      "url": "https://static.cpgame.io/v2/1940/assets/Game1940/native/91/915ea9ba-dbbb-4ac4-81d0-cd4bed129a58.81cbb.png",
+      "status": 200,
+      "bytes": 140179,
+      "sha256": "d721fb520da470bb8652403f5d754cdf434fc088b742ab253eca04d7c5cb1e45",
+      "filled": 13
+    },
+    {
+      "kind": "1940-runtime",
+      "url": "https://static.cpgame.io/v2/1940/assets/Game1940/native/22/2254c0ce-dfe2-45be-b5eb-406db9e45b39.c3f38.mp3",
+      "status": 200,
+      "bytes": 6836,
+      "sha256": "780ac5db27f1a0bff801dc2ceb0278b363daa59d63ac24e8c0899c3f6a36d883",
+      "filled": 13
+    },
+    {
+      "kind": "1940-runtime",
+      "url": "https://static.cpgame.io/v2/1940/assets/GameBetCom/config.cfd00.json",
+      "status": 200,
+      "bytes": 3615,
+      "sha256": "2b90e69ce2927967e0b535d885029eb5f7256890a010db6fbf69ccbebe652697",
+      "filled": 13
+    },
+    {
+      "kind": "1940-runtime",
+      "url": "https://static.cpgame.io/v2/1940/assets/GameBetCom/index.cfd00.js",
+      "status": 200,
+      "bytes": 15863,
+      "sha256": "484866d76d5190ba96113c1270c5c71be1c721e83056ab40e5fad0542ef8400f",
+      "filled": 13
+    }
+  ]
+}

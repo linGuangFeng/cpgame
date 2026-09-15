@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 2,
+  "batchId": "remake-batch-20260909",
+  "kind": "top-level-headless",
+  "updatedAt": "2026-09-09T10:43:30+08:00",
+  "games": [
+    {"gid": 52, "name": "Cyber GO", "sessionId": "377d4d9f-bc35-4cb9-89eb-9b32ab3ad241"},
+    {"gid": 2300, "name": "Monster Slayer", "sessionId": "2613a7b6-5d7b-4e8d-b17a-0cbcdda3a586"},
+    {"gid": 1380, "name": "Hidden Realm", "sessionId": "add3e6c3-9b57-4b58-8caf-b09accd6d60d"},
+    {"gid": 1780, "name": "Glacier Treasure", "sessionId": "ed4a3ee4-8c01-4aa9-96b0-0cb0893bdb38"},
+    {"gid": 1940, "name": "Beach Fun", "sessionId": "059f59dd-6d16-493b-b7f8-baea22c30585"},
+    {"gid": 2060, "name": "Club Goddess", "sessionId": "eb659130-f644-4400-8885-399b56a53827"},
+    {"gid": 2110, "name": "Bee Workshop", "sessionId": "b1ae3bb1-adf1-487d-9ce2-dc3ee38bb630"}
+  ]
+}

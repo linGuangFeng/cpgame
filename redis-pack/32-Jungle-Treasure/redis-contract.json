@@ -1,0 +1,17 @@
+{
+  "host": "192.168.10.3",
+  "port": 6379,
+  "database": 15,
+  "gameId": 32,
+  "indexes": {
+    "ordinary": "PerKeyList_000000032",
+    "special": "MaryKeyList_000000032"
+  },
+  "lists": {
+    "ordinary": "BetLog:000000032:{ratio}",
+    "special": "MaryLog:000000032:{ratio}"
+  },
+  "memberPrefix": "JT32V1.",
+  "claim": "LINDEX random offset in chosen integer-ratio bucket",
+  "note": "Local contract for Demo consumption. Origin Redis protocol UNKNOWN."
+}

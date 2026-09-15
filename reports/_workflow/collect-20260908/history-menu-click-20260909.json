@@ -1,0 +1,59 @@
+[
+  {
+    "id": "2110-Bee-Workshop",
+    "before": [
+      "btn_menu"
+    ],
+    "after": [
+      "btn_menu"
+    ],
+    "taps": [
+      {
+        "clicked": true,
+        "name": "btn_menu",
+        "x": 1210.1503553223388,
+        "y": 818.9606214392803,
+        "via": "world",
+        "w": 1920,
+        "h": 953
+      },
+      {
+        "clicked": false,
+        "reason": "NOT_FOUND"
+      }
+    ],
+    "hits": [],
+    "at": "2026-09-09T02:29:30.021Z"
+  },
+  {
+    "id": "1780-Glacier-Treasure",
+    "before": [
+      "btn_history1"
+    ],
+    "after": [
+      "btn_history1"
+    ],
+    "taps": [
+      {
+        "clicked": true,
+        "name": "btn_history1",
+        "x": 857.0014992503748,
+        "y": 622.4822308845577,
+        "via": "world",
+        "w": 1416,
+        "h": 808
+      },
+      {
+        "clicked": true,
+        "name": "btn_history1",
+        "x": 857.0014992503748,
+        "y": 622.4822308845577,
+        "via": "world",
+        "w": 1416,
+        "h": 808
+      }
+    ],
+    "hits": [],
+    "at": "2026-09-09T02:29:37.244Z"
+  }
+]

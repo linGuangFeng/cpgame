@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 40,
+  "rawGameId": 32,
+  "gameName": "Jungle Treasure",
+  "rulesVersion": "jt32-empirical-2026-09-09-v1",
+  "rulesHash": "0ae93f542908a7391cffe77dc02327ace428c614333bc73d711bf8e66357e68f",
+  "fields": [
+    {
+      "field": "request.gid",
+      "status": "CONFIRMED",
+      "semantic": "raw game identity exact string 32",
+      "evidence": [
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/launch-meta.redacted.json",
+        "fixtures/32-Jungle-Treasure/enter/config/request.json"
+      ]
+    },
+    {
+      "field": "request.bl / request.bs",
+      "status": "CONFIRMED",
+      "semantic": "spin form fields; config bll=1..10 bsl=0.02/0.1/0.2; min paid ba=20*bs*bl=0.40 at bl=1 bs=0.02",
+      "evidence": [
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/enter-config.redacted.json",
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/round-index.jsonl"
+      ]
+    },
+    {
+      "field": "data.rskl",
+      "status": "CONFIRMED",
+      "semantic": "height-prefixed tokens (1H3/4T/3Wild/1Scat); board s=[5,6,6,6,6,5] = 34 cells",
+      "evidence": [
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/spin-steps.jsonl",
+        "publish/32-Jungle-Treasure/assets/main/index.78f23.js"
+      ]
+    },
+    {
+      "field": "data.ss",
+      "status": "CONFIRMED",
+      "semantic": "0 continues cascade; 1 is step-terminal. Complete round ends when ss===1 && fsn===nfsc",
+      "evidence": [
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/round-index.jsonl",
+        "reports/32-Jungle-Treasure/classified-coverage.json"
+      ]
+    },
+    {
+      "field": "data.wa / data.rwa",
+      "status": "CONFIRMED",
+      "semantic": "step win and round accumulator; wa=rpx*Σ(paytable[len]*bs*bl*ways); ss=0 iff wa>0",
+      "evidence": [
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/spin-steps.jsonl",
+        "protocol/32-Jungle-Treasure/rules-core-canonical.json"
+      ]
+    },
+    {
+      "field": "data.rpx",
+      "status": "CONFIRMED",
+      "semantic": "base starts 1 then +1 per cascade; free starts 2 then +2 per cascade and sticks across free spins; observed max 30",
+      "evidence": [
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/spin-steps.jsonl",
+        "fixtures/32-Jungle-Treasure/history-free/response.json"
+      ]
+    },
+    {
+      "field": "data.fsn / data.nfsc / data.small_game_type / data.gt",
+      "status": "CONFIRMED",
+      "semantic": "4 Scat tokens grant 10 free. Trigger step still gt=1 sgt=0 fsn=10 nfsc=0. Free steps gt=2 sgt=2 ba=0 nfsc=1..10. No retrigger in 30 origin FREE rounds (4Scat during free does not add spins)",
+      "evidence": [
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/classified-coverage.json",
+        "fixtures/32-Jungle-Treasure/history-free/response.json"
+      ]
+    },
+    {
+      "field": "data.ba scatter-start",
+      "status": "CONFIRMED",
+      "semantic": "opening 4-scatter board may deduct bet but report ba=0 with fsn=10; still a paid complete-round start",
+      "evidence": [
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/enter-config.redacted.json",
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/spin-steps.jsonl"
+      ]
+    },
+    {
+      "field": "history.list ll[] / lc / tis",
+      "status": "CONFIRMED",
+      "semantic": "POST log-list page_index + begin_at/end_at day window; tis is string transfer id; fe is not a free flag (FREE rows still fe=0); gt=32 is game id",
+      "evidence": [
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/history-list-pages.redacted.json",
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/history-view-log.json"
+      ]
+    },
+    {
+      "field": "history.detail bsl / fsl",
+      "status": "CONFIRMED",
+      "semantic": "log-view playback is bsl then fsl. LOSS: bsl=1. WIN: bsl cascade only. FREE: bsl trigger (and any pre-free cascade) + fsl free steps. transfer_id is string tis",
+      "evidence": [
+        "fixtures/32-Jungle-Treasure/history-loss/response.json",
+        "fixtures/32-Jungle-Treasure/history-win/response.json",
+        "fixtures/32-Jungle-Treasure/history-free/response.json"
+      ]
+    },
+    {
+      "field": "config.auto",
+      "status": "CONFIRMED",
+      "semantic": "auto round choices 10/30/50/100/500; no feature-buy in config or UI",
+      "evidence": [
+        "captures/32-Jungle-Treasure/origin-abc221-20260909/enter-config.redacted.json",
+        "reports/32-Jungle-Treasure/interaction-triggers.json"
+      ]
+    },
+    {
+      "field": "languages",
+      "status": "CONFIRMED",
+      "semantic": "declared/observed bn en es fr id ko pt-br th tr vi; entry l=pt with language=pt-br",
+      "evidence": [
+        "reports/32-Jungle-Treasure/language-inventory.json",
+        "publish/32-Jungle-Treasure/32/assets/resources/config.9148d.json"
+      ]
+    },
+    {
+      "field": "origin symbol weights",
+      "status": "UNKNOWN",
+      "semantic": "observed frequency is not an origin probability contract",
+      "evidence": ["protocol/32-Jungle-Treasure/protocol-spec.md"]
+    },
+    {
+      "field": "origin Redis consumer",
+      "status": "UNKNOWN",
+      "semantic": "local replica Redis DB15 is separate and makes no origin compatibility claim",
+      "evidence": ["redis-pack/32-Jungle-Treasure/redis-contract.json"]
+    }
+  ]
+}

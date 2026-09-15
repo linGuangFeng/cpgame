@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 16,
+  "gameName": "Jungle Fruit",
+  "directoryName": "16-Jungle-Fruit",
+  "status": "PRE_IMPLEMENTATION_SKELETON_NOT_A_PROTOCOL_HANDOFF",
+  "implementationAllowed": false,
+  "knownStaticObservations": {},
+  "knownEntranceEvidence": [],
+  "unknownRequiredFields": [
+    "first-load and hidden resource inventory",
+    "supportedLanguages.codes",
+    "rule text and exact paytable",
+    "board and win model",
+    "paid Round start request matcher",
+    "round correlation field and terminal rule",
+    "ordinary LOSS/WIN classification",
+    "every special/reward mode and its trigger",
+    "History open, response schema, return behavior and Round correlation",
+    "balance, session, idempotency and reconnect behavior"
+  ],
+  "resumeGate": "CHROME_RELEASED_TO_A followed by visible account verification for abc221"
+}

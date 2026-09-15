@@ -1,0 +1,1 @@
+http://127.0.0.1:50000/?gid=52&l=pt&language=pt-br&ai=luck_single_10229&btt=1&t=cyber-go-local

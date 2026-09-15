@@ -1,0 +1,1005 @@
+{
+  "schemaVersion": 3,
+  "gameId": 1407,
+  "cpGameId": 55,
+  "gameName": "Coin Master GO",
+  "directoryName": "1407-mac-Coin-Master-GO",
+  "generatedAt": "2026-09-01T18:52:00+08:00",
+  "status": "protocol-evidence-complete",
+  "rulesVersion": "1407-mac-evidence-v18.4",
+  "rulesHash": "08727f7e5a890dcd1b3cf5ae9559474ef9ea98c6e9a09ac34b7d53598ba1662f",
+  "rulesHashAlgorithm": "SHA-256 of the isolated local rule/adaptor contract tuple",
+  "rulesHashSource": "reports/1407-mac-Coin-Master-GO/rules-hash-input.txt",
+  "winModel": "FIXED_WAYS_1024",
+  "specialModes": [
+    "cascade",
+    "goldenTransformingWild",
+    "freeSpins",
+    "freeSpinRetrigger"
+  ],
+  "evidence": [
+    "protocol/1407-Coin-Master-GO/protocol-spec.json",
+    "protocol/1407-Coin-Master-GO/state-machine.json",
+    "reports/1407-Coin-Master-GO/field-evidence-matrix.json",
+    "captures/1407-Coin-Master-GO/spin-index.jsonl",
+    "captures/1407-Coin-Master-GO/step-index.jsonl",
+    "captures/1407-Coin-Master-GO/history-special-index.json",
+    "protocol/1407-Coin-Master-GO/protocol-handoff.json"
+  ],
+  "sourcePolicy": {
+    "fixturesAreOracleOnly": true,
+    "fixturesAreRuntimeSource": false,
+    "historicalResponsesMayBeGeneratedAtRuntime": false,
+    "unknownFieldsMayBeSynthesized": false
+  },
+  "identity": {
+    "platformGameId": 1407,
+    "gameProtocolId": 55,
+    "name": "Coin Master GO",
+    "evidence": [
+      "E-ID-PLATFORM",
+      "E-ID-BUNDLE"
+    ]
+  },
+  "betModel": {
+    "baseBetFactor": 20,
+    "betLevels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "betSizes": [
+      0.02,
+      0.1,
+      0.5
+    ],
+    "betAmountFormula": "ba = 20 * bl * bs",
+    "minimumBet": {
+      "bl": 1,
+      "bs": 0.02,
+      "ba": 0.4
+    },
+    "evidence": [
+      "E-RULES",
+      "E-CONFIG",
+      "E-FRONTEND-BET",
+      "E-SPINS"
+    ]
+  },
+  "winModelDetails": {
+    "type": "FIXED_WAYS",
+    "fixedWays": 1024,
+    "evaluation": "same paying symbol on 3 to 5 consecutive reels starting at the leftmost reel",
+    "waysFormula": "product of matched visible-cell counts on each consecutive reel",
+    "payoutFormula": "wa = sum(spl[symbol][matchedReelCount] * bs * bl * ways * rpx)",
+    "minimumMatchedReels": 3,
+    "maximumMatchedReels": 5,
+    "cascade": true,
+    "paylines": false,
+    "cluster": false,
+    "wild": {
+      "symbol": "WILD",
+      "substitutes": [
+        "H1",
+        "H2",
+        "H3",
+        "H4",
+        "H5",
+        "H6",
+        "H7",
+        "H8"
+      ],
+      "doesNotSubstitute": [
+        "SC"
+      ],
+      "ownCashPay": false
+    },
+    "scatter": {
+      "symbol": "SC",
+      "cashPay": false,
+      "evaluatedAnywhere": true,
+      "triggerCount": 3,
+      "initialFreeSpins": 12,
+      "additionalFreeSpinsPerExtraScatter": 2
+    },
+    "verification": {
+      "capturedWinningSteps": 222,
+      "formulaMatches": 222,
+      "formulaMismatches": 0,
+      "wildSubstituteCoordinateHits": 391,
+      "zeroWinStepsWithNonemptyWinMatches": 0
+    },
+    "evidence": [
+      "E-RULES",
+      "E-PAYTABLE",
+      "E-CONFIG",
+      "E-FRONTEND-RESULT",
+      "E-SPINS",
+      "E-STEPS"
+    ]
+  },
+  "paytable": {
+    "unit": "bet size multiplied by bet level, ways and current rpx",
+    "symbols": {
+      "H1": {
+        "3": 15,
+        "4": 60,
+        "5": 100
+      },
+      "H2": {
+        "3": 10,
+        "4": 40,
+        "5": 80
+      },
+      "H3": {
+        "3": 8,
+        "4": 20,
+        "5": 60
+      },
+      "H4": {
+        "3": 6,
+        "4": 15,
+        "5": 40
+      },
+      "H5": {
+        "3": 4,
+        "4": 10,
+        "5": 20
+      },
+      "H6": {
+        "3": 4,
+        "4": 10,
+        "5": 20
+      },
+      "H7": {
+        "3": 2,
+        "4": 5,
+        "5": 10
+      },
+      "H8": {
+        "3": 2,
+        "4": 5,
+        "5": 10
+      },
+      "SC": {
+        "3": 0,
+        "4": 0,
+        "5": 0
+      },
+      "WILD": {
+        "3": 0,
+        "4": 0,
+        "5": 0
+      }
+    },
+    "evidence": [
+      "E-CONFIG",
+      "E-PAYTABLE",
+      "E-SPINS"
+    ]
+  },
+  "boardModel": {
+    "visibleReels": 5,
+    "visibleRowsPerReel": 4,
+    "visibleCellCount": 20,
+    "bufferRowsPerReel": 1,
+    "transportRowsPerReel": 5,
+    "transportCellCount": 25,
+    "transportField": "rskl",
+    "transportOrder": "reel-major; five entries per reel; row 0 is the non-visible buffer and rows 1..4 are visible",
+    "matchCoordinateEncoding": {
+      "field": "wmkl",
+      "rawFormat": "decimal RR where tens digit is zero-based reel 0..4 and ones digit is zero-based visible row 0..3",
+      "frontendTransform": "add 1 to the raw decimal coordinate, zero-pad to two digits, then use the first digit as reel and second as visible row 1..4",
+      "validValues": [
+        0,
+        1,
+        2,
+        3,
+        10,
+        11,
+        12,
+        13,
+        20,
+        21,
+        22,
+        23,
+        30,
+        31,
+        32,
+        33,
+        40,
+        41,
+        42,
+        43
+      ]
+    },
+    "goldCoordinateEncoding": {
+      "field": "gfl",
+      "format": "two-digit live-board coordinate compared directly with the frontend symbol coord",
+      "allowedReelDigits": [
+        1,
+        2,
+        3
+      ],
+      "capturedValues": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        20,
+        21,
+        22,
+        23,
+        24,
+        30,
+        31,
+        32,
+        33,
+        34
+      ]
+    },
+    "symbols": [
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "H5",
+      "H6",
+      "H7",
+      "H8",
+      "WILD",
+      "SC"
+    ],
+    "goldenSymbols": {
+      "supported": true,
+      "eligibleReelsOneBased": [
+        2,
+        3,
+        4
+      ],
+      "ineligibleSymbols": [
+        "WILD",
+        "SC"
+      ],
+      "transformRule": "a golden symbol participating in a win transforms to WILD for the next cascade"
+    },
+    "verification": {
+      "capturedSteps": 1470,
+      "invalidTransportLengths": 0,
+      "invalidMatchCoordinates": 0,
+      "invalidMatchReelCounts": 0,
+      "wsklWmklAlignmentErrors": 0
+    },
+    "evidence": [
+      "E-RULES",
+      "E-PAYTABLE",
+      "E-FRONTEND-BOARD",
+      "E-FRONTEND-GOLD",
+      "E-SPINS",
+      "E-STEPS"
+    ]
+  },
+  "roundModel": {
+    "roundDefinition": "one paid Step (ba > 0) plus every following zero-bet cascade and free-spin Step until final settlement",
+    "deliveryDefinition": "one base-spin or one free-spin board resolution, including all of that resolution's cascades through ss=1",
+    "stepDefinition": "one POST /api/v1/go-master/spin request and response",
+    "paidStep": {
+      "gt": 1,
+      "small_game_type": 0,
+      "ba": "20 * bl * bs",
+      "initialRpx": 1
+    },
+    "baseCascadeStep": {
+      "gt": 1,
+      "small_game_type": 1,
+      "ba": 0,
+      "rpxSequence": [
+        2,
+        3,
+        5
+      ]
+    },
+    "freeStep": {
+      "gt": 2,
+      "small_game_type": 2,
+      "ba": 0,
+      "rpxSequence": [
+        2,
+        4,
+        6,
+        10
+      ]
+    },
+    "stepContinuation": {
+      "ss": 0,
+      "meaning": "current Delivery has another cascade Step"
+    },
+    "stepTerminal": {
+      "ss": 1,
+      "meaning": "current Delivery has no further cascade"
+    },
+    "roundTerminalPredicate": "ss == 1 AND (fsn == 0 OR (gt == 2 AND nfsc == fsn))",
+    "accumulators": {
+      "wa": "current Step win",
+      "rwa": "cumulative win for the paid Round; resets on ba > 0",
+      "frwa": "cumulative free-spin portion of the paid Round win",
+      "pb": "balance after the paid debit while the Round is active; final Round settlement adds rwa only at the terminal predicate"
+    },
+    "capturedCounts": {
+      "paidSpinCount": 501,
+      "indexedSteps": 1470,
+      "paidRoundStarts": 501,
+      "completeRoundTerminalsInIndex": 500,
+      "incompleteIndexedRounds": 1,
+      "baseInitialSteps": 501,
+      "baseCascadeSteps": 385,
+      "freeSteps": 584,
+      "featureRounds": 19,
+      "retriggerRounds": 4
+    },
+    "captureContinuityNote": {
+      "incompleteRoundStartScene": 499,
+      "lastIndexedScene": 500,
+      "nextPaidScene": 501,
+      "explanation": "the Round beginning at scene 499 has two completion Steps visible in log-view bsl but absent from the live Step index",
+      "synthesized": false,
+      "runtimeInferenceFromMissingStepsAllowed": false
+    },
+    "evidence": [
+      "E-FRONTEND-STATE",
+      "E-SPINS",
+      "E-HISTORY",
+      "E-STEPS"
+    ],
+    "roundIndex": {
+      "path": "captures/1407-Coin-Master-GO/round-index.jsonl",
+      "paidSpinIndexPath": "captures/1407-Coin-Master-GO/spin-index.jsonl",
+      "stepIndexPath": "captures/1407-Coin-Master-GO/step-index.jsonl",
+      "paidSpinCount": 501,
+      "completeRounds": 500,
+      "incompleteRounds": 1,
+      "startField": "startSceneIndex",
+      "endField": "endSceneIndex",
+      "terminalField": "terminal"
+    }
+  },
+  "specialModeDetails": {
+    "cascade": {
+      "supported": true,
+      "accessible": true,
+      "evidence": [
+        "E-RULES",
+        "E-FRONTEND-RESULT",
+        "E-FRONTEND-GOLD",
+        "E-SPINS",
+        "E-STEPS"
+      ],
+      "physicalContinuity": {
+        "status": "CONFIRMED_CURRENT_GAME_EVIDENCE",
+        "representativeTransitions": [
+          "scene-11-to-12",
+          "scene-12-to-13"
+        ],
+        "transportProjection": "per reel, remove only ordinary winning visible coordinates from the prior five-cell rskl queue; preserve buffer and non-winning symbol order; compact toward the final transport row; prepend only the required new symbols",
+        "unaffectedReelRule": "a reel with no removed winner preserves all five prior transport cells exactly",
+        "goldenRule": "wmkl raw coordinate is transformed to the frontend coordinate by adding 1; when that coordinate is in gfl, the winning symbol becomes WILD, stays in the survivor queue and falls after ordinary winners are removed; non-winning gfl markers move with their surviving symbols",
+        "fullCaptureValidation": "679/679 available adjacent cascade transitions match survivor/WILD/gfl projection; scene 499 live tail is excluded because its successor responses are absent",
+        "roundBoundary": "all cascade Steps are pre-generated in one complete Round and projected in contiguous deliveryIndex/stepIndex order"
+      },
+      "capturedSceneCount": 385,
+      "representativeScenes": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        27,
+        28,
+        29,
+        30,
+        31
+      ]
+    },
+    "goldenTransformingWild": {
+      "supported": true,
+      "accessible": true,
+      "evidence": [
+        "E-RULES",
+        "E-FRONTEND-GOLD",
+        "E-SPINS",
+        "E-STEPS"
+      ],
+      "capturedWinningGoldSceneCount": 229,
+      "representativeScenes": [
+        12,
+        13,
+        14,
+        26,
+        29,
+        36,
+        37,
+        38,
+        39,
+        44
+      ]
+    },
+    "freeSpins": {
+      "supported": true,
+      "accessible": true,
+      "initialAward": 12,
+      "retriggerSupported": true,
+      "capturedInitialTriggers": 19,
+      "capturedMaximumFsn": 36,
+      "evidence": [
+        "E-RULES",
+        "E-FRONTEND-STATE",
+        "E-SPINS",
+        "E-STEPS"
+      ],
+      "historyDetails": {
+        "confirmed": true,
+        "field": "fsl",
+        "detailsCaptured": 19,
+        "retriggerDetailsCaptured": 4,
+        "maximumFsn": 36,
+        "evidence": [
+          "E-HISTORY-FREE"
+        ]
+      },
+      "capturedInitialTriggerEvents": 19,
+      "capturedRetriggerRounds": 4,
+      "capturedRetriggerEvents": 5,
+      "observedRetriggerTransitions": [
+        {
+          "transition": "12->24",
+          "count": 3
+        },
+        {
+          "transition": "12->26",
+          "count": 1
+        },
+        {
+          "transition": "24->36",
+          "count": 1
+        }
+      ],
+      "retriggerEvents": [
+        {
+          "roundStartScene": 171,
+          "sceneIndex": 187,
+          "fromFsn": 12,
+          "toFsn": 24,
+          "nfsc": 6,
+          "gt": 2,
+          "ss": 1
+        },
+        {
+          "roundStartScene": 612,
+          "sceneIndex": 636,
+          "fromFsn": 12,
+          "toFsn": 26,
+          "nfsc": 11,
+          "gt": 2,
+          "ss": 1
+        },
+        {
+          "roundStartScene": 813,
+          "sceneIndex": 819,
+          "fromFsn": 12,
+          "toFsn": 24,
+          "nfsc": 3,
+          "gt": 2,
+          "ss": 1
+        },
+        {
+          "roundStartScene": 813,
+          "sceneIndex": 833,
+          "fromFsn": 24,
+          "toFsn": 36,
+          "nfsc": 9,
+          "gt": 2,
+          "ss": 1
+        },
+        {
+          "roundStartScene": 1235,
+          "sceneIndex": 1262,
+          "fromFsn": 12,
+          "toFsn": 24,
+          "nfsc": 10,
+          "gt": 2,
+          "ss": 1
+        }
+      ],
+      "multipleRetriggersInOneRound": {
+        "captured": true,
+        "roundStartScenes": [
+          813
+        ]
+      }
+    },
+    "purchaseEntry": {
+      "supported": false,
+      "discoveryStatus": "not found in rules, bundle, menu probes or endpoints",
+      "evidence": [
+        "E-SCENARIO"
+      ]
+    },
+    "separateRespinPurchase": {
+      "supported": false,
+      "discoveryStatus": "not found in rules, bundle, menu probes or endpoints",
+      "evidence": [
+        "E-SCENARIO"
+      ]
+    },
+    "freeSpinRetrigger": {
+      "supported": true,
+      "accessible": true,
+      "parentMode": "freeSpins",
+      "capturedRetriggerRounds": 4,
+      "capturedRetriggerEvents": 5,
+      "observedRetriggerTransitions": [
+        {
+          "transition": "12->24",
+          "count": 3
+        },
+        {
+          "transition": "12->26",
+          "count": 1
+        },
+        {
+          "transition": "24->36",
+          "count": 1
+        }
+      ],
+      "multipleRetriggersInOneRound": {
+        "captured": true,
+        "roundStartScenes": [
+          813
+        ]
+      },
+      "historyDetailsCaptured": 4,
+      "evidence": [
+        "E-RULES",
+        "E-FRONTEND-STATE",
+        "E-STEPS",
+        "E-HISTORY-FREE"
+      ]
+    }
+  },
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "onlyFor": "ordinary paid base-game Round",
+    "requiredShape": {
+      "ba": "20 * bl * bs",
+      "gt": 1,
+      "small_game_type": 0,
+      "rpx": 1,
+      "fsn": 0,
+      "nfsc": 0,
+      "ss": 1,
+      "wa": 0,
+      "rwa": 0,
+      "frwa": 0,
+      "wskl": [],
+      "wmkl": []
+    },
+    "forbiddenWhen": [
+      "a cascade is active",
+      "fsn > nfsc",
+      "gt == 2",
+      "any reward mode is active"
+    ],
+    "evidence": [
+      "E-SPINS",
+      "E-FRONTEND-STATE"
+    ],
+    "capturedSceneCount": 422,
+    "representativeScenes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ]
+  },
+  "redisContract": {
+    "status": "PLATFORM_DOWNSTREAM_CONFIRMED",
+    "upstreamProviderFact": false,
+    "runtimeUseAllowed": true,
+    "sourceGameId": 1407,
+    "redisGameIdDefault": 1407,
+    "redisGameIdConfigurable": true,
+    "normalIndexKeyPattern": "PerKeyList_%09d",
+    "specialIndexKeyPattern": "MaryKeyList_%09d",
+    "normalResultKeyPattern": "BetLog:0%08d:%s",
+    "specialResultKeyPattern": "MaryLog:%09d:%s",
+    "indexType": "ZSET",
+    "listType": "LIST",
+    "scoreSemantics": "actual independently recomputed total Round multiplier",
+    "memberEncoding": "CMG1 variable-length UTF-8 JSON with only non-recomputable complete-Round facts",
+    "memberContainsHttpEnvelope": false,
+    "memberContainsBalanceSessionOrTimestamp": false,
+    "zeroMultiplierDisposition": "SKIP",
+    "positiveMultiplierDisposition": "ZADD actual multiplier then RPUSH member and LTRIM per bucket",
+    "atomicBatch": "single MULTI/EXEC containing ZADD+RPUSH+LTRIM",
+    "defaultCapacityPerMultiplier": 300,
+    "evidenceBoundary": "platform adapter contract derived from current target consumer and workflow; not asserted as original-provider behavior"
+  },
+  "codecContract": {
+    "requestMethod": "POST",
+    "requestContentType": "application/x-www-form-urlencoded",
+    "charset": "UTF-8 percent-encoding",
+    "headerToBodyAliases": {
+      "web-token": "t",
+      "game-id": "gid"
+    },
+    "responseContentType": "application/json",
+    "responseEnvelope": {
+      "success": {
+        "code": 200,
+        "info": "ok",
+        "data": "object"
+      }
+    },
+    "frontendUnwrapsData": true,
+    "applicationEncryption": "none observed",
+    "applicationCompression": "none observed",
+    "tokenHandling": "opaque token passed from auth response to t; the game frontend does not decrypt it",
+    "moneyTypes": {
+      "spin.pb": "decimal string",
+      "spin.ba": "JSON number",
+      "spin.wa": "JSON number",
+      "spin.rwa": "JSON number",
+      "spin.frwa": "JSON number",
+      "historyList.money": "decimal strings",
+      "historyDetail.money": "mixed JSON numbers and decimal strings as captured"
+    },
+    "evidence": [
+      "E-FRONTEND-HTTP",
+      "E-SESSION",
+      "E-SPINS",
+      "E-HISTORY"
+    ]
+  },
+  "symbolWeights": {
+    "providerServerOutcomeWeights": null,
+    "providerStatus": "UNKNOWN",
+    "providerProbabilityConclusion": "UNKNOWN",
+    "localReplicaStatus": "EVIDENCE_SAMPLED_FROM_501_PAID_STARTS",
+    "localReplicaMayBeUsedForRuntimeGeneration": true,
+    "localReplicaNotProviderFact": true,
+    "localReplicaWeights": {
+      "H1": 1595,
+      "H2": 1569,
+      "H3": 1542,
+      "H4": 1489,
+      "H5": 1508,
+      "H6": 1547,
+      "H7": 1500,
+      "H8": 1459,
+      "WILD": 0,
+      "SC": 316
+    },
+    "localReplicaTotalWeight": 12525,
+    "approximatePercentFromSample": {
+      "H1": 12.734531,
+      "H2": 12.526946,
+      "H3": 12.311377,
+      "H4": 11.888224,
+      "H5": 12.039920,
+      "H6": 12.351297,
+      "H7": 11.976048,
+      "H8": 11.648703,
+      "WILD": 0.000000,
+      "SC": 2.522954
+    },
+    "sampleSource": "501 preserved paid-Round starts, 25 rskl transport cells each",
+    "wildRule": "WILD direct-draw count is zero; WILD is created only by a winning Golden symbol in the immediate cascade successor",
+    "goldCountFrequencyByCount0Through9": [20, 73, 109, 94, 97, 61, 28, 15, 2, 2],
+    "captureFrequencyIsProviderProbability": false,
+    "localReplicaValidation": "natural complete-Round special-chain test plus 200k evidence-profile draw distribution test",
+    "frontendAnimationOnly": {
+      "values": [
+        5,
+        10,
+        15,
+        20,
+        25,
+        30,
+        10
+      ],
+      "mappedPrefixSymbols": [
+        "H1",
+        "H2",
+        "H3",
+        "H4",
+        "H5",
+        "H6",
+        "H7"
+      ],
+      "purpose": "randomReel filler used before server results are appended for reel animation",
+      "whyNotRngEvidence": "only seven entries exist for ten symbols and authoritative results arrive in rskl from the server"
+    },
+    "evidence": [
+      "E-SPINS",
+      "E-STEPS",
+      "E-FRONTEND-GOLD",
+      "E-FRONTEND-RESULT"
+    ]
+  },
+  "cardMaterialWeights": {
+    "scope": "reels 2-4, paying symbols only; WILD and SC are excluded",
+    "classification": "gfl identifies Gold on the provider wire; decoding immediately materializes every eligible non-gfl coordinate as explicit Silver and validates a complete disjoint Silver/Gold partition",
+    "stateModel": "Silver and Gold are first-class GameRuleCore states; Silver is not left as an unmodelled default branch",
+    "lifecycleScope": "these configurable weights apply to complete-Round opening boards only",
+    "eligibleCardCount": 7310,
+    "localReplicaWeights": {
+      "SILVER": 5737,
+      "GOLD": 1573
+    },
+    "approximatePercentFromSample": {
+      "SILVER": 78.481532,
+      "GOLD": 21.518468
+    },
+    "configKeys": [
+      "generation.card.silver.weight",
+      "generation.card.gold.weight"
+    ],
+    "configurationRule": "either material may be set to zero, but both cannot be zero",
+    "cascadeRefillProfile": {
+      "sourceAdjacentPairs": 679,
+      "eligibleRefillCards": 2429,
+      "SILVER": 2429,
+      "GOLD": 0,
+      "rule": "every eligible cascade refill is explicit Silver; opening weights are not reused"
+    },
+    "providerProbabilityClaim": false,
+    "evidence": [
+      "E-SPINS",
+      "E-FRONTEND-GOLD",
+      "E-FRONTEND-RESULT"
+    ]
+  },
+  "theoreticalRtp": {
+    "percent": 96.68,
+    "source": "frontend GameGlobalConfig CurRtp",
+    "evidence": [
+      "E-FRONTEND-CONSTANTS"
+    ]
+  },
+  "unconfirmedOrAbsent": [
+    "original-provider server RNG symbol weights and reel strips: UNKNOWN",
+    "original-provider win/special selection probability: UNKNOWN",
+    "purchase or bonus-buy endpoint: NOT_OBSERVED",
+    "separate respin purchase mode: NOT_OBSERVED"
+  ],
+  "evidenceCatalog": {
+    "E-ID-PLATFORM": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/entry-platform-evidence.json",
+    "E-ID-BUNDLE": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/versionconfig.js",
+    "E-RULES": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/languages/en/json/gameRules.json",
+    "E-PAYTABLE": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/languages/en/json/paytable.json",
+    "E-CONFIG": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json#/config/response/json/data",
+    "E-SPINS": "captures/1407-Coin-Master-GO/spin-index.jsonl",
+    "E-HISTORY": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/history-capture.json",
+    "E-SCENARIO": "reports/1407-Coin-Master-GO/1407-Coin-Master-GO/scenario-coverage.json",
+    "E-FRONTEND-HTTP": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#offset-235658",
+    "E-FRONTEND-BET": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameLogic.CurBetGold",
+    "E-FRONTEND-RESULT": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#offset-123500",
+    "E-FRONTEND-BOARD": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameConfig.RowCounts",
+    "E-FRONTEND-GOLD": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameLogic.isGoldSymbolByIndex",
+    "E-FRONTEND-STATE": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameResults",
+    "E-FRONTEND-WEIGHTS": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#offset-119271",
+    "E-FRONTEND-CONSTANTS": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#GameGlobalConfig",
+    "E-SESSION": "captures/1407-Coin-Master-GO/1407-Coin-Master-GO/session-and-config.json",
+    "E-ROUNDS": "captures/1407-Coin-Master-GO/round-index.jsonl",
+    "E-HISTORY-SCAN": "captures/1407-Coin-Master-GO/history-detail-scan.jsonl",
+    "E-HISTORY-FREE": "captures/1407-Coin-Master-GO/history-special-index.json",
+    "E-LANGUAGES": "reports/1407-Coin-Master-GO/language-inventory.json",
+    "E-FRONTEND-LANGUAGE": "resources/1407-Coin-Master-GO/1407-Coin-Master-GO/shared/static.cpgame.io/55/assets/main/index.2d56a.js#language-loadDir",
+    "E-STEPS": "captures/1407-Coin-Master-GO/step-index.jsonl"
+  },
+  "supportedLanguages": {
+    "codes": [
+      "bn",
+      "en",
+      "es",
+      "fr",
+      "id",
+      "ko",
+      "pt",
+      "th",
+      "tr",
+      "vi"
+    ],
+    "count": 10,
+    "actualFirstLoadParameter": "both l and language are set to the selected code",
+    "sourceOriginException": {
+      "language": "pt",
+      "path": "assets/resources/native/11/11df1983e.1b365.png",
+      "status": 404,
+      "retryCount": 4,
+      "impact": "source-parity exception; page and game resources otherwise loaded"
+    },
+    "evidence": [
+      "E-LANGUAGES",
+      "E-FRONTEND-LANGUAGE"
+    ]
+  },
+  "historyModel": {
+    "supported": true,
+    "list": {
+      "endpoint": "POST /cp/api/v1/go-master/log-list",
+      "requestFields": [
+        "page_index",
+        "begin_at",
+        "end_at",
+        "t",
+        "gid"
+      ],
+      "responseFields": [
+        "ba",
+        "end",
+        "lc",
+        "ll",
+        "wa"
+      ],
+      "rowFields": [
+        "ba",
+        "baf",
+        "bid",
+        "ca",
+        "fe",
+        "gm",
+        "gt",
+        "tis",
+        "wa"
+      ],
+      "transferIdField": "tis"
+    },
+    "detail": {
+      "endpoint": "POST /cp/api/v1/go-master/log-view",
+      "requestFields": [
+        "transfer_id",
+        "t",
+        "gid"
+      ],
+      "responseFields": [
+        "baf",
+        "bid",
+        "bsl",
+        "fsl"
+      ],
+      "baseRoundStepsField": "bsl",
+      "freeRoundStepsField": "fsl",
+      "stepFields": [
+        "ba",
+        "bid",
+        "bl",
+        "bs",
+        "ca",
+        "frwa",
+        "fsn",
+        "gfl",
+        "gt",
+        "nfsc",
+        "pb",
+        "rpx",
+        "rskl",
+        "rwa",
+        "small_game_type",
+        "ss",
+        "wa",
+        "wmkl",
+        "wskl"
+      ],
+      "freeDetailsCaptured": 19,
+      "retriggerDetailsCaptured": 4
+    },
+    "mapping": "one list row per paid Round; list row tis is posted as detail transfer_id; detail bsl holds paid/base Steps and fsl holds free-mode Steps",
+    "evidence": [
+      "E-HISTORY",
+      "E-HISTORY-SCAN",
+      "E-HISTORY-FREE",
+      "E-FRONTEND-STATE"
+    ]
+  },
+  "roundSampleCoverage": {
+    "ordinaryTargetPerCategory": 200,
+    "specialTargetPerCategory": 30,
+    "paidRoundStarts": 501,
+    "completeRounds": 500,
+    "maximumPaidRoundAttempts": 5000,
+    "categories": {
+      "ordinaryLoss": {
+        "actualCompleteRounds": 403,
+        "target": 200,
+        "status": "SUFFICIENT"
+      },
+      "ordinaryWin": {
+        "actualCompleteRounds": 78,
+        "target": 200,
+        "status": "SAMPLE_INSUFFICIENT"
+      },
+      "cascade": {
+        "actualCompleteRounds": 97,
+        "target": 30,
+        "status": "SUFFICIENT"
+      },
+      "goldenTransformingWild": {
+        "actualCompleteRounds": 96,
+        "target": 30,
+        "status": "SUFFICIENT"
+      },
+      "freeSpins": {
+        "actualCompleteRounds": 19,
+        "target": 30,
+        "status": "SAMPLE_INSUFFICIENT"
+      },
+      "freeSpinRetrigger": {
+        "actualCompleteRounds": 4,
+        "target": 30,
+        "status": "SAMPLE_INSUFFICIENT"
+      }
+    },
+    "stopDisposition": "Existing raw evidence determines every transition repaired by this follow-up; no repeated capture was performed merely to inflate counts. Shortfalls remain explicitly recorded."
+  },
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "schemaVersion": 2,
+    "rulesHash": "08727f7e5a890dcd1b3cf5ae9559474ef9ea98c6e9a09ac34b7d53598ba1662f",
+    "behaviorIds": [
+      "transport.form-json-envelope",
+      "session.verify-config-resume",
+      "wager.bet-amount",
+      "board.transport-coordinate-mapping",
+      "outcome.fixed-ways-payout",
+      "round.boundary-and-state-progression",
+      "runtime.independent-paid-loss",
+      "cascade.physical-board-continuity",
+      "golden.transform-to-wild",
+      "free-spin.initial-award",
+      "free-spin.retrigger",
+      "round.delivery-single-claim",
+      "request.idempotency",
+      "balance.delayed-settlement",
+      "history.list-detail-round-projection",
+      "disconnect.durable-resume",
+      "language.supported-first-load",
+      "mode.purchase-entry-disabled",
+      "mode.separate-respin-purchase-disabled",
+      "runtime.fixture-isolation",
+      "redis.platform-downstream-loader",
+      "generator.local-adjustable-weights",
+      "theoretical-rtp.frontend-constant"
+    ],
+    "unresolvedBehaviorIds": [
+      "production.server-symbol-weights",
+      "production.win-special-selection-probability",
+      "capture.scene-499-live-tail",
+      "capture.history-non-strict-one-to-one",
+      "sample.ordinary-win-insufficient",
+      "sample.free-spins-insufficient",
+      "sample.retrigger-insufficient"
+    ],
+    "verificationPolicy": {
+      "allConfirmedBehaviorsRequireImplementationContract": true,
+      "allConfirmedBehaviorsRequireVerificationContract": true,
+      "multiStepBehaviorsRequireAdjacentStepEvidence": true,
+      "usesImplementationGeneratedExpected": false
+    }
+  }
+}

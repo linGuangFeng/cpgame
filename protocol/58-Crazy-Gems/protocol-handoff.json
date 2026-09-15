@@ -1,0 +1,344 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 58,
+  "directoryName": "58-Crazy-Gems",
+  "rulesVersion": "crazy-gems-rules-0bf6b8291cfbfe00",
+  "rulesHash": "0bf6b8291cfbfe0005aacbe5150d64097752cd989da88fb5a384db1e2d3d60ef",
+  "handoffStatus": "SCHEMA_REWORK_COMPLETE_PENDING_INDEPENDENT_PROTOCOL_ACCEPTANCE",
+  "rulesManifest": [
+    {"source": "captures/58-Crazy-Gems/rules-text-pt.json", "sha256": "6b1fae94e1f15cd6f5f211fe17226818a4189b2be2a8c8473d0ee2d8f90be355"},
+    {"source": "captures/58-Crazy-Gems/paytable-text-pt.json", "sha256": "3a4ac00cdbcf15c0ba90bbba8e72b1e81b349a6f1feea77185743aaed74632ab"},
+    {"source": "fixtures/58-Crazy-Gems/first-load/0001-post-config.json", "sha256": "2912fdf8743974621b3d2952a77a9f30be6d4619917c93c3698fbb44d1b42b84"},
+    {"source": "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js", "sha256": "0b9ab93e73803fd2f8b8f497a30333607adda1ea074de8a7338aab8b2d4dd1c1"}
+  ],
+  "evidenceInventory": [
+    {"id": "E-ID-NAME", "source": "captures/58-Crazy-Gems/id-name-evidence.json", "behaviorIds": ["B-ENTRY-ID"]},
+    {"id": "E-LAUNCH", "source": "captures/58-Crazy-Gems/game-launch-network-redacted.json", "behaviorIds": ["B-ENTRY-ID", "B-LANGUAGE-FIRST-LOAD"]},
+    {"id": "E-HTML", "source": "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/index.html", "behaviorIds": ["B-ENTRY-ID", "B-LANGUAGE-FIRST-LOAD"]},
+    {"id": "E-LANG-CONFIG", "source": "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/resources/config.c4224.json", "behaviorIds": ["B-LANGUAGE-FIRST-LOAD"]},
+    {"id": "E-LANG-RUN", "source": "reports/58-Crazy-Gems/language-inventory.json", "behaviorIds": ["B-LANGUAGE-FIRST-LOAD"]},
+    {"id": "E-FIRSTLOAD-API", "source": "captures/58-Crazy-Gems/game-first-load-api-network.json", "behaviorIds": ["B-SOURCE-REQUEST-SEQUENCE", "B-FORM-JSON-CODEC", "B-CONFIG-BET-PAYTABLE"]},
+    {"id": "E-RULES", "source": "captures/58-Crazy-Gems/rules-text-pt.json", "behaviorIds": ["B-CONFIG-BET-PAYTABLE", "B-FIXED-PAYLINE-WIN", "B-MINECART-MULTIPLIER"]},
+    {"id": "E-RULES-TREE", "source": "captures/58-Crazy-Gems/rules-control-active-tree.json", "behaviorIds": ["B-FIXED-PAYLINE-WIN", "B-MINECART-MULTIPLIER"]},
+    {"id": "E-PAYTABLE", "source": "captures/58-Crazy-Gems/paytable-text-pt.json", "behaviorIds": ["B-CONFIG-BET-PAYTABLE", "B-FIXED-PAYLINE-WIN", "B-WILD-SUBSTITUTION", "B-MINECART-MULTIPLIER"]},
+    {"id": "E-PAYTABLE-TREE", "source": "captures/58-Crazy-Gems/paytable-active-tree.json", "behaviorIds": ["B-FIXED-PAYLINE-WIN", "B-WILD-SUBSTITUTION", "B-MINECART-MULTIPLIER"]},
+    {"id": "E-CONFIG", "source": "fixtures/58-Crazy-Gems/first-load/0001-post-config.json", "behaviorIds": ["B-FORM-JSON-CODEC", "B-CONFIG-BET-PAYTABLE", "B-FIXED-PAYLINE-WIN", "B-WILD-SUBSTITUTION"]},
+    {
+      "id": "E-BUNDLE",
+      "source": "resources/58-Crazy-Gems/pt-br/static.cpgame.io/58/assets/main/index.a2ace.js",
+      "behaviorIds": ["B-ENTRY-ID", "B-SOURCE-REQUEST-SEQUENCE", "B-FORM-JSON-CODEC", "B-CONFIG-BET-PAYTABLE", "B-FIXED-PAYLINE-WIN", "B-MINECART-MULTIPLIER", "B-ROUND-DELIVERY-STATE", "B-HISTORY-PAGINATION", "B-HISTORY-LIST-DETAIL", "B-BALANCE-LEDGER-CONTINUITY"],
+      "disposition": "USED_WITH_EXPLICIT_SCOPE_LIMITS",
+      "reason": "FreeGame scaffold 与 randomReel 动画权重未被当前规则/API确认为服务端玩法或生成权重，分别进入 unresolvedBehaviors。"
+    },
+    {"id": "E-INITIAL-SPIN-NET", "source": "captures/58-Crazy-Gems/initial-paid-round-network.json", "behaviorIds": ["B-SOURCE-REQUEST-SEQUENCE", "B-FORM-JSON-CODEC", "B-PAID-ROUND-LOSS", "B-ROUND-DELIVERY-STATE"]},
+    {"id": "E-SPIN-FIXTURE", "source": "fixtures/58-Crazy-Gems/initial-round/0001-post-spin.json", "behaviorIds": ["B-FORM-JSON-CODEC", "B-PAID-ROUND-LOSS", "B-ROUND-DELIVERY-STATE"]},
+    {"id": "E-ROUND-STEPS", "source": "captures/58-Crazy-Gems/round-steps.jsonl", "behaviorIds": ["B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN", "B-MINECART-MULTIPLIER", "B-ROUND-DELIVERY-STATE", "B-BALANCE-LEDGER-CONTINUITY"]},
+    {"id": "E-SPIN-INDEX", "source": "captures/58-Crazy-Gems/spin-index.jsonl", "behaviorIds": ["B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN", "B-MINECART-MULTIPLIER", "B-ROUND-DELIVERY-STATE"]},
+    {"id": "E-HISTORY-LIST", "source": "captures/58-Crazy-Gems/history-list-pages.jsonl", "behaviorIds": ["B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN", "B-ROUND-DELIVERY-STATE", "B-HISTORY-PAGINATION", "B-HISTORY-LIST-DETAIL", "B-BALANCE-LEDGER-CONTINUITY"]},
+    {"id": "E-HISTORY-DETAIL", "source": "captures/58-Crazy-Gems/history-details.jsonl", "behaviorIds": ["B-FIXED-PAYLINE-WIN", "B-WILD-SUBSTITUTION", "B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN", "B-MINECART-MULTIPLIER", "B-ROUND-DELIVERY-STATE", "B-HISTORY-LIST-DETAIL", "B-BALANCE-LEDGER-CONTINUITY"]},
+    {"id": "E-HISTORY-SUMMARY", "source": "captures/58-Crazy-Gems/history-recovery-summary.json", "behaviorIds": ["B-HISTORY-PAGINATION", "B-HISTORY-LIST-DETAIL", "B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN", "B-MINECART-MULTIPLIER"]},
+    {"id": "E-HISTORY-NET", "source": "captures/58-Crazy-Gems/history-page-001-network.json", "behaviorIds": ["B-SOURCE-REQUEST-SEQUENCE", "B-FORM-JSON-CODEC", "B-HISTORY-PAGINATION", "B-HISTORY-LIST-DETAIL"]},
+    {"id": "E-HISTORY-DETAIL-NET", "source": "captures/58-Crazy-Gems/history-detail-probe-network.json", "behaviorIds": ["B-SOURCE-REQUEST-SEQUENCE", "B-FORM-JSON-CODEC", "B-HISTORY-LIST-DETAIL"]},
+    {"id": "E-BUY-SEARCH", "source": "captures/58-Crazy-Gems/buy-entry-search.json", "behaviorIds": [], "disposition": "NO_BEHAVIOR_FORMED", "reason": "未发现购买入口，FEATURE_BUY 不适用。"},
+    {"id": "E-GAMEPLAY-TREE", "source": "captures/58-Crazy-Gems/cocos-gameplay-tree.json", "behaviorIds": [], "disposition": "NEGATIVE_CAPABILITY_EVIDENCE", "reason": "未形成免费、奖励购买或其他可访问特殊模式行为。"},
+    {"id": "E-SCENARIO-COVERAGE", "source": "reports/58-Crazy-Gems/scenario-coverage.json", "behaviorIds": ["B-PAID-ROUND-LOSS", "B-PAID-ROUND-WIN", "B-MINECART-MULTIPLIER"], "disposition": "VALIDATION_SUPPORT_ONLY", "reason": "只证明完整 Round 覆盖，不作为运行时结果源。"},
+    {"id": "E-CAPTURE-VALIDATION", "source": "reports/58-Crazy-Gems/capture-node-validation.json", "behaviorIds": [], "disposition": "VALIDATION_SUPPORT_ONLY", "reason": "证明抓取数量、语言与规则哈希一致，不形成额外游戏行为。"}
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-ENTRY-ID",
+      "category": "ENTRY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-ID-NAME", "E-LAUNCH", "E-HTML", "E-BUNDLE"],
+      "implementationContract": {
+        "preconditions": ["selected launch item is Crazy Gems"],
+        "stateFields": ["pathGameId", "query.gid", "game-id", "document.title", "GameName"],
+        "transitionRules": ["/58 and gid=58 select this game", "GameName and title must remain Crazy Gems", "never substitute lobby g_id=456"],
+        "outputs": ["58-Crazy-Gems entry identity"],
+        "terminationRules": ["config for gid=58 is reachable"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-ID-NAME", "E-LAUNCH", "E-BUNDLE"],
+        "assertions": ["gameId=58", "gameName=Crazy Gems", "g_id=456 is excluded"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-LANGUAGE-FIRST-LOAD",
+      "category": "RESOURCE_LOADING",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-LAUNCH", "E-HTML", "E-LANG-CONFIG", "E-LANG-RUN"],
+      "implementationContract": {
+        "preconditions": ["language is one of bn,en,es,fr,id,ko,pt,th,tr,vi", "language parameters are set before navigation"],
+        "stateFields": ["query.l", "query.language", "requestedResourceUrls", "loadFailureCount"],
+        "transitionRules": ["map pt to language=pt-br", "load entry then shared/language-specific resources", "do not create language directories outside resources or publish"],
+        "outputs": ["first-loaded game canvas in selected language"],
+        "terminationRules": ["initial load completes with zero failed local requests"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-LANG-CONFIG", "E-LANG-RUN"],
+        "assertions": ["all ten language codes recorded", "pt launch mapping is pt-br", "each isolated first load has evidence"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {"from": "entry navigation with l/language", "to": "language/shared asset requests", "evidenceRefs": ["E-LAUNCH", "E-LANG-RUN"], "assertion": "requested language mapping is preserved through first load"}
+        ]
+      }
+    },
+    {
+      "id": "B-SOURCE-REQUEST-SEQUENCE",
+      "category": "ENDPOINT_SEQUENCE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-FIRSTLOAD-API", "E-BUNDLE", "E-INITIAL-SPIN-NET", "E-HISTORY-NET", "E-HISTORY-DETAIL-NET"],
+      "implementationContract": {
+        "preconditions": ["entry loaded", "assigned-session credential remains scoped to source API domain"],
+        "stateFields": ["authVerified", "configLoaded", "activeRound", "historyPageIndex", "selectedTransferId"],
+        "transitionRules": ["first load: auth/verify then config", "gameplay: config then spin", "history: log-list pages then log-view with ll[].tis"],
+        "outputs": ["config data", "spin data", "history list/detail data"],
+        "terminationRules": ["config success enables Spin", "history pagination stops when end=1", "log-view joins selected transfer exactly once"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-FIRSTLOAD-API", "E-INITIAL-SPIN-NET", "E-HISTORY-NET", "E-HISTORY-DETAIL-NET"],
+        "assertions": ["auth/verify precedes config", "Spin uses crazy-gems/spin", "log-view transfer_id comes from list tis"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {"from": "POST auth/verify", "to": "POST crazy-gems/config", "evidenceRefs": ["E-FIRSTLOAD-API"], "assertion": "wallTime order is strictly increasing"},
+          {"from": "log-list ll[].tis", "to": "log-view transfer_id", "evidenceRefs": ["E-HISTORY-NET", "E-HISTORY-DETAIL-NET"], "assertion": "same transfer ID is used"}
+        ]
+      }
+    },
+    {
+      "id": "B-FORM-JSON-CODEC",
+      "category": "CODEC",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-FIRSTLOAD-API", "E-CONFIG", "E-BUNDLE", "E-INITIAL-SPIN-NET", "E-SPIN-FIXTURE", "E-HISTORY-NET", "E-HISTORY-DETAIL-NET"],
+      "implementationContract": {
+        "preconditions": ["HTTP POST business request"],
+        "stateFields": ["Content-Type", "formFields", "response.code", "response.data", "response.info"],
+        "transitionRules": ["encode form fields with encodeURIComponent and '+' for spaces", "send application/x-www-form-urlencoded", "on code==200 resolve data||{}; otherwise return protocol error"],
+        "outputs": ["JSON envelope compatible with frontend unwrapping"],
+        "terminationRules": ["success or explicit error envelope returned"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-CONFIG", "E-SPIN-FIXTURE", "E-BUNDLE"],
+        "assertions": ["success envelope has code,data,info", "game requests are form encoded", "no application-layer encryption is invented", "t is treated as opaque and never persisted"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-CONFIG-BET-PAYTABLE",
+      "category": "CONFIG",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-FIRSTLOAD-API", "E-RULES", "E-PAYTABLE", "E-CONFIG", "E-BUNDLE"],
+      "implementationContract": {
+        "preconditions": ["gid=58", "successful session verification"],
+        "stateFields": ["auto", "bll", "bsl", "cc", "cs", "dbl", "dbs", "spl", "ts"],
+        "transitionRules": ["initialize bet levels from bll", "initialize bet sizes from bsl", "select dbs=0.5", "preserve dbl=50 raw but do not infer semantics", "publish the confirmed spl values"],
+        "outputs": ["Crazy Gems config data"],
+        "terminationRules": ["all required confirmed config fields are present"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-RULES", "E-PAYTABLE", "E-CONFIG"],
+        "assertions": ["minimum total bet is R$0.50", "bll=1..10", "bsl=[0.5,5,50]", "paytable matches rule UI", "dbl is not used as payline count"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-FIXED-PAYLINE-WIN",
+      "category": "WIN_EVALUATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-RULES", "E-RULES-TREE", "E-PAYTABLE", "E-PAYTABLE-TREE", "E-CONFIG", "E-BUNDLE", "E-HISTORY-DETAIL"],
+      "implementationContract": {
+        "preconditions": ["rskl has exactly 9 symbols", "bl and bs are valid", "rpx is in 1,2,3,5,10,15", "formal random generation is constrained by the confirmed aggregate theoretical RTP 96.4%"],
+        "stateFields": ["rskl", "wmkl", "bl", "bs", "rpx", "wa", "spl", "aggregateRtpTarget"],
+        "transitionRules": ["interpret rskl reel-major", "evaluate lines [000],[111],[222],[012],[210]", "select the highest prize per winning line", "sum spl[symbol]*bs*bl*rpx", "design the formal SecureRandom outcome distribution to converge to aggregate RTP 96.4% without treating frontend animation weights or captured frequencies as server symbol weights"],
+        "outputs": ["wmkl with keys 0..4", "wa", "formal aggregate payout distribution constrained to theoretical RTP 96.4%"],
+        "terminationRules": ["all five line candidates evaluated once"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-RULES", "E-PAYTABLE", "E-CONFIG", "E-HISTORY-DETAIL"],
+        "assertions": ["paylineCount=5", "line keys are limited to 0..4", "1160 independent line evaluations have zero line mismatch", "1160 independent amount evaluations have zero mismatch", "an independent large-sample verifier records total bet, total payout, measured RTP and a statistical confidence limit around 96.4%", "formal distribution does not import frontend animation weights or captured outcome frequencies"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-WILD-SUBSTITUTION",
+      "category": "SYMBOL_RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-PAYTABLE", "E-PAYTABLE-TREE", "E-CONFIG", "E-HISTORY-DETAIL"],
+      "implementationContract": {
+        "preconditions": ["a candidate line contains WILD"],
+        "stateFields": ["rskl", "wmkl", "spl.WILD"],
+        "transitionRules": ["WILD substitutes any regular symbol", "two different non-WILD symbols still do not match", "three WILD symbols pay WILD"],
+        "outputs": ["winning symbol for the line or no win"],
+        "terminationRules": ["candidate line classification complete"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-PAYTABLE", "E-HISTORY-DETAIL"],
+        "assertions": ["substitution comes from rule text", "captured WILD lines agree with independent fixed-line oracle"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-PAID-ROUND-LOSS",
+      "category": "ROUND_OUTCOME",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-INITIAL-SPIN-NET", "E-SPIN-FIXTURE", "E-ROUND-STEPS", "E-SPIN-INDEX", "E-HISTORY-LIST", "E-HISTORY-DETAIL", "E-HISTORY-SUMMARY", "E-SCENARIO-COVERAGE"],
+      "implementationContract": {
+        "preconditions": ["no active Round", "ordinary paid request", "valid bl and bs"],
+        "stateFields": ["ba", "pb", "rpx", "rskl", "wa", "wmkl", "spin_status"],
+        "transitionRules": ["wa=0 and wmkl empty classifies LOSS", "runtime independent LOSS must be random and rechecked by independent ResultUtil", "never read or rotate fixture/history results"],
+        "outputs": ["one complete ordinary LOSS Round"],
+        "terminationRules": ["spin_status absent/falsy and no pending Step"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-HISTORY-LIST", "E-HISTORY-DETAIL", "E-SPIN-INDEX"],
+        "assertions": ["959 complete LOSS Rounds", "each indexed once at a real paid start", "all five lines independently evaluate as loss"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-PAID-ROUND-WIN",
+      "category": "ROUND_OUTCOME",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-ROUND-STEPS", "E-SPIN-INDEX", "E-HISTORY-LIST", "E-HISTORY-DETAIL", "E-HISTORY-SUMMARY", "E-SCENARIO-COVERAGE"],
+      "implementationContract": {
+        "preconditions": ["no active Round", "ordinary paid request", "valid bl and bs"],
+        "stateFields": ["ba", "pb", "rpx", "rskl", "wa", "wmkl", "spin_status"],
+        "transitionRules": ["wa>0 classifies WIN", "wmkl and wa must be produced by the confirmed five-line evaluator", "generate the complete Round once before delivery"],
+        "outputs": ["one complete ordinary WIN Round"],
+        "terminationRules": ["spin_status absent/falsy and no pending Step"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-HISTORY-LIST", "E-HISTORY-DETAIL", "E-SPIN-INDEX", "E-PAYTABLE"],
+        "assertions": ["201 complete WIN Rounds", "each indexed once at a real paid start", "wmkl and wa agree with independent rule oracle"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-MINECART-MULTIPLIER",
+      "category": "SPECIAL_RESULT",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-RULES", "E-RULES-TREE", "E-PAYTABLE", "E-PAYTABLE-TREE", "E-ROUND-STEPS", "E-SPIN-INDEX", "E-HISTORY-DETAIL", "E-HISTORY-SUMMARY", "E-SCENARIO-COVERAGE"],
+      "implementationContract": {
+        "preconditions": ["paid base Round"],
+        "stateFields": ["rpx", "wmkl", "wa"],
+        "transitionRules": ["rpx belongs to 1,2,3,5,10,15", "multiply every winning line amount by rpx", "rpx does not create a separate Step or paid Round"],
+        "outputs": ["base-game result carrying rpx"],
+        "terminationRules": ["same paid Round terminates under normal single-Step rule"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-RULES", "E-PAYTABLE", "E-HISTORY-DETAIL", "E-SPIN-INDEX"],
+        "assertions": ["only six rpx values occur", "983 complete Rounds have rpx>1", "wa formula includes rpx", "special target 30 is met"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-ROUND-DELIVERY-STATE",
+      "category": "ROUND_DELIVERY_STEP_STATE_MACHINE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-BUNDLE", "E-INITIAL-SPIN-NET", "E-SPIN-FIXTURE", "E-ROUND-STEPS", "E-SPIN-INDEX", "E-HISTORY-LIST", "E-HISTORY-DETAIL"],
+      "implementationContract": {
+        "preconditions": ["state READY", "no active Round", "one paid Spin request accepted"],
+        "stateFields": ["activeRoundId", "paidRoundStarted", "completeRoundGenerated", "steps", "nextDeliveryIndex", "spin_status", "terminal", "memberClaimed"],
+        "transitionRules": ["READY -> PAID_START_ACCEPTED", "claim one member and invoke GameRuleCore once -> COMPLETE_ROUND_GENERATED", "publish immutable Step 1 -> STEP_AVAILABLE", "deliver Step 1 exactly once -> TERMINAL_STEP_DELIVERED", "clear activeRound -> READY"],
+        "outputs": ["one PAID_SPIN Step containing ba,pb,rpx,rskl,wa,wmkl", "terminal complete Round"],
+        "terminationRules": ["missing/falsy spin_status is terminal", "observed stepCount is exactly 1", "truthy spin_status continuation is unsupported until adjacent source Steps are captured"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-INITIAL-SPIN-NET", "E-ROUND-STEPS", "E-SPIN-INDEX", "E-HISTORY-LIST", "E-HISTORY-DETAIL"],
+        "assertions": ["1160 paid starts equal 1160 completed Rounds", "every round has exactly one associated PAID_SPIN Step", "every transfer is unique", "delivery never regenerates a result", "fixtures are oracle-only"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {"from": "paid spin request", "to": "single response Step", "evidenceRefs": ["E-INITIAL-SPIN-NET", "E-SPIN-FIXTURE"], "assertion": "request and response are adjacent and response is terminal"},
+          {"from": "terminal response Step", "to": "History list/detail completion", "evidenceRefs": ["E-ROUND-STEPS", "E-SPIN-INDEX", "E-HISTORY-LIST", "E-HISTORY-DETAIL"], "assertion": "same logical Round joins one-to-one by tis/bid evidence"}
+        ]
+      }
+    },
+    {
+      "id": "B-HISTORY-PAGINATION",
+      "category": "HISTORY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-BUNDLE", "E-HISTORY-LIST", "E-HISTORY-SUMMARY", "E-HISTORY-NET"],
+      "implementationContract": {
+        "preconditions": ["history date window selected", "page_index starts at 1"],
+        "stateFields": ["page_index", "begin_at", "end_at", "lc", "end", "ll"],
+        "transitionRules": ["request sequential pages", "append ll entries without duplicating tis", "continue while end != 1"],
+        "outputs": ["ordered completed-Round list"],
+        "terminationRules": ["end=1 and unique entry count equals lc"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-HISTORY-LIST", "E-HISTORY-SUMMARY"],
+        "assertions": ["117 pages", "last page end=1", "lc=1160", "1160 unique tis"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {"from": "log-list page N", "to": "log-list page N+1", "evidenceRefs": ["E-HISTORY-LIST"], "assertion": "pageIndex increments by one until end=1 and no tis repeats"}
+        ]
+      }
+    },
+    {
+      "id": "B-HISTORY-LIST-DETAIL",
+      "category": "HISTORY_ORACLE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-BUNDLE", "E-HISTORY-LIST", "E-HISTORY-DETAIL", "E-HISTORY-SUMMARY", "E-HISTORY-NET", "E-HISTORY-DETAIL-NET"],
+      "implementationContract": {
+        "preconditions": ["a unique list item ll[].tis exists"],
+        "stateFields": ["ll[].tis", "ll[].bid", "transfer_id", "detail.bid", "detail fields"],
+        "transitionRules": ["send ll[].tis as log-view transfer_id", "require detail.bid='58-'+tis", "join list and detail exactly once"],
+        "outputs": ["field-level completed Round detail"],
+        "terminationRules": ["all unique list transfers have one successful detail"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-HISTORY-LIST", "E-HISTORY-DETAIL", "E-HISTORY-SUMMARY"],
+        "assertions": ["declared=1160", "unique list=1160", "details=1160", "bid pattern matches all 1160"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {"from": "log-list ll[].tis", "to": "log-view transfer_id and detail.bid", "evidenceRefs": ["E-HISTORY-LIST", "E-HISTORY-DETAIL"], "assertion": "same transfer joins exactly once and bid equals 58-tis"}
+        ]
+      }
+    },
+    {
+      "id": "B-BALANCE-LEDGER-CONTINUITY",
+      "category": "CROSS_ROUND_LEDGER",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-BUNDLE", "E-ROUND-STEPS", "E-HISTORY-LIST", "E-HISTORY-DETAIL"],
+      "implementationContract": {
+        "preconditions": ["completed Rounds are in ascending transfer order", "previous post-balance is known"],
+        "stateFields": ["previous.pb", "current.ba", "current.wa", "current.pb", "current.baf"],
+        "transitionRules": ["current.pb = previous.pb - current.ba + current.wa", "current.baf equals current.pb numerically", "update balance only once at terminal Round completion"],
+        "outputs": ["post-Round balance pb/baf"],
+        "terminationRules": ["ledger update committed before next paid Round"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-HISTORY-LIST", "E-HISTORY-DETAIL"],
+        "assertions": ["1160/1160 pb equals baf", "1159/1159 adjacent pairs satisfy the balance equation", "no fixture-derived balance is used at runtime"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {"from": "completed Round N pb", "to": "completed Round N+1 ba/wa/pb", "evidenceRefs": ["E-HISTORY-DETAIL"], "assertion": "N+1.pb = N.pb - N+1.ba + N+1.wa for every adjacent pair"}
+        ]
+      }
+    }
+  ],
+  "unresolvedBehaviors": [
+    {"id": "UB-FREE-SPINS", "category": "SPECIAL_MODE", "status": "[BLOCKER:RARE] UNCONFIRMED_GENERIC_SCAFFOLD_ONLY", "evidenceRefs": ["E-BUNDLE", "E-HISTORY-DETAIL", "E-RULES", "E-PAYTABLE", "E-GAMEPLAY-TREE"], "disposition": "NOT_APPLICABLE_UNTIL_CURRENT_GAME_TRIGGER_AND_ADJACENT_STEPS_ARE_CAPTURED", "reason": "规则/奖表无入口，1160 局无 fsn/frwa。"},
+    {"id": "UB-MULTI-STEP-SPIN-STATUS", "category": "ROUND_BOUNDARY", "status": "[BLOCKER:RARE] UNCONFIRMED_RARE_PATH", "evidenceRefs": ["E-BUNDLE", "E-SPIN-INDEX", "E-HISTORY-DETAIL"], "disposition": "DO_NOT_IMPLEMENT_AS_CONFIRMED", "reason": "代码存在 truthy spin_status 分支，但 1160 局未出现；若后续捕获，必须保存相邻 Step 原文后修订 rulesHash/handoff。"},
+    {"id": "UB-FEATURE-BUY", "category": "SPECIAL_MODE", "status": "[BLOCKER:RARE] NOT_FOUND", "evidenceRefs": ["E-BUY-SEARCH", "E-GAMEPLAY-TREE", "E-RULES", "E-PAYTABLE"], "disposition": "NOT_APPLICABLE", "reason": "规则、场景树、bundle 无购买入口。"},
+    {"id": "UB-CONFIG-DBL", "category": "CONFIG_FIELD", "status": "UNKNOWN_SEMANTICS", "evidenceRefs": ["E-CONFIG", "E-BUNDLE"], "disposition": "PRESERVE_RAW_DO_NOT_CONFIGURE", "reason": "dbl=50 不在 bll 1..10，getIndexByMultiplier 回退索引 0；不得猜成线数或倍率。"},
+    {"id": "UB-SERVER-SYMBOL-WEIGHTS", "category": "GENERATION_WEIGHTS", "status": "UNKNOWN", "evidenceRefs": ["E-BUNDLE", "E-HISTORY-DETAIL"], "disposition": "FRONTEND_ANIMATION_WEIGHTS_FORBIDDEN_AS_SERVER_WEIGHTS", "reason": "SymbolWeightsList/SymbolRpxWeightsList 仅被 randomReel 用于动画 backReels，真实结果来自 Spin.rskl/rpx；采样频次也不得反推权重。"},
+    {"id": "UB-REDIS-WIRE-CONTRACT", "category": "REDIS", "status": "UNKNOWN_NOT_CAPTURED", "evidenceRefs": ["E-FIRSTLOAD-API", "E-BUNDLE"], "disposition": "DO_NOT_INHERIT_OR_GUESS; REQUIRE_CURRENT_PLATFORM_CONTRACT_EVIDENCE", "reason": "首载业务网络只观察到 HTTP API，前端 bundle 只枚举 HTTP 端点；两者共同界定浏览器协议未暴露 Redis Key、member 编码或长度，但不据此猜测 Redis 协议。"},
+    {"id": "UB-AUTH-HEART-FIELDS", "category": "SESSION", "status": "PARTIALLY_OBSERVED", "evidenceRefs": ["E-FIRSTLOAD-API", "E-BUNDLE"], "disposition": "PRESERVE_ENDPOINTS_BUT_DO_NOT_GUESS_FIELDS", "reason": "auth/verify 只捕获状态 200，Heart 只由 bundle 枚举；请求/响应字段未保存。"}
+  ]
+}

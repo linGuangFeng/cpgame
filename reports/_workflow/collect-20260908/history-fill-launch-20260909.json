@@ -1,0 +1,104 @@
+[
+  {
+    "id": "1380-Hidden-Realm",
+    "account": "abc224",
+    "from": "playwright",
+    "user": {
+      "code": 0,
+      "token": {
+        "n": 3,
+        "len": 428,
+        "jwt": true
+      }
+    },
+    "goldAttempts": [
+      {
+        "path": "/cp/goldgame/single_game_user_gold_history?slot13",
+        "code": 0,
+        "n": 7,
+        "info": "success"
+      }
+    ],
+    "goldCode": 0,
+    "goldDays": 7,
+    "goldActiveDays": 1,
+    "details": [
+      {
+        "n": 30,
+        "code": 0,
+        "info": "success",
+        "day": 1788825600
+      }
+    ],
+    "historyView": true,
+    "at": "2026-09-09T02:41:52.624Z"
+  },
+  {
+    "id": "2110-Bee-Workshop",
+    "account": "abc223",
+    "from": "playwright",
+    "user": {
+      "code": 0,
+      "token": {
+        "n": 3,
+        "len": 428,
+        "jwt": true
+      }
+    },
+    "goldAttempts": [
+      {
+        "path": "/cp/goldgame/single_game_user_gold_history",
+        "code": 0,
+        "n": 7,
+        "info": "success"
+      }
+    ],
+    "goldCode": 0,
+    "goldDays": 7,
+    "goldActiveDays": 1,
+    "details": [
+      {
+        "n": 30,
+        "code": 0,
+        "info": "success",
+        "day": 1788825600
+      }
+    ],
+    "historyView": true,
+    "at": "2026-09-09T02:42:39.736Z"
+  },
+  {
+    "id": "1780-Glacier-Treasure",
+    "account": "abc224",
+    "from": "playwright",
+    "user": {
+      "code": 0,
+      "token": {
+        "n": 3,
+        "len": 428,
+        "jwt": true
+      }
+    },
+    "goldAttempts": [
+      {
+        "path": "/cp/goldgame/single_game_user_gold_history?slot1780",
+        "code": 0,
+        "n": 7,
+        "info": "success"
+      }
+    ],
+    "goldCode": 0,
+    "goldDays": 7,
+    "goldActiveDays": 1,
+    "details": [
+      {
+        "n": 30,
+        "code": 0,
+        "info": "success",
+        "day": 1788825600
+      }
+    ],
+    "historyView": true,
+    "at": "2026-09-09T02:43:15.312Z"
+  }
+]

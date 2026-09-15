@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 2060,
+  "directoryName": "2060-Club-Goddess",
+  "rulesHash": "sha256:cd9e5bac75dcaee42e78e1298a4e896b3a2b01db98c28027a50d7d3df771016b",
+  "result": "REDIS_POOL_VERIFIED",
+  "deliveryType": "JAVA_PREGENERATED_COMPLETE_ROUND_POOL",
+  "redisContractStatus": "IMPLEMENTED_AND_VALIDATED",
+  "implementationAllowed": true,
+  "redisPackageGenerated": true,
+  "redisWriteEnabled": true,
+  "memberEncodingEnabled": true,
+  "disposition": "BROWSER_ACCEPTANCE_BLOCKED",
+  "reason": "Java Loader \u5df2\u5411 192.168.10.3:6379 DB15 \u5199\u5165\u666e\u901a\u4e0e\u7279\u6b8a\u5b8c\u6574 Round\uff1bController \u4ec5\u6309\u5206\u7c7b\u548c\u6574\u6570\u500d\u7387\u539f\u5b50\u9886\u53d6\u7d27\u51d1 ASCII member\u3002",
+  "javaDelivery": {
+    "formalLoader": "generator/2060-Club-Goddess/src/main/java/com/cpgame/clubgoddess/loader/RedisLoader.java",
+    "codecGate": "generator/2060-Club-Goddess/src/main/java/com/cpgame/clubgoddess/codec/MinimalRoundFactCodec.java",
+    "executableJar": "generator/2060-Club-Goddess/dist/club-goddess-redis-loader.jar",
+    "externalConfig": "generator/2060-Club-Goddess/dist/generator.properties",
+    "endpoint": "192.168.10.3:6379/15",
+    "normalIndex": "PerKeyList_000002060",
+    "specialIndex": "MaryKeyList_000002060",
+    "member": "CG2 compact ASCII complete-round minimum fact"
+  },
+  "evidence": [
+    "reports/2060-Club-Goddess/redis-model-verification.json",
+    "reports/2060-Club-Goddess/redis-model-migration.json",
+    "reports/2060-Club-Goddess/empirical-api-validation.json"
+  ],
+  "evidenceLocators": [],
+  "safetyAssertions": {
+    "integerMultiplierBuckets": true,
+    "sameMemberAllDeliveries": true,
+    "emptyPoolFailsClosed": true,
+    "fixturesOrHistoricalResponsesUsed": false
+  },
+  "validatedMemberCount": 4086
+}

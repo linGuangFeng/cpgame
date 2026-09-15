@@ -1,0 +1,719 @@
+{
+  "schemaVersion": 2,
+  "gameId": 43,
+  "gameName": "Lucky Wheel",
+  "directoryName": "43-Lucky-Wheel",
+  "status": "PROTOCOL_VALIDATED_IMPLEMENTED_BET5_MATRICES_CONFIRMED",
+  "rulesVersion": "v1.5.10.250430",
+  "rulesHash": "sha256:5BD756F5F541F6577977BA3A6FD309AED6BCC45730150E4A687B488157E595D1",
+  "rulesHashBasis": "SHA-256 of the archived current-game rule asset resources/43-Lucky-Wheel/public-static/_hosts/static.cpgame.io/43/assets/resources/import/07/071e7ce22.e91b6.json",
+  "identity": {
+    "idName": "43-Lucky-Wheel",
+    "status": "CONFIRMED",
+    "evidenceRefs": [
+      "E-PORTAL-CATALOG",
+      "E-VERSION-CONFIG",
+      "E-FRONTEND-RAW",
+      "E-ENTRY-RUNTIME"
+    ]
+  },
+  "winModel": "FIXED_SINGLE_PAYLINE_NUMERIC_COMBINATION_WITH_SPECIAL_WHEEL",
+  "paylineCount": 1,
+  "winModelDetails": {
+    "paylineCount": 1,
+    "paylineApplicability": "APPLICABLE",
+    "waysApplicability": "NOT_APPLICABLE",
+    "clusterApplicability": "NOT_APPLICABLE",
+    "payoutRule": "Concatenate numeric texts from left to right, ignoring H0 blanks; special-wheel mode then applies the mode-specific rule.",
+    "status": "CONFIRMED_RULE_CODE_AND_RUNTIME",
+    "evidenceRefs": [
+      "E-RULE-RAW",
+      "E-RULE-EXTRACT",
+      "E-FRONTEND-RAW",
+      "E-RUNTIME-STEPS",
+      "E-FIELD-MATRIX"
+    ]
+  },
+  "boardModel": {
+    "columns": 4,
+    "rowCounts": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "visibleCellCount": 4,
+    "bufferCellCount": "UNKNOWN_NOT_PROTOCOL_RELEVANT",
+    "baseNumberReels": [
+      0,
+      1,
+      2
+    ],
+    "specialReel": 3,
+    "minimumBetResponseBaseSymbolCount": 2,
+    "minimumBetLockedBaseReel": 2,
+    "minimumBet": {
+      "bl": 1,
+      "bs": 1,
+      "ba": 1,
+      "currency": "BRL"
+    },
+    "higherBetResponseShape": "bl>=5 uses three base rskl positions; MD3 is unlocked only in this profile",
+    "betThresholdProfiles": {
+      "betLt5": {"baseSymbolCount": 2, "md3Allowed": false},
+      "betGte5": {"baseSymbolCount": 3, "md3Allowed": true, "confirmedAtBetLevel": 5}
+    },
+    "status": "CONFIRMED_BET_THRESHOLD_SHAPES",
+    "evidenceRefs": [
+      "E-RULE-EXTRACT",
+      "E-FRONTEND-RAW",
+      "E-RUNTIME-STEPS",
+      "E-FIELD-MATRIX"
+    ]
+  },
+  "symbolContract": {
+    "blankSymbol": "H0",
+    "numericTexts": {
+      "H1": "0",
+      "H2": "00",
+      "H3": "1",
+      "H4": "5",
+      "H5": "10"
+    },
+    "minimumBetObservedBaseSymbols": [
+      "H0",
+      "H1",
+      "H3",
+      "H4",
+      "H5"
+    ],
+    "scoreRule": "Join mapped texts in array order after removing H0; an empty join scores 0; parse the remaining text as a base-10 integer.",
+    "status": "CONFIRMED",
+    "evidenceRefs": [
+      "E-RULE-RAW",
+      "E-FRONTEND-RAW",
+      "E-RUNTIME-STEPS",
+      "E-FIELD-MATRIX"
+    ]
+  },
+  "roundModel": {
+    "paidRoundStart": "Each actual POST lucky-wheel/spin issued from IDLE is a paid Round start.",
+    "protocolStep": "One successful Spin HTTP response.",
+    "delivery": "A client-consumable response belonging to an already generated complete Round.",
+    "capturedBranches": {
+      "md0": "one HTTP Step and one Delivery, then terminal",
+      "md1": "one HTTP Step and one Delivery, then terminal",
+      "md2": "one HTTP Step and one Delivery with two display phases: rskl then embedded fwi, then terminal",
+      "md3": "bet>=5 only; one HTTP Step and one Delivery with base rskl then embedded SCAT scalar fwi/fwa, then terminal"
+    },
+    "codeOnlyContinuation": "If ss is present and equals 0, the client removes winning symbols and issues an adjacent Spin with the same session and bet until a later response does not satisfy ss=0.",
+    "terminalCondition": "For captured md=0/1/2/3 responses with ss absent, the Round is terminal after that response. md=2 and md=3 are embedded display switches, not adjacent paid or continuation requests.",
+    "originalRoundIdField": "UNKNOWN_NOT_PRESENT_IN_SPIN",
+    "captureRoundIdPolicy": "roundId in spin-index.jsonl is collector-generated and must not be exposed as an asserted original protocol field.",
+    "indexedPaidRoundStarts": 5000,
+    "completedRoundCount": 5000,
+    "protocolStepCount": 5000,
+    "excludedCapAuditCount": 87,
+    "excludedCapAuditFile": "captures/43-Lucky-Wheel/spin-index.cap-overage-audit.jsonl",
+    "status": "CONFIRMED_MD0_MD1_MD2_MD3_BRANCHES_SS0_RECORDED_ABSENT",
+    "evidenceRefs": [
+      "E-FRONTEND-RAW",
+      "E-RUNTIME-INDEX",
+      "E-RUNTIME-STEPS",
+      "E-PRE-CORRECTION-INDEX",
+      "E-REINDEX-TOOL",
+      "E-FIELD-MATRIX"
+    ]
+  },
+  "specialModes": [
+    {
+      "id": "MULTIPLIER_WHEEL_MD1",
+      "protocolValue": {
+        "md": 1
+      },
+      "capturedValues": {
+        "fws": [
+          "2",
+          "5"
+        ],
+        "fsk": [
+          "2",
+          "5"
+        ],
+        "rpx": [
+          2,
+          5
+        ]
+      },
+      "payoutRule": "wa=score(rskl)*rpx; fwi=[]; fwa=0",
+      "completeRoundCount": 885,
+      "target": 30,
+      "status": "TARGET_MET_CONFIRMED",
+      "runtimeGeneration": "ENABLED_BY_CONFIRMED_INVARIANTS",
+      "evidenceRefs": [
+        "E-RULE-EXTRACT",
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-STEPS",
+        "E-FIELD-MATRIX"
+      ]
+    },
+    {
+      "id": "RESPIN_MD2",
+      "protocolValue": {
+        "md": 2,
+        "fws": "RS",
+        "fsk": "RS",
+        "rpx": 1
+      },
+      "stepModel": "SINGLE_HTTP_DELIVERY_TWO_DISPLAY_PHASES",
+      "payoutRule": "fwa=score(fwi); wa=score(rskl)+fwa",
+      "completeRoundCount": 82,
+      "target": 30,
+      "status": "TARGET_MET_CONFIRMED",
+      "runtimeGeneration": "ENABLED_BY_CONFIRMED_INVARIANTS",
+      "evidenceRefs": [
+        "E-RULE-EXTRACT",
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-STEPS",
+        "E-PRE-CORRECTION-INDEX",
+        "E-REINDEX-TOOL",
+        "E-FIELD-MATRIX"
+      ]
+    },
+    {
+      "id": "LUCKY_WHEEL_SCATTER_MD3",
+      "protocolValue": {
+        "md": 3,
+        "fws": "SCAT",
+        "fsk": "SCAT",
+        "rpx": 1
+      },
+      "knownRule": "Lucky Wheel reward is added to the base-number reward; frontend parses fwa as the Lucky Wheel number and computes before_win_amount=wa-fwa.",
+      "completeRoundCount": 2,
+      "target": null,
+      "status": "RUNTIME_CONFIRMED_IN_EXACT_100_BET5_FOLLOWUP",
+      "runtimeGeneration": "ENABLED_BY_RULE_CODE_AND_TWO_CONCORDANT_ORIGINAL_RESPONSES",
+      "evidenceRefs": [
+        "E-RULE-RAW",
+        "E-RULE-EXTRACT",
+        "E-FRONTEND-RAW",
+        "E-BETGT1-FOLLOWUP"
+      ],
+      "stepModel": "SINGLE_HTTP_DELIVERY_BASE_THEN_SCATTER_WHEEL_DISPLAY",
+      "payoutRule": "fwi is a scalar Lucky Wheel reward; fwa=fwi; wa=score(rskl)+fwa",
+      "capturedValues": {
+        "fwi": [
+          [
+            "50"
+          ],
+          [
+            "150"
+          ]
+        ],
+        "fwa": [
+          50,
+          150
+        ]
+      },
+      "followupSampleSize": 100,
+      "unlockCondition": "Original UI bet level 5 displays APOSTE 5 DESBLOQUEIA SCATTER."
+    }
+  ],
+  "otherSpecialResults": [
+    {
+      "id": "RPX_GT1",
+      "condition": "rpx>1",
+      "relationship": "Captured alias of MULTIPLIER_WHEEL_MD1, not a separate mode: 885/885 md=1 responses in the capped official sample and no other official response have rpx>1.",
+      "completeRoundCount": 885,
+      "target": 30,
+      "status": "TARGET_MET_CONFIRMED_ALIAS",
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-STEPS",
+        "E-FIELD-MATRIX"
+      ]
+    },
+    {
+      "id": "CASCADE_SS0",
+      "condition": "ss field is present and numeric value is 0",
+      "knownRule": "Frontend spin_status=!ss and onPlayRemoveBlock -> onReqSpin establishes an adjacent-request continuation.",
+      "completeRoundCount": 0,
+      "target": 30,
+      "status": "SAMPLE_INSUFFICIENT",
+      "runtimeGeneration": "DISABLED_SAFE_REJECTION_REQUIRED",
+      "missingEvidence": "ss is absent from all 5000 responses in the capped official sample; no original adjacent Step chain, state carry, retrigger or terminal example exists.",
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-STEPS",
+        "E-SCENARIO-COVERAGE",
+        "E-FIELD-MATRIX"
+      ]
+    }
+  ],
+  "supportedLanguages": {
+    "codes": [
+      "en",
+      "es",
+      "pt",
+      "tr",
+      "id",
+      "bn",
+      "th",
+      "vi",
+      "fr",
+      "ko"
+    ],
+    "defaultCode": "en",
+    "parameter": "l",
+    "actualFirstLoadCount": 10,
+    "status": "CONFIRMED_CONFIG_BUNDLE_AND_ACTUAL_FIRST_LOAD",
+    "evidenceRefs": [
+      "E-LANGUAGE-INVENTORY",
+      "E-LANGUAGE-FIRSTLOAD"
+    ]
+  },
+  "featurePurchase": {
+    "supported": false,
+    "status": "NOT_APPLICABLE_NOT_DISCOVERED",
+    "evidenceRefs": [
+      "E-RULE-RAW",
+      "E-FRONTEND-RAW",
+      "E-RESOURCE-INVENTORY"
+    ]
+  },
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "eligibility": "Only an IDLE, ordinary paid, independent single-Step result with md=0, wa=0, rpx=1, fws=fsk=H0, fwi=[], fwa=0 and no ss continuation.",
+    "completeRoundCount": 3815,
+    "fixtureRuntimeDependencyAllowed": false,
+    "status": "CONFIRMED",
+    "evidenceRefs": [
+      "E-RUNTIME-INDEX",
+      "E-RUNTIME-STEPS",
+      "E-FIELD-MATRIX"
+    ]
+  },
+  "codecContract": {
+    "transport": "HTTPS XHR POST",
+    "requestContentType": "application/x-www-form-urlencoded",
+    "formEncoding": "encodeURIComponent for key and value, with %20 replaced by +",
+    "logicalHeaderMapping": {
+      "web-token": "t",
+      "game-id": "gid"
+    },
+    "responseEnvelope": {
+      "successCode": 200,
+      "fields": [
+        "code",
+        "data",
+        "info"
+      ]
+    },
+    "applicationEncryption": "NONE_OBSERVED",
+    "compression": "NONE_OBSERVED_AT_APPLICATION_LAYER",
+    "binaryEncoding": "NONE_OBSERVED",
+    "status": "CONFIRMED",
+    "evidenceRefs": [
+      "E-FRONTEND-RAW",
+      "E-FRONTEND-EXTRACT",
+      "E-ENTRY-RUNTIME",
+      "E-FIELD-MATRIX"
+    ]
+  },
+  "redisContract": {
+    "status": "CONFIRMED_INTERNAL_DOWNSTREAM_CONTRACT",
+    "authority": "Platform target consumer: ordinary and Mary pools each split by the digit after the underscore. 0=locked bet<5, 1=special-1 bet>=5 unlocked gameplay. Ordinary uses PerKeyList/BetLog; Mary uses MaryKeyList/MaryLog.",
+    "normalLockedIndexKey": "PerKeyList_0%08d",
+    "normalUnlockedIndexKey": "PerKeyList_1%08d",
+    "maryLockedIndexKey": "MaryKeyList_0%08d",
+    "maryUnlockedIndexKey": "MaryKeyList_1%08d",
+    "normalLockedListKey": "BetLog:0%08d:%06d",
+    "normalUnlockedListKey": "BetLog:1%08d:%06d",
+    "maryLockedListKey": "MaryLog:0%08d:%06d",
+    "maryUnlockedListKey": "MaryLog:1%08d:%06d",
+    "memberEncoding": "One complete-Round minimal ASCII fact. bet<5 keeps 0BB/1MBB/2BBRR; bet>=5 uses prefix 5 plus md and three base positions, with embedded md2 refill positions or md3 three-digit scalar award.",
+    "payloadEncoding": "US-ASCII, one complete Round fact per LIST member",
+    "claimSemantics": "Bet-threshold-isolated index/list keys; LPOP removes exactly one compatible complete-Round member, then shared Java ResultUtil recomputes all display fields and settlement",
+    "generationPolicy": "SecureRandom samples a trained whole-round outcome class and then one complete md+rskl+rpx+fwi joint state; ResultUtil derives the actual non-negative integer multiplier; ordinary loss emerges naturally from the same model and is stored in multiplier 0",
+    "writeTransaction": [
+      "MULTI",
+      "ZADD multiplier index",
+      "RPUSH round LIST",
+      "LTRIM newest capacity",
+      "EXEC"
+    ],
+    "defaultMaxMembersPerMultiplier": 300,
+    "evidenceRefs": [
+      "generator/1809-Freedom-Day/src/main/java/com/cpgame/replica/freedomday/RedisDirectLoader.java",
+      "generator/1809-Freedom-Day/src/main/java/com/cpgame/replica/freedomday/RedisPackCli.java",
+      "generator/1809-Freedom-Day/src/test/java/com/cpgame/replica/freedomday/RedisDirectLoaderTest.java",
+      "generator/43-Lucky-Wheel/src/main/java/com/cpgame/luckywheel/loader/RedisKeyContract.java",
+      "generator/43-Lucky-Wheel/src/main/java/com/cpgame/luckywheel/core/MinimalFactCodec.java",
+      "reports/43-Lucky-Wheel/redis-delivery-validation.json"
+    ]
+  },
+  "symbolWeights": {
+    "status": "EMPIRICAL_MARGINALS_REPORTED_NOT_USED_AS_INDEPENDENT_GENERATOR",
+    "trainingRoundCount": 4589,
+    "outcomeClassCounts": {
+      "ORDINARY_LOSS": 3442,
+      "ORDINARY_WIN": 199,
+      "MULTIPLIER_MD1": 815,
+      "RESPIN_MD2": 77,
+      "SCATTER_LUCKY_WHEEL_MD3": 2
+    },
+    "jointStateCategoryCount": 53,
+    "normalization": "The generator samples whole-round outcome classes and complete joint states. Per-cell marginals are diagnostic only and are never multiplied to construct a board.",
+    "originalRtpRepresentation": false,
+    "notice": "These empirical training weights are current-game local replica controls and do not represent original long-term RTP.",
+    "frontendVisualValuesExcluded": [
+      10,
+      20,
+      15,
+      10,
+      5
+    ],
+    "exclusionReason": "The bundle list remains excluded as original server RNG evidence; the provided values are explicit local generation controls instead.",
+    "evidenceRefs": [
+      "E-FRONTEND-RAW",
+      "E-FIELD-MATRIX",
+      "generator/43-Lucky-Wheel/dist/generator.properties",
+      "reports/43-Lucky-Wheel/redis-delivery-validation.json"
+    ]
+  },
+  "generationModel": {
+    "implementationReady": true,
+    "usesIndependentCellMarginalsOnly": false,
+    "artificialLossBoardConstraints": false,
+    "modelType": "HIERARCHICAL_WHOLE_ROUND_JOINT_CATEGORICAL",
+    "trainingPartition": "bet<5: first 5000 provider rounds use SHA-256 first byte >=26 for training; bet>=5: exact 100 level-5 rounds use first byte <128 for training. The complementary partitions are mutually exclusive REAL_PROVIDER holdouts.",
+    "lifecycleEntries": [
+      {
+        "id": "BET_LT5_PAID_INITIAL",
+        "role": "INITIAL",
+        "countingUnit": "COMPLETE_INITIAL_STATE",
+        "sampleRoundCount": 5000,
+        "samplePositionCount": 10000,
+        "wholeNextStateCountedAsNewDeal": false,
+        "evidenceRefs": [
+          "E-RUNTIME-INDEX",
+          "E-RUNTIME-STEPS",
+          "E-FIELD-MATRIX"
+        ]
+      },
+      {
+        "id": "BET_GTE5_PAID_INITIAL",
+        "role": "INITIAL",
+        "countingUnit": "COMPLETE_INITIAL_STATE",
+        "sampleRoundCount": 100,
+        "samplePositionCount": 300,
+        "wholeNextStateCountedAsNewDeal": false,
+        "evidenceRefs": ["E-BETGT1-FOLLOWUP"]
+      },
+      {
+        "id": "BET_LT5_MD2_EMBEDDED_RESPIN",
+        "role": "RESPIN",
+        "countingUnit": "NEWLY_DEALT_POSITIONS",
+        "sampleRoundCount": 82,
+        "samplePositionCount": 164,
+        "wholeNextStateCountedAsNewDeal": false,
+        "evidenceRefs": [
+          "E-RUNTIME-STEPS",
+          "E-PRE-CORRECTION-STEPS",
+          "E-REINDEX-TOOL",
+          "E-FIELD-MATRIX"
+        ]
+      }
+      ,{
+        "id": "BET_GTE5_MD2_EMBEDDED_RESPIN",
+        "role": "RESPIN",
+        "countingUnit": "NEWLY_DEALT_POSITIONS",
+        "sampleRoundCount": 1,
+        "samplePositionCount": 3,
+        "wholeNextStateCountedAsNewDeal": false,
+        "evidenceRefs": ["E-BETGT1-FOLLOWUP"]
+      },
+      {
+        "id": "BET_GTE5_MD3_EMBEDDED_LUCKY_WHEEL",
+        "role": "FEATURE_DISPLAY",
+        "countingUnit": "NEWLY_DEALT_POSITIONS",
+        "sampleRoundCount": 2,
+        "samplePositionCount": 2,
+        "wholeNextStateCountedAsNewDeal": false,
+        "evidenceRefs": ["E-BETGT1-FOLLOWUP"]
+      }
+    ],
+    "jointRoundFeatures": [
+      {
+        "id": "ROUND_OUTCOME_CLASS",
+        "applicable": true,
+        "evidenceRefs": [
+          "E-RUNTIME-INDEX",
+          "E-RUNTIME-STEPS"
+        ]
+      },
+      {
+        "id": "ROUND_STEP_COUNT",
+        "applicable": true,
+        "evidenceRefs": [
+          "E-RUNTIME-INDEX",
+          "E-RUNTIME-STEPS"
+        ]
+      },
+      {
+        "id": "STATE_ELEMENT_COUNT_VECTOR",
+        "applicable": true,
+        "evidenceRefs": [
+          "E-RUNTIME-STEPS",
+          "E-FIELD-MATRIX"
+        ]
+      }
+    ],
+    "holdoutPlan": {
+      "source": "REAL_PROVIDER",
+      "minimumRounds": 511,
+      "disjointFromTraining": true,
+      "partitionRule": "468 bet<5 holdouts plus 43 bet>=5 holdouts; both are hash-selected and disjoint from their training partitions",
+      "usesImplementationGeneratedExpected": false
+    },
+    "runtimeSourcePolicy": "Only aggregate training counts are compiled into JointRoundModel; no fixture, capture response or historical result is read at runtime.",
+    "evidenceRefs": [
+      "E-RUNTIME-INDEX",
+      "E-RUNTIME-STEPS",
+      "reports/43-Lucky-Wheel/generation-model-validation.json"
+    ]
+  },
+  "conditionalFields": {
+    "notObserved": [
+      "ss",
+      "wmkl",
+      "rwa",
+      "frwa",
+      "fbt"
+    ],
+    "policy": "Do not generate, require or infer these fields except where an explicitly confirmed behavior contract allows it. ss=0 remains disabled.",
+    "evidenceRefs": [
+      "E-RUNTIME-STEPS",
+      "E-FIELD-MATRIX"
+    ]
+  },
+  "runtimeGenerationPolicy": {
+    "completeRoundGenerationRequired": true,
+    "oneRedisMemberClaimPerRound": true,
+    "fixtureRuntimeDependencyAllowed": false,
+    "historyResponseRuntimeDependencyAllowed": false,
+    "enabledBehaviors": [
+      "ORDINARY_LOSS",
+      "ORDINARY_WIN",
+      "MULTIPLIER_WHEEL_MD1",
+      "RESPIN_MD2"
+      ,"LUCKY_WHEEL_SCATTER_MD3"
+    ],
+    "disabledBehaviors": [
+      "CASCADE_SS0"
+    ],
+    "randomness": "Production must use secure fresh randomness; optional seed is test-only and must not appear in production config."
+  },
+  "evidence": [
+    "resources/43-Lucky-Wheel/source-catalog-evidence.json",
+    "resources/43-Lucky-Wheel/resource-inventory.json",
+    "resources/43-Lucky-Wheel/public-static/_hosts/static.cpgame.io/43/assets/resources/import/07/071e7ce22.e91b6.json",
+    "resources/43-Lucky-Wheel/public-static/_hosts/static.cpgame.io/43/assets/main/index.d1d79.js",
+    "fixtures/43-Lucky-Wheel/static-rule-text-assets.json",
+    "fixtures/43-Lucky-Wheel/frontend-code-evidence.json",
+    "captures/43-Lucky-Wheel/entry-resource-handoff.json",
+    "captures/43-Lucky-Wheel/spin-index.jsonl",
+    "captures/43-Lucky-Wheel/spin-index.cap-overage-audit.jsonl",
+    "captures/43-Lucky-Wheel/spin-index-cap-audit.json",
+    "captures/43-Lucky-Wheel/round-steps.jsonl",
+    "captures/43-Lucky-Wheel/spin-index.pre-protocol-correction.jsonl",
+    "captures/43-Lucky-Wheel/round-steps.pre-protocol-correction.jsonl",
+    "captures/43-Lucky-Wheel/capture-gap-ledger.json",
+    "fixtures/43-Lucky-Wheel/history-list.json",
+    "fixtures/43-Lucky-Wheel/history-view.json",
+    "reports/43-Lucky-Wheel/language-inventory.json",
+    "reports/43-Lucky-Wheel/scenario-coverage.json",
+    "protocol/43-Lucky-Wheel/field-evidence-matrix.json"
+    ,"captures/43-Lucky-Wheel/betgt1-followup/20260904T193524755Z/rounds.jsonl"
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "sha256:5BD756F5F541F6577977BA3A6FD309AED6BCC45730150E4A687B488157E595D1",
+    "behaviorIds": [
+      "B-IDENTITY-LAUNCH",
+      "B-LANGUAGE-FIRSTLOAD",
+      "B-AUTH-CONFIG",
+      "B-PAID-SPIN",
+      "B-ROUND-DELIVERY",
+      "B-ORDINARY-LOSS",
+      "B-ORDINARY-WIN",
+      "B-MULTIPLIER-MD1",
+      "B-RESPIN-MD2",
+      "B-LUCKY-WHEEL-MD3",
+      "B-RPX-GT1",
+      "B-SS0-CONTINUATION",
+      "B-HISTORY-LIST-VIEW",
+      "B-BALANCE-SETTLEMENT",
+      "B-RULES-PAYTABLE-UI",
+      "B-FEATURE-PURCHASE-ABSENT",
+      "B-BETGT1-MATRIX-UNLOCK"
+    ],
+    "status": "COMPLETE_VALIDATED"
+  },
+  "implementationGate": "PASSED_IMPLEMENTATION_REVALIDATED",
+  "betGreaterThanOneFollowup": {
+    "schemaVersion": 1,
+    "gameId": 43,
+    "auditedAt": "2026-09-04T19:48:33.359Z",
+    "status": "PASS_EXACT_100_BET_GT_1_AND_HISTORY_CLOSED",
+    "isolation": {
+      "dedicatedProfile": "work/profiles/43-lucky-wheel-betgt1-followup",
+      "sameAuthenticatedAccountContext": true,
+      "accountIdentifierPersisted": false,
+      "concurrentLoginOrSecondResourceTask": false
+    },
+    "qualifyingSample": {
+      "selectedByOriginalUi": true,
+      "bet": {
+        "bl": 5,
+        "bs": 1,
+        "amount": 5,
+        "currency": "BRL"
+      },
+      "originalUiMessage": "APOSTE 5 DESBLOQUEIA SCATTER",
+      "paidRoundStarts": 100,
+      "completeRounds": 100,
+      "httpResponsesPerRound": 1,
+      "counts": {
+        "MD0": 82,
+        "MD1": 15,
+        "MD2": 1,
+        "MD3": 2,
+        "WIN": 15,
+        "LOSS": 85,
+        "RPX_GT1": 15,
+        "SS0": 0
+      },
+      "allAdjacentBalanceEquationsMatch": true,
+      "stopReason": "EXACTLY_100_COMPLETE_PAID_ROUNDS_REACHED_NO_EXTRA_QUALIFYING_SPINS",
+      "evidence": [
+        "captures/43-Lucky-Wheel/betgt1-followup/20260904T193524755Z/rounds.jsonl",
+        "screenshots/43-Lucky-Wheel/betgt1-followup/20260904T193524755Z/04-original-level-5-selected.png"
+      ]
+    },
+    "matrixLifecycle": [
+      {
+        "matrix": "MD0_ORDINARY",
+        "observed": 82,
+        "unlock": "Available at selected bet level 5.",
+        "switch": "No feature-display switch.",
+        "end": "Terminal in the same response; the next response is an independently paid Round."
+      },
+      {
+        "matrix": "MD1_MULTIPLIER_WHEEL",
+        "observed": 15,
+        "unlock": "2x and 5x are already unlocked at level 1 and remain available at level 5.",
+        "switch": "Base rskl result is multiplied by response rpx=2 or 5; fws=fsk names the multiplier.",
+        "end": "Terminal in the same response; no adjacent continuation request."
+      },
+      {
+        "matrix": "MD2_RESPIN",
+        "observed": 1,
+        "unlock": "RESPIN is already unlocked at level 1 and remains available at level 5.",
+        "switch": "Within one response, display switches from base rskl to embedded fwi; fws=fsk=RS.",
+        "end": "Terminal after the embedded display phase in the same HTTP response."
+      },
+      {
+        "matrix": "MD3_SCATTER_LUCKY_WHEEL",
+        "observed": 2,
+        "unlock": "Original UI explicitly unlocks SCATTER at bet level 5.",
+        "switch": "Within one response, base rskl award switches to the SCAT Lucky Wheel scalar reward fwi=fwa.",
+        "end": "wa=score(rskl)+fwa and the following response is an independently paid Round.",
+        "exactEvidence": [
+          {
+            "sequence": 20,
+            "rskl": [
+              "H4",
+              "H4",
+              "H3"
+            ],
+            "baseAward": 551,
+            "fws": "SCAT",
+            "fsk": "SCAT",
+            "fwi": [
+              "150"
+            ],
+            "fwa": 150,
+            "wa": 701,
+            "payoutMatches": true,
+            "nextSequence": 21,
+            "nextIsIndependentPaidRound": true
+          },
+          {
+            "sequence": 40,
+            "rskl": [
+              "H4",
+              "H1",
+              "H1"
+            ],
+            "baseAward": 500,
+            "fws": "SCAT",
+            "fsk": "SCAT",
+            "fwi": [
+              "50"
+            ],
+            "fwa": 50,
+            "wa": 550,
+            "payoutMatches": true,
+            "nextSequence": 41,
+            "nextIsIndependentPaidRound": true
+          }
+        ]
+      }
+    ],
+    "absentAfterExactly100": [
+      {
+        "id": "SS0_CONTINUATION",
+        "observed": 0,
+        "disposition": "RECORDED_ABSENT_NO_EXTRA_SPINS"
+      }
+    ],
+    "history": {
+      "sequence": [
+        "list",
+        "detail",
+        "back"
+      ],
+      "listHttpStatus": 200,
+      "listRecordCount": 101,
+      "visibleAggregateBet": 501,
+      "detailHttpStatus": 200,
+      "selectedTransferMatchesDetailRequest": true,
+      "detailBetLevel": 5,
+      "returnedToList": true,
+      "screenshots": [
+        "screenshots/43-Lucky-Wheel/original-ui/20260904T193756848Z/followup_history_list.png",
+        "screenshots/43-Lucky-Wheel/original-ui/20260904T193756848Z/followup_history_detail.png",
+        "screenshots/43-Lucky-Wheel/original-ui/20260904T193756848Z/followup_history_list_after_back.png"
+      ],
+      "networkEvidence": [
+        "captures/43-Lucky-Wheel/ui-evidence/20260904T193756848Z/followup_history_list.json",
+        "captures/43-Lucky-Wheel/ui-evidence/20260904T193756848Z/followup_history_detail.json",
+        "captures/43-Lucky-Wheel/ui-evidence/20260904T193756848Z/followup_history_back.json"
+      ]
+    },
+    "diagnosticDeviation": {
+      "settledNonQualifyingRounds": 1,
+      "description": "A selector-mismatch safeguard stopped after one R$1 diagnostic Round before the qualifying sample. It is excluded from the 100 level-5 Rounds.",
+      "independentHistoryProof": {
+        "recordCount": 101,
+        "aggregateBet": 501,
+        "equation": "100*R$5 + 1*R$1 = R$501"
+      },
+      "rejectedLevel5UiRequestSettledAsPaidRound": false
+    },
+    "replicationChangesMade": true,
+    "hardFailures": [],
+    "exactMissingItems": []
+  }
+}

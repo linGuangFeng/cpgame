@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "batchId": "B",
+  "scope": "MANUAL_MILESTONE_AND_READINESS_ONLY",
+  "accountAlias": "abc222",
+  "accountConfirmedOnPage": true,
+  "accountConfirmation": {
+    "method": "HMS_PERSONAL_CENTER_VISIBLE_ACCOUNT_FIELD",
+    "confirmedGameLabAccountId": 74171415,
+    "confirmedAt": "2026-08-28",
+    "wrongAccountEvidenceAccepted": false
+  },
+  "credentialPolicy": {
+    "passwordPersisted": false,
+    "tokenPersisted": false,
+    "cookiePersisted": false,
+    "authorizationPersisted": false
+  },
+  "samplingPolicy": {
+    "ordinaryLossTarget": 200,
+    "ordinaryWinTarget": 100,
+    "specialTargetPerConfirmedCategory": 30,
+    "maxPaidRoundStartsPerGame": 3000,
+    "rareRewardAbsencePaidRoundThreshold": 1000,
+    "roundDefinition": "ONE_PAID_START_PLUS_ALL_CONTINUATION_STEPS"
+  },
+  "games": [
+    {
+      "gameId": 42,
+      "gameName": "Lucky Dragon",
+      "directoryName": "42-Lucky-Dragon",
+      "launchPathConfirmed": "/42/",
+      "manualMilestoneObservedPaidStarts": 1,
+      "manualMilestoneObservedTerminalRounds": 1,
+      "formalPaidRoundStarts": 0,
+      "formalCompletedRounds": 0,
+      "completionClaim": false,
+      "formalExclusionReason": "The milestone was browser-verified and History-replayed, but no original request/response exchange was persisted for protocol-oracle indexing.",
+      "historyAudit": {
+        "clickable": true,
+        "listLoaded": true,
+        "detailLoaded": true,
+        "returnControlVisible": true,
+        "roundType": "NORMAL_SPIN",
+        "observedAt": "2026-08-28T23:29:45+08:00",
+        "betId": "42-2093360393507995648",
+        "transactionId": "2093360393507995648",
+        "bet": "0.50",
+        "payout": "0.00",
+        "netResult": "-0.50",
+        "endingBalance": "5768.90",
+        "betLevel": 1,
+        "terminalStepCount": 1,
+        "specialOrContinuationObserved": false
+      }
+    },
+    {
+      "gameId": 43,
+      "gameName": "Lucky Wheel",
+      "directoryName": "43-Lucky-Wheel",
+      "formalPaidRoundStarts": 0,
+      "formalCompletedRounds": 0,
+      "completionClaim": false,
+      "historyAudit": { "clickable": null, "status": "NOT_TESTED_AFTER_BROWSER_RELEASE" }
+    },
+    {
+      "gameId": 45,
+      "gameName": "Rio Carnival",
+      "directoryName": "45-Rio-Carnival",
+      "formalPaidRoundStarts": 0,
+      "formalCompletedRounds": 0,
+      "completionClaim": false,
+      "historyAudit": { "clickable": null, "status": "NOT_TESTED_AFTER_BROWSER_RELEASE" }
+    },
+    {
+      "gameId": 50,
+      "gameName": "Lucky Cat II",
+      "directoryName": "50-Lucky-Cat-II",
+      "formalPaidRoundStarts": 0,
+      "formalCompletedRounds": 0,
+      "completionClaim": false,
+      "historyAudit": { "clickable": null, "status": "NOT_TESTED_AFTER_BROWSER_RELEASE" }
+    }
+  ],
+  "browser": {
+    "autoSpinStarted": false,
+    "batchBCreatedTabsClosed": true,
+    "releaseSignal": "RELEASE_BROWSER_TO_C"
+  },
+  "status": "READINESS_ONLY_NOT_COMPLETE"
+}

@@ -1,0 +1,318 @@
+{
+  "updatedAt": "2026-09-06T14:39:13.437743+08:00",
+  "goal": "resources + spin targets_met + HIS light => remake-ready",
+  "games": {
+    "16": {
+      "name": "Jungle Fruit",
+      "directory": "16-Jungle-Fruit",
+      "resources": {
+        "ok": true,
+        "langCount": 10,
+        "langs": [
+          "bn",
+          "en",
+          "es",
+          "fr",
+          "id",
+          "ko",
+          "pt-br",
+          "th",
+          "tr",
+          "vi"
+        ]
+      },
+      "spin": {
+        "ok": true,
+        "note": "1126 paid; ALL_CONFIRMED_TARGETS_MET"
+      },
+      "HIS": {
+        "ok": true,
+        "samples": {
+          "history-list": {
+            "path": "fixtures/16-Jungle-Fruit/history-list/",
+            "url": "https://api.omgapibra.com/cp/api/v1/jungle-fruit/log-list",
+            "code": 200,
+            "sampleRows": 10,
+            "count": 1126
+          },
+          "history-view": {
+            "path": "fixtures/16-Jungle-Fruit/history-view/",
+            "url": "https://api.omgapibra.com/cp/api/v1/jungle-fruit/log-view",
+            "code": 200,
+            "sampleRows": 0,
+            "count": null
+          }
+        }
+      },
+      "remakeReady": true
+    },
+    "45": {
+      "name": "Rio Carnival",
+      "directory": "45-Rio-Carnival",
+      "resources": {
+        "ok": true,
+        "langCount": 12,
+        "langs": [
+          "bn",
+          "en",
+          "es",
+          "fr",
+          "id",
+          "ko",
+          "pt",
+          "pt-br",
+          "spa",
+          "th",
+          "tr",
+          "vi"
+        ]
+      },
+      "spin": {
+        "ok": true,
+        "note": "1406 paid; ALL category TARGET_MET"
+      },
+      "HIS": {
+        "ok": true,
+        "samples": {
+          "history-list": {
+            "path": "fixtures/45-Rio-Carnival/history-list/",
+            "url": "https://api.omgapibra.com/cp/api/v1/rio-carnival/log-list",
+            "code": 200,
+            "sampleRows": 10,
+            "count": 1406
+          },
+          "history-view": {
+            "path": "fixtures/45-Rio-Carnival/history-view/",
+            "url": "https://api.omgapibra.com/cp/api/v1/rio-carnival/log-view",
+            "code": 200,
+            "sampleRows": 0,
+            "count": null
+          }
+        }
+      },
+      "remakeReady": true
+    },
+    "61": {
+      "name": "Saci",
+      "directory": "61-Saci",
+      "resources": {
+        "ok": true,
+        "langCount": 10,
+        "langs": [
+          "bn",
+          "en",
+          "es",
+          "fr",
+          "id",
+          "ko",
+          "pt-br",
+          "th",
+          "tr",
+          "vi"
+        ]
+      },
+      "spin": {
+        "ok": true,
+        "note": "2053 paid; coverage targets_or_max (loss/win/special)"
+      },
+      "HIS": {
+        "ok": true,
+        "samples": {
+          "history-list": {
+            "path": "fixtures/61-Saci/history-list/",
+            "url": "https://api.omgapibra.com/cp/api/v1/d-saci/log-list",
+            "code": 200,
+            "sampleRows": 10,
+            "count": 10
+          },
+          "history-view": {
+            "path": "fixtures/61-Saci/history-view/",
+            "url": "https://api.omgapibra.com/cp/api/v1/d-saci/log-view",
+            "code": 200,
+            "sampleRows": 0,
+            "count": null
+          }
+        }
+      },
+      "remakeReady": true
+    },
+    "2060": {
+      "name": "Club Goddess",
+      "directory": "2060-Club-Goddess",
+      "resources": {
+        "ok": true,
+        "langCount": 25,
+        "langs": [
+          "bn",
+          "bn-bd",
+          "en",
+          "en-us",
+          "es",
+          "es-es",
+          "fr",
+          "fr-fr",
+          "hi-in",
+          "id",
+          "id-id",
+          "in-marathi",
+          "in-telugu",
+          "ko",
+          "ko-ko"
+        ]
+      },
+      "spin": {
+        "ok": true,
+        "note": "status COMPLETE_WITH_RARE_SPECIAL_MODES_DISABLED (spinCount=10 base corpus)"
+      },
+      "HIS": {
+        "ok": true,
+        "samples": {
+          "history-list": {
+            "path": "fixtures/2060-Club-Goddess/history-list/",
+            "url": "https://api.omgapibra.com/cp/goldgame/single_game_user_gold_history",
+            "code": 0,
+            "sampleRows": 7,
+            "count": null
+          },
+          "history-view": {
+            "path": "fixtures/2060-Club-Goddess/history-view/",
+            "url": "https://api.omgapibra.com/cp/goldgame/single_game_user_history",
+            "code": 0,
+            "sampleRows": 10,
+            "count": null
+          }
+        }
+      },
+      "remakeReady": true
+    },
+    "2350": {
+      "name": "Curupira",
+      "directory": "2350-Curupira",
+      "resources": {
+        "ok": true,
+        "langCount": 10,
+        "langs": [
+          "bn",
+          "en",
+          "es",
+          "fr",
+          "id",
+          "ko",
+          "pt-br",
+          "th",
+          "tr",
+          "vi"
+        ]
+      },
+      "spin": {
+        "ok": true,
+        "note": "status COMPLETE_WITH_RARE_GAP... (spinCount=10); HIS single Goldgame endpoint (detail embedded in list)"
+      },
+      "HIS": {
+        "ok": true,
+        "samples": {
+          "history-list": {
+            "path": "fixtures/2350-Curupira/history-list/",
+            "url": "https://api.omgapibra.com/cp/Goldgame/user_game_history",
+            "code": 0,
+            "sampleRows": 10,
+            "count": null
+          }
+        }
+      },
+      "remakeReady": true
+    },
+    "1": {
+      "name": "Lucky Cat",
+      "directory": "1-Lucky-Cat",
+      "resources": {
+        "ok": true,
+        "langCount": 10,
+        "langs": [
+          "bn",
+          "en",
+          "es",
+          "fr",
+          "id",
+          "ko",
+          "pt-br",
+          "th",
+          "tr",
+          "vi"
+        ]
+      },
+      "spin": {
+        "ok": false,
+        "note": "ONLY spin-dirty (~2 rounds) + HIS lc=3; NOT ordinary 200/200/30 targets_met"
+      },
+      "HIS": {
+        "ok": true,
+        "samples": {
+          "history-list": {
+            "path": "fixtures/1-Lucky-Cat/history-list/",
+            "url": "https://api.omgapibra.com/cp/api/v1/lucky-cat/log-list",
+            "code": 200,
+            "sampleRows": 3,
+            "count": 3
+          },
+          "history-view": {
+            "path": "fixtures/1-Lucky-Cat/history-view/",
+            "url": "https://api.omgapibra.com/cp/api/v1/lucky-cat/log-view",
+            "code": 200,
+            "sampleRows": 0,
+            "count": null
+          }
+        }
+      },
+      "remakeReady": false
+    },
+    "52": {
+      "name": "Cyber GO",
+      "directory": "52-Cyber-GO",
+      "resources": {
+        "ok": true,
+        "kind": "REAL",
+        "langCount": 11,
+        "langs": [
+          "bn",
+          "en",
+          "es",
+          "fr",
+          "id",
+          "ko",
+          "pt",
+          "pt-br",
+          "th",
+          "tr",
+          "vi"
+        ],
+        "note": "programmatic-http CDN dump + localized natives; source CURRENT_GAME_FIRST_LOAD_MANIFEST_CONFIRMED_CDN_URLS"
+      },
+      "spin": {
+        "ok": true,
+        "note": "targets_met paid1305 L1068 W200 S464 (scatter_fs=37 sgt_2=427) on abc221 box :9225"
+      },
+      "HIS": {
+        "ok": true,
+        "samples": {
+          "history-list": {
+            "path": "fixtures/52-Cyber-GO/history-list/",
+            "url": "https://api.omgapibra.com/cp/api/v1/go-cyber/log-list",
+            "code": 200,
+            "sampleRows": 10,
+            "count": 1306
+          },
+          "history-view": {
+            "path": "fixtures/52-Cyber-GO/history-view/",
+            "url": "https://api.omgapibra.com/cp/api/v1/go-cyber/log-view",
+            "code": 200,
+            "sampleRows": 1,
+            "count": null
+          }
+        }
+      },
+      "remakeReady": true,
+      "updatedAt": "2026-09-06T14:39:13.436542+08:00"
+    }
+  }
+}

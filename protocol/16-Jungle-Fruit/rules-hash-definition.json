@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "rawGameId": 16,
+  "rulesVersion": "jf16-empirical-2026-09-08-v3",
+  "canonicalFile": "protocol/16-Jungle-Fruit/rules-core-canonical.json",
+  "algorithm": "SHA-256",
+  "canonicalization": "jq compact sorted-key JSON followed by its emitted newline",
+  "excludedTopLevelFields": [
+    "rulesHash"
+  ],
+  "commandFromArtifactRoot": "jq -cS 'del(.rulesHash)' protocol/16-Jungle-Fruit/rules-core-canonical.json | shasum -a 256",
+  "expectedHash": "164088c0440871c9bc33b631a1b6bfa5e00d3012db3b0e3694bb59ac683e1743",
+  "note": "This definition is external so documenting the hash procedure does not mutate the hashed canonical input."
+}

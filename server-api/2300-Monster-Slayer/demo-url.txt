@@ -1,0 +1,1 @@
+http://127.0.0.1:52311/?ai=luck_single_10229&btt=1&gid=2300&l=en&language=en-us&sip=127.0.0.1%3A52311&t=local-session&token=local-session

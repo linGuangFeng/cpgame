@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "draft": true,
+  "gameId": 43,
+  "rulesHash": "sha256:5BD756F5F541F6577977BA3A6FD309AED6BCC45730150E4A687B488157E595D1",
+  "evidenceInventory": [
+    {"id":"E-PORTAL-CATALOG","source":"resources/43-Lucky-Wheel/source-catalog-evidence.json","behaviorIds":["B-LAUNCH"]},
+    {"id":"E-VERSION-CONFIG","source":"resources/43-Lucky-Wheel/public-static/_hosts/static.cpgame.io/43/versionconfig.js","behaviorIds":["B-LAUNCH"]},
+    {"id":"E-RULE-TEXT","source":"fixtures/43-Lucky-Wheel/static-rule-text-assets.json","behaviorIds":["B-SPIN","B-MULTIPLIER-MD1","B-RESPIN-MD2","B-LUCKY-WHEEL-MD3"]},
+    {"id":"E-FRONTEND-CODE","source":"fixtures/43-Lucky-Wheel/frontend-code-evidence.json","behaviorIds":["B-LAUNCH","B-SPIN","B-MULTIPLIER-MD1","B-RESPIN-MD2","B-LUCKY-WHEEL-MD3","B-HISTORY"]},
+    {"id":"E-LANGUAGE-FIRSTLOAD","source":"captures/43-Lucky-Wheel/browser-resource-urls.json","behaviorIds":[],"disposition":"STATIC_RESOURCE_COVERAGE","reason":"记录十种语言首次加载，不直接形成游戏行为契约。"},
+    {"id":"E-LOCAL-NO-T","source":"captures/43-Lucky-Wheel/entry-resource-handoff.json#untrustedOrNonOriginalEvidence","behaviorIds":["B-LAUNCH"],"disposition":"DIAGNOSTIC_ONLY","reason":"只证明无 t 时本地兼容 API 拒绝；不是原站运行时样本。"}
+  ],
+  "behaviorContracts": [
+    {"id":"B-LAUNCH","category":"SESSION","status":"PARTIAL_STATIC_CONFIRMED_RUNTIME_UNCAPTURED","multiStep":true,"evidenceRefs":["E-PORTAL-CATALOG","E-VERSION-CONFIG","E-FRONTEND-CODE","E-LOCAL-NO-T"],"known":"portal startup -> iframe game_url; sip selects /cp host; t required by auth/session","missing":"assigned-account startup response, original auth response, session termination"},
+    {"id":"B-SPIN","category":"PAID_ROUND","status":"PARTIAL_STATIC_CONFIRMED_RUNTIME_UNCAPTURED","multiStep":true,"evidenceRefs":["E-RULE-TEXT","E-FRONTEND-CODE"],"known":"request bl/bs with web-token and game-id; response code reads rskl, wmkl, ss, rpx, fws, md, fwi, fwa, wa, rwa, frwa, fbt, pb","missing":"types, optionality, actual values, round identifier, terminal semantics"},
+    {"id":"B-MULTIPLIER-MD1","category":"SPECIAL","status":"PARTIAL_STATIC_CONFIRMED_RUNTIME_UNCAPTURED","multiStep":false,"evidenceRefs":["E-RULE-TEXT","E-FRONTEND-CODE"],"known":"md=1 MODE_FEATURE_X; payout rule multiplies left numeric combination by special multiplier","missing":"original response example and exact response-field calculation"},
+    {"id":"B-RESPIN-MD2","category":"SPECIAL","status":"PARTIAL_STATIC_CONFIRMED_RUNTIME_UNCAPTURED","multiStep":true,"evidenceRefs":["E-RULE-TEXT","E-FRONTEND-CODE"],"known":"md=2 MODE_FEATURE_RESPIN; frontend refreshes fwi and automatically calls adjacent Spin","missing":"original adjacent steps, state fields across requests, terminal condition, retrigger evidence"},
+    {"id":"B-LUCKY-WHEEL-MD3","category":"SPECIAL","status":"PARTIAL_STATIC_CONFIRMED_RUNTIME_UNCAPTURED","multiStep":false,"evidenceRefs":["E-RULE-TEXT","E-FRONTEND-CODE"],"known":"md=3 MODE_FEATURE_SCAT; fwa carries displayed Lucky Wheel reward value in frontend","missing":"original response example and exact payout invariants"},
+    {"id":"B-HISTORY","category":"HISTORY","status":"ENDPOINT_ONLY_RUNTIME_UNCAPTURED","multiStep":true,"evidenceRefs":["E-FRONTEND-CODE"],"known":"log-list and log-view endpoints","missing":"request fields, list/view response schema, click-return adjacent evidence"}
+  ],
+  "unresolvedBehaviors": [
+    {"id":"U-AUTH-LAUNCH","reason":"等待用户明确批准后以分配账号抓取原始 startup/auth/config。","evidenceRefs":["E-PORTAL-CATALOG","E-VERSION-CONFIG","E-FRONTEND-CODE"]},
+    {"id":"U-SPIN-ROUND-TERMINATION","reason":"ss 的终止语义、Round ID 与合法结束值必须由原始相邻 HTTP 证据确认。","evidenceRefs":["E-FRONTEND-CODE"]},
+    {"id":"U-RESPIN-ADJACENCY","reason":"md=2 自动相邻 Spin 已由代码确认，但尚无原始相邻请求/响应断言。","evidenceRefs":["E-RULE-TEXT","E-FRONTEND-CODE"]},
+    {"id":"U-HISTORY","reason":"History 列表、详情、返回路径尚无认证运行时证据。","evidenceRefs":["E-FRONTEND-CODE"]}
+  ],
+  "note": "DRAFT_ONLY：本文件保存入口节点发现的全部行为证据，后续协议 Agent 必须补齐原始运行时矩阵、完整 implementationContract 与独立 verificationContract 后生成 protocol-handoff.json。"
+}

@@ -1,0 +1,272 @@
+{
+  "schemaVersion": "2.0",
+  "gameId": 61,
+  "directoryName": "61-Saci",
+  "gameName": "Saci",
+  "activeRevision": "v1.5.10.250821",
+  "rulesVersion": "v1.5.10.250821-rules-saci-rebuild",
+  "rulesHash": "saci-v2-656af5aa-rebuild-20260910",
+  "identity": {
+    "status": "CONFIRMED",
+    "idName": "61-Saci",
+    "evidence": [
+      "resources/61-Saci/raw/static.cpgame.io/61/versionconfig.js",
+      "resources/61-Saci/raw/static.cpgame.io/61/assets/main/index.2155d.js"
+    ]
+  },
+  "supportedLanguages": {
+    "codes": ["bn", "en", "es", "fr", "id", "ko", "pt", "th", "tr", "vi"],
+    "status": "CONFIRMED_FIRST_LOAD",
+    "evidence": [
+      "reports/61-Saci/language-inventory.json",
+      "resources/61-Saci/raw/static.cpgame.io/61/assets/resources/config.fdb65.json",
+      "resources/61-Saci/raw/static.cpgame.io/61/assets/main/index.2155d.js"
+    ]
+  },
+  "boardModel": {
+    "status": "CONFIRMED_VISIBLE_BOARD",
+    "reels": 5,
+    "visibleRowsPerReel": [3, 3, 3, 3, 3],
+    "visibleCellCount": 15,
+    "bufferRows": "UNKNOWN",
+    "flattening": "column-major: arrayIndex = reelIndex * 3 + rowIndex",
+    "coordinateEncoding": "two decimal digits reelIndex,rowIndex; valid visible coordinates 00 through 42",
+    "rsklEncoding": {
+      "itemLength": 3,
+      "storageType": "JSON scalar parsed as string by the front end",
+      "characters": [
+        {"index": 0, "meaning": "symbol copy/cardinality count; 2 denotes the observed split double symbol"},
+        {"index": 1, "meaning": "symbol id"},
+        {"index": 2, "meaning": "cell multiplier; character a is decoded as 10"}
+      ]
+    },
+    "symbols": {
+      "ordinary": ["1", "2", "3", "4", "5", "6", "7", "8"],
+      "wild": "9",
+      "scatter": "a",
+      "splitPresentation": "syxl marks coordinates; split is not a standalone rskl symbol id in captured responses"
+    },
+    "evidence": [
+      "resources/61-Saci/extracted/pt/paytable.json",
+      "resources/61-Saci/raw/static.cpgame.io/61/assets/main/index.2155d.js",
+      "fixtures/61-Saci/spin/round-005/step-001.response.json",
+      "fixtures/61-Saci/spin/round-008/step-001.response.json"
+    ]
+  },
+  "winModel": "WAYS",
+  "winModelDetails": {
+    "status": "CONFIRMED",
+    "type": "WAYS",
+    "baseWays": 243,
+    "maximumWays": 7776,
+    "paylineCount": null,
+    "paylineCountApplicability": "NOT_APPLICABLE",
+    "direction": "successive reels from the leftmost reel to the right",
+    "ordinaryMinimumReels": 3,
+    "wildSelfPayMinimumReels": 5,
+    "wildSubstitution": "Wild id 9 substitutes for ordinary ids 1-8; it does not substitute for Scatter id a",
+    "scatterEvaluation": "not evaluated as an ordinary Ways win",
+    "payoutFormula": "betSize * betLevel * symbolPayout * ways * cellMultiplierFactor",
+    "payoutTable": {
+      "1": {"3": 2, "4": 3, "5": 5},
+      "2": {"3": 3, "4": 4, "5": 6},
+      "3": {"3": 4, "4": 5, "5": 7},
+      "4": {"3": 5, "4": 6, "5": 8},
+      "5": {"3": 10, "4": 12, "5": 15},
+      "6": {"3": 12, "4": 15, "5": 20},
+      "7": {"3": 15, "4": 20, "5": 30},
+      "8": {"3": 20, "4": 30, "5": 50},
+      "9": {"5": 100}
+    },
+    "constantDisambiguation": "GameConfig.PayLineCount=20 is the base-bet factor used by ba=bl*bs*20. The paytable calls it 20 base bets; it is not a fixed payline count.",
+    "evidence": [
+      "resources/61-Saci/extracted/pt/paytable.json",
+      "fixtures/61-Saci/config/response.json",
+      "resources/61-Saci/raw/static.cpgame.io/61/assets/main/index.2155d.js",
+      "fixtures/61-Saci/spin/round-005/step-001.response.json"
+    ]
+  },
+  "betModel": {
+    "status": "CONFIRMED",
+    "betLevels": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "betSizes": [0.02, 0.1, 0.5],
+    "baseBetFactor": 20,
+    "paidBetFormula": "bl * bs * 20",
+    "minimumBet": 0.4,
+    "currencyCode": "BRL",
+    "currencySymbol": "R$",
+    "evidence": ["fixtures/61-Saci/config/response.json", "fixtures/61-Saci/spin/round-001/step-001.response.json"]
+  },
+  "roundModel": {
+    "status": "CONFIRMED_FOR_ORDINARY_AND_CASCADE",
+    "generationUnit": "one complete Round from a paid start through its terminal Step",
+    "deliveryUnit": "one response from POST /cp/api/v1/d-saci/spin",
+    "paidStart": {
+      "precondition": "no active continuation, free-spin, summon, or feature-buy Round",
+      "requestFields": ["bl", "bs", "t", "gid"],
+      "responseInvariants": ["ba=bl*bs*20", "small_game_type=0", "one balance debit"]
+    },
+    "continuation": {
+      "trigger": "previous Step ss=0",
+      "request": "repeat /spin with the same bl and bs after the current animation",
+      "responseInvariants": ["ba=0", "small_game_type=1", "rwa is cumulative", "no second paid debit"]
+    },
+    "termination": {
+      "signal": "ss=1",
+      "winningCascadeShape": "captured winning Rounds end with a zero-award terminal Step that preserves rwa and credits pb",
+      "independentLossShape": "a one-Step paid Round can terminate immediately with wa=0,rwa=0,wmkl=[]"
+    },
+    "balanceSettlement": "paid start pb reflects the debit; pb stays unchanged on nonterminal cascade Steps; terminal pb credits the accumulated rwa",
+    "historyGrouping": "one log-list tis identifies the Round; log-view bsl preserves all adjacent base/cascade Steps under that Round",
+    "capturedStepCounts": [1, 2, 3, 5],
+    "evidence": [
+      "captures/61-Saci/spin-index.jsonl",
+      "fixtures/61-Saci/spin/round-005",
+      "fixtures/61-Saci/spin/round-008",
+      "fixtures/61-Saci/spin/round-010",
+      "fixtures/61-Saci/history-view/response.json"
+    ]
+  },
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "status": "CONFIRMED",
+    "allowedOnlyWhen": ["paid ordinary start", "no active Round or queued continuation", "no free/reward mode"],
+    "requiredValidation": ["ba equals paid bet", "ss=1", "wa=0", "rwa=0", "wmkl is empty", "pb equals prior balance minus ba"],
+    "capturedPaidRounds": [1, 2, 3, 4, 6, 7, 9],
+    "runtimeSourceProhibition": "fixtures and captured responses are oracle-only and must never supply runtime outcomes",
+    "evidence": ["captures/61-Saci/spin-index.jsonl", "fixtures/61-Saci/spin/round-001/step-001.response.json"]
+  },
+  "specialModes": [
+    {
+      "id": "cascade",
+      "availability": "CONFIRMED_CAPTURED",
+      "implementationDisposition": "IMPLEMENT_CONFIRMED_CONTRACT_ONLY",
+      "multiStep": true,
+      "evidence": ["fixtures/61-Saci/spin/round-005", "fixtures/61-Saci/history-view/response.json"]
+    },
+    {
+      "id": "symbol-split",
+      "availability": "PARTIAL_RULE_AND_FIELD_OBSERVATION",
+      "implementationDisposition": "DO_NOT_IMPLEMENT_UNCAPTURED_TRANSFORMATIONS",
+      "observed": {
+        "rawSyxlValues": [0, 40, 41, 42],
+        "decodedCoordinates": ["00", "40", "41", "42"],
+        "roundSequences": [
+          {"round": 5, "raw": [40, 40, 40, 40, 0], "decoded": ["40", "40", "40", "40", "00"], "transitions": ["40->40", "40->00 on terminal Step"]},
+          {"round": 8, "raw": [41, 42, 42], "decoded": ["41", "42", "42"], "transitions": ["41->42", "42->42 on terminal Step"]}
+        ],
+        "zeroSemantics": "raw numeric 0 is the encoded visible coordinate 00; it is not an empty syxl list",
+        "encodedDoubleExample": "281"
+      },
+      "missingEvidence": "general creation probability and lifecycle rules beyond the exact observed 40->00 and 41->42 transitions; red/fire variant",
+      "evidence": ["resources/61-Saci/extracted/pt/paytable.json", "fixtures/61-Saci/spin/round-005", "fixtures/61-Saci/spin/round-008"]
+    },
+    {
+      "id": "wild-vortex-energy",
+      "availability": "CONFIRMED_CAPTURED",
+      "implementationDisposition": "IMPLEMENT_CAPTURED_RSN3_VORTEX",
+      "capturedCompleteRounds": 11,
+      "sampleDisposition": "SAMPLE_INSUFFICIENT",
+      "observed": {
+        "wnValues": [0, 1, 2],
+        "wnlKeyRule": "String(100 * ba) from front-end resume code",
+        "betKey": "40",
+        "paidRoundTransitions": [
+          {"fromRound": 7, "toRound": 8, "from": {"wn": 0, "wnl": {}}, "to": {"wn": 1, "wnl": {"40": 1}}, "transition": "0->1"},
+          {"fromRound": 8, "toRound": 9, "from": {"wn": 1, "wnl": {"40": 1}}, "to": {"wn": 1, "wnl": {"40": 1}}, "transition": "1->1 persisted across paid Round boundary"},
+          {"fromRound": 9, "toRound": 10, "from": {"wn": 1, "wnl": {"40": 1}}, "to": {"wn": 2, "wnl": {"40": 2}}, "transition": "1->2"}
+        ],
+        "withinRoundPersistence": [
+          {"round": 8, "wn": [1, 1, 1], "wnl40": [1, 1, 1]},
+          {"round": 10, "wn": [2, 2], "wnl40": [2, 2]}
+        ],
+        "configLastWnl": {"40": 2}
+      },
+      "missingEvidence": "full-energy summon and fire-vortex result Steps",
+      "evidence": ["resources/61-Saci/extracted/pt/paytable.json", "fixtures/61-Saci/spin/round-007", "fixtures/61-Saci/spin/round-008", "fixtures/61-Saci/spin/round-009", "fixtures/61-Saci/spin/round-010", "fixtures/61-Saci/config/response.json"]
+    },
+    {
+      "id": "free-spins",
+      "availability": "CONFIRMED_CAPTURED",
+      "implementationDisposition": "IMPLEMENT_CONFIRMED_CONTRACT_ONLY",
+      "capturedCompleteRounds": 47,
+      "knownRule": "Exactly 3 Scatter on a paid start awards fsn=10; afnl chests add extra free spins; gt/gm=2/2 deliveries until fsn==nfsc and ss=1",
+      "evidence": ["resources/61-Saci/extracted/pt/paytable.json", "reports/61-Saci/scenario-coverage.json"]
+    },
+    {
+      "id": "feature-buy",
+      "availability": "ENTRY_AND_REQUEST_PARAMETER_DISCOVERED_RESULT_NOT_CAPTURED",
+      "implementationDisposition": "DO_NOT_IMPLEMENT RESULT MODE",
+      "options": [
+        {"bm": 4, "labelFreeSpins": 10, "costMultiplier": 30},
+        {"bm": 5, "labelFreeSpins": 13, "costMultiplier": 60},
+        {"bm": 6, "labelFreeSpins": 16, "costMultiplier": 90},
+        {"bm": 7, "labelFreeSpins": "mystery", "costMultiplier": 65}
+      ],
+      "missingEvidence": "a purchased response and complete purchased Round",
+      "evidence": ["fixtures/61-Saci/config/response.json", "resources/61-Saci/raw/static.cpgame.io/61/assets/main/index.2155d.js", "screenshots/61-Saci/buy-entry-pt.png"]
+    }
+  ],
+  "symbolWeights": {
+    "status": "FRONTEND_CONSTANT_CONFIRMED_SERVER_OUTCOME_DISTRIBUTION_UNKNOWN",
+    "scope": "front-end random/back-reel helper; not evidence of the server RNG distribution",
+    "weights": [
+      {"symbol": "1", "weight": 5}, {"symbol": "2", "weight": 10},
+      {"symbol": "3", "weight": 15}, {"symbol": "4", "weight": 20},
+      {"symbol": "5", "weight": 25}, {"symbol": "6", "weight": 30},
+      {"symbol": "7", "weight": 40}, {"symbol": "8", "weight": 45},
+      {"symbol": "9", "weight": 5}, {"symbol": "a", "weight": 5}
+    ],
+    "implementationDisposition": "may be used only where the front-end helper contract is required; do not claim it reproduces server probabilities",
+    "evidence": ["resources/61-Saci/raw/static.cpgame.io/61/assets/main/index.2155d.js"]
+  },
+  "codecContract": {
+    "status": "CONFIRMED",
+    "requestContentType": "application/x-www-form-urlencoded",
+    "formEncoding": "encodeURIComponent for keys and values with %20 replaced by +",
+    "headerAliases": {"web-token": "t", "game-id": "gid"},
+    "responseContentType": "application/json; charset=utf-8",
+    "responseEnvelope": {"fields": ["code", "data", "info"], "successCode": 200, "consumerValue": "data or empty object"},
+    "encryption": "NONE_IN_OBSERVED_HTTP_PATH",
+    "tokenPhases": "auth verify t is the launch token; subsequent t is the longer session token returned by auth verify",
+    "evidence": ["captures/61-Saci/api-traffic.json", "resources/61-Saci/raw/static.cpgame.io/61/assets/main/index.2155d.js"]
+  },
+  "redisContract": {
+    "status": "CONFIRMED_PLATFORM_V3",
+    "keyPattern": "PerKeyList_000000061 / BetLog:000000061:<hundredths> and MaryKeyList_000000061 / MaryLog:000000061:<hundredths>",
+    "memberEncoding": "SACIA1;<rulesHash>;<ascii step facts>",
+    "resultLength": "one complete Round per member",
+    "safeDisposition": "Demo claims via LINDEX only. Empty pool returns HTTP 503 REDIS_POOL_EMPTY.",
+    "evidence": ["generator/61-Saci/src/main/java/com/cpgame/saci/generator/RedisLoader.java"]
+  },
+  "missingModes": [
+    {"target": "free-spins-trigger-and-steps", "actualPaidRoundAttempts": 10, "entry": "3+ Scatter rules and feature-buy entry", "missingEvidence": "No fsn/nfsc transition or free-spin response."},
+    {"target": "full-wild-vortex-summon", "actualPaidRoundAttempts": 10, "entry": "Wild energy collector", "missingEvidence": "wn progress reached 1 and 2 only; no full-energy summon."},
+    {"target": "fire-vortex-to-wild-split", "actualPaidRoundAttempts": 10, "entry": "Wild feature rules", "missingEvidence": "No fire-vortex response sample."},
+    {"target": "feature-buy-result", "actualPaidRoundAttempts": 10, "entry": "shopping-cart modal and bm parameter code", "missingEvidence": "Entry captured; purchase not executed and no buy result obtained."}
+  ],
+  "evidence": [
+    "resources/61-Saci/extracted/rules-source-manifest.json",
+    "resources/61-Saci/extracted/pt/paytable.json",
+    "resources/61-Saci/raw/static.cpgame.io/61/assets/main/index.2155d.js",
+    "captures/61-Saci/api-traffic.json",
+    "captures/61-Saci/spin-index.jsonl",
+    "fixtures/61-Saci/config/response.json",
+    "fixtures/61-Saci/history-list/response.json",
+    "fixtures/61-Saci/history-view/response.json",
+    "protocol/61-Saci/field-evidence-matrix.json",
+    "protocol/61-Saci/protocol-spec.json",
+    "protocol/61-Saci/protocol-spec.md"
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "saci-v2-656af5aa-rebuild-20260910",
+    "behaviorIds": [
+      "B-IDENTITY", "B-LANGUAGE-FIRSTLOAD", "B-HTTP-CODEC", "B-AUTH-SESSION",
+      "B-CONFIG-BET-PAYTABLE", "B-SESSION-RESUME", "B-RUNTIME-INDEPENDENT-LOSS",
+      "B-PAID-ROUND-DELIVERY", "B-WAYS-PAYOUT", "B-BALANCE-SETTLEMENT",
+      "B-HISTORY", "B-RULES-ENTRY", "B-BUY-ENTRY", "B-SYMBOL-SPLIT",
+      "B-WILD-ENERGY", "B-FREE-SPINS", "B-BUY-RESULT", "B-AUX-ENDPOINTS"
+    ]
+  }
+}

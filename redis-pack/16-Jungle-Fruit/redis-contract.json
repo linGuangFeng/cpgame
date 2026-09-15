@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 3,
+  "workflowTemplateVersion": 40,
+  "gameId": 16,
+  "rawGameId": 16,
+  "directoryName": "16-Jungle-Fruit",
+  "rulesVersion": "jf16-empirical-2026-09-08-v3",
+  "rulesHash": "164088c0440871c9bc33b631a1b6bfa5e00d3012db3b0e3694bb59ac683e1743",
+  "redis": {
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15
+  },
+  "contractKind": "LOCAL_REPLICA_COMPLETE_ROUND",
+  "originalConsumerCompatibilityClaimed": false,
+  "memberBoundary": "ONE_INDEPENDENTLY_VERIFIED_COMPLETE_ROUND",
+  "memberEncoding": "ASCII JF16V1.<base64url-minimal-facts>",
+  "poolKeyPattern": "cpgame:runtime:16:jungle-fruit:empirical-v1:pool:{MODE}:{nonnegativeIntegerMultiplier}",
+  "modeIndexKeyPattern": "cpgame:runtime:16:jungle-fruit:empirical-v1:pool-index:{MODE}",
+  "eligibleModes": [
+    "LOSS",
+    "MARY",
+    "FREE"
+  ],
+  "claimContract": {
+    "operation": "LPOP",
+    "rules": [
+      "every paid outcome, including ordinary loss, claims exactly one pre-generated complete-Round member",
+      "one member contains all ordered Steps for that Round",
+      "empty or unavailable pool returns HTTP 503 without debit, History or active Round creation",
+      "runtime fixtures, runtime random construction and scripted rotation are forbidden"
+    ]
+  },
+  "loaderWriteContract": {
+    "operation": [
+      "MULTI",
+      "RPUSH",
+      "LTRIM -max -1",
+      "SADD mode-index",
+      "EXEC"
+    ],
+    "defaultMaxMembersPerIntegerBucket": 500,
+    "formalSeedAllowed": false,
+    "secureRandomRequired": true,
+    "independentVerificationRequired": true,
+    "completeRoundGenerationRequired": true
+  },
+  "memberFacts": [
+    "paidBet",
+    "betSize",
+    "betLevel",
+    "ordered Step state",
+    "ordered 36-symbol boards"
+  ],
+  "memberExcluded": [
+    "HTTP envelope",
+    "balance",
+    "session",
+    "transferId",
+    "timestamp",
+    "History",
+    "derived winners",
+    "derived payout"
+  ],
+  "derivedByUniqueGameRuleCore": [
+    "winner sets",
+    "wire positions",
+    "win_amount",
+    "round_win_amount",
+    "classification",
+    "complete-Round payout"
+  ],
+  "failureContract": {
+    "corruptMember": "reject before debit and do not expose a partial Round",
+    "rulesHashMismatch": "Compile-time shared hash and isolated empirical namespace; member stores facts without a per-member rules hash.",
+    "wrongGameId": "reject before Redis mutation",
+    "historyRead": "never claims a member"
+  },
+  "unknownOriginFields": [
+    "origin key pattern",
+    "origin member codec",
+    "origin TTL",
+    "origin partitions",
+    "origin probability weights"
+  ],
+  "status": "READY_FOR_ACCEPTANCE",
+  "namespace": "cpgame:runtime:16:jungle-fruit:empirical-v1",
+  "integerMultiplierPolicy": "exact payout/paidBet; fractional candidates excluded from Loader pools; never floor payout into a different bucket",
+  "outcomeSelection": "SecureRandom chooses loss/win, then uniformly chooses an existing exact integer payout multiplier; atomically LPOP one member; no generation or fixture fallback",
+  "legacyPools": "not deleted or consumed by new namespace"
+}

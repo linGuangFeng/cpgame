@@ -1,0 +1,47 @@
+{
+  "rawGameId": 33,
+  "gameArtifactDirectoryName": "33-Jungle-Party",
+  "checkedAt": "2026-08-30T15:56:07Z",
+  "status": "BLOCKED_OFFICIAL_WINDOWS_OWNER_UNREACHABLE",
+  "completionClaimed": false,
+  "reviewPassObserved": false,
+  "workflowCompletedObserved": false,
+  "readOnlyChecks": {
+    "windowsManagementCenter": {
+      "url": "http://192.168.10.3:8091/",
+      "healthHttpStatus": 200,
+      "homeHttpStatus": 200,
+      "gid33CardObserved": true,
+      "gid33CardStatus": "未完成",
+      "playEntry": "暂无试玩入口",
+      "reportedGap": "试玩服务未启动或无法连接"
+    },
+    "sharedWorkflowExecutions": {
+      "path": "/Volumes/agent-ai/data/workflow-executions.json",
+      "gid33ExecutionCount": 0
+    },
+    "windowsAgentAi": {
+      "url": "http://192.168.10.3:8080/",
+      "result": "CONNECTION_REFUSED"
+    },
+    "codexOwnerDiscovery": {
+      "windowsHostDiscovered": false,
+      "windowsOwnerTaskDiscovered": false
+    },
+    "localGid33Runtime": {
+      "apiHealthUrl": "http://192.168.24.37:29633/health",
+      "apiHealthHttpStatus": 200,
+      "labHealthUrl": "http://192.168.24.37:18093/health",
+      "labHealthHttpStatus": 200
+    }
+  },
+  "blockedOn": "Restore the existing unique Windows AgentAI owner on port 8080 or provide its existing Codex task/thread identifier, then create and advance an official read-only gid33 final-review execution to a real REVIEW PASS and COMPLETED state.",
+  "prohibitedActionsRespected": {
+    "startedLocalAgentAiJvm": false,
+    "editedWorkflowJson": false,
+    "editedWorkflowExecutionJson": false,
+    "usedForcePass": false,
+    "touchedOriginalSite": false,
+    "issuedSpin": false
+  }
+}

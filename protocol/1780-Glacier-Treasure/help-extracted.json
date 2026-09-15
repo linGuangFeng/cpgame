@@ -1,0 +1,453 @@
+{
+  "source": "/Volumes/hd/cpgame/resources/1780-Glacier-Treasure/programmatic-http/20260902T103846701Z/files/static.cpgame.io/v2/1780/assets/resources/import/0e/0e8193bfb.03966.json",
+  "header": [
+    "none",
+    "en-us",
+    "hi-in",
+    "th-th",
+    "zh-cn",
+    "zh-hk",
+    "vi-vn",
+    "id-id",
+    "in-telugu",
+    "in-marathi",
+    "pt-pt",
+    "es-es",
+    "fr-fr",
+    "bn-bd",
+    "ko-ko",
+    "tr-tr"
+  ],
+  "entries": [
+    {
+      "key": "UI_Game1780_3",
+      "en": "Wild symbol substitutes for all symbols except Scatter symbol.",
+      "zh": "Wild 符號可替代除 Scatter 符號以外的所有符號。"
+    },
+    {
+      "key": "UI_Game1780_4",
+      "en": "4 or more Scatter symbols will trigger free spins.",
+      "zh": "4 個或以上 Scatter 符號將觸發免費遊戲。"
+    },
+    {
+      "key": "UI_Game1780_8",
+      "en": "Paytable",
+      "zh": "賠付表"
+    },
+    {
+      "key": "UI_Game1780_9",
+      "en": "Symbol Payout Values",
+      "zh": "符號賠付值"
+    },
+    {
+      "key": "UI_Game1780_10",
+      "en": "Scatter\\nSymbol",
+      "zh": "Scatter 符號"
+    },
+    {
+      "key": "UI_Game1780_11",
+      "en": "Wild\\nSymbol",
+      "zh": "Wild 符號"
+    },
+    {
+      "key": "UI_Game1780_12",
+      "en": "● Some symbols in reels 2, 3, 4 and/or 5 may occupy 2 to 4 symbols' spaces and each of these symbols will represent as a single symbol during payout calculations.\\n\\n● Wild symbol substitutes for all symbols except  Scatter symbol.\\n\\n● Wild symbols appears on reels 2, 3, 4 and 5 only.",
+      "zh": "● 第 2、3、4 和/或第 5 輪上的部分符號可能佔據 2 至 4 格位置，這些符號在計算時將視為單一符號。\\n\\n● Wild 符號可替代除 Scatter 符號以外的所有符號。\\n\\n● 百搭符號只出現在第2，第3，第4和第5轉軸。"
+    },
+    {
+      "key": "UI_Game1780_13",
+      "en": "Wilds-on-the-Way",
+      "zh": "多路連消百搭"
+    },
+    {
+      "key": "UI_Game1780_14",
+      "en": "● During any spins, some symbols (excluding Wild symbol and Scatter symbol) in reels 2, 3, 4 and/or 5 that occupy 2 to 4 symbols' spaces may have a silver frame around itself.",
+      "zh": "● 任意旋轉期間，第 2、3、4 和/或第 5 輪上佔據 2 至 4 格的部分符號（不含 Wild 與 Scatter）可能會有銀框。"
+    },
+    {
+      "key": "UI_Game1780_16",
+      "en": "● At every new round after the new symbols have cascaded down, any silver-framed symbol(s) that is involved in a win in the previous round will be transformed into a randomly selected symbol (other than Wild symbol and Scatter symbol) with a gold frame around itself.",
+      "zh": "● 在新符號跌落後的每一輪旋轉中，上一輪贏獎中所涉及的任何銀框符號將被轉換為一個隨機並帶有金框的符號(百搭符號和Scatter除外)。"
+    },
+    {
+      "key": "UI_Game1780_17",
+      "en": "● At every new round after the new symbols have cascaded down, any gold-framed symbol(s) that is involved in a win in the previous round will be transformed into Wild symbol.",
+      "zh": "● 在新符號跌落後的每一輪旋轉中，上一輪贏獎中所涉及的任何金框符號將轉換為百搭符號。"
+    },
+    {
+      "key": "UI_Game1780_18",
+      "en": "Multiplier",
+      "zh": "獎金翻倍"
+    },
+    {
+      "key": "UI_Game1780_19",
+      "en": "● At the start of any main game spin, the win multiplier is x1.",
+      "zh": "● 每次主遊戲旋轉開始時，贏分倍數為 x1。"
+    },
+    {
+      "key": "UI_Game1780_20",
+      "en": "● During any spins, if there are one or more winning symbols on the reels, after wins are paid and the new symbols have cascaded down, the win multiplier will be increased by 1.",
+      "zh": "● 任意旋轉中，只要有贏分組合出現，支付後並有新符號落下，贏分倍數將增加 1。"
+    },
+    {
+      "key": "UI_Game1780_21",
+      "en": "Free Spins Feature",
+      "zh": "免費遊戲功能"
+    },
+    {
+      "key": "UI_Game1780_22",
+      "en": "● 4 Scatter symbols appearing anywhere will trigger the Free Spins Feature with 10 free spins. Each additional Scatter symbol will trigger 2 more free spins.",
+      "zh": "● 出現 4 個 Scatter 符號將觸發免費遊戲功能，獲得 10 次免費旋轉。每多 1 個 Scatter，將增加 2 次免費旋轉。"
+    },
+    {
+      "key": "UI_Game1780_23",
+      "en": "● At the start of the Free Spins Feature, the win multiplier is x2.",
+      "zh": "● 免費遊戲開始時，贏分倍數為 x2。"
+    },
+    {
+      "key": "UI_Game1780_24",
+      "en": "● During any free spin, if there are one or more winning symbols on the reels, after wins are paid and the new symbols have cascaded down, the win multiplier will be increased by 2.",
+      "zh": "● 免費旋轉期間，每有贏分並落下新符號後，倍數將增加 2。"
+    },
+    {
+      "key": "UI_Game1780_25",
+      "en": "● Free spins can be retriggered.",
+      "zh": "● 免費旋轉可再次觸發。"
+    },
+    {
+      "key": "UI_Game1780_26",
+      "en": "Feature Buy",
+      "zh": "功能購買"
+    },
+    {
+      "key": "UI_Game1780_27",
+      "en": "● Tap on Feature Buy button to open the Feature Buy menu.",
+      "zh": "● 點擊功能購買按鈕可開啟功能購買選單。"
+    },
+    {
+      "key": "UI_Game1780_28",
+      "en": "● Tap on Start button to buy the Free Spins Feature at the price displayed in the Feature Buy menu.",
+      "zh": "● 點擊開始按鈕可依當前顯示價格購買免費遊戲功能。"
+    },
+    {
+      "key": "UI_Game1780_29",
+      "en": "2,025 - 32,400 Ways",
+      "zh": "2,025 - 32,400 路"
+    },
+    {
+      "key": "UI_Game1780_30",
+      "en": "● Bet ways win if the winning symbols are in succession from the leftmost reel to the right.",
+      "zh": "● 若贏分符號從最左輪起連續排列，即視為中獎。"
+    },
+    {
+      "key": "UI_Game1780_31",
+      "en": "● Total number of winning bet ways for each symbol are calculated by multiplying the number of adjacent winning symbols on each symbols from the leftmost reel to the right.",
+      "zh": "● 每個符號的總贏法為從最左輪起每輪相鄰中獎符號數量相乘。"
+    },
+    {
+      "key": "UI_Game1780_32",
+      "en": "From Above Example:",
+      "zh": "參考以上例子:"
+    },
+    {
+      "key": "UI_Game1780_33",
+      "en": "● The winning symbol payout is multiplied by the number of winning bet ways.",
+      "zh": "● 贏獎符號的賠付是由該符號的賠付值乘以中獎路的數目所得。"
+    },
+    {
+      "key": "UI_Game1780_34",
+      "en": "Total Winnings in this example:",
+      "zh": "本例中的總贏獎:"
+    },
+    {
+      "key": "UI_Game1780_35",
+      "en": "● After the payout of every round is made, all winning symbols will explode allowing the symbols above them to cascade down for a new round.",
+      "zh": "● 每輪遊戲結束並發放獎金後，所有贏獎符號都將爆炸消除，讓其上方的符號向下跌以進行新一輪的旋轉。"
+    },
+    {
+      "key": "UI_Game1780_36",
+      "en": "● Additional winning combination will be tallied in every round until no more winning combination can be tallied.",
+      "zh": "● 額外的中獎組合都將計入每次旋轉的贏獎中，直到沒有其他中獎組合。"
+    },
+    {
+      "key": "UI_Game1780_38",
+      "en": "● All wins shown in cash.",
+      "zh": "● 所有贏獎以現金顯示。"
+    },
+    {
+      "key": "UI_Game1780_51",
+      "en": "AUTO",
+      "zh": "自動"
+    },
+    {
+      "key": "UI_Game1780_52",
+      "en": "TURBO",
+      "zh": "極速旋轉"
+    },
+    {
+      "key": "UI_Game1780_55",
+      "en": "Quit",
+      "zh": "退出"
+    },
+    {
+      "key": "UI_Game1780_56",
+      "en": "History",
+      "zh": "歷史紀錄"
+    },
+    {
+      "key": "UI_Game1780_57",
+      "en": "Close",
+      "zh": "關閉"
+    },
+    {
+      "key": "UI_Game1780_Minimum",
+      "en": "Minimum Bet",
+      "zh": "最小投注"
+    },
+    {
+      "key": "UI_Game1780_Maximum",
+      "en": "Maximum Bet",
+      "zh": "最大投注"
+    },
+    {
+      "key": "UI_Game1780_TurboSpinDisabled",
+      "en": "Turbo Spin Disabled",
+      "zh": "極速旋轉已關閉"
+    },
+    {
+      "key": "UI_Game1780_TurboSpinEnabled",
+      "en": "Turbo Spin Enabled",
+      "zh": "極速旋轉已開啟"
+    },
+    {
+      "key": "UI_Game1780_Record",
+      "en": "Record",
+      "zh": "記錄"
+    },
+    {
+      "key": "UI_Game1780_Totalbetamount",
+      "en": "Total bet amount",
+      "zh": "總投注金額"
+    },
+    {
+      "key": "UI_Game1780_TotalbetWinLoss",
+      "en": "Total net Win/Loss",
+      "zh": "總淨贏/輸"
+    },
+    {
+      "key": "UI_Game1780_Date",
+      "en": "Date",
+      "zh": "日期"
+    },
+    {
+      "key": "UI_Game1780_Singledaybetamount",
+      "en": "Single day bet amount",
+      "zh": "單日投注金額"
+    },
+    {
+      "key": "UI_Game1780_Singledaybetwinloss",
+      "en": "Single day net win/loss",
+      "zh": "單日淨盈虧"
+    },
+    {
+      "key": "UI_Game1780_Time",
+      "en": "Time",
+      "zh": "時間"
+    },
+    {
+      "key": "UI_Game1780_orderNo",
+      "en": "Order No.",
+      "zh": "訂單編號"
+    },
+    {
+      "key": "UI_Game1780_BetWinLoss",
+      "en": "Net Win/Loss",
+      "zh": "淨贏/虧"
+    },
+    {
+      "key": "UI_Game1780_BetDetails_NormalSpin",
+      "en": "Normal Spin",
+      "zh": "普通旋轉"
+    },
+    {
+      "key": "UI_Game1780_BetDetails_FreeSpin",
+      "en": "Free Spin",
+      "zh": "免費旋轉"
+    },
+    {
+      "key": "UI_Game1780_Transactions",
+      "en": "Transactions",
+      "zh": "交易記錄"
+    },
+    {
+      "key": "UI_Game1780_50",
+      "en": "Round",
+      "zh": "回合"
+    },
+    {
+      "key": "UI_Game1780_BetSize",
+      "en": "Bet Size",
+      "zh": "投注金額"
+    },
+    {
+      "key": "UI_Game1780_BetLevel",
+      "en": "Bet Level",
+      "zh": "投注等級"
+    },
+    {
+      "key": "UI_Game1780_Payout",
+      "en": "Payout",
+      "zh": "賠償"
+    },
+    {
+      "key": "UI_Game1780_NoWinningCombination",
+      "en": "No Winning Combination",
+      "zh": "未中獎組合"
+    },
+    {
+      "key": "UI_Game1780_49",
+      "en": "Feature Buy",
+      "zh": "功能購買"
+    },
+    {
+      "key": "UI_Game1780_BetDetails_WinMultiplier",
+      "en": "Win Multiplier xS{num}",
+      "zh": "贏分倍數 xS{num}"
+    },
+    {
+      "key": "UI_Game1780_BetDetails_Three",
+      "en": "Three of Kind",
+      "zh": "三連線"
+    },
+    {
+      "key": "UI_Game1780_BetDetails_Four",
+      "en": "Four of Kind",
+      "zh": "四連線"
+    },
+    {
+      "key": "UI_Game1780_BetDetails_Five",
+      "en": "Five of a Kind",
+      "zh": "五連線"
+    },
+    {
+      "key": "UI_Game1780_BetDetails_Six",
+      "en": "Six of a Kind",
+      "zh": "六連線"
+    },
+    {
+      "key": "UI_Game1780_BetDetails_Way",
+      "en": "way(s)",
+      "zh": "路"
+    },
+    {
+      "key": "UI_Game1780_BetDetails_Tips",
+      "en": "Bet Size x Bet Level x Symbol Payout Values x Way(s) x Multiplier",
+      "zh": "投注大小 x 投注等級 x 符號賠付值 x 路 x 倍數"
+    },
+    {
+      "key": "UI_Game1780_FreeSpins",
+      "en": "+ S{addNum} Free Spins",
+      "zh": "S{addNum} 次免費旋轉"
+    },
+    {
+      "key": "UI_Game1780_Days",
+      "en": "● The game will automatically return to its initial state after being idle for 30 days.Progress and status of any collection games,unfinished free games,and unfinished feature games etc will no longer be retained.",
+      "zh": "● 若遊戲閒置時長超過30天，遊戲將自動恢復至初始狀態收集類的遊戲進度、未完成的免費遊戲、未完成的特色遊戲以及等狀態將不再保留。"
+    },
+    {
+      "key": "UI_Game1780_loading1",
+      "en": "Win with ",
+      "zh": "特色多路連消百搭"
+    },
+    {
+      "key": "UI_Game1780_loading2",
+      "en": "Wilds-on-the-Way  ",
+      "zh": "還可領取獎金倍數遞增的"
+    },
+    {
+      "key": "UI_Game1780_loading3",
+      "en": "& increasing multipliers",
+      "zh": "免費旋轉！"
+    },
+    {
+      "key": "UI_Game1780_loading4",
+      "en": "with every win! ",
+      "zh": ""
+    },
+    {
+      "key": "UI_Game1780_Tip1_1",
+      "en": "4 OR MORE",
+      "zh": "4個或更多"
+    },
+    {
+      "key": "UI_Game1780_Tip1_2",
+      "en": "TRIGGERS 10 OR MORE FREE SPINS",
+      "zh": "獎勵10次或更多免費旋轉"
+    },
+    {
+      "key": "UI_Game1780_Tip2",
+      "en": "WIN UP TO 32400 WAYS!",
+      "zh": "最多可贏得 32400 路中獎組合！"
+    },
+    {
+      "key": "UI_Game1780_Tip3",
+      "en": "MULTIPLER INCREASES AFTER EVERY WIN!",
+      "zh": "獎金倍數在每次中獎後增加!"
+    },
+    {
+      "key": "UI_Game1780_Tip4_1",
+      "en": "GET MORE",
+      "zh": "獲得更多"
+    },
+    {
+      "key": "UI_Game1780_Tip4_2",
+      "en": "WITH WILDS-ON-THE-WAY!",
+      "zh": "以多路連消百搭！"
+    },
+    {
+      "key": "UI_Game1780_Tip5",
+      "en": "MULTIPLER INCREASES X2 AFTER EVERY WIN! ",
+      "zh": "每次贏分後倍數提升 x2！"
+    },
+    {
+      "key": "UI_Game1780_Tip6_1",
+      "en": "ONE MORE",
+      "zh": "再來一次"
+    },
+    {
+      "key": "UI_Game1780_Tip6_2",
+      "en": "! ",
+      "zh": "！"
+    },
+    {
+      "key": "UI_Game1780_Win_1",
+      "en": "TOTAL WIN",
+      "zh": "共贏得"
+    },
+    {
+      "key": "UI_Game1780_Buy_1",
+      "en": "FEATURE",
+      "zh": "模式"
+    },
+    {
+      "key": "UI_Game1780_Buy_2",
+      "en": "BUY",
+      "zh": "購買"
+    },
+    {
+      "key": "UI_Game1780_Cost",
+      "en": "COST",
+      "zh": "價格"
+    },
+    {
+      "key": "UI_Game1780_Buy_Text",
+      "en": "SELECT 'START' TO TRIGGER THE FREE SPINS FEATURE AT THE CURRENT BET SIZE & BET LEVEL",
+      "zh": "選擇「開始」以當前投注與等級觸發免費遊戲功能"
+    },
+    {
+      "key": "UI_Game1780_STAR_Text",
+      "en": "MULTIPLIER INCREASES ×2\\nAFTER EVERY WIN!",
+      "zh": "每次贏分後倍數提升 ×2！"
+    }
+  ]
+}

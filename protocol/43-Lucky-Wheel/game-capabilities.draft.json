@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "draft": true,
+  "gameId": 43,
+  "gameName": "Lucky Wheel",
+  "rulesVersion": "v1.5.10.250430-static-capture",
+  "rulesHash": "sha256:5BD756F5F541F6577977BA3A6FD309AED6BCC45730150E4A687B488157E595D1",
+  "winModel": {
+    "type": "FIXED_SINGLE_PAYLINE_NUMERIC_COMBINATION_WITH_SPECIAL_WHEEL",
+    "paylineCount": 1,
+    "status": "CONFIRMED_STATIC_RULE_AND_CODE",
+    "evidence": ["GameConfig.PayLineCount=1", "rule text describes the first three bonus reels as one complete-number payout"]
+  },
+  "boardModel": {
+    "columns": 4,
+    "rowCounts": [1,1,1,1],
+    "firstThreeColumns": "BONUS_NUMBER_REELS",
+    "fourthColumn": "SPECIAL_REEL",
+    "status": "CONFIRMED_STATIC_RULE_AND_CODE"
+  },
+  "roundModel": {
+    "paidStart": "POST /api/v1/lucky-wheel/spin with bl and bs while not in IsFreeGame",
+    "continuations": ["md=2 causes frontend to issue adjacent free Spin"],
+    "terminalField": "UNKNOWN_WAITING_ORIGINAL_ADJACENT_HTTP",
+    "roundIdField": "UNKNOWN_WAITING_ORIGINAL_HTTP",
+    "status": "PARTIAL_STATIC_ONLY"
+  },
+  "specialModes": [
+    {"id":"MULTIPLIER_WHEEL_MD1","md":1,"status":"CONFIRMED_STATIC_RULE_AND_CODE","runtimeCapturedRounds":0},
+    {"id":"RESPIN_MD2","md":2,"status":"CONFIRMED_STATIC_RULE_AND_CODE_RUNTIME_SEQUENCE_UNCAPTURED","runtimeCapturedRounds":0},
+    {"id":"LUCKY_WHEEL_SCATTER_MD3","md":3,"status":"CONFIRMED_STATIC_RULE_AND_CODE","runtimeCapturedRounds":0}
+  ],
+  "supportedLanguages": {
+    "codes": ["en", "es", "pt", "tr", "id", "bn", "th", "vi", "fr", "ko"],
+    "status": "CONFIRMED_CONFIG_AND_FIRST_LOAD"
+  },
+  "runtimeIndependentLoss": {"supported":false,"status":"UNKNOWN_WAITING_ORIGINAL_RUNTIME_EVIDENCE"},
+  "redisContract": {"status":"UNKNOWN_WAITING_CONSUMER_EVIDENCE"},
+  "codecContract": {"status":"UNKNOWN_WAITING_ORIGINAL_PROTOCOL_EVIDENCE"},
+  "symbolWeights": {"status":"FRONTEND_VISUAL_REEL_ONLY_NOT_AUTHORIZED_AS_SERVER_RULE","values":{}},
+  "evidence": [
+    "resources/43-Lucky-Wheel/resource-inventory.json",
+    "fixtures/43-Lucky-Wheel/static-rule-text-assets.json",
+    "fixtures/43-Lucky-Wheel/frontend-code-evidence.json",
+    "captures/43-Lucky-Wheel/entry-resource-handoff.json"
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.draft.json",
+    "rulesHash": "sha256:5BD756F5F541F6577977BA3A6FD309AED6BCC45730150E4A687B488157E595D1",
+    "behaviorIds": ["B-LAUNCH", "B-SPIN", "B-MULTIPLIER-MD1", "B-RESPIN-MD2", "B-LUCKY-WHEEL-MD3", "B-HISTORY"]
+  },
+  "note": "DRAFT_ONLY：静态规则与代码能力已确认，但缺少分配账号的原始运行时相邻请求；不得进入 Java 实现。"
+}

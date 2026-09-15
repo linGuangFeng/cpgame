@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "scope": [
+    1910,
+    2010,
+    2110
+  ],
+  "identityPolicy": "RAW_GID_ONLY",
+  "roundIndexGate": "PASS_6_OF_6",
+  "javaRuleCoreBuilds": "PASS_3_OF_3",
+  "javaLoaderSafeRejection": "PASS_3_OF_3",
+  "formalOriginalSiteSamplesCreated": 0,
+  "originalSiteEvidenceClaimed": false,
+  "games": [
+    {
+      "gameId": 1910,
+      "directoryName": "1910-Churrasco",
+      "checks": {
+        "serverBuildPassed": true,
+        "loaderSafeRejectionPassed": true,
+        "serverJarContainsRuleCore": true,
+        "serverJarContainsMain": true,
+        "loaderJarContainsRuleCore": true,
+        "loaderJarContainsMain": true,
+        "serverCompilerRelease21": true,
+        "generatorCompilerRelease21": true,
+        "rawGameId": true,
+        "generationDisabled": true,
+        "redisWritesDisabled": true,
+        "noSeedProperty": true
+      },
+      "result": "PASS"
+    },
+    {
+      "gameId": 2010,
+      "directoryName": "2010-EDM-Mania",
+      "checks": {
+        "serverBuildPassed": true,
+        "loaderSafeRejectionPassed": true,
+        "serverJarContainsRuleCore": true,
+        "serverJarContainsMain": true,
+        "loaderJarContainsRuleCore": true,
+        "loaderJarContainsMain": true,
+        "serverCompilerRelease21": true,
+        "generatorCompilerRelease21": true,
+        "rawGameId": true,
+        "generationDisabled": true,
+        "redisWritesDisabled": true,
+        "noSeedProperty": true
+      },
+      "result": "PASS"
+    },
+    {
+      "gameId": 2110,
+      "directoryName": "2110-Bee-Workshop",
+      "checks": {
+        "serverBuildPassed": true,
+        "loaderSafeRejectionPassed": true,
+        "serverJarContainsRuleCore": true,
+        "serverJarContainsMain": true,
+        "loaderJarContainsRuleCore": true,
+        "loaderJarContainsMain": true,
+        "serverCompilerRelease21": true,
+        "generatorCompilerRelease21": true,
+        "rawGameId": true,
+        "generationDisabled": true,
+        "redisWritesDisabled": true,
+        "noSeedProperty": true
+      },
+      "result": "PASS"
+    }
+  ],
+  "overall": "PASS_EVIDENCE_GATE_ONLY"
+}

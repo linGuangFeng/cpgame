@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 2010,
+  "gameName": "EDM Mania",
+  "rulesVersion": "edm-mania-2010-v1",
+  "rulesHash": "f2f29ebdf63e2442409c1eb600513a949d149d47b30f5797f2643c0a7a4af061",
+  "implementationAllowed": true,
+  "winModel": "WAYS",
+  "boardModel": {
+    "reels": 6,
+    "rows": 5,
+    "topCells": 4,
+    "propLength": 30,
+    "trlLength": 4
+  },
+  "specialModes": [
+    {
+      "id": "FREE_FEATURE",
+      "status": "CONFIRMED",
+      "requestType": 3,
+      "continuationType": 2,
+      "small_game_type": 2,
+      "completeRoundCount": 14,
+      "note": "11 trigger+terminal plus 3 complete abc223 Rounds (2 retriggers 10→20)"
+    },
+    {
+      "id": "FEATURE_BUY",
+      "status": "CONFIRMED",
+      "requestType": 3,
+      "bet_type": 3,
+      "costBetMultiple": 75,
+      "minCharge": 300,
+      "completeRoundCount": 30,
+      "note": "btn_buy on main UI; Game2010Constant.buyFreeTimesBetAmountMultiple=75; origin abc222 bet_gold=300"
+    }
+  ],
+  "runtimeIndependentLoss": { "status": "SUPPORTED_FOR_GENERATOR_NOT_DEMO" },
+  "redisContract": {
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "normalIndex": "PerKeyList_000002010",
+    "specialIndex": "MaryKeyList_000002010"
+  },
+  "symbolWeights": {
+    "status": "EMPIRICAL_OPENING_389_PAGES_13226_CELLS",
+    "opening": [109, 1334, 1379, 1294, 1216, 1184, 1308, 1248, 1276, 1265, 1264, 275, 74]
+  }
+}

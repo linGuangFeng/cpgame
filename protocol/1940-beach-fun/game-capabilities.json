@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 3,
+  "gameId": 1940,
+  "gameName": "Beach Fun",
+  "directoryName": "1940-beach-fun",
+  "rulesHash": "sha256:4332cba4e18f7a2dfb8c99d2c5f8969e7650edc3d109f97204af38fb4d1a2af2",
+  "behaviorIds": ["BF-IDENTITY","BF-INIT","BF-PAID","BF-CASCADE","BF-GOLD","BF-FREE","BF-RETRIGGER","BF-HISTORY","BF-REDIS-ROUND","BF-STATIC-LANGUAGE"],
+  "states": ["IDLE","PAID_START","DELIVERING","CACHE_EMPTY"],
+  "identity": {"gid":1940,"cpImageId":51940,"authorizedEntry":"hms-paddle.com CP lobby card record 2689"},
+  "board": {"reels":5,"rows":4,"ways":1024,"scatter":9,"wild":10},
+  "paytable": {"1":[2,5,10],"2":[2,5,10],"3":[4,10,20],"4":[4,10,20],"5":[6,15,40],"6":[8,20,60],"7":[10,40,80],"8":[15,60,100]},
+  "features": {
+    "cascade":{"status":"CONFIRMED","multipliers":[1,2,3,5]},
+    "goldToWild":{"status":"CONFIRMED","eligibleReels":[2,3,4]},
+    "freeSpins":{"status":"CONFIRMED","trigger":3,"award":12,"additionalScatterAward":2,"multipliers":[2,4,6,10]},
+    "freeRetrigger":{"status":"SAMPLE_INSUFFICIENT","capturedCompleteRounds":0,"attemptedPaidRounds":1865,"implementedFromPaytableAndFrontendCode":true}
+  },
+  "rtpEvidencePercent": 97.42,
+  "languages": ["bn-bd","en-us","es-es","fr-fr","hi-in","id-id","in-marathi","in-telugu","ko-ko","pt-br","pt-pt","th-th","tr-tr","vi-vn","zh-cn","zh-hk"],
+  "realRoundCoverage": {"completeRounds":1865,"steps":2515,"ordinaryLoss":1551,"ordinaryWin":314,"freeSpins":54,"cascadeRounds":314,"goldFeatureRounds":1743},
+  "buyEntry": {"status":"UNAVAILABLE","evidence":"buy_free_max_bet=-1 and no active UI entry"},
+  "history": {"list":"/cp/goldgame/single_game_user_gold_history","detail":"/cp/goldgame/single_game_user_history","evidenceStatus":"CAPTURED"},
+  "runtimePolicy": {"redisOnly":true,"database":15,"fixtureReplay":false,"randomDeal":false,"emptyPool":"HTTP_503"}
+}

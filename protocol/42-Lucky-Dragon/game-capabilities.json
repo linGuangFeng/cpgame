@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 5,
+  "workflowTemplateVersion": 40,
+  "gameId": 42,
+  "rawGameId": 42,
+  "gameName": "Lucky Dragon",
+  "directoryName": "42-Lucky-Dragon",
+  "status": "COMPLETE",
+  "rulesHash": "b80c2bc3d8e9d04305c2808a59843743a3950241842c2dc70b36e1e0012b1a57",
+  "rulesVersion": "gid42-v18",
+  "winModel": "ONE_FIXED_LINE_THREE_POSITION_MATCH_WITH_WILD_SUBSTITUTION",
+  "winModelDetails": {
+    "type": "PAYLINE",
+    "paylineCount": 1,
+    "direction": "LEFT_TO_RIGHT_ALL_THREE_POSITIONS",
+    "wildSubstitution": "WILD substitutes for H0/H1/H2/H3/H4; all-WILD resolves WILD",
+    "paytableBetMultiplier": {"H0": 0, "H1": 111, "H2": 21, "H3": 5, "H4": 1, "WILD": 1111},
+    "evidence": "captures/42-Lucky-Dragon/original-http-preflight.json.config.data.spl"
+  },
+  "boardModel": {
+    "columns": 3,
+    "rowCounts": [1, 1, 1],
+    "responseField": "rskl",
+    "symbols": ["H0", "H1", "H2", "H3", "H4", "WILD"],
+    "observedSymbols": ["H0", "H1", "H2", "H3", "WILD"],
+    "unobservedConfiguredSymbols": ["H4"]
+  },
+  "betModel": {
+    "currency": "BRL",
+    "currencySymbol": "R$",
+    "minimumBet": {"amount": "0.50", "betSize": "0.50", "betLevel": 1},
+    "amountFormula": "betSize * betLevel * paylineCount",
+    "betSizes": [0.5, 5, 20],
+    "betLevels": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  },
+  "roundModel": {
+    "paidRoundStart": "one POST /cp/api/v1/lucky-dragon/spin",
+    "deliveryCount": 1,
+    "deliveryIndex": 0,
+    "terminal": true,
+    "continuationSteps": 0,
+    "transferIdSource": "History ll[].tis and log-view transfer_id",
+    "completeRoundEvidenceCount": 1131,
+    "historyMatchedOneToOne": 1131
+  },
+  "specialModes": ["WILD_MULTIPLIER_X3", "WILD_MULTIPLIER_X5", "WILD_MULTIPLIER_X9"],
+  "specialModeDetails": {
+    "trigger": "center position is WILD",
+    "awardSemantics": "rpx is 3, 5 or 9; it multiplies the paytable award only when all three symbols form a WILD-substituted match",
+    "nonAwardingMultiplierRounds": 10,
+    "capturedAwardedCounts": {"WILD_MULTIPLIER_X3": 80, "WILD_MULTIPLIER_X5": 40, "WILD_MULTIPLIER_X9": 35},
+    "continuation": "NONE_OBSERVED_OR_CONSTRUCTED"
+  },
+  "supportedLanguages": {
+    "codes": ["bn", "en", "es", "fr", "id", "ko", "pt", "th", "tr", "vi"],
+    "default": "pt",
+    "source": "resources/42-Lucky-Dragon/public-static/asset-catalog.json"
+  },
+  "resourceClosure": {
+    "workflowTemplateVersion": 40,
+    "status": "READY",
+    "auditMethod": "REAL_ORIGIN_BROWSER",
+    "interactiveUiClosure": true,
+    "passCount": 2,
+    "controlsPerPass": 56,
+    "controlSetsIdentical": true,
+    "secondPassNewResourceCount": 0,
+    "discoveredRequestCount": 133,
+    "archivedRequestCount": 133,
+    "allDiscoveredRequestsArchived": true,
+    "publishByteMismatchCount": 0,
+    "missingOr404Count": 0,
+    "unexplainedCrossOriginRequestCount": 0,
+    "evidenceRefs": [
+      "reports/42-Lucky-Dragon/resource-stage-status.json",
+      "reports/42-Lucky-Dragon/v40-static-publish-validation.json",
+      "reports/42-Lucky-Dragon/v40-machine-gate.json"
+    ]
+  },
+  "runtimeIndependentLoss": {
+    "supported": false,
+    "scope": "Loader generation only; Controller runtime never deals",
+    "method": "pre-generated zero-multiplier Redis pool plus atomic LPOP claim",
+    "forbiddenScopes": ["all Controller paid Round starts", "active Round delivery", "History replay"]
+  },
+  "redisContract": {
+    "supported": true,
+    "sourceGameId": 42,
+    "redisGameId": 42,
+    "normalIndex": "PerKeyList_000000042",
+    "specialIndex": "MaryKeyList_000000042",
+    "normalResultKey": "BetLog:000000042:{actualMultiplier as six digits}",
+    "specialResultKey": "MaryLog:000000042:{actualMultiplier as six digits}",
+    "writeTransaction": ["MULTI", "ZADD index", "RPUSH result-list member", "LTRIM result-list -capacity -1", "EXEC"],
+    "claimContract": "downstream LPOP/BLPOP removes one complete terminal Round member exactly once",
+    "maxMembersPerMultiplierDefault": 300,
+    "zeroMultiplierWrite": true
+  },
+  "codecContract": {
+    "version": "v2",
+    "encoding": "US-ASCII",
+    "memberShape": "v2|bs=<decimal>|bl=<int>|rpx=<0|3|5|9>|s=<three symbol codes>|rk=<roundKey>|di=0|tm=1",
+    "nonRecomputableFacts": ["betSize", "betLevel", "rpx", "three symbols", "roundKey", "deliveryIndex", "terminal"],
+    "recomputedFields": ["winningSymbol", "payout", "actualMultiplier", "OutcomeType"],
+    "excludedFields": ["HTTP envelope", "balance", "session", "timestamp", "cached payout"]
+  },
+  "symbolWeights": {
+    "status": "LOCAL_REPLICA_EMPIRICAL_NOT_ORIGINAL_PROBABILITY",
+    "sourceCompleteRounds": 1131,
+    "weights": {"H0": 1468, "H1": 642, "H2": 670, "H3": 412, "WILD": 198},
+    "centerWildMultiplierWeights": {"3": 87, "5": 43, "9": 35},
+    "excludedUnknown": {"H4": "configured paytable symbol but not observed in any captured reel position"},
+    "disclaimer": "These adjustable local-replica weights do not claim original reel strips, symbol probabilities, RTP or volatility."
+  },
+  "directGenerationSymbolLimits": {
+    "evidencePopulation": 1130,
+    "countingUnit": "one terminal three-column complete Round",
+    "columnCapacity": 1,
+    "symbols": {
+      "H0": {"allowedColumns":[0,1,2],"perColumnMax":[1,1,1],"totalMax":3},
+      "H1": {"allowedColumns":[0,1,2],"perColumnMax":[1,1,1],"totalMax":3},
+      "H2": {"allowedColumns":[0,1,2],"perColumnMax":[1,1,1],"totalMax":2},
+      "H3": {"allowedColumns":[0,1,2],"perColumnMax":[1,1,1],"totalMax":2},
+      "H4": {"allowedColumns":[],"perColumnMax":[0,0,0],"totalMax":0},
+      "WILD": {"allowedColumns":[0,1,2],"perColumnMax":[1,1,1],"totalMax":2}
+    },
+    "enforcement": "RandomRoundGenerator validates every configured intact joint state before weighting; no runtime state can exceed these frozen provider maxima",
+    "evidenceRefs": ["captures/42-Lucky-Dragon/original-http-spin-index.jsonl"]
+  },
+  "generationModel": {
+    "implementationReady": true,
+    "usesIndependentCellMarginalsOnly": false,
+    "artificialLossBoardConstraints": false,
+    "modelType": "EMPIRICAL_COMPLETE_STATE_JOINT_DISTRIBUTION",
+    "sourcePopulation": {
+      "sourceType": "ORIGINAL_AUTHORIZED_HTTP",
+      "rawResponseRounds": 1130,
+      "trainingRounds": 1030,
+      "holdoutRounds": 100,
+      "splitMethod": "responseSha256 lexical deterministic split",
+      "holdoutType": "REAL_PROVIDER_HOLDOUT",
+      "overlap": 0
+    },
+    "lifecycleEntries": [
+      {
+        "id": "INITIAL",
+        "role": "INITIAL",
+        "countingUnit": "COMPLETE_INITIAL_STATE",
+        "sampleRoundCount": 1030,
+        "samplePositionCount": 3090,
+        "evidenceRefs": ["captures/42-Lucky-Dragon/original-http-spin-index.jsonl"],
+        "wholeNextStateCountedAsNewDeal": false,
+        "stateFields": ["rskl[0]", "rskl[1]", "rskl[2]", "rpx"],
+        "newlyDealtPositionsOnly": false,
+        "reason": "Lucky Dragon has one terminal initial delivery and no captured cascade, respin, refill or continuation entry"
+      }
+    ],
+    "jointRoundFeatures": [
+      {"id":"ROUND_OUTCOME_CLASS","applicable":true,"evidenceRefs":["captures/42-Lucky-Dragon/original-http-spin-index.jsonl"]},
+      {"id":"ROUND_STEP_COUNT","applicable":true,"evidenceRefs":["captures/42-Lucky-Dragon/original-http-round-index.jsonl"]},
+      {"id":"STATE_ELEMENT_COUNT_VECTOR","applicable":true,"evidenceRefs":["captures/42-Lucky-Dragon/original-http-spin-index.jsonl"]}
+    ],
+    "holdoutPlan": {"source":"REAL_PROVIDER","minimumRounds":100,"disjointFromTraining":true,"splitMethod":"responseSha256 lexical deterministic split"},
+    "trainingUnit": "one ordered three-symbol board plus its coupled rpx",
+    "lossGeneration": "rejection sampling over intact learned joint states; no symbol replacement or board constraint",
+    "validation": "reports/42-Lucky-Dragon/generation-model-validation.json"
+  },
+  "unknowns": [
+    "ORIGINAL_REEL_STRIPS",
+    "ORIGINAL_SYMBOL_PROBABILITIES",
+    "ORIGINAL_RTP",
+    "UNOBSERVED_H4_REEL_PLACEMENT"
+  ],
+  "evidence": [
+    "captures/42-Lucky-Dragon/original-http-preflight.json",
+    "captures/42-Lucky-Dragon/original-http-spin-index.jsonl",
+    "captures/42-Lucky-Dragon/original-http-round-index.jsonl",
+    "captures/42-Lucky-Dragon/original-http-history-index.jsonl",
+    "captures/42-Lucky-Dragon/original-http-request-intents.jsonl",
+    "reports/42-Lucky-Dragon/frozen-evidence-audit.json",
+    "resources/42-Lucky-Dragon/public-static/asset-catalog.json",
+    "reports/42-Lucky-Dragon/resource-stage-status.json",
+    "reports/42-Lucky-Dragon/v40-static-publish-validation.json",
+    "reports/42-Lucky-Dragon/v40-machine-gate.json"
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "b80c2bc3d8e9d04305c2808a59843743a3950241842c2dc70b36e1e0012b1a57",
+    "behaviorIds": ["B-IDENTITY", "B-AUTH-CONFIG", "B-SPIN-ROUND", "B-HISTORY", "B-REDIS-ROUND"]
+  }
+}

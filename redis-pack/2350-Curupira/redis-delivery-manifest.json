@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 2350,
+  "directoryName": "2350-Curupira",
+  "rulesVersion": "2350-curupira-rules-d5421efc",
+  "rulesHash": "d5421efc347392576699048c0538c72d669056017eb723ae2a046fa7bac71404",
+  "status": "LOADED",
+  "redisContract": "PLATFORM_CONSUMER_CONTRACT_ENABLED",
+  "writeAllowed": true,
+  "runtimeResultMembersIncluded": true,
+  "memberCount": 550,
+  "redisHost": "192.168.10.3",
+  "redisPort": 6379,
+  "redisDatabase": 15,
+  "selectionContract": "LIVE_NON_WINNING_TRIGGER_THEN_CACHED_FEATURE",
+  "keys": {
+    "ordinaryIndex": "PerKeyList_000002350",
+    "ordinaryList": "BetLog:000002350:%06d",
+    "freeEwIndex": "MaryKeyList_000002350",
+    "freeEwList": "MaryLog:000002350:%06d",
+    "holdIndex": "MaryKeyList_100002350",
+    "holdList": "MaryLog:100002350:%06d"
+  },
+  "verifiedRedis": {
+    "ordinaryMembers": 350,
+    "ordinaryPrefixes": ["CU1PL", "CU1PW", "CU1PE"],
+    "freeEwMembers": 100,
+    "freeEwPrefixes": ["CU1PF"],
+    "holdMembers": 100,
+    "holdPrefixes": ["CU1PH"],
+    "triggerMembers": 0
+  },
+  "pools": {
+    "LOSS": 100,
+    "WIN": 150,
+    "EXPANDING_WILD": 100,
+    "FREE_EW": 100,
+    "HOLD": 100
+  },
+  "memberEncoding": "CU1 ASCII",
+  "loader": "generator/2350-Curupira/dist/curupira-round-loader-all.jar",
+  "formalConfiguration": "generator/2350-Curupira/dist/generator.properties"
+}

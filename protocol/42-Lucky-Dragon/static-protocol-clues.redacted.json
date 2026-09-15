@@ -1,0 +1,356 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-08-30T16:16:06Z",
+  "rawGameId": 42,
+  "game": "Lucky Dragon",
+  "status": "STATIC_SOURCE_CONFIRMED_NO_API_REQUESTS",
+  "safety": {
+    "chromeAccessed": false,
+    "accountAccessed": false,
+    "spinApiAccessed": false,
+    "paidSpinIssued": false,
+    "apiRequestsIssued": false,
+    "credentialValuesPersisted": false,
+    "publicStaticFetchOnly": true,
+    "publicStaticFetchPolicy": "GET only; no query string, cookie, authorization token, or custom request header"
+  },
+  "evidence": {
+    "local": [
+      {
+        "path": "captures/42-Lucky-Dragon/protocol-probe/gid42-launch-observation-001.redacted.json",
+        "role": "redacted launch observation",
+        "facts": [
+          "static origin https://static.cpgame.io and path /42/",
+          "observed API origin https://api.omgapibra.com",
+          "observed /api/report/timing, /cp/api/v1/auth/verify and /cp/api/v1/lucky-dragon/config",
+          "launch query key names ai,btt,gid,l,language,sip,t,token; no values persisted"
+        ]
+      },
+      {
+        "path": "protocol/42-Lucky-Dragon/browser-milestone-evidence.json",
+        "role": "manual UI and History milestone evidence; not raw HTTP"
+      }
+    ],
+    "publicStatic": [
+      {
+        "url": "https://static.cpgame.io/42/versionconfig.js",
+        "bytes": 303,
+        "sha256": "dffcf340e90fbc632143dcdd2b3cbf642c0cbedf5ab283933d2f8439454c2240"
+      },
+      {
+        "url": "https://static.cpgame.io/0/versionconfig.js",
+        "bytes": 363,
+        "sha256": "776d3d1223fe19615a8e391c51f6ee6ecf5050b6306f43d8c72be7ddeb2978e2"
+      },
+      {
+        "url": "https://static.cpgame.io/asset/versionconfig.js",
+        "bytes": 128,
+        "sha256": "a1c9f6d7711d6a252586ff9dbadfea2634a138446fb88802cd698cd6e012123a"
+      },
+      {
+        "url": "https://static.cpgame.io/42/src/settings.4f29a.js",
+        "bytes": 300,
+        "sha256": "46a7e861c27c3caa50ff3e02ac2098ae256583e980074b9a5f2dc67636312ec6"
+      },
+      {
+        "url": "https://static.cpgame.io/asset/cocos2d-js-min.55e56.js",
+        "bytes": 2033553,
+        "sha256": "2e5112502a0de9cb7e73352f30a44b3bb072443ec5f5dad1b204358ef0c2dd69"
+      },
+      {
+        "url": "https://static.cpgame.io/42/assets/internal/index.d0832.js",
+        "bytes": 463,
+        "sha256": "91e9970eba5f76af1a8585527b6e80352978ac231908ea9e6ec3e139e8f326a5"
+      },
+      {
+        "url": "https://static.cpgame.io/42/assets/resources/index.9b052.js",
+        "bytes": 1136,
+        "sha256": "e9cf7c919e439c037a36c2827b0f5fa4b0a719da50852d419cb70dcb8eb843fa"
+      },
+      {
+        "url": "https://static.cpgame.io/42/assets/main/index.d68a4.js",
+        "bytes": 319622,
+        "sha256": "1756889d4d7f61d9cc1cacabaeb78b08ec2584bfebe49f8880d04308d4428264"
+      },
+      {
+        "url": "https://static.cpgame.io/42/assets/resources/import/02/0242db13b.bab44.json",
+        "bytes": 332157,
+        "sha256": "33b043a1be1006b30abbe5827985c391bf4fed78d99f2254032af83abdf21fd6"
+      }
+    ]
+  },
+  "runtime": {
+    "title": "Lucky Dragon",
+    "version": "v1.5.10.250514",
+    "defaultLanguage": "pt",
+    "gameIdInBundle": 42,
+    "gameUrlConstruction": {
+      "source": "https://static.cpgame.io/0/versionconfig.js",
+      "expression": "window.location.protocol + '//' + launch.sip + '/cp'",
+      "fallbackWhenSipAbsent": "http://127.0.0.1:9500/cp",
+      "observedResolvedBase": "https://api.omgapibra.com/cp"
+    },
+    "serverVersionSelection": "Platform.getCurVersion() selects v2 when launch field t is non-null; otherwise v1"
+  },
+  "startInteraction": {
+    "visiblePortugueseLabel": "COMEÇAR",
+    "localizationKey": "GameShell.GetStarted",
+    "sourceBehavior": [
+      "The Loading component preloads prefabs, spines, atlases, shaders, fonts, sounds and other resources.",
+      "Main starts Login, then Config, before marking PlayerData online.",
+      "The start button remains inactive until both resource progress and PlayerData.IsOnline reach their ready states.",
+      "Once ready, the button is activated and its label is populated from GameShell.GetStarted; the Portuguese resource maps it to COMEÇAR.",
+      "Clicking it dispatches GO_GAME and plays a click sound.",
+      "Main handles GO_GAME by instantiating the game view, fading the shade, and hiding loading/copyright nodes. The click itself does not issue a Spin request."
+    ],
+    "failureBehavior": "If Login or Config has not succeeded, the normal ready gate is not satisfied; the source retains retry/error paths instead of entering paid play."
+  },
+  "transport": {
+    "method": "POST",
+    "contentType": "application/x-www-form-urlencoded",
+    "encoding": "For each own field, encodeURIComponent(key/value), replace encoded spaces (%20) with '+', then join pairs with '&'.",
+    "responseEnvelope": {
+      "successCondition": "HTTP 2xx and parsed JSON field code string-equal to '200'",
+      "payload": "parsedJson.data or empty object",
+      "failure": "reject parsed error object; if parsing/status fails synthesize code HTTP<status>"
+    },
+    "pseudoHeaderRewrite": {
+      "game-id": "form field gid",
+      "web-token": "form field t",
+      "note": "These two values are inserted into the form body by Http.post, not sent as HTTP headers. Other keys in the caller's Headers object are ignored by this transport implementation."
+    },
+    "signature": {
+      "businessSignatureFieldFound": false,
+      "hashOrHmacAlgorithmFound": false,
+      "canonicalSortFound": false,
+      "conclusion": "No endpoint-specific signature is constructed by the gid42 application bundle. The only request transformation found is URL-form encoding in object insertion order. Engine references to MD5 concern static asset versioning/cache and are not API signing.",
+      "scope": "static source conclusion only; no API request was sent to verify server enforcement"
+    }
+  },
+  "launchFieldRouting": {
+    "platformAllowList": [
+      "ai",
+      "ops",
+      "t",
+      "f",
+      "op",
+      "oc",
+      "btt",
+      "mi"
+    ],
+    "observedLaunchKeysForwardableToAuth": [
+      "ai",
+      "btt",
+      "t"
+    ],
+    "notForwardedByPlatformObject": [
+      "gid",
+      "l",
+      "language",
+      "sip",
+      "token"
+    ],
+    "notes": [
+      "sip selects the API base rather than becoming an auth form field.",
+      "l selects localization.",
+      "gid is injected from the bundle's raw game id through the game-id to gid rewrite.",
+      "The query key token is not the session token used after login; PlayerData.Token is populated from auth response data.token."
+    ]
+  },
+  "endpoints": [
+    {
+      "name": "authVerify",
+      "path": "/cp/api/v1/auth/verify",
+      "staticPathBeforeBasePrefix": "/api/v1/auth/verify",
+      "method": "POST",
+      "requestFields": {
+        "requiredByConstruction": [
+          "gid"
+        ],
+        "forwardedWhenPresent": [
+          "ai",
+          "ops",
+          "t",
+          "f",
+          "op",
+          "oc",
+          "btt",
+          "mi"
+        ]
+      },
+      "versionNote": "Main constructs a caller Headers key named version, but Http.post recognizes only game-id and web-token; therefore version is not serialized by this static transport.",
+      "responseFieldClues": [
+        "token",
+        "player.id",
+        "player.balance",
+        "player.fbt",
+        "player.fcg.fbl",
+        "player.fcg.fbs",
+        "ping"
+      ],
+      "confidence": "CONFIRMED_BY_STATIC_SOURCE_AND_REDACTED_LAUNCH_OBSERVATION"
+    },
+    {
+      "name": "config",
+      "path": "/cp/api/v1/lucky-dragon/config",
+      "staticPathBeforeBasePrefix": "/api/v1/lucky-dragon/config",
+      "method": "POST",
+      "requestFields": {
+        "body": [
+          "t",
+          "gid"
+        ],
+        "sources": {
+          "t": "auth response data.token",
+          "gid": "bundle raw game id 42"
+        }
+      },
+      "responseFieldClues": [
+        "cs",
+        "bsl",
+        "bll",
+        "auto",
+        "spl",
+        "dbs",
+        "dbl",
+        "last",
+        "last.ss",
+        "last.fsn",
+        "last.nfsc",
+        "last.rwa",
+        "last.frwa",
+        "last.bs",
+        "last.bl",
+        "last.rskl"
+      ],
+      "confidence": "CONFIRMED_BY_STATIC_SOURCE_AND_REDACTED_LAUNCH_OBSERVATION"
+    },
+    {
+      "name": "spin",
+      "path": "/cp/api/v1/lucky-dragon/spin",
+      "staticPathBeforeBasePrefix": "/api/v1/lucky-dragon/spin",
+      "method": "POST",
+      "requestFields": {
+        "body": [
+          "bl",
+          "bs",
+          "t",
+          "gid"
+        ],
+        "optional": [
+          "ec"
+        ],
+        "sources": {
+          "bl": "selected Config bll entry",
+          "bs": "selected Config bsl entry",
+          "t": "auth response data.token",
+          "gid": "bundle raw game id 42",
+          "ec": "activity code when the optional activity system is active"
+        }
+      },
+      "negativeClues": [
+        "No amount/ba request field is constructed.",
+        "No transfer_id/tis request field is constructed.",
+        "No explicit free/cascade/continuation flag is constructed.",
+        "The same bl/bs construction is used when the UI requests the next result; server-side session state appears to decide free/continuation behavior, but this inference was not API-tested."
+      ],
+      "responseFieldClues": [
+        "pb",
+        "fbt",
+        "rskl",
+        "wsk",
+        "rpx",
+        "wa",
+        "rwa",
+        "ba"
+      ],
+      "confidence": "CONFIRMED_BY_STATIC_SOURCE_ONLY_NO_SPIN_REQUEST_SENT"
+    },
+    {
+      "name": "historyList",
+      "path": "/cp/api/v1/lucky-dragon/log-list",
+      "staticPathBeforeBasePrefix": "/api/v1/lucky-dragon/log-list",
+      "method": "POST",
+      "requestFields": {
+        "body": [
+          "page_index",
+          "begin_at",
+          "end_at",
+          "t",
+          "gid"
+        ],
+        "notes": [
+          "page_index starts at 1 and increments while response end equals 0.",
+          "UI component declares page size 20 but does not send a page_size field.",
+          "begin_at/end_at are epoch-second day boundaries selected by Today, Week, or Custom filters."
+        ]
+      },
+      "responseFieldClues": [
+        "lc",
+        "ba",
+        "wa",
+        "end",
+        "ll[]",
+        "ll[].ca",
+        "ll[].tis",
+        "ll[].bid",
+        "ll[].ba",
+        "ll[].wa",
+        "ll[].gt",
+        "ll[].ifb"
+      ],
+      "confidence": "CONFIRMED_BY_STATIC_SOURCE_ONLY"
+    },
+    {
+      "name": "historyView",
+      "path": "/cp/api/v1/lucky-dragon/log-view",
+      "staticPathBeforeBasePrefix": "/api/v1/lucky-dragon/log-view",
+      "method": "POST",
+      "requestFields": {
+        "body": [
+          "transfer_id",
+          "t",
+          "gid"
+        ],
+        "sources": {
+          "transfer_id": "selected history-list item tis",
+          "t": "auth response data.token",
+          "gid": "bundle raw game id 42"
+        }
+      },
+      "responseFieldClues": [
+        "ba",
+        "bl",
+        "bs",
+        "ca",
+        "baf",
+        "frwa",
+        "rpx",
+        "rskl",
+        "rwa",
+        "ss",
+        "wa",
+        "wsk",
+        "gfl",
+        "sfl"
+      ],
+      "confidence": "CONFIRMED_BY_STATIC_SOURCE_ONLY"
+    }
+  ],
+  "additionalEndpointClue": {
+    "path": "/cp/api/v1/ping",
+    "method": "POST",
+    "bodyFields": [
+      "t",
+      "gid"
+    ],
+    "reasonNotInTargetFive": "heartbeat only"
+  },
+  "unknownsAndLimits": [
+    "No raw auth/config response body was persisted, so response field clues are static consumer expectations rather than live schema validation.",
+    "No Spin or History API request was issued; status codes, server-required optional fields, and actual response cardinality remain unverified.",
+    "The static bundle does not prove a safe paid-round terminal rule or payout reconciliation formula.",
+    "The static source contains a v1 fallback auth/session path when launch t is absent, but the redacted launch observation selected and observed v2 auth/verify.",
+    "No protocol was borrowed from another raw game id."
+  ]
+}

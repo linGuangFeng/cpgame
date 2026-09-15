@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 17,
+  "rawGameId": 42,
+  "gameName": "Lucky Dragon",
+  "directoryName": "42-Lucky-Dragon",
+  "status": "GID42_COLLECTION_COMPLETE_FROZEN",
+  "identity": {
+    "rawGameIdOnly": true,
+    "derivedIntegrationGameIdAccepted": false,
+    "accountAlias": "abc222",
+    "accountConfirmedOnPage": true
+  },
+  "currentEvidence": {
+    "formalOriginalAuthorizedHttp": {
+      "paidRoundStarts": 1131,
+      "completedRounds": 1131,
+      "ordinaryLoss": 931,
+      "ordinaryWin": 200,
+      "wildMultiplierX3": 80,
+      "wildMultiplierX5": 40,
+      "wildMultiplierX9": 35,
+      "historyMatchedOneToOne": 1131,
+      "spinDeliveries": 1131,
+      "grossBetBrl": 565.5
+    },
+    "hmsUiManual": {
+      "paidRoundStarts": 11,
+      "completedRounds": 11,
+      "ordinaryLoss": 10,
+      "ordinaryWin": 1,
+      "formalContribution": 0
+    }
+  },
+  "protocol": {
+    "transport": "POST application/x-www-form-urlencoded",
+    "signatureMode": "NONE_CONFIRMED",
+    "apiOrigin": "https://api.omgapibra.com",
+    "minimumBetBrl": 0.5,
+    "minimumRequest": {"bs": "0.5", "bl": "1", "gid": "42"},
+    "spinPath": "/cp/api/v1/lucky-dragon/spin",
+    "historyListPath": "/cp/api/v1/lucky-dragon/log-list",
+    "historyDetailPath": "/cp/api/v1/lucky-dragon/log-view",
+    "firstRoundHistoryTerminalConfirmed": true
+  },
+  "batch": {
+    "collector": "captures/42-Lucky-Dragon/tools/gid42-live-batch.mjs",
+    "singleWriter": true,
+    "spinSerialization": true,
+    "intentFsyncBeforeEachPaidRequest": true,
+    "unknownInFlightRetryAllowed": false,
+    "targets": {
+      "ordinaryLoss": 200,
+      "ordinaryWin": 200,
+      "wildMultiplierX3": 30,
+      "wildMultiplierX5": 30,
+      "wildMultiplierX9": 30
+    },
+    "maximumPaidStarts": 5000,
+    "maximumGrossBetBrl": 2500,
+    "batchRequestsSent": 1130,
+    "fundingAuthorizationReceived": true,
+    "unknownInFlight": false,
+    "liveWriterStarted": false,
+    "writerLockPresent": false,
+    "blocker": null,
+    "stopReason": "ALL_TARGETS_MET"
+  },
+  "validation": {
+    "nodeSyntax": "PASS",
+    "testsPassed": 25,
+    "testsFailed": 0,
+    "sensitiveMaterialMatches": 0,
+    "credentialPersistence": false
+  },
+  "evidence": [
+    "protocol/42-Lucky-Dragon/static-protocol-clues.redacted.json",
+    "captures/42-Lucky-Dragon/original-http-preflight.json",
+    "captures/42-Lucky-Dragon/original-http-live-step-journal-001.json",
+    "captures/42-Lucky-Dragon/original-http-round-001.json",
+    "captures/42-Lucky-Dragon/original-http-live-history-001.json",
+    "captures/42-Lucky-Dragon/api-first-collector-config.json"
+  ],
+  "nextAction": "KEEP_GID42_FROZEN; CREATE_SEPARATE_REPLICATION_TASK_USING_REVISED_V17_SHARED_JVM_SHARED_HTTP_CONTRACT; DEFER_FINAL_SHARED_DEMO_ACCEPTANCE_UNTIL_PLATFORM_GATES_ARE_UNIFIED",
+  "updatedAt": "2026-08-31T15:52:52+08:00"
+}

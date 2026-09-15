@@ -1,0 +1,1 @@
+http://192.168.10.3:55057/?gid=57&t=demo-launch&ai=luck_single_10229&btt=1&l=pt

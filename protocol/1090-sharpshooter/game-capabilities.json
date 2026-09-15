@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 3,
+  "gameId": 1090,
+  "gameName": "Sharpshooter",
+  "directoryName": "1090-Sharpshooter",
+  "rulesVersion": "1090-rules-v2",
+  "rulesHash": "e2d48bc36060cfa82c86468e67d20617b0f137bae5ed9986541823c558c7daff",
+  "implementationReady": true,
+  "supportedLanguages": [
+    "bn",
+    "en",
+    "es",
+    "fr",
+    "id",
+    "ko",
+    "pt-br",
+    "th",
+    "tr",
+    "vi",
+    "zh"
+  ],
+  "winModel": "LEFT_TO_RIGHT_ALL_WAYS_TUMBLE",
+  "boardModel": {
+    "columns": 5,
+    "rows": 4,
+    "order": "COLUMN_MAJOR",
+    "symbols": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "scatter": 9,
+    "wild": 10
+  },
+  "multipliers": {
+    "normal": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "free": [
+      2,
+      4,
+      6,
+      10
+    ]
+  },
+  "freeSpins": {
+    "scatter3": 12,
+    "scatter4": 14,
+    "counterFields": [
+      "frees.total_times",
+      "frees.surplus_times",
+      "new_free.new_times"
+    ],
+    "retrigger": {
+      "status": "SAMPLE_INSUFFICIENT",
+      "originalHelpSupports": true,
+      "implemented": false
+    }
+  },
+  "specialModes": {
+    "cascade": {
+      "supported": true
+    },
+    "freeSpins": {
+      "supported": true,
+      "retriggerSupported": false
+    }
+  },
+  "roundModel": {
+    "paidType": 1,
+    "freeType": 2,
+    "termination": "frees.surplus_times=0 and last props page has no win",
+    "countingUnit": "COMPLETE_PAID_ROUND"
+  },
+  "realEvidence": {
+    "paidStarts": 1485,
+    "ordinaryLossComplete": 1235,
+    "ordinaryWinComplete": 200,
+    "featureTriggers": 50,
+    "freeSpinComplete": 30,
+    "freeSpinIncompleteExcluded": 20
+  },
+  "redisContract": {
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "integerMultiplierUnit": "centi-multiplier = payoutUnits * 5",
+    "lossIndex": "PerKeyList_000001090",
+    "winIndex": "PerKeyList_000001090",
+    "specialIndex": "MaryKeyList_000001090",
+    "memberCodec": "SS1 printable ASCII",
+    "prefix": "PerKeyList_000001090"
+  },
+  "behaviorIds": [
+    "B-NORMAL-LOSS",
+    "B-NORMAL-WIN",
+    "B-TUMBLE",
+    "B-FREE-SPINS",
+    "B-ROUND-BOUNDARY",
+    "B-HISTORY",
+    "B-REDIS-EMPTY"
+  ],
+  "acceptanceStatus": "READY_FOR_ACCEPTANCE",
+  "nativeLanguageCodes": [
+    "en-us",
+    "hi-in",
+    "th-th",
+    "zh-cn",
+    "zh-hk",
+    "vi-vn",
+    "id-id",
+    "in-telugu",
+    "in-marathi",
+    "pt-pt",
+    "es-es",
+    "fr-fr",
+    "bn-bd",
+    "ko-ko",
+    "tr-tr"
+  ],
+  "supportedLanguagesMeaning": "Archived directory aliases; native code startup/main UI verified in native-locale-acceptance.json, with original blank/fallback strings preserved",
+  "capabilityGaps": [
+    {
+      "id": "FREE_RETRIGGER_SAMPLE_INSUFFICIENT",
+      "behaviorId": "B-FREE-SPINS",
+      "status": "SAMPLE_INSUFFICIENT",
+      "blocking": false,
+      "helpEvidence": "Original help: Free spins can be retriggered.",
+      "screenshot": "screenshots/1090-Sharpshooter/recovery-help-free-rule.png",
+      "audit": {
+        "spinResponses": 2068,
+        "freeResponses": 583,
+        "positiveFreeRetriggers": 0,
+        "historyRecords": 30,
+        "historyNestedStates": 42,
+        "historyPositiveFreeRetriggers": 0,
+        "dirtyResponses": 2,
+        "dirtyPositiveFreeRetriggers": 0
+      },
+      "missing": [
+        "Retrigger threshold and additional award",
+        "Counter updates across retrigger",
+        "Complete retrigger chain to terminal"
+      ],
+      "currentImplementation": "Non-retrigger features only. Empirical free Scatter cap 2 prevents retrigger. This is an implementation gap, not a confirmed provider prohibition.",
+      "requiredNextInput": "Existing complete retrigger response-chain path or authoritative archived rule evidence; no new original-site capture."
+    }
+  ],
+  "empiricalCaps": {
+    "paid": {
+      "pages": 11,
+      "scatter": 4,
+      "goldInitial": 6,
+      "goldLater": 5,
+      "wildLater": 4,
+      "goldColumn": [
+        0,
+        3,
+        3,
+        3,
+        0
+      ]
+    },
+    "free": {
+      "pages": 10,
+      "scatter": 2,
+      "goldInitial": 5,
+      "goldLater": 4,
+      "wildLater": 3,
+      "goldColumn": [
+        0,
+        3,
+        3,
+        2,
+        0
+      ]
+    },
+    "scatterPerColumn": 1,
+    "initialWild": 0
+  },
+  "capsScope": "Training observations enforced by current generator; not exhaustive provider limits",
+  "browserAcceptance": {
+    "observedModesAtLeastTwice": true,
+    "freeRetriggerAccepted": false,
+    "nativeLocaleStartupAndMainChecked": 15,
+    "report": "reports/1090-Sharpshooter/browser-acceptance-resumed.json"
+  }
+}

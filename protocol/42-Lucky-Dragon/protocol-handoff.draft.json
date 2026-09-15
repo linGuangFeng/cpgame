@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "draft": true,
+  "gameId": 42,
+  "rulesHash": "UNKNOWN_WAITING_ORIGINAL_EVIDENCE",
+  "evidenceInventory": [
+    {
+      "id": "E-USER-SCOPE",
+      "source": "explicit delegated batch B request",
+      "behaviorIds": [],
+      "disposition": "IDENTITY_AND_COVERAGE_SCOPE_ONLY",
+      "reason": "不包含游戏规则或协议字段。"
+    },
+    {
+      "id": "E-LOCAL-CATALOG",
+      "source": "resources/42-Lucky-Dragon/source-catalog-evidence.json",
+      "behaviorIds": [],
+      "disposition": "STATIC_IDENTITY_ONLY",
+      "reason": "只确认平台目录映射。"
+    },
+    {
+      "id": "E-BROWSER-MILESTONE",
+      "source": "protocol/42-Lucky-Dragon/browser-milestone-evidence.json",
+      "behaviorIds": [
+        "B-IDENTITY-LAUNCH",
+        "B-HISTORY-CLICKPATH",
+        "B-HISTORY-SESSION-AGGREGATE",
+        "B-HISTORY-WIN-OBSERVATION"
+      ],
+      "disposition": "MANUAL_ORIGINAL_BROWSER_EVIDENCE",
+      "reason": "确认页面账号、/42/启动身份、最低注正常局以及History列表/详情/返回路径；不包含原始网络字段。"
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-IDENTITY-LAUNCH",
+      "category": "identity",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-BROWSER-MILESTONE"],
+      "implementationContract": {
+        "preconditions": ["HMS page account is abc222"],
+        "stateFields": ["gameId", "gameName", "launchPath"],
+        "transitionRules": ["resourceCode 50042 card opens game path /42/"],
+        "outputs": ["gameId 42", "Lucky Dragon", "/42/"],
+        "terminationRules": ["Lucky Dragon start screen is visible"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-BROWSER-MILESTONE"],
+        "assertions": ["account is abc222", "frame path is /42/", "History bet ID starts with 42-"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HISTORY-CLICKPATH",
+      "category": "history",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-BROWSER-MILESTONE"],
+      "implementationContract": {
+        "preconditions": ["one terminal original round exists"],
+        "stateFields": ["timestamp", "betId", "transactionId", "bet", "netResult", "endingBalance", "betLevel", "terminalReplay", "payment"],
+        "transitionRules": ["open menu", "open History", "load list", "open row detail", "return"],
+        "outputs": ["History list row", "normal-spin detail", "terminal reel replay", "payment section"],
+        "terminationRules": ["detail return control is visible"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-BROWSER-MILESTONE"],
+        "assertions": ["list and detail are clickable", "bet 0.50", "net result -0.50", "ending balance 5768.90", "no continuation step"],
+        "adjacentStepEvidence": ["menu -> list -> row detail -> return recorded in E-BROWSER-MILESTONE"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HISTORY-SESSION-AGGREGATE",
+      "category": "history-ui-observation",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-BROWSER-MILESTONE"],
+      "implementationContract": {
+        "preconditions": ["History list belongs to confirmed abc222 account ID 74171415"],
+        "stateFields": ["paidRoundStarts", "ordinaryLossRounds", "ordinaryWinRounds", "historyTotalBet", "historyNetResult"],
+        "transitionRules": ["No network or rule transition may be inferred from the aggregate"],
+        "outputs": ["10 paid rows", "9 loss rows", "1 win row", "total bet 5.00", "net result 26.50"],
+        "terminationRules": ["Aggregate is used only as a UI acceptance oracle"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-BROWSER-MILESTONE", "protocol/42-Lucky-Dragon/ui-history-evidence-contract.json"],
+        "assertions": ["paid starts equals 10", "loss plus win equals 10", "total bet equals 5.00", "net result equals 26.50", "formal HTTP count remains zero"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HISTORY-WIN-OBSERVATION",
+      "category": "history-ui-observation",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-BROWSER-MILESTONE"],
+      "implementationContract": {
+        "preconditions": ["History detail transaction 2093422299384020992 is open"],
+        "stateFields": ["bet", "payment", "netResult", "terminal", "continuationSteps", "observedCentralSymbols", "candidateMechanism"],
+        "transitionRules": ["WILD_MULTIPLIER_X3 remains candidateOnly until original rules and HTTP evidence confirm it"],
+        "outputs": ["bet 0.50", "payment 31.50", "net result 31.00", "terminal true", "continuationSteps 0", "three silver dragon symbols"],
+        "terminationRules": ["Observation must never be counted as ORIGINAL_AUTHORIZED_HTTP"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-BROWSER-MILESTONE", "protocol/42-Lucky-Dragon/ui-history-evidence-contract.json"],
+        "assertions": ["transactionId equals 2093422299384020992", "candidateOnly is true", "formalOriginalHttpEligible is false"],
+        "usesImplementationGeneratedExpected": false
+      }
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "U-SPIN-ROUND",
+      "reason": "当前游戏付费起点、相邻Step和合法终止字段尚无真实网络证据。",
+      "evidenceRefs": [
+        "E-USER-SCOPE"
+      ]
+    },
+    {
+      "id": "U-RULES-SPECIALS",
+      "reason": "规则、奖表、玛丽及其他特殊/奖励模式尚待当前游戏证据。",
+      "evidenceRefs": [
+        "E-USER-SCOPE",
+        "E-LOCAL-CATALOG"
+      ]
+    }
+  ],
+  "note": "DRAFT_ONLY：不得用于 Java 实现或验收通过。"
+}

@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "gameId": 50,
+  "status": "SUPERSEDED",
+  "supersededBy": "protocol-handoff.json",
+  "reason": "Canonical accepted handoff with authenticated wire and adjacent-step evidence exists. This marker must not be used for implementation."
+}

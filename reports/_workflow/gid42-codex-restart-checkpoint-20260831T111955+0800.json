@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "rawGameId": 42,
+  "directoryName": "42-Lucky-Dragon",
+  "checkpointAt": "2026-08-31T11:19:55+08:00",
+  "status": "CODEX_RESTART_CHECKPOINT_READY",
+  "liveState": {
+    "writerStarted": false,
+    "writerLockPresent": false,
+    "knownOutputOpenHandles": 0,
+    "batchRequestsSent": 0,
+    "unknownInFlight": false,
+    "spinCallsDuringCheckpoint": 0,
+    "apiCallsDuringCheckpoint": 0,
+    "browserPageCallsDuringCheckpoint": 0
+  },
+  "committedEvidence": {
+    "formalOriginalAuthorizedHttpPaidStarts": 1,
+    "completedRounds": 1,
+    "historyMatchedOneToOne": 1,
+    "currentCommittedBalanceBrl": 59996.15,
+    "currentGrossBetBrl": 0.5
+  },
+  "authorization": {
+    "minimumBetBrl": 0.5,
+    "maximumPaidStarts": 5000,
+    "maximumGrossBetBrl": 2500,
+    "received": true
+  },
+  "offlineGate": {
+    "testsPassed": 20,
+    "testsFailed": 0,
+    "durableIntentRestartGate": true,
+    "crossProcessSingleWriterGate": true,
+    "serialSpinHistoryCommitGate": true
+  },
+  "browser": {
+    "handlesReleasedByJsReset": true,
+    "externalChromeWindowsOrTabsClosed": false,
+    "policyBypassAttempted": false,
+    "nextAction": "AFTER_CODEX_RESTART_WAIT_FOR_ROOT_WAKEUP; REBIND CHROME, RE-RUN FULL PRE-LIVE GATE, THEN RETRY OFFICIAL RESOURCE_50042 LAUNCH ONCE"
+  }
+}

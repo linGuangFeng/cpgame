@@ -1,0 +1,1674 @@
+{
+  "schemaVersion": 1,
+  "auditType": "cpgame-repull-audit",
+  "auditedAt": "2026-09-02T04:45:01Z",
+  "method": "light-audit-no-deep-smb-walk",
+  "paths": {
+    "resources": "/Volumes/hd/cpgame/resources",
+    "fixtures": "/Volumes/hd/cpgame/fixtures"
+  },
+  "excludeFromRepull": [
+    1407,
+    1809
+  ],
+  "summary": {
+    "wrong_gids": [],
+    "incomplete_gids": [
+      2,
+      8,
+      16,
+      33,
+      41,
+      42,
+      43,
+      45,
+      50,
+      52,
+      54,
+      56,
+      57,
+      58,
+      60,
+      61,
+      1670,
+      1830,
+      1910,
+      1940,
+      2010,
+      2060,
+      2110,
+      2350,
+      2470,
+      2001007
+    ],
+    "complete_looking_gids": [
+      1810
+    ],
+    "excluded_gids_present": [
+      1407,
+      1809
+    ],
+    "fixture_with_spin": [
+      "1407-Coin-Master-GO",
+      "1407-mac-Coin-Master-GO",
+      "1940-Beach-Fun",
+      "2001007-Magic-Scroll-2",
+      "2060-Club-Goddess",
+      "2350-Curupira",
+      "45-Rio-Carnival",
+      "50-Lucky-Cat-II",
+      "54-Fishing-GO",
+      "56-Crazy-Piggy",
+      "58-Crazy-Gems",
+      "61-Saci"
+    ],
+    "fixture_with_history": [
+      "1407-Coin-Master-GO",
+      "1407-mac-Coin-Master-GO",
+      "2001007-Magic-Scroll-2",
+      "2060-Club-Goddess",
+      "2350-Curupira",
+      "43-Lucky-Wheel",
+      "45-Rio-Carnival",
+      "50-Lucky-Cat-II",
+      "57-Crazy-777",
+      "58-Crazy-Gems",
+      "61-Saci"
+    ],
+    "fixture_missing_spin_and_history": [
+      ".pending-1809-0a3caa18c035",
+      ".pending-2350-65454c3cca8f",
+      "16-Jungle-Fruit",
+      "1670-Christmas-Gift",
+      "1809-Freedom-Day",
+      "1809-mac-Freedom-Day",
+      "1810-Treasure-Hunt",
+      "1830-Hotpot",
+      "1910-Churrasco",
+      "2-Jungle-Kings",
+      "2010-EDM-Mania",
+      "2110-Bee-Workshop",
+      "2470-Lucky-Night-Market",
+      "33-Jungle-Party",
+      "41-Lucky-Panda",
+      "42-Lucky-Dragon",
+      "52-Cyber-GO",
+      "60-Crazy-Birds",
+      "8-Jurassic-Jungle"
+    ],
+    "fixture_empty": [
+      ".pending-1809-0a3caa18c035",
+      ".pending-2350-65454c3cca8f",
+      "1810-Treasure-Hunt",
+      "1830-Hotpot",
+      "1910-Churrasco",
+      "2010-EDM-Mania",
+      "2110-Bee-Workshop",
+      "60-Crazy-Birds",
+      "8-Jurassic-Jungle"
+    ]
+  },
+  "resources": [
+    {
+      "folder": ".pending-1809-0a3caa18c035",
+      "gid": null,
+      "name": null,
+      "pending": true,
+      "top_entries": [],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 0,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": false,
+      "incomplete_reasons": [],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": ".pending-2350-65454c3cca8f",
+      "gid": null,
+      "name": null,
+      "pending": true,
+      "top_entries": [],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 0,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": false,
+      "incomplete_reasons": [],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "1407-Coin-Master-GO",
+      "gid": 1407,
+      "name": "Coin-Master-GO",
+      "pending": false,
+      "top_entries": [
+        "1407-Coin-Master-GO",
+        "legacy-publish",
+        "legacy-server-api-state",
+        "programmatic-http"
+      ],
+      "has_programmatic_http": true,
+      "latest_run": "2026-09-01T150940455Z",
+      "file_count_estimate": 176,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": 1407,
+      "download_report_path": "/Volumes/hd/cpgame/resources/1407-Coin-Master-GO/programmatic-http/2026-09-01T150940455Z/download-report.public.json",
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": false,
+      "incomplete_reasons": [],
+      "excluded_from_repull": true
+    },
+    {
+      "folder": "1407-mac-Coin-Master-GO",
+      "gid": 1407,
+      "name": "mac-Coin-Master-GO",
+      "pending": false,
+      "top_entries": [
+        "1407-Coin-Master-GO"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 1,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": true
+    },
+    {
+      "folder": "16-Jungle-Fruit",
+      "gid": 16,
+      "name": "Jungle-Fruit",
+      "pending": false,
+      "top_entries": [
+        "README.md",
+        "language-evidence.json",
+        "resource-provenance.json",
+        "symbol-inventory.json"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 4,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "1670-Christmas-Gift",
+      "gid": 1670,
+      "name": "Christmas-Gift",
+      "pending": false,
+      "top_entries": [
+        "cover.webp",
+        "pt-br",
+        "source-manifest.json"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 2,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "1809-Freedom-Day",
+      "gid": 1809,
+      "name": "Freedom-Day",
+      "pending": false,
+      "top_entries": [
+        "all-languages",
+        "bn-bd",
+        "en-us",
+        "es-es",
+        "fr-fr",
+        "id-id",
+        "ko-ko",
+        "pt-br",
+        "pt-pt",
+        "th-th",
+        "tr-tr"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 0,
+      "game_xxxx_ids": [
+        2260
+      ],
+      "game_xxxx_sample_paths": [
+        "/Volumes/hd/cpgame/resources/1809-Freedom-Day/all-languages/static.cpgame.io/fixed/assets/Game2260",
+        "/Volumes/hd/cpgame/resources/1809-Freedom-Day/all-languages/static.cpgame.io/fixed/assets/GameBetCom",
+        "/Volumes/hd/cpgame/resources/1809-Freedom-Day/bn-bd/static.cpgame.io/fixed/assets/Game2260",
+        "/Volumes/hd/cpgame/resources/1809-Freedom-Day/bn-bd/static.cpgame.io/fixed/assets/GameBetCom",
+        "/Volumes/hd/cpgame/resources/1809-Freedom-Day/en-us/static.cpgame.io/fixed/assets/Game2260",
+        "/Volumes/hd/cpgame/resources/1809-Freedom-Day/en-us/static.cpgame.io/fixed/assets/GameBetCom",
+        "/Volumes/hd/cpgame/resources/1809-Freedom-Day/es-es/static.cpgame.io/fixed/assets/Game2260",
+        "/Volumes/hd/cpgame/resources/1809-Freedom-Day/es-es/static.cpgame.io/fixed/assets/GameBetCom",
+        "/Volumes/hd/cpgame/resources/1809-Freedom-Day/fr-fr/static.cpgame.io/fixed/assets/Game2260",
+        "/Volumes/hd/cpgame/resources/1809-Freedom-Day/fr-fr/static.cpgame.io/fixed/assets/GameBetCom"
+      ],
+      "game_xxxx_matches_folder_gid": false,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": true,
+      "wrong_reasons": [
+        "GameXXXX mismatch: folder gid=1809 found Game[2260]"
+      ],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": true
+    },
+    {
+      "folder": "1809-mac-Freedom-Day",
+      "gid": 1809,
+      "name": "mac-Freedom-Day",
+      "pending": false,
+      "top_entries": [
+        "all-languages",
+        "bn-bd",
+        "en-us",
+        "es-es",
+        "fr-fr",
+        "id-id",
+        "ko-ko",
+        "pt-br",
+        "pt-pt",
+        "th-th",
+        "tr-tr"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 0,
+      "game_xxxx_ids": [
+        2260
+      ],
+      "game_xxxx_sample_paths": [
+        "/Volumes/hd/cpgame/resources/1809-mac-Freedom-Day/all-languages/static.cpgame.io/fixed/assets/Game2260",
+        "/Volumes/hd/cpgame/resources/1809-mac-Freedom-Day/all-languages/static.cpgame.io/fixed/assets/GameBetCom",
+        "/Volumes/hd/cpgame/resources/1809-mac-Freedom-Day/bn-bd/static.cpgame.io/fixed/assets/Game2260",
+        "/Volumes/hd/cpgame/resources/1809-mac-Freedom-Day/bn-bd/static.cpgame.io/fixed/assets/GameBetCom",
+        "/Volumes/hd/cpgame/resources/1809-mac-Freedom-Day/en-us/static.cpgame.io/fixed/assets/Game2260",
+        "/Volumes/hd/cpgame/resources/1809-mac-Freedom-Day/en-us/static.cpgame.io/fixed/assets/GameBetCom",
+        "/Volumes/hd/cpgame/resources/1809-mac-Freedom-Day/es-es/static.cpgame.io/fixed/assets/Game2260",
+        "/Volumes/hd/cpgame/resources/1809-mac-Freedom-Day/es-es/static.cpgame.io/fixed/assets/GameBetCom",
+        "/Volumes/hd/cpgame/resources/1809-mac-Freedom-Day/fr-fr/static.cpgame.io/fixed/assets/Game2260",
+        "/Volumes/hd/cpgame/resources/1809-mac-Freedom-Day/fr-fr/static.cpgame.io/fixed/assets/GameBetCom"
+      ],
+      "game_xxxx_matches_folder_gid": false,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": true,
+      "wrong_reasons": [
+        "GameXXXX mismatch: folder gid=1809 found Game[2260]"
+      ],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": true
+    },
+    {
+      "folder": "1810-Treasure-Hunt",
+      "gid": 1810,
+      "name": "Treasure-Hunt",
+      "pending": false,
+      "top_entries": [
+        "programmatic-http"
+      ],
+      "has_programmatic_http": true,
+      "latest_run": "20260901T152512197Z",
+      "file_count_estimate": 99,
+      "game_xxxx_ids": [
+        1810
+      ],
+      "game_xxxx_sample_paths": [
+        "/Volumes/hd/cpgame/resources/1810-Treasure-Hunt/programmatic-http/20260901T152512197Z/files/static.cpgame.io/fixed/assets/Game1810"
+      ],
+      "game_xxxx_matches_folder_gid": true,
+      "download_report_platformGameId": 1810,
+      "download_report_path": "/Volumes/hd/cpgame/resources/1810-Treasure-Hunt/programmatic-http/20260901T152512197Z/download-report.public.json",
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": false,
+      "incomplete_reasons": [],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "1830-Hotpot",
+      "gid": 1830,
+      "name": "Hotpot",
+      "pending": false,
+      "top_entries": [],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 0,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "1910-Churrasco",
+      "gid": 1910,
+      "name": "Churrasco",
+      "pending": false,
+      "top_entries": [
+        "source-inventory.json"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 1,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "1940-Beach-Fun",
+      "gid": 1940,
+      "name": "Beach-Fun",
+      "pending": false,
+      "top_entries": [
+        "bn-bd",
+        "cover.webp",
+        "en-us",
+        "es-es",
+        "fr-fr",
+        "hi-in",
+        "id-id",
+        "in-marathi",
+        "in-telugu",
+        "ko-ko",
+        "pt-br",
+        "pt-pt",
+        "source-manifest.json",
+        "th-th",
+        "tr-tr",
+        "vi-vn",
+        "zh-cn",
+        "zh-hk"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 18,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "2-Jungle-Kings",
+      "gid": 2,
+      "name": "Jungle-Kings",
+      "pending": false,
+      "top_entries": [
+        "browser-page-assets",
+        "language-evidence.json",
+        "observed-page-assets-20260830.json",
+        "origin-page",
+        "origin-page-files.tsv",
+        "post-start-observed-assets.json",
+        "resource-provenance.json",
+        "symbol-inventory.json",
+        "tools"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 80,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "2001007-Magic-Scroll-2",
+      "gid": 2001007,
+      "name": "Magic-Scroll-2",
+      "pending": false,
+      "top_entries": [
+        "en",
+        "pt"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 13,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "2010-EDM-Mania",
+      "gid": 2010,
+      "name": "EDM-Mania",
+      "pending": false,
+      "top_entries": [
+        "source-inventory.json"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 1,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "2060-Club-Goddess",
+      "gid": 2060,
+      "name": "Club-Goddess",
+      "pending": false,
+      "top_entries": [
+        "bn-bd",
+        "en-us",
+        "es-es",
+        "fr-fr",
+        "hi-in",
+        "id-id",
+        "in-marathi",
+        "in-telugu",
+        "ko-ko",
+        "pt-br",
+        "pt-pt",
+        "source-manifest.json",
+        "th-th",
+        "tr-tr",
+        "vi-vn",
+        "zh-cn",
+        "zh-hk"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 26,
+      "game_xxxx_ids": [
+        2060
+      ],
+      "game_xxxx_sample_paths": [
+        "/Volumes/hd/cpgame/resources/2060-Club-Goddess/bn-bd/language-assets/assets/Game2060",
+        "/Volumes/hd/cpgame/resources/2060-Club-Goddess/en-us/language-assets/assets/Game2060",
+        "/Volumes/hd/cpgame/resources/2060-Club-Goddess/es-es/language-assets/assets/Game2060",
+        "/Volumes/hd/cpgame/resources/2060-Club-Goddess/fr-fr/language-assets/assets/Game2060",
+        "/Volumes/hd/cpgame/resources/2060-Club-Goddess/id-id/language-assets/assets/Game2060",
+        "/Volumes/hd/cpgame/resources/2060-Club-Goddess/ko-ko/language-assets/assets/Game2060",
+        "/Volumes/hd/cpgame/resources/2060-Club-Goddess/pt-pt/language-assets/assets/Game2060",
+        "/Volumes/hd/cpgame/resources/2060-Club-Goddess/th-th/language-assets/assets/Game2060",
+        "/Volumes/hd/cpgame/resources/2060-Club-Goddess/tr-tr/language-assets/assets/Game2060"
+      ],
+      "game_xxxx_matches_folder_gid": true,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "2110-Bee-Workshop",
+      "gid": 2110,
+      "name": "Bee-Workshop",
+      "pending": false,
+      "top_entries": [
+        "source-inventory.json"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 1,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "2350-Curupira",
+      "gid": 2350,
+      "name": "Curupira",
+      "pending": false,
+      "top_entries": [
+        "archive-manifest.json",
+        "languages",
+        "shared"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 49,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "2470-Lucky-Night-Market",
+      "gid": 2470,
+      "name": "Lucky-Night-Market",
+      "pending": false,
+      "top_entries": [
+        "generated",
+        "original",
+        "source-manifest.json"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 3,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "33-Jungle-Party",
+      "gid": 33,
+      "name": "Jungle-Party",
+      "pending": false,
+      "top_entries": [
+        "README.md",
+        "pt-br"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 2,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "41-Lucky-Panda",
+      "gid": 41,
+      "name": "Lucky-Panda",
+      "pending": false,
+      "top_entries": [
+        "browser-page-assets"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 78,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "42-Lucky-Dragon",
+      "gid": 42,
+      "name": "Lucky-Dragon",
+      "pending": false,
+      "top_entries": [
+        "public-static",
+        "source-catalog-evidence.json",
+        "tools"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 5,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "43-Lucky-Wheel",
+      "gid": 43,
+      "name": "Lucky-Wheel",
+      "pending": false,
+      "top_entries": [
+        "portal-public",
+        "public-static",
+        "resource-inventory.json",
+        "source-catalog-evidence.json"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 6,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "45-Rio-Carnival",
+      "gid": 45,
+      "name": "Rio-Carnival",
+      "pending": false,
+      "top_entries": [
+        "bn",
+        "en",
+        "es",
+        "fr",
+        "id",
+        "ko",
+        "pt",
+        "pt-br",
+        "source-catalog-evidence.json",
+        "spa",
+        "th",
+        "tr",
+        "vi"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 14,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "50-Lucky-Cat-II",
+      "gid": 50,
+      "name": "Lucky-Cat-II",
+      "pending": false,
+      "top_entries": [
+        "bn",
+        "en",
+        "es",
+        "extracted",
+        "fr",
+        "id",
+        "ko",
+        "portal",
+        "pt",
+        "source",
+        "source-catalog-evidence.json",
+        "spa",
+        "th",
+        "tr",
+        "vi"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 16,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "52-Cyber-GO",
+      "gid": 52,
+      "name": "Cyber-GO",
+      "pending": false,
+      "top_entries": [
+        "bn",
+        "en",
+        "es",
+        "fr",
+        "id",
+        "ko",
+        "localized-assets-manifest.json",
+        "pt",
+        "pt-br",
+        "th",
+        "tr",
+        "vi"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 23,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "54-Fishing-GO",
+      "gid": 54,
+      "name": "Fishing-GO",
+      "pending": false,
+      "top_entries": [
+        "portal-pt-br",
+        "pt-br"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 3,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "56-Crazy-Piggy",
+      "gid": 56,
+      "name": "Crazy-Piggy",
+      "pending": false,
+      "top_entries": [
+        "bn",
+        "en",
+        "es",
+        "fr",
+        "id",
+        "ko",
+        "pt-br",
+        "rules-export-summary.json",
+        "th",
+        "tr",
+        "vi"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 41,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "57-Crazy-777",
+      "gid": 57,
+      "name": "Crazy-777",
+      "pending": false,
+      "top_entries": [
+        "bn",
+        "en",
+        "es",
+        "fr",
+        "id",
+        "ko",
+        "pt",
+        "pt-BR",
+        "shared",
+        "th",
+        "tr",
+        "vi"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 0,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "58-Crazy-Gems",
+      "gid": 58,
+      "name": "Crazy-Gems",
+      "pending": false,
+      "top_entries": [
+        "bn",
+        "en",
+        "es",
+        "fr",
+        "id",
+        "ko",
+        "pt-br",
+        "th",
+        "tr",
+        "vi"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 10,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "60-Crazy-Birds",
+      "gid": 60,
+      "name": "Crazy-Birds",
+      "pending": false,
+      "top_entries": [
+        "RESOURCE_PROVENANCE_STATUS.json",
+        "pageassets",
+        "public-static-bytes"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 1,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "61-Saci",
+      "gid": 61,
+      "name": "Saci",
+      "pending": false,
+      "top_entries": [
+        "extracted",
+        "raw"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 6,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    },
+    {
+      "folder": "8-Jurassic-Jungle",
+      "gid": 8,
+      "name": "Jurassic-Jungle",
+      "pending": false,
+      "top_entries": [
+        "generated",
+        "original",
+        "pt-br",
+        "source-manifest.json"
+      ],
+      "has_programmatic_http": false,
+      "latest_run": null,
+      "file_count_estimate": 3,
+      "game_xxxx_ids": [],
+      "game_xxxx_sample_paths": [],
+      "game_xxxx_matches_folder_gid": null,
+      "download_report_platformGameId": null,
+      "download_report_path": null,
+      "wrong": false,
+      "wrong_reasons": [],
+      "incomplete": true,
+      "incomplete_reasons": [
+        "no programmatic-http"
+      ],
+      "excluded_from_repull": false
+    }
+  ],
+  "fixtures": [
+    {
+      "folder": ".pending-1809-0a3caa18c035",
+      "gid": null,
+      "name": ".pending-1809-0a3caa18c035",
+      "top_entries": [],
+      "empty": true,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": ".pending-2350-65454c3cca8f",
+      "gid": null,
+      "name": ".pending-2350-65454c3cca8f",
+      "top_entries": [],
+      "empty": true,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "1407-Coin-Master-GO",
+      "gid": 1407,
+      "name": "Coin-Master-GO",
+      "top_entries": [
+        "1407-Coin-Master-GO",
+        "history-free-detail.json",
+        "history-retrigger-detail.json"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "1407-Coin-Master-GO/spin-fsnPositive.json",
+        "1407-Coin-Master-GO/spin-gtNonOne.json",
+        "1407-Coin-Master-GO/spin-lossByWa.json",
+        "1407-Coin-Master-GO/spin-nfscPositive.json",
+        "1407-Coin-Master-GO/spin-rpxAboveOne.json",
+        "1407-Coin-Master-GO/spin-smallGameTypeNonZero.json",
+        "1407-Coin-Master-GO/spin-winByWa.json"
+      ],
+      "has_history": true,
+      "history_items": [
+        "1407-Coin-Master-GO/history-detail.json",
+        "1407-Coin-Master-GO/history-page.json",
+        "history-free-detail.json",
+        "history-retrigger-detail.json"
+      ]
+    },
+    {
+      "folder": "1407-mac-Coin-Master-GO",
+      "gid": 1407,
+      "name": "mac-Coin-Master-GO",
+      "top_entries": [
+        "1407-Coin-Master-GO",
+        "history-free-detail.json",
+        "history-retrigger-detail.json"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "1407-Coin-Master-GO/spin-fsnPositive.json",
+        "1407-Coin-Master-GO/spin-gtNonOne.json",
+        "1407-Coin-Master-GO/spin-lossByWa.json",
+        "1407-Coin-Master-GO/spin-nfscPositive.json",
+        "1407-Coin-Master-GO/spin-rpxAboveOne.json",
+        "1407-Coin-Master-GO/spin-smallGameTypeNonZero.json",
+        "1407-Coin-Master-GO/spin-winByWa.json"
+      ],
+      "has_history": true,
+      "history_items": [
+        "1407-Coin-Master-GO/history-detail.json",
+        "1407-Coin-Master-GO/history-page.json",
+        "history-free-detail.json",
+        "history-retrigger-detail.json"
+      ]
+    },
+    {
+      "folder": "16-Jungle-Fruit",
+      "gid": 16,
+      "name": "Jungle-Fruit",
+      "top_entries": [
+        "README.md",
+        "oracle-summary.json",
+        "round-oracle-vectors.json"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "1670-Christmas-Gift",
+      "gid": 1670,
+      "name": "Christmas-Gift",
+      "top_entries": [
+        "first-load-api.pt-br.json",
+        "lobby-game-list-first-load.redacted.json",
+        "oracle"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "1809-Freedom-Day",
+      "gid": 1809,
+      "name": "Freedom-Day",
+      "top_entries": [
+        "fixture-manifest.json",
+        "local-replay-requests",
+        "local-simulation-results",
+        "mock-config.json",
+        "mock-init.json",
+        "mock-user.json",
+        "replay-results.json",
+        "simulation-scenarios.json"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "1809-mac-Freedom-Day",
+      "gid": 1809,
+      "name": "mac-Freedom-Day",
+      "top_entries": [
+        "fixture-manifest.json",
+        "local-replay-requests",
+        "local-simulation-results",
+        "mock-config.json",
+        "mock-init.json",
+        "mock-user.json",
+        "replay-results.json",
+        "simulation-scenarios.json"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "1810-Treasure-Hunt",
+      "gid": 1810,
+      "name": "Treasure-Hunt",
+      "top_entries": [],
+      "empty": true,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "1830-Hotpot",
+      "gid": 1830,
+      "name": "Hotpot",
+      "top_entries": [],
+      "empty": true,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "1910-Churrasco",
+      "gid": 1910,
+      "name": "Churrasco",
+      "top_entries": [],
+      "empty": true,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "1940-Beach-Fun",
+      "gid": 1940,
+      "name": "Beach-Fun",
+      "top_entries": [
+        "oracle"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "oracle/free-spins.json"
+      ],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "2-Jungle-Kings",
+      "gid": 2,
+      "name": "Jungle-Kings",
+      "top_entries": [
+        "README.md",
+        "oracle-summary.json"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "2001007-Magic-Scroll-2",
+      "gid": 2001007,
+      "name": "Magic-Scroll-2",
+      "top_entries": [
+        "01-v3-verifySession.json",
+        "02-GameInfo-Get.json",
+        "03-spin-valid-min-loss.json",
+        "04-spin-valid-min-win-multistep.json",
+        "05-history-empty.json"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "03-spin-valid-min-loss.json",
+        "04-spin-valid-min-win-multistep.json"
+      ],
+      "has_history": true,
+      "history_items": [
+        "05-history-empty.json"
+      ]
+    },
+    {
+      "folder": "2010-EDM-Mania",
+      "gid": 2010,
+      "name": "EDM-Mania",
+      "top_entries": [],
+      "empty": true,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "2060-Club-Goddess",
+      "gid": 2060,
+      "name": "Club-Goddess",
+      "top_entries": [
+        "oracle"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "oracle/spin-loss-001.request.json",
+        "oracle/spin-loss-001.response.json",
+        "oracle/spin-win-010.request.json",
+        "oracle/spin-win-010.response.json"
+      ],
+      "has_history": true,
+      "history_items": [
+        "oracle/history-after-10-rounds.response.json"
+      ]
+    },
+    {
+      "folder": "2110-Bee-Workshop",
+      "gid": 2110,
+      "name": "Bee-Workshop",
+      "top_entries": [],
+      "empty": true,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "2350-Curupira",
+      "gid": 2350,
+      "name": "Curupira",
+      "top_entries": [
+        "001-cp-config-initialData.json",
+        "002-cp-account-getUserInfo.json",
+        "003-cp-single_game.Game-initRoom.json",
+        "004-cp-activity-getActivity.json",
+        "005-cp-Goldgame-user_game_history.json",
+        "history-after-spins.json",
+        "paid-rounds"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "history-after-spins.json"
+      ],
+      "has_history": true,
+      "history_items": [
+        "history-after-spins.json"
+      ]
+    },
+    {
+      "folder": "2470-Lucky-Night-Market",
+      "gid": 2470,
+      "name": "Lucky-Night-Market",
+      "top_entries": [
+        "config-response.json",
+        "oracle-cases.json"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "33-Jungle-Party",
+      "gid": 33,
+      "name": "Jungle-Party",
+      "top_entries": [
+        "first-load-dynamic-samples.redacted.json",
+        "lobby-jungle-party-card.redacted.json",
+        "lobby-startup-response.redacted.json",
+        "representative-contracts.json"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "41-Lucky-Panda",
+      "gid": 41,
+      "name": "Lucky-Panda",
+      "top_entries": [
+        "README.md"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "42-Lucky-Dragon",
+      "gid": 42,
+      "name": "Lucky-Dragon",
+      "top_entries": [
+        "README.md",
+        "oracle-manifest.json"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "43-Lucky-Wheel",
+      "gid": 43,
+      "name": "Lucky-Wheel",
+      "top_entries": [
+        "README.md",
+        "frontend-code-evidence.json",
+        "history-list.json",
+        "history-view.json",
+        "static-rule-text-assets.json"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": true,
+      "history_items": [
+        "history-list.json",
+        "history-view.json"
+      ]
+    },
+    {
+      "folder": "45-Rio-Carnival",
+      "gid": 45,
+      "name": "Rio-Carnival",
+      "top_entries": [
+        "README.md",
+        "complete-rounds",
+        "first-load-api",
+        "protocol-evidence",
+        "rounds"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "protocol-evidence/recovery/activation-spin.json"
+      ],
+      "has_history": true,
+      "history_items": [
+        "protocol-evidence/history"
+      ]
+    },
+    {
+      "folder": "50-Lucky-Cat-II",
+      "gid": 50,
+      "name": "Lucky-Cat-II",
+      "top_entries": [
+        "README.md",
+        "config-response.json",
+        "history-details.jsonl",
+        "history-list.json",
+        "spin-responses.jsonl"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "spin-responses.jsonl"
+      ],
+      "has_history": true,
+      "history_items": [
+        "history-details.jsonl",
+        "history-list.json"
+      ]
+    },
+    {
+      "folder": "52-Cyber-GO",
+      "gid": 52,
+      "name": "Cyber-GO",
+      "top_entries": [
+        "first-load-api-pt-br.json",
+        "representative-complete-rounds.json"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "54-Fishing-GO",
+      "gid": 54,
+      "name": "Fishing-GO",
+      "top_entries": [
+        "entry",
+        "fixture-manifest.json",
+        "free-spins-x1-round.json",
+        "free-spins-x2-round.json",
+        "free-spins-x3-round.json",
+        "ordinary-loss-round.json",
+        "ordinary-win-round.json"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "free-spins-x1-round.json",
+        "free-spins-x2-round.json",
+        "free-spins-x3-round.json"
+      ],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "56-Crazy-Piggy",
+      "gid": 56,
+      "name": "Crazy-Piggy",
+      "top_entries": [
+        "first-load-bn-api.json",
+        "first-load-en-api.json",
+        "first-load-es-api.json",
+        "first-load-fr-api.json",
+        "first-load-id-api.json",
+        "first-load-ko-api.json",
+        "first-load-pt-br-api.json",
+        "first-load-th-api.json",
+        "first-load-tr-api.json",
+        "first-load-vi-api.json",
+        "rejected-spin-responses-runtime-launch-token.jsonl",
+        "rejected-spin-responses.jsonl",
+        "round-steps.jsonl"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "rejected-spin-responses-runtime-launch-token.jsonl",
+        "rejected-spin-responses.jsonl"
+      ],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "57-Crazy-777",
+      "gid": 57,
+      "name": "Crazy-777",
+      "top_entries": [
+        "auth-verify-redacted.json",
+        "complete-round-oracles.json",
+        "first-complete-round.json",
+        "game-config.json",
+        "history-detail-adjacent.json",
+        "history-list-adjacent.json",
+        "lobby-game-list.json",
+        "startup-crazy-777.json"
+      ],
+      "empty": false,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": true,
+      "history_items": [
+        "history-detail-adjacent.json",
+        "history-list-adjacent.json"
+      ]
+    },
+    {
+      "folder": "58-Crazy-Gems",
+      "gid": 58,
+      "name": "Crazy-Gems",
+      "top_entries": [
+        "direct-test",
+        "explore-until-win",
+        "first-load",
+        "history-detail-probe",
+        "history-recovery",
+        "initial-round"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "direct-test/0001-post-spin.json",
+        "explore-until-win/0001-post-spin.json",
+        "explore-until-win/0002-post-spin.json",
+        "explore-until-win/0003-post-spin.json",
+        "explore-until-win/0004-post-spin.json",
+        "explore-until-win/0005-post-spin.json",
+        "explore-until-win/0006-post-spin.json",
+        "explore-until-win/0007-post-spin.json",
+        "explore-until-win/0008-post-spin.json",
+        "initial-round/0001-post-spin.json"
+      ],
+      "has_history": true,
+      "history_items": [
+        "history-detail-probe",
+        "history-recovery"
+      ]
+    },
+    {
+      "folder": "60-Crazy-Birds",
+      "gid": 60,
+      "name": "Crazy-Birds",
+      "top_entries": [],
+      "empty": true,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    },
+    {
+      "folder": "61-Saci",
+      "gid": 61,
+      "name": "Saci",
+      "top_entries": [
+        "auth-verify",
+        "config",
+        "history-list",
+        "history-view",
+        "spin"
+      ],
+      "empty": false,
+      "has_spin": true,
+      "spin_items": [
+        "spin"
+      ],
+      "has_history": true,
+      "history_items": [
+        "history-list",
+        "history-view"
+      ]
+    },
+    {
+      "folder": "8-Jurassic-Jungle",
+      "gid": 8,
+      "name": "Jurassic-Jungle",
+      "top_entries": [],
+      "empty": true,
+      "has_spin": false,
+      "spin_items": [],
+      "has_history": false,
+      "history_items": []
+    }
+  ]
+}

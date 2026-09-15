@@ -1,0 +1,1 @@
+http://192.168.10.3:8091/play/33-Jungle-Party/index.html?gid=33&l=en&language=en&ai=local_33&btt=1&t=local-demo-33-1788581626547&sip=192.168.10.3%3A8091&apiHost=192.168.10.3%3A8091

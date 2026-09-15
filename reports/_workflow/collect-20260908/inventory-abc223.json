@@ -1,0 +1,77 @@
+{
+  "worker": "abc223",
+  "inventoriedAt": "2026-09-08T03:12:00Z",
+  "games": {
+    "16-Jungle-Fruit": {
+      "captures": {
+        "spinIndex": 1126,
+        "originalHttpSpinSteps": 2852,
+        "originalHttpRounds": 1126,
+        "progress": {
+          "ordinaryLoss": 926,
+          "ordinaryWin": 200,
+          "scatterFreeRounds": 36,
+          "marySmallGame": 164,
+          "stopReason": "ALL_CONFIRMED_TARGETS_MET"
+        },
+        "apiCatalogDir": false,
+        "resourceStageStatus": false
+      },
+      "fixtures": {
+        "enter": ["auth-verify", "config", "report-timing"],
+        "history": ["log-list", "log-view"],
+        "spinProbe": true
+      },
+      "resources": {
+        "languages": ["bn", "en", "es", "fr", "id", "ko", "pt-br", "th", "tr", "vi"],
+        "programmaticHttp": { "runId": "20260902T063222000Z", "succeeded": 87, "failed": 0 }
+      },
+      "samplingDecision": "DO_NOT_RESAMPLE",
+      "samplingReason": "existing original-http rounds already meet loss>=200, win>=200, each special>=30",
+      "gaps": ["resource-stage-status.json", "language-inventory.json", "api-catalog from THIS account live origin", "two REAL_ORIGIN UI passes"]
+    },
+    "52-Cyber-GO": {
+      "captures": {
+        "spinIndex": 1462,
+        "rounds": 1462,
+        "ordinaryLoss": 1205,
+        "ordinaryWin": 203,
+        "freeSpins": 54,
+        "apiCatalogDir": false,
+        "resourceStageStatus": false
+      },
+      "fixtures": {
+        "enter": ["auth-verify", "config", "report-timing"],
+        "history": ["go-cyber/log-list", "go-cyber/log-view"]
+      },
+      "resources": {
+        "languages": ["bn", "en", "es", "fr", "id", "ko", "pt", "th", "tr", "vi"],
+        "programmaticHttp": { "runId": "20260902T073314000Z", "succeeded": 152, "failed": 0 }
+      },
+      "samplingDecision": "DO_NOT_RESAMPLE",
+      "samplingReason": "existing complete-round jsonl already meets quotas",
+      "gaps": ["resource-stage-status.json", "api-catalog from THIS account live origin", "two REAL_ORIGIN UI passes"]
+    },
+    "1090-Sharpshooter": {
+      "capturesDir": false,
+      "resourceStageStatus": false,
+      "fixtures": {
+        "spinRoundMeta": 2068,
+        "kinds": { "LOSS": 1235, "WIN": 200, "SPECIAL": 633 },
+        "spinEndpointUnique": ["https://api.omgapibra.com/cp/single_game.Shooter/gameResult"],
+        "responseGids": [1090],
+        "copiedFromOtherGame": false,
+        "coverageJsonMentionsCrazyGems": true,
+        "coverageJsonNote": "generic fieldChoices leftover; actual request/response files are Shooter/gameResult gid=1090"
+      },
+      "enter": ["initRoom", "initialData", "getUserInfo", "report-timing"],
+      "history": ["shooter_user_gold_history", "shooter_user_history"],
+      "resources": {
+        "languagesPresent": ["bn", "en", "es", "fr", "id", "ko", "programmatic-http", "pt-br", "th", "tr", "vi", "zh"]
+      },
+      "samplingDecision": "DO_NOT_RESAMPLE_ORGANIZE_EXISTING",
+      "samplingReason": "real original HTTP for this game; user quotas loss50/win40/special15 already exceeded",
+      "gaps": ["captures/1090-Sharpshooter directory", "resource-stage-status.json", "api-catalog from THIS account live origin", "two REAL_ORIGIN UI passes"]
+    }
+  }
+}

@@ -1,0 +1,628 @@
+[
+  {
+    "game": "1090-sharpshooter",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "sharpshooter-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.sharpshooter.loader.RedisLoader",
+    "classCount": 2156,
+    "scaledCountKeys": [
+      "generation.loss-count",
+      "generation.win-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT redis.clients.jedis.exceptions.JedisConnectionException: Failed to connect to 192.168.10.3:6379.",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "1380-Hidden-Realm",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "hidden-realm-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.hiddenrealm.loader.RedisLoader",
+    "classCount": 1073,
+    "scaledCountKeys": [
+      "generation.loss-count",
+      "generation.win-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT redis.clients.jedis.exceptions.JedisConnectionException: Failed to connect to 192.168.10.3:6379.",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "1400-Blessing-of-Ice-and-Fire",
+    "lastState": "COMPLETED",
+    "lastLogTail": "rulesVersion=blessing-1400-realtime-multiplier-r1 rulesHash=6ac10077f98ce4efe1075d00861581da853a06a44235b27afd36639b3f2d71f4\r\nsingleList size=5 [0, 5, 25, 50, 100]\r\nbothList size=13 [0, 5, 10, 25, 30, 50, 55, 75, 100, 105, 125, 150, 200]\r\nsingleFireMap keys=5 combos=5\r\nsingleIceMap keys=5 combos=5\r\nbothMap keys=13 combos=25\r\npageOdd=0 middleCases=37\r\npageOdd=5 middleCases=24\r\npageOdd=25 middleCases=1\r\n  [3, 3, 3]\r\npageOdd=50 middleCases=1\r\n  [2, 2, 2]\r\npageOdd=100 middleCases=1\r\n  [1, 1, 1]\r\npayTable={1=100, 2=50, 3=25, 4=5}\r\nOK realtime multiplier catalog\r\n\r\n[exit] state=COMPLETED code=0\r\n",
+    "jar": "blessing-ice-fire-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.replica.blessing.BlessingCatalogCli",
+    "classCount": 9,
+    "scaledCountKeys": [],
+    "exitCode": 0,
+    "probeLog": "rulesVersion=blessing-1400-realtime-multiplier-r1 rulesHash=6ac10077f98ce4efe1075d00861581da853a06a44235b27afd36639b3f2d71f4\nsingleList size=5 [0, 5, 25, 50, 100]\nbothList size=13 [0, 5, 10, 25, 30, 50, 55, 75, 100, 105, 125, 150, 200]\nsingleFireMap keys=5 combos=5\nsingleIceMap keys=5 combos=5\nbothMap keys=13 combos=25\npageOdd=0 middleCases=37\npageOdd=5 middleCases=24\npageOdd=25 middleCases=1\n  [3, 3, 3]\npageOdd=50 middleCases=1\n  [2, 2, 2]\npageOdd=100 middleCases=1\n  [1, 1, 1]\npayTable={1=100, 2=50, 3=25, 4=5}\nOK realtime multiplier catalog\n",
+    "status": "RETURNED_WITHOUT_NETWORK"
+  },
+  {
+    "game": "1407-mac-Coin-Master-GO",
+    "lastState": "RUNNING",
+    "lastLogTail": "100\r\n批次已提交 batch=362 members=100\r\n批次已提交 batch=363 members=100\r\n批次已提交 batch=364 members=100\r\n批次已提交 batch=365 members=100\r\n批次已提交 batch=366 members=100\r\n批次已提交 batch=367 members=100\r\n批次已提交 batch=368 members=100\r\n批次已提交 batch=369 members=100\r\n批次已提交 batch=370 members=100\r\n批次已提交 batch=371 members=100\r\n批次已提交 batch=372 members=100\r\n批次已提交 batch=373 members=100\r\n批次已提交 batch=374 members=100\r\n批次已提交 batch=375 members=100\r\n批次已提交 batch=376 members=100\r\n批次已提交 batch=377 members=100\r\n批次已提交 batch=378 members=100\r\n批次已提交 batch=379 members=100\r\n批次已提交 batch=380 members=100\r\n批次已提交 batch=381 members=100\r\n批次已提交 batch=382 members=100\r\n批次已提交 batch=383 members=100\r\n批次已提交 batch=384 members=100\r\n批次已提交 batch=385 members=100\r\n批次已提交 batch=386 members=100\r\n批次已提交 batch=387 members=100\r\n批次已提交 batch=388 members=100\r\n批次已提交 batch=389 members=100\r\n批次已提交 batch=390 members=100\r\n批次已提交 batch=391 members=100\r\n批次已提交 batch=392 members=100\r\n批次已提交 batch=393 members=100\r\n批次已提交 batch=394 members=100\r\n批次已提交 batch=395 members=100\r\n批次已提交 batch=396 members=100\r\n批次已提交 batch=397 members=100\r\n批次已提交 batch=398 members=100\r\n批次已提交 batch=399 members=100\r\n批次已提交 batch=400 members=100\r\n批次已提交 batch=401 members=100\r\n批次已提交 batch=402 members=100\r\n批次已提交 batch=403 members=100\r\n批次已提交 batch=404 members=100\r\n批次已提交 batch=405 members=100\r\n批次已提交 batch=406 members=100\r\n批次已提交 batch=407 members=100\r\n批次已提交 batch=408 members=100\r\n批次已提交 batch=409 members=100\r\n批次已提交 batch=410 members=100\r\n批次已提交 batch=411 members=100\r\n批次已提交 batch=412 members=100\r\n批次已提交 batch=413 members=100\r\n批次已提交 batch=414 members=100\r\n批次已提交 batch=415 members=100\r\n批次已提交 batch=416 members=100\r\n",
+    "jar": "coin-master-go-redis-loader-20260914.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.coinmastergo.generator.RedisLoader",
+    "classCount": 6297,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nSLF4J: Failed to load class \"org.slf4j.impl.StaticLoggerBinder\".\nSLF4J: Defaulting to no-operation (NOP) logger implementation\nSLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.\nAUDIT_UNCAUGHT java.security.AccessControlException: access denied (\"javax.management.MBeanTrustPermission\" \"register\")",
+    "status": "STARTUP_FAILURE"
+  },
+  {
+    "game": "16-Jungle-Fruit",
+    "lastState": "COMPLETED",
+    "lastLogTail": "LOADER_PROGRESS written=100 candidates=152\r\nLOADER_PROGRESS written=200 candidates=319\r\nLOADER_PROGRESS written=300 candidates=497\r\nLOADER_PROGRESS written=400 candidates=660\r\n生成完成：raw gid=16，写入完整局=400，候选=660，rulesHash=164088c0440871c9bc33b631a1b6bfa5e00d3012db3b0e3694bb59ac683e1743\r\n\r\n[exit] state=COMPLETED code=0\r\n",
+    "jar": "jungle-fruit-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.batcha.g16.LoaderMain",
+    "classCount": 29,
+    "scaledCountKeys": [
+      "generation.total-members"
+    ],
+    "exitCode": 2,
+    "probeLog": "\n生成失败：请使用 --config=正式配置文件",
+    "status": "STARTUP_FAILURE"
+  },
+  {
+    "game": "1670-Christmas-Gift",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "christmas-gift-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.christmasgift.loader.RedisLoader",
+    "classCount": 21,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "1780-Glacier-Treasure",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "glacier-treasure-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.glacier.RedisDirectLoader",
+    "classCount": 32,
+    "scaledCountKeys": [
+      "generation.loss-count",
+      "generation.win-count",
+      "generation.special-count",
+      "generation.loss.fallback-samples"
+    ],
+    "exitCode": 1,
+    "probeLog": "CONFIG loss=2 win=2 special=2 boost=10x switchEvery=1000 structures=39\nGENERATION_COMPLETE members=4 writing redis\nREDIS_CONNECTING host=192.168.10.3 port=6379 database=15 ssl=false\n\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\n[失败] AUDIT_NETWORK_BLOCKED\njava.lang.SecurityException: AUDIT_NETWORK_BLOCKED\n\tat LoaderStartupAudit$1.checkConnect(LoaderStartupAudit.java:9)\n\tat java.base/java.net.Socket.connect(Socket.java:747)\n\tat com.cpgame.glacier.RedisDirectLoader$RedisConnection.connect(RedisDirectLoader.java:137)\n\tat com.cpgame.glacier.RedisDirectLoader$RedisConnection.connect(RedisDirectLoader.java:129)\n\tat com.cpgame.glacier.RedisDirectLoader.run(RedisDirectLoader.java:54)\n\tat com.cpgame.glacier.RedisDirectLoader.main(RedisDirectLoader.java:26)\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\n\tat LoaderStartupAudit.main(LoaderStartupAudit.java:17)",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "1809-mac-Freedom-Day",
+    "lastState": "FAILED",
+    "lastLogTail": "ed=223500\r\nBATCH_COMMITTED batch=2236 members=100 loaded=223600\r\nBATCH_COMMITTED batch=2237 members=100 loaded=223700\r\nBATCH_COMMITTED batch=2238 members=100 loaded=223800\r\nBATCH_COMMITTED batch=2239 members=100 loaded=223900\r\nBATCH_COMMITTED batch=2240 members=100 loaded=224000\r\nBATCH_COMMITTED batch=2241 members=100 loaded=224100\r\nBATCH_COMMITTED batch=2242 members=100 loaded=224200\r\nBATCH_COMMITTED batch=2243 members=100 loaded=224300\r\nBATCH_COMMITTED batch=2244 members=100 loaded=224400\r\nBATCH_COMMITTED batch=2245 members=100 loaded=224500\r\nBATCH_COMMITTED batch=2246 members=100 loaded=224600\r\nBATCH_COMMITTED batch=2247 members=100 loaded=224700\r\nBATCH_COMMITTED batch=2248 members=100 loaded=224800\r\nBATCH_COMMITTED batch=2249 members=100 loaded=224900\r\nBATCH_COMMITTED batch=2250 members=100 loaded=225000\r\nBATCH_COMMITTED batch=2251 members=100 loaded=225100\r\nBATCH_COMMITTED batch=2252 members=100 loaded=225200\r\nBATCH_COMMITTED batch=2253 members=100 loaded=225300\r\nBATCH_COMMITTED batch=2254 members=100 loaded=225400\r\nBATCH_COMMITTED batch=2255 members=100 loaded=225500\r\nBATCH_COMMITTED batch=2256 members=100 loaded=225600\r\nBATCH_COMMITTED batch=2257 members=100 loaded=225700\r\nBATCH_COMMITTED batch=2258 members=100 loaded=225800\r\nBATCH_COMMITTED batch=2259 members=100 loaded=225900\r\nBATCH_COMMITTED batch=2260 members=100 loaded=226000\r\nBATCH_COMMITTED batch=2261 members=100 loaded=226100\r\nBATCH_COMMITTED batch=2262 members=100 loaded=226200\r\nBATCH_COMMITTED batch=2263 members=100 loaded=226300\r\n[失败] cannot construct verified no-Ball ordinary loss\r\n\r\n[exit] state=FAILED\r\n",
+    "jar": "freedom-day-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.replica.freedomday.RedisDirectLoader",
+    "classCount": 1115,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 1,
+    "probeLog": "REDIS_CONNECTING host=18.234.101.161 port=8021 database=0 ssl=false\n\nAUDIT_NETWORK_BOUNDARY host=18.234.101.161 port=8021\n[失败] AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "1810-Treasure-Hunt",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "treasurehunt-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.batchd.treasurehunt.loader.RedisLoader",
+    "classCount": 1073,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT redis.clients.jedis.exceptions.JedisConnectionException: Failed to connect to 192.168.10.3:6379.",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "1830-Hotpot",
+    "lastState": "FAILED",
+    "lastLogTail": "REDIS_CONNECTING host=18.234.101.161 port=8021 database=0 ssl=false\r\nREDIS_CONNECTED host=18.234.101.161 port=8021 database=0 ssl=false\r\nINDEPENDENT_LOSS_PRELOAD loss=0 capPerMultiplier=300\r\n[失败] Scatter exceeds PAID page cap\r\n\r\n[exit] state=FAILED\r\n",
+    "jar": "hotpot-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.replica.hotpot.RedisDirectLoader",
+    "classCount": 33,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 1,
+    "probeLog": "REDIS_CONNECTING host=18.234.101.161 port=8021 database=0 ssl=false\n\nAUDIT_NETWORK_BOUNDARY host=18.234.101.161 port=8021\n[失败] AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "1910-Churrasco",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "churrasco-generator.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.g1910.generator.RedisLoader",
+    "classCount": 1072,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT redis.clients.jedis.exceptions.JedisConnectionException: Failed to connect to 192.168.10.3:6379.",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "1940-beach-fun",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.beachfun.loader.RedisLoader",
+    "classCount": 2185,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 1,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\n[失败] Failed to connect to 192.168.10.3:6379.",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2-Jungle-Kings",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "jungle-kings-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.junglekings.JungleKingsCatalogCli",
+    "classCount": 22,
+    "scaledCountKeys": [],
+    "exitCode": 0,
+    "probeLog": "rulesVersion=jk2-reelstrip-dualboard-20260909 rulesHash=3c1e8d7a9b4f2c6e0a5d8b1f7e4c9a2d6b0e3f8c1a7d4b9e2f5c8a0d3b6e1f4\ngeneration.mode=realtime generation.cache=false\nsingleList size=3 [0, 50, 100]\nbothList size=6 [0, 25, 50, 100, 150, 200]\nsingleMap keys=3 combos=3\nbothMap keys=6 combos=9\nsingle odd=0 combos=[[0]]\nsingle odd=50 combos=[[50]]\nsingle odd=100 combos=[[100]]\nboth odd=0 combos=[[0, 0]]\nboth odd=25 combos=[[0, 50], [50, 0]]\nboth odd=50 combos=[[0, 100], [100, 0]]\nboth odd=100 combos=[[50, 50]]\nboth odd=150 combos=[[50, 100], [100, 50]]\nboth odd=200 combos=[[100, 100]]\nchessboard=0 pageOdd=50 boardCases=1\nchessboard=0 pageOdd=100 boardCases=1\nchessboard=0 pageOdd=0 boardCases=61\nchessboard=1 pageOdd=50 boardCases=1\nchessboard=1 pageOdd=100 boardCases=1\nchessboard=1 pageOdd=0 boardCases=61\npayTable={S00015=0, S00011=100, S00012=50, S00013=25, S00014=5}\nOK realtime multiplier catalog\n",
+    "status": "RETURNED_WITHOUT_NETWORK"
+  },
+  {
+    "game": "2001007-Magic-Scroll-2",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "magic-scroll2-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.hd.cpgame.magicscroll2.loader.LoaderMain",
+    "classCount": 34,
+    "scaledCountKeys": [
+      "generation.loss-count",
+      "generation.win-count",
+      "generation.special-count",
+      "generation.loss.fallback-samples"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2010-EDM-Mania",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "edm-mania-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.replica.edmmania.RedisDirectLoader",
+    "classCount": 1117,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 1,
+    "probeLog": "REDIS_CONNECTING host=192.168.10.3 port=6379 database=15 ssl=false\n\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\n[失败] AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2060-Club-Goddess",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "club-goddess-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.clubgoddess.loader.RedisLoader",
+    "classCount": 1111,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2110-Bee-Workshop",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.g2110.generator.RedisLoader",
+    "classCount": 2184,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT redis.clients.jedis.exceptions.JedisConnectionException: Failed to connect to 192.168.10.3:6379.",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2110-mac-Bee-Workshop",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "bee-workshop-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.replica.beeworkshop.RedisDirectLoader",
+    "classCount": 1134,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 1,
+    "probeLog": "REDIS_CONNECTING host=192.168.10.3 port=6379 database=15 ssl=false\n\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\n[失败] AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2210-Wu-Kong",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "wukong-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.wukong.loader.RedisLoader",
+    "classCount": 26,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2290-Samba-Sensation",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "samba-sensation-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.sambasensation.loader.RedisLoader",
+    "classCount": 40,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 1,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\n[失败] AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2300-Monster-Slayer",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "monster-slayer-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.monsterslayer.loader.RedisLoader",
+    "classCount": 22,
+    "scaledCountKeys": [
+      "generation.win-count"
+    ],
+    "exitCode": 1,
+    "probeLog": "LOAD_START target=152 batchSize=100 loss=0 win=2 naturalSpecial=0 buyPerMode=50 config=/tmp/cpgame-loader-audit/2300-Monster-Slayer.properties\n\nAUDIT_NETWORK_BOUNDARY host=18.234.101.161 port=8021\n[FAILED] AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2350-Curupira",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "curupira-round-loader-all.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.curupira.loader.RedisLoader",
+    "classCount": 38,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count",
+      "generation.loss.fallback-samples",
+      "generation.loss.validation-samples"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2410-Electro-Fiesta",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.fiesta.RedisLoaderMain",
+    "classCount": 2152,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT redis.clients.jedis.exceptions.JedisConnectionException: Failed to connect to 192.168.10.3:6379.",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "2470-Lucky-Night-Market",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.luckynightmarket.GeneratorMain",
+    "classCount": 24,
+    "scaledCountKeys": [
+      "generation.count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "32-Jungle-Treasure",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "jungle-treasure-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.batcha.g32.LoaderMain",
+    "classCount": 31,
+    "scaledCountKeys": [
+      "generation.total-members"
+    ],
+    "exitCode": 2,
+    "probeLog": "\n生成失败：请使用 --config=正式配置文件\njava.lang.IllegalArgumentException: 请使用 --config=正式配置文件\n\tat com.cpgame.batcha.g32.LoaderMain.configPath(LoaderMain.java:70)\n\tat com.cpgame.batcha.g32.LoaderMain.main(LoaderMain.java:13)\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\n\tat LoaderStartupAudit.main(LoaderStartupAudit.java:17)",
+    "status": "STARTUP_FAILURE"
+  },
+  {
+    "game": "33-Jungle-Party",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "jungle-party-generator-1.0.0.jar",
+    "config": "generator.properties",
+    "mainClass": "com.hd.cpgame.jungleparty.LoaderMain",
+    "classCount": 24,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "41-Lucky-Panda",
+    "lastState": "RUNNING",
+    "lastLogTail": "h=390 members=1000 loaded=390000\r\nBATCH_COMMITTED batch=391 members=1000 loaded=391000\r\nBATCH_COMMITTED batch=392 members=1000 loaded=392000\r\nBATCH_COMMITTED batch=393 members=1000 loaded=393000\r\nBATCH_COMMITTED batch=394 members=1000 loaded=394000\r\nBATCH_COMMITTED batch=395 members=1000 loaded=395000\r\nBATCH_COMMITTED batch=396 members=1000 loaded=396000\r\nBATCH_COMMITTED batch=397 members=1000 loaded=397000\r\nBATCH_COMMITTED batch=398 members=1000 loaded=398000\r\nBATCH_COMMITTED batch=399 members=1000 loaded=399000\r\nBATCH_COMMITTED batch=400 members=1000 loaded=400000\r\nBATCH_COMMITTED batch=401 members=1000 loaded=401000\r\nBATCH_COMMITTED batch=402 members=1000 loaded=402000\r\nBATCH_COMMITTED batch=403 members=1000 loaded=403000\r\nBATCH_COMMITTED batch=404 members=1000 loaded=404000\r\nBATCH_COMMITTED batch=405 members=1000 loaded=405000\r\nBATCH_COMMITTED batch=406 members=1000 loaded=406000\r\nBATCH_COMMITTED batch=407 members=1000 loaded=407000\r\nBATCH_COMMITTED batch=408 members=1000 loaded=408000\r\nBATCH_COMMITTED batch=409 members=1000 loaded=409000\r\nBATCH_COMMITTED batch=410 members=1000 loaded=410000\r\nBATCH_COMMITTED batch=411 members=1000 loaded=411000\r\nBATCH_COMMITTED batch=412 members=1000 loaded=412000\r\nBATCH_COMMITTED batch=413 members=1000 loaded=413000\r\nBATCH_COMMITTED batch=414 members=1000 loaded=414000\r\nBATCH_COMMITTED batch=415 members=1000 loaded=415000\r\nBATCH_COMMITTED batch=416 members=1000 loaded=416000\r\nBATCH_COMMITTED batch=417 members=1000 loaded=417000\r\nBATCH_COMMITTED batch=418 members=1000 loaded=418000\r\nBATCH_COMMITTED batch=419 members=1000 loaded=419000\r\n",
+    "jar": "lucky-panda-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.replica.luckypanda.RedisDirectLoader",
+    "classCount": 37,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 1,
+    "probeLog": "REDIS_CONNECTING host=192.168.10.3 port=6379 database=15 ssl=false\n\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\n[失败] AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "42-Lucky-Dragon",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "lucky-dragon-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.luckydragon.loader.LoaderMain",
+    "classCount": 20,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\n[FAIL] Redis Loader: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "43-Lucky-Wheel",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "lucky-wheel-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.luckywheel.loader.LoaderMain",
+    "classCount": 26,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\n[失败] Redis Loader 执行失败：AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "45-Rio-Carnival",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "rio-carnival-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.hd.cpgame.riocarnival.loader.RoundLoaderApplication",
+    "classCount": 1069,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count",
+      "generation.loss-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "50-Lucky-Cat-II",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "lucky-cat-ii-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.luckycatii.LoaderMain",
+    "classCount": 27,
+    "scaledCountKeys": [
+      "generation.loss-count",
+      "generation.win-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "52-Cyber-GO",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "cyber-go-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.batchc.cybergo.LoaderMain",
+    "classCount": 34,
+    "scaledCountKeys": [
+      "generation.normal-count",
+      "generation.special-count",
+      "generation.loss-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_UNCAUGHT java.lang.IllegalArgumentException: 正式配置缺少参数: generation.normal-min-win-multiplier",
+    "status": "STARTUP_FAILURE"
+  },
+  {
+    "game": "54-Fishing-GO",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "fishing-go-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.fishinggo.loader.RedisLoader",
+    "classCount": 1070,
+    "scaledCountKeys": [
+      "generation.loss-count",
+      "generation.win-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT redis.clients.jedis.exceptions.JedisConnectionException: Failed to connect to 192.168.10.3:6379.",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "56-Crazy-Piggy",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "crazy-piggy-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.crazypiggy.generator.LoaderMain",
+    "classCount": 1102,
+    "scaledCountKeys": [
+      "generation.loss-count",
+      "generation.win-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "57-Crazy-777",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "crazy777-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.crazy777.generator.LoaderMain",
+    "classCount": 1100,
+    "scaledCountKeys": [
+      "generation.loss-count",
+      "generation.win-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "58-Crazy-Gems",
+    "lastState": "RUNNING",
+    "lastLogTail": "TED batch=519 members=100 loaded=51900\r\nBATCH_COMMITTED batch=520 members=100 loaded=52000\r\nBATCH_COMMITTED batch=521 members=100 loaded=52100\r\nBATCH_COMMITTED batch=522 members=100 loaded=52200\r\nBATCH_COMMITTED batch=523 members=100 loaded=52300\r\nBATCH_COMMITTED batch=524 members=100 loaded=52400\r\nBATCH_COMMITTED batch=525 members=100 loaded=52500\r\nBATCH_COMMITTED batch=526 members=100 loaded=52600\r\nBATCH_COMMITTED batch=527 members=100 loaded=52700\r\nBATCH_COMMITTED batch=528 members=100 loaded=52800\r\nBATCH_COMMITTED batch=529 members=100 loaded=52900\r\nBATCH_COMMITTED batch=530 members=100 loaded=53000\r\nBATCH_COMMITTED batch=531 members=100 loaded=53100\r\nBATCH_COMMITTED batch=532 members=100 loaded=53200\r\nBATCH_COMMITTED batch=533 members=100 loaded=53300\r\nBATCH_COMMITTED batch=534 members=100 loaded=53400\r\nBATCH_COMMITTED batch=535 members=100 loaded=53500\r\nBATCH_COMMITTED batch=536 members=100 loaded=53600\r\nBATCH_COMMITTED batch=537 members=100 loaded=53700\r\nBATCH_COMMITTED batch=538 members=100 loaded=53800\r\nBATCH_COMMITTED batch=539 members=100 loaded=53900\r\nBATCH_COMMITTED batch=540 members=100 loaded=54000\r\nBATCH_COMMITTED batch=541 members=100 loaded=54100\r\nBATCH_COMMITTED batch=542 members=100 loaded=54200\r\nBATCH_COMMITTED batch=543 members=100 loaded=54300\r\nBATCH_COMMITTED batch=544 members=100 loaded=54400\r\nBATCH_COMMITTED batch=545 members=100 loaded=54500\r\nBATCH_COMMITTED batch=546 members=100 loaded=54600\r\nBATCH_COMMITTED batch=547 members=100 loaded=54700\r\nBATCH_COMMITTED batch=548 members=100 loaded=54800\r\nBATCH_COMMITTED batch=549 members=100 loaded=54900\r\n",
+    "jar": "crazygems-redis-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.replica.crazygems.RedisDirectLoader",
+    "classCount": 1100,
+    "scaledCountKeys": [
+      "generation.total-members"
+    ],
+    "exitCode": 1,
+    "probeLog": "REDIS_CONNECTING host=18.234.101.161 port=8021 database=0 ssl=false\n\nAUDIT_NETWORK_BOUNDARY host=18.234.101.161 port=8021\n[失败] AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "60-Crazy-Birds",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "crazybirds-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.crazybirds.generator.LoaderMain",
+    "classCount": 1097,
+    "scaledCountKeys": [
+      "generation.loss-count",
+      "generation.win-count",
+      "generation.special-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=192.168.10.3 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "61-Saci",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "saci-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.saci.generator.LoaderMain",
+    "classCount": 1106,
+    "scaledCountKeys": [
+      "generation.normal-count"
+    ],
+    "exitCode": 2,
+    "probeLog": "\nAUDIT_NETWORK_BOUNDARY host=127.0.0.1 port=6379\nAUDIT_UNCAUGHT java.lang.SecurityException: AUDIT_NETWORK_BLOCKED",
+    "status": "REACHED_NETWORK_BOUNDARY"
+  },
+  {
+    "game": "8-Jurassic-Jungle",
+    "lastState": "IDLE",
+    "lastLogTail": "",
+    "jar": "jurassic-jungle-loader.jar",
+    "config": "generator.properties",
+    "mainClass": "com.cpgame.batcha.g8.LoaderMain",
+    "classCount": 29,
+    "scaledCountKeys": [
+      "generation.total-members"
+    ],
+    "exitCode": 2,
+    "probeLog": "\n生成失败：请使用 --config=正式配置文件\njava.lang.IllegalArgumentException: 请使用 --config=正式配置文件\n\tat com.cpgame.batcha.g8.LoaderMain.configPath(LoaderMain.java:71)\n\tat com.cpgame.batcha.g8.LoaderMain.main(LoaderMain.java:14)\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\n\tat LoaderStartupAudit.main(LoaderStartupAudit.java:17)",
+    "status": "STARTUP_FAILURE"
+  }
+]

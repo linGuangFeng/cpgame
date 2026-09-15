@@ -1,0 +1,380 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 1830,
+  "note": "Empirical cell counts from REAL_PROVIDER complete Rounds. Cascade-page counts include survivors plus fills; fill-only reconstruction is not claimed as origin RNG. Do not copy start weights onto cascade or free.",
+  "providerRngClaimed": false,
+  "scenes": [
+    {
+      "scene": "PAID_START_PAGE",
+      "sampleBoards": 1391,
+      "cells": 50076,
+      "rows": [
+        {
+          "symbolId": 1,
+          "count": 5351,
+          "denominator": 50076,
+          "approxPercent": 10.6858
+        },
+        {
+          "symbolId": 2,
+          "count": 5179,
+          "denominator": 50076,
+          "approxPercent": 10.3423
+        },
+        {
+          "symbolId": 3,
+          "count": 4917,
+          "denominator": 50076,
+          "approxPercent": 9.8191
+        },
+        {
+          "symbolId": 4,
+          "count": 4903,
+          "denominator": 50076,
+          "approxPercent": 9.7911
+        },
+        {
+          "symbolId": 5,
+          "count": 4788,
+          "denominator": 50076,
+          "approxPercent": 9.5615
+        },
+        {
+          "symbolId": 6,
+          "count": 4833,
+          "denominator": 50076,
+          "approxPercent": 9.6513
+        },
+        {
+          "symbolId": 7,
+          "count": 4790,
+          "denominator": 50076,
+          "approxPercent": 9.5655
+        },
+        {
+          "symbolId": 8,
+          "count": 4885,
+          "denominator": 50076,
+          "approxPercent": 9.7552
+        },
+        {
+          "symbolId": 9,
+          "count": 4692,
+          "denominator": 50076,
+          "approxPercent": 9.3698
+        },
+        {
+          "symbolId": 10,
+          "count": 4752,
+          "denominator": 50076,
+          "approxPercent": 9.4896
+        },
+        {
+          "symbolId": 11,
+          "count": 557,
+          "denominator": 50076,
+          "approxPercent": 1.1123
+        },
+        {
+          "symbolId": 12,
+          "count": 89,
+          "denominator": 50076,
+          "approxPercent": 0.1777
+        },
+        {
+          "symbolId": 13,
+          "count": 111,
+          "denominator": 50076,
+          "approxPercent": 0.2217
+        },
+        {
+          "symbolId": 14,
+          "count": 105,
+          "denominator": 50076,
+          "approxPercent": 0.2097
+        },
+        {
+          "symbolId": 15,
+          "count": 124,
+          "denominator": 50076,
+          "approxPercent": 0.2476
+        }
+      ],
+      "evidence": "captures/1830-Hotpot/round-bodies/*/step-001 first props[0] type=1"
+    },
+    {
+      "scene": "CASCADE_OR_LATER_PAGE",
+      "sampleBoards": 1583,
+      "cells": 56988,
+      "rows": [
+        {
+          "symbolId": 1,
+          "count": 5432,
+          "denominator": 56988,
+          "approxPercent": 9.5318
+        },
+        {
+          "symbolId": 2,
+          "count": 5499,
+          "denominator": 56988,
+          "approxPercent": 9.6494
+        },
+        {
+          "symbolId": 3,
+          "count": 5735,
+          "denominator": 56988,
+          "approxPercent": 10.0635
+        },
+        {
+          "symbolId": 4,
+          "count": 5505,
+          "denominator": 56988,
+          "approxPercent": 9.6599
+        },
+        {
+          "symbolId": 5,
+          "count": 5432,
+          "denominator": 56988,
+          "approxPercent": 9.5318
+        },
+        {
+          "symbolId": 6,
+          "count": 5386,
+          "denominator": 56988,
+          "approxPercent": 9.4511
+        },
+        {
+          "symbolId": 7,
+          "count": 5418,
+          "denominator": 56988,
+          "approxPercent": 9.5073
+        },
+        {
+          "symbolId": 8,
+          "count": 5247,
+          "denominator": 56988,
+          "approxPercent": 9.2072
+        },
+        {
+          "symbolId": 9,
+          "count": 5510,
+          "denominator": 56988,
+          "approxPercent": 9.6687
+        },
+        {
+          "symbolId": 10,
+          "count": 5295,
+          "denominator": 56988,
+          "approxPercent": 9.2914
+        },
+        {
+          "symbolId": 11,
+          "count": 553,
+          "denominator": 56988,
+          "approxPercent": 0.9704
+        },
+        {
+          "symbolId": 12,
+          "count": 226,
+          "denominator": 56988,
+          "approxPercent": 0.3966
+        },
+        {
+          "symbolId": 13,
+          "count": 394,
+          "denominator": 56988,
+          "approxPercent": 0.6914
+        },
+        {
+          "symbolId": 14,
+          "count": 360,
+          "denominator": 56988,
+          "approxPercent": 0.6317
+        },
+        {
+          "symbolId": 15,
+          "count": 701,
+          "denominator": 56988,
+          "approxPercent": 1.2301
+        },
+        {
+          "symbolId": 16,
+          "count": 50,
+          "denominator": 56988,
+          "approxPercent": 0.0877
+        },
+        {
+          "symbolId": 17,
+          "count": 51,
+          "denominator": 56988,
+          "approxPercent": 0.0895
+        },
+        {
+          "symbolId": 18,
+          "count": 40,
+          "denominator": 56988,
+          "approxPercent": 0.0702
+        },
+        {
+          "symbolId": 19,
+          "count": 45,
+          "denominator": 56988,
+          "approxPercent": 0.079
+        },
+        {
+          "symbolId": 20,
+          "count": 60,
+          "denominator": 56988,
+          "approxPercent": 0.1053
+        },
+        {
+          "symbolId": 21,
+          "count": 32,
+          "denominator": 56988,
+          "approxPercent": 0.0562
+        },
+        {
+          "symbolId": 22,
+          "count": 12,
+          "denominator": 56988,
+          "approxPercent": 0.0211
+        },
+        {
+          "symbolId": 23,
+          "count": 5,
+          "denominator": 56988,
+          "approxPercent": 0.0088
+        }
+      ],
+      "evidence": "later props pages and later steps; includes survivors"
+    },
+    {
+      "scene": "FREE_STEP_START_PAGE",
+      "sampleBoards": 1056,
+      "cells": 38016,
+      "rows": [
+        {
+          "symbolId": 1,
+          "count": 3846,
+          "denominator": 38016,
+          "approxPercent": 10.1168
+        },
+        {
+          "symbolId": 2,
+          "count": 3695,
+          "denominator": 38016,
+          "approxPercent": 9.7196
+        },
+        {
+          "symbolId": 3,
+          "count": 3779,
+          "denominator": 38016,
+          "approxPercent": 9.9406
+        },
+        {
+          "symbolId": 4,
+          "count": 3777,
+          "denominator": 38016,
+          "approxPercent": 9.9353
+        },
+        {
+          "symbolId": 5,
+          "count": 3645,
+          "denominator": 38016,
+          "approxPercent": 9.5881
+        },
+        {
+          "symbolId": 6,
+          "count": 3654,
+          "denominator": 38016,
+          "approxPercent": 9.6117
+        },
+        {
+          "symbolId": 7,
+          "count": 3618,
+          "denominator": 38016,
+          "approxPercent": 9.517
+        },
+        {
+          "symbolId": 8,
+          "count": 3710,
+          "denominator": 38016,
+          "approxPercent": 9.759
+        },
+        {
+          "symbolId": 9,
+          "count": 3732,
+          "denominator": 38016,
+          "approxPercent": 9.8169
+        },
+        {
+          "symbolId": 10,
+          "count": 3704,
+          "denominator": 38016,
+          "approxPercent": 9.7433
+        },
+        {
+          "symbolId": 11,
+          "count": 439,
+          "denominator": 38016,
+          "approxPercent": 1.1548
+        },
+        {
+          "symbolId": 15,
+          "count": 108,
+          "denominator": 38016,
+          "approxPercent": 0.2841
+        },
+        {
+          "symbolId": 16,
+          "count": 78,
+          "denominator": 38016,
+          "approxPercent": 0.2052
+        },
+        {
+          "symbolId": 17,
+          "count": 47,
+          "denominator": 38016,
+          "approxPercent": 0.1236
+        },
+        {
+          "symbolId": 18,
+          "count": 32,
+          "denominator": 38016,
+          "approxPercent": 0.0842
+        },
+        {
+          "symbolId": 19,
+          "count": 57,
+          "denominator": 38016,
+          "approxPercent": 0.1499
+        },
+        {
+          "symbolId": 20,
+          "count": 47,
+          "denominator": 38016,
+          "approxPercent": 0.1236
+        },
+        {
+          "symbolId": 21,
+          "count": 32,
+          "denominator": 38016,
+          "approxPercent": 0.0842
+        },
+        {
+          "symbolId": 22,
+          "count": 10,
+          "denominator": 38016,
+          "approxPercent": 0.0263
+        },
+        {
+          "symbolId": 23,
+          "count": 6,
+          "denominator": 38016,
+          "approxPercent": 0.0158
+        }
+      ],
+      "evidence": "type=2 step props[0]"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+server:
+  # Demo must be reachable from other machines on the same LAN; health checks may still use 127.0.0.1.
+  address: ${COIN_MASTER_BIND_ADDRESS:0.0.0.0}
+  port: ${PORT:0}
+
+spring:
+  application:
+    name: coin-master-go-1407-api
+  jackson:
+    default-property-inclusion: always
+
+coin-master:
+  initial-balance: 1000.00
+  state-file: ${COIN_MASTER_STATE_FILE:./data/coin-master-go-state.json}
+  publish-directory: ${COIN_MASTER_PUBLISH_DIRECTORY:../../publish/1407-mac-Coin-Master-GO}

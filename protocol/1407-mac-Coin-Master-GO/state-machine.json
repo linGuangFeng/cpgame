@@ -1,0 +1,256 @@
+{
+  "schemaVersion": 2,
+  "gameId": 1407,
+  "units": {
+    "Round": "one paid wager and all causally following base cascades and free spins",
+    "Delivery": "one base or free-spin board plus all of its cascades",
+    "Step": "one spin HTTP exchange"
+  },
+  "states": [
+    "READY",
+    "BASE_DELIVERY",
+    "BASE_CASCADE",
+    "FREE_DELIVERY",
+    "FREE_CASCADE",
+    "ROUND_COMPLETE"
+  ],
+  "initial": "READY",
+  "cardMaterialState": {
+    "eligible": "H1..H8 on reels 2-4, including the transport buffer",
+    "wireDecode": "gfl=Gold; every other eligible coordinate is materialized as explicit Silver",
+    "opening": "draw explicit Silver or Gold with the configured evidence weights",
+    "cascadeRefill": "explicit Silver only (2429/2429 eligible refills across 679 source-adjacent pairs)",
+    "silverWinner": "remove",
+    "goldWinner": "transform to WILD and remain in the survivor queue",
+    "nonWinner": "fall with its symbol while preserving Silver or Gold material"
+  },
+  "transitions": [
+    {
+      "from": "READY",
+      "event": "paid spin request",
+      "guard": "bl and bs valid",
+      "to": "BASE_DELIVERY",
+      "effects": [
+        "debit ba=20*bl*bs",
+        "reset rwa and frwa",
+        "set rpx=1"
+      ]
+    },
+    {
+      "from": "BASE_DELIVERY",
+      "event": "response",
+      "guard": "ss=0",
+      "to": "BASE_CASCADE",
+      "effects": [
+        "wa>0",
+        "retain post-debit pb"
+      ]
+    },
+    {
+      "from": "BASE_DELIVERY",
+      "event": "response",
+      "guard": "ss=1 and fsn=0",
+      "to": "ROUND_COMPLETE",
+      "effects": [
+        "settle pb=postDebit+rwa"
+      ]
+    },
+    {
+      "from": "BASE_DELIVERY",
+      "event": "response",
+      "guard": "ss=1 and fsn>nfsc",
+      "to": "FREE_DELIVERY",
+      "effects": [
+        "preserve paid bl and bs",
+        "next free delivery starts at rpx=2"
+      ]
+    },
+    {
+      "from": "BASE_CASCADE",
+      "event": "cascade response",
+      "guard": "ss=0",
+      "to": "BASE_CASCADE",
+      "effects": [
+        "ba=0",
+        "advance rpx along 2,3,5 capped at 5",
+        "rwa+=wa"
+      ]
+    },
+    {
+      "from": "BASE_CASCADE",
+      "event": "cascade response",
+      "guard": "ss=1 and fsn=0",
+      "to": "ROUND_COMPLETE",
+      "effects": [
+        "settle cumulative rwa"
+      ]
+    },
+    {
+      "from": "BASE_CASCADE",
+      "event": "cascade response",
+      "guard": "ss=1 and fsn>nfsc",
+      "to": "FREE_DELIVERY",
+      "effects": [
+        "begin awarded free spins"
+      ]
+    },
+    {
+      "from": "FREE_DELIVERY",
+      "event": "free response",
+      "guard": "ss=0",
+      "to": "FREE_CASCADE",
+      "effects": [
+        "gt=2",
+        "small_game_type=2",
+        "ba=0",
+        "rwa+=wa",
+        "frwa+=wa"
+      ]
+    },
+    {
+      "from": "FREE_DELIVERY",
+      "event": "free response",
+      "guard": "ss=1 and nfsc<fsn",
+      "to": "FREE_DELIVERY",
+      "effects": [
+        "increment free delivery count on the next Step",
+        "reset next delivery rpx to 2"
+      ]
+    },
+    {
+      "from": "FREE_DELIVERY",
+      "event": "free response",
+      "guard": "ss=1 and nfsc=fsn",
+      "to": "ROUND_COMPLETE",
+      "effects": [
+        "settle pb=postDebit+rwa"
+      ]
+    },
+    {
+      "from": "FREE_CASCADE",
+      "event": "cascade response",
+      "guard": "ss=0",
+      "to": "FREE_CASCADE",
+      "effects": [
+        "same nfsc",
+        "advance rpx along 4,6,10 capped at 10",
+        "rwa+=wa",
+        "frwa+=wa"
+      ]
+    },
+    {
+      "from": "FREE_CASCADE",
+      "event": "cascade response",
+      "guard": "ss=1 and nfsc<fsn",
+      "to": "FREE_DELIVERY",
+      "effects": [
+        "next free delivery begins"
+      ]
+    },
+    {
+      "from": "FREE_CASCADE",
+      "event": "cascade response",
+      "guard": "ss=1 and nfsc=fsn",
+      "to": "ROUND_COMPLETE",
+      "effects": [
+        "settle Round"
+      ]
+    },
+    {
+      "from": "ROUND_COMPLETE",
+      "event": "UI ready",
+      "to": "READY",
+      "effects": [
+        "allow the next paid wager"
+      ]
+    }
+  ],
+  "retrigger": {
+    "guard": "during an active free Round, a response increases fsn above the previous fsn value",
+    "effect": "the Round remains active and the newly awarded free deliveries are included before nfsc can reach the new fsn terminal boundary",
+    "captured": true,
+    "capturedInitialTriggerEvents": 19,
+    "capturedRetriggerRounds": 4,
+    "capturedRetriggerEvents": 5,
+    "observedTransitions": [
+      {
+        "transition": "12->24",
+        "count": 3
+      },
+      {
+        "transition": "12->26",
+        "count": 1
+      },
+      {
+        "transition": "24->36",
+        "count": 1
+      }
+    ],
+    "events": [
+      {
+        "roundStartScene": 171,
+        "sceneIndex": 187,
+        "fromFsn": 12,
+        "toFsn": 24,
+        "nfsc": 6,
+        "gt": 2,
+        "ss": 1
+      },
+      {
+        "roundStartScene": 612,
+        "sceneIndex": 636,
+        "fromFsn": 12,
+        "toFsn": 26,
+        "nfsc": 11,
+        "gt": 2,
+        "ss": 1
+      },
+      {
+        "roundStartScene": 813,
+        "sceneIndex": 819,
+        "fromFsn": 12,
+        "toFsn": 24,
+        "nfsc": 3,
+        "gt": 2,
+        "ss": 1
+      },
+      {
+        "roundStartScene": 813,
+        "sceneIndex": 833,
+        "fromFsn": 24,
+        "toFsn": 36,
+        "nfsc": 9,
+        "gt": 2,
+        "ss": 1
+      },
+      {
+        "roundStartScene": 1235,
+        "sceneIndex": 1262,
+        "fromFsn": 12,
+        "toFsn": 24,
+        "nfsc": 10,
+        "gt": 2,
+        "ss": 1
+      }
+    ],
+    "multipleRetriggersInOneRound": {
+      "supportedByCapture": true,
+      "roundStartScenes": [
+        813
+      ],
+      "evidence": "Round starting scene 813 contains 12->24 at scene 819 and 24->36 at scene 833"
+    },
+    "evidence": "captures/1407-Coin-Master-GO/step-index.jsonl"
+  },
+  "independentLossPath": [
+    "READY",
+    "BASE_DELIVERY",
+    "ROUND_COMPLETE"
+  ],
+  "forbiddenIndependentTerminalPaths": [
+    "BASE_CASCADE",
+    "FREE_DELIVERY",
+    "FREE_CASCADE"
+  ],
+  "generatedAt": "2026-08-27T08:17:56.675Z"
+}

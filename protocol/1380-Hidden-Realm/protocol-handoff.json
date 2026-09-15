@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "gameId": 1380,
+  "directory": "1380-Hidden-Realm",
+  "gid": 1380,
+  "rulesHash": "a47cbb826fa130d6cf03c208a992f29789aad2a9870202ea7080145935f2d7db",
+  "rulesVersion": "1380-rules-v2",
+  "readyForAcceptance": true,
+  "rulesVersionNote": "1380-rules-v2",
+  "apiPaths": {
+    "historyDay": "/cp/goldgame/single_game_user_history?slot13",
+    "historySummary": "/cp/goldgame/single_game_user_gold_history?slot13",
+    "init": "/cp/single_game.Game/initRoom",
+    "spin": "/cp/single_game.Game/gameResult",
+    "config": "/cp/config/initialData",
+    "user": "/cp/account/getUserInfo"
+  },
+  "behaviorIds": [
+    "board.column-major-5x5",
+    "symbols.ids",
+    "payout.orthogonal-cluster",
+    "payout.scale",
+    "cascade.gravity",
+    "phase.grass",
+    "phase.water",
+    "phase.fire",
+    "phase.lord",
+    "round.delivery-continuation",
+    "ui.round-finish",
+    "history.day-and-round"
+  ],
+  "capabilities": "game-capabilities.json",
+  "controllerContractTarget": {
+    "artifactBuilt": true,
+    "portRange": [50000, 59999],
+    "version": 3,
+    "jar": "server-api/1380-Hidden-Realm/dist/controller.jar"
+  },
+  "loaderTarget": {
+    "artifactBuilt": true,
+    "language": "Java",
+    "random": "SecureRandom",
+    "jar": "generator/1380-Hidden-Realm/dist/hidden-realm-loader.jar"
+  },
+  "redisTarget": {
+    "db": 15,
+    "host": "192.168.10.3",
+    "port": 6379,
+    "touched": true,
+    "lossPool": "BetLog:000001380:000000",
+    "winIndex": "PerKeyList_000001380",
+    "specialIndex": "MaryKeyList_000001380"
+  },
+  "demo": {
+    "runtimeDeal": false,
+    "runtimeFixtures": false,
+    "emptyCacheFails": true
+  }
+}

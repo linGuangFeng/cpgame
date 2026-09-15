@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "gameId": 41,
+  "directoryName": "41-Lucky-Panda",
+  "rulesHash": "f3b873d1ee56f004089ba1754b88905dad33ba6df8d103d7a03d263d51c0c99b",
+  "redis": {
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15
+  },
+  "keys": {
+    "normalIndex": "PerKeyList_000000041",
+    "specialIndex": "MaryKeyList_000000041",
+    "normalList": "BetLog:000000041:{multiplier as six digits}",
+    "specialList": "MaryLog:000000041:{multiplier as six digits}",
+    "lossMultiplier": "000000"
+  },
+  "loaded": {
+    "normalMembers": 80,
+    "specialMembers": 30,
+    "ordinaryLoss": 50,
+    "ordinaryWin": 30,
+    "normalBuckets": 25,
+    "specialBuckets": 30,
+    "lossListLength": 50,
+    "memberCodec": "lp1 ASCII rskl pages + rpx",
+    "jsonMembers": 0,
+    "resultUtilVerified": 110
+  },
+  "claimContract": "Demo picks miss from BetLog:000000041:000000 or hit from PerKeyList then LPOP that multiplier list. Scatter-free complete Rounds are in MaryKeyList / MaryLog. One LPOP removes the entire Round.",
+  "loader": "generator/41-Lucky-Panda/dist/lucky-panda-redis-loader.jar",
+  "verifiedAt": "2026-09-04T13:48:00Z"
+}

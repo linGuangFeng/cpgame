@@ -1,0 +1,38 @@
+[
+  {
+    "game": "16-Jungle-Fruit",
+    "exitCode": 2,
+    "jarSha256": "b04b393f6a0a498678ce322d0285e638ebea77bd255af29d0694cf765c6d1bd0",
+    "logTail": "\n生成失败：请使用 --config=正式配置文件"
+  },
+  {
+    "game": "1809-mac-Freedom-Day",
+    "exitCode": 0,
+    "jarSha256": "5f469a8a47a58a7dbc3d717cb2635bade69baf8640f33561c9615089c9451a79",
+    "logTail": "REDIS_CONNECTING host=127.0.0.1 port=56712 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=56712 database=0 ssl=false\nNATURAL_CLASSIFICATION_COMPLETE normal=2 special=2 normalBuckets=2 specialBuckets=2 capPerMultiplier=300 discardedOverlong=0\nBATCH_COMMITTED batch=1 members=4 loaded=4\nLOAD_COMPLETE redisGameId=8001809 normal=2 special=2 batches=1 maxConsecutiveWins=4 rulesVersion=freedom-day-1809-v2-defect-fix rulesHash=623c36f2909d7cf6e3005d2bd08f3fff50e667b0d218246323a6d9922365e561\n"
+  },
+  {
+    "game": "1830-Hotpot",
+    "exitCode": 0,
+    "jarSha256": "2e33a95770221a4e48c71dab88c904b360bf71d33fcf8c887dbc90dddf232912",
+    "logTail": "REDIS_CONNECTING host=127.0.0.1 port=56713 database=0 ssl=false\nREDIS_CONNECTED host=127.0.0.1 port=56713 database=0 ssl=false\nINDEPENDENT_LOSS_PRELOAD loss=0 capPerMultiplier=300\nNATURAL_CLASSIFICATION_COMPLETE normal=2 special=2 lossPreloaded=0 normalBuckets=2 specialBuckets=2 capPerMultiplier=300 discardedCandidateLimit=0\nBATCH_COMMITTED batch=1 members=4 loaded=4\nLOAD_COMPLETE redisGameId=1830 loss=0 normal=2 special=2 batches=1 maxConsecutiveWins=3 rulesVersion=hotpot-1830-result-engine-r1-20260904 rulesHash=725261a0bdda79f9d63bfeec37472febd8be9e1ec304c4a74291388468f9342f protocolHash=01123dc898992e5e38efb1f58b816c844093dfcf07939e2cefa3153022b61c01\n"
+  },
+  {
+    "game": "32-Jungle-Treasure",
+    "exitCode": 0,
+    "jarSha256": "781b9d7403b2907ef2d28481efa1f2d7cea6f6d88fa6524f3f0716db56b83f9a",
+    "logTail": "生成完成：raw gid=32，写入完整局=2，候选=9，rulesHash=0ae93f542908a7391cffe77dc02327ace428c614333bc73d711bf8e66357e68f\n"
+  },
+  {
+    "game": "52-Cyber-GO",
+    "exitCode": 0,
+    "jarSha256": "83d03b920819a7e3d2ffb1a3a58c9bab16feb594e1eff8dd14f964f4cdb0c37a",
+    "logTail": "LOSS_PREWRITTEN=2\nLOAD_COMPLETE redisGameId=52 normal=2 special=2 batches=1 candidates=621 fractionalMultiplierSkipped=21 limitSkipped=0 maxDeliveries=13 rulesHash=ae4823db63a5e8bd1d1f3a06da3ed6f76c04d761aefce10f29de6f6502885cfa\n普通实际倍率分布={162=1, 0=2, 41=1}\n特殊实际倍率分布={93=1, 765=1}\n"
+  },
+  {
+    "game": "8-Jurassic-Jungle",
+    "exitCode": 0,
+    "jarSha256": "9dcc38f0cbc0ea55ac6b429f939e7811b2bc1744923675296d1f53b918dbcc15",
+    "logTail": "生成完成：raw gid=8，写入完整局=2，候选=2，rulesHash=8dae3e502d7eb6610086d677915adb0b988b25f2b8210b378d3ba6d313518b04\n"
+  }
+]

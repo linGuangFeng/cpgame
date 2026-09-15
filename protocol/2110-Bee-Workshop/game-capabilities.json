@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 3,
+  "gameId": 2110,
+  "directoryName": "2110-Bee-Workshop",
+  "rulesHash": "bw2110-lines20-paytable-v2-a7afb966-deal-3d5f4e28",
+  "behaviorIds": [
+    "BW2110.ORDINARY_LOSS",
+    "BW2110.ORDINARY_WIN",
+    "BW2110.MYSTERY_BOX",
+    "BW2110.FREE_STICKY_SYMBOLS"
+  ],
+  "status": "CORE_AND_API_PASS",
+  "readyForAcceptance": false,
+  "name": "Bee Workshop",
+  "entryPath": "index.html",
+  "originalPath": "/fixed/",
+  "board": {
+    "reels": 5,
+    "rows": 3,
+    "layout": "column-major-bottom-to-top"
+  },
+  "symbols": {
+    "paying": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "wild": 8,
+    "scatter": 9,
+    "wildLegalReels": [
+      2,
+      3,
+      4
+    ]
+  },
+  "paylines": 20,
+  "winModel": {
+    "type": "PAYLINE",
+    "paylineCount": 20
+  },
+  "specialModes": {
+    "mysteryBox": { "supported": true },
+    "freeSpins": { "supported": true, "retriggerSupported": false }
+  },
+  "roundKinds": [
+    "ORDINARY_LOSS",
+    "ORDINARY_WIN",
+    "MYSTERY_BOX",
+    "FREE_STICKY_SYMBOLS"
+  ],
+  "freeAwards": {
+    "3": 8,
+    "4": 10,
+    "5": 15
+  },
+  "generatedFreeAwards": [
+    8,
+    10
+  ],
+  "fiveScatterGeneration": "SAMPLE_INSUFFICIENT; observed Scatter cap is four",
+  "mystery": {
+    "specialCellsMin": 5,
+    "specialCellsMax": 10,
+    "revealTargets": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "free": {
+    "centerSeedPosition": 7,
+    "stickyRule": "all visible positions matching the current center symbol are sticky; previous sticky positions persist",
+    "scatterAllowed": false,
+    "completeHistoryChains": 1
+  },
+  "buy": {
+    "capturedConfiguration": "buy_free_max_bet=-1",
+    "confirmedEntry": false,
+    "implementation": "no invented purchase route",
+    "scope": "Disabled in captured configuration; not a global impossibility claim"
+  },
+  "languages": {
+    "resourceDirectories": [
+      "bn",
+      "en",
+      "es",
+      "fr",
+      "id",
+      "ko",
+      "pt-br",
+      "th",
+      "tr",
+      "vi"
+    ],
+    "uiValidatedThisRecovery": []
+  },
+  "redis": {
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "prefix": "cpgame:v3:2110:deal-3d5f4e28:units",
+    "codec": "BW1",
+    "member": "complete-round printable ASCII structural facts",
+    "integerMultiplierBasis": "bet-size-times-level",
+    "totalStakeOddsDenominator": 20,
+    "selection": [
+      "choose LOSS/WIN (1189/239 out of 1428 captured paid entry records)",
+      "uniformly choose one existing indexed integer payout-unit bucket for selected outcome",
+      "atomic RPOP entire BW1 member; remove empty index entry",
+      "validate and retain same member for all continuation steps"
+    ],
+    "emptyPolicy": "503 PREGENERATED_CACHE_EMPTY; no outcome retry, generation or fixture fallback",
+    "runtimeGeneration": false,
+    "fixtureReplay": false,
+    "clearGamePrefixDefault": false,
+    "otherGameKeysChanged": false,
+    "legacyPrefixModified": false
+  },
+  "controller": {
+    "contractVersion": 3,
+    "descriptor": "server-api/2110-Bee-Workshop/demo-controller.properties",
+    "jar": "server-api/2110-Bee-Workshop/dist/controller.jar",
+    "config": "server-api/2110-Bee-Workshop/dist/controller.properties",
+    "portRange": [
+      50000,
+      59999
+    ],
+    "portSources": [
+      "--port",
+      "PORT"
+    ],
+    "publishArgument": "--publish",
+    "resume": "in-memory active-session continuation; process restart persistence not implemented",
+    "history": "Candidate supports day/page/page_size, all-day statistics and seven daily rows; formal JAR still awaits promotion",
+    "integrationStatus": "PLATFORM_PORT_INJECTION_FAILED",
+    "historyFixDeployment": {
+      "status": "BLOCKED",
+      "formalJar": "server-api/2110-Bee-Workshop/dist/controller.jar",
+      "candidateJar": "server-api/2110-Bee-Workshop/target/controller-history-candidate.jar",
+      "candidateSha256": "386e58bac812bd4d7505a0824a877ed2713b11653145a3c428e0673747bdcea8",
+      "candidateBytes": 4001705,
+      "error": "Errno16 Resource busy during atomic replace",
+      "holder": "UNVERIFIED; no local handles/processes reported; SMB server 192.168.10.3",
+      "diagnostic": "reports/2110-Bee-Workshop/controller-lock-diagnostic-20260908.json",
+      "formalJarContainsHistoryFix": false
+    },
+    "handlerValidation": {
+      "status": "PASS_IN_CANDIDATE",
+      "standardApiRequests": 120,
+      "completeRounds": 8,
+      "perKind": 2,
+      "historyRegression": {
+        "realRedisCompleteRounds": 31,
+        "pageLengths": [
+          30,
+          1,
+          0
+        ],
+        "fullDayBet": 124,
+        "dailyRows": 7,
+        "report": "reports/2110-Bee-Workshop/history-pagination-validation-20260908.json"
+      },
+      "tenFree": {
+        "completeRounds": 2,
+        "deliveriesEach": 11,
+        "selection": "test-selected existing Redis bucket heads; real RPOP",
+        "report": "reports/2110-Bee-Workshop/ten-free-api-validation-20260908.json"
+      },
+      "emptyCache": {
+        "requests": 2,
+        "indexReadsEach": 1,
+        "popAttempts": [
+          0,
+          1
+        ],
+        "report": "reports/2110-Bee-Workshop/empty-cache-validation-20260908.json"
+      },
+      "report": "reports/2110-Bee-Workshop/api-handler-history-fixed-20260908.json",
+      "listenersStarted": 0,
+      "browserAnimationVerified": false
+    }
+  },
+  "model": {
+    "sha256": "3d5f4e2805cd49bda59a53a06232f40385e8a0de1f7db1c4263e8e9adf39fa85",
+    "path": "server-api/2110-Bee-Workshop/src/main/resources/com/cpgame/g2110/core/deal-model.json",
+    "entryDenominators": {
+      "ordinary": 1210,
+      "mystery": 80,
+      "freeTrigger": 38,
+      "freeInitial": 1,
+      "freeContinuation": 7,
+      "freeTerminalEmissionOnly": 48
+    }
+  },
+  "sampleCoverage": {
+    "scope": "1476 indexed unique response records, all index step=1; referenced supplementary archive unlocated",
+    "ordinaryLoss": {
+      "count": 1189,
+      "target": 200,
+      "status": "PASS"
+    },
+    "ordinaryWin": {
+      "count": 101,
+      "target": 200,
+      "status": "SAMPLE_INSUFFICIENT"
+    },
+    "mysteryBox": {
+      "count": 100,
+      "target": 30,
+      "status": "PASS"
+    },
+    "freeTriggerRecords": {
+      "count": 38,
+      "threeScatter": 36,
+      "fourScatter": 2,
+      "completeRounds": 0
+    },
+    "freeStepSnapshots": {
+      "count": 48,
+      "completeRounds": 0
+    },
+    "historyCompleteFreeChains": {
+      "count": 1,
+      "target": 30,
+      "status": "SAMPLE_INSUFFICIENT",
+      "remainingSequence": [
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        0
+      ]
+    },
+    "noSyntheticRoundsCountedAsReal": true,
+    "historySingleRowsNotAddedWithoutCrossCorpusDeduplication": true
+  },
+  "blockingEvidence": [
+    {
+      "id": "ORIGINAL_ENTRY_PROVENANCE_UNVERIFIED",
+      "detail": "publish/index.html exists (8331 bytes), but the manifest's source resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/index.html returns ENOENT. URL capture has no original HTML body/hash. Exact saved original HTML/archive requested; no recapture."
+    },
+    {
+      "id": "REFERENCED_ARCHIVE_UNLOCATED",
+      "detail": "spin-full-from-box.tgz not found at fixtures/2110-Bee-Workshop/, fixtures/, or project root. These exact probes returned ENOENT in 0.039/0.022/0.030 seconds, not timeouts. No claim about other locations."
+    },
+    {
+      "id": "PLATFORM_PORT_INJECTION_FAILED",
+      "detail": "POST management center game start returned HTTP 500: shared launch failed: platform must supply --port or PORT (50000-59999). Descriptor matches 2470 Controller v3 reference. Public platform not modified; no manual listener."
+    },
+    {
+      "id": "ORIGINAL_PAGE_PLAYTHROUGH_NOT_VERIFIED",
+      "detail": "In-app browser refused LAN game page with ERR_BLOCKED_BY_CLIENT. No completed animation, restored Spin button, language or History UI pass this recovery."
+    },
+    {
+      "id": "SAMPLE_INSUFFICIENT",
+      "detail": "Indexed ordinary wins 101/200; complete free chains 1/30 (History only); no observed five-Scatter/15-free-spin complete round."
+    },
+    {
+      "id": "CONTROLLER_HISTORY_FIX_PROMOTION_BLOCKED",
+      "detail": "Validated History pagination/full-day totals exist in target/controller-history-candidate.jar only. Atomic replacement of dist/controller.jar returned Errno16 Resource busy. Exact holder is unverified; bounded local lsof/process checks showed no matches, and the file is on SMB share hd at 192.168.10.3. Formal JAR still has the known 30-row History truncation bug.",
+      "required": "Server-side read-only handle/lease diagnosis for this exact file; release only a confirmed 2110 holder before normal atomic promotion."
+    }
+  ],
+  "deliveryStatus": "CANDIDATE_VALIDATED_PROMOTION_BLOCKED",
+  "updatedAt": "2026-09-08T07:01:36.968578+00:00"
+}

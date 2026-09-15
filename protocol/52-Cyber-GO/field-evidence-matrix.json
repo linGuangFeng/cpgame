@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "gameId": 52,
+  "gameName": "Cyber GO",
+  "rulesHash": "ae4823db63a5e8bd1d1f3a06da3ed6f76c04d761aefce10f29de6f6502885cfa",
+  "columns": [
+    "fieldOrRule",
+    "source",
+    "frontendDecision",
+    "sampleEvidence",
+    "conclusion"
+  ],
+  "rows": [
+    {
+      "fieldOrRule": "game identity",
+      "source": "E01/E02/E03",
+      "frontendDecision": "GameConfig._gameId=52 and page/rules title",
+      "sampleEvidence": "52-round-00001",
+      "conclusion": "ID-name=52-Cyber-GO; display name=Cyber GO"
+    },
+    {
+      "fieldOrRule": "HTTP endpoint family",
+      "source": "E02/E03/E08",
+      "frontendDecision": "GameApi routes auth, config, spin, log-list, log-view and ping",
+      "sampleEvidence": "first-load-api-pt-br.json#request.url",
+      "conclusion": "POST /api/v1/auth/verify then /api/v1/go-cyber/config; gameplay uses /spin; history uses /log-list then /log-view"
+    },
+    {
+      "fieldOrRule": "request codec",
+      "source": "E02/E03/E09",
+      "frontendDecision": "Http.encodeFormData and Http.post",
+      "sampleEvidence": "first-load-api-pt-br.json#config.request.body",
+      "conclusion": "application/x-www-form-urlencoded; web-token->t; game-id->gid; no custom application encryption observed"
+    },
+    {
+      "fieldOrRule": "response envelope code/data/info",
+      "source": "E02/E03/E09",
+      "frontendDecision": "_cancelResponseData resolves data only when JSON code=200",
+      "sampleEvidence": "first-load-api-pt-br.json#response.body",
+      "conclusion": "HTTP 2xx plus code=200 is success; payload is body.data"
+    },
+    {
+      "fieldOrRule": "config cc/cs/bll/bsl/dbl/dbs/spl",
+      "source": "E02/E03",
+      "frontendDecision": "ConfigData.initConfig initializes currency, bet lists/defaults and symbol_pay_list",
+      "sampleEvidence": "first-load-api-pt-br.json#go-cyber/config",
+      "conclusion": "BRL/R$; bll=1..10; bsl=[0.02,0.2]; captured defaults dbl=0.2, dbs=0.02; spl is payout oracle"
+    },
+    {
+      "fieldOrRule": "board rskl",
+      "source": "E01/E02/E04",
+      "frontendDecision": "15 symbols assigned to global SymbolList and rendered",
+      "sampleEvidence": "52-round-00001:step0.rskl",
+      "conclusion": "5 reels x 3 visible rows; rskl length=15; no protocol buffer cells evidenced"
+    },
+    {
+      "fieldOrRule": "win model",
+      "source": "E01/E02/E04",
+      "frontendDecision": "Ways history calculation and wmkl rendering",
+      "sampleEvidence": "52-round-00020:step0.wmkl",
+      "conclusion": "243 fixed Ways, consecutive from leftmost reel; paylineCount NOT_APPLICABLE"
+    },
+    {
+      "fieldOrRule": "minimum paid request bl/bs and result ba",
+      "source": "E01/E02/E03/E04",
+      "frontendDecision": "CurBetGold=bs*bl*30; Spin Params={bl,bs}",
+      "sampleEvidence": "52-round-00001:bl=1,bs=0.02,ba=0.60",
+      "conclusion": "minimum paid Round starts with bl=1, bs=0.02, effective ba=R$0.60"
+    },
+    {
+      "fieldOrRule": "symbols and spl",
+      "source": "E01/E03/E04",
+      "frontendDecision": "ConfigData.symbol_pay_list and Ways renderer",
+      "sampleEvidence": "52-round-00020:wmkl/wskl",
+      "conclusion": "paying symbols S1,S2,S3,S4,A,K,Q,J use config.spl; SC and WILD have no captured spl entry"
+    },
+    {
+      "fieldOrRule": "Wild",
+      "source": "E01/E02/E04",
+      "frontendDecision": "WILD participates in Ways match and free Wild collection",
+      "sampleEvidence": "52-round-00020 and 52-round-00010",
+      "conclusion": "substitutes all except SC; only reels 2,3,4"
+    },
+    {
+      "fieldOrRule": "wmkl[].sk/wa/wmk and wskl",
+      "source": "E02/E04",
+      "frontendDecision": "history maps winning symbol, amount and matched cell codes for display",
+      "sampleEvidence": "52-round-00020:step0",
+      "conclusion": "wmkl is per-winning-symbol evidence; wskl lists winning symbol keys; empty arrays mean no symbol win"
+    },
+    {
+      "fieldOrRule": "wa",
+      "source": "E02/E04",
+      "frontendDecision": "current Step award display",
+      "sampleEvidence": "52-round-00010:steps0..12",
+      "conclusion": "Step win amount; ordinary LOSS wa=0, ordinary WIN wa>0"
+    },
+    {
+      "fieldOrRule": "rwa",
+      "source": "E02/E04",
+      "frontendDecision": "Round reward/history total display",
+      "sampleEvidence": "52-round-00010:adjacent steps",
+      "conclusion": "observed cumulative Round win amount across free Steps; terminal rwa equals captured Round payout"
+    },
+    {
+      "fieldOrRule": "pl.balance/pl.id",
+      "source": "E02/E04",
+      "frontendDecision": "Spin sets PlayerData.Coins=t.pl.balance",
+      "sampleEvidence": "live portions of rounds.jsonl",
+      "conclusion": "direct spin response player snapshot; absent in history-reconstructed Step variant and therefore not a board-rule field"
+    },
+    {
+      "fieldOrRule": "free trigger and fsn",
+      "source": "E01/E02/E04",
+      "frontendDecision": "free state uses fsn/nfsc",
+      "sampleEvidence": "52-round-00010:step0",
+      "conclusion": "paid Step with 3/4/5 SC sets fsn=12/15/20 and nfsc=0"
+    },
+    {
+      "fieldOrRule": "nfsc",
+      "source": "E02/E04",
+      "frontendDecision": "IsFreeGame iff fsn!=nfsc and fsn!=0",
+      "sampleEvidence": "52-round-00010:steps1..12",
+      "conclusion": "consumed free-Step counter; increments from 1 to fsn; fsn=nfsc is terminal"
+    },
+    {
+      "fieldOrRule": "gt and small_game_type",
+      "source": "E04",
+      "frontendDecision": "history/detail visual branch selection",
+      "sampleEvidence": "52-round-00010",
+      "conclusion": "all 1462 paid starts observed gt=1/small_game_type=0; all 654 free Steps observed gt=2/small_game_type=2"
+    },
+    {
+      "fieldOrRule": "ba on free Step",
+      "source": "E04",
+      "frontendDecision": "free continuation uses same Spin action without new paid debit",
+      "sampleEvidence": "52-round-00010:steps1..12",
+      "conclusion": "paid trigger ba=0.60; subsequent free Steps ba=0.00 and are not new paid Rounds"
+    },
+    {
+      "fieldOrRule": "rpx",
+      "source": "E01/E02/E04",
+      "frontendDecision": "free multiplier used in payout/history rendering",
+      "sampleEvidence": "52-round-00010:adjacent steps",
+      "conclusion": "paid Step rpx=1; free starts x2; +2 per 3 consumed collected Wild, carry remainder, maximum x20; 654 original free steps match"
+    },
+    {
+      "fieldOrRule": "ss",
+      "source": "E02/E04",
+      "frontendDecision": "history Step status marker",
+      "sampleEvidence": "52-round-00010:step0..step12 and ordinary samples",
+      "conclusion": "captured free intermediate Steps ss=1 and final free Step ss=0; ordinary terminal samples may still be ss=1, so ss must not replace fsn/nfsc as universal Round terminator"
+    },
+    {
+      "fieldOrRule": "bid/ca/bl/bs history-detail variant",
+      "source": "E04",
+      "frontendDecision": "history detail renderer consumes optional metadata",
+      "sampleEvidence": "first 102 history-reconciled Rounds",
+      "conclusion": "present on captured history-detail Steps but not required in every direct spin response; do not invent when absent"
+    },
+    {
+      "fieldOrRule": "Round and Delivery boundary",
+      "source": "E02/E04/E05",
+      "frontendDecision": "continue while fsn>nfsc; history merges bsl+fsl",
+      "sampleEvidence": "52-round-00010:step0..step12",
+      "conclusion": "one paid start plus every adjacent free Step; terminal iff fsn=0 or fsn=nfsc; local roundId is not a server response field"
+    },
+    {
+      "fieldOrRule": "history ll/tis/bsl/fsl",
+      "source": "E02/E04",
+      "frontendDecision": "log-list supplies ll and transfer id tis; log-view concatenates bsl then fsl",
+      "sampleEvidence": "52-round-00010 historyTransferId",
+      "conclusion": "history is an independent complete-Round reconciliation oracle"
+    },
+    {
+      "fieldOrRule": "supported languages",
+      "source": "E02/E06",
+      "frontendDecision": "LanguageMgr whitelist and CurLanguage",
+      "sampleEvidence": "resources/52-Cyber-GO/<code>/first-load-manifest.json",
+      "conclusion": "bn,en,es,fr,id,ko,pt,th,tr,vi; wrapper pt-br maps to runtime pt"
+    },
+    {
+      "fieldOrRule": "purchase feature",
+      "source": "E01/E02/E03/E08",
+      "frontendDecision": "no purchase UI or purchase API enumerated",
+      "sampleEvidence": "rules/config/endpoint enumeration",
+      "conclusion": "NOT_DISCOVERED; do not implement or advertise purchase behavior"
+    },
+    {
+      "fieldOrRule": "symbol weights/reel strips",
+      "source": "E01/E02/E03/E04",
+      "frontendDecision": "no authoritative weight table consumed",
+      "sampleEvidence": "1462 complete Rounds are outcomes, not a weight authority",
+      "conclusion": "Original probabilities/reel strips UNKNOWN; explicitly labelled local empirical transition counts are authorized and validated separately"
+    },
+    {
+      "fieldOrRule": "Redis key/member/score codec",
+      "source": "E01/E02/E03/E04",
+      "frontendDecision": "not present in original HTTP client",
+      "sampleEvidence": "none in current-game evidence",
+      "conclusion": "User-mandated local Redis v3 contract implemented and tested; game-52 namespace only; not an original upstream field or inherited example-game rule"
+    },
+    {
+      "fieldOrRule": "free Step order and complete Round boundary",
+      "source": "E02/E04/E05",
+      "frontendDecision": "fsn!=nfsc且fsn!=0时继续同一Round；log-view按bsl后接fsl恢复相邻Step",
+      "sampleEvidence": "52-round-00100:step0 then nfsc=1..12; final ss=0 and fsn=nfsc=12",
+      "conclusion": "stepIndex从0连续；免费Step的nfsc严格逐次递增；免费Step不得另计付费Round"
+    }
+  ],
+  "rulesVersion": "evidence-snapshot-e138fe9b94c489b9"
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "rawGameId": 16,
+  "rulesVersion": "jf16-evidence-2026-08-30-v2",
+  "rulesHash": "e53fffb1bc81b26725d44f1522b44b050eb21f93063de0c6a3a0c241adc3f7e2",
+  "fields": [
+    {"field": "request.gid", "status": "CONFIRMED", "semantic": "raw game identity; exact string 16", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl"]},
+    {"field": "request.bl/request.bs", "status": "CONFIRMED_MINIMUM_ONLY", "semantic": "authorized corpus uses bl=1 and bs=0.05; bet_amount=1", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl"]},
+    {"field": "data.rand_symbol_key_list", "status": "CONFIRMED", "semantic": "36 symbols in column-major 6x6 order", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl"]},
+    {"field": "data.win_symbol_key_list", "status": "CONFIRMED", "semantic": "every paying symbol whose total board count is at least 8", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl", "protocol/16-Jungle-Fruit/rules-core-canonical.json"]},
+    {"field": "data.win_match_key_list", "status": "CONFIRMED", "semantic": "parallel list of every winning symbol occurrence using column*10+row", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl"]},
+    {"field": "data.win_amount", "status": "CONFIRMED", "semantic": "sum(paytable[count]*bet_size*bet_level) for current winning board", "evidence": ["captures/16-Jungle-Fruit/original-http-preflight.json", "captures/16-Jungle-Fruit/original-http-spin-index.jsonl"]},
+    {"field": "data.round_win_amount", "status": "CONFIRMED", "semantic": "continuing segment accumulator on spin_status=0; multiplied segment settlement on spin_status=1", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl"]},
+    {"field": "data.spin_status", "status": "CONFIRMED", "semantic": "0 continues the current tumble/segment; 1 settles that segment; complete Round payout sums all status-1 settlements", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl", "captures/16-Jungle-Fruit/round-index.jsonl"]},
+    {"field": "data.win_x_key_list", "status": "CONFIRMED_OBSERVED_VALUES", "semantic": "terminal settlement multiplier is the sum of numeric X values; empty is x1; observed X2/X3/X4/X5/X7/X15", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl"]},
+    {"field": "data.small_game_type", "status": "CONFIRMED", "semantic": "0 base, 1 Mary Small Game, 2 Scatter Free Rounds", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl", "captures/16-Jungle-Fruit/round-index.jsonl"]},
+    {"field": "data.free_spin_num", "status": "CONFIRMED", "semantic": "total awarded Free spins; initial 3/4/5 Scat gives 10/12/14 and each observed Free-mode 2-Scat retrigger adds 5", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl"]},
+    {"field": "data.now_free_spin_count", "status": "CONFIRMED", "semantic": "current Free spin ordinal; unchanged through tumbles and equals free_spin_num at Round end", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl"]},
+    {"field": "data.player.balance", "status": "CONFIRMED", "semantic": "two-decimal terminal balance exposed by each response", "evidence": ["captures/16-Jungle-Fruit/original-http-spin-index.jsonl"]},
+    {"field": "history.row.tis", "status": "CONFIRMED_EXACT_STRING", "semantic": "exact History correlation transferId", "evidence": ["captures/16-Jungle-Fruit/history-1to1.jsonl"]},
+    {"field": "history.row.transfer_id", "status": "UNSAFE_NUMERIC", "semantic": "JSON Number loses precision for 1091/1126 rows; never use as identity", "evidence": ["captures/16-Jungle-Fruit/history-1to1.jsonl"]},
+    {"field": "history.detail.base_spin_list/free_spin_list", "status": "CONFIRMED", "semantic": "detail playback order is base list then free list", "evidence": ["captures/16-Jungle-Fruit/history-1to1.jsonl"]},
+    {"field": "history.detail.balance_after", "status": "CONFIRMED", "semantic": "post-bet pre-payout balance; add row.win_amount to obtain terminal balance", "evidence": ["captures/16-Jungle-Fruit/history-1to1.jsonl"]},
+    {"field": "origin symbol weights/probabilities", "status": "UNKNOWN", "semantic": "observed frequency is not an origin probability contract", "evidence": ["captures/16-Jungle-Fruit/history-finalization.json"]},
+    {"field": "supported language codes", "status": "UNKNOWN", "semantic": "not established by the authorized HTTP corpus", "evidence": ["protocol/16-Jungle-Fruit/pre-capture-capabilities.json"]},
+    {"field": "origin Redis keys/member/TTL", "status": "UNKNOWN", "semantic": "local replica contract is separate and makes no origin compatibility claim", "evidence": ["redis-pack/16-Jungle-Fruit/redis-contract.json"]}
+  ]
+}

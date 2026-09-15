@@ -1,0 +1,7 @@
+package com.hd.cpgame.magicscroll2.server;
+
+public final class ApiException extends RuntimeException {
+    private final String code;
+    public ApiException(String code, String message) { super(message); this.code = code; }
+    public String getCode() { return code; }
+}

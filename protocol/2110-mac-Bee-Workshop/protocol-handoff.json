@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 3,
+  "gameId": 2110,
+  "directoryName": "2110-mac-Bee-Workshop",
+  "rulesHash": "bw2110-lines20-paytable-v2-a7afb966-deal-3d5f4e28",
+  "rulesVersion": "bee-workshop-2110-mac-v1",
+  "canonicalRuleCore": "generator/2110-mac-Bee-Workshop/src/main/java/com/cpgame/replica/beeworkshop/GameRuleCore.java",
+  "independentResultUtil": "generator/2110-mac-Bee-Workshop/src/main/java/com/cpgame/replica/beeworkshop/ResultUtil.java",
+  "generatorMain": "com.cpgame.replica.beeworkshop.RedisDirectLoader",
+  "controllerMain": "com.cpgame.replica.beeworkshop.BeeWorkshopController",
+  "evidenceInventory": [
+    {
+      "id": "EV-HELP-PAYTABLE",
+      "source": "resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/assets/resources/import/06/0671ab352.10e6d.json",
+      "behaviorIds": ["BW2110.ORDINARY_WIN", "BW2110.FREE_STICKY_SYMBOLS"],
+      "facts": ["20 lines", "paytable 1-7", "Wild reels 2-4", "3/4/5 Scatter = 8/10/15 free", "sticky matches center symbol"]
+    },
+    {
+      "id": "EV-ORIGIN-GAP-FILL",
+      "source": "captures/2110-Bee-Workshop/origin-gap-fill-20260908/spin-index.jsonl",
+      "behaviorIds": ["BW2110.ORDINARY_LOSS", "BW2110.ORDINARY_WIN", "BW2110.MYSTERY_BOX", "BW2110.FREE_STICKY_SYMBOLS"],
+      "facts": ["paid 1929", "LOSS 1485", "WIN 120", "MYSTERY 192", "FREE_TRIGGER 132"]
+    },
+    {
+      "id": "EV-ENTER",
+      "source": "fixtures/2110-Bee-Workshop/enter/",
+      "behaviorIds": ["BW2110.INIT-CONFIG"],
+      "facts": ["initialData", "getUserInfo", "initRoom", "buy_free_max_bet=-1", "game_info.name=Magic Scroll"]
+    },
+    {
+      "id": "EV-HISTORY",
+      "source": "fixtures/2110-Bee-Workshop/history-view/response.json",
+      "behaviorIds": ["BW2110.HISTORY"],
+      "facts": ["day/page/page_size=30", "full-day statistics independent of page"]
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "BW2110.ORDINARY_LOSS",
+      "category": "RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-ORIGIN-GAP-FILL"],
+      "implementationContract": {
+        "preconditions": ["paid spin", "ResultUtil units=0", "Scatter<3", "empty spe_pos"],
+        "outputs": ["type=1", "win_arr=[]", "tw=0"],
+        "terminationRules": ["single delivery"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-ORIGIN-GAP-FILL"],
+        "assertions": ["independent ResultUtil 0", "member in BetLog 0"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BW2110.ORDINARY_WIN",
+      "category": "RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-HELP-PAYTABLE", "EV-ORIGIN-GAP-FILL"],
+      "implementationContract": {
+        "preconditions": ["paid spin", "positive line awards", "empty spe_pos"],
+        "outputs": ["type=1", "win_arr", "tw"],
+        "terminationRules": ["single delivery"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-ORIGIN-GAP-FILL"],
+        "assertions": ["win_arr.odd matches ResultUtil", "integer multiplier exact"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BW2110.MYSTERY_BOX",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-ORIGIN-GAP-FILL"],
+      "implementationContract": {
+        "preconditions": ["5-10 spe_pos", "one paying reveal symbol"],
+        "outputs": ["type=1", "spe_pos", "revealed prop cells"],
+        "terminationRules": ["single delivery; not a buy"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-ORIGIN-GAP-FILL"],
+        "assertions": ["all spe_pos share one paying symbol", "MaryLog member"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BW2110.FREE_STICKY_SYMBOLS",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-HELP-PAYTABLE", "EV-HISTORY"],
+      "implementationContract": {
+        "preconditions": ["3 or 4 Scatter on paid trigger"],
+        "stateFields": ["frees.st", "frees.tt", "center cell 7", "sticky mask"],
+        "transitionRules": ["st decreases to 0", "all matching center symbols become sticky", "no free Scatter"],
+        "terminationRules": ["st=0 last type=2 delivery"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-HELP-PAYTABLE", "EV-HISTORY"],
+        "assertions": ["8 or 10 free deliveries", "sticky persists", "same Redis member"],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [{"ref": "EV-HISTORY", "from": "st=8 trigger", "event": "sticky free spin", "to": "st=0"}]
+      }
+    },
+    {
+      "id": "BW2110.INIT-CONFIG",
+      "category": "API",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["EV-ENTER"],
+      "implementationContract": {
+        "preconditions": ["valid session"],
+        "outputs": ["initialData", "getUserInfo", "initRoom"],
+        "terminationRules": ["init does not consume a round"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-ENTER"],
+        "assertions": ["buy_free_max_bet=-1", "gid=2110"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BW2110.HISTORY",
+      "category": "SESSION",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-HISTORY"],
+      "implementationContract": {
+        "preconditions": ["completed session rounds"],
+        "outputs": ["day list", "page/page_size detail", "seven daily rows", "full-day totals"],
+        "terminationRules": ["invalid query 400"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-HISTORY"],
+        "assertions": ["page_size 30", "statistics cover selected day"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "BW2110.REDIS-COMPLETE-ROUND",
+      "category": "DELIVERY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["EV-ORIGIN-GAP-FILL"],
+      "implementationContract": {
+        "preconditions": ["preloaded BetLog/MaryLog"],
+        "transitionRules": ["choose WIN/LOSS", "choose existing integer multiplier", "RPOP one member", "project remaining steps"],
+        "terminationRules": ["empty pool 503", "no runtime deal"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["EV-ORIGIN-GAP-FILL"],
+        "assertions": ["member is BW1 ASCII", "continuations keep the same member"],
+        "usesImplementationGeneratedExpected": false
+      }
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "BW2110.FIVE-SCATTER",
+      "status": "SAMPLE_INSUFFICIENT",
+      "reason": "Help documents 5 Scatter = 15 free; origin and older corpus never showed five Scatter. Generation capped at four.",
+      "doesNotBlock": ["3/4 Scatter free", "ordinary", "mystery"]
+    },
+    {
+      "id": "BW2110.COMPLETE-FREE-OID-CHAINS",
+      "status": "SAMPLE_INSUFFICIENT",
+      "reason": "origin-gap-fill folders mix continuation files from other oids; 132 free triggers observed. History has one 8→0 chain. Implementation still generates complete sticky rounds from the trigger model.",
+      "doesNotBlock": ["FREE_STICKY generation", "Demo projection"]
+    }
+  ]
+}

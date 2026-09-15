@@ -1,0 +1,63 @@
+# Resource archives — do not upload
+/resources/
+
+# Capture, fixture, screenshot, static publish, and backup blobs
+/captures/
+/fixtures/
+/screenshots/
+/bundles/
+/publish/
+/his-light/
+/meta/
+/spin-full/
+/tmp-s3-sip-restore/
+/data/
+controller-state.bin
+
+# Maven / compiler output
+**/target/
+**/build/
+**/*.class
+**/*.dumpstream
+
+# Runtime, logs, PIDs
+admin/var/
+**/*.log
+**/*.pid
+**/*.jar.next
+**/runtime/*.bin
+**/runtime/generated-results.jsonl
+server-api/**/data/
+server-api/**/logs/
+
+# Browser profiles and bulky report runtime dumps
+**/*-profile/
+**/*-profile-*/
+reports/_game-processes/
+reports/_shared-demo/
+reports/_admin-demo-entry-20260915/
+
+# Deleted / leftover trees
+**/*OLDDELETE*
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Node / Python
+node_modules/
+__pycache__/
+*.pyc
+
+# Backups
+*.bak
+*.orig
+
+# Keep generator Redis loader dist (including *.jar). Do not add a global *.jar rule.

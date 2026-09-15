@@ -1,0 +1,13 @@
+{
+  "slug": "lucky-santa",
+  "folder": "40-Lucky-Santa",
+  "gid": 40,
+  "runId": "20260902T093023000Z",
+  "stage": "/Users/a1/Downloads/lucky-santa-stage/20260902T093023000Z",
+  "hdDest": "/Volumes/hd/cpgame/resources/40-Lucky-Santa/programmatic-http/20260902T093023000Z",
+  "succeeded": 131,
+  "failed": 0,
+  "bytes": 11856348,
+  "total": 131,
+  "gameDirs": []
+}

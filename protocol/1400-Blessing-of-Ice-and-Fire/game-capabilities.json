@@ -1,0 +1,38 @@
+{
+  "gameId": "1400",
+  "directoryName": "1400-Blessing-of-Ice-and-Fire",
+  "name": "Blessing of Ice and Fire",
+  "rulesVersion": "blessing-1400-realtime-multiplier-r1",
+  "rulesHash": "6ac10077f98ce4efe1075d00861581da853a06a44235b27afd36639b3f2d71f4",
+  "board": { "cols": 3, "rows": 3, "layout": "column-major", "visible": 9 },
+  "symbols": { "empty": 0, "pay": [1, 2, 3], "wild": null, "scatter": null },
+  "modes": [
+    { "id": "FIRE", "bet_type": 1 },
+    { "id": "ICE", "bet_type": 2 },
+    { "id": "BOTH", "bet_type": 3, "costMultiplier": 2, "bothWinMultiplier": 2 }
+  ],
+  "special": {
+    "freeSpins": false,
+    "mali": false,
+    "buy": false,
+    "cascade": false
+  },
+  "paytable": { "1": 100, "2": 50, "3": 25, "4": 5 },
+  "generation": {
+    "mode": "realtime",
+    "cache": false,
+    "entry": "generate(betType, requestedOdd)",
+    "floor": "greatest-list-value-le-requested",
+    "singleListSize": 5,
+    "bothListSize": 13,
+    "bothComboCount": 25,
+    "empty": "middle-row-on-loss-only",
+    "winBoard": "full-3x3"
+  },
+  "behaviorIds": [
+    "B1400-INIT-CONFIG",
+    "B1400-MIDDLE-ROW",
+    "B1400-DUAL-X2",
+    "B1400-REALTIME-ODD-MAP"
+  ]
+}

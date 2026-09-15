@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 3,
+  "gameId": 1940,
+  "rulesHash": "sha256:4332cba4e18f7a2dfb8c99d2c5f8969e7650edc3d109f97204af38fb4d1a2af2",
+  "host": "192.168.10.3",
+  "port": 6379,
+  "database": 15,
+  "ordinaryIndex": "PerKeyList_000001940",
+  "specialIndex": "MaryKeyList_000001940",
+  "ordinaryList": "BetLog:000001940:{integerMultiplier6}",
+  "specialList": "MaryLog:000001940:{integerMultiplier6}",
+  "memberCodec": "BF2 printable ASCII structural facts",
+  "loadCounts": {"LOSS": 300, "WIN": 300, "CASCADE": 100, "GOLD": 100, "FREE": 40},
+  "claim": "random WIN/LOSS; random indexed integer-multiplier bucket with remaining members; project one complete Round member; later cascade/free steps reuse that member",
+  "continuation": "session retains the claimed member and projects every delivery from it",
+  "emptyBehavior": "HTTP 503 PREGENERATED_CACHE_EMPTY; no random deal and no fixture fallback"
+}

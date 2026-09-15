@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 2,
+  "workflowTemplateVersion": 15,
+  "gameId": 41,
+  "gameName": "Lucky Panda",
+  "directoryName": "41-Lucky-Panda",
+  "status": "IMPLEMENTED_AND_LOCAL_RUNTIME_VERIFIED",
+  "rulesVersion": "replica-41-v1",
+  "rulesHash": "626066184f494c6221c1680502d81372d80fd0ff5ddb8611837567b88b33937f",
+  "supportedLanguages": {
+    "codes": ["pt-BR"],
+    "default": "pt-BR",
+    "status": "CONFIRMED_LOCAL_PUBLISH",
+    "evidence": ["publish/41-Lucky-Panda/index.html", "publish/41-Lucky-Panda/app.js"]
+  },
+  "winModel": "ALL_WAYS",
+  "boardModel": {
+    "type": "RLE_REELS",
+    "reelCount": 6,
+    "rowCounts": [5, 6, 6, 6, 6, 5],
+    "wirePosition": "reelIndex*10+rowIndex",
+    "validation": "2883/2883 ORIGINAL_AUTHORIZED_HTTP delivery boards decode exactly"
+  },
+  "roundModel": {
+    "paidStart": "one POST /cp/api/v1/lucky-panda/spin",
+    "completeRoundGeneratedOnce": true,
+    "deliveryProjection": "ordered responses with ss=0 continuation and ss=1 delivery terminal",
+    "historyFinalization": "one record after complete Round terminal",
+    "observed": {"paidStarts": 1093, "completeRounds": 1093, "historyMatches": 1093}
+  },
+  "specialModes": [
+    {"id": "CASCADE_MULTI_STEP", "status": "CONFIRMED", "completeRoundCount": 165, "target": 30},
+    {"id": "SCATTER_FREE_ROUNDS", "status": "CONFIRMED", "completeRoundCount": 35, "target": 30, "freeSpinCount": 10}
+  ],
+  "runtimeIndependentLoss": {
+    "supported": true,
+    "status": "CONFIRMED_CONSTRUCTIVE",
+    "contract": "the formal Java core constructs a board with no all-ways win and fewer than three scatters, then the independent verifier recomputes zero award"
+  },
+  "redisContract": {
+    "status": "LOCAL_REPLICA_CONTRACT",
+    "gameId": 41,
+    "keyPattern": "cpgame:41:rounds:{category}",
+    "encoding": "versioned UTF-8 member codec containing generated board/state facts",
+    "resultBoundary": "COMPLETE_ROUND",
+    "writeOperation": "MULTI + RPUSH + LTRIM + EXEC",
+    "originalConsumerCompatibility": "NOT_CLAIMED"
+  },
+  "codecContract": {
+    "requestBody": "application/x-www-form-urlencoded UTF-8",
+    "responseBody": "plain JSON wrapper {code,info,data}",
+    "requestEncryption": "NONE_OBSERVED",
+    "responseEncryption": "NONE_OBSERVED",
+    "spinFields": ["ba", "frwa", "fsn", "gfl", "gt", "nfsc", "pb", "rpx", "rskl", "rwa", "sfl", "ss", "wa", "wmkl", "wskl"]
+  },
+  "symbolWeights": {
+    "status": "UNKNOWN_ORIGINAL_SERVER_DISTRIBUTION",
+    "implementation": "local configurable policy only",
+    "evidenceUse": "observed frequencies validate symbols and codec but are not promoted to original probabilities"
+  },
+  "unconfirmedOrAbsent": [
+    "Original server probability/reel-strip configuration",
+    "Original History detail URL",
+    "Free-spin retrigger rule"
+  ],
+  "evidence": [
+    "protocol/41-Lucky-Panda/rules-core-canonical.json",
+    "captures/41-Lucky-Panda/spin-index.jsonl",
+    "captures/41-Lucky-Panda/round-index.jsonl",
+    "captures/41-Lucky-Panda/history-1to1.jsonl",
+    "captures/41-Lucky-Panda/history-finalization.json",
+    "reports/41-Lucky-Panda/evidence-analysis.json"
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "626066184f494c6221c1680502d81372d80fd0ff5ddb8611837567b88b33937f",
+    "status": "PROTOCOL_ACCEPTED_READY_FOR_IMPLEMENTATION",
+    "behaviorIds": ["HTTP_CODEC", "CONFIG_LOAD", "ALL_WAYS_EVALUATION", "CASCADE_ROUND", "SCATTER_FREE_ROUNDS", "ROUND_HISTORY_FINALIZATION", "HISTORY_LIST_DETAIL_RETURN", "REDIS_COMPLETE_ROUND_BOUNDARY"]
+  }
+}

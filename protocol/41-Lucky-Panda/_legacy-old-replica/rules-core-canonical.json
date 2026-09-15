@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "rawGameId": 41,
+  "gameName": "Lucky Panda",
+  "rulesVersion": "replica-41-v1",
+  "board": {
+    "reelCount": 6,
+    "rowCounts": [5, 6, 6, 6, 6, 5],
+    "wireCodec": "RLE tokens: <height><symbol>; tokens are partitioned by rowCounts",
+    "wirePosition": "reelIndex*10+rowIndex"
+  },
+  "symbols": ["Pan", "H1", "H2", "H3", "H4", "H5", "A", "K", "Q", "J", "T", "Wild", "Scat"],
+  "wild": {
+    "code": "Wild",
+    "substitutesFor": "all paying symbols",
+    "doesNotSubstituteFor": ["Scat"]
+  },
+  "winModel": {
+    "type": "ALL_WAYS",
+    "direction": "LEFT_TO_RIGHT",
+    "minimumConsecutiveReels": 3,
+    "maximumConsecutiveReels": 6,
+    "awardFormula": "sum(product(winningPositionsPerReel) * paytable[symbol][reelCount] * bs * bl * max(1,rpx))"
+  },
+  "paytable": {
+    "Pan": [30, 40, 50, 80],
+    "H1": [20, 25, 30, 50],
+    "H2": [10, 25, 30, 40],
+    "H3": [8, 15, 20, 30],
+    "H4": [6, 10, 12, 15],
+    "H5": [6, 10, 12, 15],
+    "A": [4, 6, 8, 10],
+    "K": [4, 6, 8, 10],
+    "Q": [1, 2, 3, 4],
+    "J": [1, 2, 3, 4],
+    "T": [1, 2, 3, 4]
+  },
+  "cascade": {
+    "winningCellsRemoved": true,
+    "continuation": "ss=0 while another delivery is required; ss=1 on the terminal delivery",
+    "roundAwardField": "rwa accumulates wa across deliveries",
+    "multiplier": "rpx=0 is x1; observed positive values are even numbers 2 through 26"
+  },
+  "scatterFreeRounds": {
+    "trigger": "at least three Scat positions",
+    "freeSpinCount": 10,
+    "fields": {"awarded": "fsn=10", "currentFreeSpin": "nfsc=1..10"},
+    "retrigger": "not established by the 1093 complete-Round corpus"
+  },
+  "round": {
+    "paidStart": "one POST /cp/api/v1/lucky-panda/spin with bl, bs and gid=41",
+    "minimumObservedBet": 0.4,
+    "minimumObservedBetInputs": {"bl": 1, "bs": 0.02, "factor": 20},
+    "generationBoundary": "complete Round generated once; each HTTP response is one delivery projection",
+    "historyBoundary": "write one History record only after the Round terminal delivery"
+  },
+  "history": {
+    "listPathObserved": "/cp/api/v1/lucky-panda/log-list",
+    "listFields": ["ba", "baf", "bid", "ca", "fe", "gm", "gt", "tis", "wa"],
+    "detailFields": ["baf", "bid", "bsl", "fsl"],
+    "detailPath": "not captured; replica exposes a separately documented local path"
+  },
+  "runtimeProbability": {
+    "originalServerReelStrips": "UNKNOWN",
+    "originalSpecialTriggerProbability": "UNKNOWN",
+    "replicaPolicy": "configurable local generation policy; never represented as the original probability distribution"
+  },
+  "evidence": [
+    "captures/41-Lucky-Panda/spin-index.jsonl",
+    "captures/41-Lucky-Panda/round-index.jsonl",
+    "captures/41-Lucky-Panda/original-http-spin-index.jsonl",
+    "captures/41-Lucky-Panda/history-1to1.jsonl",
+    "captures/41-Lucky-Panda/history-finalization.json",
+    "screenshots/41-Lucky-Panda/original-paytable.png",
+    "reports/41-Lucky-Panda/evidence-analysis.json"
+  ]
+}

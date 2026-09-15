@@ -1,0 +1,8 @@
+{
+  "gid": 1380,
+  "name": "Hidden Realm",
+  "status": "READY_FOR_ACCEPTANCE",
+  "updatedAt": "2026-09-10T20:10:00+08:00",
+  "page": "http://192.168.10.3:51380/v2/1380/index.html?gid=1380&language=en&token=demo&ai=demo&sip=192.168.10.3:51380",
+  "rulesHash": "a47cbb826fa130d6cf03c208a992f29789aad2a9870202ea7080145935f2d7db"
+}

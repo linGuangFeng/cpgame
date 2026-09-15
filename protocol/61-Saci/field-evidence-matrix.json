@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "2.0",
+  "gameId": 61,
+  "directoryName": "61-Saci",
+  "rulesHash": "656af5aabcad6a585da1853a38d3b57c86b5f2e4d3eee064b1170e3ea8a58315",
+  "matrixColumns": ["fieldOrRule", "source", "frontendDecision", "sampleOracle", "status", "implementationDisposition"],
+  "matrix": [
+    {
+      "fieldOrRule": "HTTP request codec and t/gid aliases",
+      "source": "main bundle Http.encodeFormData/Http.post",
+      "frontendDecision": "POST defaults to application/x-www-form-urlencoded; encodeURIComponent plus space-to-+; web-token/game-id are copied into form t/gid",
+      "sampleOracle": "captures/61-Saci/api-traffic.json",
+      "status": "CONFIRMED",
+      "implementationDisposition": "accept form fields; do not expect Authorization headers"
+    },
+    {
+      "fieldOrRule": "response code,data,info and encryption",
+      "source": "main bundle Http._cancelResponseData and raw traffic",
+      "frontendDecision": "JSON.parse; HTTP 2xx and code 200 resolves data or {}; no cipher transform exists in the HTTP path",
+      "sampleOracle": "all endpoint fixtures have a clear-text JSON envelope",
+      "status": "CONFIRMED_NONE",
+      "implementationDisposition": "return captured envelope; do not invent encryption"
+    },
+    {
+      "fieldOrRule": "auth request ai,btt,t,gid",
+      "source": "POST /cp/api/v1/auth/verify",
+      "frontendDecision": "uses launch token t to establish a game session",
+      "sampleOracle": "fixtures/61-Saci/auth-verify/request.json",
+      "status": "CONFIRMED",
+      "implementationDisposition": "distinguish launch token from returned session token"
+    },
+    {
+      "fieldOrRule": "auth response player.balance,player.id,token,ping,rc,gc",
+      "source": "GameApi.Login and PlayerData consumers",
+      "frontendDecision": "sets identity/balance/session token, heartbeat and sound state",
+      "sampleOracle": "fixtures/61-Saci/auth-verify/response.json",
+      "status": "CONFIRMED",
+      "implementationDisposition": "subsequent t is response data.token"
+    },
+    {
+      "fieldOrRule": "config bll,bsl,dbl,dbs,cc,cs,ct,auto,ts",
+      "source": "ConfigData initialization",
+      "frontendDecision": "defines bet arrays/defaults, currency formatting, autoplay values and server time",
+      "sampleOracle": "fixtures/61-Saci/config/response.json",
+      "status": "CONFIRMED",
+      "implementationDisposition": "use current-game values only"
+    },
+    {
+      "fieldOrRule": "config spl",
+      "source": "ConfigData symbol lookup and History Ways evaluator",
+      "frontendDecision": "payout table indexed by symbol id and matched reel count",
+      "sampleOracle": "round-005 step-001: symbol 7 across 3 reels => 15*1*0.02=0.30",
+      "status": "CONFIRMED",
+      "implementationDisposition": "authoritative payout coefficients for independent ResultUtil"
+    },
+    {
+      "fieldOrRule": "config buy and spin request bm",
+      "source": "GameApi.Config, Shop and paid request builder",
+      "frontendDecision": "buy values map to bm 4..7 with labels 10,13,16,???; selected bm is added to /spin",
+      "sampleOracle": "config buy=[30,60,90,65] and buy-entry screenshot; no bm request captured",
+      "status": "ENTRY_CODE_CONFIRMED_RESULT_UNCAPTURED",
+      "implementationDisposition": "disable purchased outcomes"
+    },
+    {
+      "fieldOrRule": "config last",
+      "source": "GameApi.Config resume branch",
+      "frontendDecision": "IsContent when ss=0 or fsn!=nfsc or rsn!=nrsc; restores bet, cumulative amount and wnl",
+      "sampleOracle": "config fixture contains terminal last only",
+      "status": "PARTIAL_ACTIVE_RESUME_NOT_CAPTURED",
+      "implementationDisposition": "do not guess active resume sequencing"
+    },
+    {
+      "fieldOrRule": "spin request bl,bs",
+      "source": "paid-start and automatic-continuation builders",
+      "frontendDecision": "both paths send the current bet; server active state distinguishes continuation",
+      "sampleOracle": "17 request fixtures use bl=1,bs=0.02",
+      "status": "CONFIRMED",
+      "implementationDisposition": "never treat a continuation as a second paid start"
+    },
+    {
+      "fieldOrRule": "spin ba",
+      "source": "paytable 20 base bets and ba=bl*bs*20 code",
+      "frontendDecision": "paid Step has ba; continuation Step has ba=0",
+      "sampleOracle": "round-005 ba=[0.4,0,0,0,0]",
+      "status": "CONFIRMED",
+      "implementationDisposition": "debit once per Round; 20 is not paylineCount"
+    },
+    {
+      "fieldOrRule": "board/rskl",
+      "source": "live and History result parsers",
+      "frontendDecision": "15 column-major cells; char0 copy count, char1 symbol id, char2 multiplier (a means 10)",
+      "sampleOracle": "round-005 step-001 has encoded split cell 281 at coordinate 40",
+      "status": "CONFIRMED",
+      "implementationDisposition": "5 reels x 3 visible rows; buffer rows UNKNOWN"
+    },
+    {
+      "fieldOrRule": "symbol ids 1..8,9,a",
+      "source": "GameGlobalConfig, Ways evaluator and paytable",
+      "frontendDecision": "1..8 ordinary; 9 Wild substitutes; a Scatter is excluded from ordinary Ways",
+      "sampleOracle": "config spl and captured rskl",
+      "status": "CONFIRMED",
+      "implementationDisposition": "do not introduce uncaptured ids"
+    },
+    {
+      "fieldOrRule": "Ways model and paylineCount",
+      "source": "paytable WinTip2 plus History evaluator",
+      "frontendDecision": "adjacent left-to-right Ways; ordinary needs 3+ reels; Wild self-pay needs 5 reels",
+      "sampleOracle": "paytable says 243 to 7776 Ways and 20 base bets",
+      "status": "CONFIRMED",
+      "implementationDisposition": "paylineCount NOT_APPLICABLE"
+    },
+    {
+      "fieldOrRule": "wmkl,wskl",
+      "source": "result and History parsers",
+      "frontendDecision": "wmkl flat coordinates drive payout display/removal; wskl is copied but empty in captures",
+      "sampleOracle": "round-005 step-001 wmkl=[0,10,22]; all 17 wskl=[]",
+      "status": "WMKL_CONFIRMED; WSKL_FIELD_ONLY",
+      "implementationDisposition": "validate wmkl against rskl; keep wskl empty for confirmed modes"
+    },
+    {
+      "fieldOrRule": "wa,rwa,frwa",
+      "source": "result cumulative counters",
+      "frontendDecision": "wa Step award; rwa Round cumulative; frwa free-mode aggregate",
+      "sampleOracle": "round-005 wa=[0.30,0.06,0.08,24,0], rwa terminal=24.44, frwa=0",
+      "status": "ORDINARY_CONFIRMED; FREE_FIELD_ONLY",
+      "implementationDisposition": "do not infer free-mode aggregation"
+    },
+    {
+      "fieldOrRule": "ss and small_game_type",
+      "source": "spin_status=!ss, continuation scheduler and samples",
+      "frontendDecision": "ss=0 continues; ss=1 terminates",
+      "sampleOracle": "round-005 ss=[0,0,0,0,1]; paid small_game_type=0, later Steps=1",
+      "status": "CONFIRMED",
+      "implementationDisposition": "pre-generate and queue full Round"
+    },
+    {
+      "fieldOrRule": "pb settlement",
+      "source": "PlayerData Coins consumer and adjacent samples",
+      "frontendDecision": "replaces displayed balance each Step",
+      "sampleOracle": "round-010 pb=1042.44 on win Step and 1071.24 on terminal after rwa=28.8",
+      "status": "CONFIRMED",
+      "implementationDisposition": "one debit at start; cumulative credit at terminal"
+    },
+    {
+      "fieldOrRule": "ca,gm,gt",
+      "source": "responses and History detail",
+      "frontendDecision": "ca is epoch-second created-at; gm/gt are copied metadata",
+      "sampleOracle": "ca increases between adjacent Steps; spin gm=1,gt=1",
+      "status": "CA_CONFIRMED; GM_GT_OBSERVED_ONLY",
+      "implementationDisposition": "do not infer broader gm/gt enums"
+    },
+    {
+      "fieldOrRule": "syxl",
+      "source": "SplitList parser and split paytable rule",
+      "frontendDecision": "numeric values are visible reel/row coordinates; raw 0 decodes as coordinate 00 rather than an empty list",
+      "sampleOracle": "round-005 raw sequence [40,40,40,40,0] gives observed persistence then 40->00 on terminal; round-008 [41,42,42] gives 41->42 then persistence",
+      "status": "CONFIRMED_OBSERVED_TRANSITIONS_PARTIAL_GENERAL_LIFECYCLE",
+      "implementationDisposition": "verify and preserve the exact observed transitions; do not generalize creation probability, other movement/removal cases, or red/fire variants"
+    },
+    {
+      "fieldOrRule": "wn,wnl",
+      "source": "result parser and Config resume code",
+      "frontendDecision": "wn current-bet energy; wnl persists by String(100*ba)",
+      "sampleOracle": "round-007->008 wn 0->1 and wnl {}->{40:1}; round-008 terminal->009 remains 1/{40:1}; round-009->010 becomes 2/{40:2}; config.last.wnl={40:2}",
+      "status": "CONFIRMED_PROGRESS_ONLY",
+      "implementationDisposition": "implement/verify only observed key-40 persistence and 0->1->1->2 state changes; do not infer threshold or summon payload"
+    },
+    {
+      "fieldOrRule": "fsn,nfsc,rsn,nrsc,afnl,rpx",
+      "source": "result/resume special-state branches",
+      "frontendDecision": "counter comparisons select free/summon continuation; afnl annotates additions; rpx affects display",
+      "sampleOracle": "all captured paid rounds have zero counters, afnl=[], no rpx",
+      "status": "FIELDS_CONFIRMED_MODES_UNCAPTURED",
+      "implementationDisposition": "do not guess values or transitions"
+    },
+    {
+      "fieldOrRule": "History log-list request/response",
+      "source": "History UI and list parser",
+      "frontendDecision": "page_index plus epoch range; response ba,wa,lc,end,ll gives Round summaries",
+      "sampleOracle": "10 rows, ba=4,wa=77.48,lc=10,end=0",
+      "status": "CONFIRMED",
+      "implementationDisposition": "one ll row per paid Round"
+    },
+    {
+      "fieldOrRule": "History log-view transfer_id and bsl[]",
+      "source": "History detail request and setCurIdDetailInfo",
+      "frontendDecision": "transfer_id loads one Round; bsl replays adjacent base/cascade Steps and only first is charged",
+      "sampleOracle": "round-010 detail bsl ss=[0,1],ba=[0.4,0]",
+      "status": "CONFIRMED",
+      "implementationDisposition": "store generated Round Step sequence"
+    },
+    {
+      "fieldOrRule": "History fsl[],rsl[]",
+      "source": "HistoryData code branches",
+      "frontendDecision": "would append free and summon histories after bsl",
+      "sampleOracle": "absent from captured log-view",
+      "status": "CODE_ONLY_UNCAPTURED",
+      "implementationDisposition": "do not synthesize"
+    },
+    {
+      "fieldOrRule": "symbol weights",
+      "source": "SymbolWeightsList plus front-end randomReel helper",
+      "frontendDecision": "front-end expands [5,10,15,20,25,30,40,45,5,5] for [1..8,9,a]",
+      "sampleOracle": "no server-distribution oracle",
+      "status": "FRONTEND_CONFIRMED_SERVER_UNKNOWN",
+      "implementationDisposition": "do not claim original-server RNG parity"
+    },
+    {
+      "fieldOrRule": "localized gameRules identity",
+      "source": "resources/61-Saci/extracted/pt/gameRules.json",
+      "frontendDecision": "generic rule/help asset",
+      "sampleOracle": "title says Dia das Bruxas Louco II, conflicting with versionconfig/GameName Saci",
+      "status": "CONFLICTING_STALE_TEXT",
+      "implementationDisposition": "not authoritative for Saci identity/math"
+    },
+    {
+      "fieldOrRule": "Redis key/member/encoding",
+      "source": "no current-game Redis evidence",
+      "frontendDecision": "not present in browser client",
+      "sampleOracle": "none",
+      "status": "UNKNOWN",
+      "implementationDisposition": "never inherit another game; keep unresolved/disabled"
+    }
+  ],
+  "prohibitions": [
+    "Fixtures and captures are oracle-only, never runtime result sources.",
+    "Constant 20 is a base-bet factor, not a payline count.",
+    "Do not infer free-spin, summon, fire-vortex, purchased-result, active-resume, Redis, or uncaptured fields.",
+    "Do not treat stale generic gameRules text as current-game identity/math evidence.",
+    "Do not treat front-end symbol weights as proven server probabilities."
+  ]
+}

@@ -1,0 +1,1427 @@
+{
+  "schemaVersion": 2,
+  "gameId": 43,
+  "gameName": "Lucky Wheel",
+  "directoryName": "43-Lucky-Wheel",
+  "rulesHash": "sha256:5BD756F5F541F6577977BA3A6FD309AED6BCC45730150E4A687B488157E595D1",
+  "status": "PROTOCOL_VALIDATED_IMPLEMENTED",
+  "evidenceInventory": [
+    {
+      "id": "E-PORTAL-CATALOG",
+      "source": "resources/43-Lucky-Wheel/source-catalog-evidence.json",
+      "behaviorIds": [
+        "B-IDENTITY-LAUNCH"
+      ]
+    },
+    {
+      "id": "E-RESOURCE-INVENTORY",
+      "source": "resources/43-Lucky-Wheel/resource-inventory.json",
+      "behaviorIds": [
+        "B-IDENTITY-LAUNCH",
+        "B-LANGUAGE-FIRSTLOAD",
+        "B-RULES-PAYTABLE-UI",
+        "B-FEATURE-PURCHASE-ABSENT"
+      ]
+    },
+    {
+      "id": "E-VERSION-CONFIG",
+      "source": "resources/43-Lucky-Wheel/public-static/_hosts/static.cpgame.io/43/versionconfig.js",
+      "behaviorIds": [
+        "B-IDENTITY-LAUNCH"
+      ]
+    },
+    {
+      "id": "E-RULE-RAW",
+      "source": "resources/43-Lucky-Wheel/public-static/_hosts/static.cpgame.io/43/assets/resources/import/07/071e7ce22.e91b6.json",
+      "behaviorIds": [
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-ORDINARY-WIN",
+        "B-MULTIPLIER-MD1",
+        "B-RESPIN-MD2",
+        "B-LUCKY-WHEEL-MD3",
+        "B-RULES-PAYTABLE-UI",
+        "B-FEATURE-PURCHASE-ABSENT"
+      ]
+    },
+    {
+      "id": "E-RULE-EXTRACT",
+      "source": "fixtures/43-Lucky-Wheel/static-rule-text-assets.json",
+      "behaviorIds": [
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-ORDINARY-WIN",
+        "B-MULTIPLIER-MD1",
+        "B-RESPIN-MD2",
+        "B-LUCKY-WHEEL-MD3",
+        "B-RULES-PAYTABLE-UI"
+      ]
+    },
+    {
+      "id": "E-FRONTEND-RAW",
+      "source": "resources/43-Lucky-Wheel/public-static/_hosts/static.cpgame.io/43/assets/main/index.d1d79.js",
+      "behaviorIds": [
+        "B-IDENTITY-LAUNCH",
+        "B-LANGUAGE-FIRSTLOAD",
+        "B-AUTH-CONFIG",
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-MULTIPLIER-MD1",
+        "B-RESPIN-MD2",
+        "B-LUCKY-WHEEL-MD3",
+        "B-RPX-GT1",
+        "B-SS0-CONTINUATION",
+        "B-HISTORY-LIST-VIEW",
+        "B-BALANCE-SETTLEMENT",
+        "B-RULES-PAYTABLE-UI",
+        "B-FEATURE-PURCHASE-ABSENT"
+      ]
+    },
+    {
+      "id": "E-FRONTEND-EXTRACT",
+      "source": "fixtures/43-Lucky-Wheel/frontend-code-evidence.json",
+      "behaviorIds": [
+        "B-AUTH-CONFIG",
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-MULTIPLIER-MD1",
+        "B-RESPIN-MD2",
+        "B-LUCKY-WHEEL-MD3",
+        "B-RPX-GT1",
+        "B-SS0-CONTINUATION",
+        "B-HISTORY-LIST-VIEW",
+        "B-BALANCE-SETTLEMENT"
+      ]
+    },
+    {
+      "id": "E-ENTRY-RUNTIME",
+      "source": "captures/43-Lucky-Wheel/entry-resource-handoff.json",
+      "behaviorIds": [
+        "B-IDENTITY-LAUNCH",
+        "B-AUTH-CONFIG",
+        "B-PAID-SPIN"
+      ],
+      "limitations": "Its md=2 cross-request Round counts are superseded by E-REINDEX-TOOL and E-FIELD-MATRIX; endpoint, account, minimum-bet and resource observations remain evidence."
+    },
+    {
+      "id": "E-LANGUAGE-FIRSTLOAD",
+      "source": "captures/43-Lucky-Wheel/browser-resource-urls.json",
+      "behaviorIds": [
+        "B-LANGUAGE-FIRSTLOAD"
+      ]
+    },
+    {
+      "id": "E-LANGUAGE-INVENTORY",
+      "source": "reports/43-Lucky-Wheel/language-inventory.json",
+      "behaviorIds": [
+        "B-LANGUAGE-FIRSTLOAD"
+      ]
+    },
+    {
+      "id": "E-RUNTIME-INDEX",
+      "source": "captures/43-Lucky-Wheel/spin-index.jsonl",
+      "behaviorIds": [
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-MULTIPLIER-MD1",
+        "B-RESPIN-MD2",
+        "B-RPX-GT1"
+      ]
+    },
+    {
+      "id": "E-CAP-OVERAGE-AUDIT",
+      "source": "captures/43-Lucky-Wheel/spin-index.cap-overage-audit.jsonl",
+      "behaviorIds": [],
+      "disposition": "AUDIT_ONLY_EXCLUDED_FROM_OFFICIAL_INDEX_AND_COVERAGE",
+      "reason": "The 87 paid starts R43-005001 through R43-005087 are preserved to prevent evidence deletion after enforcing the platform limit. They are not current coverage or behavior-frequency inputs."
+    },
+    {
+      "id": "E-RUNTIME-STEPS",
+      "source": "captures/43-Lucky-Wheel/round-steps.jsonl",
+      "behaviorIds": [
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-MULTIPLIER-MD1",
+        "B-RESPIN-MD2",
+        "B-RPX-GT1",
+        "B-SS0-CONTINUATION",
+        "B-BALANCE-SETTLEMENT"
+      ],
+      "limitations": "The file preserves all 5087 original captured responses for protocol auditing. Only captureSeq 1 through 5000 participate in the official index and current coverage statistics."
+    },
+    {
+      "id": "E-PRE-CORRECTION-INDEX",
+      "source": "captures/43-Lucky-Wheel/spin-index.pre-protocol-correction.jsonl",
+      "behaviorIds": [
+        "B-ROUND-DELIVERY",
+        "B-RESPIN-MD2",
+        "B-BALANCE-SETTLEMENT"
+      ],
+      "limitations": "Preserved audit evidence of the rejected md=2 grouping; it is not the current paid-Round index."
+    },
+    {
+      "id": "E-PRE-CORRECTION-STEPS",
+      "source": "captures/43-Lucky-Wheel/round-steps.pre-protocol-correction.jsonl",
+      "behaviorIds": [
+        "B-ROUND-DELIVERY",
+        "B-RESPIN-MD2",
+        "B-BALANCE-SETTLEMENT"
+      ],
+      "limitations": "Original response bytes and capture sequence are retained; old local roundId/stepIndex values are not original protocol fields."
+    },
+    {
+      "id": "E-CAPTURE-TOOL",
+      "source": "captures/43-Lucky-Wheel/tools/capture-paid-rounds.cjs",
+      "behaviorIds": [],
+      "disposition": "REJECTED_BOUNDARY_ASSUMPTION_PRESERVED_FOR_AUDIT",
+      "reason": "isContinuation(md=2) caused 87 extra paid requests. Frontend code and balance recurrence disprove that assumption; do not reuse this logic."
+    },
+    {
+      "id": "E-REINDEX-TOOL",
+      "source": "captures/43-Lucky-Wheel/tools/reindex-round-boundaries.cjs",
+      "behaviorIds": [
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-RESPIN-MD2"
+      ]
+    },
+    {
+      "id": "E-CAPTURE-LEDGER-OLD",
+      "source": "captures/43-Lucky-Wheel/capture-ledger.json",
+      "behaviorIds": [],
+      "disposition": "SUPERSEDED_COUNT_SNAPSHOT",
+      "reason": "The file predates protocol boundary correction and therefore reports 5000 locally grouped Rounds. Current truth is E-RUNTIME-INDEX plus E-RUNTIME-STEPS."
+    },
+    {
+      "id": "E-CAPTURE-PROGRESS-OLD",
+      "source": "captures/43-Lucky-Wheel/round-capture-progress.json",
+      "behaviorIds": [],
+      "disposition": "SUPERSEDED_COUNT_SNAPSHOT",
+      "reason": "Historical collector progress is retained unchanged; its grouping is not the corrected protocol Round count."
+    },
+    {
+      "id": "E-CAPTURE-GAPS",
+      "source": "captures/43-Lucky-Wheel/capture-gap-ledger.json",
+      "behaviorIds": [
+        "B-BALANCE-SETTLEMENT"
+      ],
+      "disposition": "CURRENT_CAP_ENFORCED_LEDGER_WITH_NAMED_AUDIT_SNAPSHOTS",
+      "reason": "The ledger exposes exactly 5000 current official indexed starts, preserves the excluded 87 captured starts in the named cap audit snapshot, and retains the two history-confirmed gaps outside spin-index because their original Spin responses are missing.",
+      "limitations": "History recovery proves two paid starts and terminal shape only; it is not a source for reconstructing the missing original responses."
+    },
+    {
+      "id": "E-HISTORY-LIST",
+      "source": "fixtures/43-Lucky-Wheel/history-list.json",
+      "behaviorIds": [
+        "B-HISTORY-LIST-VIEW",
+        "B-BALANCE-SETTLEMENT"
+      ]
+    },
+    {
+      "id": "E-HISTORY-VIEW",
+      "source": "fixtures/43-Lucky-Wheel/history-view.json",
+      "behaviorIds": [
+        "B-HISTORY-LIST-VIEW",
+        "B-BALANCE-SETTLEMENT"
+      ]
+    },
+    {
+      "id": "E-FIELD-MATRIX",
+      "source": "protocol/43-Lucky-Wheel/field-evidence-matrix.json",
+      "behaviorIds": [
+        "B-AUTH-CONFIG",
+        "B-PAID-SPIN",
+        "B-ROUND-DELIVERY",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-MULTIPLIER-MD1",
+        "B-RESPIN-MD2",
+        "B-LUCKY-WHEEL-MD3",
+        "B-RPX-GT1",
+        "B-SS0-CONTINUATION",
+        "B-HISTORY-LIST-VIEW",
+        "B-BALANCE-SETTLEMENT"
+      ]
+    },
+    {
+      "id": "E-SCENARIO-COVERAGE",
+      "source": "reports/43-Lucky-Wheel/scenario-coverage.json",
+      "behaviorIds": [
+        "B-PAID-SPIN",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-MULTIPLIER-MD1",
+        "B-RESPIN-MD2",
+        "B-LUCKY-WHEEL-MD3",
+        "B-RPX-GT1",
+        "B-SS0-CONTINUATION"
+      ]
+    },
+    {
+      "id": "E-UI-ATTEMPT",
+      "source": "captures/43-Lucky-Wheel/ui-access-attempt.json",
+      "behaviorIds": [
+        "B-RULES-PAYTABLE-UI"
+      ]
+    },
+    {
+      "id": "E-STATIC-PUBLISH-VALIDATION",
+      "source": "reports/43-Lucky-Wheel/static-publish-validation.json",
+      "behaviorIds": [
+        "B-IDENTITY-LAUNCH",
+        "B-LANGUAGE-FIRSTLOAD",
+        "B-RULES-PAYTABLE-UI"
+      ]
+    },
+    {
+      "id": "E-LAB-METADATA",
+      "source": "reports/43-Lucky-Wheel/lab-metadata.json",
+      "behaviorIds": [],
+      "disposition": "MANAGEMENT_METADATA_SYNCED",
+      "reason": "Records the evidence-backed one-payline display value; it is not a runtime behavior oracle."
+    },
+    {
+      "id": "E-REDIS-VALIDATION",
+      "source": "reports/43-Lucky-Wheel/redis-delivery-validation.json",
+      "behaviorIds": [],
+      "disposition": "INTERNAL_DOWNSTREAM_CONTRACT_VALIDATION",
+      "reason": "Validates the platform-owned Redis key, atomic write, claim and decode contract; it is not asserted as an original provider field."
+    },
+    {
+      "id": "E-MINIMAL-FACT-CODEC",
+      "source": "generator/43-Lucky-Wheel/src/main/java/com/cpgame/luckywheel/core/MinimalFactCodec.java",
+      "behaviorIds": [],
+      "disposition": "IMPLEMENTED_RULE_CHAIN",
+      "reason": "Records the implemented compact fact codec used by both Loader and Controller through the same Java dependency."
+    },
+    {
+      "id": "E-GENERATOR-PROPERTIES",
+      "source": "generator/43-Lucky-Wheel/dist/generator.properties",
+      "behaviorIds": [],
+      "disposition": "LOCAL_REPLICA_CONFIGURATION",
+      "reason": "Records local adjustable whole-round joint weights derived from the training partition; it does not claim original RTP."
+    },
+    {
+      "id": "E-BETGT1-FOLLOWUP",
+      "source": "reports/43-Lucky-Wheel/betgt1-followup.json",
+      "behaviorIds": [
+        "B-BETGT1-MATRIX-UNLOCK",
+        "B-LUCKY-WHEEL-MD3",
+        "B-ROUND-DELIVERY"
+      ]
+    },
+    {
+      "id": "E-BETGT1-HISTORY-UI",
+      "source": "captures/43-Lucky-Wheel/ui-evidence/20260904T193756848Z",
+      "behaviorIds": [
+        "B-HISTORY-LIST-VIEW"
+      ]
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-IDENTITY-LAUNCH",
+      "category": "LAUNCH",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-PORTAL-CATALOG",
+        "E-RESOURCE-INVENTORY",
+        "E-VERSION-CONFIG",
+        "E-FRONTEND-RAW",
+        "E-ENTRY-RUNTIME",
+        "E-STATIC-PUBLISH-VALIDATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "assigned account session when using the original portal",
+          "catalog startup entry for the Lucky Wheel card"
+        ],
+        "stateFields": [
+          "portal game card id",
+          "startup game_url",
+          "static path game id",
+          "iframe ai",
+          "iframe btt",
+          "iframe sip",
+          "iframe t",
+          "language l"
+        ],
+        "transitionRules": [
+          "portal startup returns a game_url",
+          "accept identity only when the URL resolves to static path /43 and bundle _gameId=43",
+          "versionconfig title must be Lucky Wheel"
+        ],
+        "outputs": [
+          "idName=43-Lucky-Wheel",
+          "static entry /43/",
+          "API host from sip"
+        ],
+        "terminationRules": [
+          "ready to authenticate only after all identity checks agree",
+          "reject a different static ID or untrusted sip host"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-PORTAL-CATALOG",
+          "E-VERSION-CONFIG",
+          "E-FRONTEND-RAW",
+          "E-ENTRY-RUNTIME"
+        ],
+        "assertions": [
+          "catalog identifies Lucky Wheel",
+          "versionconfig title is Lucky Wheel",
+          "bundle game ID and static path are 43"
+        ],
+        "adjacentStepEvidence": [
+          "E-ENTRY-RUNTIME records portal startup game_id=2484 -> returned static.cpgame.io/43 URL -> auth/config sequence; 2484 is a portal duplicate-card identifier, not the game protocol ID."
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-LANGUAGE-FIRSTLOAD",
+      "category": "LOCALIZATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RESOURCE-INVENTORY",
+        "E-LANGUAGE-FIRSTLOAD",
+        "E-LANGUAGE-INVENTORY",
+        "E-STATIC-PUBLISH-VALIDATION"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "static entry available",
+          "language code is one of en/es/pt/tr/id/bn/th/vi/fr/ko"
+        ],
+        "stateFields": [
+          "query parameter l",
+          "selected locale",
+          "shared resource map"
+        ],
+        "transitionRules": [
+          "set l before first load",
+          "load locale bundle or documented shared resource",
+          "do not invent additional supported codes"
+        ],
+        "outputs": [
+          "localized first load for the selected code"
+        ],
+        "terminationRules": [
+          "first-load resource graph settles or a recorded failure is returned"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-LANGUAGE-FIRSTLOAD",
+          "E-LANGUAGE-INVENTORY",
+          "E-STATIC-PUBLISH-VALIDATION"
+        ],
+        "assertions": [
+          "exact supported code list is en/es/pt/tr/id/bn/th/vi/fr/ko",
+          "all ten codes have actual first-load evidence"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-AUTH-CONFIG",
+      "category": "SESSION",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-FRONTEND-EXTRACT",
+        "E-ENTRY-RUNTIME",
+        "E-FIELD-MATRIX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "trusted launch parameters ai/btt/t/sip",
+          "gid=43"
+        ],
+        "stateFields": [
+          "launch t",
+          "game token",
+          "gid",
+          "ai",
+          "btt",
+          "bll",
+          "bsl",
+          "currency"
+        ],
+        "transitionRules": [
+          "POST form ai,btt,t,gid to /cp/api/v1/auth/verify",
+          "take data.token only in memory",
+          "POST form t=game token,gid=43 to /cp/api/v1/lucky-wheel/config",
+          "initialize supported bets from config"
+        ],
+        "outputs": [
+          "authenticated game session",
+          "bll=[1,5,10,50,100]",
+          "bsl=[1]",
+          "minimum bet bl=1 bs=1",
+          "currency BRL"
+        ],
+        "terminationRules": [
+          "session ready after successful Config",
+          "terminate on auth/config envelope error or missing token"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-RAW",
+          "E-ENTRY-RUNTIME",
+          "E-FIELD-MATRIX"
+        ],
+        "assertions": [
+          "request Content-Type is form URL encoded",
+          "logical web-token/game-id map to t/gid",
+          "auth precedes config",
+          "minimum bet is 1 BRL"
+        ],
+        "adjacentStepEvidence": [
+          "E-ENTRY-RUNTIME: startup parameters -> auth/verify data.token -> lucky-wheel/config bll/bsl/currency; sensitive token values were intentionally not persisted."
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-PAID-SPIN",
+      "category": "PAID_ROUND",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RULE-RAW",
+        "E-FRONTEND-RAW",
+        "E-ENTRY-RUNTIME",
+        "E-RUNTIME-INDEX",
+        "E-RUNTIME-STEPS",
+        "E-REINDEX-TOOL",
+        "E-FIELD-MATRIX",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "authenticated game session",
+          "IDLE with no active ss=0 continuation",
+          "valid bl/bs"
+        ],
+        "stateFields": [
+          "bl",
+          "bs",
+          "t",
+          "gid",
+          "ba",
+          "pb",
+          "wa",
+          "md",
+          "ss"
+        ],
+        "transitionRules": [
+          "POST form bl,bs,t,gid to /cp/api/v1/lucky-wheel/spin",
+          "one actual request from IDLE starts one paid Round",
+          "do not classify md=2 display phase as another HTTP Step"
+        ],
+        "outputs": [
+          "JSON envelope containing one result data object",
+          "one indexed paid Round start"
+        ],
+        "terminationRules": [
+          "captured md=0/1/2 response with absent ss is terminal",
+          "future ss=0 response keeps the same Round active"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-RAW",
+          "E-RUNTIME-INDEX",
+          "E-RUNTIME-STEPS",
+          "E-FIELD-MATRIX"
+        ],
+        "assertions": [
+          "5000 official index lines",
+          "5000 distinct local roundIds from R43-000001 through R43-005000",
+          "every official index line has paidRoundStart=true and stepCount=1",
+          "the excluded 87 entries are present only in E-CAP-OVERAGE-AUDIT"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-ROUND-DELIVERY",
+      "category": "STATE_MACHINE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULE-RAW",
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-INDEX",
+        "E-RUNTIME-STEPS",
+        "E-PRE-CORRECTION-INDEX",
+        "E-PRE-CORRECTION-STEPS",
+        "E-REINDEX-TOOL",
+        "E-FIELD-MATRIX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "GameRuleCore is asked for a complete Round",
+          "no existing active Round for a new paid start"
+        ],
+        "stateFields": [
+          "roundState",
+          "deliveryIndex",
+          "paidRoundStart",
+          "md",
+          "ss",
+          "rskl",
+          "fwi",
+          "pb"
+        ],
+        "transitionRules": [
+          "IDLE -> PAID_REQUEST -> RESULT_READY",
+          "md=0/1 uses one display phase",
+          "md=2 uses BASE_DISPLAY -> EMBEDDED_RESPIN_DISPLAY within the same Delivery",
+          "only a future ss=0 result may transition to AWAITING_ADJACENT_REQUEST",
+          "Delivery consumes pre-generated Round data and never generates a new special result on demand"
+        ],
+        "outputs": [
+          "complete captured md=0/1/2 Round",
+          "ordered Delivery data",
+          "terminal state"
+        ],
+        "terminationRules": [
+          "md=0/1/2 with ss absent terminates after the response/display sequence",
+          "ss=0 would terminate only after an adjacent response with ss absent/nonzero"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-RAW",
+          "E-RUNTIME-STEPS",
+          "E-PRE-CORRECTION-STEPS",
+          "E-FIELD-MATRIX"
+        ],
+        "assertions": [
+          "md=2 does not cause a second HTTP call",
+          "all current index records contain exactly one protocol Step",
+          "no captured response contains ss"
+        ],
+        "adjacentStepEvidence": [
+          "Within R43-000040/captureSeq 40, frontend onGameEnd first displays rskl=[H5,H4], then refreshRespinList switches to embedded fwi=[H0,H4] before terminal payout wa=110.",
+          "Across requests captureSeq 40 -> 41, pb 14255.99 -> 14254.99 with next ba=1 and wa=0 proves captureSeq 41 is a new paid Round, not an md=2 continuation."
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-ORDINARY-LOSS",
+      "category": "RESULT",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-INDEX",
+        "E-RUNTIME-STEPS",
+        "E-FIELD-MATRIX",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "IDLE ordinary paid Round",
+          "minimum-bet shape when reproducing captured contract"
+        ],
+        "stateFields": [
+          "md",
+          "rskl",
+          "wskl",
+          "fws",
+          "fsk",
+          "rpx",
+          "fwi",
+          "fwa",
+          "wa",
+          "ss"
+        ],
+        "transitionRules": [
+          "emit md=0",
+          "score(rskl)=0",
+          "set rpx=1, fws=fsk=H0, fwi=[], fwa=0, wa=0",
+          "omit unobserved continuation fields"
+        ],
+        "outputs": [
+          "one terminal ordinary LOSS Round"
+        ],
+        "terminationRules": [
+          "terminal after the single response because ss is absent"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RUNTIME-INDEX",
+          "E-RUNTIME-STEPS",
+          "E-FIELD-MATRIX"
+        ],
+        "assertions": [
+          "3884 complete ordinary LOSS Rounds",
+          "wa=score(rskl)=0",
+          "wskl equals rskl with H0 removed"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-ORDINARY-WIN",
+      "category": "RESULT",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RULE-RAW",
+        "E-RULE-EXTRACT",
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-INDEX",
+        "E-RUNTIME-STEPS",
+        "E-FIELD-MATRIX",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "IDLE ordinary paid Round",
+          "valid current-game numeric symbols"
+        ],
+        "stateFields": [
+          "md",
+          "rskl",
+          "wskl",
+          "rpx",
+          "fws",
+          "fsk",
+          "fwi",
+          "fwa",
+          "wa"
+        ],
+        "transitionRules": [
+          "map H1=0,H2=00,H3=1,H4=5,H5=10 and ignore H0",
+          "join left-to-right and parse decimal",
+          "emit md=0, rpx=1, fws=fsk=H0, fwi=[], fwa=0",
+          "set wa=score(rskl)>0"
+        ],
+        "outputs": [
+          "one terminal ordinary WIN Round"
+        ],
+        "terminationRules": [
+          "terminal after the single response because ss is absent"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULE-RAW",
+          "E-FRONTEND-RAW",
+          "E-RUNTIME-STEPS",
+          "E-FIELD-MATRIX"
+        ],
+        "assertions": [
+          "220 complete ordinary WIN Rounds",
+          "4104/4104 md=0 responses satisfy wa=score(rskl)",
+          "R43-000014 maps [H4,H1] to 50"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-MULTIPLIER-MD1",
+      "category": "SPECIAL_RESULT",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RULE-RAW",
+        "E-RULE-EXTRACT",
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-INDEX",
+        "E-RUNTIME-STEPS",
+        "E-FIELD-MATRIX",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "IDLE paid Round",
+          "mode selected as current-game multiplier wheel"
+        ],
+        "stateFields": [
+          "md",
+          "rskl",
+          "fws",
+          "fsk",
+          "rpx",
+          "fwi",
+          "fwa",
+          "wa",
+          "pb"
+        ],
+        "transitionRules": [
+          "emit md=1",
+          "choose only captured multiplier 2 or 5 when reproducing the confirmed minimum-bet contract",
+          "set fws=fsk=string(rpx), fwi=[], fwa=0",
+          "set wa=score(rskl)*rpx"
+        ],
+        "outputs": [
+          "one terminal multiplier-wheel Round"
+        ],
+        "terminationRules": [
+          "terminal after the single response because ss is absent"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULE-RAW",
+          "E-FRONTEND-RAW",
+          "E-RUNTIME-STEPS",
+          "E-FIELD-MATRIX"
+        ],
+        "assertions": [
+          "896/896 md=1 responses satisfy the payout formula",
+          "462 responses use 2 and 434 use 5",
+          "R43-000010 maps 55*2 to wa=110"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-RESPIN-MD2",
+      "category": "SPECIAL_RESULT",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULE-RAW",
+        "E-RULE-EXTRACT",
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-INDEX",
+        "E-RUNTIME-STEPS",
+        "E-PRE-CORRECTION-INDEX",
+        "E-PRE-CORRECTION-STEPS",
+        "E-REINDEX-TOOL",
+        "E-FIELD-MATRIX",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "IDLE paid Round",
+          "mode selected as current-game special-wheel respin"
+        ],
+        "stateFields": [
+          "md",
+          "rskl",
+          "fwi",
+          "fwa",
+          "fws",
+          "fsk",
+          "rpx",
+          "wa",
+          "displayPhase",
+          "pb"
+        ],
+        "transitionRules": [
+          "emit one response with md=2, fws=fsk=RS and rpx=1",
+          "set fwa=score(fwi)",
+          "set wa=score(rskl)+fwa",
+          "display rskl in BASE_DISPLAY",
+          "refreshRespinList switches to fwi in EMBEDDED_RESPIN_DISPLAY",
+          "do not issue or expect another HTTP Spin for md=2"
+        ],
+        "outputs": [
+          "one paid Round",
+          "one HTTP Delivery",
+          "two ordered visual phases",
+          "one final payout and balance"
+        ],
+        "terminationRules": [
+          "after embedded fwi display and award animation, return to IDLE when ss is absent"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULE-RAW",
+          "E-FRONTEND-RAW",
+          "E-RUNTIME-STEPS",
+          "E-PRE-CORRECTION-STEPS",
+          "E-FIELD-MATRIX"
+        ],
+        "assertions": [
+          "87/87 responses satisfy fwa=score(fwi)",
+          "87/87 satisfy wa=score(rskl)+fwa",
+          "every corrected md=2 Round has one HTTP Step",
+          "onPlayBet while IsFreeGame performs display setup and does not invoke Spin"
+        ],
+        "adjacentStepEvidence": [
+          "R43-000040/captureSeq 40: BASE_DISPLAY rskl=[H5,H4] score 105 -> EMBEDDED_RESPIN_DISPLAY fwi=[H0,H4] score/fwa 5 -> wa 110 in one response.",
+          "captureSeq 40 pb=14255.99 -> captureSeq 41 ba=1,wa=0,pb=14254.99 independently rejects the old cross-request grouping."
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-LUCKY-WHEEL-MD3",
+      "category": "SPECIAL_RESULT",
+      "status": "CONFIRMED",
+      "reason": "Two original md=3 responses occurred after the original UI unlocked SCATTER at bet level 5 in the exact 100-Round follow-up.",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RULE-RAW",
+        "E-RULE-EXTRACT",
+        "E-FRONTEND-RAW",
+        "E-BETGT1-FOLLOWUP"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "bet level >=5 unlocks SCATTER; result md=3"
+        ],
+        "stateFields": [
+          "md=3",
+          "rskl",
+          "wskl",
+          "fws=SCAT",
+          "fsk=SCAT",
+          "rpx=1",
+          "fwi scalar",
+          "fwa",
+          "wa",
+          "pb"
+        ],
+        "transitionRules": [
+          "display base rskl",
+          "switch to SCAT Lucky Wheel scalar reward",
+          "set fwa=fwi",
+          "set wa=score(rskl)+fwa"
+        ],
+        "outputs": [
+          "combined terminal prize and updated balance"
+        ],
+        "terminationRules": [
+          "one HTTP response is one complete paid Round; the next response is independently paid"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULE-RAW",
+          "E-FRONTEND-RAW",
+          "E-BETGT1-FOLLOWUP"
+        ],
+        "assertions": [
+          "2/2 md=3 responses use fws=fsk=SCAT and rpx=1",
+          "2/2 satisfy fwa=fwi and wa=score(rskl)+fwa",
+          "100/100 qualifying Rounds satisfy adjacent balance recurrence"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "missingEvidence": []
+    },
+    {
+      "id": "B-RPX-GT1",
+      "category": "SPECIAL_RESULT_ALIAS",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-INDEX",
+        "E-RUNTIME-STEPS",
+        "E-FIELD-MATRIX",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "captured result has rpx>1"
+        ],
+        "stateFields": [
+          "md",
+          "rpx",
+          "fws",
+          "fsk",
+          "wa"
+        ],
+        "transitionRules": [
+          "classify rpx>1 coverage",
+          "for captured contract require md=1 and fws=fsk=string(rpx)",
+          "do not schedule it as a second independent mode"
+        ],
+        "outputs": [
+          "coverage alias for B-MULTIPLIER-MD1"
+        ],
+        "terminationRules": [
+          "same terminal rule as the underlying md=1 Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RUNTIME-STEPS",
+          "E-FIELD-MATRIX"
+        ],
+        "assertions": [
+          "896/896 md=1 responses have rpx>1",
+          "no md=0 or md=2 response has rpx>1"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-SS0-CONTINUATION",
+      "category": "CROSS_REQUEST_STATE_MACHINE",
+      "status": "UNKNOWN",
+      "reason": "Frontend code confirms the ss=0 transition path, but ss is absent from all 5087 original responses and no adjacent runtime chain or terminal pair exists; generation remains disabled.",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-FRONTEND-EXTRACT",
+        "E-RUNTIME-STEPS",
+        "E-FIELD-MATRIX",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "knownContract": {
+        "preconditions": [
+          "a result contains ss=0"
+        ],
+        "stateFields": [
+          "ss",
+          "spin_status",
+          "win_match_key_list",
+          "RemoveBlockNums",
+          "bl",
+          "bs",
+          "t",
+          "gid",
+          "activeRound"
+        ],
+        "transitionRules": [
+          "spin_status=!ss",
+          "onPlaySymbol animates winning symbols",
+          "onPlayRemoveBlock calls onReqSpin",
+          "onReqSpin reuses current bl/bs/session",
+          "adjacent response remains in the same Round"
+        ],
+        "outputs": [
+          "ordered adjacent Spin response chain"
+        ],
+        "terminationRules": [
+          "terminate only when a later response has ss absent/nonzero"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-RAW",
+          "E-RUNTIME-STEPS",
+          "E-FIELD-MATRIX"
+        ],
+        "assertions": [
+          "code branch exists",
+          "ss is absent from all 5087 original responses",
+          "runtime generation and forced scenario must remain disabled"
+        ],
+        "adjacentStepEvidence": {
+          "status": "MISSING_RUNTIME_SAMPLE",
+          "codeSequence": "CurGameResult spin_status=!ss -> onPlaySymbol -> symbol removal checkOver -> onPlayRemoveBlock -> onReqSpin -> Spin",
+          "missingOriginalEvidence": "No ss=0 start, adjacent response, retrigger or terminal pair was captured."
+        },
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HISTORY-LIST-VIEW",
+      "category": "HISTORY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-FRONTEND-EXTRACT",
+        "E-HISTORY-LIST",
+        "E-HISTORY-VIEW",
+        "E-FIELD-MATRIX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "authenticated game token",
+          "gid=43",
+          "requested date range"
+        ],
+        "stateFields": [
+          "page_index",
+          "begin_at",
+          "end_at",
+          "ll",
+          "lc",
+          "tis",
+          "bid",
+          "transfer_id",
+          "baf",
+          "balance_after"
+        ],
+        "transitionRules": [
+          "POST log-list with page/date/session fields",
+          "select list-row tis",
+          "POST log-view with transfer_id=tis",
+          "render returned Spin-detail fields"
+        ],
+        "outputs": [
+          "history summary page",
+          "matching history detail"
+        ],
+        "terminationRules": [
+          "list ends according to end pagination field",
+          "detail completes when bid/transfer selection matches"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-HISTORY-LIST",
+          "E-HISTORY-VIEW",
+          "E-FRONTEND-RAW"
+        ],
+        "assertions": [
+          "list ll[0].tis=2093574273144356864",
+          "view bid=43-2093574273144356864",
+          "view baf=balance_after=pb=56786.99",
+          "view contains the original result fields"
+        ],
+        "adjacentStepEvidence": [
+          "E-HISTORY-LIST ll[0] selects tis 2093574273144356864 -> E-HISTORY-VIEW returns bid 43-2093574273144356864 and matching settled balance."
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-BALANCE-SETTLEMENT",
+      "category": "CROSS_ROUND_STATE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-STEPS",
+        "E-PRE-CORRECTION-STEPS",
+        "E-CAPTURE-GAPS",
+        "E-HISTORY-LIST",
+        "E-HISTORY-VIEW",
+        "E-FIELD-MATRIX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "known prior settled balance",
+          "one paid result with ba and wa"
+        ],
+        "stateFields": [
+          "previous pb",
+          "ba",
+          "wa",
+          "current pb",
+          "baf",
+          "balance_after"
+        ],
+        "transitionRules": [
+          "current pb=previous pb-ba+wa for adjacent uninterrupted paid requests",
+          "frontend replaces displayed coins with pb",
+          "history detail mirrors settled pb in baf/balance_after"
+        ],
+        "outputs": [
+          "post-settlement balance as a decimal string"
+        ],
+        "terminationRules": [
+          "balance update commits once per complete paid Round",
+          "do not infer across documented transport/session gaps"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RUNTIME-STEPS",
+          "E-CAPTURE-GAPS",
+          "E-HISTORY-VIEW",
+          "E-FIELD-MATRIX"
+        ],
+        "assertions": [
+          "5084/5086 adjacent response pairs satisfy the recurrence",
+          "two exceptions align with documented transport/session gaps",
+          "history baf/balance_after/pb agree"
+        ],
+        "adjacentStepEvidence": [
+          "captureSeq 40 pb=14255.99 -> captureSeq 41 ba=1,wa=0,pb=14254.99",
+          "two non-matching pairs remain gaps and were not fabricated"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-RULES-PAYTABLE-UI",
+      "category": "UI_LAZY_LOAD",
+      "status": "UNKNOWN",
+      "reason": "Rule/paytable assets and code are archived, but the live Canvas click and return sequence was not safely observed, so the complete UI behavior is not confirmed.",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RESOURCE-INVENTORY",
+        "E-RULE-RAW",
+        "E-RULE-EXTRACT",
+        "E-FRONTEND-RAW",
+        "E-UI-ATTEMPT",
+        "E-STATIC-PUBLISH-VALIDATION"
+      ],
+      "knownContract": {
+        "preconditions": [
+          "game Canvas loaded"
+        ],
+        "stateFields": [
+          "menu state",
+          "rules prefab",
+          "paytable prefab",
+          "locale"
+        ],
+        "transitionRules": [
+          "open settings menu",
+          "open rules or paytable",
+          "load current localized assets",
+          "close returns to game"
+        ],
+        "outputs": [
+          "rule text and paytable UI"
+        ],
+        "terminationRules": [
+          "close returns to main game"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULE-RAW",
+          "E-RULE-EXTRACT",
+          "E-UI-ATTEMPT",
+          "E-STATIC-PUBLISH-VALIDATION"
+        ],
+        "assertions": [
+          "rule/paytable assets and localized strings are archived",
+          "live coordinate click was not safely verified",
+          "static publish contains the assets"
+        ],
+        "adjacentStepEvidence": {
+          "status": "MISSING_LIVE_CANVAS_CLICK",
+          "availableEvidence": "E-UI-ATTEMPT plus archived prefab/rule assets",
+          "reason": "The unverified Canvas coordinate could not be proven distinct from a wager control after capture stop."
+        },
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-FEATURE-PURCHASE-ABSENT",
+      "category": "CAPABILITY_NEGATIVE",
+      "status": "NOT_APPLICABLE",
+      "reason": "No feature-purchase rule, entry, endpoint or frontend behavior was discovered in the current game's rule asset, resource inventory or main bundle.",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RESOURCE-INVENTORY",
+        "E-RULE-RAW",
+        "E-FRONTEND-RAW"
+      ],
+      "disposition": "No feature-purchase entry, endpoint, rule or code behavior was found in the current game. Do not implement or advertise one."
+    },
+    {
+      "id": "B-BETGT1-MATRIX-UNLOCK",
+      "category": "BET_BEHAVIOR",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-BETGT1-FOLLOWUP"
+      ],
+      "implementationContract": {
+        "preconditions": ["request bet level is below 5 or at least 5"],
+        "stateFields": ["bl", "bs", "ba", "md", "rskl", "fwi", "fwa", "wa", "pb"],
+        "transitionRules": [
+          "bet<5 selects the two-position locked profile and excludes md=3",
+          "bet>=5 selects the three-position unlocked profile where md=0/1/2 remain available and md=3 may occur",
+          "md=2 and md=3 display switches remain embedded in the one claimed complete Round"
+        ],
+        "outputs": ["one threshold-compatible terminal Spin response"],
+        "terminationRules": ["one response settles the paid Round; the next Spin is a new paid Round"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-BETGT1-FOLLOWUP", "E-RUNTIME-STEPS"],
+        "assertions": [
+          "100/100 original level-5 Rounds use three rskl positions",
+          "MD3 occurs only in generated bet>=5 Rounds and never in generated bet<5 Rounds",
+          "sequence 20 and 40 satisfy wa=score(rskl)+fwa and their next responses are independently paid"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "contract": [
+        {
+          "matrix": "MD0_ORDINARY",
+          "observed": 82,
+          "unlock": "Available at selected bet level 5.",
+          "switch": "No feature-display switch.",
+          "end": "Terminal in the same response; the next response is an independently paid Round."
+        },
+        {
+          "matrix": "MD1_MULTIPLIER_WHEEL",
+          "observed": 15,
+          "unlock": "2x and 5x are already unlocked at level 1 and remain available at level 5.",
+          "switch": "Base rskl result is multiplied by response rpx=2 or 5; fws=fsk names the multiplier.",
+          "end": "Terminal in the same response; no adjacent continuation request."
+        },
+        {
+          "matrix": "MD2_RESPIN",
+          "observed": 1,
+          "unlock": "RESPIN is already unlocked at level 1 and remains available at level 5.",
+          "switch": "Within one response, display switches from base rskl to embedded fwi; fws=fsk=RS.",
+          "end": "Terminal after the embedded display phase in the same HTTP response."
+        },
+        {
+          "matrix": "MD3_SCATTER_LUCKY_WHEEL",
+          "observed": 2,
+          "unlock": "Original UI explicitly unlocks SCATTER at bet level 5.",
+          "switch": "Within one response, base rskl award switches to the SCAT Lucky Wheel scalar reward fwi=fwa.",
+          "end": "wa=score(rskl)+fwa and the following response is an independently paid Round.",
+          "exactEvidence": [
+            {
+              "sequence": 20,
+              "rskl": [
+                "H4",
+                "H4",
+                "H3"
+              ],
+              "baseAward": 551,
+              "fws": "SCAT",
+              "fsk": "SCAT",
+              "fwi": [
+                "150"
+              ],
+              "fwa": 150,
+              "wa": 701,
+              "payoutMatches": true,
+              "nextSequence": 21,
+              "nextIsIndependentPaidRound": true
+            },
+            {
+              "sequence": 40,
+              "rskl": [
+                "H4",
+                "H1",
+                "H1"
+              ],
+              "baseAward": 500,
+              "fws": "SCAT",
+              "fsk": "SCAT",
+              "fwi": [
+                "50"
+              ],
+              "fwa": 50,
+              "wa": 550,
+              "payoutMatches": true,
+              "nextSequence": 41,
+              "nextIsIndependentPaidRound": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "U-SS0-RUNTIME",
+      "behaviorId": "B-SS0-CONTINUATION",
+      "status": "SAMPLE_INSUFFICIENT",
+      "blocksGeneration": false,
+      "reason": "Code confirms the transition but ss is absent from all original responses; no adjacent chain exists.",
+      "requiredDisposition": "Keep generation disabled; preserve the state-machine interface and never count a future continuation as a new paid Round.",
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-STEPS",
+        "E-SCENARIO-COVERAGE"
+      ]
+    },
+    {
+      "id": "U-ORIGINAL-ROUND-ID",
+      "status": "UNKNOWN",
+      "blocksGeneration": false,
+      "reason": "Spin responses have no bid, tis or roundId; local roundId is collector-generated.",
+      "requiredDisposition": "Do not claim an original round identifier. Use local server state identifiers only as implementation metadata.",
+      "evidenceRefs": [
+        "E-RUNTIME-STEPS",
+        "E-HISTORY-LIST",
+        "E-HISTORY-VIEW",
+        "E-FIELD-MATRIX"
+      ]
+    },
+    {
+      "id": "U-CONDITIONAL-FIELDS",
+      "status": "UNKNOWN",
+      "blocksGeneration": false,
+      "reason": "ss, wmkl, rwa, frwa and fbt are absent from all 5187 original Spin responses including the exact 100 level-5 follow-up; limited frontend reads exist.",
+      "requiredDisposition": "Do not guess or generate these fields except the disabled ss interface described above.",
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-RUNTIME-STEPS",
+        "E-FIELD-MATRIX"
+      ]
+    },
+    {
+      "id": "U-REDIS-CONTRACT",
+      "status": "RESOLVED_INTERNAL_DOWNSTREAM_CONTRACT",
+      "blocksGeneration": false,
+      "reason": "Redis is not an original browser field; the platform consumer contract is implemented with a Lucky Wheel-specific compact fact codec and independently revalidated.",
+      "requiredDisposition": "Keep the platform key shapes, claim exactly one complete-round member, and decode/recompute it with the current game's ResultUtil.",
+      "evidenceRefs": [
+        "E-FIELD-MATRIX",
+        "E-REDIS-VALIDATION",
+        "E-MINIMAL-FACT-CODEC"
+      ]
+    },
+    {
+      "id": "U-SERVER-SYMBOL-WEIGHTS",
+      "status": "UNKNOWN",
+      "blocksGeneration": false,
+      "reason": "Frontend SymbolWeightsList is presentation evidence only and sample frequency cannot establish server RNG weights.",
+      "requiredDisposition": "Do not claim original RTP. Any runtime weights must remain explicitly labeled local replica controls and must not enable unobserved modes.",
+      "evidenceRefs": [
+        "E-FRONTEND-RAW",
+        "E-FIELD-MATRIX",
+        "E-GENERATOR-PROPERTIES"
+      ]
+    },
+    {
+      "id": "U-RULES-UI-CLICK",
+      "behaviorId": "B-RULES-PAYTABLE-UI",
+      "status": "SOFT_GAP",
+      "blocksGeneration": false,
+      "reason": "Archived rule/paytable assets are complete, but the live Canvas click/return sequence was not safely executed.",
+      "requiredDisposition": "Do not repeat betting or external login; later local UI acceptance may validate the click path using publish assets.",
+      "evidenceRefs": [
+        "E-RULE-RAW",
+        "E-RULE-EXTRACT",
+        "E-UI-ATTEMPT",
+        "E-STATIC-PUBLISH-VALIDATION"
+      ]
+    }
+  ],
+  "betGreaterThanOneFollowup": {
+    "status": "PASS_EXACT_100_BET_GT_1_AND_HISTORY_CLOSED",
+    "qualifyingRounds": 100,
+    "counts": {
+      "MD0": 82,
+      "MD1": 15,
+      "MD2": 1,
+      "MD3": 2,
+      "WIN": 15,
+      "LOSS": 85,
+      "RPX_GT1": 15,
+      "SS0": 0
+    },
+    "absentAfterExactly100": [
+      {
+        "id": "SS0_CONTINUATION",
+        "observed": 0,
+        "disposition": "RECORDED_ABSENT_NO_EXTRA_SPINS"
+      }
+    ],
+    "historyClosed": true,
+    "replicationChangesMade": true
+  }
+}

@@ -1,0 +1,643 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 56,
+  "directoryName": "56-Crazy-Piggy",
+  "gameName": "Crazy Piggy",
+  "generatedAt": "2026-09-07T16:17:06.087Z",
+  "rulesVersion": "v1.5.10.250430",
+  "rulesHash": "7edd2945da54923875932aa9feb1bfd657c9c67cca832637060f8419573480ab",
+  "status": "READY_FOR_IMPLEMENTATION",
+  "scope": "还原当前游戏的入口认证、配置、Spin、历史代码契约、字段语义、余额变化、固定赔付线与完整 Round/Delivery/Step 状态机；本文件不定义 Java 实现。",
+  "identity": {
+    "idName": "56-Crazy-Piggy",
+    "cpGameId": 56,
+    "lobbyProviderGameId": 454,
+    "name": "Crazy Piggy",
+    "evidence": [
+      "captures/56-Crazy-Piggy/account-and-game-match.json",
+      "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js"
+    ]
+  },
+  "transport": {
+    "apiOrigin": "https://api.omgapibra.com",
+    "method": "POST",
+    "requestContentType": "application/x-www-form-urlencoded",
+    "requestEncoding": "UTF-8 percent-encoded form fields; spaces are encoded as +",
+    "headerAliasToBodyField": {
+      "web-token": "t",
+      "game-id": "gid"
+    },
+    "responseEncoding": "UTF-8 JSON",
+    "successEnvelope": {
+      "code": 200,
+      "info": "ok",
+      "payloadField": "data"
+    },
+    "applicationEncryption": "NONE_OBSERVED",
+    "applicationSignature": "NONE_OBSERVED",
+    "networkSecurity": "HTTPS",
+    "notes": [
+      "Http.js 把调用方传入的 web-token/game-id 别名写入表单字段 t/gid，并未把它们作为真实 HTTP Header 发送。",
+      "没有发现 Spin 请求或响应的额外加密、压缩、签名或二进制编解码层；不得据此推断站点其他游戏。",
+      "Token 只在采集进程内使用，所有持久化证据均已脱敏。"
+    ],
+    "evidence": [
+      "captures/56-Crazy-Piggy/source-modules/Http.js",
+      "captures/56-Crazy-Piggy/source-modules/GameApi.js",
+      "fixtures/56-Crazy-Piggy/first-load-en-api.json",
+      "fixtures/56-Crazy-Piggy/round-steps.jsonl"
+    ]
+  },
+  "endpointSequence": {
+    "requiredOrder": [
+      "POST /cp/api/v1/auth/verify",
+      "POST /cp/api/v1/crazy-piggy/config",
+      "POST /cp/api/v1/crazy-piggy/spin"
+    ],
+    "tokenTransition": "入口 URL 的 launch token 只用于 auth/verify；verify.data.token 是 config、spin、history 和可选 ping 使用的 runtime web token。",
+    "optionalAfterConfig": [
+      "POST /cp/api/v1/crazy-piggy/log-list",
+      "POST /cp/api/v1/crazy-piggy/log-view",
+      "POST /cp/api/v1/ping when verify.data.ping.enable is nonzero"
+    ],
+    "telemetryDisposition": "首次加载还出现 /api/report/timing，但它不是游戏状态或派奖协议，不进入本地结果 API 契约。",
+    "evidence": [
+      "captures/56-Crazy-Piggy/first-load-en-network.json",
+      "fixtures/56-Crazy-Piggy/first-load-en-api.json",
+      "captures/56-Crazy-Piggy/source-modules/Main.js",
+      "captures/56-Crazy-Piggy/source-modules/GameApi.js"
+    ]
+  },
+  "endpoints": [
+    {
+      "id": "auth.verify",
+      "path": "/cp/api/v1/auth/verify",
+      "requestFields": {
+        "ai": "当前入口采样为 luck_single_10229；平台入口参数，不能硬编码为跨环境常量",
+        "btt": "当前入口采样为字符串 1；语义未由当前代码进一步解释",
+        "t": "入口 launch token",
+        "gid": "CP 游戏 ID，固定为 56"
+      },
+      "responseFields": {
+        "player.id": "玩家数字 ID",
+        "player.balance": "认证时余额，十进制字符串",
+        "token": "后续请求使用的 runtime web token",
+        "ping.enable": "心跳开关；当前采样为 0",
+        "ping.seconds": "心跳间隔；当前采样为 0",
+        "rc": "已捕获配置对象，字段 on/v 的业务语义未确认",
+        "gc": "已捕获配置对象，字段 os/om 的业务语义未确认"
+      },
+      "captureStatus": "CAPTURED"
+    },
+    {
+      "id": "game.config",
+      "path": "/cp/api/v1/crazy-piggy/config",
+      "requestFields": {
+        "t": "runtime web token",
+        "gid": "56"
+      },
+      "responseFields": {
+        "auto": "可选自动局数列表 [10,30,50,100,500]",
+        "bll": "Bet Level 列表 [1..10]",
+        "bsl": "Bet Size 列表 [0.5,5,50]",
+        "dbl": "默认 Bet Level，当前采样 50；前端找不到该值时回退索引 0，因此不得把它解释为赔付线数",
+        "dbs": "默认 Bet Size，当前采样 0.5",
+        "cc": "币种代码 BRL",
+        "cs": "币种符号 R$",
+        "spl": "符号赔付表",
+        "last": "最近一次结果快照；前端可恢复棋盘、下注档位和展示状态",
+        "ts": "服务端秒级时间戳"
+      },
+      "captureStatus": "CAPTURED"
+    },
+    {
+      "id": "game.spin",
+      "path": "/cp/api/v1/crazy-piggy/spin",
+      "requestFields": {
+        "t": "runtime web token",
+        "gid": "56",
+        "bl": "Bet Level；最低押注采集为 1",
+        "bs": "Bet Size；最低押注采集为 0.5",
+        "ec": "仅通用活动分支代码可附加；当前游戏规则与 1392 局样本未确认该模式"
+      },
+      "responseFieldsRef": "fieldSemantics.spin",
+      "captureStatus": "CAPTURED_1392_COMPLETE_ROUNDS"
+    },
+    {
+      "id": "history.list",
+      "path": "/cp/api/v1/crazy-piggy/log-list",
+      "requestFields": {
+        "t": "runtime web token",
+        "gid": "56",
+        "page_index": "从 1 开始的页号",
+        "begin_at": "查询起始 Unix 秒",
+        "end_at": "查询结束 Unix 秒"
+      },
+      "codeExpectedResponseFields": {
+        "lc": "汇总 Spin 数",
+        "ba": "汇总投注额",
+        "wa": "汇总派奖额",
+        "end": "分页终止标志，0 表示前端继续加页",
+        "ll": "历史列表；代码读取每项 tis/ba/ca/wa/gt"
+      },
+      "captureStatus": "CODE_ENUMERATED_NO_RAW_RESPONSE",
+      "implementationDisposition": "请求契约可按代码保留；响应形态不得在获得当前游戏原始样本前宣称完全确认。"
+    },
+    {
+      "id": "history.detail",
+      "path": "/cp/api/v1/crazy-piggy/log-view",
+      "requestFields": {
+        "t": "runtime web token",
+        "gid": "56",
+        "transfer_id": "历史列表项 tis"
+      },
+      "codeExpectedResponseFields": "ba, bl, bs, ca, fwa, fwtl, fwxl, gm, rpx, rskl, rwa, ss, wa, wsk, wmkl",
+      "captureStatus": "CODE_ENUMERATED_NO_RAW_RESPONSE",
+      "implementationDisposition": "字段仅为当前前端消费清单，不等同于已捕获响应 schema。"
+    },
+    {
+      "id": "heartbeat",
+      "path": "/cp/api/v1/ping",
+      "requestFields": {
+        "t": "runtime web token",
+        "gid": "56"
+      },
+      "captureStatus": "CODE_ENUMERATED_DISABLED_BY_CAPTURED_PING_CONFIG"
+    }
+  ],
+  "fieldSemantics": {
+    "configLast": {
+      "ba": "上局投注额",
+      "bl": "上局 Bet Level",
+      "bs": "上局 Bet Size",
+      "ca": "秒级创建时间戳",
+      "fwa": "上局 Booster Wheel 增量派奖；普通局为 0",
+      "fwtl": "上局轮盘落点序列",
+      "fwxl": "上局轮盘非终止步骤倍率序列",
+      "gm": "0 普通，1 Booster Wheel",
+      "gt": "捕获为 1，具体业务枚举未由当前前端判定",
+      "pb": "该结果完成后的余额",
+      "rskl": "按列展开的 9 个符号",
+      "small_game_type": "0 普通，2 Booster Wheel",
+      "wa": "该完整局总派奖",
+      "wmkl": "线路号到中奖符号的映射"
+    },
+    "spin": {
+      "ba": "本次付费 Round 总投注额；最低档全部为 0.5",
+      "pb": "完整 Round 已扣注并计入全部 wa 后的余额，十进制字符串",
+      "rskl": "长度 9 的当前结果，按列展开：index=column*3+row",
+      "wa": "完整 Round 总派奖；Booster Wheel 时已包含初始五线奖和全部轮盘增量",
+      "wmkl": "线路号 0..4 到中奖符号的稀疏映射；无奖为 []，稀疏普通赢可为 JSON object，五线全中可为数组",
+      "gm": "游戏模式：0=普通，1=Booster Wheel",
+      "small_game_type": "当前样本严格对应 0=普通、2=Booster Wheel；前端未直接解释该字段",
+      "fwa": "Booster Wheel 相对初始五线奖增加的金额；普通局为 0",
+      "fwtl": "轮盘落点序列；最后一个元素是终止落点，序列由前端本地逐项消费",
+      "fwxl": "每个非终止轮盘落点对应的派奖倍率；长度恒为 fwtl.length-1",
+      "rpx": "通用代码映射为中奖倍率，但 1392 个当前 Spin 响应均不存在",
+      "rdri": "通用代码映射为重转列索引，但规则和 1392 个当前 Spin 响应均不存在",
+      "fbt": "通用免费次数入口；1392 个当前 Spin 响应均不存在"
+    }
+  },
+  "boardModel": {
+    "reels": 3,
+    "rowsPerReel": [
+      3,
+      3,
+      3
+    ],
+    "visibleCells": 9,
+    "flattening": "COLUMN_MAJOR",
+    "indexFormula": "column*3+row",
+    "protocolBufferCells": 0,
+    "frontendAnimationBufferDisposition": "GameGlobalConfig 的 BlockNums/QuickBlockNums/SpecailBlockNums 只控制动画填充，不属于 rskl 或服务端棋盘。",
+    "symbolsConfirmedInRuntime": [
+      "HOT",
+      "SEV",
+      "H2",
+      "H3",
+      "H4",
+      "H5",
+      "H6",
+      "H7"
+    ]
+  },
+  "winEvaluation": {
+    "type": "FIXED_PAYLINES",
+    "paylineCount": 5,
+    "routes": {
+      "0": {
+        "code": "PL0001",
+        "rowsByColumn": [
+          0,
+          0,
+          0
+        ],
+        "rsklIndices": [
+          0,
+          3,
+          6
+        ]
+      },
+      "1": {
+        "code": "PL0002",
+        "rowsByColumn": [
+          1,
+          1,
+          1
+        ],
+        "rsklIndices": [
+          1,
+          4,
+          7
+        ]
+      },
+      "2": {
+        "code": "PL0003",
+        "rowsByColumn": [
+          2,
+          2,
+          2
+        ],
+        "rsklIndices": [
+          2,
+          5,
+          8
+        ]
+      },
+      "3": {
+        "code": "PL0004",
+        "rowsByColumn": [
+          0,
+          1,
+          2
+        ],
+        "rsklIndices": [
+          0,
+          4,
+          8
+        ]
+      },
+      "4": {
+        "code": "PL0005",
+        "rowsByColumn": [
+          2,
+          1,
+          0
+        ],
+        "rsklIndices": [
+          2,
+          4,
+          6
+        ]
+      }
+    },
+    "paytable": {
+      "HOT": 200,
+      "SEV": 50,
+      "H2": 20,
+      "H3": 10,
+      "H4": 8,
+      "H5": 5,
+      "H6": 3,
+      "H7": 1
+    },
+    "lineAwardFormula": "symbolPay * bs * bl",
+    "roundAwardFormula": "sum(lineAward for every key present in wmkl)",
+    "betAmountFormula": "ba = bs * bl；五条固定线全部包含在该总投注中，不再乘以 5",
+    "highestPerLineOnly": true,
+    "wildDisposition": "paytable 文本含通用 Wild 替代说明，但当前 spl、SymbolList、规则的 8 个常规符号和 1392 局均无 WILD；当前能力不得生成 WILD。",
+    "evidence": [
+      "resources/56-Crazy-Piggy/en/extracted-rules/gameRules.json",
+      "resources/56-Crazy-Piggy/en/extracted-rules/paytable.json",
+      "fixtures/56-Crazy-Piggy/first-load-en-api.json",
+      "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js",
+      "captures/56-Crazy-Piggy/source-modules/HistoryData.js",
+      "fixtures/56-Crazy-Piggy/round-steps.jsonl"
+    ]
+  },
+  "balanceAccounting": {
+    "verifyBalanceField": "auth.verify.data.player.balance",
+    "postRoundBalanceField": "spin.data.pb",
+    "equation": "nextPb = previousPb - ba + wa",
+    "verifiedAdjacentTransitionCount": 1304,
+    "mismatchCount": 0,
+    "firstTransition": "verify balance 1156.40 -> cp56-00001 pb 1155.90 with ba=0.50 and wa=0",
+    "wheelSettlement": "Booster Wheel 的全部 fwa 已包含在同一响应 wa 与 pb 中，不存在逐轮盘 Step 的余额请求或中间余额。",
+    "dedicatedBalanceEndpoint": "NOT_ENUMERATED_OR_OBSERVED"
+  },
+  "roundStateMachine": {
+    "roundUnit": "一次授权付费 Spin 起点及其响应中全部本地 Delivery/Step，直到前端回到 Wait",
+    "states": [
+      {
+        "id": "SESSION_UNVERIFIED",
+        "terminal": false
+      },
+      {
+        "id": "SESSION_READY",
+        "terminal": false
+      },
+      {
+        "id": "PAID_REQUEST_IN_FLIGHT",
+        "terminal": false
+      },
+      {
+        "id": "ORDINARY_RESULT_DELIVERY",
+        "terminal": false
+      },
+      {
+        "id": "BOOSTER_BASE_DELIVERY",
+        "terminal": false
+      },
+      {
+        "id": "BOOSTER_WHEEL_STEP",
+        "terminal": false
+      },
+      {
+        "id": "ROUND_COMPLETE",
+        "terminal": true
+      }
+    ],
+    "transitions": [
+      {
+        "from": "SESSION_UNVERIFIED",
+        "event": "verify success then config success",
+        "to": "SESSION_READY"
+      },
+      {
+        "from": "SESSION_READY",
+        "event": "paid spin(bl,bs,t,gid)",
+        "to": "PAID_REQUEST_IN_FLIGHT"
+      },
+      {
+        "from": "PAID_REQUEST_IN_FLIGHT",
+        "guard": "gm=0",
+        "to": "ORDINARY_RESULT_DELIVERY"
+      },
+      {
+        "from": "ORDINARY_RESULT_DELIVERY",
+        "event": "reels and optional paylines finish",
+        "to": "ROUND_COMPLETE"
+      },
+      {
+        "from": "PAID_REQUEST_IN_FLIGHT",
+        "guard": "gm=1",
+        "to": "BOOSTER_BASE_DELIVERY"
+      },
+      {
+        "from": "BOOSTER_BASE_DELIVERY",
+        "event": "initial five-line award shown",
+        "to": "BOOSTER_WHEEL_STEP"
+      },
+      {
+        "from": "BOOSTER_WHEEL_STEP",
+        "guard": "a next fwtl position exists",
+        "event": "consume next embedded position and matching non-terminal fwxl when applicable",
+        "to": "BOOSTER_WHEEL_STEP"
+      },
+      {
+        "from": "BOOSTER_WHEEL_STEP",
+        "guard": "no next fwtl position",
+        "event": "TurnTable.onHideTurnTable -> GameLogic.onGameEnd",
+        "to": "ROUND_COMPLETE"
+      },
+      {
+        "from": "ROUND_COMPLETE",
+        "event": "frontend returns to Wait",
+        "to": "SESSION_READY"
+      }
+    ],
+    "networkBoundary": "所有1392局均只有1个Spin HTTP请求；Booster Wheel的1..7个fwtl Step是同一响应内的Delivery。",
+    "persistentStateFields": [
+      "runtimeToken",
+      "playerBalance",
+      "currentBetSizeIndex",
+      "currentBetLevelIndex",
+      "lastResult"
+    ],
+    "roundStateFields": [
+      "roundId",
+      "ba",
+      "pb",
+      "rskl",
+      "wa",
+      "wmkl",
+      "gm",
+      "small_game_type",
+      "fwa",
+      "fwtl",
+      "fwxl",
+      "wheelIndex"
+    ],
+    "illegalTransitions": [
+      "没有 active Round 时不得请求轮盘后续网络 Step，因为当前协议不存在此端点。",
+      "轮盘 Delivery 未消费完时不得领取新的完整 Round 结果。",
+      "不得把 fwtl 的任何位置写成 spin-index.jsonl 新行。"
+    ]
+  },
+  "boosterWheel": {
+    "trigger": "rskl 九格为同一符号，且该符号不是 HOT 或 SEV",
+    "responseDiscriminators": {
+      "gm": 1,
+      "small_game_type": 2
+    },
+    "initialBaseAward": "5 * symbolPay * bs * bl",
+    "supplementalAward": "fwa = initialBaseAward * sum(fwxl)",
+    "totalAward": "wa = initialBaseAward + fwa",
+    "wheelPositions": {
+      "initialWinZones": [
+        0,
+        2,
+        3,
+        4,
+        7
+      ],
+      "initialEndZones": [
+        1,
+        5
+      ],
+      "boosterZone": 6,
+      "terminalRule": "最后落点不在 fwxl 中；已命中的 Win/Booster 区转为 End，因此最终落点可以是 0..7 的任一位置。"
+    },
+    "capturedInvariants": {
+      "completeRoundCount": 39,
+      "allNineIdentical": 37,
+      "excludedHOTOrSEVTriggerCount": 0,
+      "fwtlLengthRange": [
+        1,
+        7
+      ],
+      "fwxlLengthRange": [
+        2,
+        6
+      ],
+      "lengthEquationMismatchCount": 0,
+      "awardEquationMismatchCount": 0,
+      "capturedFwxlValues": [
+        1,
+        2
+      ]
+    },
+    "rareBranchDisposition": "39个完整轮盘局的wire均只出现fwxl=1/2；服务端复刻以真实wire与结算为准，原前端递增显示差异记录为非阻塞原版表现。",
+    "representativeAdjacentEvidence": [
+      {
+        "roundId": "cp56-00105",
+        "fwtl": [
+          0,
+          4,
+          6,
+          3,
+          7,
+          5
+        ],
+        "fwxl": [
+          1,
+          1,
+          1,
+          2,
+          2
+        ],
+        "initialBaseAward": 20,
+        "fwa": 140,
+        "wa": 160
+      },
+      {
+        "roundId": "cp56-00178",
+        "fwtl": [
+          0,
+          6,
+          4,
+          2,
+          1
+        ],
+        "fwxl": [
+          1,
+          1,
+          2,
+          2
+        ],
+        "initialBaseAward": 25,
+        "fwa": 150,
+        "wa": 175
+      }
+    ]
+  },
+  "errorSemantics": {
+    "frontendSuccessRule": "HTTP 2xx 且 JSON code 等于字符串/数字 200；返回 data 或空对象。",
+    "frontendFailureRule": "HTTP 非 2xx、JSON code 非 200 或非 JSON均拒绝 Promise；401 会停止心跳。",
+    "capturedWrongToken": {
+      "httpStatus": 200,
+      "bodyShape": {
+        "dt": null,
+        "err": {
+          "cd": "1002",
+          "msg": "Authorization failed, please try again.",
+          "tid": "per-request trace id"
+        }
+      },
+      "effect": "未形成合法付费 Round，未写入最终 spin-index.jsonl；不得扣注或重试为同一已知结果。",
+      "frontendCompatibilityNote": "当前 Http.js 不直接解析 err.cd envelope，会回退为 HTTP200 类错误；本地兼容层若暴露原始 cd=1002，必须保留失败语义。"
+    },
+    "insufficientBalance": "前端在发 Spin 前检查余额并显示本地错误；未捕获服务端不足余额错误码，禁止猜测。"
+  },
+  "sampleIndex": {
+    "ordinaryLoss": [
+      "fixtures/56-Crazy-Piggy/round-steps.jsonl#cp56-00001"
+    ],
+    "ordinaryWin": [
+      "fixtures/56-Crazy-Piggy/round-steps.jsonl#cp56-00005"
+    ],
+    "paylineExamples": {
+      "0": "cp56-00005",
+      "1": "cp56-00005",
+      "2": "cp56-00005",
+      "3": "cp56-00038",
+      "4": "cp56-00020"
+    },
+    "boosterWheel": [
+      "cp56-00105",
+      "cp56-00178"
+    ],
+    "balanceAdjacentTriplet": [
+      "cp56-00104",
+      "cp56-00105",
+      "cp56-00106"
+    ],
+    "fullRoundIndex": "captures/56-Crazy-Piggy/spin-index.jsonl"
+  },
+  "unresolved": [
+    {
+      "id": "U-HISTORY-RAW-RESPONSE",
+      "status": "CODE_ONLY_NO_RAW_FIXTURE",
+      "workflowImpact": "NONE_FOR_ROUND_GENERATION",
+      "safeAction": "保留端点与请求字段；响应字段在新证据出现前保持部分确认。"
+    },
+    {
+      "id": "U-WHEEL-FWXL-GT2",
+      "status": "RARE_NOT_CAPTURED_CAP_POLICY",
+      "workflowImpact": "NON_BLOCKING",
+      "safeAction": "不得用合成或其他游戏样本冒充；按规则、前端代码与已捕获公式分别测试，保留稀有分支标记。"
+    },
+    {
+      "id": "U-RPX-RDRI-FBT",
+      "status": "GENERIC_CODE_ONLY_NOT_CURRENT_CAPABILITY",
+      "workflowImpact": "NONE",
+      "safeAction": "不生成、不对外声明为当前玩法。"
+    },
+    {
+      "id": "U-WILD-AVAILABILITY",
+      "status": "CONFLICTING_GENERIC_TEXT_NO_RUNTIME_SYMBOL",
+      "workflowImpact": "NONE",
+      "safeAction": "当前生成器不得输出 WILD，除非获得当前 spl/SymbolList/Spin 新证据。"
+    }
+  ],
+  "prohibitions": [
+    "fixtures 仅作为协议 oracle，不能成为运行时结果源。",
+    "不得把 Bet Level、dbl 或 GameConfig.PayLineCount=1 猜成赔付线数；固定赔付线数为有证据的 5。",
+    "不得把轮盘嵌入 Step 重复计为付费 Round。",
+    "不得从前端动画 SymbolWeightsList 推导服务端生成权重。",
+    "不得猜测 Redis Key、编码长度或历史响应中未捕获字段。"
+  ],
+  "redisContract": {
+    "status": "IMPLEMENTED_LOCAL_REPLICA_CONTRACT",
+    "host": "192.168.10.3",
+    "port": 6379,
+    "database": 15,
+    "normalIndex": "PerKeyList_%09d",
+    "specialIndex": "MaryKeyList_%09d",
+    "normalList": "BetLog:0%08d:%06d",
+    "specialList": "MaryLog:%09d:%06d",
+    "memberEncoding": "CP56A1_MINIMAL_US_ASCII",
+    "memberBoundary": "ONE_COMPLETE_PAID_ROUND_WITH_ALL_EMBEDDED_DELIVERY_STEPS",
+    "claimCountPerRuntimeRound": 1,
+    "selection": "OUTCOME_THEN_EXISTING_INTEGER_MULTIPLIER",
+    "emptyBehavior": "FAIL_CLOSED_503",
+    "evidence": [
+      "generator/56-Crazy-Piggy/src/main/java/com/cpgame/crazypiggy/generator/MinimalRoundFactCodec.java",
+      "server-api/56-Crazy-Piggy/src/main/java/com/cpgame/crazypiggy/server/RedisRoundStore.java"
+    ]
+  },
+  "behaviorIds": [
+    "B-ENTRY-IDENTITY",
+    "B-LANGUAGE-FIRST-LOAD",
+    "B-HTTP-CODEC",
+    "B-SESSION-INIT",
+    "B-CONFIG-RESTORE",
+    "B-ORDINARY-LOSS",
+    "B-ORDINARY-WIN",
+    "B-FIXED-PAYLINE-WIN",
+    "B-BALANCE-ACCOUNTING",
+    "B-BOOSTER-WHEEL",
+    "B-RULES-PAYTABLE-LAZY",
+    "B-AUTH-REJECTION",
+    "B-HISTORY-READ",
+    "B-REDIS-COMPLETE-ROUND"
+  ],
+  "stateDefinitions": {
+    "SESSION_READY": "authenticated, no claimed Round",
+    "PAID_REQUEST_IN_FLIGHT": "one paid request awaiting one Redis claim",
+    "ORDINARY_RESULT_DELIVERY": "ordinary complete Round response projection",
+    "BOOSTER_BASE_DELIVERY": "Booster base award projection from claimed member",
+    "BOOSTER_WHEEL_STEP": "local frontend consumption of the same member fwtl/fwxl",
+    "ROUND_COMPLETE": "settled once, history committed, ready to return"
+  }
+}

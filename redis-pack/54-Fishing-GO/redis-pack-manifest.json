@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 54,
+  "directoryName": "54-Fishing-GO",
+  "rulesHash": "23e7a379b8a38d25d638cd0726cab97c49a6c425c88e2dd371c82007f9f81463",
+  "deliveryType": "LIVE_REDIS_COMPLETE_ROUND_PACKAGE",
+  "runtimeResultSource": "JAVA_GAME_RULE_CORE",
+  "loader": {
+    "artifact": "generator/54-Fishing-GO/dist/fishing-go-redis-loader.jar",
+    "sha256": "f7ff07dc8f856e1c68f04e4c8cd81d91b0c5aa24ac0583ab6dbfc8cd1037dfa5",
+    "configuration": "generator/54-Fishing-GO/dist/generator.properties",
+    "launcher": "generator/54-Fishing-GO/dist/start-loader.cmd",
+    "formalSeedAllowed": false
+  },
+  "memberContract": {
+    "codec": "Fishing GO MinimalFactCodec v1",
+    "unit": "one paid start through its terminal Delivery",
+    "normalIndex": "PerKeyList_000000054",
+    "normalListPattern": "BetLog:000000054:<actualMultiplier>",
+    "specialIndex": "MaryKeyList_000000054",
+    "specialListPattern": "MaryLog:000000054:<actualMultiplier>",
+    "atomicWrite": ["MULTI", "ZADD", "RPUSH", "LTRIM", "EXEC"],
+    "defaultMaxMembersPerMultiplier": 300
+  },
+  "consumer": {
+    "artifact": "server-api/54-Fishing-GO/dist/fishing-go-controller.jar",
+    "sha256": "b6c9b9aedf626d4386b915831bb866db16de55e82f1c7ab8d16cbe89c69d7444",
+    "claimBoundary": "paid start with no active Round",
+    "rebuild": "shared GameRuleCore",
+    "independentVerification": "RoundVerifier and ResultUtil",
+    "fallback": "independently verified runtime LOSS only"
+  },
+  "fixtureRuntimeDependency": false,
+  "jsonlDelivery": false,
+  "preGeneratedHistoricalResponses": false
+}
+

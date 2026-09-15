@@ -1,0 +1,1283 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 1830,
+  "directoryName": "1830-Hotpot",
+  "rulesVersion": "hotpot-1830-protocol-r1-20260904",
+  "rulesHash": "01123dc898992e5e38efb1f58b816c844093dfcf07939e2cefa3153022b61c01",
+  "status": "RULES_AND_SAMPLES_ALIGNED",
+  "sourceAuthority": "ORIGINAL_AUTHORIZED_HTTP",
+  "accountAlias": "abc224",
+  "formalPaidRounds": 1392,
+  "implementationAllowed": false,
+  "collectionClassificationReady": true,
+  "requiredBeforeImplementation": [
+    "clean complete-round samples classified with this Round boundary",
+    "ORDINARY_LOSS >= 200 complete Rounds",
+    "ORDINARY_WIN >= 200 complete Rounds",
+    "SCATTER_FREE_SPINS >= 30 complete Rounds if it appears; else SAMPLE_INSUFFICIENT only after 5000 paid starts",
+    "History list+detail once per confirmed outcome",
+    "archived initRoom body with prop_odds"
+  ],
+  "evidenceInventory": [
+    {
+      "id": "E-LANG-POLYGLOT",
+      "source": "captures/1830-Hotpot/polyglot-game1830.json",
+      "behaviorIds": [
+        "B-LANGUAGE-FIRST-LOAD",
+        "B-COUNT-ANYWHERE-8",
+        "B-SCATTER-FREE-SPINS",
+        "B-MULTIPLIER-SYMBOLS",
+        "B-CASCADE-WITHIN-SPIN"
+      ]
+    },
+    {
+      "id": "E-LANG-HELP-EN",
+      "source": "captures/1830-Hotpot/protocol-extract/polyglot-en-zh-pt.json",
+      "behaviorIds": [
+        "B-COUNT-ANYWHERE-8",
+        "B-CASCADE-WITHIN-SPIN",
+        "B-SCATTER-FREE-SPINS",
+        "B-MULTIPLIER-SYMBOLS",
+        "B-NO-WILD-SUBSTITUTE",
+        "B-FEATURE-BUY-ABSENT"
+      ]
+    },
+    {
+      "id": "E-LANG-RUN",
+      "source": "reports/1830-Hotpot/language-inventory.json",
+      "behaviorIds": [
+        "B-LANGUAGE-FIRST-LOAD"
+      ]
+    },
+    {
+      "id": "E-ENTRY-IFRAME",
+      "source": "captures/1830-Hotpot/first-load-pt-br-network.json",
+      "behaviorIds": [
+        "B-LANGUAGE-FIRST-LOAD",
+        "B-HTTP-ENDPOINTS",
+        "B-IDENTITY-GID-1830"
+      ]
+    },
+    {
+      "id": "E-TRIGGERED-URLS",
+      "source": "captures/1830-Hotpot/triggered-request-inventory.json",
+      "behaviorIds": [
+        "B-HTTP-ENDPOINTS",
+        "B-HISTORY-DAY-LIST"
+      ]
+    },
+    {
+      "id": "E-FRONTEND-DEFINE",
+      "source": "publish/1830-Hotpot/assets/Game1830/index.19146.js Game1830Define",
+      "behaviorIds": [
+        "B-HTTP-ENDPOINTS",
+        "B-BOARD-6X6",
+        "B-SCATTER-FREE-SPINS",
+        "B-ROUND-BOUNDARY",
+        "B-IDENTITY-GID-1830",
+        "B-NO-WILD-SUBSTITUTE"
+      ]
+    },
+    {
+      "id": "E-FRONTEND-MGR",
+      "source": "publish/1830-Hotpot/assets/Game1830/index.19146.js Game1830Mgr",
+      "behaviorIds": [
+        "B-HTTP-ENDPOINTS",
+        "B-INITROOM-RESUME",
+        "B-SPIN-GAMERESULT",
+        "B-BOARD-6X6",
+        "B-BET-STAKE-FORMULA",
+        "B-SCATTER-FREE-SPINS",
+        "B-MULTIPLIER-SYMBOLS",
+        "B-HISTORY-DAY-LIST",
+        "B-PROMO-FREEBET-NOT-MODE"
+      ]
+    },
+    {
+      "id": "E-FRONTEND-MAIN",
+      "source": "publish/1830-Hotpot/assets/Game1830/index.19146.js game_1830",
+      "behaviorIds": [
+        "B-ROUND-BOUNDARY",
+        "B-SPIN-GAMERESULT",
+        "B-SCATTER-FREE-SPINS",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-PROMO-FREEBET-NOT-MODE",
+        "B-INITROOM-RESUME"
+      ]
+    },
+    {
+      "id": "E-FRONTEND-RESULT",
+      "source": "publish/1830-Hotpot/assets/Game1830/index.19146.js Game1830ResultDisplay",
+      "behaviorIds": [
+        "B-CASCADE-WITHIN-SPIN",
+        "B-COUNT-ANYWHERE-8",
+        "B-ROUND-BOUNDARY",
+        "B-MULTIPLIER-SYMBOLS",
+        "B-BOARD-6X6",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN"
+      ]
+    },
+    {
+      "id": "E-FRONTEND-DETAILS",
+      "source": "publish/1830-Hotpot/assets/Game1830/index.19146.js Game1830BetDetails",
+      "behaviorIds": [
+        "B-COUNT-ANYWHERE-8",
+        "B-SCATTER-FREE-SPINS",
+        "B-HISTORY-DETAIL",
+        "B-BET-STAKE-FORMULA"
+      ]
+    },
+    {
+      "id": "E-FRONTEND-HISTORY-UI",
+      "source": "publish/1830-Hotpot/assets/Game1830/index.19146.js Game1830Record Game1830Daily Game1830MyHistoryItem Game1830DailyItem",
+      "behaviorIds": [
+        "B-HISTORY-DAY-LIST",
+        "B-HISTORY-DETAIL"
+      ]
+    },
+    {
+      "id": "E-FRONTEND-SYMBOLDESC",
+      "source": "publish/1830-Hotpot/assets/Game1830/index.19146.js Game1830SymbolDesc",
+      "behaviorIds": [
+        "B-NO-WILD-SUBSTITUTE",
+        "B-MULTIPLIER-SYMBOLS"
+      ]
+    },
+    {
+      "id": "E-CANONICAL-RULES",
+      "source": "protocol/1830-Hotpot/rules-core-canonical.json",
+      "behaviorIds": [
+        "B-ROUND-BOUNDARY",
+        "B-COUNT-ANYWHERE-8",
+        "B-CASCADE-WITHIN-SPIN",
+        "B-SCATTER-FREE-SPINS",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-FEATURE-BUY-ABSENT",
+        "B-BET-STAKE-FORMULA"
+      ]
+    },
+    {
+      "id": "E-ROUND-END-MD",
+      "source": "protocol/1830-Hotpot/round-end.md",
+      "behaviorIds": [
+        "B-ROUND-BOUNDARY",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-SCATTER-FREE-SPINS",
+        "B-FEATURE-BUY-ABSENT"
+      ]
+    },
+    {
+      "id": "E-FIELD-MATRIX",
+      "source": "protocol/1830-Hotpot/field-evidence-matrix.json",
+      "behaviorIds": [
+        "B-HTTP-ENDPOINTS",
+        "B-SPIN-GAMERESULT",
+        "B-BET-STAKE-FORMULA"
+      ]
+    },
+    {
+      "id": "E-DIRTY-SPIN-FIXTURE",
+      "source": "fixtures/1830-Hotpot/spin-dirty-20260903",
+      "behaviorIds": [],
+      "disposition": "QUARANTINED",
+      "reason": "脏样本：字段名可对照前端，不得计入完整局，不得作为 ordinary-loss 配额，不得作为运行时结果源。"
+    },
+    {
+      "id": "E-BUY-SCAN",
+      "source": "captures/1830-Hotpot/tools/extract-rules.mjs buyFree/BuyBonus/btn_buy/FEATURE_BUY = 0 hits in Game1830 index.19146.js",
+      "behaviorIds": [
+        "B-FEATURE-BUY-ABSENT"
+      ],
+      "reason": "本游戏没有购买入口；购买不是独立互斥玩法。"
+    },
+    {
+      "id": "E-SMALL-GAME-TYPE",
+      "source": "fixtures/1830-Hotpot/spin-dirty-20260903 data.small_game_type=0",
+      "behaviorIds": [],
+      "disposition": "UNUSED_BY_CLIENT",
+      "reason": "Game1830 源码不读取 small_game_type；禁止据此发明小游戏。"
+    },
+    {
+      "id": "E-INITROOM-BODY",
+      "source": "captures/1830-Hotpot/init-room.response.json",
+      "behaviorIds": [
+        "B-INITROOM-RESUME",
+        "B-COUNT-ANYWHERE-8",
+        "B-BET-STAKE-FORMULA"
+      ]
+    },
+    {
+      "id": "E-SPIN-INDEX",
+      "source": "captures/1830-Hotpot/spin-index.jsonl",
+      "behaviorIds": [
+        "B-SPIN-GAMERESULT",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-SCATTER-FREE-SPINS",
+        "B-ROUND-BOUNDARY"
+      ]
+    },
+    {
+      "id": "E-ROUND-INDEX",
+      "source": "captures/1830-Hotpot/round-index.jsonl",
+      "behaviorIds": [
+        "B-ROUND-BOUNDARY",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-SCATTER-FREE-SPINS",
+        "B-CASCADE-WITHIN-SPIN",
+        "B-SPIN-GAMERESULT"
+      ]
+    },
+    {
+      "id": "E-PAYTABLE-INIT",
+      "source": "protocol/1830-Hotpot/paytable-from-initroom.json",
+      "behaviorIds": [
+        "B-COUNT-ANYWHERE-8",
+        "B-INITROOM-RESUME"
+      ]
+    },
+    {
+      "id": "E-SYMBOL-WEIGHTS",
+      "source": "protocol/1830-Hotpot/symbol-weight-empirical.json",
+      "behaviorIds": [
+        "B-BOARD-6X6"
+      ]
+    },
+    {
+      "id": "E-HISTORY-ONCE",
+      "source": "captures/1830-Hotpot/history-round-index.jsonl",
+      "behaviorIds": [
+        "B-HISTORY-DAY-LIST",
+        "B-HISTORY-DETAIL"
+      ]
+    },
+    {
+      "id": "E-HISTORY-GOLD",
+      "source": "captures/1830-Hotpot/history-gold-list.response.json",
+      "behaviorIds": [
+        "B-HISTORY-DAY-LIST"
+      ]
+    },
+    {
+      "id": "E-HISTORY-DAY",
+      "source": "captures/1830-Hotpot/history-user-day.response.json",
+      "behaviorIds": [
+        "B-HISTORY-DAY-LIST",
+        "B-HISTORY-DETAIL"
+      ]
+    },
+    {
+      "id": "E-HISTORY-LOSS",
+      "source": "captures/1830-Hotpot/history-detail-ORDINARY_LOSS.json",
+      "behaviorIds": [
+        "B-HISTORY-DETAIL",
+        "B-ORDINARY-LOSS"
+      ]
+    },
+    {
+      "id": "E-HISTORY-WIN",
+      "source": "captures/1830-Hotpot/history-detail-ORDINARY_WIN.json",
+      "behaviorIds": [
+        "B-HISTORY-DETAIL",
+        "B-ORDINARY-WIN"
+      ]
+    },
+    {
+      "id": "E-HISTORY-FREE",
+      "source": "captures/1830-Hotpot/history-detail-SCATTER_FREE_SPINS.json",
+      "behaviorIds": [
+        "B-HISTORY-DETAIL",
+        "B-SCATTER-FREE-SPINS"
+      ]
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-IDENTITY-GID-1830",
+      "category": "IDENTITY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-ENTRY-IFRAME",
+        "E-FRONTEND-DEFINE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "launch item is Hotpot"
+        ],
+        "stateFields": [
+          "gid=1830",
+          "directoryName=1830-Hotpot"
+        ],
+        "transitionRules": [
+          "accept only raw gid 1830",
+          "never substitute 1809 or 1407 identity or field names"
+        ],
+        "outputs": [
+          "1830-Hotpot artifacts"
+        ],
+        "terminationRules": [
+          "wrong gid fails before spin or history mutation"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ENTRY-IFRAME",
+          "E-FRONTEND-DEFINE"
+        ],
+        "assertions": [
+          "every counted request includes gid=1830",
+          "no 1809/1407 default mode names"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-LANGUAGE-FIRST-LOAD",
+      "category": "RESOURCE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-LANG-POLYGLOT",
+        "E-LANG-RUN",
+        "E-ENTRY-IFRAME"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "launch with a PolyglotGame1830 language or lobby alias pt-br"
+        ],
+        "stateFields": [
+          "language",
+          "l",
+          "gid=1830"
+        ],
+        "transitionRules": [
+          "SetInitLanguage(url.language)",
+          "pt-br maps to asset language pt-pt"
+        ],
+        "outputs": [
+          "main UI in that language"
+        ],
+        "terminationRules": [
+          "main UI loaded"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-LANG-RUN"
+        ],
+        "assertions": [
+          "15 declared codes plus pt-br alias each have first-load network and index.html"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-HTTP-ENDPOINTS",
+      "category": "PROTOCOL",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND-DEFINE",
+        "E-FRONTEND-MGR",
+        "E-TRIGGERED-URLS",
+        "E-FIELD-MATRIX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "authenticated session token"
+        ],
+        "stateFields": [
+          "token",
+          "gid"
+        ],
+        "transitionRules": [
+          "initRoom = POST /cp/single_game.Game/initRoom",
+          "spin = POST /cp/single_game.Game/gameResult",
+          "day history = POST /cp/goldgame/single_game_user_gold_history",
+          "one-day history = POST /cp/goldgame/single_game_user_history"
+        ],
+        "outputs": [
+          "JSON envelope code/data/msg/time with code=0 success"
+        ],
+        "terminationRules": [
+          "code!=0 does not advance PageIndex or isScatterIng"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-DEFINE",
+          "E-TRIGGERED-URLS"
+        ],
+        "assertions": [
+          "paths match Game1830HttpAPI",
+          "gid remains 1830"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-INITROOM-RESUME",
+      "category": "SESSION",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-MGR",
+        "E-FRONTEND-MAIN",
+        "E-INITROOM-BODY"
+      ],
+      "note": "Code consumes initRoom data as GameDates including prop_odds and a result snapshot. Response body is not archived. If BetResultData exists and oid matches, client auto RequestGameBet; if oid differs it treats GameDates as a new result.",
+      "implementationContract": {
+        "preconditions": [
+          "valid token",
+          "gid=1830"
+        ],
+        "stateFields": [
+          "GameDates",
+          "prop_odds",
+          "oid",
+          "bet_gold",
+          "level",
+          "props",
+          "frees"
+        ],
+        "transitionRules": [
+          "load symbolOddMap from prop_odds",
+          "resume unfinished oid as BetResult"
+        ],
+        "outputs": [
+          "paytable map",
+          "optional resume board"
+        ],
+        "terminationRules": [
+          "loadingInit true only on code=0"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-MGR"
+        ],
+        "assertions": [
+          "client request fields are token+gid only",
+          "prop_odds keys are prop_id and odds[].num/odds"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-FRONTEND-MGR",
+            "from": "initRoom data.oid",
+            "event": "same oid with existing BetResultData triggers RequestGameBet; different oid replaces BetResultData",
+            "to": "either next gameResult or RecGameDates board"
+          }
+        ]
+      },
+      "reason": "initRoom body archived with prop_odds; idle oid=0."
+    },
+    {
+      "id": "B-SPIN-GAMERESULT",
+      "category": "PROTOCOL",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND-MGR",
+        "E-FRONTEND-MAIN",
+        "E-FIELD-MATRIX",
+        "E-SPIN-INDEX",
+        "E-ROUND-INDEX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "INIT or GAME_ENDED, or isScatterIng continuation"
+        ],
+        "stateFields": [
+          "bet_gold",
+          "level",
+          "gid",
+          "optional act_id"
+        ],
+        "transitionRules": [
+          "one response carries all cascade pages in data.props",
+          "do not request per-page"
+        ],
+        "outputs": [
+          "BetResultData"
+        ],
+        "terminationRules": [
+          "missing props schedules ResendBet; code!=0 retries"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-MGR",
+          "E-FRONTEND-MAIN"
+        ],
+        "assertions": [
+          "request uses BaseBetNum as bet_gold",
+          "RecBetResult requires data.props"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-BOARD-6X6",
+      "category": "RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND-DEFINE",
+        "E-FRONTEND-MGR",
+        "E-FRONTEND-RESULT"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "props page present"
+        ],
+        "stateFields": [
+          "prop[36]"
+        ],
+        "transitionRules": [
+          "6 columns x 6 rows",
+          "column t uses indices 6*t..6*t+5",
+          "within column index 0 is visual top"
+        ],
+        "outputs": [
+          "6x6 visible board, no extra buffer named in Game1830Constant"
+        ],
+        "terminationRules": [
+          "prop length other than 36 is illegal for this game"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-DEFINE",
+          "E-FRONTEND-RESULT"
+        ],
+        "assertions": [
+          "COL_NUM=6",
+          "BetDetails creates 36 cells",
+          "onGetColToIdx slices 6 then reverse"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-COUNT-ANYWHERE-8",
+      "category": "RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-LANG-HELP-EN",
+        "E-FRONTEND-RESULT",
+        "E-FRONTEND-DETAILS",
+        "E-CANONICAL-RULES"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "a props page"
+        ],
+        "stateFields": [
+          "prop",
+          "win_arr.p",
+          "win_arr.n",
+          "win_arr.wm",
+          "win_arr.odd"
+        ],
+        "transitionRules": [
+          "8 or more matching pay symbols anywhere win",
+          "not paylines, not ways, adjacency not required by Help",
+          "client removes every cell with symbolId==win_arr[i].p",
+          "payout tip is betSize x betLevel x odd"
+        ],
+        "outputs": [
+          "win_arr",
+          "tw"
+        ],
+        "terminationRules": [
+          "page with empty win_arr is a no-win page"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-LANG-HELP-EN",
+          "E-FRONTEND-RESULT"
+        ],
+        "assertions": [
+          "Help Game1830_4 minimum 8 anywhere",
+          "StartEliminate matches by symbol id not by payline index",
+          "betLinesConfig [20] is Base Bet not paylineCount"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-CASCADE-WITHIN-SPIN",
+      "category": "STATE_MACHINE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-LANG-HELP-EN",
+        "E-FRONTEND-RESULT",
+        "E-CANONICAL-RULES"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "gameResult.props has one or more pages"
+        ],
+        "stateFields": [
+          "PageIndex",
+          "props",
+          "win_arr",
+          "TwoDimensionalList"
+        ],
+        "transitionRules": [
+          "eliminate winning symbols on current page",
+          "survivors fall down in-column",
+          "vacancies fill from the next props page only",
+          "do not copy start-page weights onto fill"
+        ],
+        "outputs": [
+          "reconstructable next visible 6x6"
+        ],
+        "terminationRules": [
+          "PageIndex >= props.length-1 then setGameEnd"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-RESULT",
+          "E-LANG-HELP-EN"
+        ],
+        "assertions": [
+          "ReadyNextPageEliminate increments PageIndex then fills empty cells from onGetColToIdx",
+          "checkGameEnd uses last props page",
+          "Help says continue until no winning combination"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-FRONTEND-RESULT",
+            "from": "props[i] with win_arr nonempty",
+            "event": "ELIMINATE then OLDMOVES gravity then NEXTPAGE_ELIMINATE fill",
+            "to": "props[i+1] occupying only previously empty cells plus survivors"
+          },
+          {
+            "ref": "E-FRONTEND-RESULT",
+            "from": "last props page",
+            "event": "checkGameEnd true",
+            "to": "setGameEnd / GAME_ENDED or free-feature popup"
+          }
+        ]
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-MULTIPLIER-SYMBOLS",
+      "category": "RULE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-LANG-HELP-EN",
+        "E-FRONTEND-MGR",
+        "E-FRONTEND-RESULT",
+        "E-FRONTEND-SYMBOLDESC"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "board may contain symbolId>=12"
+        ],
+        "stateFields": [
+          "prop id 12..23",
+          "MultipleTypeList",
+          "mult",
+          "tw"
+        ],
+        "transitionRules": [
+          "id 12..23 map to [2,3,4,5,7,10,15,20,25,30,40,50]",
+          "Help: main game x2-x5, free game x5-x50",
+          "all multipliers on the reels at spin end are summed and multiply that spin total win",
+          "multipliers are not 8-of-a-kind pay symbols"
+        ],
+        "outputs": [
+          "ShowMultipleSum",
+          "page tw after multiply"
+        ],
+        "terminationRules": [
+          "checkMultiple looks at last page ids>=12"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-MGR",
+          "E-LANG-HELP-EN"
+        ],
+        "assertions": [
+          "MultipleTypeList exact array",
+          "Help Game1830_11/12/15/16 describe sum-then-multiply"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-FRONTEND-RESULT",
+            "from": "last cascade page with id>=12",
+            "event": "setmultipleAct then PLAYMULTIPLE",
+            "to": "multipliers fly and tw reflects summed multiplier"
+          }
+        ]
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-NO-WILD-SUBSTITUTE",
+      "category": "RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND-SYMBOLDESC",
+        "E-LANG-HELP-EN",
+        "E-FRONTEND-DEFINE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "symbol id in 1..23"
+        ],
+        "stateFields": [
+          "GamePropID.Scatter=11"
+        ],
+        "transitionRules": [
+          "no substituting Wild id is defined",
+          "label_wild node is copy for Scatter/multiplier"
+        ],
+        "outputs": [
+          "pay symbols 1-10, scatter 11, multipliers 12+"
+        ],
+        "terminationRules": [
+          "do not implement Wild substitution"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-DEFINE",
+          "E-LANG-HELP-EN"
+        ],
+        "assertions": [
+          "GamePropID only Scatter=11",
+          "Help has no Wild substitution sentence"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-BET-STAKE-FORMULA",
+      "category": "CONFIG",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND-MGR",
+        "E-FRONTEND-DETAILS",
+        "E-CANONICAL-RULES"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "bet UI selected"
+        ],
+        "stateFields": [
+          "BaseBetNum",
+          "Level",
+          "baseBetList=[20]"
+        ],
+        "transitionRules": [
+          "request.bet_gold is Bet Size",
+          "request.level is Bet Level 10..1",
+          "betLinesConfig is getBaseBetList()=[20] and is not paylineCount",
+          "History tip: Bet Size x Bet Level x Symbol Payout"
+        ],
+        "outputs": [
+          "charged stake on response.bet_gold"
+        ],
+        "terminationRules": [
+          "do not publish 20 as paylineCount"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-MGR",
+          "E-LANG-HELP-EN"
+        ],
+        "assertions": [
+          "ClearBasket constructs betAmountData with levels 10..1 and base [20]",
+          "Game1830_36 is Bet Size x Bet Level x Symbol Payout Values"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-ORDINARY-LOSS",
+      "category": "CLASSIFICATION",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-CANONICAL-RULES",
+        "E-ROUND-END-MD",
+        "E-FRONTEND-MAIN",
+        "E-FRONTEND-RESULT",
+        "E-SPIN-INDEX",
+        "E-ROUND-INDEX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid gameResult while isScatterIng is false"
+        ],
+        "stateFields": [
+          "total_win",
+          "frees.st",
+          "props[].win_arr",
+          "change_gold",
+          "bet_gold"
+        ],
+        "transitionRules": [
+          "complete the cascade pages of that one response",
+          "ORDINARY_LOSS iff frees.st==0 and no Scatter Free Spins entry and total_win==0"
+        ],
+        "outputs": [
+          "one complete LOSS Round"
+        ],
+        "terminationRules": [
+          "GAME_ENDED without GetFreeTimesView"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ROUND-END-MD",
+          "E-FRONTEND-RESULT"
+        ],
+        "assertions": [
+          "checkScatterModel false",
+          "last page empty win_arr",
+          "dirty fixture must not increment quota"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-FRONTEND-RESULT",
+            "from": "paid gameResult props[0]",
+            "event": "cascade through last page with no scatter trigger",
+            "to": "GAME_ENDED"
+          }
+        ]
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-ORDINARY-WIN",
+      "category": "CLASSIFICATION",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-CANONICAL-RULES",
+        "E-ROUND-END-MD",
+        "E-FRONTEND-RESULT",
+        "E-SPIN-INDEX",
+        "E-ROUND-INDEX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid gameResult while isScatterIng is false"
+        ],
+        "stateFields": [
+          "total_win",
+          "tw",
+          "win_arr",
+          "frees.st"
+        ],
+        "transitionRules": [
+          "play all props pages",
+          "ORDINARY_WIN iff positive total_win/tw and frees.st==0"
+        ],
+        "outputs": [
+          "one complete WIN Round"
+        ],
+        "terminationRules": [
+          "GAME_ENDED or BigWin then GAME_ENDED; no free feature"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ROUND-END-MD",
+          "E-LANG-HELP-EN"
+        ],
+        "assertions": [
+          "8+ anywhere produces win_arr",
+          "cascade stays inside the same gameResult"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-FRONTEND-RESULT",
+            "from": "winning page",
+            "event": "eliminate / gravity / next page until last page",
+            "to": "setGameEnd with frees.st==0"
+          }
+        ]
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-SCATTER-FREE-SPINS",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-LANG-HELP-EN",
+        "E-FRONTEND-MAIN",
+        "E-FRONTEND-DETAILS",
+        "E-CANONICAL-RULES",
+        "E-ROUND-END-MD",
+        "E-SPIN-INDEX",
+        "E-ROUND-INDEX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid spin Scatter count >= 3 anywhere"
+        ],
+        "stateFields": [
+          "frees.st",
+          "frees.tt",
+          "frees.twa",
+          "frees.lwa",
+          "isScatterIng",
+          "type"
+        ],
+        "transitionRules": [
+          "paid award 10+2*(scatter-3)",
+          "show GetFreeTimesView with frees.st then isScatterIng=true",
+          "each later gameResult is a free step; type==2 in History",
+          "2 Scatter during free awards 5+2*(scatter-2)",
+          "isScatterIng cleared when frees.st==0",
+          "FreeSpinTotalWinView when tt>0 and st==0"
+        ],
+        "outputs": [
+          "paid trigger plus all free gameResult until terminal"
+        ],
+        "terminationRules": [
+          "GAME_ENDED after FreeSpinTotalWinView"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-LANG-HELP-EN",
+          "E-FRONTEND-MAIN",
+          "E-FRONTEND-DETAILS"
+        ],
+        "assertions": [
+          "Help Game1830_14/17 match BetDetails type branch",
+          "checkScatterModel is frees.st>0",
+          "BUY is not this mode"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-FRONTEND-MAIN",
+            "from": "paid gameResult with frees.st>0",
+            "event": "GetFreeTimesView then isScatterIng=true then RequestGameBet",
+            "to": "next gameResult while isScatterIng"
+          },
+          {
+            "ref": "E-FRONTEND-MAIN",
+            "from": "free gameResult with frees.st==0",
+            "event": "isScatterIng=false; if tt>0 show FreeSpinTotalWinView",
+            "to": "GAME_ENDED"
+          }
+        ]
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-FEATURE-BUY-ABSENT",
+      "category": "NEGATIVE_CAPABILITY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-BUY-SCAN",
+        "E-LANG-HELP-EN",
+        "E-CANONICAL-RULES"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "this game only"
+        ],
+        "stateFields": [
+          "buyUiAbsent",
+          "buyApiAbsent",
+          "helpHasNoPurchase"
+        ],
+        "transitionRules": [
+          "do not expose a buy endpoint or buy bucket",
+          "do not treat promo act_id as buy"
+        ],
+        "outputs": [
+          "specialModes excludes BUY"
+        ],
+        "terminationRules": [
+          "collection/generator/Demo must not classify BUY as a mutually exclusive mode"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-BUY-SCAN",
+          "E-LANG-HELP-EN"
+        ],
+        "assertions": [
+          "no buyFree/btn_buy/FEATURE_BUY in Game1830",
+          "Help has no purchase sentence"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-PROMO-FREEBET-NOT-MODE",
+      "category": "NEGATIVE_CAPABILITY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND-MAIN",
+        "E-FRONTEND-MGR"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "GameActivityMgr FreeBetTimes"
+        ],
+        "stateFields": [
+          "isFreeBet",
+          "act_id"
+        ],
+        "transitionRules": [
+          "isFreeBet is promotional FreeBetTimes>0",
+          "distinct from isScatterIng"
+        ],
+        "outputs": [
+          "optional act_id on gameResult"
+        ],
+        "terminationRules": [
+          "do not put promo free-bet in specialModes"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-MAIN"
+        ],
+        "assertions": [
+          "isFreeBet assigned from FreeBetTimes",
+          "scatter path uses isScatterIng"
+        ],
+        "usesImplementationGeneratedExpected": false
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-ROUND-BOUNDARY",
+      "category": "STATE_MACHINE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-ROUND-END-MD",
+        "E-CANONICAL-RULES",
+        "E-FRONTEND-MAIN",
+        "E-FRONTEND-RESULT",
+        "E-SPIN-INDEX",
+        "E-ROUND-INDEX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid start from INIT or GAME_ENDED with isScatterIng false"
+        ],
+        "stateFields": [
+          "gameStatus",
+          "PageIndex",
+          "isScatterIng",
+          "frees.st",
+          "frees.tt"
+        ],
+        "transitionRules": [
+          "one paid gameResult plus all of its props pages",
+          "if frees.st>0 continue with free gameResult calls until st==0",
+          "one paid start plus all follow-up steps is one Round"
+        ],
+        "outputs": [
+          "completeRound record"
+        ],
+        "terminationRules": [
+          "legal GAME_ENDED after last spin of that paid start"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ROUND-END-MD",
+          "E-FRONTEND-MAIN"
+        ],
+        "assertions": [
+          "cannot count a mid-cascade page as a Round",
+          "cannot count a free step as a new paid Round"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-ROUND-END-MD",
+            "from": "paid RecBetClick PageIndex=0",
+            "event": "cascade then optional free gameResult loop",
+            "to": "GAME_ENDED"
+          }
+        ]
+      },
+      "reason": "Confirmed from this game frontend and Help."
+    },
+    {
+      "id": "B-HISTORY-DAY-LIST",
+      "category": "INTERFACE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-HISTORY-UI",
+        "E-TRIGGERED-URLS",
+        "E-FRONTEND-MGR",
+        "E-HISTORY-ONCE",
+        "E-HISTORY-GOLD",
+        "E-HISTORY-DAY"
+      ],
+      "note": "gold_history list plus user_history day list archived once.",
+      "implementationContract": {
+        "preconditions": [
+          "ShowForm Game1830Record"
+        ],
+        "stateFields": [
+          "page",
+          "page_size=30",
+          "gid"
+        ],
+        "transitionRules": [
+          "RequestBetHistory(1)",
+          "list items are days with day/bet_gold/change_gold",
+          "click opens Game1830Daily"
+        ],
+        "outputs": [
+          "MyHistory.list",
+          "statistics.total_bet_gold",
+          "statistics.total_change_gold"
+        ],
+        "terminationRules": [
+          "empty list shows no_data"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-TRIGGERED-URLS",
+          "E-FRONTEND-HISTORY-UI"
+        ],
+        "assertions": [
+          "path is single_game_user_gold_history",
+          "page_size 30"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-FRONTEND-HISTORY-UI",
+            "from": "gold_history day row",
+            "event": "OnClick li ShowForm Game1830Daily",
+            "to": "user_history for that day"
+          }
+        ]
+      },
+      "reason": "List payloads archived: gold_history and user_history."
+    },
+    {
+      "id": "B-HISTORY-DETAIL",
+      "category": "INTERFACE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND-DETAILS",
+        "E-FRONTEND-HISTORY-UI",
+        "E-HISTORY-ONCE",
+        "E-HISTORY-LOSS",
+        "E-HISTORY-WIN",
+        "E-HISTORY-FREE"
+      ],
+      "note": "LOSS/WIN/SCATTER_FREE_SPINS each have one BetDetails payload.",
+      "implementationContract": {
+        "preconditions": [
+          "Daily item click"
+        ],
+        "stateFields": [
+          "data.results",
+          "results[].result",
+          "type",
+          "extend.act_id"
+        ],
+        "transitionRules": [
+          "results[0] Normal Spin",
+          "later groups Free Spin",
+          "result[] are cascade pages",
+          "type==2 is free step for scatter award math"
+        ],
+        "outputs": [
+          "BetDetails board and payout list"
+        ],
+        "terminationRules": [
+          "btn_back closes form; do not fetch history per spin"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND-DETAILS"
+        ],
+        "assertions": [
+          "GetResult reads results[groupIdx].result[PageIdx]",
+          "results.length>1 turns on free-spin tab"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-FRONTEND-HISTORY-UI",
+            "from": "Daily list item",
+            "event": "ShowForm Game1830BetDetails",
+            "to": "detail with results/result pages"
+          }
+        ]
+      },
+      "reason": "Three detail bodies archived; not used to fill 200/200/30."
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "U-SYMBOL-WEIGHTS",
+      "status": "SAMPLE_DEPENDENT",
+      "reason": "起始牌、级联补牌、免费局补牌权重禁止互套。样本不够，不得 supported=true。",
+      "evidenceRefs": [
+        "E-FIELD-MATRIX",
+        "E-CANONICAL-RULES"
+      ]
+    },
+    {
+      "id": "U-INTEGER-MULTIPLIER-RATE",
+      "status": "SAMPLE_DEPENDENT",
+      "reason": "倍率符号映射是整数；total_win 是否恒为押注整数倍样本不够。",
+      "evidenceRefs": [
+        "E-FIELD-MATRIX",
+        "E-DIRTY-SPIN-FIXTURE"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "batchId": "B",
+  "status": "BROWSER_RELEASED_TO_C_OFFLINE_AUDIT",
+  "resumeAuthorization": "ALLOW_TOKEN_TO_API",
+  "idPolicy": {
+    "onlyOriginalGameIds": [
+      42,
+      43,
+      45,
+      50
+    ],
+    "derivedOrCrossWorkflowIdsAllowed": false
+  },
+  "browserDispatch": {
+    "inAppBrowser": "FORBIDDEN_BY_EXPLICIT_CHROME_PROFILE_DISPATCH",
+    "sharedChrome": "RELEASED_WITHOUT_TAB_MUTATION",
+    "sharedChromeLockOwner": "C",
+    "browserAgentKernel": "RESET_DESTROYED_ALL_BATCH_B_BROWSER_HANDLES",
+    "browserCallsAfterHardReleaseAllowed": false,
+    "requiredNextSignal": "RELEASE_TO_B_IF_BROWSER_WORK_RESUMES",
+    "nextSessionAccountAlias": "abc222",
+    "requiredExtensionInstanceId": "35d86d21-ac60-4133-9019-8c4645472100",
+    "observedDynamicBrowserId": "-42d9-4cc1-92dc-4a1651c5fa7c",
+    "extensionDiscoveryStatus": "PASS",
+    "pageControlStatus": "HARD_RESTART_RETEST_FAILED_SINGLE_NEW_TAB_GOTO_STALLED_AT_ABOUT_BLANK",
+    "pageControlFailureObservedAtAsiaShanghai": "2026-08-29T03:18:13+08:00",
+    "batchBOwnedTabCountAfterCleanup": 0,
+    "accountMustBeConfirmedOnPageBeforeFirstPaidRound": true,
+    "currentSessionAccountCheck": "PRIOR_CONFIRMED_ABC222_ID_74171415_REAUTH_REQUIRED_FOR_CURRENT_SESSION",
+    "wrongAccountSpinAccepted": false,
+    "autoSpinStarted": false,
+    "releaseSignal": "BROWSER_RELEASED_TO_C"
+  },
+  "tokenTransmissionAuthorization": {
+    "authorized": true,
+    "destinationHost": "api.omgapibra.com",
+    "purpose": "ORIGINAL_GAME_BATCH_SAMPLING",
+    "requiredSourceAccountAlias": "abc222",
+    "memoryOnly": true,
+    "persistOrEchoForbidden": true
+  },
+  "inventoryRecovery": {
+    "priorBroadScanFailure": "RESOLVED",
+    "resolution": "EXPLICIT_TARGET_DIRECTORIES_ONLY",
+    "plainNodePathFailure": "RESOLVED_WITH_BUNDLED_RUNTIME",
+    "bundledNode": "/Users/a1/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node"
+  },
+  "games": [
+    {
+      "gameId": 42,
+      "gameName": "Lucky Dragon",
+      "directoryName": "42-Lucky-Dragon",
+      "platformListItemId": 1398,
+      "platformGameId": 444,
+      "resourceCode": 50042,
+      "manualMilestoneObservedPaidStarts": 1,
+      "manualMilestoneObservedTerminalRounds": 1,
+      "currentSessionUiHistoryPaidStarts": 10,
+      "currentSessionUiHistoryLossRounds": 9,
+      "currentSessionUiHistoryWinRounds": 1,
+      "currentSessionCandidateSpecialMechanisms": [
+        "WILD_MULTIPLIER_X3"
+      ],
+      "currentSessionHistoryTotalBet": "5.00",
+      "currentSessionHistoryNetResult": "26.50",
+      "formalPaidRoundStarts": 0,
+      "formalCompletedRounds": 0,
+      "completionClaim": false
+    },
+    {
+      "gameId": 43,
+      "gameName": "Lucky Wheel",
+      "directoryName": "43-Lucky-Wheel",
+      "platformListItemId": 1399,
+      "platformGameId": 445,
+      "resourceCode": 50043,
+      "manualMilestoneObservedPaidStarts": 0,
+      "formalPaidRoundStarts": 0,
+      "formalCompletedRounds": 0,
+      "completionClaim": false
+    },
+    {
+      "gameId": 45,
+      "gameName": "Rio Carnival",
+      "directoryName": "45-Rio-Carnival",
+      "platformListItemId": 1401,
+      "platformGameId": 447,
+      "resourceCode": 50045,
+      "manualMilestoneObservedPaidStarts": 0,
+      "formalPaidRoundStarts": 0,
+      "formalCompletedRounds": 0,
+      "completionClaim": false
+    },
+    {
+      "gameId": 50,
+      "gameName": "Lucky Cat Ⅱ",
+      "directoryName": "50-Lucky-Cat-II",
+      "platformListItemId": 1402,
+      "platformGameId": 448,
+      "resourceCode": 50050,
+      "manualMilestoneObservedPaidStarts": 0,
+      "formalPaidRoundStarts": 0,
+      "formalCompletedRounds": 0,
+      "completionClaim": false
+    }
+  ],
+  "samplingPolicy": {
+    "userExplicitOverride": true,
+    "ordinaryLossTarget": 200,
+    "ordinaryWinTarget": 100,
+    "specialAndRewardTargetPerConfirmedCategory": 30,
+    "maxPaidRoundStartsPerGame": 3000,
+    "rareRewardAbsencePaidRoundThreshold": 1000,
+    "roundDefinition": "ONE_PAID_START_PLUS_ALL_CONTINUATION_STEPS"
+  },
+  "nextActionsAfterReleaseToB": [
+    "RECOVER_PAGE_LEVEL_CONTROL_ON_REQUIRED_ABC222_EXTENSION_INSTANCE",
+    "RECONFIRM_PAGE_ACCOUNT_ALIAS_ABC222_BEFORE_FORMAL_CAPTURE",
+    "DISCOVER_CURRENT_GAME_SPIN_PROTOCOL_IN_PAGE_REQUEST_CHAIN",
+    "PARAMETERIZE_CAPTURE_PROFILE_FROM_ORIGINAL_EVIDENCE",
+    "START_FORMAL_PROGRAMMATIC_ROUND_CAPTURE"
+  ],
+  "updatedOn": "2026-08-28"
+}

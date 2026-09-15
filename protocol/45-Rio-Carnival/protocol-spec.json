@@ -1,0 +1,689 @@
+{
+  "schemaVersion": 2,
+  "gameId": 45,
+  "gameName": "Rio Carnival",
+  "directoryName": "45-Rio-Carnival",
+  "rulesHash": "sha256:515ffa3a4f803e36d44a1a50da1ce79b4c1df2e75a79893a18cd404aecc0565c",
+  "behaviorIds": [
+    "B-CATALOG-IDENTITY",
+    "B-AUTHENTICATED-STARTUP",
+    "B-GAME-LANGUAGE-FIRSTLOAD",
+    "B-HTTP-CODEC",
+    "B-INITIALIZATION-SEQUENCE",
+    "B-CONFIG-SEMANTICS",
+    "B-SESSION-RESUME-SNAPSHOT",
+    "B-FIXED-PAYLINES",
+    "B-PAYTABLE-PAYOUT",
+    "B-WILD-RULE",
+    "B-SPIN-REQUEST-CONSTRUCTION",
+    "B-ROUND-DELIVERY-STATE-MACHINE",
+    "B-FREE-SPINS-RULE",
+    "B-ORDINARY-OUTCOMES",
+    "B-BALANCE-SETTLEMENT",
+    "B-HISTORY-ENDPOINTS",
+    "B-ERROR-HANDLING",
+    "B-NO-BUY-ENTRY",
+    "B-FRONTEND-REEL-COUNTS-NOT-RNG"
+  ],
+  "stateDefinitions": {
+    "IDLE": "No active complete Round; the next paid spin claims exactly one Redis member.",
+    "PAID_START_DELIVERED": "Step 0 of one claimed Round was delivered; ba>0, ss=1 and nfsc=0.",
+    "FREE_DELIVERY_ACTIVE": "The same claimed Round is active; continuation Steps have ba=0, gt=2, small_game_type=2 and monotonic nfsc.",
+    "TERMINAL": "The claimed Round ends only when ss=1 and fsn=nfsc; final rwa is settled once and History is appended."
+  },
+  "rulesHashBasis": "SHA-256 of the current-game frontend rules/protocol bundle assets/main/index.76d7e.js",
+  "identity": {
+    "workflowGameId": 45,
+    "platformCatalogItemId": 1401,
+    "platformGameId": 447,
+    "providerResourceCode": 50045,
+    "title": "Rio Carnival"
+  },
+  "origins": {
+    "platformStartupObserved": "https://api.hmsgame3.com",
+    "gameDocument": "https://static.cpgame.io/45/",
+    "providerApi": "https://api.omgapibra.com/cp/api/v1",
+    "telemetry": "https://api.omgapibra.com/api/report/timing"
+  },
+  "codec": {
+    "requestEncoding": "application/x-www-form-urlencoded",
+    "formAlgorithm": "encodeURIComponent(key/value), spaces encoded as +, pairs joined by &",
+    "headerToFormMapping": {
+      "game-id": "gid",
+      "web-token": "t"
+    },
+    "responseEncoding": "plain JSON",
+    "responseEnvelope": {
+      "success": "HTTP 2xx and envelope code loosely equals 200; consumer receives data or {}",
+      "failure": "non-2xx or envelope code != 200 rejects with the parsed envelope; non-JSON becomes {code: HTTP<status>, info: ''}",
+      "fields": [
+        "code",
+        "data",
+        "info"
+      ]
+    },
+    "cryptography": {
+      "status": "NONE_IN_CURRENT_GAME_HTTP_MODULE",
+      "encryption": false,
+      "decryption": false,
+      "evidence": "resources/45-Rio-Carnival/pt-br/game-first-load/_hosts/static.cpgame.io/45/assets/main/index.76d7e.js#Http"
+    },
+    "secrets": "Launch/session tokens are transport credentials and remain redacted in evidence; they are not a payload cipher."
+  },
+  "requestOrder": [
+    {
+      "order": 1,
+      "action": "platform startup",
+      "request": "GET /api/game/startup?game_id=1401",
+      "output": "data.game_url",
+      "evidence": "captures/45-Rio-Carnival/authenticated-startup-evidence.json"
+    },
+    {
+      "order": 2,
+      "action": "iframe document and versioned static bundles",
+      "request": "GET https://static.cpgame.io/45/?ai=...&btt=1&gid=45&l=<code>&language=<archive-code>&sip=...&t=<redacted>",
+      "output": "Rio Carnival Cocos runtime",
+      "evidence": "captures/45-Rio-Carnival/first-load-pt-br-network.json"
+    },
+    {
+      "order": 3,
+      "action": "provider session verification",
+      "request": "POST /cp/api/v1/auth/verify",
+      "formFields": [
+        "ai",
+        "btt",
+        "t",
+        "gid"
+      ],
+      "output": "player, provider token, ping, rc, gc",
+      "evidence": [
+        "resources/45-Rio-Carnival/pt-br/game-first-load/_hosts/static.cpgame.io/45/assets/main/index.76d7e.js#Main.onLogin/GameApi.Login/Http",
+        "fixtures/45-Rio-Carnival/first-load-api/cp/api/v1/auth/verify.json"
+      ]
+    },
+    {
+      "order": 4,
+      "action": "game config",
+      "request": "POST /cp/api/v1/rio-carnival/config",
+      "formFields": [
+        "t",
+        "gid"
+      ],
+      "output": "bet lists, currency, defaults, paytable, optional last snapshot",
+      "evidence": [
+        "captures/45-Rio-Carnival/first-load-pt-br-network.json",
+        "fixtures/45-Rio-Carnival/first-load-api/cp/api/v1/rio-carnival/config.json"
+      ]
+    },
+    {
+      "order": 5,
+      "action": "play or deliver next Step",
+      "request": "POST /cp/api/v1/rio-carnival/spin",
+      "formFields": [
+        "bl",
+        "bs",
+        "t",
+        "gid"
+      ],
+      "output": "one Delivery/Step response",
+      "evidence": "captures/45-Rio-Carnival/spin-probe-pt-br-network.json"
+    }
+  ],
+  "endpoints": [
+    {
+      "id": "platform-startup",
+      "method": "GET",
+      "path": "/api/game/startup?game_id=1401",
+      "status": "RUNTIME_CAPTURED",
+      "purpose": "obtain authenticated iframe URL"
+    },
+    {
+      "id": "auth-verify",
+      "method": "POST",
+      "path": "/cp/api/v1/auth/verify",
+      "status": "RUNTIME_CAPTURED",
+      "purpose": "exchange launch session for provider player/token state"
+    },
+    {
+      "id": "config",
+      "method": "POST",
+      "path": "/cp/api/v1/rio-carnival/config",
+      "status": "RUNTIME_CAPTURED",
+      "purpose": "initialize game configuration and optional interrupted-Round snapshot"
+    },
+    {
+      "id": "spin",
+      "method": "POST",
+      "path": "/cp/api/v1/rio-carnival/spin",
+      "status": "RUNTIME_CAPTURED_2306_STEPS",
+      "purpose": "start a paid Round or deliver its next free Step"
+    },
+    {
+      "id": "history-list",
+      "method": "POST",
+      "path": "/cp/api/v1/rio-carnival/log-list",
+      "status": "RUNTIME_CAPTURED_REDACTED_ADJACENT",
+      "requestFields": [
+        "page_index",
+        "begin_at",
+        "end_at",
+        "t",
+        "gid"
+      ],
+      "purpose": "paged Round history",
+      "responseFields": {
+        "page1": [
+          "ba",
+          "end",
+          "lc",
+          "ll",
+          "wa"
+        ],
+        "pageOrEnd": [
+          "end",
+          "ll"
+        ],
+        "listItem": [
+          "ba",
+          "baf",
+          "bid",
+          "ca",
+          "fe",
+          "gm",
+          "gt",
+          "tis",
+          "wa"
+        ]
+      },
+      "fieldSemantics": {
+        "lc": "list count consumed as spinCount",
+        "ba": "summary total bet, decimal string",
+        "wa": "summary total award, decimal string",
+        "end": "pagination/end flag returned as number",
+        "ll": "history list array",
+        "tis": "transfer identifier selected for log-view; persisted only as SHA-256",
+        "ca": "creation Unix seconds",
+        "gt": "history game identifier; observed 45 and not the live-spin gt field"
+      }
+    },
+    {
+      "id": "history-view",
+      "method": "POST",
+      "path": "/cp/api/v1/rio-carnival/log-view",
+      "status": "RUNTIME_CAPTURED_REDACTED_ADJACENT",
+      "requestFields": [
+        "transfer_id",
+        "t",
+        "gid"
+      ],
+      "purpose": "history detail; client concatenates bsl and fsl",
+      "responseFields": {
+        "top": [
+          "baf",
+          "bid",
+          "bsl",
+          "fsl"
+        ],
+        "step": [
+          "ba",
+          "balance_after",
+          "bet_level",
+          "bet_size",
+          "bid",
+          "bl",
+          "bs",
+          "ca",
+          "cc",
+          "created_at",
+          "cs",
+          "fsn",
+          "gt",
+          "nfsc",
+          "pl",
+          "rpx",
+          "rskl",
+          "rwa",
+          "small_game_type",
+          "ss",
+          "wa",
+          "wmkl"
+        ]
+      },
+      "fieldSemantics": {
+        "bsl": "base-spin Step array",
+        "fsl": "free-spin Step array",
+        "baf": "balance-before/detail summary",
+        "wmkl": "history shape is an array of {psn,sk,wa,wpk}; frontend converts for rendering"
+      }
+    },
+    {
+      "id": "heartbeat",
+      "method": "POST",
+      "path": "/cp/api/v1/ping",
+      "status": "FRONTEND_CODE_CONFIRMED_DISABLED_IN_CAPTURED_VERIFY_RESPONSE",
+      "purpose": "session heartbeat when verify.ping.enable is nonzero"
+    },
+    {
+      "id": "timing",
+      "method": "POST",
+      "path": "/api/report/timing",
+      "status": "RUNTIME_CAPTURED_TELEMETRY_ONLY",
+      "purpose": "timing telemetry; not required for game-state correctness"
+    }
+  ],
+  "configFields": {
+    "auto": "allowed auto-spin counts",
+    "bll": "bet-level multipliers",
+    "bsl": "per-line base bet sizes",
+    "cc": "currency code",
+    "cs": "currency symbol",
+    "dbl": "default bet level",
+    "dbs": "default base bet size",
+    "spl": "symbol payout multipliers keyed by match length",
+    "last": "optional interrupted-Round delivery snapshot; null in captured inactive session",
+    "ts": "server timestamp/version-like numeric field; behavior not used by current frontend code",
+    "frwa": "optional all-free-win field consumed by frontend resume/history code; absent from all 2306 captured live Step responses",
+    "remove_num": "optional frontend result field; absent from all 2306 captured live Step responses"
+  },
+  "spinRequest": {
+    "bl": "selected bet level; minimum 1",
+    "bs": "selected per-line base bet; minimum 0.02",
+    "totalBetFormula": "bl * bs * 25",
+    "minimumTotalBet": 0.5,
+    "continuationBehavior": "the frontend sends the same bl/bs request shape for the next free Delivery; the server returns ba=0"
+  },
+  "spinResponseFields": {
+    "ba": "amount charged by this Step; 0.50 only at the paid Round start and 0 for all continuations",
+    "fsn": "current total scheduled free-spin count; may increase on retrigger",
+    "gt": "game-type discriminator; observed 1 on paid starts and 2 on free Steps",
+    "nfsc": "number of free Steps delivered/consumed so far",
+    "pl.id": "provider player id",
+    "pl.balance": "balance after current settlement boundary",
+    "rpx": "free-spin payout multiplier; 0 ordinary, observed 2/5/8 in free mode",
+    "rskl": "15 visible symbol ids in column-major order: index = reel * 3 + row",
+    "rwa": "cumulative award for the complete Round through this Step",
+    "small_game_type": "UI submode discriminator; observed 0 on paid starts and 2 on free Steps",
+    "ss": "Step status flag; 0 means continuation, 1 appears on the paid start and legal terminal; not sufficient alone to end a Round",
+    "wa": "award contributed by this Step; all captured free transitions satisfy current.rwa - prior.rwa = wa",
+    "wmkl": "winning-line map: line number 1..25 -> {symbolId: consecutiveMatchCount}; empty loss is []",
+    "frwa": "optional all-free-win field consumed by frontend resume/history code; absent from all 2306 captured live Step responses",
+    "remove_num": "optional frontend result field; absent from all 2306 captured live Step responses"
+  },
+  "boardAndWin": {
+    "visible": {
+      "reels": 5,
+      "rows": 3,
+      "payloadLength": 15,
+      "order": "COLUMN_MAJOR"
+    },
+    "winModel": "FIXED_PAYLINES",
+    "paylineCount": 25,
+    "direction": "left to right",
+    "awardSelection": "highest award per payline only",
+    "paylines": {
+      "1": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "2": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "3": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "4": [
+        0,
+        1,
+        2,
+        1,
+        0
+      ],
+      "5": [
+        2,
+        1,
+        0,
+        1,
+        2
+      ],
+      "6": [
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "7": [
+        1,
+        2,
+        2,
+        2,
+        1
+      ],
+      "8": [
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "9": [
+        2,
+        2,
+        1,
+        0,
+        0
+      ],
+      "10": [
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "11": [
+        1,
+        0,
+        1,
+        2,
+        1
+      ],
+      "12": [
+        0,
+        1,
+        1,
+        1,
+        0
+      ],
+      "13": [
+        2,
+        1,
+        1,
+        1,
+        2
+      ],
+      "14": [
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "15": [
+        2,
+        1,
+        2,
+        1,
+        2
+      ],
+      "16": [
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "17": [
+        1,
+        1,
+        2,
+        1,
+        1
+      ],
+      "18": [
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "19": [
+        2,
+        2,
+        0,
+        2,
+        2
+      ],
+      "20": [
+        0,
+        2,
+        2,
+        2,
+        0
+      ],
+      "21": [
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "22": [
+        1,
+        2,
+        0,
+        2,
+        1
+      ],
+      "23": [
+        1,
+        0,
+        2,
+        0,
+        1
+      ],
+      "24": [
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "25": [
+        2,
+        0,
+        2,
+        0,
+        2
+      ]
+    },
+    "payoutFormula": "spl[symbol][matchCount] * bs * bl * (containsWild ? 2 : 1) * (rpx == 0 ? 1 : rpx), summed across wmkl lines",
+    "wild": {
+      "symbol": "Wild",
+      "substitutes": "all except Scat",
+      "involvedWinMultiplier": 2
+    },
+    "scatter": {
+      "symbol": "Scat",
+      "linePayout": 0,
+      "purpose": "FREE_SPINS trigger/retrigger"
+    }
+  },
+  "roundDeliveryStateMachine": {
+    "countingUnit": "one paid Round, never one HTTP request or free Step",
+    "states": [
+      "IDLE",
+      "PAID_START_DELIVERED",
+      "FREE_DELIVERY_ACTIVE",
+      "TERMINAL"
+    ],
+    "start": "IDLE -> PAID_START_DELIVERED only for a response with ba>0 and ss=1",
+    "ordinaryTerminal": "paid response has fsn=nfsc=0 and ss=1",
+    "freeTrigger": "paid response has ba>0, ss=1, fsn>nfsc=0 and rpx in {2,5,8}; Round remains active",
+    "freeContinuation": "same roundId, ba=0, gt=2, small_game_type=2, nfsc advances by one, ss=0 until final Delivery",
+    "retrigger": "a free Delivery with 3/4/5 Scat increases fsn by 8/12/20 while nfsc continues monotonically",
+    "terminal": "ss=1 AND fsn==nfsc; both conditions are required",
+    "settlement": "rwa accumulates wa; intermediate free balances remain held and terminal balance increases by final rwa",
+    "generationBoundary": "downstream GameRuleCore must generate the complete Round once; Delivery only consumes its ordered Steps",
+    "indexBoundary": "spin-index.jsonl contains only the paid start and associates all continuation Steps with the same roundId"
+  },
+  "specialModes": [
+    {
+      "id": "FREE_SPINS",
+      "trigger": "3, 4 or 5 Scat anywhere",
+      "initialSpinChoices": {
+        "3": [
+          8,
+          12,
+          20
+        ],
+        "4": [
+          12,
+          16,
+          24
+        ],
+        "5": [
+          20,
+          24,
+          32
+        ]
+      },
+      "multiplierChoices": [
+        2,
+        5,
+        8
+      ],
+      "retriggerAwards": {
+        "3": 8,
+        "4": 12,
+        "5": 20
+      },
+      "runtimeEvidence": {
+        "completeRounds": 48,
+        "freeSteps": 900,
+        "retriggerRounds": 8,
+        "scope": "all complete Rounds through round-001406"
+      }
+    }
+  ],
+  "sessionResume": {
+    "status": "CONFIRMED_ADJACENT_RUNTIME_CHAIN",
+    "sequence": [
+      "paid spin activates FREE_SPINS with fsn=8,nfsc=0",
+      "page reload performs auth/verify",
+      "config returns non-null last matching activation",
+      "eight ba=0 spin deliveries advance nfsc 1..8",
+      "terminal ss=1 && fsn==nfsc"
+    ],
+    "restoreFields": [
+      "ba",
+      "fsn",
+      "nfsc",
+      "rpx",
+      "rskl",
+      "rwa",
+      "ss",
+      "wa"
+    ],
+    "codeBehavior": "frontend converts last.wmkl entries {wpk,sk,psn} to the live map, restores the snapshot, and treats fsn!=nfsc as active content",
+    "terminationRule": "resume remains active while fsn!=nfsc; legal terminal is ss==1 && fsn==nfsc",
+    "evidence": [
+      "captures/45-Rio-Carnival/session-resume-adjacent-evidence.json",
+      "fixtures/45-Rio-Carnival/protocol-evidence/recovery/reload-config-active-last.json",
+      "fixtures/45-Rio-Carnival/complete-rounds/round-001406.json"
+    ]
+  },
+  "errorBranches": {
+    "401": "stop heartbeat and reject response",
+    "403": "authentication/restriction message path",
+    "500": "network error path",
+    "C10001": "operator/authentication error",
+    "C10002": "insufficient funds",
+    "C10003": "bonus-wallet insufficient funds",
+    "transport": "timeout/error rejects; malformed response becomes HTTP<status>",
+    "spinUi": "on failure, current auto-spin is cancelled and play lock is released after error handling"
+  },
+  "captureFacts": {
+    "paidRoundStarts": 1406,
+    "completedRoundCount": 1406,
+    "totalStepCount": 2306,
+    "ordinaryLossRounds": 1153,
+    "ordinaryWinRounds": 205,
+    "freeSpinRounds": 48,
+    "freeSpinSteps": 900,
+    "retriggerRounds": 8,
+    "maximumStepCount": 33,
+    "stopReason": "ALL_APPLICABLE_CATEGORY_TARGETS_MET",
+    "targetedRecoveryEvidencePaidRounds": 30
+  },
+  "evidence": [
+    "captures/45-Rio-Carnival/authenticated-startup-evidence.json",
+    "captures/45-Rio-Carnival/first-load-pt-br-network.json",
+    "captures/45-Rio-Carnival/spin-probe-pt-br-network.json",
+    "captures/45-Rio-Carnival/rules-ui-text-pt.json",
+    "captures/45-Rio-Carnival/paytable-ui-text-pt.json",
+    "fixtures/45-Rio-Carnival/first-load-api/cp/api/v1/auth/verify.json",
+    "fixtures/45-Rio-Carnival/first-load-api/cp/api/v1/rio-carnival/config.json",
+    "fixtures/45-Rio-Carnival/complete-rounds",
+    "captures/45-Rio-Carnival/spin-index.jsonl",
+    "captures/45-Rio-Carnival/round-regroup-audit.json",
+    "resources/45-Rio-Carnival/pt-br/game-first-load/_hosts/static.cpgame.io/45/assets/main/index.76d7e.js",
+    "captures/45-Rio-Carnival/history-adjacent-evidence.json",
+    "captures/45-Rio-Carnival/session-resume-adjacent-evidence.json",
+    "protocol/45-Rio-Carnival/protocol-spec.md"
+  ],
+  "historyContract": {
+    "status": "CONFIRMED_ADJACENT_RUNTIME_CHAIN",
+    "sequence": [
+      "POST log-list page_index=1",
+      "POST log-list page_index=2 or observe end",
+      "select ll[].tis",
+      "POST log-view transfer_id=tis",
+      "render bsl then fsl"
+    ],
+    "listPaginationTermination": "page 2 is captured as the required adjacent next-page response; continue or stop according to the returned end/ll state consumed by the frontend",
+    "transferRule": "the selected list tis and detail transfer_id must match; evidence stores the same SHA-256 value, never the raw identifier",
+    "evidence": [
+      "captures/45-Rio-Carnival/history-adjacent-evidence.json",
+      "fixtures/45-Rio-Carnival/protocol-evidence/history/log-list-page-1.json",
+      "fixtures/45-Rio-Carnival/protocol-evidence/history/log-list-page-2.json",
+      "fixtures/45-Rio-Carnival/protocol-evidence/history/log-view.json"
+    ]
+  },
+  "implementationV3": {
+    "schemaVersion": 3,
+    "status": "READY_FOR_ACCEPTANCE",
+    "rulesHash": "sha256:515ffa3a4f803e36d44a1a50da1ce79b4c1df2e75a79893a18cd404aecc0565c",
+    "runtimeGeneration": false,
+    "runtimeFixtureReplay": false,
+    "core": "Shared Java GameRuleCore; production CorePayout separately verified by ResultUtil",
+    "model": "Compiled empirical joint special-symbol shape and conditional three-cell reel windows; 1306 training rounds, 100 excluded holdout rounds",
+    "modelSource": "reports/45-Rio-Carnival/generation-model-source.json",
+    "modelValidation": "reports/45-Rio-Carnival/generation-model-validation.json",
+    "factoryRtpClaim": false,
+    "memberEncoding": "R45C3|initialFree|multiplier|ordered 15-hex-character boards; printable ASCII; no bet or response JSON",
+    "ratioUnit": "award / totalBet * 100, exact integer (0.01x)",
+    "redis": {
+      "host": "192.168.10.3",
+      "port": 6379,
+      "db": 15,
+      "normalIndex": "Rio45:v3:normal:ratios",
+      "specialIndex": "Rio45:v3:special:ratios",
+      "listPatterns": [
+        "Rio45:v3:normal:<integer>",
+        "Rio45:v3:special:<integer>"
+      ],
+      "zeroAwardFree": "special:0 selected only from LOSS branch",
+      "claim": "Choose WIN/LOSS first; choose mode; WIN chooses existing positive integer index; atomically LPOP exactly one member; no fallback",
+      "continuation": "Persist complete decoded round; all deliveries use same roundKey and ordered steps"
+    },
+    "controller": {
+      "descriptor": "server-api/45-Rio-Carnival/demo-controller.properties",
+      "jar": "server-api/45-Rio-Carnival/dist/controller.jar",
+      "port": "Injected --port or PORT, 50000-59999",
+      "listeners": 1
+    },
+    "historyIdentifiers": "Original evidence identifiers were redacted; compact stable local opaque IDs are projected consistently for list/detail; no original ID format claim.",
+    "acceptanceReport": "reports/45-Rio-Carnival/acceptance-final-v3.json"
+  }
+}

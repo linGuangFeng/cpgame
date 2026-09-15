@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-08-29T13:08:12Z",
+  "purpose": "PRE_FULL_CHROME_RESTART_TAB_CHECKPOINT",
+  "browser": {
+    "family": "chrome",
+    "profileName": "abc222",
+    "extensionInstanceId": "35d86d21-ac60-4133-9019-8c4645472100"
+  },
+  "safety": {
+    "queryValuesPersisted": false,
+    "hashValuesPersisted": false,
+    "cookiesRead": false,
+    "storageRead": false,
+    "tabsClosed": false,
+    "pageLevelCallsUsed": false,
+    "spinIssued": false
+  },
+  "tabCount": 12,
+  "tabs": [
+    {"tabId":"520526424","title":"HMS-PADDLE","origin":"https://hms-paddle.com","path":"/","queryRedacted":false,"hashRedacted":true,"tabGroup":"abc222 Chrome restart checkpoint"},
+    {"tabId":"520526423","title":"about:blank","origin":"about://","path":"blank","queryRedacted":false,"hashRedacted":false,"tabGroup":"abc222 Chrome restart checkpoint"},
+    {"tabId":"520526420","title":"about:blank","origin":"about://","path":"blank","queryRedacted":false,"hashRedacted":false,"tabGroup":"gid41 recovery"},
+    {"tabId":"520526327","title":"HMS-PADDLE","origin":"https://hms-paddle.com","path":"/","queryRedacted":false,"hashRedacted":true,"tabGroup":"gid41 recovery"},
+    {"tabId":"520526419","title":"HMS-PADDLE","origin":"https://hms-paddle.com","path":"/","queryRedacted":false,"hashRedacted":true,"tabGroup":"gid41 UI chunk recovery"},
+    {"tabId":"520526418","title":"api.omgapibra.com/cp/api/v1/auth/verify","origin":"https://api.omgapibra.com","path":"/cp/api/v1/auth/verify","queryRedacted":false,"hashRedacted":false,"tabGroup":"gid41 UI chunk recovery"},
+    {"tabId":"520526417","title":"api.omgapibra.com/cp/api/v1/lucky-panda/config","origin":"https://api.omgapibra.com","path":"/cp/api/v1/lucky-panda/config","queryRedacted":false,"hashRedacted":false,"tabGroup":"gid41 UI chunk recovery"},
+    {"tabId":"520526410","title":"Lucky Panda","origin":"https://static.cpgame.io","path":"/41/","queryRedacted":true,"hashRedacted":false,"tabGroup":"gid41 UI chunk recovery"},
+    {"tabId":"520526416","title":"HMS-PADDLE","origin":"https://hms-paddle.com","path":"/","queryRedacted":false,"hashRedacted":true,"tabGroup":"gid41 UI chunk recovery"},
+    {"tabId":"520526415","title":"HMS-PADDLE","origin":"https://hms-paddle.com","path":"/","queryRedacted":false,"hashRedacted":true,"tabGroup":"HMS batch B abc222 exclusive"},
+    {"tabId":"520526414","title":"about:blank","origin":"about://","path":"blank","queryRedacted":false,"hashRedacted":false,"tabGroup":"batch B gid43 preparation"},
+    {"tabId":"520526407","title":"New tab","origin":"chrome://","path":"/","queryRedacted":false,"hashRedacted":false,"tabGroup":null}
+  ],
+  "status": "ABC222_TABS_CHECKPOINTED_BROWSER_RELEASED"
+}

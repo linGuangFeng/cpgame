@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "runId": "collect-20260908",
+  "hall": "https://hms-paddle.com/",
+  "runbook": "reports/_workflow/cp-game-replication-full-runbook.zh-CN.md",
+  "indexDoc": "reports/_workflow/collect-20260908/INDEX.zh-CN.md",
+  "tokenValuesPersisted": false,
+  "javaStartedThisRun": false,
+  "games": [
+    {
+      "rawId": 16,
+      "directoryName": "16-Jungle-Fruit",
+      "handoff": "reports/16-Jungle-Fruit/collect-20260908-handoff.zh-CN.md",
+      "originCollection": "reports/16-Jungle-Fruit/origin-collection-20260908.json",
+      "collectStatus": "COMPLETE_NO_RESAMPLE"
+    },
+    {
+      "rawId": 52,
+      "directoryName": "52-Cyber-GO",
+      "handoff": "reports/52-Cyber-GO/collect-20260908-handoff.zh-CN.md",
+      "originCollection": "reports/52-Cyber-GO/origin-collection-20260908.json",
+      "collectStatus": "COMPLETE_NO_RESAMPLE"
+    },
+    {
+      "rawId": 1090,
+      "directoryName": "1090-Sharpshooter",
+      "handoff": "reports/1090-Sharpshooter/collect-20260908-handoff.zh-CN.md",
+      "originCollection": "reports/1090-Sharpshooter/origin-collection-20260908.json",
+      "collectStatus": "COMPLETE_NO_RESAMPLE"
+    },
+    {
+      "rawId": 45,
+      "directoryName": "45-Rio-Carnival",
+      "handoff": "reports/45-Rio-Carnival/collect-20260908-handoff.zh-CN.md",
+      "originCollection": "reports/45-Rio-Carnival/origin-collection-20260908.json",
+      "collectStatus": "COMPLETE_NO_RESAMPLE"
+    },
+    {
+      "rawId": 56,
+      "directoryName": "56-Crazy-Piggy",
+      "handoff": "reports/56-Crazy-Piggy/collect-20260908-handoff.zh-CN.md",
+      "originCollection": "reports/56-Crazy-Piggy/origin-collection-20260908.json",
+      "collectStatus": "COMPLETE_NO_RESAMPLE"
+    },
+    {
+      "rawId": 2300,
+      "directoryName": "2300-Monster-Slayer",
+      "handoff": "reports/2300-Monster-Slayer/collect-20260908-handoff.zh-CN.md",
+      "originCollection": "reports/2300-Monster-Slayer/origin-collection-20260908.json",
+      "collectStatus": "BUY_BUCKETS_READY"
+    },
+    {
+      "rawId": 1380,
+      "directoryName": "1380-Hidden-Realm",
+      "handoff": "reports/1380-Hidden-Realm/collect-20260908-handoff.zh-CN.md",
+      "originCollection": "reports/1380-Hidden-Realm/origin-collection-20260908.json",
+      "collectStatus": "SPIN_900_HISTORY_DETAIL_READY"
+    },
+    {
+      "rawId": 1780,
+      "directoryName": "1780-Glacier-Treasure",
+      "handoff": "reports/1780-Glacier-Treasure/collect-20260908-handoff.zh-CN.md",
+      "originCollection": "reports/1780-Glacier-Treasure/origin-collection-20260908.json",
+      "collectStatus": "SPIN_900_HISTORY_DETAIL_READY"
+    },
+    {
+      "rawId": 2110,
+      "directoryName": "2110-Bee-Workshop",
+      "handoff": "reports/2110-Bee-Workshop/collect-20260908-handoff.zh-CN.md",
+      "originCollection": "reports/2110-Bee-Workshop/origin-collection-20260908.json",
+      "collectStatus": "SPIN_WIN120_HISTORY_DETAIL_READY"
+    }
+  ]
+}

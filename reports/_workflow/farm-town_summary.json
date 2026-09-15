@@ -1,0 +1,15 @@
+{
+  "slug": "farm-town",
+  "folder": "2130-Farm-Town",
+  "gid": 2130,
+  "runId": "20260902T093931000Z",
+  "stage": "/Users/a1/Downloads/farm-town-stage/20260902T093931000Z",
+  "hdDest": "/Volumes/hd/cpgame/resources/2130-Farm-Town/programmatic-http/20260902T093931000Z",
+  "succeeded": 108,
+  "failed": 0,
+  "bytes": 16374283,
+  "total": 108,
+  "gameDirs": [
+    "Game2130"
+  ]
+}

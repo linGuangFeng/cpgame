@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "batchId": "B",
+  "attemptedAt": "2026-08-29T07:46:27+08:00",
+  "requestedGameId": 43,
+  "requestedDirectoryName": "43-Lucky-Wheel",
+  "extensionInstanceId": "35d86d21-ac60-4133-9019-8c4645472100",
+  "resolvedBrowserId": "-4eed-4c90-b383-5c55d21d5ae8",
+  "browserFamily": "chrome",
+  "scope": "OWN_AGENT_CREATED_HMS_TAB_ONLY",
+  "operation": "CREATE_OWN_TAB_AND_NAVIGATE_HTTPS_HMS_PADDLE_COM",
+  "result": "BROWSER_CONTROL_BRIDGE_TIMEOUT_AND_SESSION_RESET",
+  "pageLoadConfirmed": false,
+  "accountVerified": false,
+  "gameEntered": false,
+  "minimumBetObserved": false,
+  "historyObserved": false,
+  "realSpinAttempted": false,
+  "transactionCreated": false,
+  "formalOriginalHttpPaidRoundStarts": 0,
+  "continuation": "CONTINUE_OFFLINE_ARTIFACT_PREPARATION_WITHOUT_BROWSER_RETRY",
+  "completionClaim": false
+}

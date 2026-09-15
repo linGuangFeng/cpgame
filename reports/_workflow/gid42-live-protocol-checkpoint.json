@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "rawGameId": 42,
+  "directoryName": "42-Lucky-Dragon",
+  "status": "IN_PROGRESS_UI_HISTORY_FIRST_ROUND_CONFIRMED_FORMAL_HTTP_SCHEMA_BLOCKED",
+  "releaseSignal": "RELEASE_GID42",
+  "browser": {
+    "family": "chrome",
+    "profileName": "abc222",
+    "extensionInstanceId": "35d86d21-ac60-4133-9019-8c4645472100",
+    "accountAliasVerified": true,
+    "accountIdVerified": "74171415",
+    "officialCardResource": 50042,
+    "officialCardName": "Lucky Dragon",
+    "launchOrigin": "https://static.cpgame.io",
+    "launchPath": "/42/",
+    "launchRawGameId": 42,
+    "launchQueryValuesPersisted": false
+  },
+  "firstRound": {
+    "evidenceType": "HMS_UI_MANUAL",
+    "formalOriginalAuthorizedHttpContribution": 0,
+    "paidBetBrl": 0.5,
+    "payoutBrl": 0,
+    "netBrl": -0.5,
+    "preRoundBalanceBrl": 59997.15,
+    "terminalBalanceBrl": 59996.65,
+    "outcome": "LOSS",
+    "historyMatchedOneToOne": true,
+    "betId": "42-2094094921864216576",
+    "transferId": "2094094921864216576",
+    "roundLabel": "Giro Normal",
+    "betLevel": 1,
+    "visibleStepCount": 1
+  },
+  "confirmedGid42ApiPaths": {
+    "origin": "https://api.omgapibra.com",
+    "auth": "/cp/api/v1/auth/verify",
+    "config": "/cp/api/v1/lucky-dragon/config",
+    "spin": "/cp/api/v1/lucky-dragon/spin",
+    "historyList": "/cp/api/v1/lucky-dragon/log-list",
+    "historyDetail": "/cp/api/v1/lucky-dragon/log-view"
+  },
+  "chromeEvidenceCapability": {
+    "pageAssetsCanObservePaths": true,
+    "pageAssetsCanReadHttpMethod": false,
+    "pageAssetsCanReadRequestBody": false,
+    "pageAssetsCanReadResponseBody": false,
+    "pageAssetsCanBundleScriptBodies": false,
+    "consoleProtocolLogsObserved": 0,
+    "directStaticScriptOrConfigNavigation": "ERR_BLOCKED_BY_CLIENT"
+  },
+  "collectorStillRequires": [
+    "exact HTTP method for auth/config/spin/log-list/log-view",
+    "exact non-secret request field names",
+    "exact response envelope and data field names",
+    "signed or unsigned determination backed by gid42 evidence",
+    "minimum-bet request field/value reconciliation with BRL 0.50",
+    "paid-start, terminal, payout, round-id and terminal-balance pointers",
+    "History normalization schema and exact step evidence"
+  ],
+  "safety": {
+    "unknownProtocolGuessed": false,
+    "otherGameProtocolApplied": false,
+    "formalPaidRoundStarts": 0,
+    "uiManualPaidRoundStartsThisSession": 1,
+    "tokenReadIntoMemoryOnly": true,
+    "tokenUnexpectedlyRenderedOnceByRawChromeTabsListTool": true,
+    "tokenValueRepeatedAfterIncident": false,
+    "freshLaunchTokenRequiredBeforeAnyFutureBatch": true,
+    "tokenPersisted": false,
+    "additionalSpinBlockedUntilProtocolSchemaCaptured": true
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 1830,
+  "directoryName": "1830-Hotpot",
+  "rulesHash": "01123dc898992e5e38efb1f58b816c844093dfcf07939e2cefa3153022b61c01",
+  "status": "RULES_AND_SAMPLES_ALIGNED",
+  "matrixPolicy": "Field, rule, frontend decision and sample are from game 1830 only. Appearance rates, empty-value normality, three-entry weights and integer-multiplier rate that cannot be answered from current evidence stay 样本不够. supported=true is forbidden on those rows.",
+  "rows": [
+    {
+      "item": "launch.language / l / gid",
+      "source": "iframe query; PolyglotGame1830; ClientConfigManager language",
+      "frontend": "SetInitLanguage; i18n.selectLang must be a PolyglotGame1830 column",
+      "sample": "language=pt-br (lobby alias of pt-pt); 15 declared codes each first-loaded",
+      "status": "OBSERVED",
+      "appearanceRate": "n/a",
+      "emptyNormal": false
+    },
+    {
+      "item": "POST /cp/single_game.Game/initRoom",
+      "source": "Game1830HttpAPI.GameDates; first-load network URLs",
+      "frontend": "RequestGameDates / loadingInitRoom send token+gid; consume data.bet_gold, data.level, data.oid, data.prop_odds[], data.props, data.frees, data.total_win",
+      "sample": "URL observed on every language first-load; response body not archived this node",
+      "status": "URL_OBSERVED_BODY_NOT_ARCHIVED",
+      "appearanceRate": "样本不够"
+    },
+    {
+      "item": "data.prop_odds[].prop_id / odds[].num / odds[].odds",
+      "source": "initRoom data.prop_odds",
+      "frontend": "Game1830Mgr.symbolOddMap; SymbolDesc shows count/odd; History tips use win_arr.odd",
+      "sample": "样本不够 — no archived initRoom body",
+      "status": "NAMED_IN_CODE_NO_SAMPLE",
+      "appearanceRate": "样本不够"
+    },
+    {
+      "item": "POST /cp/single_game.Game/gameResult request.bet_gold",
+      "source": "Game1830Mgr.RequestGameBet",
+      "frontend": "sends BaseBetNum (Bet Size), not charged total",
+      "sample": "quarantined dirty fixture bet_gold=0.02; not a complete Round",
+      "status": "CODE_CONFIRMED_CLEAN_SAMPLE_INSUFFICIENT"
+    },
+    {
+      "item": "request.level",
+      "source": "Game1830Mgr.RequestGameBet; ClearBasket levels [10..1]",
+      "frontend": "Level from bet UI EventTypeGetAmount",
+      "sample": "quarantined dirty fixture level=10",
+      "status": "CODE_CONFIRMED_CLEAN_SAMPLE_INSUFFICIENT"
+    },
+    {
+      "item": "request.act_id",
+      "source": "Game1830Mgr.RequestGameBet",
+      "frontend": "only when FreeBetActId!='0' and free-bet type is not rotate_merchant; promotional, not Scatter Free Spins",
+      "sample": "样本不够",
+      "status": "CODE_ONLY"
+    },
+    {
+      "item": "response.data.bet / bet_gold / change_gold / start_gold / end_gold / total_win / odds / oid / type / level",
+      "source": "quarantined dirty gameResult; Game1830 RecBetResult / RecGameDates / BetDetails",
+      "frontend": "win_gold computed as bet_gold+change_gold when not isScatterIng, else change_gold; end_gold updates balance; type==2 is free step in BetDetails",
+      "sample": "dirty type=1, total_win=0, odds=0, oid present; clean samples 样本不够",
+      "status": "DIRTY_FIELD_NAMES_ONLY"
+    },
+    {
+      "item": "response.data.small_game_type",
+      "source": "quarantined dirty gameResult = 0",
+      "frontend": "Game1830 never reads small_game_type",
+      "sample": "dirty 0",
+      "status": "UNUSED_BY_CLIENT",
+      "disposition": "preserve if present; do not invent a small-game from this field"
+    },
+    {
+      "item": "data.props[].prop[36]",
+      "source": "gameResult; COL_NUM=6; BetDetails 36 cells",
+      "frontend": "column-major 6x6; onGetColToIdx reverses each column so index 0 is visual top",
+      "sample": "dirty 36 ints in 1..10; clean 样本不够",
+      "status": "CODE_CONFIRMED_LAYOUT"
+    },
+    {
+      "item": "data.props[].win_arr[].p / n / wm / odd",
+      "source": "StartEliminate uses p; BetDetails uses n, wm, odd",
+      "frontend": "eliminate every symbolId==p; payout line x n; gold wm; tip bet X level X odd",
+      "sample": "dirty empty array on loss — hypothesized NORMAL empty-on-loss; 样本不够 to call supported=true",
+      "status": "CODE_CONFIRMED_EMPTY_ON_LOSS_HYPOTHESIS"
+    },
+    {
+      "item": "data.props[].tw / mult",
+      "source": "getTipsOddsKey tw/bet_gold; BetDetails sums mult then shows tw",
+      "frontend": "page total win tw; multiplier map summed at spin end",
+      "sample": "dirty tw=0 mult=[]; 样本不够 for rates",
+      "status": "CODE_CONFIRMED_EMPTY_ON_LOSS_HYPOTHESIS"
+    },
+    {
+      "item": "data.frees.st / tt / twa / lwa",
+      "source": "checkScatterModel st>0; GetFreeTimesView st; ADDSCATTER tt-OldScatterNum; FreeSpinTotalWinView twa+lwa",
+      "frontend": "consumed as remaining / total / feature win",
+      "sample": "dirty all zeros on ordinary loss; clean free-spin body 样本不够",
+      "status": "CODE_CONFIRMED_ZERO_ON_ORDINARY_LOSS_HYPOTHESIS"
+    },
+    {
+      "item": "data.frees.ba / bet / l",
+      "source": "quarantined dirty object keys",
+      "frontend": "Game1830 does not read these keys",
+      "sample": "dirty 0",
+      "status": "UNUSED_BY_CLIENT"
+    },
+    {
+      "item": "win model / paylineCount",
+      "source": "PolyglotGame1830 Game1830_4",
+      "frontend": "8+ matching symbols anywhere; not paylines; betLinesConfig=[20] is Base Bet",
+      "sample": "n/a",
+      "status": "CONFIRMED_NOT_PAYLINE",
+      "paylineCount": null,
+      "paylineApplicable": false
+    },
+    {
+      "item": "Scatter trigger counts and awards",
+      "source": "Game1830_14 Game1830_17; BetDetails type branch",
+      "frontend": "paid: 3+ Scatter → 10+2*(h-3); free: 2+ Scatter → 5+2*(h-2)",
+      "sample": "clean trigger 样本不够",
+      "status": "CODE_AND_HELP_CONFIRMED"
+    },
+    {
+      "item": "MultiplierTypeList",
+      "source": "Game1830Mgr.MultipleTypeList",
+      "frontend": "[2,3,4,5,7,10,15,20,25,30,40,50] via symbolId-12; Help main x2-x5 free x5-x50",
+      "sample": "样本不够 for which ids appear on start vs fill vs free",
+      "status": "CODE_AND_HELP_CONFIRMED_WEIGHTS_UNKNOWN"
+    },
+    {
+      "item": "integer multiplier / total_win over bet",
+      "source": null,
+      "frontend": "multiplier values are integers; whether every win is an integer multiple of charged stake is unproven",
+      "sample": "样本不够",
+      "status": "UNKNOWN",
+      "supported": false
+    },
+    {
+      "item": "three-entry weights (start / cascade fill / free)",
+      "source": null,
+      "frontend": "next page fills only empty cells from props[PageIndex]; no client weight table",
+      "sample": "样本不够 — do not copy start-page weights onto fill",
+      "status": "UNKNOWN",
+      "supported": false
+    },
+    {
+      "item": "empty-value normality",
+      "source": "captures/1830-Hotpot/round-index.jsonl ordinary LOSS",
+      "frontend": "empty win_arr skips eliminate and goes OLDMOVESEND",
+      "sample": "ORDINARY_LOSS 1140/1140 terminal pages have empty win_arr and total_win=0; empty is NORMAL on ordinary loss. WIN/free empty-field rates still 样本不够 for a global supported=true.",
+      "status": "NORMAL_ON_ORDINARY_LOSS_ONLY",
+      "supported": false
+    },
+    {
+      "item": "POST gold_history / user_history",
+      "source": "triggered-request-inventory; Game1830Record / Game1830Daily",
+      "frontend": "day list then one-day list then BetDetails",
+      "sample": "URLs fired per language; response bodies not archived; detail click not captured",
+      "status": "URL_OBSERVED_BODY_NOT_ARCHIVED"
+    },
+    {
+      "item": "FEATURE_BUY",
+      "source": "full Game1830 module scan buyFree/btn_buy/FEATURE_BUY = 0 hits; Help has no purchase",
+      "frontend": "no buy UI",
+      "sample": "n/a",
+      "status": "NOT_APPLICABLE"
+    }
+  ]
+}

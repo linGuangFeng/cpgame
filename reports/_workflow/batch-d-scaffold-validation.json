@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "workflowTemplateVersion": 15,
+  "validatedAt": "2026-08-29",
+  "browserUsed": false,
+  "formalSamples": 0,
+  "rawGameIds": [
+    58,
+    60,
+    1810,
+    1830
+  ],
+  "checks": {
+    "java21Compilation": "PASS_8_PROJECTS",
+    "generatorExecutableJar": "PASS_4",
+    "loaderVerifyMode": "PASS_EXIT_0_4",
+    "loaderDefaultSafeRefusal": "PASS_EXIT_2_4",
+    "serverAdministrativeHealth": "PASS_4",
+    "serverScaffoldStatus": "PASS_4",
+    "guessedGameProtocolEndpoints": false,
+    "redisAccessImplemented": false,
+    "seedInFormalConfig": false,
+    "derivedOrIntegrationGameIds": false
+  },
+  "problems": [],
+  "status": "PASS_ALL_EVIDENCE_GATED_SCAFFOLDS"
+}
+

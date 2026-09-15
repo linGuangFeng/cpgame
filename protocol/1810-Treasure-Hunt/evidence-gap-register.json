@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "workflowTemplateVersion": 17,
+  "rawGameId": 1810,
+  "directoryName": "1810-Treasure-Hunt",
+  "rawGameIdOnly": true,
+  "status": "POST_OFFICIAL_RECOVERY_HMS_NAVIGATION_TRANSPORT_FAILURE",
+  "implementationAllowed": false,
+  "formalPaidRounds": 0,
+  "confirmedEndpoints": [],
+  "confirmedRequestFields": [],
+  "confirmedResponseFields": [],
+  "confirmedBehaviors": [],
+  "confirmedRules": [],
+  "unknown": [
+    "init/config endpoint sequence",
+    "paid Spin endpoint and codec",
+    "board and win model",
+    "Round/Delivery/Step state machine",
+    "History list/detail/back contract",
+    "rules/paytable/paylines/bet levels",
+    "supported languages",
+    "symbol weights",
+    "Mary applicability",
+    "all special/reward categories",
+    "Redis consumer contract"
+  ],
+  "requiredEvidenceSources": ["ORIGINAL_AUTHORIZED_HTTP", "ORIGINAL_OFFICIAL_UI_MANUAL"],
+  "forbiddenEvidenceSources": ["OFFLINE_GENERATED_NOT_ORIGINAL", "OTHER_GAME_EXAMPLE"],
+  "browserGate": "OFFICIAL_CHROME_RECOVERY_AND_ABOUT_BLANK_SCREENSHOT_PASS_BUT_HMS_NAVIGATION_FAILS_BEFORE_COMMIT",
+  "firstProbePlan": "reports/1810-Treasure-Hunt/first-round-probe-plan.json"
+}

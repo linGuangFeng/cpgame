@@ -1,0 +1,8 @@
+package com.cpgame.g2110.core;
+import java.util.*;
+/** BW1 stores only complete structural facts in printable ASCII; all awards are recalculated. */
+public final class MinimalRoundFactCodec{
+ private final GameRuleCore rules=new GameRuleCore();
+ public String encode(GameRuleCore.CompleteRound round){rules.validate(round);StringBuilder out=new StringBuilder("BW1|").append(round.kind().ordinal()).append('|');for(int i=0;i<round.steps().size();i++){if(i>0)out.append('~');var step=round.steps().get(i);for(int value:step.board())out.append((char)('0'+value));int mask=0;for(int p:step.specialPositions())mask|=1<<p;out.append('.').append(Integer.toHexString(mask));}String value=out.toString();for(int i=0;i<value.length();i++)if(value.charAt(i)<32||value.charAt(i)>126)throw new IllegalStateException("non ASCII");return value;}
+ public GameRuleCore.CompleteRound decode(String value){try{String[]h=value.split("\\|",3);if(h.length!=3||!"BW1".equals(h[0]))throw new IllegalArgumentException("header");var kind=GameRuleCore.RoundKind.values()[Integer.parseInt(h[1])];List<GameRuleCore.Step>steps=new ArrayList<>();for(String raw:h[2].split("~")){String[]p=raw.split("\\.",2);if(p.length!=2||p[0].length()!=GameRuleCore.CELLS)throw new IllegalArgumentException("step");int[]board=new int[GameRuleCore.CELLS];for(int i=0;i<board.length;i++)board[i]=p[0].charAt(i)-'0';int mask=Integer.parseInt(p[1],16);List<Integer>special=new ArrayList<>();for(int i=0;i<GameRuleCore.CELLS;i++)if((mask&(1<<i))!=0)special.add(i);steps.add(new GameRuleCore.Step(board,special));}var round=new GameRuleCore.CompleteRound(kind,steps);rules.validate(round);return round;}catch(RuntimeException e){throw new IllegalArgumentException("invalid BW1 member",e);}}
+}

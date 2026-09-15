@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.cpgame.sambasensation</groupId>
+  <artifactId>samba-sensation-controller</artifactId>
+  <version>1.0.0</version>
+  <properties>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <junit.version>5.11.4</junit.version>
+  </properties>
+  <dependencies>
+    <!-- 唯一规则核心来自 generator Maven artifact，Controller 不复制判奖/赔表。 -->
+    <dependency>
+      <groupId>com.cpgame.sambasensation</groupId>
+      <artifactId>samba-sensation-rule-engine</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.18.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>controller</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.5.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>shade</goal></goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <!-- 最终 Controller 只嵌入共享 core/codec/key contract，不携带生成器或 Loader 可执行类。 -->
+              <filters>
+                <filter>
+                  <artifact>com.cpgame.sambasensation:samba-sensation-rule-engine</artifact>
+                  <includes>
+                    <include>com/cpgame/sambasensation/core/**</include>
+                    <include>com/cpgame/sambasensation/generator/RuntimeSpinGenerator**</include>
+                    <include>com/cpgame/sambasensation/redis/RedisKeyContract.class</include>
+                  </includes>
+                </filter>
+              </filters>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>com.cpgame.sambasensation.server.SambaSensationController</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>fixed-controller-v3-delivery</id>
+            <phase>package</phase>
+            <goals><goal>run</goal></goals>
+            <configuration>
+              <target>
+                <mkdir dir="${project.basedir}/dist"/>
+                <copy file="${project.build.directory}/controller.jar"
+                      tofile="${project.basedir}/dist/controller.jar" overwrite="true"/>
+                <copy file="${project.basedir}/src/main/dist/controller.properties"
+                      tofile="${project.basedir}/dist/controller.properties" overwrite="true"/>
+                <copy file="${project.basedir}/src/main/dist/demo-controller.properties"
+                      tofile="${project.basedir}/dist/demo-controller.properties" overwrite="true"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

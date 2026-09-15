@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "account": "abc221",
+  "operation": "land_exact_staticUrls",
+  "rsync": {
+    "flags": [
+      "-rltD",
+      "--chmod=ugo=rwX"
+    ]
+  },
+  "urlGuessingOrAssetPathSynthesis": false,
+  "jobs": [
+    {
+      "slug": "samba-sensation",
+      "gid": 2290,
+      "folder": "2290-Samba-Sensation",
+      "assetPathBase": "/fixed/",
+      "runId": "20260902T094956736Z",
+      "exactStaticUrls": 108,
+      "ok": 108,
+      "fail": 0,
+      "bytes": 35918483,
+      "hdFileCount": 108,
+      "pathPrefixMatch": 108,
+      "gameDirs": [
+        "Game2290"
+      ],
+      "stage": "/Users/a1/Downloads/samba-sensation-stage/20260902T094956736Z",
+      "hdDest": "/Volumes/hd/cpgame/resources/2290-Samba-Sensation/programmatic-http/20260902T094956736Z",
+      "itemsSha256": "c633b65f2fcdaebb712775e779c08f1e865302b910b978b87a9f27ddc90dc8e0",
+      "captureCopied": "/Volumes/hd/cpgame/reports/_workflow/cp-capture-abc221-samba-sensation-urls.json",
+      "reportCopied": "/Volumes/hd/cpgame/reports/_workflow/samba-sensation_download-report.public.json",
+      "summaryCopied": "/Volumes/hd/cpgame/reports/_workflow/samba-sensation_summary.json",
+      "rsync_rc": 0
+    },
+    {
+      "slug": "electro-fiesta",
+      "gid": 2410,
+      "folder": "2410-Electro-Fiesta",
+      "assetPathBase": "/v2/2410/",
+      "runId": "20260902T095036758Z",
+      "exactStaticUrls": 242,
+      "ok": 242,
+      "fail": 0,
+      "bytes": 26636893,
+      "hdFileCount": 242,
+      "pathPrefixMatch": 242,
+      "gameDirs": [],
+      "stage": "/Users/a1/Downloads/electro-fiesta-stage/20260902T095036758Z",
+      "hdDest": "/Volumes/hd/cpgame/resources/2410-Electro-Fiesta/programmatic-http/20260902T095036758Z",
+      "itemsSha256": "9c22f5f56b02bb2b409219241302c9197fc1a0eaf703ef92a0fc8c1ff809eabe",
+      "captureCopied": "/Volumes/hd/cpgame/reports/_workflow/cp-capture-abc221-electro-fiesta-urls.json",
+      "reportCopied": "/Volumes/hd/cpgame/reports/_workflow/electro-fiesta_download-report.public.json",
+      "summaryCopied": "/Volumes/hd/cpgame/reports/_workflow/electro-fiesta_summary.json",
+      "rsync_rc": 0
+    }
+  ]
+}

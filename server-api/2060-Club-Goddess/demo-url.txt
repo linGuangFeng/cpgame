@@ -1,0 +1,1 @@
+http://localhost:20600/?ai=local_demo&btt=1&gid=2060&l=pt&language=pt-br&sip=localhost:20600&t=local-demo-launch&token=local-demo-launch

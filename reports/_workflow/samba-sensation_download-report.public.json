@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 2290,
+  "gameName": "Samba Sensation",
+  "runId": "20260902T094956736Z",
+  "startedAt": "2026-09-02T09:49:56.736Z",
+  "finishedAt": "2026-09-02T09:50:06.950Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 111,
+    "exactStaticUrls": 108,
+    "excludedDynamicApiUrls": 3,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 108,
+    "succeeded": 108,
+    "failed": 0,
+    "downloadedBytes": 35918483,
+    "statusCounts": {
+      "200": 108
+    },
+    "contentTypeCounts": {
+      "application/javascript": 13,
+      "image/png": 72,
+      "application/json": 10,
+      "application/octet-stream": 5,
+      "image/jpeg": 7,
+      "audio/mpeg": 1
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/2290-Samba-Sensation/programmatic-http/20260902T094956736Z/download-items.public.jsonl",
+      "sha256": "c633b65f2fcdaebb712775e779c08f1e865302b910b978b87a9f27ddc90dc8e0",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/2290-Samba-Sensation/programmatic-http/20260902T094956736Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "stageDirectory": "/Users/a1/Downloads/samba-sensation-stage/20260902T094956736Z",
+  "resourceFolder": "2290-Samba-Sensation"
+}

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "gameId": 50,
+  "gameName": "Lucky Cat II",
+  "directoryName": "50-Lucky-Cat-II",
+  "rulesVersion": "v1.5.10.250430",
+  "purpose": "Immutable canonical input for rulesHash; fixtures remain oracle-only and are never runtime result sources.",
+  "sourceHashes": [
+    {
+      "source": "resources/50-Lucky-Cat-II/en/static.cpgame.io/50/versionconfig.js",
+      "sha256": "fb05750a4f9e9b9e2c67c19237c33e1689411369c4e6fc36aa70f7554476b4dc",
+      "disposition": "IDENTITY_AND_VERSION"
+    },
+    {
+      "source": "resources/50-Lucky-Cat-II/extracted/text-assets/en/gameRules.json",
+      "sha256": "21a04c44b02862fd5c70c793409307ba1d7e030fc43d6be5ef05ebb7958e328a",
+      "disposition": "AUTHORITATIVE_RULE_TEXT"
+    },
+    {
+      "source": "resources/50-Lucky-Cat-II/extracted/text-assets/en/paytable.json",
+      "sha256": "44c5b08a38883cee3459ddb760f3c326c5ce46b50ebc77faa82d377bc805027f",
+      "disposition": "AUTHORITATIVE_PAYTABLE_TEXT"
+    },
+    {
+      "source": "resources/50-Lucky-Cat-II/en/static.cpgame.io/50/assets/main/index.b4be9.js",
+      "sha256": "4675d19868213cc4c3874d5964ff6ef438a5d5634039af22a33105177007cf9f",
+      "disposition": "FRONTEND_DECISION_CODE"
+    },
+    {
+      "source": "fixtures/50-Lucky-Cat-II/config-response.json",
+      "sha256": "c9b84893017b1ec1caf0b010fe760fea46ee1964b807d19faf42cdc77b093a3b",
+      "disposition": "CONFIG_ORACLE_ONLY"
+    }
+  ],
+  "ruleCore": {
+    "board": {"reels": 3, "rowsPerReel": [3, 3, 3], "visibleCells": 9},
+    "winModel": {
+      "type": "FIXED_PAYLINES",
+      "paylineCount": 5,
+      "direction": "LEFT_TO_RIGHT",
+      "coordinates": {"1": [0, 0, 0], "2": [1, 1, 1], "3": [2, 2, 2], "4": [0, 1, 2], "5": [2, 1, 0]}
+    },
+    "symbols": ["WILD", "S1", "S2", "S3", "S4", "S5", "S6"],
+    "wildSubstitutesFor": "ALL_NON_WILD_SYMBOLS",
+    "paytable": {"WILD": 80, "S1": 25, "S2": 20, "S3": 15, "S4": 7, "S5": 5, "S6": 2},
+    "payoutFormula": "sum(spl[wmkl[line]] * bs * bl) * rpx",
+    "specialModes": ["LUCKY_RESPIN", "MULTIPLIER_WHEEL"],
+    "roundBoundary": "one paid Spin response contains the complete Round; gm=1 embeds one free Lucky Respin board transition and never requires another Spin request"
+  },
+  "unknownsExcludedFromRuleCore": [
+    "server reel-strip probabilities",
+    "server symbol generation weights",
+    "multiplier probability distribution",
+    "Redis key pattern and binary encoding"
+  ]
+}

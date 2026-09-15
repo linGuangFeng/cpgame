@@ -1,0 +1,378 @@
+{
+  "schemaVersion": "2.0",
+  "gameId": 2060,
+  "directoryName": "2060-Club-Goddess",
+  "gameName": "Club Goddess",
+  "rulesVersion": "2060-protocol-r3",
+  "rulesHash": "sha256:cd9e5bac75dcaee42e78e1298a4e896b3a2b01db98c28027a50d7d3df771016b",
+  "behaviorIds": [
+    "BHV-IDENTITY",
+    "BHV-HTTP-CODEC-SIGNATURE",
+    "BHV-BOOTSTRAP-AUTH-INIT",
+    "BHV-INIT-RESUME-SNAPSHOT",
+    "BHV-BET-MODEL",
+    "BHV-BOARD-SYMBOLS",
+    "BHV-WAYS-BASE-WIN",
+    "BHV-BASE-LOSS",
+    "BHV-PAID-LEDGER",
+    "BHV-HISTORY-AGGREGATE",
+    "BHV-HISTORY-ORDER-STEPS",
+    "BHV-WILD-SUBSTITUTION",
+    "BHV-BUY-FEATURE-ABSENT",
+    "BHV-LANGUAGE-ASSETS",
+    "BHV-FREE-SPINS-TRIGGER",
+    "BHV-FREE-WILD-MULTIPLIER",
+    "BHV-FREE-STEP-STATE-MACHINE",
+    "BHV-REQUEST-RECOVERY",
+    "BHV-RTP-DISCLOSURE",
+    "BHV-REDIS-COMPLETE-ROUND"
+  ],
+  "stateDefinitions": [
+    "WAIT_INIT_DATA",
+    "IDLE",
+    "AUTO_IDLE",
+    "SCROLL",
+    "SHOW_WIN_RESULT",
+    "FREE_IDLE"
+  ],
+  "capabilityStatus": "PROTOCOL_READY_FREE_SAMPLE_INSUFFICIENT",
+  "winModel": "WAYS",
+  "winModelDetails": {
+    "type": "WAYS",
+    "waysCount": 243,
+    "paylineCount": null,
+    "paylineCountStatus": "NOT_APPLICABLE",
+    "minimumAdjacentReels": 3,
+    "direction": "LEFT_TO_RIGHT",
+    "waysFormula": "Product of matching positions on consecutive reels starting at reel 1.",
+    "basePayoutFormula": "bet * level * odd * ways",
+    "evidence": [
+      "screenshots/2060-Club-Goddess/rules-page-23-pt-br.png",
+      "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+      "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+    ]
+  },
+  "boardModel": {
+    "columns": 5,
+    "visibleRows": 3,
+    "visibleCellCount": 15,
+    "bufferRows": "UNKNOWN",
+    "encoding": "COLUMN_MAJOR",
+    "positionFormula": "position = reelZeroBased * 3 + rowZeroBased",
+    "symbolIds": {
+      "regular": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "scatter": 9,
+      "wild": 10
+    },
+    "evidence": [
+      "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+      "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json",
+      "fixtures/2060-Club-Goddess/oracle/spin-win-010.response.json"
+    ]
+  },
+  "betModel": {
+    "betSizeOptions": [
+      0.01,
+      0.04,
+      0.2
+    ],
+    "frontendLevelOptions": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "capturedLevel": 10,
+    "baseBetFactor": 30,
+    "chargedStakeFormula": "betSize * level * baseBetFactor",
+    "capturedChargedStake": 3,
+    "minimumServerAcceptedTotalStake": "UNKNOWN; only 0.01/level 10/base factor 30 was actually paid",
+    "warning": "baseBetFactor 30 is not a payline count.",
+    "evidence": [
+      "fixtures/2060-Club-Goddess/oracle/initial-data.response.json",
+      "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+      "fixtures/2060-Club-Goddess/oracle/spin-loss-001.request.json"
+    ]
+  },
+  "roundModel": {
+    "paidRoundStart": "A user-authorized POST /single_game.Game/gameResult producing type=1 and a nonzero oid.",
+    "initSnapshotIsPaidRound": false,
+    "roundKey": "oid",
+    "deliveryIdField": null,
+    "stepIdField": null,
+    "liveEndpoint": "/single_game.Game/gameResult",
+    "historyStepContainer": "list[].results[]",
+    "ordinaryPaidTerminalRule": "type==1 && frees.st==0; captured LOSS and WIN each have one terminal step.",
+    "specialContinuationRule": "Saved archive confirms paid type=1 trigger followed by award-count type=2 steps; st decrements to zero and twa accumulates Free wins.",
+    "resumeEndpoint": "/single_game.Game/initRoom",
+    "balanceFormulaForCapturedPaid": "end_gold = start_gold - bet_gold + total_win",
+    "evidence": [
+      "captures/2060-Club-Goddess/spin-index.jsonl",
+      "fixtures/2060-Club-Goddess/oracle/init-room.response.json",
+      "fixtures/2060-Club-Goddess/oracle/history-after-10-rounds.response.json",
+      "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js"
+    ]
+  },
+  "specialModes": [
+    {
+      "id": "FREE_SPINS",
+      "status": "CONFIRMED_SAMPLE_INSUFFICIENT",
+      "trigger": {
+        "scatterCounts": [
+          3,
+          4,
+          5
+        ],
+        "awardedSpins": [
+          12,
+          15,
+          20
+        ],
+        "location": "ANYWHERE"
+      },
+      "knownProtocolHints": [
+        "type=2",
+        "frees.st",
+        "frees.tt",
+        "frees.twa",
+        "History results[]"
+      ],
+      "implementationAllowed": true,
+      "reason": "21 complete adjacent Free Spin rounds are preserved; below target 30 so coverage remains SAMPLE_INSUFFICIENT.",
+      "evidence": [
+        "screenshots/2060-Club-Goddess/rules-page-6-pt-br.png",
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+        "reports/2060-Club-Goddess/scenario-coverage.json"
+      ]
+    },
+    {
+      "id": "FREE_SPIN_WILD_MULTIPLIER",
+      "status": "CONFIRMED_SAMPLE_INSUFFICIENT",
+      "rules": {
+        "initialMultiplier": 2,
+        "wildsPerIncrease": 3,
+        "increase": 2,
+        "maximumMultiplier": 20,
+        "progressResetAfterIncrease": true
+      },
+      "knownProtocolHints": [
+        "frees.m",
+        "frees.spe_num",
+        "frees.twa"
+      ],
+      "implementationAllowed": true,
+      "reason": "Adjacent saved responses confirm cumulative spe_num and same-step multiplier increase; sample count remains below 30.",
+      "evidence": [
+        "screenshots/2060-Club-Goddess/rules-page-17-pt-br.png",
+        "publish/2060-Club-Goddess/assets/Game2060/index.88d42.js",
+        "reports/2060-Club-Goddess/scenario-coverage.json"
+      ]
+    },
+    {
+      "id": "BUY_FEATURE",
+      "status": "NOT_DISCOVERED",
+      "implementationAllowed": false,
+      "reason": "No UI control was discovered and initialData.game_info.buy_free_max_bet=-1.",
+      "evidence": [
+        "fixtures/2060-Club-Goddess/oracle/initial-data.response.json",
+        "screenshots/2060-Club-Goddess/main-ui-pt-br.png"
+      ]
+    }
+  ],
+  "wildModel": {
+    "symbolId": 10,
+    "substitutesFor": "ALL_EXCEPT_SCATTER",
+    "allowedReelsOneBased": [
+      2,
+      3,
+      4
+    ],
+    "runtimeSubstitutionWinCaptured": false,
+    "evidence": [
+      "screenshots/2060-Club-Goddess/rules-page-1-pt-br.png"
+    ]
+  },
+  "supportedLanguages": {
+    "codes": [
+      "bn-bd",
+      "en-us",
+      "es-es",
+      "fr-fr",
+      "id-id",
+      "ko-ko",
+      "pt-pt",
+      "th-th",
+      "tr-tr"
+    ],
+    "queryAliasNotNative": [
+      "pt-br"
+    ],
+    "evidence": [
+      "reports/2060-Club-Goddess/language-inventory.json",
+      "resources/2060-Club-Goddess/source-manifest.json",
+      "publish/2060-Club-Goddess/assets/resources/config.6618e.json",
+      "publish/2060-Club-Goddess/assets/Game2060/config.88d42.json"
+    ]
+  },
+  "runtimeIndependentLoss": {
+    "supported": false,
+    "scope": "ORDINARY_PAID_BASE_ONLY",
+    "requiredResult": {
+      "type": 1,
+      "small_game_type": 0,
+      "total_win": 0,
+      "props.tw": 0,
+      "props.win_arr.length": 0,
+      "frees.st": 0,
+      "frees.tt": 0,
+      "frees.twa": 0
+    },
+    "terminal": true,
+    "generatorRequirement": "Offline Loader generates and verifies 0-multiplier complete rounds; Controller must claim them from Redis and never deal at runtime.",
+    "evidence": [
+      "captures/2060-Club-Goddess/spin-index.jsonl",
+      "fixtures/2060-Club-Goddess/oracle/spin-loss-001.response.json"
+    ]
+  },
+  "redisContract": {
+    "status": "IMPLEMENTED_AND_VALIDATED",
+    "endpoint": "192.168.10.3:6379/15",
+    "normalIndexKey": "PerKeyList_000002060",
+    "specialIndexKey": "MaryKeyList_000002060",
+    "normalListPattern": "BetLog:000002060:%06d",
+    "specialListPattern": "MaryLog:000002060:%06d",
+    "dataStructure": "sorted-set multiplier index plus list per integer multiplier",
+    "memberEncoding": "compact ASCII CG2 minimal complete-round fact",
+    "payloadCompression": "NONE",
+    "roundBoundaryEncoding": "one member contains paid trigger and all continuation boards",
+    "claim": "category selection, existing integer multiplier selection, atomic Lua LPOP",
+    "implementationAllowed": true,
+    "emptyDisposition": "FAIL_CLOSED_NO_RUNTIME_GENERATION"
+  },
+  "codecContract": {
+    "transport": "HTTPS_POST_FORM",
+    "requestContentType": "application/x-www-form-urlencoded",
+    "requestPercentEncoding": false,
+    "response": "UTF8_JSON",
+    "applicationEncryption": "NONE",
+    "applicationCompression": "NONE",
+    "auth": "Launch token is exchanged by getUserInfo; returned session token is sent on game routes.",
+    "signing": {
+      "algorithm": "MD5",
+      "canonicalization": "Lexicographically sorted original keys; key=value entries joined by ':'; JSON.stringify object/array values.",
+      "formula": "MD5(frontendSecret + expireMillis + canonicalString + 'aptsignature')",
+      "fieldsAddedAfterCanonicalization": [
+        "signapt",
+        "expire"
+      ]
+    },
+    "genericProtocol060d7Used": false,
+    "evidence": [
+      "publish/2060-Club-Goddess/versionconfig.js",
+      "publish/2060-Club-Goddess/assets/main/index.f8fbc.js",
+      "captures/2060-Club-Goddess/network/0182-api.omgapibra.com_cp_single_game.Game_gameResult.json"
+    ]
+  },
+  "symbolWeights": {
+    "status": "UNKNOWN",
+    "weights": null,
+    "reelStrips": null,
+    "reason": "Frontend receives server-generated boards; no current-game weights/strips were found and ten samples are not a probability source.",
+    "implementationRule": "Do not infer weights from capture frequency or another game."
+  },
+  "rtp": {
+    "percent": 96.3,
+    "type": "THEORETICAL",
+    "evidence": [
+      "screenshots/2060-Club-Goddess/rules-page-26-pt-br.png"
+    ]
+  },
+  "evidence": [
+    "protocol/2060-Club-Goddess/rules-source-manifest.json",
+    "protocol/2060-Club-Goddess/field-evidence-matrix.json",
+    "protocol/2060-Club-Goddess/protocol-spec.json",
+    "captures/2060-Club-Goddess/spin-index.jsonl",
+    "captures/2060-Club-Goddess/network-manifest.json",
+    "reports/2060-Club-Goddess/scenario-coverage.json",
+    "reports/2060-Club-Goddess/language-inventory.json"
+  ],
+  "missingModes": [
+    {
+      "targetScenario": "FREE_SPINS_RUNTIME_ROUND_AND_ADJACENT_STEPS",
+      "actualPaidRoundAttempts": 1332,
+      "retrievalEntrances": [
+        "minimum-used-bet paid Spin",
+        "rules Free Spins section",
+        "Game2060 free-mode frontend modules"
+      ],
+      "missingEvidence": "Only 21 complete Free Spin rounds are present versus target 30.",
+      "disposition": "SAMPLE_INSUFFICIENT; implemented from preserved complete adjacent sequences."
+    },
+    {
+      "targetScenario": "FREE_SPIN_WILD_MULTIPLIER_RUNTIME_PROGRESSION",
+      "actualPaidRoundAttempts": 1332,
+      "retrievalEntrances": [
+        "paid Spin",
+        "rules Wild multiplier section",
+        "frontend progress and History code"
+      ],
+      "missingEvidence": "Target coverage is short by 9 complete special rounds.",
+      "disposition": "SAMPLE_INSUFFICIENT; multiplier and terminal twa are confirmed in adjacent saved steps."
+    }
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.json",
+    "rulesHash": "sha256:cd9e5bac75dcaee42e78e1298a4e896b3a2b01db98c28027a50d7d3df771016b",
+    "behaviorIds": [
+      "BHV-IDENTITY",
+      "BHV-HTTP-CODEC-SIGNATURE",
+      "BHV-BOOTSTRAP-AUTH-INIT",
+      "BHV-INIT-RESUME-SNAPSHOT",
+      "BHV-BET-MODEL",
+      "BHV-BOARD-SYMBOLS",
+      "BHV-WAYS-BASE-WIN",
+      "BHV-BASE-LOSS",
+      "BHV-PAID-LEDGER",
+      "BHV-HISTORY-AGGREGATE",
+      "BHV-HISTORY-ORDER-STEPS",
+      "BHV-WILD-SUBSTITUTION",
+      "BHV-BUY-FEATURE-ABSENT",
+      "BHV-LANGUAGE-ASSETS",
+      "BHV-FREE-SPINS-TRIGGER",
+      "BHV-FREE-WILD-MULTIPLIER",
+      "BHV-FREE-STEP-STATE-MACHINE",
+      "BHV-REQUEST-RECOVERY",
+      "BHV-RTP-DISCLOSURE"
+    ]
+  },
+  "fixturePolicy": "Fixtures and captures are oracle-only. Runtime Spin outcomes come only from Redis compact members pre-generated by Java GameRuleCore; no runtime fixture read or board generation is allowed.",
+  "generationModel": {
+    "method": "joint special-count signature and conditional three-cell columns by paid/free entry",
+    "runtimeFullBoardReplay": false,
+    "runtimeFixtureReads": false,
+    "source": "generator/2060-Club-Goddess/src/main/resources/com/cpgame/clubgoddess/core/reel-model.json",
+    "validation": "reports/2060-Club-Goddess/generation-model-validation.json",
+    "limits": {
+      "wildPerBoard": 2,
+      "scatterPerReel": 1,
+      "freeScatters": 0,
+      "cumulativeFreeWilds": 15
+    },
+    "freeSampleStatus": "SAMPLE_INSUFFICIENT_21_OF_30"
+  }
+}

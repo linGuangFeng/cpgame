@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "clean-1",
+  "gameId": 2470,
+  "status": "DEPLOYED_API_VERIFIED_UI_RETEST_PENDING",
+  "sampleInsufficient": [
+    "LUCKY_WHEEL"
+  ],
+  "sourcePolicy": "ORIGINAL_RULES_AND_CAPTURES_CLEAN_JAVA_REWRITE",
+  "originAccessUsed": true,
+  "uniqueRealPaidRoundCount": 3000,
+  "realRoundCoverage": {
+    "ORDINARY_LOSS": 2436,
+    "ORDINARY_WIN": 444,
+    "LUCKY_WHEEL": 2,
+    "LUCKY_FEATURE": 118
+  },
+  "stopReason": "PAID_START_LIMIT",
+  "behaviorIds": [
+    "BASE_3X3_5_LINES",
+    "VISIBLE_3_SLOT_MULTIPLIER_REEL",
+    "CENTER_MULTIPLIER_APPLIES",
+    "LUCKY_WHEEL_CENTER_TICKET",
+    "LUCKY_FEATURE_8_INDEPENDENT_BOARDS"
+  ],
+  "endpoints": [
+    "/cp/config/initialData",
+    "/cp/account/getUserInfo",
+    "/cp/single_game.Game/initRoom",
+    "/cp/single_game.Game/gameResult",
+    "/cp/Goldgame/user_game_history"
+  ],
+  "factCodec": "LNM1 ASCII",
+  "redis": "192.168.10.3:6379/15",
+  "controllerContractVersion": 3,
+  "rulesHash": "fb845fbcbe1eac1dc0eecc31b51f505d0ce2353d69a4b90b413c5981a527649d",
+  "implementationSource": "server-api/2470-Lucky-Night-Market/src/main/java/com/cpgame/luckynightmarket",
+  "runtimeResultSource": "Redis pre-generated complete rounds only; never fixtures or local generation",
+  "verifiedAt": "2026-09-14T06:28:45.412099+00:00",
+  "acceptanceEvidenceDirectory": "/Volumes/hd/cpgame/reports/2470-Lucky-Night-Market/clean-rebuild",
+  "nonBlockingGaps": [
+    "SAMPLE_INSUFFICIENT: Lucky Wheel has only 2 original complete rounds in 3000 paid starts; only observed 100x/200x outcomes modeled.",
+    "Default special pool range 25..500 b*l units excludes the observed 200x wheel; whole rounds outside range are rejected, not clipped.",
+    "Original hi-in empty loading2_3 and mostly-English zh-cn dictionary preserved; 5 original lucky_spin translations retain prefab English sprite.",
+    "Raw source protocol confirms all 444 original ordinary wins >=50x total bet, with no collector filtering. The corrected lower-win generator does not claim to match that upstream payout CDF or establish production RTP; empirical entry symbol/axis statistics and formal mode frequencies remain checked. See low-award-model-review.json."
+  ],
+  "demoFixEvidence": "/Volumes/hd/cpgame/reports/2470-Lucky-Night-Market/clean-rebuild/demo-small-award-fix.json"
+}

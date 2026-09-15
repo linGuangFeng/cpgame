@@ -1,0 +1,19 @@
+{
+  "gid": 52,
+  "name": "Cyber GO",
+  "directory": "52-Cyber-GO",
+  "sessionId": "01a08444-0d44-7d02-8de2-136adfe653a8",
+  "status": "ORIGINAL_ENTRY_RESTORED_API_PLAYABLE",
+  "updatedAt": "2026-09-09T06:12:17Z",
+  "demoUrl": "http://192.168.10.3:8000/play/52-Cyber-GO/index.html?gid=52&l=pt&language=pt-br&ai=luck_single_10229&btt=1&t=cyber-go-local&sip=192.168.10.3:8000&apiHost=192.168.10.3:8000",
+  "port": 50017,
+  "originalIndexSha256": "5c4c581d740a3f35fe104ab1d6cb30bb250bd74f6b0f16a84eff342ddd2eeead",
+  "notes": [
+    "Restored original bytes for index.html, versionconfig.js, 0/versionconfig.js, report.js",
+    "Platform query string supplies gid/l/language/ai/btt/t/sip/apiHost",
+    "LoaderMain skips platform --config preload so demo start does not regenerate Redis",
+    "CyberGoServer accepts redis.* overlay keys and resolves generator.properties if the runtime config path moves",
+    "Live API: 14 loss / 9 win / 17 free complete rounds; history list+view OK",
+    "Canvas click playtest not recorded in this agent sandbox"
+  ]
+}

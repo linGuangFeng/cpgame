@@ -1,0 +1,13 @@
+{
+  "gameId": 2110,
+  "rulesHash": "bw2110-lines20-paytable-v2-a7afb966-deal-3d5f4e28",
+  "rows": [
+    {"field": "props.prop[15]", "source": "origin gameResult", "code": "GameRuleCore.CELLS", "sample": "captures/2110-Bee-Workshop/origin-gap-fill-20260908/rounds/round-0002/step-001.response.json"},
+    {"field": "win_arr.line/num/odd/wp", "source": "origin win_arr + help paytable", "code": "GameRuleCore.evaluate + ResultUtil.independentPayoutUnits", "sample": "1929 origin step-001, ResultUtil PASS"},
+    {"field": "spe_pos 5-10 mystery", "source": "origin type=1 spe_pos", "code": "RoundKind.MYSTERY_BOX", "sample": "round-0001 step-001"},
+    {"field": "frees.st/tt sticky", "source": "help Game2110_15/18 + History 8→0", "code": "FREE_STICKY_SYMBOLS", "sample": "api-playthrough free trial st 8..0"},
+    {"field": "Wild reels 2-4", "source": "help Game2110_9", "code": "validateDealtStep", "sample": "deal-model caps"},
+    {"field": "buy_free_max_bet=-1", "source": "fixtures/enter/initialData", "code": "config() returns -1", "sample": "no purchase route"},
+    {"field": "integer multiplier", "source": "sum of line odds", "code": "ResultUtil.integerMultiplier", "sample": "Redis BetLog/MaryLog %06d"}
+  ]
+}

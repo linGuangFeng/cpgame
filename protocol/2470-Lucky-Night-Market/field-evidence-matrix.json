@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "clean-1",
+  "gameId": 2470,
+  "gameName": "Lucky Night Market",
+  "directoryName": "2470-Lucky-Night-Market",
+  "rulesHash": "fb845fbcbe1eac1dc0eecc31b51f505d0ce2353d69a4b90b413c5981a527649d",
+  "status": "COMPLETE_FIELD_RULE_SOURCE_CODE_SAMPLE_MATRIX",
+  "columns": [
+    "fieldOrRule",
+    "ruleOrConfigSource",
+    "frontendDecision",
+    "sampleEvidence",
+    "status",
+    "behaviorIds"
+  ],
+  "rows": [
+    {
+      "fieldOrRule": "board ps 3x3 column-major col*3+row, row0 bottom",
+      "ruleOrConfigSource": "GameConstant.ROW_NUM/COL_NUM; SlotDataMgr.getProps",
+      "frontendDecision": "symbolScroll.getSymbol(col, visualRow) visualRow0=top=provider row2",
+      "sampleEvidence": "every gameResult res.ps length 9; oracle 3826/3826",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "BASE_3X3_5_LINES"
+      ]
+    },
+    {
+      "fieldOrRule": "five paylines wa.l 1..5",
+      "ruleOrConfigSource": "provider wa vs geometry; GameSymbolArea.winLine2SymbolIdx",
+      "frontendDecision": "1:[1,1,1] middle 2:[2,2,2] bottom 3:[0,0,0] top 4:[2,1,0] 5:[0,1,2]; playWinLineAnim uses wa.l and wa.c",
+      "sampleEvidence": "round-0005 l1+l5; round-0078 step-003 l1+l4+l5; ResultUtil matches all captured wa",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "BASE_3X3_5_LINES"
+      ]
+    },
+    {
+      "fieldOrRule": "matrix win = 3-of-a-kind on a payline, Wild substitutes, odds 100/50/25/10/5/3/2",
+      "ruleOrConfigSource": "GameConstant.ODDS; Help01 winningSymbol",
+      "frontendDecision": "wa.o is paytable odd; winLineAmountLab = wa.o * l * b (no mul)",
+      "sampleEvidence": "screenshot WIN 2.00 = 25 * 0.08 * 1; EPIC 42.00 = 2.00 * sum(muls)",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "BASE_3X3_5_LINES"
+      ]
+    },
+    {
+      "fieldOrRule": "ordinary applied mul = muls[1] only",
+      "ruleOrConfigSource": "SlotDataMgr.getTotalMult !isFree -> muls[1]||1",
+      "frontendDecision": "playTotalMulAnim i=tw/getTotalMult then collect center only",
+      "sampleEvidence": "round-0005 muls[1,5,1] tw uses 5",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "CENTER_MULTIPLIER_APPLIES"
+      ]
+    },
+    {
+      "fieldOrRule": "feature applied mul = sum(muls)",
+      "ruleOrConfigSource": "SlotDataMgr.getTotalMult isFree -> reduce sum || 1",
+      "frontendDecision": "playFreeMults collects all 3 H-reel symbols; totalMul label is running sum + 'x'",
+      "sampleEvidence": "round-0078 step-003 muls[1,5,5] sum=11 tw=39.6 = 3.6*11; screenshot 2.00*21=42.00",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "LUCKY_FEATURE_8_INDEPENDENT_BOARDS"
+      ]
+    },
+    {
+      "fieldOrRule": "feature f object {bet,l,st,tt,twa} tt=8 st=7..0",
+      "ruleOrConfigSource": "SlotDataMgr.isFreeFirst tt-1==st; isFreeEnd st==0; getFreeTotalWin twa",
+      "frontendDecision": "array f => normal; object f => FREE, t=2, reqBet type=2 after first",
+      "sampleEvidence": "round-0078 step-001 st=7 twa=0; step-003 st=5 twa=39.6",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "LUCKY_FEATURE_8_INDEPENDENT_BOARDS"
+      ]
+    },
+    {
+      "fieldOrRule": "feature start st=7 is always a matrix loss",
+      "ruleOrConfigSource": "118/118 origin paid feature starts tw=0 wa=[]; isFreeFirst opens GameFreeStart then scroll",
+      "frontendDecision": "a first-step win opens BigWin on GameFreeStart and the original client never returns",
+      "sampleEvidence": "118/118 original starts lose. New correlated full boards are sampled and rejected if winning; no origin board pool.",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "LUCKY_FEATURE_8_INDEPENDENT_BOARDS"
+      ]
+    },
+    {
+      "fieldOrRule": "feature later steps may BigWin/EPIC",
+      "ruleOrConfigSource": "GameMain.showWin Big(tw).div(betAmount)>=BIG_WIN_RATIO 10; BigWin.ratioList default [35,50] EPIC at 50x",
+      "frontendDecision": "High-win feature steps remain enabled. Restore genuine missing audio assets; no payout filter or frontend code modification.",
+      "sampleEvidence": "Original 251 feature steps >=10x, including holdout, independently validated. Original BigWin.js onClosep invokes onCloseView; GameWinAmountDisplay invokes callback for free and base. Missing audio caused observed runtime null.currentTime error.",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "LUCKY_FEATURE_8_INDEPENDENT_BOARDS"
+      ]
+    },
+    {
+      "fieldOrRule": "Generation uses conditional correlated reel vectors and multipliers per real entry",
+      "ruleOrConfigSource": "\u590d\u523b\u8981\u6c42 \u00a7\u516d \u77e9\u9635\u5370\u8bc1; origin paid-rounds train 2900 holdout 100",
+      "frontendDecision": "n/a \u2014 server dealing model only",
+      "sampleEvidence": "2900 original training complete rounds; 100 held-out complete rounds; 10000 new complete rounds independently checked. No full boards embedded.",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "LUCKY_FEATURE_8_INDEPENDENT_BOARDS"
+      ]
+    },
+    {
+      "fieldOrRule": "wild caps board<=5 col<=[3,2,2]",
+      "ruleOrConfigSource": "origin max across 2900 train rounds",
+      "frontendDecision": "Wild substitutes on paylines; no sticky across feature steps",
+      "sampleEvidence": "empirical-weights.json wildBoardMax=5 wildColMax=[3,2,2]",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "BASE_3X3_5_LINES"
+      ]
+    },
+    {
+      "fieldOrRule": "wheel muls[1]==0 we=1 wem observed 100|200 only",
+      "ruleOrConfigSource": "SlotDataMgr.isWheel res.we==1; help WHEEL_MUL",
+      "frontendDecision": "onWheelBonus then GameWheel; tw = line cash + totalBet*wem",
+      "sampleEvidence": "2/3000 SAMPLE_INSUFFICIENT; round-0313 wem=100 tw=40",
+      "status": "SAMPLE_INSUFFICIENT",
+      "behaviorIds": [
+        "LUCKY_WHEEL_CENTER_TICKET"
+      ]
+    },
+    {
+      "fieldOrRule": "step o = tw / (b*l*5); tws=tw; cg feature continuation = tw; first cg = tw-bg",
+      "ruleOrConfigSource": "origin gameResult; SlotDataMgr.getWinMult/getTotalWin",
+      "frontendDecision": "onGameResult gold = eg-cg-bg; showWin uses tw not o",
+      "sampleEvidence": "round-0078 step-001 cg=-0.4 tw=0; step-003 cg=39.6 o=99 tws=39.6",
+      "status": "CONFIRMED",
+      "behaviorIds": [
+        "BASE_3X3_5_LINES"
+      ]
+    }
+  ]
+}

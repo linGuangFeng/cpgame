@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 3,
+  "gameId": 2110,
+  "directoryName": "2110-Bee-Workshop",
+  "rulesHash": "bw2110-lines20-paytable-v2-a7afb966-deal-3d5f4e28",
+  "behaviorIds": [
+    "BW2110.ORDINARY_LOSS",
+    "BW2110.ORDINARY_WIN",
+    "BW2110.MYSTERY_BOX",
+    "BW2110.FREE_STICKY_SYMBOLS"
+  ],
+  "status": "CORE_VALIDATED_BLOCKED_INTEGRATION_AND_EVIDENCE",
+  "readyForAcceptance": false,
+  "host": "192.168.10.3",
+  "port": 6379,
+  "database": 15,
+  "prefix": "cpgame:v3:2110:deal-3d5f4e28:units",
+  "codec": "BW1",
+  "member": "complete-round printable ASCII structural facts",
+  "integerMultiplierBasis": "bet-size-times-level",
+  "totalStakeOddsDenominator": 20,
+  "selection": [
+    "choose LOSS/WIN (1189/239 out of 1428 captured paid entry records)",
+    "uniformly choose one existing indexed integer payout-unit bucket for selected outcome",
+    "atomic RPOP entire BW1 member; remove empty index entry",
+    "validate and retain same member for all continuation steps"
+  ],
+  "emptyPolicy": "503 PREGENERATED_CACHE_EMPTY; no outcome retry, generation or fixture fallback",
+  "runtimeGeneration": false,
+  "fixtureReplay": false,
+  "clearGamePrefixDefault": false,
+  "otherGameKeysChanged": false,
+  "legacyPrefixModified": false,
+  "verification": {
+    "status": "PASS",
+    "database": 15,
+    "prefix": "cpgame:v3:2110:deal-3d5f4e28:units",
+    "verifiedMembers": 850,
+    "outcomePools": {
+      "LOSS": 400,
+      "WIN": 450
+    },
+    "kindPools": {
+      "ORDINARY_LOSS": 400,
+      "ORDINARY_WIN": 250,
+      "MYSTERY_BOX": 120,
+      "FREE_STICKY_SYMBOLS": 80
+    },
+    "metadataCompatibility": "HMSET; initial HSET failure repaired with zero generation targets",
+    "noOtherGameKeysChanged": true
+  },
+  "deliveryStatus": "CANDIDATE_VALIDATED_PROMOTION_BLOCKED",
+  "updatedAt": "2026-09-08T07:01:38.082446+00:00",
+  "additionalHandlerChecks": {
+    "status": "PASS_IN_CANDIDATE",
+    "standardApiRequests": 120,
+    "completeRounds": 8,
+    "perKind": 2,
+    "historyRegression": {
+      "realRedisCompleteRounds": 31,
+      "pageLengths": [
+        30,
+        1,
+        0
+      ],
+      "fullDayBet": 124,
+      "dailyRows": 7,
+      "report": "reports/2110-Bee-Workshop/history-pagination-validation-20260908.json"
+    },
+    "tenFree": {
+      "completeRounds": 2,
+      "deliveriesEach": 11,
+      "selection": "test-selected existing Redis bucket heads; real RPOP",
+      "report": "reports/2110-Bee-Workshop/ten-free-api-validation-20260908.json"
+    },
+    "emptyCache": {
+      "requests": 2,
+      "indexReadsEach": 1,
+      "popAttempts": [
+        0,
+        1
+      ],
+      "report": "reports/2110-Bee-Workshop/empty-cache-validation-20260908.json"
+    },
+    "report": "reports/2110-Bee-Workshop/api-handler-history-fixed-20260908.json",
+    "listenersStarted": 0,
+    "browserAnimationVerified": false
+  },
+  "kindMembersConsumedByNewHandlerTests": 49,
+  "outcomeMembersConsumedByNewHandlerTests": 0
+}

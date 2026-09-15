@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 3,
+  "gameId": 1910,
+  "gameName": "Churrasco",
+  "directoryName": "1910-Churrasco",
+  "rulesVersion": "1910-formal-provider-v40-1398-complete",
+  "rulesHash": "4b8bc4cc855608dffb6069f45cae4ff98f4f07391b7907689d1c303366bf5915",
+  "winModel": "FIXED_PAYLINE",
+  "boardModel": {"status":"CONFIRMED","rows":3,"columns":5,"paylineCount":25,"responseField":"props.prop","providerOrder":"COLUMN_MAJOR_BOTTOM_TO_TOP"},
+  "roundModel": {"status":"CONFIRMED","paidRequestType":1,"continuationRequestType":2,"countingBoundary":"paid type=1 plus adjacent selector calls and type=2 states through frees.st=0","incompleteCaptureDisposition":"EXCLUDED_FROM_CANONICAL_ROUND_INDEX"},
+  "specialModes": [
+    {"id":"SMALL_GAME_1","status":"CONFIRMED","multiRequestWithinRound":false,"triggerFields":["small_game_type=1"],"completeRounds":229},
+    {"id":"FREE_REWARD","status":"CONFIRMED","multiRequestWithinRound":true,"triggerFields":["time_flag=1","multiple_flag=1","3_or_4_scatter"],"completeRounds":50,"selectorTimeOptions":{"3":[8,12,20],"4":[12,16,24]},"selectorMultipliers":[2,5,8],"retrigger":{"scatterMinimum":3,"additionalFreeSteps":8}}
+  ],
+  "runtimeIndependentLoss": {"supported":true,"demoMayGenerateAtRuntime":false,"completeLossRoundsMustBePreloaded":true},
+  "redisContract": {"required":true,"host":"192.168.10.3","port":6379,"database":15,"gameId":1910,"completeRoundMembers":true,"preloadedLossPoolRequired":true,"selectionOrder":"OUTCOME_THEN_INTEGER_MULTIPLIER","normalIndex":"PerKeyList_%09d","specialIndex":"MaryKeyList_%09d","normalList":"BetLog:0%08d:%06d","specialList":"MaryLog:%09d:%06d"},
+  "codecContract": {"memberEncoding":"CH40_MINIMAL_ASCII","mustReconstructCompleteRound":true,"integerMultiplierBasis":"roundAward/(bet*level)","fullJsonForbidden":true,"fixtureOrHistoryRuntimeSourceForbidden":true},
+  "symbolWeights": {
+    "sourceType":"REAL_PROVIDER_TRAINING_EMPIRICAL_COUNTS","trainingRoundCount":1298,"holdoutExcluded":true,"representsProviderLongRunProbabilityOrRtp":false,
+    "paidCompleteInitialState":{"boards":1298,"positions":19470,"counts":{"1":1912,"2":1808,"3":1686,"4":1577,"5":1649,"6":1548,"7":1614,"8":1630,"9":1579,"10":1587,"11":1656,"12":621,"13":603}},
+    "freeNewlyDealtPositions":{"boards":728,"positions":10920,"counts":{"1":986,"2":976,"3":915,"4":932,"5":962,"6":918,"7":926,"8":908,"9":917,"10":934,"11":977,"12":245,"13":324}},
+    "evidence":"reports/1910-Churrasco/v40-evidence-analysis.json"
+  },
+  "generationModel": {
+    "implementationReady":true,"usesIndependentCellMarginalsOnly":false,"artificialLossBoardConstraints":false,"probabilityCaution":"Finite empirical lifecycle weights are adjustable and are not a provider RTP claim.",
+    "lifecycleEntries":[
+      {"id":"PAID_INITIAL","entryType":"INITIAL","lifecyclePhase":"INITIAL","isInitialEntry":true,"role":"INITIAL","countingUnit":"COMPLETE_INITIAL_STATE","observationUnit":"COMPLETE_INITIAL_STATE","newlyDealtPositionsOnly":false,"sampleRoundCount":1298,"samplePositionCount":19470,"evidenceRefs":["EVID-TRAINING","EVID-ANALYSIS"],"wholeNextStateCountedAsNewDeal":false},
+      {"id":"FREE_STEP","entryType":"SUBSEQUENT","lifecyclePhase":"SUBSEQUENT","isInitialEntry":false,"role":"FREE_SPIN","countingUnit":"NEWLY_DEALT_POSITIONS","observationUnit":"NEWLY_DEALT_POSITIONS","newlyDealtPositionsOnly":true,"sampleRoundCount":47,"samplePositionCount":10920,"evidenceRefs":["EVID-TRAINING","EVID-ANALYSIS","EVID-RAW-BATCHES"],"wholeNextStateCountedAsNewDeal":false}
+    ],
+    "jointRoundFeatures":[
+      {"id":"ROUND_OUTCOME_CLASS","applicable":true,"role":"WHOLE_ROUND_JOINT_FEATURE","countingUnit":"COMPLETE_ROUND","sampleRoundCount":1298,"distribution":{"ORDINARY_LOSS":847,"ORDINARY_WIN":186,"SMALL_GAME_1":218,"FREE_REWARD":47},"evidenceRefs":["EVID-TRAINING"]},
+      {"id":"ROUND_STEP_COUNT","applicable":true,"role":"WHOLE_ROUND_JOINT_FEATURE","countingUnit":"COMPLETE_ROUND","sampleRoundCount":1298,"distribution":{"1":1251,"10":1,"11":16,"13":1,"15":9,"19":3,"20":1,"21":1,"23":7,"25":1,"27":1,"30":2,"31":3,"47":1},"evidenceRefs":["EVID-TRAINING","EVID-RAW-BATCHES"]},
+      {"id":"STATE_ELEMENT_COUNT_VECTOR","applicable":true,"role":"WHOLE_ROUND_JOINT_FEATURE","countingUnit":"COMPLETE_ROUND","sampleRoundCount":1298,"distribution":{"ONE_STEP":"1251x(PAID:15)","FREE_REWARD":"47x(PAID:15+SELECTORS+FREE:variable*15)"},"evidenceRefs":["EVID-TRAINING","EVID-ANALYSIS"]}
+    ],
+    "holdoutPlan":{"source":"REAL_PROVIDER","sourceType":"REAL_PROVIDER","minimumRounds":100,"actualRounds":100,"completeRoundsOnly":true,"frozenBeforeAnalysis":true,"disjointFromTraining":true,"intersectionCount":0,"trainingCompleteRounds":1298,"file":"captures/1910-Churrasco/holdout-round-index.jsonl","trainingManifest":"captures/1910-Churrasco/training-manifest.json","minimumGeneratedRoundsForValidation":10000,"requiredResult":"PASS"}
+  },
+  "evidence":["captures/1910-Churrasco/v40-formal-rounds-batch-001.json","captures/1910-Churrasco/v40-formal-rounds-batch-002.json","captures/1910-Churrasco/round-index.jsonl","captures/1910-Churrasco/training-manifest.json","captures/1910-Churrasco/holdout-round-index.jsonl","reports/1910-Churrasco/v40-evidence-analysis.json"],
+  "handoffContract":{"file":"protocol-handoff.json","rulesHash":"4b8bc4cc855608dffb6069f45cae4ff98f4f07391b7907689d1c303366bf5915","behaviorIds":["BHV-SESSION-INIT","BHV-PAID-ROUND","BHV-PAYLINE-WILD","BHV-ORDINARY-LOSS","BHV-ORDINARY-WIN","BHV-SMALL-GAME-1","BHV-FREE-REWARD","BHV-HISTORY"]},
+  "implementationAllowed": true
+}

@@ -1,0 +1,478 @@
+{
+  "at": "2026-09-09T08:42:02.612Z",
+  "games": [
+    {
+      "dir": "16-Jungle-Fruit",
+      "frontendHistoryUrls": [
+        "/api/v1/jungle-fruit/log-list",
+        "/api/v1/jungle-fruit/log-view",
+        "/cp/api/v1/jungle-fruit/log-list",
+        "/cp/api/v1/jungle-fruit/log-view"
+      ],
+      "javaHistoryRoutes": [
+        "/History",
+        "/cp/api/v1/jungle-fruit/log-list",
+        "/cp/api/v1/jungle-fruit/log-view"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 1,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": [
+        "history-list/request.json",
+        "history-list/response.json",
+        "history-view/request.json",
+        "history-view/response.json",
+        "HISTORY.md"
+      ]
+    },
+    {
+      "dir": "1670-Christmas-Gift",
+      "frontendHistoryUrls": [
+        "/Goldgame/bd_history",
+        "/Goldgame/crash2_history",
+        "/Goldgame/crash3_history",
+        "/goldGame/double2_history",
+        "/goldGame/double_history",
+        "/goldGame/getUserHistory",
+        "/goldgame/longhu_bai_history",
+        "/goldgame/user_history",
+        "/order/log_list",
+        "/order/log_view",
+        "/single_game.mini_game/getUserHistory"
+      ],
+      "javaHistoryRoutes": [
+        "/api/history",
+        "/api/history/",
+        "/cp/order/log_list",
+        "/cp/order/log_view",
+        "/history"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 5,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [
+        {
+          "root": "languages",
+          "children": [
+            "bn",
+            "en",
+            "es",
+            "fr",
+            "id",
+            "ko",
+            "pt-br",
+            "th",
+            "tr",
+            "vi"
+          ]
+        }
+      ],
+      "fixtures": []
+    },
+    {
+      "dir": "1810-Treasure-Hunt",
+      "frontendHistoryUrls": [
+        "/Goldgame/bd_history",
+        "/Goldgame/crash2_history",
+        "/Goldgame/crash3_history",
+        "/goldGame/double2_history",
+        "/goldGame/double_history",
+        "/goldGame/getUserHistory",
+        "/goldgame/kthree_user_history",
+        "/goldgame/longhu_bai_history",
+        "/goldgame/single_game_user_gold_history",
+        "/goldgame/single_game_user_history",
+        "/goldgame/user_history",
+        "/single_game.mini_game/getUserHistory"
+      ],
+      "javaHistoryRoutes": [
+        "/api/history",
+        "/goldgame/single_game_user_gold_history",
+        "/goldgame/single_game_user_history",
+        "/history"
+      ],
+      "javaHasExtend": true,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 5,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [
+        {
+          "root": "languages",
+          "children": [
+            "bn",
+            "en",
+            "es",
+            "fr",
+            "id",
+            "ko",
+            "pt-br",
+            "th",
+            "tr",
+            "vi"
+          ]
+        }
+      ],
+      "fixtures": []
+    },
+    {
+      "dir": "1830-Hotpot",
+      "frontendHistoryUrls": [
+        "/Goldgame/bd_history",
+        "/Goldgame/crash2_history",
+        "/Goldgame/crash3_history",
+        "/goldGame/double2_history",
+        "/goldGame/double_history",
+        "/goldGame/getUserHistory",
+        "/goldgame/kthree_user_history",
+        "/goldgame/longhu_bai_history",
+        "/goldgame/single_game_user_gold_history",
+        "/goldgame/single_game_user_history",
+        "/goldgame/user_history",
+        "/single_game.mini_game/getUserHistory"
+      ],
+      "javaHistoryRoutes": [
+        "/cp/goldgame/single_game_user_gold_history",
+        "/cp/goldgame/single_game_user_history"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": true,
+      "javaHasRes": false,
+      "javaFiles": 16,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": []
+    },
+    {
+      "dir": "1910-Churrasco",
+      "frontendHistoryUrls": [
+        "/Goldgame/bd_history",
+        "/Goldgame/crash2_history",
+        "/Goldgame/crash3_history",
+        "/goldGame/double2_history",
+        "/goldGame/double_history",
+        "/goldGame/getUserHistory",
+        "/goldgame/kthree_user_history",
+        "/goldgame/longhu_bai_history",
+        "/goldgame/single_game_user_gold_history",
+        "/goldgame/single_game_user_history",
+        "/goldgame/user_history",
+        "/single_game.mini_game/getUserHistory"
+      ],
+      "javaHistoryRoutes": [
+        "/api/history",
+        "/goldgame/single_game_user_gold_history",
+        "/goldgame/single_game_user_history"
+      ],
+      "javaHasExtend": true,
+      "javaHasResults": true,
+      "javaHasRes": false,
+      "javaFiles": 6,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": []
+    },
+    {
+      "dir": "2060-Club-Goddess",
+      "frontendHistoryUrls": [
+        "/Goldgame/bd_history",
+        "/Goldgame/crash2_history",
+        "/Goldgame/crash3_history",
+        "/goldGame/double2_history",
+        "/goldGame/double_history",
+        "/goldGame/getUserHistory",
+        "/goldgame/longhu_bai_history",
+        "/goldgame/single_game_user_gold_history",
+        "/goldgame/single_game_user_history",
+        "/goldgame/user_history",
+        "/single_game.mini_game/getUserHistory"
+      ],
+      "javaHistoryRoutes": [
+        "/goldgame/single_game_user_gold_history",
+        "/goldgame/single_game_user_history",
+        "@PostMapping(path=\"/goldgame/single_game_user_gold_history\", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)",
+        "@PostMapping(path=\"/goldgame/single_game_user_history\", consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": true,
+      "javaHasRes": false,
+      "javaFiles": 11,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": [
+        "history-list/request.json",
+        "history-list/response.json",
+        "history-view/request.json",
+        "history-view/response.json",
+        "HISTORY.md",
+        "oracle/history-after-10-rounds.response.json"
+      ]
+    },
+    {
+      "dir": "2210-Wu-Kong",
+      "frontendHistoryUrls": [
+        "/Goldgame/bd_history",
+        "/Goldgame/crash2_history",
+        "/Goldgame/crash3_history",
+        "/goldGame/double2_history",
+        "/goldGame/double_history",
+        "/goldGame/getUserHistory",
+        "/goldGame/wukong_user_gold_history",
+        "/goldGame/wukong_user_history",
+        "/goldgame/kthree_user_history",
+        "/goldgame/longhu_bai_history",
+        "/goldgame/user_history",
+        "/single_game.black_myth_wukong/getUserHistory",
+        "/single_game.mini_game/getUserHistory"
+      ],
+      "javaHistoryRoutes": [
+        "/cp/goldGame/wukong_user_gold_history",
+        "/cp/goldGame/wukong_user_history",
+        "/cp/goldgame/wukong_user_gold_history",
+        "/cp/goldgame/wukong_user_history",
+        "/cp/single_game.black_myth_wukong/getUserHistory"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": true,
+      "javaHasRes": false,
+      "javaFiles": 4,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": []
+    },
+    {
+      "dir": "2290-Samba-Sensation",
+      "frontendHistoryUrls": [
+        "/Goldgame/bd_history",
+        "/Goldgame/crash2_history",
+        "/Goldgame/crash3_history",
+        "/cp/goldgame/single_game_user_gold_history",
+        "/cp/goldgame/single_game_user_history",
+        "/goldGame/double2_history",
+        "/goldGame/double_history",
+        "/goldGame/getUserHistory",
+        "/goldgame/kthree_user_history",
+        "/goldgame/longhu_bai_history",
+        "/goldgame/single_game_user_gold_history",
+        "/goldgame/single_game_user_history",
+        "/goldgame/user_history",
+        "/single_game.mini_game/getUserHistory"
+      ],
+      "javaHistoryRoutes": [
+        "/cp/goldgame/single_game_user_gold_history",
+        "/cp/goldgame/single_game_user_history",
+        "/goldgame/single_game_user_gold_history",
+        "/goldgame/single_game_user_history"
+      ],
+      "javaHasExtend": true,
+      "javaHasResults": true,
+      "javaHasRes": false,
+      "javaFiles": 15,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": [
+        "oracle-history-lightweight.json"
+      ]
+    },
+    {
+      "dir": "2410-Electro-Fiesta",
+      "frontendHistoryUrls": [
+        "/Goldgame/user_game_history",
+        "/goldgame/single_game_user_gold_history",
+        "/goldgame/single_game_user_history"
+      ],
+      "javaHistoryRoutes": [
+        "/Goldgame/user_game_history"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 4,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": []
+    },
+    {
+      "dir": "33-Jungle-Party",
+      "frontendHistoryUrls": [
+        "/api/v1/jungle-party/log-list",
+        "/api/v1/jungle-party/log-view"
+      ],
+      "javaHistoryRoutes": [
+        "/cp/api/v1/jungle-party/log-list",
+        "/cp/api/v1/jungle-party/log-view"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 1,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": []
+    },
+    {
+      "dir": "42-Lucky-Dragon",
+      "frontendHistoryUrls": [
+        "/api/v1/lucky-dragon/log-list",
+        "/api/v1/lucky-dragon/log-view"
+      ],
+      "javaHistoryRoutes": [
+        "/cp/api/v1/lucky-dragon/log-list",
+        "/cp/api/v1/lucky-dragon/log-view"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 10,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": []
+    },
+    {
+      "dir": "43-Lucky-Wheel",
+      "frontendHistoryUrls": [
+        "/api/v1/lucky-wheel/log-list",
+        "/api/v1/lucky-wheel/log-view"
+      ],
+      "javaHistoryRoutes": [
+        "/cp/api/v1/lucky-wheel/log-list",
+        "/cp/api/v1/lucky-wheel/log-view"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 11,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": [
+        "history-list.json",
+        "history-view.json"
+      ]
+    },
+    {
+      "dir": "45-Rio-Carnival",
+      "frontendHistoryUrls": [
+        "/api/v1/rio-carnival/log-list",
+        "/api/v1/rio-carnival/log-view"
+      ],
+      "javaHistoryRoutes": [
+        "/rio-carnival/log-list",
+        "/rio-carnival/log-view",
+        "@PostMapping(value=\"/rio-carnival/log-list\",consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)",
+        "@PostMapping(value=\"/rio-carnival/log-view\",consumes=MediaType.APPLICATION_FORM_URLENCODED_VALUE)"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 16,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": [
+        "history-list/request.json",
+        "history-list/response.json",
+        "history-view/request.json",
+        "history-view/response.json",
+        "HISTORY.md",
+        "protocol-evidence/history/log-list-page-1.json",
+        "protocol-evidence/history/log-list-page-2.json",
+        "protocol-evidence/history/log-list-selection.json",
+        "protocol-evidence/history/log-view.json"
+      ]
+    },
+    {
+      "dir": "52-Cyber-GO",
+      "frontendHistoryUrls": [
+        "/api/v1/go-cyber/log-list",
+        "/api/v1/go-cyber/log-view"
+      ],
+      "javaHistoryRoutes": [
+        "/api/v1/go-cyber/log-list",
+        "/api/v1/go-cyber/log-view"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 5,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": [
+        "history-list/request.json",
+        "history-list/response.json",
+        "history-view/request.json",
+        "history-view/response.json",
+        "HISTORY.md"
+      ]
+    },
+    {
+      "dir": "56-Crazy-Piggy",
+      "frontendHistoryUrls": [
+        "/api/v1/crazy-piggy/log-list",
+        "/api/v1/crazy-piggy/log-view"
+      ],
+      "javaHistoryRoutes": [
+        "/cp/api/v1/crazy-piggy/log-list",
+        "/cp/api/v1/crazy-piggy/log-view"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 11,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": [
+        "history-list/request.json",
+        "history-list/response.json",
+        "history-view/request.json",
+        "history-view/response.json",
+        "HISTORY.md"
+      ]
+    },
+    {
+      "dir": "58-Crazy-Gems",
+      "frontendHistoryUrls": [
+        "/api/v1/crazy-gems/log-list",
+        "/api/v1/crazy-gems/log-view"
+      ],
+      "javaHistoryRoutes": [
+        "/api/v1/crazy-gems/log-list",
+        "/api/v1/crazy-gems/log-view"
+      ],
+      "javaHasExtend": false,
+      "javaHasResults": false,
+      "javaHasRes": false,
+      "javaFiles": 1,
+      "historyAssetCount": 0,
+      "historyAssetSamples": [],
+      "languageRoots": [],
+      "fixtures": [
+        "history-detail-probe/0001-post-log-view.json",
+        "history-list/request.json",
+        "history-list/response.json",
+        "history-recovery/0001-post-log-list.json",
+        "history-view/request.json",
+        "history-view/response.json",
+        "HISTORY.md"
+      ]
+    }
+  ]
+}

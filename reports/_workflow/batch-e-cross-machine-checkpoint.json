@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "batch": "E",
+  "checkpointAt": "2026-08-29T07:59:30+08:00",
+  "scope": [1910, 2010, 2110],
+  "identityPolicy": "RAW_GID_ONLY",
+  "status": "INCOMPLETE_HANDOFF_TO_ISOLATED_ABC225_MACHINE",
+  "localWritePolicy": "FROZEN_NO_FURTHER_GID_WRITES",
+  "localBrowserPolicy": "STOPPED_NO_FURTHER_CONNECTIONS_OR_PROFILE_RETRIES",
+  "takeover": {
+    "machine": "ISOLATED_MACHINE_ABC225",
+    "responsibilities": [
+      "FORMAL_ORIGINAL_SITE_SAMPLING",
+      "ROUND_AND_HISTORY_1_TO_1_RECONCILIATION",
+      "ALL_SUBSEQUENT_GID_WRITES"
+    ]
+  },
+  "preservedLocalArtifacts": {
+    "javaEvidenceGateReport": "reports/_workflow/batch-e-java-gate-test.json",
+    "v15AuditReport": "reports/_workflow/batch-e-v15-audit.json",
+    "serverApiRoots": [
+      "server-api/1910-Churrasco",
+      "server-api/2010-EDM-Mania",
+      "server-api/2110-Bee-Workshop"
+    ],
+    "generatorRoots": [
+      "generator/1910-Churrasco",
+      "generator/2010-EDM-Mania",
+      "generator/2110-Bee-Workshop"
+    ]
+  },
+  "validationAtFreeze": {
+    "roundIndexGate": "PASS_6_OF_6",
+    "javaRuleCoreBuilds": "PASS_3_OF_3",
+    "javaLoaderSafeRejection": "PASS_3_OF_3",
+    "formalOriginalSiteSampleCount": 0,
+    "originalSiteEvidenceClaimed": false,
+    "rulesHash": "UNRESOLVED_PRE_COLLECTION",
+    "playable": false
+  },
+  "archiveRequested": false,
+  "completionClaimed": false,
+  "reason": "Cross-machine ownership prevents duplicate browser sampling and repository writes"
+}

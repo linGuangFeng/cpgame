@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 3,
+  "gameId": 1940,
+  "name": "Beach Fun",
+  "board": {"reels": 5, "rows": 4, "ways": 1024},
+  "symbols": {
+    "regular": [1, 2, 3, 4, 5, 6, 7, 8],
+    "scatter": 9,
+    "wild": 10,
+    "paytableBySymbol": {
+      "1": [2, 5, 10],
+      "2": [2, 5, 10],
+      "3": [4, 10, 20],
+      "4": [4, 10, 20],
+      "5": [6, 15, 40],
+      "6": [8, 20, 60],
+      "7": [10, 40, 80],
+      "8": [15, 60, 100]
+    }
+  },
+  "waysRule": "leftmost consecutive reels; per-symbol ways are the product of matching-or-wild counts",
+  "cascade": {
+    "winningSymbolsExplode": true,
+    "goldWinningSymbolsBecomeWild": true,
+    "goldAllowedReelsOneBased": [2, 3, 4],
+    "baseMultipliers": [1, 2, 3, 5],
+    "freeMultipliers": [2, 4, 6, 10]
+  },
+  "freeSpins": {"triggerScatterCount": 3, "initialAward": 12, "extraPerAdditionalScatter": 2, "retrigger": true},
+  "rulesHash": "sha256:4332cba4e18f7a2dfb8c99d2c5f8969e7650edc3d109f97204af38fb4d1a2af2",
+  "rtpEvidencePercent": 97.42,
+  "roundBoundary": "one paid gameResult plus every props cascade and every subsequent FREE_STEP until frees.surplus_times=0",
+  "evidence": [
+    "captures/1940-Beach-Fun/rules-paytable-ui-evidence.json",
+    "captures/1940-Beach-Fun/round-batches.jsonl",
+    "captures/1940-Beach-Fun/spin-index.jsonl",
+    "fixtures/1940-Beach-Fun/enter/initRoom/response.json"
+  ]
+}

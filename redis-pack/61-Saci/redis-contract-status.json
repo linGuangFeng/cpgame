@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": 61,
+  "directoryName": "61-Saci",
+  "rulesHash": "656af5aabcad6a585da1853a38d3b57c86b5f2e4d3eee064b1170e3ea8a58315",
+  "contractStatus": "UNKNOWN_DISABLED",
+  "enabled": false,
+  "resultMembersIncluded": 0,
+  "writeAttempted": false,
+  "connectionAttempted": false,
+  "key": null,
+  "memberEncoding": null,
+  "memberLength": null,
+  "partition": null,
+  "loaderDisposition": "FAIL_CLOSED_BEFORE_CONNECTION_OR_WRITE",
+  "validatedAt": "2026-08-28T00:42:58+08:00",
+  "distLoaderValidation": {
+    "entry": "generator/61-Saci/dist/saci-generator.jar",
+    "executedFrom": "C:/Windows",
+    "redisEnabledTestOverride": true,
+    "exitCode": 1,
+    "expectedMessageObserved": true,
+    "generatedResultLines": 0,
+    "connectionAttempted": false,
+    "writeAttempted": false
+  },
+  "evidenceRefs": [
+    "protocol/61-Saci/protocol-handoff.json#U-REDIS-CONTRACT",
+    "protocol/61-Saci/game-capabilities.json",
+    "reports/61-Saci/runtime-generation-validation.json"
+  ],
+  "reason": "No accepted current-game evidence defines the Redis key, member encoding, member length or partition. This machine-readable delivery records the required disabled state without inventing another game's contract.",
+  "safetyAssertions": {
+    "fabricatedKey": false,
+    "fabricatedMember": false,
+    "fixtureOrCapturedResponsePackaged": false,
+    "formalLoaderRejectsEnableBeforeConnection": true
+  }
+}

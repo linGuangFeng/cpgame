@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "batch": "E",
+  "scope": [
+    1910,
+    2010,
+    2110
+  ],
+  "browserState": "BATCH_E_BROWSER_STOPPED_WAITING_FOR_STABLE_ABC222_CHANNEL_HANDOFF",
+  "originalSiteEvidenceClaimed": false,
+  "formalSampleCount": 0,
+  "tests": {
+    "roundIndexGate": "PASS_6_OF_6",
+    "javaRuleCoreBuilds": "PASS_3_OF_3",
+    "javaLoaderSafeRejection": "PASS_3_OF_3",
+    "localApiHealthAndSpinGate": "PASS_3_OF_3"
+  },
+  "games": [
+    {
+      "gameId": 1910,
+      "directoryName": "1910-Churrasco",
+      "identityPolicy": "RAW_GID_ONLY",
+      "workflowTemplateVersion": 15,
+      "formalSampleCount": 0,
+      "currentStatus": "WAITING_FOR_ORIGINAL_EVIDENCE_HANDOFF_FROM_ABC222_CHANNEL",
+      "categoryDirectories": {
+        "resources": true,
+        "publish": true,
+        "server-api": true,
+        "generator": true,
+        "screenshots": true,
+        "captures": true,
+        "fixtures": true,
+        "protocol": true,
+        "redis-pack": true,
+        "reports": true
+      },
+      "publishReady": false,
+      "historyEvidence": false,
+      "protocolRulesHash": "UNRESOLVED_PRE_COLLECTION",
+      "implementationAllowedByProtocol": false,
+      "serverScaffold": {
+        "pom": true,
+        "gameRuleCore": true,
+        "executableJar": true,
+        "restartCmd": true,
+        "evidenceGatedOnly": true
+      },
+      "generatorScaffold": {
+        "pom": true,
+        "javaLoader": true,
+        "executableJar": true,
+        "externalConfig": true,
+        "windowsLauncher": true,
+        "generationEnabled": false,
+        "redisWriteEnabled": false
+      },
+      "blockers": [
+        "FORMAL_ORIGINAL_SITE_ROUNDS_0",
+        "PUBLISH_NOT_READY",
+        "HISTORY_CLICK_DETAIL_RETURN_UNVERIFIED",
+        "GAME_RULES_UNRESOLVED",
+        "REDIS_INTEGRATION_NOT_IMPLEMENTED",
+        "LAN_AND_MANAGEMENT_CENTER_NOT_VERIFIED"
+      ],
+      "disposition": "INCOMPLETE_EVIDENCE_GATED_SCAFFOLD"
+    },
+    {
+      "gameId": 2010,
+      "directoryName": "2010-EDM-Mania",
+      "identityPolicy": "RAW_GID_ONLY",
+      "workflowTemplateVersion": 15,
+      "formalSampleCount": 0,
+      "currentStatus": "WAITING_FOR_ORIGINAL_EVIDENCE_HANDOFF_FROM_ABC222_CHANNEL",
+      "categoryDirectories": {
+        "resources": true,
+        "publish": true,
+        "server-api": true,
+        "generator": true,
+        "screenshots": true,
+        "captures": true,
+        "fixtures": true,
+        "protocol": true,
+        "redis-pack": true,
+        "reports": true
+      },
+      "publishReady": false,
+      "historyEvidence": false,
+      "protocolRulesHash": "UNRESOLVED_PRE_COLLECTION",
+      "implementationAllowedByProtocol": false,
+      "serverScaffold": {
+        "pom": true,
+        "gameRuleCore": true,
+        "executableJar": true,
+        "restartCmd": true,
+        "evidenceGatedOnly": true
+      },
+      "generatorScaffold": {
+        "pom": true,
+        "javaLoader": true,
+        "executableJar": true,
+        "externalConfig": true,
+        "windowsLauncher": true,
+        "generationEnabled": false,
+        "redisWriteEnabled": false
+      },
+      "blockers": [
+        "FORMAL_ORIGINAL_SITE_ROUNDS_0",
+        "PUBLISH_NOT_READY",
+        "HISTORY_CLICK_DETAIL_RETURN_UNVERIFIED",
+        "GAME_RULES_UNRESOLVED",
+        "REDIS_INTEGRATION_NOT_IMPLEMENTED",
+        "LAN_AND_MANAGEMENT_CENTER_NOT_VERIFIED"
+      ],
+      "disposition": "INCOMPLETE_EVIDENCE_GATED_SCAFFOLD"
+    },
+    {
+      "gameId": 2110,
+      "directoryName": "2110-Bee-Workshop",
+      "identityPolicy": "RAW_GID_ONLY",
+      "workflowTemplateVersion": 15,
+      "formalSampleCount": 0,
+      "currentStatus": "WAITING_FOR_ORIGINAL_EVIDENCE_HANDOFF_FROM_ABC222_CHANNEL",
+      "categoryDirectories": {
+        "resources": true,
+        "publish": true,
+        "server-api": true,
+        "generator": true,
+        "screenshots": true,
+        "captures": true,
+        "fixtures": true,
+        "protocol": true,
+        "redis-pack": true,
+        "reports": true
+      },
+      "publishReady": false,
+      "historyEvidence": false,
+      "protocolRulesHash": "UNRESOLVED_PRE_COLLECTION",
+      "implementationAllowedByProtocol": false,
+      "serverScaffold": {
+        "pom": true,
+        "gameRuleCore": true,
+        "executableJar": true,
+        "restartCmd": true,
+        "evidenceGatedOnly": true
+      },
+      "generatorScaffold": {
+        "pom": true,
+        "javaLoader": true,
+        "executableJar": true,
+        "externalConfig": true,
+        "windowsLauncher": true,
+        "generationEnabled": false,
+        "redisWriteEnabled": false
+      },
+      "blockers": [
+        "FORMAL_ORIGINAL_SITE_ROUNDS_0",
+        "PUBLISH_NOT_READY",
+        "HISTORY_CLICK_DETAIL_RETURN_UNVERIFIED",
+        "GAME_RULES_UNRESOLVED",
+        "REDIS_INTEGRATION_NOT_IMPLEMENTED",
+        "LAN_AND_MANAGEMENT_CENTER_NOT_VERIFIED"
+      ],
+      "disposition": "INCOMPLETE_EVIDENCE_GATED_SCAFFOLD"
+    }
+  ],
+  "overall": "INCOMPLETE_WAITING_FOR_ORIGINAL_EVIDENCE"
+}

@@ -1,0 +1,721 @@
+{
+  "schemaVersion": 3,
+  "gameId": 41,
+  "rawGameId": 41,
+  "directoryName": "41-Lucky-Panda",
+  "rulesVersion": "gid41-protocol-20260904",
+  "rulesHash": "5f8142ce67bb887905edb625ebfb90128fa872cc0de8e9af0f8017debc2dc50c",
+  "status": "PROTOCOL_ACCEPTED_READY_FOR_IMPLEMENTATION",
+  "evidenceInventory": [
+    {
+      "id": "E-RULES",
+      "source": "protocol/41-Lucky-Panda/rules-core-canonical.json",
+      "behaviorIds": [
+        "B-IDENTITY",
+        "B-WAYS-EVAL",
+        "B-CASCADE",
+        "B-SCATTER-FREE",
+        "B-ROUND-END",
+        "B-REDIS-ROUND"
+      ]
+    },
+    {
+      "id": "E-SPIN",
+      "source": "captures/41-Lucky-Panda/original-http-spin-index.jsonl",
+      "behaviorIds": [
+        "B-CODEC-HTTP",
+        "B-WAYS-EVAL",
+        "B-CASCADE",
+        "B-SCATTER-FREE",
+        "B-ROUND-END"
+      ]
+    },
+    {
+      "id": "E-PREFLIGHT",
+      "source": "captures/41-Lucky-Panda/original-http-preflight-round-001.json",
+      "behaviorIds": [
+        "B-CONFIG-BET",
+        "B-ROUND-END"
+      ]
+    },
+    {
+      "id": "E-ROUND",
+      "source": "captures/41-Lucky-Panda/round-index.jsonl",
+      "behaviorIds": [
+        "B-CASCADE",
+        "B-SCATTER-FREE",
+        "B-ROUND-END",
+        "B-HISTORY",
+        "B-REDIS-ROUND"
+      ]
+    },
+    {
+      "id": "E-HISTORY",
+      "source": "captures/41-Lucky-Panda/history-1to1.jsonl",
+      "behaviorIds": [
+        "B-HISTORY",
+        "B-ROUND-END"
+      ]
+    },
+    {
+      "id": "E-HISTORY-FIXTURE",
+      "source": "fixtures/41-Lucky-Panda/history-list/response.json",
+      "behaviorIds": [
+        "B-HISTORY"
+      ]
+    },
+    {
+      "id": "E-HISTORY-VIEW",
+      "source": "fixtures/41-Lucky-Panda/history-view/response.json",
+      "behaviorIds": [
+        "B-HISTORY"
+      ]
+    },
+    {
+      "id": "E-FRONTEND",
+      "source": "publish/41-Lucky-Panda/41/assets/main/index.ef386.js",
+      "behaviorIds": [
+        "B-IDENTITY",
+        "B-CODEC-HTTP",
+        "B-CONFIG-BET",
+        "B-WAYS-EVAL",
+        "B-CASCADE",
+        "B-SCATTER-FREE",
+        "B-ROUND-END",
+        "B-HISTORY"
+      ]
+    },
+    {
+      "id": "E-PAYTABLE",
+      "source": "screenshots/41-Lucky-Panda/original-paytable.png",
+      "behaviorIds": [
+        "B-WAYS-EVAL",
+        "B-CASCADE"
+      ]
+    },
+    {
+      "id": "E-ANALYSIS",
+      "source": "protocol/41-Lucky-Panda/independent-reanalysis.json",
+      "behaviorIds": [
+        "B-WAYS-EVAL",
+        "B-CASCADE",
+        "B-SCATTER-FREE",
+        "B-ROUND-END",
+        "B-REDIS-ROUND"
+      ]
+    },
+    {
+      "id": "E-ANALYSIS-RULES",
+      "source": "protocol/41-Lucky-Panda/independent-reanalysis-rules.json",
+      "behaviorIds": [
+        "B-SCATTER-FREE",
+        "B-CASCADE",
+        "B-ROUND-END"
+      ]
+    },
+    {
+      "id": "E-LANG",
+      "source": "reports/41-Lucky-Panda/language-inventory.json",
+      "behaviorIds": [
+        "B-IDENTITY"
+      ]
+    },
+    {
+      "id": "E-SPIN-FIXTURE",
+      "source": "fixtures/41-Lucky-Panda/spin/round-001/step-001.response.json",
+      "behaviorIds": [
+        "B-CODEC-HTTP"
+      ],
+      "disposition": "TEST_ORACLE_ONLY_NOT_RUNTIME",
+      "reason": "fixtures are protocol oracles; Demo and GameRuleCore must not read them as result source"
+    },
+    {
+      "id": "E-LEGACY",
+      "source": "protocol/41-Lucky-Panda/_legacy-old-replica",
+      "behaviorIds": [],
+      "disposition": "HISTORICAL_REFERENCE_NOT_ACCEPTED",
+      "reason": "old replica was moved aside; this handoff is rewritten from current-game captures and frontend"
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-IDENTITY",
+      "category": "identity",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FRONTEND",
+        "E-LANG",
+        "E-RULES"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "raw game id is 41"
+        ],
+        "stateFields": [
+          "gameId",
+          "gameName",
+          "launchPath",
+          "gid"
+        ],
+        "transitionRules": [
+          "static entry is /41/ with document.title Lucky Panda",
+          "all API forms require gid=41",
+          "language query uses l in en,pt,es,th,vi,id,bn,ko,fr,tr"
+        ],
+        "outputs": [
+          "gameId=41",
+          "Lucky Panda"
+        ],
+        "terminationRules": [
+          "entry page is visible"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FRONTEND",
+          "E-LANG"
+        ],
+        "assertions": [
+          "GameConfig.gameId is 41",
+          "API paths are /api/v1/lucky-panda/{config,spin,log-list,log-view}",
+          "supportedLanguages.codes are the ten captured l values"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-CODEC-HTTP",
+      "category": "codec",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-SPIN",
+        "E-FRONTEND",
+        "E-SPIN-FIXTURE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "endpoint URL available"
+        ],
+        "stateFields": [
+          "gid",
+          "t",
+          "bl",
+          "bs",
+          "code",
+          "data"
+        ],
+        "transitionRules": [
+          "POST application/x-www-form-urlencoded",
+          "encodeURIComponent then replace %20 with +",
+          "logical headers web-token->t and game-id->gid copied into the form",
+          "parse plain JSON envelope {code,info,data}",
+          "code 200 returns data"
+        ],
+        "outputs": [
+          "endpoint data or structured error"
+        ],
+        "terminationRules": [
+          "request settles exactly once"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-SPIN",
+          "E-FRONTEND"
+        ],
+        "assertions": [
+          "3382 captured original-http Spin requests use bl,bs,gid only",
+          "no application-layer payload encryption observed",
+          "success envelope is code=200"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-CONFIG-BET",
+      "category": "config",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-PREFLIGHT",
+        "E-FRONTEND"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "valid session token",
+          "gid=41"
+        ],
+        "stateFields": [
+          "bll",
+          "bsl",
+          "cc",
+          "cs",
+          "spl",
+          "auto",
+          "dbl",
+          "dbs"
+        ],
+        "transitionRules": [
+          "POST /cp/api/v1/lucky-panda/config with t and gid",
+          "load bll 1..10 and bsl 0.02 and 0.2",
+          "ba = bs * bl * 20 using frontend hardcoded payline_count=20 as stake factor only",
+          "symbol_pay_list comes from Config.spl; screenshot plus 2883 wa matches recover the table when spl was not persisted in preflight"
+        ],
+        "outputs": [
+          "legal selectors",
+          "BRL/R$",
+          "minimum ba 0.4"
+        ],
+        "terminationRules": [
+          "Config returns once before Spin"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-PREFLIGHT",
+          "E-FRONTEND"
+        ],
+        "assertions": [
+          "preflight config bll=[1..10] bsl=[0.02,0.2] cc=BRL cs=R$",
+          "1333 paid starts used bl=1 bs=0.02 ba=0.4",
+          "payline_count=20 is not a winning-line count"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-WAYS-EVAL",
+      "category": "GAME_RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-RULES",
+        "E-SPIN",
+        "E-PAYTABLE",
+        "E-FRONTEND",
+        "E-ANALYSIS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "RLE board decodes to rowCounts 5,6,6,6,6,5"
+        ],
+        "stateFields": [
+          "rskl",
+          "wmkl",
+          "wskl",
+          "wa",
+          "rpx",
+          "bl",
+          "bs"
+        ],
+        "transitionRules": [
+          "evaluate left-to-right 3..6 consecutive reels of the same paying symbol",
+          "Wild substitutes paying symbols and does not substitute Scat",
+          "ways is the product of wmkl position-list lengths",
+          "apply screenshot paytable indexed by reelCount-3",
+          "multiply by bs * bl * max(1,rpx)"
+        ],
+        "outputs": [
+          "wmkl",
+          "wskl",
+          "wa"
+        ],
+        "terminationRules": [
+          "each paying symbol is evaluated once per delivery"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-SPIN",
+          "E-PAYTABLE",
+          "E-ANALYSIS"
+        ],
+        "assertions": [
+          "2883/2883 RLE boards decode",
+          "2883/2883 awards recompute with mismatchCount=0 and maxAbsoluteDelta about 2.842170943040401e-14",
+          "frontend uses symbol_pay_list[symbol][reelCount] * CurBetmulti"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-CASCADE",
+      "category": "STATE_MACHINE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-SPIN",
+        "E-ROUND",
+        "E-ANALYSIS",
+        "E-PAYTABLE",
+        "E-FRONTEND"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "current delivery has wa>0 or ss=0 inside an active tumble segment"
+        ],
+        "stateFields": [
+          "roundId",
+          "ss",
+          "wa",
+          "rwa",
+          "rpx",
+          "ba",
+          "rskl"
+        ],
+        "transitionRules": [
+          "paid start has ba=bs*bl*20",
+          "remove winning cells, drop survivors, refill vacancies",
+          "accumulate rwa += wa",
+          "ss=0 means request another Spin with the same bl/bs/gid",
+          "ss=1 and wa=0 closes the current tumble segment",
+          "rpx is a server-authoritative even integer or 0 meaning x1; do not invent a +2-per-tumble formula"
+        ],
+        "outputs": [
+          "ordered delivery projections of one complete ordinary or free-spin tumble segment"
+        ],
+        "terminationRules": [
+          "segment-terminal delivery has ss=1"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-SPIN",
+          "E-ROUND",
+          "E-ANALYSIS"
+        ],
+        "assertions": [
+          "200 ordinary-win complete Rounds are all multi-step; 0 single-step ordinary wins",
+          "985/985 adjacent cascade pairs have non-decreasing rwa and previous ss=0",
+          "200/200 ordinary cascade Rounds end ss=1",
+          "continuation requests reuse bl=1 bs=0.02 gid=41 with ba=0"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-ANALYSIS",
+            "from": "roundOrdinal 11 step 1 ss=0 wa=0.6 rwa=0.6 ba=0.4 rpx=0",
+            "event": "tumble refill under the same roundOrdinal",
+            "to": "steps 2..8 ss=0 with rwa accumulating to 22.66 then step 9 ss=1 wa=0 rwa=22.66 ba=0"
+          },
+          {
+            "ref": "E-SPIN",
+            "from": "shared roundOrdinal and increasing stepOrdinal",
+            "event": "client posts the next /lucky-panda/spin",
+            "to": "next rskl is the post-tumble board, not a new paid start"
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-SCATTER-FREE",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-SPIN",
+        "E-ROUND",
+        "E-ANALYSIS-RULES",
+        "E-FRONTEND",
+        "E-HISTORY"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid tumble segment reaches ss=1 nfsc=0 with at least 4 Scat RLE blocks"
+        ],
+        "stateFields": [
+          "fsn",
+          "nfsc",
+          "ss",
+          "rwa",
+          "rpx",
+          "roundId"
+        ],
+        "transitionRules": [
+          "award fsn=10 on that paid terminal delivery",
+          "client treats IsFreeGameFirst when ss=1 and fsn>0 and nfsc=0",
+          "deliver nfsc 1 through 10, each free spin having its own tumble chain",
+          "keep every delivery in the same paid Round",
+          "rwa continues to accumulate; frwa stays 0",
+          "3 Scat blocks on a paid terminal never triggered in 9 counterexamples"
+        ],
+        "outputs": [
+          "ten free-spin segments plus their tumbles inside one complete Round"
+        ],
+        "terminationRules": [
+          "nfsc=10 and ss=1 closes the Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-SPIN",
+          "E-ROUND",
+          "E-ANALYSIS-RULES",
+          "E-HISTORY"
+        ],
+        "assertions": [
+          "38 complete Scatter Free Rounds, each fsn=10",
+          "38/38 first fsn=10 deliveries have ss=1 and nfsc=0 and 4 or 5 Scat blocks",
+          "0 retriggers after nfsc>0",
+          "38/38 history details have nonempty fsl",
+          "806/806 adjacent free pairs have non-decreasing nfsc"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-ANALYSIS",
+            "from": "roundOrdinal 69 step 1 paid tumble ss=0 nfsc=0 fsn=0",
+            "event": "paid terminal awards fsn=10",
+            "to": "step 2 ss=1 nfsc=0 fsn=10 then steps with nfsc 1..10 ending nfsc=10 ss=1"
+          },
+          {
+            "ref": "E-HISTORY",
+            "from": "detail.bsl paid-segment deliveries",
+            "event": "history splits free spins into fsl",
+            "to": "detail.fsl nfsc 1..10 under the same transferId"
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-ROUND-END",
+      "category": "round",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FRONTEND",
+        "E-SPIN",
+        "E-ROUND",
+        "E-ANALYSIS-RULES"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "a paid Spin has been accepted"
+        ],
+        "stateFields": [
+          "ss",
+          "fsn",
+          "nfsc",
+          "rwa"
+        ],
+        "transitionRules": [
+          "frontend isRealEnd = (ss==1 && fsn==nfsc)",
+          "IsFreeGame clears when (fsn==nfsc && ss==1) or fsn==0",
+          "complete Round predicate used on the corpus: ss==1 AND (fsn==0 OR nfsc==fsn)"
+        ],
+        "outputs": [
+          "terminal delivery",
+          "one History record"
+        ],
+        "terminationRules": [
+          "no further Spin belongs to this Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-SPIN",
+          "E-ROUND",
+          "E-ANALYSIS-RULES"
+        ],
+        "assertions": [
+          "1333/1333 complete Rounds in round-index satisfy ss==1 AND (fsn==0 OR nfsc==fsn)",
+          "0 captured Rounds stop with ss!=1"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-ANALYSIS-RULES",
+            "from": "last delivery of each roundOrdinal",
+            "event": "evaluate ss/fsn/nfsc",
+            "to": "ss=1 and (fsn=0 or nfsc=fsn) then History becomes visible"
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-HISTORY",
+      "category": "history",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-HISTORY",
+        "E-HISTORY-FIXTURE",
+        "E-HISTORY-VIEW",
+        "E-FRONTEND",
+        "E-ROUND"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "complete Round is terminal",
+          "valid session"
+        ],
+        "stateFields": [
+          "ll",
+          "tis",
+          "bid",
+          "bsl",
+          "fsl",
+          "ba",
+          "wa",
+          "baf"
+        ],
+        "transitionRules": [
+          "POST /cp/api/v1/lucky-panda/log-list with page_index, begin_at, end_at, t, gid",
+          "row.tis is the transferId",
+          "POST /cp/api/v1/lucky-panda/log-view with transfer_id=tis, t, gid",
+          "detail.bsl is the paid-segment deliveries; detail.fsl is present only for scatter-free Rounds",
+          "gm is null and fe is 0 on every captured row; that empty state is normal",
+          "history wmkl uses object {sk,wa,wmk}; spin wmkl uses array-of-arrays"
+        ],
+        "outputs": [
+          "History list",
+          "History detail",
+          "return to list"
+        ],
+        "terminationRules": [
+          "detail is returnable without creating a Spin"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-HISTORY",
+          "E-ROUND",
+          "E-HISTORY-FIXTURE"
+        ],
+        "assertions": [
+          "1333/1333 transferId exact set match between round-index and history-1to1",
+          "row.tis maps to detail.bid suffix",
+          "38/38 scatter-free Rounds have nonempty fsl; 0/1095 losses have fsl",
+          "History is one list+detail per confirmed result class, not per spin"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-HISTORY",
+            "from": "log-list ll[].tis",
+            "event": "log-view transfer_id",
+            "to": "detail.bid 41-{tis} with bsl and optional fsl"
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-REDIS-ROUND",
+      "category": "redis",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULES",
+        "E-ROUND",
+        "E-ANALYSIS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "GameRuleCore generated and Independent ResultUtil verified a complete Round"
+        ],
+        "stateFields": [
+          "bs",
+          "bl",
+          "pages of rskl+rpx",
+          "fsn",
+          "actualMultiplier"
+        ],
+        "transitionRules": [
+          "encode lp1 ASCII member restoring every visible page",
+          "actualMultiplier = terminal rwa / (bs * bl) as six-digit integer; 0 for ordinary loss",
+          "ordinary complete Rounds including tumbles write BetLog:000000041:{multiplier} and PerKeyList_000000041",
+          "scatter-free complete Rounds write MaryLog:000000041:{multiplier} and MaryKeyList_000000041",
+          "MULTI ZADD RPUSH LTRIM EXEC",
+          "do not skip writing 0-multiplier ordinary losses"
+        ],
+        "outputs": [
+          "one complete-Round member per generated Round"
+        ],
+        "terminationRules": [
+          "transaction succeeds atomically or the member is not accepted"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ANALYSIS",
+          "E-ROUND"
+        ],
+        "assertions": [
+          "member is not a JSON spin envelope",
+          "200/200 positive rwa Rounds have integer rwa/(bs*bl)",
+          "ResultUtil recomputes wmkl/wa/ss/fsn/nfsc from boards and rpx",
+          "original Redis consumer compatibility is not claimed; keys follow the 1809/42 platform consumer"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "ref": "E-ANALYSIS",
+            "from": "verified complete Round pages in order",
+            "event": "encode then MULTI write",
+            "to": "one LPOP/BLPOP claim removes the entire Round"
+          }
+        ]
+      }
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "U-ORIGINAL-PROBABILITY",
+      "reason": "No original reel strips or probability configuration were captured. Observed cell/block counts are local replica weights only.",
+      "evidenceRefs": [
+        "E-ANALYSIS",
+        "E-FRONTEND"
+      ]
+    },
+    {
+      "id": "U-RPX-INCREMENT",
+      "reason": "rpx is server-authoritative. First paid wins already show 0/2/4/6/8. Later deltas are 0, +2, rarely +4/+6. Client Pan first-collect only drives times=2 animation. Do not implement a guessed closed form.",
+      "evidenceRefs": [
+        "E-ANALYSIS-RULES",
+        "E-FRONTEND"
+      ]
+    },
+    {
+      "id": "U-GFL-SFL-ASSIGNMENT",
+      "reason": "sfl/gfl are gold/silver frame coordinates consumed by the frontend. They are not scatter positions (0/289 sfl equal scat cells). Award recomputation does not need them. Exact assignment from the board was not reconstructed.",
+      "evidenceRefs": [
+        "E-FRONTEND",
+        "E-ANALYSIS-RULES"
+      ]
+    },
+    {
+      "id": "U-FOUR-SCAT-ON-FEWER-REELS",
+      "reason": "All 35 triggers had 4+ Scat blocks on 3 or 4 reels. Whether 4 blocks on 1-2 reels would trigger is unobserved.",
+      "evidenceRefs": [
+        "E-ANALYSIS-RULES"
+      ]
+    },
+    {
+      "id": "U-FREE-RETRIGGER",
+      "reason": "38/38 free Rounds keep fsn=10. Retrigger is not established and must not be randomly implemented.",
+      "evidenceRefs": [
+        "E-ANALYSIS",
+        "E-ROUND"
+      ]
+    },
+    {
+      "id": "U-BUY-FEATURE",
+      "reason": "Buy is absent from the menu, frontend, and 1333 spin requests. Treat as not a play mode, not as mali-via-buy.",
+      "evidenceRefs": [
+        "E-FRONTEND",
+        "E-SPIN"
+      ]
+    },
+    {
+      "id": "U-CONFIG-SPL-BODY",
+      "reason": "Frontend reads Config.spl into symbol_pay_list. The saved preflight config omitted spl. Paytable is recovered from the original screenshot and 2883 wa matches.",
+      "evidenceRefs": [
+        "E-PREFLIGHT",
+        "E-PAYTABLE",
+        "E-FRONTEND"
+      ]
+    }
+  ]
+}

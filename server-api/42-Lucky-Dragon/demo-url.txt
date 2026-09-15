@@ -1,0 +1,1 @@
+http://127.0.0.1:50055/play/42-Lucky-Dragon/index.html?gid=42&l=pt&ai=local_42&btt=0&t=local-demo&sip=127.0.0.1%3A50055&apiHost=127.0.0.1%3A50055

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "workflowTemplateVersion": 15,
+  "eventTime": "2026-08-29T07:45:32+08:00",
+  "batch": "D",
+  "operation": "setupBrowserRuntime -> agent.browsers.list -> exact extensionInstanceId match",
+  "expected": {
+    "family": "chrome",
+    "profileName": "abc224",
+    "extensionInstanceId": "462e177b-f59f-4495-a574-4b1c63fb53c3"
+  },
+  "observed": [
+    {
+      "family": "chrome",
+      "profileName": "fgl",
+      "extensionInstanceId": "ca572871-84f4-4fc8-9697-bf8a96bcfaf3"
+    },
+    {
+      "family": "chrome",
+      "profileName": "abc222",
+      "extensionInstanceId": "35d86d21-ac60-4133-9019-8c4645472100"
+    }
+  ],
+  "result": "EXACT_ABC224_EXTENSION_INSTANCE_NOT_DISCOVERED",
+  "selectionPerformed": false,
+  "tabCreated": false,
+  "pageLevelCallsPerformed": false,
+  "otherProfilesTouched": false,
+  "formalPaidRounds": 0,
+  "disposition": "CONTINUE_OFFLINE_ARTIFACT_WORK_AND_WAIT_FOR_EXACT_INSTANCE"
+}
+

@@ -1,0 +1,248 @@
+{
+  "identity": {
+    "username": "abc223",
+    "url": "https://hms-paddle.com/#/giftcode",
+    "hash": "#/giftcode",
+    "text": "Cupons\nCupons\nColar\nValor do bônus: 0,88- 5.555,00\nInstruções Do Evento:\n\n1.Digite o código de troca para resgatar os prêmios. O dinheiro será creditado diretamente na conta após o código ser validado;\n\n2.Um código de troca só pode ser utilizado uma vez e será invalidado após o uso;\n\n3.Utilize o código de troca emitido dentro do período de validade. O código de troca expirado se tornará inválido. Durante o período do evento, só pode ser utilizado um código por conta;\n\n4.O bónus (excluindo o principal) oferecido neste evento pode ser levantado apenas depois de cumprido o requisito de rollover 1x (ou seja, auditoria, apostas ou apostas válidas) e recarrega de 1, com as apostas limitadas a apenas Slots:Todos os jogos;\n\n5.O código de troca deve ser utilizada pelo titular da conta. É proibido alugar, usar plug-ins externos, robôs, apostar em contas diferentes, brushing mútuo, arbitragem, interface, protocolo, exploração de vulnerabilidades, controle de grupo ou outros meios técnicos para participar. Uma vez verificado, a plataforma tem o direito de terminar o login do membro, suspender o uso do site pelo membro e confiscar prêmios e lucros obtidos indevidamente sem aviso prévio;\n\n6.Ao concordar em participar de este evento, a plataforma assumirá que o membro concorda e cumprirá as regras e regulamentos correspondentes. Em caso de divergências de interpretação das normativas, a plataforma possui o direito de manter a interpretação final deste evento.\n\n\n\n\nResgatar Bônus"
+  },
+  "clicks1": [],
+  "surface": {
+    "url": "https://hms-paddle.com/#/index",
+    "inputs": [],
+    "cpNodes": [
+      {
+        "tag": "DIV",
+        "className": "tab_text",
+        "text": "CP",
+        "rect": {
+          "x": 535.28125,
+          "y": 700.154541015625,
+          "width": 61.390625,
+          "height": 22,
+          "top": 700.154541015625,
+          "right": 596.671875,
+          "bottom": 722.154541015625,
+          "left": 535.28125
+        }
+      },
+      {
+        "tag": "SPAN",
+        "className": "",
+        "text": "CP",
+        "rect": {
+          "x": 510.71875,
+          "y": 3378.453125,
+          "width": 30.015625,
+          "height": 26,
+          "top": 3378.453125,
+          "right": 540.734375,
+          "bottom": 3404.453125,
+          "left": 510.71875
+        }
+      }
+    ],
+    "searchish": [],
+    "titles": [
+      {
+        "tag": "DIV",
+        "className": "tabs tabActive",
+        "text": "PG"
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "CP"
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "PP"
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "WG"
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "JILI"
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "TADA"
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "FC"
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "RedTiger"
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "HSG"
+      },
+      {
+        "tag": "DIV",
+        "className": "tabs",
+        "text": "CQ9"
+      },
+      {
+        "tag": "DIV",
+        "className": "game_title_left case_5",
+        "text": "Popular"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "909"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "909"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "856"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "856"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "680"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "680"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "501"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "501"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "554"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "554"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "917"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "917"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "677"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "677"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "751"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "751"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "597"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "597"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "919"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "919"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "954"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "954"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "586"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "586"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "938"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "938"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "700"
+      },
+      {
+        "tag": "DIV",
+        "className": "innerbox",
+        "text": "700"
+      },
+      {
+        "tag": "DIV",
+        "className": "game-item case_5",
+        "text": "817"
+      }
+    ]
+  }
+}

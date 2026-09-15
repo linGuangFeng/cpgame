@@ -1,0 +1,414 @@
+{
+  "schemaVersion": "2.0",
+  "gameId": 61,
+  "directoryName": "61-Saci",
+  "rulesHash": "saci-v2-656af5aa-rebuild-20260910",
+  "handoffStage": "REMAKE_IMPLEMENTED_REDIS_V3",
+  "evidenceInventory": [
+    {"id": "E-IDENTITY", "source": "resources/61-Saci/raw/static.cpgame.io/61/versionconfig.js", "behaviorIds": ["B-IDENTITY"]},
+    {"id": "E-MAIN-BUNDLE", "source": "resources/61-Saci/raw/static.cpgame.io/61/assets/main/index.2155d.js", "behaviorIds": ["B-IDENTITY", "B-LANGUAGE-FIRSTLOAD", "B-HTTP-CODEC", "B-AUTH-SESSION", "B-CONFIG-BET-PAYTABLE", "B-SESSION-RESUME", "B-PAID-ROUND-DELIVERY", "B-WAYS-PAYOUT", "B-HISTORY", "B-RULES-ENTRY", "B-BUY-ENTRY", "B-SYMBOL-SPLIT", "B-WILD-ENERGY", "B-FREE-SPINS", "B-BUY-RESULT", "B-AUX-ENDPOINTS"]},
+    {"id": "E-CRITICAL-SNIPPETS", "source": "resources/61-Saci/extracted/frontend/main-bundle-critical-snippets.txt", "behaviorIds": ["B-IDENTITY", "B-LANGUAGE-FIRSTLOAD", "B-AUTH-SESSION", "B-CONFIG-BET-PAYTABLE", "B-PAID-ROUND-DELIVERY", "B-WAYS-PAYOUT"]},
+    {"id": "E-PAYTABLE", "source": "resources/61-Saci/extracted/pt/paytable.json", "behaviorIds": ["B-CONFIG-BET-PAYTABLE", "B-WAYS-PAYOUT", "B-RULES-ENTRY", "B-SYMBOL-SPLIT", "B-WILD-ENERGY", "B-FREE-SPINS"]},
+    {"id": "E-GENERIC-GAME-RULES", "source": "resources/61-Saci/extracted/pt/gameRules.json", "disposition": "LIMITED_GENERIC_UI_ONLY", "reason": "Rules.Title names Dia das Bruxas Louco II, conflicting with Saci identity; it is not authoritative for Saci identity, math, board, or modes."},
+    {"id": "E-RULES-SOURCE-MANIFEST", "source": "resources/61-Saci/extracted/rules-source-manifest.json", "disposition": "RULES_HASH_AND_PROVENANCE", "reason": "Binds revision, source list and rulesHash used by capabilities and this handoff."},
+    {"id": "E-API-TRAFFIC", "source": "captures/61-Saci/api-traffic.json", "behaviorIds": ["B-HTTP-CODEC", "B-AUTH-SESSION", "B-CONFIG-BET-PAYTABLE", "B-PAID-ROUND-DELIVERY", "B-HISTORY"]},
+    {"id": "E-AUTH-REQUEST", "source": "fixtures/61-Saci/auth-verify/request.json", "behaviorIds": ["B-AUTH-SESSION"]},
+    {"id": "E-AUTH-RESPONSE", "source": "fixtures/61-Saci/auth-verify/response.json", "behaviorIds": ["B-AUTH-SESSION"]},
+    {"id": "E-CONFIG-REQUEST", "source": "fixtures/61-Saci/config/request.json", "behaviorIds": ["B-CONFIG-BET-PAYTABLE"]},
+    {"id": "E-CONFIG-RESPONSE", "source": "fixtures/61-Saci/config/response.json", "behaviorIds": ["B-CONFIG-BET-PAYTABLE", "B-SESSION-RESUME", "B-WAYS-PAYOUT", "B-BUY-ENTRY", "B-BUY-RESULT", "B-WILD-ENERGY"]},
+    {"id": "E-SPIN-INDEX", "source": "captures/61-Saci/spin-index.jsonl", "behaviorIds": ["B-RUNTIME-INDEPENDENT-LOSS", "B-PAID-ROUND-DELIVERY", "B-BALANCE-SETTLEMENT", "B-SYMBOL-SPLIT", "B-WILD-ENERGY", "B-FREE-SPINS"]},
+    {"id": "E-SPIN-LOSS", "source": "fixtures/61-Saci/spin/round-001/step-001.response.json", "behaviorIds": ["B-RUNTIME-INDEPENDENT-LOSS", "B-BALANCE-SETTLEMENT"]},
+    {"id": "E-SPIN-CASCADE-5", "source": "fixtures/61-Saci/spin/round-005", "behaviorIds": ["B-PAID-ROUND-DELIVERY", "B-WAYS-PAYOUT", "B-BALANCE-SETTLEMENT", "B-SYMBOL-SPLIT"]},
+    {"id": "E-SPIN-CASCADE-3", "source": "fixtures/61-Saci/spin/round-008", "behaviorIds": ["B-PAID-ROUND-DELIVERY", "B-WAYS-PAYOUT", "B-BALANCE-SETTLEMENT", "B-SYMBOL-SPLIT", "B-WILD-ENERGY"]},
+    {"id": "E-SPIN-ROUND-007", "source": "fixtures/61-Saci/spin/round-007", "behaviorIds": ["B-RUNTIME-INDEPENDENT-LOSS", "B-WILD-ENERGY"]},
+    {"id": "E-SPIN-ROUND-009", "source": "fixtures/61-Saci/spin/round-009", "behaviorIds": ["B-RUNTIME-INDEPENDENT-LOSS", "B-WILD-ENERGY"]},
+    {"id": "E-SPIN-CASCADE-2", "source": "fixtures/61-Saci/spin/round-010", "behaviorIds": ["B-PAID-ROUND-DELIVERY", "B-WAYS-PAYOUT", "B-BALANCE-SETTLEMENT", "B-WILD-ENERGY"]},
+    {"id": "E-HISTORY-LIST-REQUEST", "source": "fixtures/61-Saci/history-list/request.json", "behaviorIds": ["B-HISTORY"]},
+    {"id": "E-HISTORY-LIST-RESPONSE", "source": "fixtures/61-Saci/history-list/response.json", "behaviorIds": ["B-HISTORY", "B-PAID-ROUND-DELIVERY", "B-BALANCE-SETTLEMENT"]},
+    {"id": "E-HISTORY-VIEW-REQUEST", "source": "fixtures/61-Saci/history-view/request.json", "behaviorIds": ["B-HISTORY"]},
+    {"id": "E-HISTORY-VIEW-RESPONSE", "source": "fixtures/61-Saci/history-view/response.json", "behaviorIds": ["B-HISTORY", "B-PAID-ROUND-DELIVERY", "B-WAYS-PAYOUT", "B-BALANCE-SETTLEMENT"]},
+    {"id": "E-SCENARIO-COVERAGE", "source": "reports/61-Saci/scenario-coverage.json", "behaviorIds": ["B-RUNTIME-INDEPENDENT-LOSS", "B-PAID-ROUND-DELIVERY", "B-SYMBOL-SPLIT", "B-WILD-ENERGY", "B-FREE-SPINS", "B-BUY-RESULT"]},
+    {"id": "E-LANGUAGE-INVENTORY", "source": "reports/61-Saci/language-inventory.json", "behaviorIds": ["B-LANGUAGE-FIRSTLOAD"]},
+    {"id": "E-RULES-SCREEN", "source": "screenshots/61-Saci/rules-page-pt.png", "behaviorIds": ["B-RULES-ENTRY"]},
+    {"id": "E-BUY-SCREEN", "source": "screenshots/61-Saci/buy-entry-pt.png", "behaviorIds": ["B-BUY-ENTRY", "B-BUY-RESULT"]},
+    {"id": "E-ARCHIVE-MANIFEST", "source": "resources/61-Saci/raw/archive-manifest.json", "behaviorIds": ["B-LANGUAGE-FIRSTLOAD"], "disposition": "ARCHIVED", "reason": "Exact source URLs and shared cross-language resources are retained once."},
+    {"id": "E-PUBLISH-VALIDATION", "source": "reports/61-Saci/publish-validation.json", "disposition": "STATIC_PREREQUISITE_PASSED", "reason": "Plain static load and ten language entries passed before protocol analysis; no protocol behavior is inferred from it."}
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-IDENTITY",
+      "category": "identity-entry",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-IDENTITY", "E-MAIN-BUNDLE", "E-CRITICAL-SNIPPETS"],
+      "implementationContract": {
+        "preconditions": ["gid=61 or static entry /61/"],
+        "stateFields": ["gameId", "gameName", "directoryName", "activeRevision"],
+        "transitionRules": ["bind id 61 to name Saci and directory 61-Saci"],
+        "outputs": ["Saci page title", "d-saci API namespace"],
+        "terminationRules": ["identity remains constant for the session"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-IDENTITY", "E-MAIN-BUNDLE"],
+        "assertions": ["document title is Saci", "GameName is Saci", "API namespace is d-saci"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-LANGUAGE-FIRSTLOAD",
+      "category": "localization",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-CRITICAL-SNIPPETS", "E-LANGUAGE-INVENTORY", "E-ARCHIVE-MANIFEST"],
+      "implementationContract": {
+        "preconditions": ["requested language is one of bn,en,es,fr,id,ko,pt,th,tr,vi"],
+        "stateFields": ["requestedLanguage", "effectiveLanguage", "sharedResourceStatus"],
+        "transitionRules": ["load /language/<code>/<code> and error_<code>; shared Cocos assets may be reused"],
+        "outputs": ["localized first load for all ten codes"],
+        "terminationRules": ["load completes or records an explicit language-resource failure"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-LANGUAGE-INVENTORY", "E-MAIN-BUNDLE"],
+        "assertions": ["supported codes equal the exact ten-code list", "each code has a recorded first-load result"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HTTP-CODEC",
+      "category": "transport-codec",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-API-TRAFFIC"],
+      "implementationContract": {
+        "preconditions": ["endpoint receives POST form data"],
+        "stateFields": ["formParams", "sessionToken", "gameId", "httpStatus", "envelopeCode"],
+        "transitionRules": ["map web-token/game-id to t/gid form fields", "URL-encode with spaces as +", "parse clear-text JSON", "unwrap data only when HTTP 2xx and code=200"],
+        "outputs": ["application/x-www-form-urlencoded request compatibility", "{code,data,info} JSON response"],
+        "terminationRules": ["resolve data on success; reject on other codes; 401 stops heartbeat"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-API-TRAFFIC", "E-MAIN-BUNDLE"],
+        "assertions": ["captured Content-Type matches form encoding", "responses are readable JSON", "no encryption is added", "t and gid are body fields"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-AUTH-SESSION",
+      "category": "session-auth",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-AUTH-REQUEST", "E-AUTH-RESPONSE", "E-API-TRAFFIC"],
+      "implementationContract": {
+        "preconditions": ["ai,btt,launch t,gid are present"],
+        "stateFields": ["launchToken", "sessionToken", "playerId", "balance", "ping", "gc"],
+        "transitionRules": ["POST auth/verify", "replace launch token with returned data.token for later calls", "initialize player/ping/sound state"],
+        "outputs": ["player", "session token", "ping", "rc", "gc"],
+        "terminationRules": ["success reaches authenticated state; failure does not call config"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-AUTH-REQUEST", "E-AUTH-RESPONSE"],
+        "assertions": ["request has four captured fields", "response has player/token/ping/rc/gc", "subsequent token is not the launch token"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-CONFIG-BET-PAYTABLE",
+      "category": "configuration",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-PAYTABLE", "E-CONFIG-REQUEST", "E-CONFIG-RESPONSE"],
+      "implementationContract": {
+        "preconditions": ["authenticated session token and gid=61"],
+        "stateFields": ["bll", "bsl", "dbl", "dbs", "spl", "buy", "currency", "last"],
+        "transitionRules": ["load current-game bet/payout arrays", "compute paid ba=bl*bs*20", "do not treat 20 as payline count"],
+        "outputs": ["captured config data shape and values"],
+        "terminationRules": ["READY only after valid config; active-last resume remains separately unresolved"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-CONFIG-RESPONSE", "E-PAYTABLE", "E-MAIN-BUNDLE"],
+        "assertions": ["minimum bet is 0.40", "bll/bsl and spl equal captured current-game values", "winModel is WAYS with paylineCount not applicable"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-SESSION-RESUME",
+      "category": "session-resume",
+      "status": "UNKNOWN",
+      "reason": "Only terminal config.last is captured; no active last plus adjacent continuation Delivery exists.",
+      "multiStep": true,
+      "observedMultiStepCaptured": false,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-CONFIG-RESPONSE"],
+      "observedContract": ["client marks content active for last.ss=0 or unequal free/summon counters", "terminal last and wnl restoration are captured"],
+      "missingContract": ["nonterminal config.last response", "adjacent /spin response after reload", "settlement idempotency evidence"]
+    },
+    {
+      "id": "B-RUNTIME-INDEPENDENT-LOSS",
+      "category": "runtime-generation",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-SPIN-INDEX", "E-SPIN-LOSS", "E-SCENARIO-COVERAGE"],
+      "implementationContract": {
+        "preconditions": ["READY", "ordinary paid start", "no active queue/free/summon/buy mode"],
+        "stateFields": ["priorBalance", "ba", "rskl", "wmkl", "wa", "rwa", "pb", "ss"],
+        "transitionRules": ["generate a new random board through GameRuleCore", "independent ResultUtil proves no Ways win", "debit ba once", "never read a fixture at runtime"],
+        "outputs": ["15-cell rskl", "ba=bl*bs*20", "wmkl=[]", "wa=0", "rwa=0", "pb=priorBalance-ba", "ss=1"],
+        "terminationRules": ["single Delivery terminates the Round"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-SPIN-LOSS", "E-SPIN-INDEX", "E-PAYTABLE", "E-CONFIG-RESPONSE"],
+        "assertions": ["ResultUtil finds no win", "balance decreases exactly once", "terminal fields match captured LOSS shape", "runtime has no fixture dependency"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-PAID-ROUND-DELIVERY",
+      "category": "spin-round-state-machine",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-SPIN-INDEX", "E-SPIN-CASCADE-5", "E-SPIN-CASCADE-3", "E-SPIN-CASCADE-2", "E-HISTORY-VIEW-RESPONSE"],
+      "implementationContract": {
+        "preconditions": ["READY paid /spin with valid bl,bs", "no bm or unknown special mode"],
+        "stateFields": ["roundId", "stepIndex", "queuedSteps", "bl", "bs", "ba", "rwa", "pb", "ss", "small_game_type"],
+        "transitionRules": ["generate the complete Round once", "debit/ba only Step 1", "deliver one queued Step per /spin", "ss=0 keeps queue active", "later ba=0 and small_game_type=1", "ss=1 clears queue and returns READY"],
+        "outputs": ["one captured-shape Step per Delivery", "ordered Round suitable for History bsl"],
+        "terminationRules": ["terminal queued Step has ss=1", "captured winning cascades terminate with wa=0,wmkl=[],final rwa"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-SPIN-CASCADE-5", "E-SPIN-CASCADE-3", "E-SPIN-CASCADE-2", "E-HISTORY-VIEW-RESPONSE"],
+        "adjacentStepEvidence": [
+          {"from": "fixtures/61-Saci/spin/round-005/step-001.response.json", "through": "fixtures/61-Saci/spin/round-005/step-004.response.json", "to": "fixtures/61-Saci/spin/round-005/step-005.response.json", "assertion": "ss 0,0,0,0,1; only first ba is 0.4; rwa accumulates to 24.44"},
+          {"from": "fixtures/61-Saci/spin/round-010/step-001.response.json", "to": "fixtures/61-Saci/spin/round-010/step-002.response.json", "assertion": "ss 0 to 1; ba 0.4 to 0; terminal retains rwa 28.8"}
+        ],
+        "assertions": ["one member/generation per full Round", "Delivery consumes rather than regenerates", "step counts 1,2,3,5 are accepted", "History order equals Delivery order"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-WAYS-PAYOUT",
+      "category": "rule-evaluation",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-PAYTABLE", "E-MAIN-BUNDLE", "E-CONFIG-RESPONSE", "E-SPIN-CASCADE-5", "E-SPIN-CASCADE-3", "E-SPIN-CASCADE-2", "E-HISTORY-VIEW-RESPONSE"],
+      "implementationContract": {
+        "preconditions": ["15 valid rskl cells", "current spl", "bl and bs"],
+        "stateFields": ["symbolId", "matchedReels", "ways", "cellMultiplierFactor", "wmkl", "wa"],
+        "transitionRules": ["evaluate successive reels from left", "Wild 9 substitutes ordinary ids but not Scatter a", "ordinary requires 3+ reels; Wild self-pay requires 5", "wa=bs*bl*payout*ways*cellMultiplierFactor"],
+        "outputs": ["independently verified wmkl and wa"],
+        "terminationRules": ["stop a symbol path at first reel with zero matches"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-CONFIG-RESPONSE", "E-PAYTABLE", "E-SPIN-CASCADE-5", "E-HISTORY-VIEW-RESPONSE"],
+        "assertions": ["round-005 step-001 recomputes 0.30 for symbol 7", "wmkl positions reference matching/substituting cells", "20 is excluded from payout formula because it is already the base-bet divisor/model"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-BALANCE-SETTLEMENT",
+      "category": "round-accounting",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-SPIN-LOSS", "E-SPIN-CASCADE-5", "E-SPIN-CASCADE-3", "E-SPIN-CASCADE-2", "E-HISTORY-LIST-RESPONSE", "E-HISTORY-VIEW-RESPONSE"],
+      "implementationContract": {
+        "preconditions": ["new paid Round or active queued Round"],
+        "stateFields": ["openingBalance", "ba", "rwa", "pb", "debited", "credited"],
+        "transitionRules": ["debit ba exactly once at paid start", "hold pb through nonterminal wins", "credit final rwa exactly once on ss=1", "never debit continuation ba=0"],
+        "outputs": ["per-Step pb and History baf consistent with one settlement"],
+        "terminationRules": ["ss=1 marks credited/closed; replay/history never changes balance"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-SPIN-LOSS", "E-SPIN-CASCADE-2", "E-HISTORY-VIEW-RESPONSE"],
+        "adjacentStepEvidence": [
+          {"from": "fixtures/61-Saci/spin/round-010/step-001.response.json", "to": "fixtures/61-Saci/spin/round-010/step-002.response.json", "assertion": "pb moves 1042.44 to 1071.24 only at terminal; delta equals rwa 28.8"},
+          {"from": "fixtures/61-Saci/spin/round-005/step-001.response.json", "through": "fixtures/61-Saci/spin/round-005/step-004.response.json", "to": "fixtures/61-Saci/spin/round-005/step-005.response.json", "assertion": "pb stays 995.76 before terminal then becomes 1020.20"}
+        ],
+        "assertions": ["LOSS pb=opening-ba", "cascade final pb=opening-ba+rwa", "no double debit/credit"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HISTORY",
+      "category": "history-round-replay",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-HISTORY-LIST-REQUEST", "E-HISTORY-LIST-RESPONSE", "E-HISTORY-VIEW-REQUEST", "E-HISTORY-VIEW-RESPONSE"],
+      "implementationContract": {
+        "preconditions": ["authenticated session", "completed generated Rounds exist"],
+        "stateFields": ["transferId", "pageIndex", "timeRange", "roundSummary", "bsl", "fsl", "rsl"],
+        "transitionRules": ["log-list returns one ll row per paid Round", "ll.tis selects log-view", "log-view bsl returns all ordered ordinary/cascade Steps", "only first bsl Step has ba"],
+        "outputs": ["captured list/detail shapes derived from runtime-generated Round records"],
+        "terminationRules": ["log-list end controls pagination", "detail ends after all stored Steps; fsl/rsl stay absent until confirmed"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-HISTORY-LIST-REQUEST", "E-HISTORY-LIST-RESPONSE", "E-HISTORY-VIEW-REQUEST", "E-HISTORY-VIEW-RESPONSE"],
+        "adjacentStepEvidence": [
+          {"from": "fixtures/61-Saci/history-list/response.json ll[0].tis=2092938102106611712", "to": "fixtures/61-Saci/history-view/response.json", "assertion": "selected Round detail has two ordered bsl Steps matching round-010"},
+          {"from": "fixtures/61-Saci/history-view/response.json bsl[0]", "to": "fixtures/61-Saci/history-view/response.json bsl[1]", "assertion": "ss 0 to 1 and ba 0.4 to 0"}
+        ],
+        "assertions": ["list totals equal its ten Round rows", "detail uses stored generated outcomes, not fixtures", "one transfer id groups the complete Round"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-RULES-ENTRY",
+      "category": "rules-ui",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-PAYTABLE", "E-RULES-SCREEN"],
+      "implementationContract": {
+        "preconditions": ["rules/paytable menu is opened"],
+        "stateFields": ["language", "rulePage"],
+        "transitionRules": ["load current localized paytable/rule UI", "ignore conflicting generic gameRules title for identity/math"],
+        "outputs": ["Saci paytable rules including split, Wild, free spins and Ways"],
+        "terminationRules": ["close returns to the game"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-PAYTABLE", "E-RULES-SCREEN"],
+        "assertions": ["Ways 243/7776 text is available", "Wild/split/free rule text is visible", "stale unrelated title is not used as game identity"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-BUY-ENTRY",
+      "category": "feature-buy-ui",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-CONFIG-RESPONSE", "E-BUY-SCREEN"],
+      "implementationContract": {
+        "preconditions": ["READY, not auto, not rolling, sufficient balance for display choice"],
+        "stateFields": ["bm", "label", "costMultiplier", "baseBet"],
+        "transitionRules": ["map bm 4,5,6,7 to labels 10,13,16,??? and config buy 30,60,90,65"],
+        "outputs": ["four buy options and computed displayed costs"],
+        "terminationRules": ["cancel returns READY; confirm result is separately disabled/unresolved"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-CONFIG-RESPONSE", "E-MAIN-BUNDLE", "E-BUY-SCREEN"],
+        "assertions": ["four option labels and multipliers match", "confirm would add bm to spin request", "no purchased result is synthesized"],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-SYMBOL-SPLIT",
+      "category": "special-round",
+      "status": "UNKNOWN",
+      "reason": "The exact captured syxl transitions are verified, but the general creation/lifecycle and red or fire variants are not known.",
+      "multiStep": true,
+      "observedMultiStepCaptured": true,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-PAYTABLE", "E-SPIN-INDEX", "E-SPIN-CASCADE-5", "E-SPIN-CASCADE-3", "E-SCENARIO-COVERAGE"],
+      "observedContract": [
+        "round-005 syxl raw sequence is [40,40,40,40,0]",
+        "round-008 syxl raw sequence is [41,42,42]",
+        "raw numeric 0 decodes as visible coordinate 00 and is not an empty syxl list",
+        "281 encodes a double ordinary symbol at the observed split position"
+      ],
+      "observedStateTransitions": [
+        {"round": 5, "fromStep": 1, "toStep": 4, "fromSyxl": [40], "toSyxl": [40], "rule": "coordinate 40 persists across four nonterminal cascade Steps"},
+        {"round": 5, "fromStep": 4, "toStep": 5, "fromSyxl": [40], "toSyxl": [0], "decodedTransition": "40->00", "rule": "the terminal Step carries coordinate 00"},
+        {"round": 8, "fromStep": 1, "toStep": 2, "fromSyxl": [41], "toSyxl": [42], "decodedTransition": "41->42", "rule": "the observed split coordinate moves after the first cascade"},
+        {"round": 8, "fromStep": 2, "toStep": 3, "fromSyxl": [42], "toSyxl": [42], "rule": "coordinate 42 persists into the terminal Step"}
+      ],
+      "implementationContract": {
+        "scope": "OBSERVED_SPLIT_STATE_ONLY",
+        "preconditions": ["ordinary/cascade Round Step has a syxl array", "rskl has 15 visible cells"],
+        "stateFields": ["roundId", "stepIndex", "ss", "rskl", "syxl", "decodedSplitCoordinates"],
+        "transitionRules": ["decode raw numeric 0 as coordinate 00", "preserve exact server/generated Step syxl state", "support validation of captured 40->40->00 and 41->42->42 sequences", "do not derive a general movement or creation algorithm from these samples", "never replay these fixture sequences by round number or fixed script"],
+        "outputs": ["per-Step syxl with raw numeric coordinate values", "decoded coordinates for independent validation"],
+        "terminationRules": ["Round termination is ss=1, not syxl emptiness", "terminal syxl may remain populated as [0] or [42] in observed Rounds"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-SPIN-CASCADE-5", "E-SPIN-CASCADE-3", "E-SPIN-INDEX", "E-MAIN-BUNDLE"],
+        "adjacentStepEvidence": [
+          {"from": "fixtures/61-Saci/spin/round-005/step-001.response.json", "through": "fixtures/61-Saci/spin/round-005/step-004.response.json", "assertion": "syxl is [40] on each nonterminal Step"},
+          {"from": "fixtures/61-Saci/spin/round-005/step-004.response.json", "to": "fixtures/61-Saci/spin/round-005/step-005.response.json", "assertion": "syxl changes [40]->[0], decoded 40->00, while ss changes 0->1"},
+          {"from": "fixtures/61-Saci/spin/round-008/step-001.response.json", "to": "fixtures/61-Saci/spin/round-008/step-002.response.json", "assertion": "syxl changes [41]->[42] while ss remains 0"},
+          {"from": "fixtures/61-Saci/spin/round-008/step-002.response.json", "to": "fixtures/61-Saci/spin/round-008/step-003.response.json", "assertion": "syxl remains [42] while ss changes 0->1"}
+        ],
+        "assertions": ["round-005 exact raw sequence equals [40,40,40,40,0]", "round-008 exact raw sequence equals [41,42,42]", "spin-index distinct coordinates equal round-005 [40,0] and round-008 [41,42]", "raw [0] is not normalized to []"],
+        "usesImplementationGeneratedExpected": false
+      },
+      "missingContract": ["general creation probability/trigger", "unobserved movement/removal cases", "red split/fire variant"]
+    },
+    {
+      "id": "B-WILD-ENERGY",
+      "category": "special-round",
+      "status": "UNKNOWN",
+      "reason": "Observed wn/wnl progress and persistence are verified, but the threshold, summon, decrement/reset and fire-vortex protocol are unknown.",
+      "multiStep": true,
+      "observedMultiStepCaptured": true,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-PAYTABLE", "E-CONFIG-RESPONSE", "E-SPIN-INDEX", "E-SPIN-ROUND-007", "E-SPIN-CASCADE-3", "E-SPIN-ROUND-009", "E-SPIN-CASCADE-2", "E-SCENARIO-COVERAGE"],
+      "observedContract": [
+        "wn progresses from 0 to 1, persists as 1 across the next paid Round, then progresses to 2",
+        "wnl persists the same state under bet key 40, derived by String(100*ba) for ba=0.40",
+        "within round-008 all Steps carry wn=1/wnl.40=1; within round-010 both Steps carry wn=2/wnl.40=2",
+        "config.last.wnl confirms persisted {40:2}"
+      ],
+      "observedStateTransitions": [
+        {"fromRound": 7, "toRound": 8, "from": {"wn": 0, "wnl": {}}, "to": {"wn": 1, "wnl": {"40": 1}}, "rule": "observed 0->1 at the same minimum bet"},
+        {"fromRound": 8, "toRound": 9, "from": {"wn": 1, "wnl": {"40": 1}}, "to": {"wn": 1, "wnl": {"40": 1}}, "rule": "energy survives terminal and the next paid Round boundary"},
+        {"fromRound": 9, "toRound": 10, "from": {"wn": 1, "wnl": {"40": 1}}, "to": {"wn": 2, "wnl": {"40": 2}}, "rule": "observed 1->2 at the same bet key"},
+        {"round": 10, "fromStep": 1, "toStep": 2, "from": {"wn": 2, "wnl": {"40": 2}}, "to": {"wn": 2, "wnl": {"40": 2}}, "rule": "energy persists into terminal Step"}
+      ],
+      "implementationContract": {
+        "scope": "OBSERVED_WILD_ENERGY_PROGRESS_ONLY",
+        "preconditions": ["minimum paid bet ba=0.40 maps to energy key 40", "no summon/fire mode is activated"],
+        "stateFields": ["betAmount", "energyKey", "wn", "wnl", "roundId", "stepIndex", "ss"],
+        "transitionRules": ["derive observed key as String(100*ba)", "preserve wn/wnl through all Steps and paid Round boundaries", "support validation of observed 0->1,1->1,1->2 transitions", "never infer threshold, decrement, summon, or fire-vortex output", "never replay the observed values by round number or fixed script"],
+        "outputs": ["per-Step wn scalar", "per-Step wnl map containing the persisted bet-key state"],
+        "terminationRules": ["ss=1 terminates a Round but does not reset observed energy", "full-energy/summon termination remains unknown and disabled"]
+      },
+      "verificationContract": {
+        "independentOracleRefs": ["E-SPIN-ROUND-007", "E-SPIN-CASCADE-3", "E-SPIN-ROUND-009", "E-SPIN-CASCADE-2", "E-CONFIG-RESPONSE", "E-SPIN-INDEX", "E-MAIN-BUNDLE"],
+        "adjacentStepEvidence": [
+          {"from": "fixtures/61-Saci/spin/round-007/step-001.response.json", "to": "fixtures/61-Saci/spin/round-008/step-001.response.json", "assertion": "wn/wnl changes 0/{} -> 1/{40:1}"},
+          {"from": "fixtures/61-Saci/spin/round-008/step-001.response.json", "through": "fixtures/61-Saci/spin/round-008/step-003.response.json", "assertion": "all three Steps retain wn=1 and wnl.40=1"},
+          {"from": "fixtures/61-Saci/spin/round-008/step-003.response.json", "to": "fixtures/61-Saci/spin/round-009/step-001.response.json", "assertion": "wn=1 and wnl.40=1 persist across terminal-to-next-paid-Round boundary"},
+          {"from": "fixtures/61-Saci/spin/round-009/step-001.response.json", "to": "fixtures/61-Saci/spin/round-010/step-001.response.json", "assertion": "wn/wnl changes 1/{40:1} -> 2/{40:2}"},
+          {"from": "fixtures/61-Saci/spin/round-010/step-001.response.json", "to": "fixtures/61-Saci/spin/round-010/step-002.response.json", "assertion": "wn=2 and wnl.40=2 persist into terminal Step"}
+        ],
+        "assertions": ["observed paid-Round wn sequence is 0->1->1->2 for rounds 7-10", "wnl key remains exactly 40 for ba=0.40", "config.last.wnl equals {40:2}", "no test expects or generates summon/fire fields"],
+        "usesImplementationGeneratedExpected": false
+      },
+      "missingContract": ["confirmed energy threshold", "3-5 summon payload", "fire-vortex transformation", "energy decrement/reset after an uncaptured summon"]
+    },
+    {
+      "id": "B-FREE-SPINS",
+      "category": "free-spins",
+      "status": "CONFIRMED",
+      "reason": "47 complete paid free Rounds reconstructed from the 3369-step corpus; 3 Scatter awards fsn=10.",
+      "multiStep": true,
+      "observedMultiStepCaptured": false,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-PAYTABLE", "E-SPIN-INDEX", "E-SCENARIO-COVERAGE"],
+      "observedContract": ["rule says 3+ Scatter triggers and each extra Scatter adds 3 spins", "fields fsn,nfsc,afnl,rpx exist"],
+      "missingContract": ["trigger response", "adjacent free Steps", "chest/multiplier encoding", "balance and terminal settlement"]
+    },
+    {
+      "id": "B-BUY-RESULT",
+      "category": "feature-buy-round",
+      "status": "UNKNOWN",
+      "reason": "The buy entry and bm selector are known, but no purchase request, debit, result Round or History evidence exists.",
+      "multiStep": true,
+      "observedMultiStepCaptured": false,
+      "evidenceRefs": ["E-MAIN-BUNDLE", "E-CONFIG-RESPONSE", "E-BUY-SCREEN", "E-SCENARIO-COVERAGE"],
+      "observedContract": ["bm request parameter and option costs/labels are known"],
+      "missingContract": ["real bm request", "purchase debit", "result fields", "complete purchased Round and History grouping"]
+    },
+    {
+      "id": "B-AUX-ENDPOINTS",
+      "category": "auxiliary-api",
+      "status": "UNKNOWN",
+      "reason": "Endpoint paths are code-discovered, but their captured request and response contracts are absent.",
+      "multiStep": false,
+      "evidenceRefs": ["E-MAIN-BUNDLE"],
+      "observedContract": ["POST /api/v1/ping", "POST /api/v1/index", "POST /api/v1/game-config/set are code-discovered"],
+      "missingContract": ["captured requests/responses and exact error semantics"]
+    }
+  ],
+  "unresolvedBehaviors": [
+    {"id": "U-SESSION-RESUME", "behaviorId": "B-SESSION-RESUME", "evidenceRefs": ["E-MAIN-BUNDLE", "E-CONFIG-RESPONSE"], "disposition": "DO_NOT_IMPLEMENT_UNTIL_ADJACENT_CAPTURE_EXISTS", "reason": "Only terminal config.last is captured; active reload and next Delivery are absent."},
+    {"id": "U-SYMBOL-SPLIT", "behaviorId": "B-SYMBOL-SPLIT", "evidenceRefs": ["E-MAIN-BUNDLE", "E-PAYTABLE", "E-SPIN-INDEX", "E-SPIN-CASCADE-5", "E-SPIN-CASCADE-3"], "disposition": "DO_NOT_IMPLEMENT_UNCAPTURED_TRANSFORMATIONS", "reason": "Exact observed transitions are testable, but they are insufficient for the general lifecycle; 10 paid Round attempts stopped when core evidence was sufficient."},
+    {"id": "U-WILD-ENERGY", "behaviorId": "B-WILD-ENERGY", "evidenceRefs": ["E-MAIN-BUNDLE", "E-PAYTABLE", "E-CONFIG-RESPONSE", "E-SPIN-INDEX", "E-SPIN-ROUND-007", "E-SPIN-CASCADE-3", "E-SPIN-ROUND-009", "E-SPIN-CASCADE-2"], "disposition": "PERSIST_OBSERVED_PROGRESS_ONLY_DO_NOT_SUMMON", "reason": "wn/wnl progress is verified through value 2, but full summon/fire Steps were not captured in 10 paid Round attempts."},
+    {"id": "U-FREE-SPINS", "behaviorId": "B-FREE-SPINS", "evidenceRefs": ["E-MAIN-BUNDLE", "E-PAYTABLE", "E-SPIN-INDEX", "E-SCENARIO-COVERAGE"], "disposition": "DO_NOT_IMPLEMENT", "reason": "Rule and fields exist but no fsn/nfsc transition or adjacent free response was captured in 10 paid Round attempts."},
+    {"id": "U-BUY-RESULT", "behaviorId": "B-BUY-RESULT", "evidenceRefs": ["E-MAIN-BUNDLE", "E-CONFIG-RESPONSE", "E-BUY-SCREEN", "E-SCENARIO-COVERAGE"], "disposition": "DO_NOT_IMPLEMENT", "reason": "Entry was visited; high-cost purchase was not executed and no purchased Round evidence exists."},
+    {"id": "U-AUX-ENDPOINTS", "behaviorId": "B-AUX-ENDPOINTS", "evidenceRefs": ["E-MAIN-BUNDLE"], "disposition": "OPTIONAL_STUB_ONLY_OR_DISABLE", "reason": "Paths are code-discovered but response contracts were not captured."},
+    {"id": "U-REDIS-CONTRACT", "behaviorId": "REDIS-CONTRACT", "evidenceRefs": ["E-MAIN-BUNDLE", "E-API-TRAFFIC"], "disposition": "UNKNOWN_DISABLED", "reason": "No current-game Redis key, member encoding, length, or partition evidence exists in the inspected client or traffic; do not inherit another game."}
+  ]
+}

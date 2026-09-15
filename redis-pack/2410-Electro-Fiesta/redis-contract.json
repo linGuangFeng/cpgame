@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 3,
+  "sourceGameId": 2410,
+  "defaultRedisGameId": "2410",
+  "database": 15,
+  "keyPattern": "cpgame:v3:{redisGameId}:outcome:{mode}:multiplier:{integerMultiplier}",
+  "lossIndex": "cpgame:v3:{redisGameId}:index:loss",
+  "winIndex": "cpgame:v3:{redisGameId}:index:win",
+  "indexMember": "{RoundOutcome}:{integerMultiplier}",
+  "codec": "EF1",
+  "memberDescription": "ASCII structural facts only: ordered state mode, nine symbols, nine sticky multiplier materials, respin column",
+  "writeAtomicity": "RPUSH and LTRIM in the same MULTI/EXEC",
+  "maxMembersPerActualMultiplierDefault": 300,
+  "claimSemantics": "choose win/loss, then a random existing indexed multiplier bucket, then RPOP exactly one complete Round member",
+  "cacheEmptyBehavior": "fail; no runtime deal or fixture fallback"
+}
+

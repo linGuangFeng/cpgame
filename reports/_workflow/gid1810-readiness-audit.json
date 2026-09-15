@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "auditType": "PURE_OFFLINE_TAKEOVER_READINESS",
+  "auditedAt": "2026-08-30T12:47:02Z",
+  "rawGameId": 1810,
+  "gameName": "Treasure Hunt",
+  "directoryName": "1810-Treasure-Hunt",
+  "queue": {
+    "status": "QUEUED_NOT_STARTED",
+    "position": "AFTER_RAW_GID_60",
+    "mayStartBeforePredecessorCompletes": false
+  },
+  "identityPolicy": {
+    "acceptedGameId": 1810,
+    "rawGameIdOnly": true,
+    "forbiddenFormula": "8000000 + gid",
+    "derivedOrIntegrationGameIdAccepted": false,
+    "derivedValuePersisted": false,
+    "directoryMappingResult": "PASS_EXACT_RAW_GID_DIRECTORY"
+  },
+  "auditScope": {
+    "browserUsed": false,
+    "networkUsed": false,
+    "spinSent": false,
+    "credentialsReadOrPersisted": false,
+    "otherGameDirectoriesModified": false,
+    "allowedWrite": "reports/_workflow/gid1810-readiness-audit.json"
+  },
+  "workflowAuthority": {
+    "source": "/Volumes/agent-ai/data/workflows.json",
+    "sourceSha256": "61969141294f6507d52f349a411623f10ae6598daa0ae224b5182f3dde0161a2",
+    "workflowId": "7423e188-0a2c-4976-9dbb-f680166e6b8c",
+    "templateKind": "GAME_REPLICATION",
+    "templateVersion": 15,
+    "enabled": true,
+    "fullDefinitionRead": true,
+    "captureRequirements": {
+      "ordinaryLossCompleteRounds": 200,
+      "ordinaryWinCompleteRounds": 200,
+      "eachConfirmedSpecialCompleteRounds": 30,
+      "maxPaidRoundStarts": 5000,
+      "countingUnit": "one paid Spin plus all adjacent Delivery/Step responses through the legal terminal state equals one complete Round",
+      "historyExactOneToOneRequired": true
+    },
+    "implementationGate": "game-capabilities, protocol-spec and protocol-handoff must be evidence-backed and reviewed before implementing rules",
+    "currentArtifactRootDirectory": "D:\\work\\hd\\cpgame",
+    "artifactRootNote": "If an official Agent AI execution is created on this Mac, the full official workflow form must first use /Volumes/hd/cpgame. This audit does not edit workflow state."
+  },
+  "formalOriginalEvidence": {
+    "status": "NONE",
+    "formalPaidRoundStarts": 0,
+    "completedRoundCount": 0,
+    "historyExactOneToOneCount": 0,
+    "formalGameAssetCount": 0,
+    "formalOriginalNetworkEvidenceCount": 0,
+    "spinIndexPresent": false,
+    "roundIndexPresent": false,
+    "historyIndexPresent": false,
+    "workflowExecutionRecords": 0,
+    "confirmedEndpoints": [],
+    "confirmedRequestFields": [],
+    "confirmedResponseFields": [],
+    "confirmedRules": [],
+    "confirmedBehaviors": [],
+    "confirmedSpecialCategories": [],
+    "acceptedEvidenceFiles": []
+  },
+  "offlineAndExcludedEvidence": {
+    "mustNotCountAsOriginalSamples": true,
+    "items": [
+      {
+        "kind": "ENTRY_SHELL_ONLY",
+        "count": 2,
+        "description": "hms-home.js and hms-app.js hashes are recorded, but they are lobby shell inputs and not gid1810 game protocol evidence"
+      },
+      {
+        "kind": "METADATA_AND_GAP_CONTRACTS",
+        "description": "collector configuration, schemas, status reports and protocol gap registers contain plans and UNKNOWN states only"
+      },
+      {
+        "kind": "FAIL_CLOSED_JAVA_SCAFFOLD",
+        "description": "server exposes only health/scaffold-status; generator and Redis loader refuse generation because implementationAllowed=false"
+      },
+      {
+        "kind": "BUILD_OUTPUT",
+        "description": "existing JAR/class files prove only that the evidence gate scaffold was built; they are not a playable replica or rule evidence"
+      },
+      {
+        "kind": "LEGACY_V14_REPORT",
+        "description": "v14 manual acceptance matrix is historical and cannot override current template v15"
+      }
+    ]
+  },
+  "tenCategoryInventory": {
+    "captures": {
+      "fileCount": 5,
+      "bytes": 12293,
+      "classification": "LEGACY_METADATA_AND_COLLECTOR_SCAFFOLD_ONLY",
+      "usable": [
+        "raw gid directory mapping",
+        "5000 paid-start ceiling",
+        "complete-Round accounting intent",
+        "credential non-persistence intent"
+      ],
+      "missing": [
+        "authenticated init/config evidence",
+        "formal spin-index.jsonl",
+        "formal Round/Step journal",
+        "formal History 1:1 journal"
+      ]
+    },
+    "protocol": {
+      "fileCount": 4,
+      "bytes": 4218,
+      "classification": "PRE_EVIDENCE_GAP_CONTRACT_ONLY",
+      "implementationAllowed": false,
+      "missing": [
+        "field evidence matrix",
+        "rulesHash and behaviorIds",
+        "Round state machine",
+        "win/board model",
+        "History contract evidence"
+      ]
+    },
+    "resources": {
+      "fileCount": 0,
+      "bytes": 0,
+      "classification": "EMPTY",
+      "missing": ["first-load assets", "lazy/rules assets", "language inventory"]
+    },
+    "screenshots": {
+      "fileCount": 0,
+      "bytes": 0,
+      "classification": "EMPTY"
+    },
+    "fixtures": {
+      "fileCount": 0,
+      "bytes": 0,
+      "classification": "EMPTY"
+    },
+    "publish": {
+      "fileCount": 0,
+      "bytes": 0,
+      "classification": "EMPTY",
+      "missing": ["index.html", "publish-manifest.json", "localized static assets"]
+    },
+    "server-api": {
+      "fileCount": 6,
+      "bytes": 9349,
+      "classification": "FAIL_CLOSED_ADMINISTRATIVE_SCAFFOLD_ONLY",
+      "playable": false,
+      "implementedRoutes": ["/health", "/scaffold-status"],
+      "gameProtocolRoutesImplemented": false
+    },
+    "generator": {
+      "fileCount": 16,
+      "bytes": 21851,
+      "classification": "FAIL_CLOSED_BUILDABLE_SCAFFOLD_ONLY",
+      "ruleImplementationPresent": false,
+      "generationEnabled": false,
+      "redisWritesImplemented": false
+    },
+    "redis-pack": {
+      "fileCount": 1,
+      "bytes": 389,
+      "classification": "SAFE_REFUSAL_README_ONLY",
+      "membersPresent": false
+    },
+    "reports": {
+      "fileCount": 9,
+      "bytes": 13392,
+      "classification": "ZERO_SAMPLE_STATUS_AND_SCAFFOLD_REPORTS",
+      "completionClaimAllowed": false
+    }
+  },
+  "legacyTakeoverHazards": [
+    {
+      "severity": "BLOCKING_BEFORE_FIRST_SPIN",
+      "id": "ACCOUNT_METADATA_CONFLICT",
+      "evidence": "capture-session/collector-config/spin-index schema require abc224 while the declared backfill channel accepts abc222",
+      "requiredResolution": "select the actual isolated account at dispatch, verify it visibly, then atomically make collector config, schema and every evidence row use that one alias"
+    },
+    {
+      "severity": "BLOCKING_BEFORE_COLLECTOR_REUSE",
+      "id": "LEGACY_VALIDATOR_CONFIG_MISMATCH",
+      "evidence": "validate-round-coverage.mjs reads historyMatchRequired, targets.mary and targets.specialOrRewardDefault, but collector-config stores different nested/key names",
+      "requiredResolution": "do not run the legacy validator as-is; use the current proven API-first collector/index validator or repair it with offline tests first"
+    },
+    {
+      "severity": "BLOCKING_BEFORE_COLLECTOR_REUSE",
+      "id": "STALE_TEMPLATE_OUTPUT_PATHS",
+      "evidence": "collector-config persistedOutputs still contains <ID-name> placeholders",
+      "requiredResolution": "bind every output explicitly to captures/1810-Treasure-Hunt or reports/1810-Treasure-Hunt before live collection"
+    },
+    {
+      "severity": "NON_AUTHORITATIVE_LEGACY_POLICY",
+      "id": "MANUAL_UI_FALLBACK_LIMIT",
+      "evidence": "legacy config allows at most 50 manual UI starts, which cannot satisfy v15 formal API evidence targets",
+      "requiredResolution": "use API-first ORIGINAL_AUTHORIZED_HTTP capture; preserve any UI evidence under its distinct evidence type and never relabel it"
+    },
+    {
+      "severity": "REPORT_STALENESS",
+      "id": "DIRECTORY_INVENTORY_HISTORICAL_WORDING",
+      "evidence": "directory-inventory says the category directories were empty skeletons, but fail-closed scaffolds now exist",
+      "requiredResolution": "treat this readiness audit as the current inventory and keep the old file only as historical evidence"
+    }
+  ],
+  "accountAndCredentialGate": {
+    "legacyIntendedAccountAlias": "abc224",
+    "legacyAcceptedBackfillAlias": "abc222",
+    "dispatchDecision": "UNRESOLVED_UNTIL_QUEUE_REACHES_1810",
+    "requiredBeforeFirstPaidStart": [
+      "reserve one isolated browser/profile for the chosen account",
+      "visibly verify the chosen account immediately before launch",
+      "make all collector metadata use the same verified alias",
+      "obtain a fresh gid1810 launch token and keep it in memory only",
+      "allow token transmission only to the observed authorized game API host",
+      "persist no password, token, authorization header, cookie or credential-bearing URL"
+    ],
+    "userAuthorizationStatus": "ALREADY_GRANTED_IN_PARENT_TASK; do not add a repetitive permission prompt",
+    "credentialsIncludedInAudit": false
+  },
+  "unknownRulesGate": {
+    "status": "CLOSED",
+    "implementationAllowed": false,
+    "doNotInfer": [
+      "endpoint slug or request codec",
+      "board dimensions or win model",
+      "paytable/paylines/bet levels",
+      "Round terminal condition",
+      "Mary applicability",
+      "free/reward/special modes",
+      "language list",
+      "symbol weights",
+      "Redis key/member/consumer codec"
+    ],
+    "existingJavaDisposition": "retain as fail-closed scaffold only; replace or extend only after protocol evidence review"
+  },
+  "shortestSafeTakeoverWhenScheduled": [
+    {
+      "step": 1,
+      "action": "Wait until raw gid60 collection handoff is complete, then assign exactly one collector writer to raw gid1810."
+    },
+    {
+      "step": 2,
+      "action": "Copy the current proven API-first collector architecture; do not execute the legacy gid1810 collector/validator unchanged. Bind all paths to 1810-Treasure-Hunt and reject every non-1810 game identity."
+    },
+    {
+      "step": 3,
+      "action": "Choose the available isolated account/profile, visibly reverify its alias, reconcile the abc224/abc222 metadata conflict, and obtain a fresh launch URL/token in memory only."
+    },
+    {
+      "step": 4,
+      "action": "Use raw gid1810 to capture auth/config/init plus first-load, rules, lazy and language resources. Persist only redacted non-credential evidence and record the real endpoint/slug instead of guessing it."
+    },
+    {
+      "step": 5,
+      "action": "Send one minimum-bet protocol probe, persist its exact authorized HTTP request/response evidence, determine Step continuation and legal terminal fields, and validate History list/detail identity before batching."
+    },
+    {
+      "step": 6,
+      "action": "Batch complete Rounds by API: collect at least 200 LOSS, 200 WIN and 30 of every confirmed special/reward category, stopping early only when every applicable target is met or at 5000 paid starts."
+    },
+    {
+      "step": 7,
+      "action": "Finalize History pagination/detail reconciliation 1:1 for every paid Round; fail closed on duplicate, missing, mismatched or ambiguous transactions."
+    },
+    {
+      "step": 8,
+      "action": "Generate canonical spin/round/history indexes, scenario coverage, language/resource inventories and protocol evidence matrix; only then open a separate implementation task while the collector advances."
+    }
+  ],
+  "readinessDecision": {
+    "status": "READY_FOR_FUTURE_API_FIRST_DISPATCH_AFTER_GID60_WITH_PRELIVE_REPAIR",
+    "liveCollectionReadyNow": false,
+    "reason": "directory identity and fail-closed skeleton are usable, but there are zero formal samples and the legacy account/config/validator metadata must be normalized before the first live request",
+    "completionClaimed": false,
+    "implementationClaimed": false
+  }
+}

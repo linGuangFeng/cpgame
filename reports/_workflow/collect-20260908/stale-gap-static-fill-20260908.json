@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-09-08T07:56:57.731Z",
+  "tokenPersisted": false,
+  "results": [
+    {
+      "kind": "2060-free-lazy",
+      "url": "https://static.cpgame.io/v2/2060/assets/Game2060/native/7b/7b5ee650-f866-4ef3-aae8-f884064bbeb0.2ae40.mp3",
+      "dest": "D:/work/hd/cpgame/resources/2060-Club-Goddess/pt-br/static.cpgame.io/v2/2060/assets/Game2060/native/7b/7b5ee650-f866-4ef3-aae8-f884064bbeb0.2ae40.mp3",
+      "status": 200,
+      "bytes": 20897,
+      "sha256": "b1426ad257196e825cecf65c141cdd9f56a0c117016ba44c333c2d21c16b5d0b",
+      "published": "publish/2060-Club-Goddess/assets/Game2060/native/7b/7b5ee650-f866-4ef3-aae8-f884064bbeb0.2ae40.mp3"
+    },
+    {
+      "kind": "2060-free-lazy",
+      "url": "https://static.cpgame.io/v2/2060/assets/Game2060/native/9a/9a4572fa-9e0e-4db5-85b9-a348f1a6ee5d.00093.jpg",
+      "dest": "D:/work/hd/cpgame/resources/2060-Club-Goddess/pt-br/static.cpgame.io/v2/2060/assets/Game2060/native/9a/9a4572fa-9e0e-4db5-85b9-a348f1a6ee5d.00093.jpg",
+      "status": 200,
+      "bytes": 131191,
+      "sha256": "7ba6f13c1a8a15b33dee12dc7d9e73047fc5ab307265ea538262c0578e642dc1",
+      "published": "publish/2060-Club-Goddess/assets/Game2060/native/9a/9a4572fa-9e0e-4db5-85b9-a348f1a6ee5d.00093.jpg"
+    },
+    {
+      "kind": "2060-free-lazy",
+      "url": "https://static.cpgame.io/v2/2060/assets/Game2060/native/08/084412ea-774f-49bb-9f51-77edf816c8ba.c7ff9.mp3",
+      "dest": "D:/work/hd/cpgame/resources/2060-Club-Goddess/pt-br/static.cpgame.io/v2/2060/assets/Game2060/native/08/084412ea-774f-49bb-9f51-77edf816c8ba.c7ff9.mp3",
+      "status": 200,
+      "bytes": 15046,
+      "sha256": "cee4fe2585d0286089ea7bfcb21c143e8574e19cb4b2a3fc69757bcf243ca500",
+      "published": "publish/2060-Club-Goddess/assets/Game2060/native/08/084412ea-774f-49bb-9f51-77edf816c8ba.c7ff9.mp3"
+    },
+    {
+      "kind": "2060-free-lazy",
+      "url": "https://static.cpgame.io/v2/2060/assets/Game2060/native/94/94fe182a-7d37-4fa0-9cda-62b4a3ace65b.47dcf.jpg",
+      "dest": "D:/work/hd/cpgame/resources/2060-Club-Goddess/pt-br/static.cpgame.io/v2/2060/assets/Game2060/native/94/94fe182a-7d37-4fa0-9cda-62b4a3ace65b.47dcf.jpg",
+      "status": 200,
+      "bytes": 35348,
+      "sha256": "dd5bcfd40497b144ae9f8eedf689a0504a49be31d85fb33000e60f0ae2311864",
+      "published": "publish/2060-Club-Goddess/assets/Game2060/native/94/94fe182a-7d37-4fa0-9cda-62b4a3ace65b.47dcf.jpg"
+    },
+    {
+      "kind": "2060-free-lazy",
+      "url": "https://static.cpgame.io/v2/2060/assets/Game2060/native/e7/e70ea374-92eb-407c-bf73-1275a0ea640d.4902b.png",
+      "dest": "D:/work/hd/cpgame/resources/2060-Club-Goddess/pt-br/static.cpgame.io/v2/2060/assets/Game2060/native/e7/e70ea374-92eb-407c-bf73-1275a0ea640d.4902b.png",
+      "status": 200,
+      "bytes": 18040,
+      "sha256": "cac1c50ee2f2b6648e38bddf8d2bf1fc9c93e252e5ef74bfae86ebe2c0bd418e",
+      "published": "publish/2060-Club-Goddess/assets/Game2060/native/e7/e70ea374-92eb-407c-bf73-1275a0ea640d.4902b.png"
+    },
+    {
+      "kind": "2060-free-lazy",
+      "url": "https://static.cpgame.io/v2/2060/assets/Game2060/native/1c/1cad630c-dd7c-459b-bcad-3423c9744223.a4aa4.jpg",
+      "dest": "D:/work/hd/cpgame/resources/2060-Club-Goddess/pt-br/static.cpgame.io/v2/2060/assets/Game2060/native/1c/1cad630c-dd7c-459b-bcad-3423c9744223.a4aa4.jpg",
+      "status": 200,
+      "bytes": 125162,
+      "sha256": "c86bd84f9e0023703d8aa11f40082a983f3b60647e5b32a63e5acb94c99195b1",
+      "published": "publish/2060-Club-Goddess/assets/Game2060/native/1c/1cad630c-dd7c-459b-bcad-3423c9744223.a4aa4.jpg"
+    },
+    {
+      "kind": "2060-free-lazy",
+      "url": "https://static.cpgame.io/v2/2060/assets/Game2060/native/9f/9f0164a9-5bf6-46aa-8119-3f042a9e87ba.e5ab0.mp3",
+      "dest": "D:/work/hd/cpgame/resources/2060-Club-Goddess/pt-br/static.cpgame.io/v2/2060/assets/Game2060/native/9f/9f0164a9-5bf6-46aa-8119-3f042a9e87ba.e5ab0.mp3",
+      "status": 200,
+      "bytes": 16300,
+      "sha256": "915b53b23e479917701b619e03367392c21884cfa0876942cf45749687097c29",
+      "published": "publish/2060-Club-Goddess/assets/Game2060/native/9f/9f0164a9-5bf6-46aa-8119-3f042a9e87ba.e5ab0.mp3"
+    },
+    {
+      "kind": "2060-free-lazy",
+      "url": "https://static.cpgame.io/v2/2060/assets/Game2060/native/7e/7eb019f0-5c04-4187-b309-05c53d1a970f.10321.png",
+      "dest": "D:/work/hd/cpgame/resources/2060-Club-Goddess/pt-br/static.cpgame.io/v2/2060/assets/Game2060/native/7e/7eb019f0-5c04-4187-b309-05c53d1a970f.10321.png",
+      "status": 200,
+      "bytes": 13667,
+      "sha256": "ade421cb1ac49c37869ee8d6d1dd17980c3afd1622fa2800604330c833344cef",
+      "published": "publish/2060-Club-Goddess/assets/Game2060/native/7e/7eb019f0-5c04-4187-b309-05c53d1a970f.10321.png"
+    },
+    {
+      "kind": "2060-free-lazy",
+      "url": "https://static.cpgame.io/v2/2060/assets/Game2060/native/80/808b0cd7-9051-44d1-a21d-5afab9a520d7.bbc0f.mp3",
+      "dest": "D:/work/hd/cpgame/resources/2060-Club-Goddess/pt-br/static.cpgame.io/v2/2060/assets/Game2060/native/80/808b0cd7-9051-44d1-a21d-5afab9a520d7.bbc0f.mp3",
+      "status": 200,
+      "bytes": 11284,
+      "sha256": "7f5e18561ef49ab88ea21092e60b9c133c39e035065b257a87345f0a3f8b27e2",
+      "published": "publish/2060-Club-Goddess/assets/Game2060/native/80/808b0cd7-9051-44d1-a21d-5afab9a520d7.bbc0f.mp3"
+    },
+    {
+      "kind": "2060-free-lazy",
+      "url": "https://static.cpgame.io/v2/2060/assets/Game2060/native/85/85442d7d-d8b1-4436-8f8f-f46167395774.4ad55.mp3",
+      "dest": "D:/work/hd/cpgame/resources/2060-Club-Goddess/pt-br/static.cpgame.io/v2/2060/assets/Game2060/native/85/85442d7d-d8b1-4436-8f8f-f46167395774.4ad55.mp3",
+      "status": 200,
+      "bytes": 17972,
+      "sha256": "165ad704487ba316a965a58edbf2775b55e69a223f874740638c23b7d1bc9997",
+      "published": "publish/2060-Club-Goddess/assets/Game2060/native/85/85442d7d-d8b1-4436-8f8f-f46167395774.4ad55.mp3"
+    },
+    {
+      "kind": "index.html",
+      "game": "1380-Hidden-Realm",
+      "url": "https://static.cpgame.io/v2/1380/index.html",
+      "dest": "D:/work/hd/cpgame/resources/1380-Hidden-Realm/pt-br/static.cpgame.io/v2/1380/index.html",
+      "status": 200,
+      "bytes": 8540,
+      "sha256": "32a0aef30ad7dc9800606a258123897afa44213eb846f89522e0528f74029c28"
+    },
+    {
+      "kind": "index.html",
+      "game": "1780-Glacier-Treasure",
+      "url": "https://static.cpgame.io/v2/1780/index.html",
+      "dest": "D:/work/hd/cpgame/resources/1780-Glacier-Treasure/pt-br/static.cpgame.io/v2/1780/index.html",
+      "status": 200,
+      "bytes": 8540,
+      "sha256": "32a0aef30ad7dc9800606a258123897afa44213eb846f89522e0528f74029c28"
+    },
+    {
+      "kind": "index.html",
+      "game": "1940-Beach-Fun",
+      "url": "https://static.cpgame.io/v2/1940/index.html",
+      "dest": "D:/work/hd/cpgame/resources/1940-Beach-Fun/pt-br/static.cpgame.io/v2/1940/index.html",
+      "status": 200,
+      "bytes": 8540,
+      "sha256": "32a0aef30ad7dc9800606a258123897afa44213eb846f89522e0528f74029c28"
+    },
+    {
+      "kind": "index.html",
+      "game": "2110-Bee-Workshop",
+      "url": "https://static.cpgame.io/2110/index.html",
+      "dest": "D:/work/hd/cpgame/resources/2110-Bee-Workshop/en/static.cpgame.io/2110/index.html",
+      "status": 200,
+      "bytes": 7752,
+      "sha256": "2560b3530f46315e70b13b9927728d9261783f680a95f25770d9719a1fbd7f76"
+    },
+    {
+      "kind": "index.html",
+      "game": "2110-Bee-Workshop-fixed",
+      "url": "https://static.cpgame.io/fixed/index.html",
+      "dest": "D:/work/hd/cpgame/resources/2110-Bee-Workshop/en/static.cpgame.io/fixed/index.html",
+      "status": 200,
+      "bytes": 8331,
+      "sha256": "7bb9c908b6831848e3f3d9a2af56fe4386adcf89db0752c2b4fd3f4fa2184739"
+    }
+  ]
+}

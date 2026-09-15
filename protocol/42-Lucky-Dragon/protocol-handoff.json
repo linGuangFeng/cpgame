@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 5,
+  "workflowTemplateVersion": 40,
+  "gameId": 42,
+  "rawGameId": 42,
+  "rulesHash": "b80c2bc3d8e9d04305c2808a59843743a3950241842c2dc70b36e1e0012b1a57",
+  "evidenceInventory": [
+    {"id":"E-STATUS","source":"reports/42-Lucky-Dragon/current-status.json","behaviorIds":["B-IDENTITY","B-AUTH-CONFIG","B-SPIN-ROUND","B-HISTORY","B-REDIS-ROUND"]},
+    {"id":"E-SPIN","source":"captures/42-Lucky-Dragon/original-http-spin-index.jsonl","behaviorIds":["B-SPIN-ROUND","B-REDIS-ROUND"]},
+    {"id":"E-ROUND","source":"captures/42-Lucky-Dragon/original-http-round-index.jsonl","behaviorIds":["B-SPIN-ROUND","B-REDIS-ROUND"]},
+    {"id":"E-HISTORY","source":"captures/42-Lucky-Dragon/original-http-history-index.jsonl","behaviorIds":["B-HISTORY","B-REDIS-ROUND"]},
+    {"id":"E-CONFIG","source":"captures/42-Lucky-Dragon/original-http-preflight.json","behaviorIds":["B-AUTH-CONFIG","B-SPIN-ROUND"]},
+    {"id":"E-STATIC","source":"protocol/42-Lucky-Dragon/static-protocol-clues.redacted.json","behaviorIds":["B-IDENTITY","B-AUTH-CONFIG","B-SPIN-ROUND","B-HISTORY"]},
+    {"id":"E-AUDIT","source":"reports/42-Lucky-Dragon/frozen-evidence-audit.json","behaviorIds":["B-AUTH-CONFIG","B-SPIN-ROUND","B-HISTORY","B-REDIS-ROUND"]},
+    {"id":"E-RUNTIME","source":"reports/42-Lucky-Dragon/runtime-generation-validation.json","behaviorIds":["B-SPIN-ROUND","B-HISTORY","B-REDIS-ROUND"]},
+    {"id":"E-GENERATION-MODEL","source":"reports/42-Lucky-Dragon/generation-model-validation.json","behaviorIds":["B-SPIN-ROUND","B-REDIS-ROUND"]},
+    {"id":"E-RESOURCE-V40","source":"reports/42-Lucky-Dragon/resource-stage-status.json","behaviorIds":["B-IDENTITY","B-AUTH-CONFIG","B-HISTORY"]},
+    {"id":"E-STATIC-V40","source":"reports/42-Lucky-Dragon/v40-static-publish-validation.json","behaviorIds":["B-IDENTITY","B-AUTH-CONFIG"]}
+  ],
+  "behaviorContracts": [
+    {
+      "id":"B-IDENTITY","category":"identity","status":"CONFIRMED","multiStep":false,
+      "evidenceRefs":["E-STATUS","E-STATIC","E-RESOURCE-V40","E-STATIC-V40"],
+      "implementationContract":{"preconditions":["raw game id is 42"],"stateFields":["gameId","gameName","launchPath"],"transitionRules":["/42/ resolves Lucky Dragon","all API forms require gid=42"],"outputs":["gameId=42","Lucky Dragon"],"terminationRules":["entry page is visible"]},
+      "verificationContract":{"independentOracleRefs":["E-STATUS","E-STATIC"],"assertions":["game id is raw 42","entry path is /42/","no alternate synthetic identity is present"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"B-AUTH-CONFIG","category":"session","status":"CONFIRMED","multiStep":false,
+      "evidenceRefs":["E-CONFIG","E-STATIC","E-STATUS","E-AUDIT","E-RESOURCE-V40","E-STATIC-V40"],
+      "implementationContract":{"preconditions":["POST form contains gid=42"],"stateFields":["token","player.balance","bsl","bll","spl","cc","cs"],"transitionRules":["auth response token gates Config and subsequent calls"],"outputs":["auth envelope","Config envelope"],"terminationRules":["valid session token is returned"]},
+      "verificationContract":{"independentOracleRefs":["E-CONFIG","E-STATIC","E-AUDIT"],"assertions":["minimum paid bet is R$0.50 at bs=0.5 bl=1","bsl=[0.5,5,20]","bll=1..10","cc=BRL","cs=R$","spl matches frozen config"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"B-SPIN-ROUND","category":"round","status":"CONFIRMED","multiStep":false,
+      "evidenceRefs":["E-SPIN","E-ROUND","E-CONFIG","E-AUDIT","E-RUNTIME","E-GENERATION-MODEL"],
+      "implementationContract":{"preconditions":["valid token","bs and bl are configured values","no active delivery remains"],"stateFields":["ba","bl","bs","pb","rpx","rskl","wa","wsk","roundKey","deliveryIndex","terminal"],"transitionRules":["one paid Spin creates one complete terminal Round","WILD rpx is 3, 5 or 9","rpx classifies WILD_X only when payout is positive","no continuation request is generated"],"outputs":["complete spin envelope","terminal balance"],"terminationRules":["deliveryIndex=0","terminal=true"]},
+      "verificationContract":{"independentOracleRefs":["E-SPIN","E-ROUND","E-AUDIT"],"assertions":["1131 paid starts and 1131 terminal complete Rounds","gross bet R$565.50","931 loss and 200 win","WILD_X3/X5/X9 counts are 80/40/35","10 non-awarding rpx Rounds remain ordinary loss","balance commits 1:1"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"B-HISTORY","category":"history","status":"CONFIRMED","multiStep":true,
+      "evidenceRefs":["E-HISTORY","E-STATIC","E-AUDIT","E-RUNTIME","E-RESOURCE-V40"],
+      "implementationContract":{"preconditions":["valid session","terminal Round exists"],"stateFields":["ll","tis","bid","ba","wa","balance_after","rskl","page_index","begin_at","end_at"],"transitionRules":["list page selects ll[].tis","detail request sends transfer_id=tis","Back returns to list without creating a Round"],"outputs":["History list","History detail","Back to list"],"terminationRules":["detail is terminal and returnable"]},
+      "verificationContract":{"independentOracleRefs":["E-HISTORY","E-STATIC","E-AUDIT"],"assertions":["historyMatchedOneToOne=1131","row tis maps to detail bid","list and detail bet/payout/balance/symbol fields match","History list -> detail -> Back is continuous"],"adjacentStepEvidence":["original log-list row ll[].tis -> log-view transfer_id -> UI return to list"],"usesImplementationGeneratedExpected":false}
+    },
+    {
+      "id":"B-REDIS-ROUND","category":"redis","status":"CONFIRMED","multiStep":false,
+      "evidenceRefs":["E-SPIN","E-ROUND","E-HISTORY","E-STATUS","E-AUDIT","E-RUNTIME","E-GENERATION-MODEL"],
+      "implementationContract":{"preconditions":["one complete generated terminal Round","ResultUtil independently derives integer multiplier"],"stateFields":["symbols","rpx","betSize","betLevel","roundKey","deliveryIndex","terminal"],"transitionRules":["codec round-trip before write","0 multiplier enters the normal loss pool","positive multiplier selects normal or WILD special index","ZADD plus RPUSH plus LTRIM execute inside one MULTI/EXEC","Controller LPOP claims one member exactly once per paid Round start","idempotent replay does not claim again"],"outputs":["minimal ASCII complete-Round member"],"terminationRules":["member independently decodes and verifies","per-multiplier capacity is respected"]},
+      "verificationContract":{"independentOracleRefs":["E-SPIN","E-ROUND","E-HISTORY","E-AUDIT"],"assertions":["same rulesHash","member has no payout/balance/session cache","actual multiplier matches list key","RPUSH/LTRIM are in one transaction","single claim removes one complete member"],"usesImplementationGeneratedExpected":false}
+    }
+  ],
+  "unresolvedBehaviors": [
+    {"id":"U-ORIGINAL-REEL-STRIPS","status":"UNKNOWN_NON_BLOCKING_LOCAL_EMPIRICAL_MODEL","blocksGeneration":false,"reason":"complete-state joint model is trained and holdout-validated without claiming original reel strips","evidenceRefs":["E-SPIN","E-GENERATION-MODEL"]},
+    {"id":"U-ORIGINAL-SYMBOL-PROBABILITIES","status":"UNKNOWN_NON_BLOCKING_LOCAL_EMPIRICAL_MODEL","blocksGeneration":false,"reason":"local empirical joint weights replace unproven original probabilities","evidenceRefs":["E-SPIN","E-GENERATION-MODEL"]},
+    {"id":"U-ORIGINAL-RTP","status":"UNKNOWN_NON_BLOCKING_LOCAL_EMPIRICAL_MODEL","blocksGeneration":false,"reason":"replica validation targets observed joint behavior and does not claim original RTP","evidenceRefs":["E-SPIN","E-GENERATION-MODEL"]},
+    {"id":"U-H4-REEL-PLACEMENT","status":"UNOBSERVED_NON_BLOCKING","blocksGeneration":false,"reason":"H4 never occurs in the 1130 raw provider responses and is not invented by generation","evidenceRefs":["E-SPIN","E-CONFIG"]}
+  ]
+}

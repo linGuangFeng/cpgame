@@ -1,0 +1,178 @@
+{
+  "schemaVersion": "1.0",
+  "gameId": "2001007",
+  "directoryName": "2001007-Magic-Scroll-2",
+  "displayName": "Magic Scroll 2",
+  "rulesHash": "sha256:ab8f86b20f45615af560b928c2f5bd860ea6abf641d461d2e200a3e4aaed3fcd",
+  "scope": "Observed HTTP protocol and frontend-derived Round/Delivery/Step state machine. UNKNOWN and PARTIAL branches are non-implementable.",
+  "transport": {
+    "apiHostObserved": "https://api.pgf-nmu1ud.com",
+    "method": "POST",
+    "requestBody": "multipart/form-data (browser FormData)",
+    "responseBody": "JSON envelope {dt,err}; GameInfo was served as text/plain but parsed as JSON",
+    "applicationEncryption": "NONE_OBSERVED",
+    "tls": "HTTPS transport",
+    "errorRule": "Frontend invokes the success callback only when err is falsy; network/parse failures emit the network-error path."
+  },
+  "endpointOrder": [
+    {
+      "order": 1,
+      "name": "verifySession",
+      "path": "/web-api/auth/session/v3/verifySession",
+      "base": "api host",
+      "requestFields": {
+        "gi": {"type": "string/integer text", "requiredObserved": true, "meaning": "game id", "observed": "2001007"},
+        "otk": {"type": "string", "requiredObserved": true, "meaning": "one-time launch token"},
+        "l": {"type": "language code", "requiredObserved": true, "allowed": ["en", "pt"]}
+      },
+      "responseDtFields": {
+        "cc": "currency code; BRL observed",
+        "cs": "currency symbol; R$ observed",
+        "atk": "authenticated session token transferred to later calls",
+        "gdr": "game API route; /game-api/cp-magic-scroll2/ observed",
+        "player": "display player name",
+        "user_id": "numeric user id"
+      },
+      "next": "GameInfo/Get uses response dt.atk and dt.gdr"
+    },
+    {
+      "order": 2,
+      "name": "GameInfo/Get",
+      "path": "v2/GameInfo/Get",
+      "base": "verifySession.dt.gdr",
+      "requestFields": {"atk": {"type": "string", "source": "verifySession.dt.atk"}},
+      "responseDtFields": {
+        "bl": "authoritative current balance",
+        "cc": "currency code",
+        "betList": "wire integers normalized by frontend /1000",
+        "multList": "wire integers normalized by frontend /10000",
+        "autoList": "autoplay selection values",
+        "totalList": "permitted total-bet wire values; exact downstream normalization is frontend-owned",
+        "aniList": "win-animation thresholds",
+        "version": "configuration version; 1 observed",
+        "formation": "initial 36-cell base-board formation",
+        "round": "initial active-row offset; frontend sets visible rows to clamp(3+round,0,6)"
+      }
+    },
+    {
+      "order": 3,
+      "name": "Spin",
+      "path": "v2/Spin",
+      "base": "verifySession.dt.gdr",
+      "paidRequestFields": {
+        "atk": "current session token",
+        "bet": "decimal total bet; 0.40 BRL legal UI minimum observed",
+        "mult": "decimal multiplier; 1 minimum observed",
+        "gameType": "1 for ordinary paid play; other values are capability-gated"
+      },
+      "continuationRequestFields": {"atk": "same session token", "bet": 0, "mult": 0, "gameType": 1},
+      "confirmedWireResponseDtFields": {
+        "bl": "step balance; 0 is allowed on nonterminal responses, but a positive value alone is not a Round termination oracle",
+        "formation": "authoritative encoded step formation",
+        "free": "wire mode marker consumed by frontend; exact legal-min Lucky Wagon semantics remain PARTIAL"
+      },
+      "wireFieldWarning": "Captured fixture projections contain derived fields for oracle use. end, ways, vaildRow, split/wild collections, multipliers and cumulative wins are not confirmed raw wire fields.",
+      "next": "Decode formation, derive the Delivery step, then either terminate or POST a zero-bet continuation."
+    },
+    {
+      "order": "on demand",
+      "name": "History",
+      "path": "v2/History",
+      "requestFields": {"atk": "session token", "page": "1-based page", "size": "page size; 20 accepted, 100 rejected", "time_begin": "epoch seconds used by active CPHistoryTY2", "time_end": "epoch seconds used by active CPHistoryTY2"},
+      "confirmedEmptyResponseDt": {"all_num": 0, "all_bet": 0, "all_win": 0, "historyItem": null},
+      "confirmedCurrentDateResponse": {"all_num": 2042, "returnedPageItems": 20, "itemFields": ["psid", "created_at", "bet", "mult", "transfer", "balance", "gameType", "formation"]},
+      "itemSemantics": {"psid": "one complete paid Round", "transfer": "payout-bet; LOSS=-0.40", "formation": "ordered array of all raw Step formations", "status": "not present", "currency": "BRL from session, not repeated"},
+      "matchedCategories": ["ordinary LOSS", "ordinary WIN", "special complete Round"],
+      "status": "CONFIRMED"
+    },
+    {
+      "order": "on demand",
+      "name": "HistoryDate",
+      "path": "v2/HistoryDate",
+      "requestFieldsFromCode": ["atk", "page", "size", "created_at"],
+      "observedHttpStatus": 404,
+      "status": "CONFIRMED_PATH_NOT_AVAILABLE"
+    },
+    {
+      "order": "conditional",
+      "name": "Top",
+      "path": "v2/Top",
+      "status": "PARTIAL_ENUMERATION_ONLY_NO_CURRENT_GAME_CAPTURE"
+    }
+  ],
+  "formationCodec": {
+    "base": {
+      "encodedCellCount": 36,
+      "shape": "6 columns x 6 encoded rows",
+      "ordering": "column-major",
+      "delimiter": ",",
+      "integerDecoder": {
+        "symbolId": "raw % 100",
+        "countExponent": "floor(raw / 1000)",
+        "symbolMultiplicity": "2 ^ countExponent",
+        "blockOrDirt": "floor((raw % 1000) / 100)"
+      }
+    },
+    "specialIds": {"0": "xBomb Wild", "1": "Bonus/Scatter", "2": "xSplit", "99": "empty", "999": "changing/internal"},
+    "regularPayingIds": [3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    "freeMode": {"status": "PARTIAL", "codeEvidence": "frontend has a pipe-delimited parser with top/center/bottom sections", "implementationRule": "Do not implement without a legal-min adjacent wire sample"}
+  },
+  "derivedDeliveryFields": {
+    "matrix": "36 integers split into 6 column arrays",
+    "gridMatrix": "decoded objects {poscolumn,posrow,symbolId,count,muban,iconId}",
+    "ways": "product of non-blocked symbol multiplicities across active rows of all six columns",
+    "vaildRow": "frontend spelling; derived active-row counter beginning at 3",
+    "winGridLines": "left-to-right WAYS matches over at least 3 consecutive columns",
+    "wildGrids": "active symbolId 0 cells",
+    "SplitGrids": "active symbolId 2 cells",
+    "ScatterGrids": "active symbolId 1 cells",
+    "gloablMulti": "frontend spelling; derived cumulative xBomb multiplier beginning at 1",
+    "finaltotalwinamount": "derived cumulative Round win",
+    "finaltotalwinWays": "derived cumulative winning ways",
+    "end": "derived termination flag"
+  },
+  "paidRoundStateMachine": {
+    "states": ["IDLE", "PAID_STEP_PENDING", "DELIVERY_ACTIVE", "CONTINUATION_PENDING", "TERMINAL"],
+    "stateFields": ["atk", "paidBet", "mult", "gameType", "orderedRawSteps", "derivedSteps", "activeRowsCounter", "globalMultiplier", "freeMode", "freeCount", "cumulativeWin", "terminalBalance"],
+    "transitions": [
+      {"from": "IDLE", "to": "PAID_STEP_PENDING", "condition": "bet>0 and mult>0 with no unfinished Round", "action": "start exactly one paid Round"},
+      {"from": "PAID_STEP_PENDING", "to": "DELIVERY_ACTIVE", "condition": "Spin dt received", "action": "append raw step and decode formation"},
+      {"from": "DELIVERY_ACTIVE", "to": "CONTINUATION_PENDING", "condition": "frontend-derived win, xSplit, active xBomb, combine or free state", "action": "emit current Delivery and request bet=0,mult=0,gameType=1; local runtime generation remains limited to capability-allowed modes"},
+      {"from": "CONTINUATION_PENDING", "to": "DELIVERY_ACTIVE", "condition": "next Spin dt received", "action": "append adjacent raw/derived step to same Round"},
+      {"from": "DELIVERY_ACTIVE", "to": "TERMINAL", "condition": "derived end=true", "action": "publish final cumulative win and authoritative final balance"},
+      {"from": "TERMINAL", "to": "IDLE", "condition": "terminal Delivery consumed", "action": "clear active Round"}
+    ],
+    "termination": ["No continuation after derived end=true", "No new paid request while a Round is active", "All special/free steps remain attached to the originating paid Round"],
+    "adjacentObservedRounds": [
+      {"roundIndex": 29, "requestIds": [562, 563, 564, 565, 566, 567], "mode": "base win + xSplit + xBomb", "wager": 0.4, "derivedEndSequence": [false, false, false, false, false, true]},
+      {"roundIndex": 18, "deliveryIndexes": [0,1,2,3], "mode": "ordinary base WIN", "wager": 0.4, "transitionEvidence": "followup-20260829/adjacent-step-evidence.json; all three exactFallMapping=true"},
+      {"roundIndex": 48, "deliveryIndexes": [0,1], "mode": "xSplit", "wager": 0.4, "transitionEvidence": "exact changed-cell row transform"},
+      {"roundIndex": 9, "deliveryIndexes": [0,1], "mode": "xBomb Wild", "wager": 0.4, "transitionEvidence": "6 eliminated, 13 retained movements, 11 refills"}
+    ],
+    "indexedButNotAdjacentResponseResolved": [
+      {"roundIndex": 1, "requestIds": [427, 428, 429, 430], "indexLabel": "MAGIC_MINING", "wager": 0.4, "evidenceScope": "request grouping and label only; per-step response formation/state content was not retained", "implementationAllowed": false}
+    ]
+  },
+  "rules": {
+    "ways": "Paytable multiplier times winning ways; same-symbol wins proceed left to right; a gap cancels later columns; only highest win per bet way is paid.",
+    "collapse": "Each paid Round starts with 3 active rows. A qualifying collapse opens one more row up to 6, removes evidenced win/xBomb cells, preserves every other raw child and its column order, compacts toward the higher row index, refills only active vacancies, and leaves buffer dirt/block unchanged.",
+    "magicMining": "Rules/frontend describe horizontal or vertical no-win alignments of 3/4/5/6 same symbols creating 1/2/3/4 Wilds. Fresh legal-min Round 7 has raw adjacent elimination/movement/refill evidence; formal local generation remains gated by the locked follow-up baseline.",
+    "xSplit": "Splits symbols in its line; Bonus and xSplit are excluded; activated xSplit becomes a regular symbol; affected dirt is removed when collapse occurs.",
+    "xBombWild": "Substitutes all symbols except Bonus; removes adjacent non-Bonus symbols; its value increases the next win multiplier; explodes before next collapse except when Magic Mining activates.",
+    "luckyWagon": "Rules captured, but legal-min execution contract is unavailable and implementation is prohibited.",
+    "xBetAndBuy": "Rules/entry mapping captured, but runtime contracts are unavailable and implementation is prohibited."
+  },
+  "paytable": {
+    "3": [0, 0, 0, 15, 40, 80, 150], "4": [0, 0, 0, 10, 15, 40, 75],
+    "5": [0, 0, 0, 9, 12, 30, 50], "6": [0, 0, 0, 8, 11, 25, 40],
+    "7": [0, 0, 0, 7, 10, 20, 35], "8": [0, 0, 0, 6, 8, 16, 30],
+    "9": [0, 0, 0, 5, 7, 14, 25], "10": [0, 0, 0, 4, 6, 12, 22],
+    "11": [0, 0, 0, 4, 6, 12, 21], "12": [0, 0, 0, 4, 6, 12, 20]
+  },
+  "implementationGates": {
+    "allowed": ["session init", "rule metadata", "wager normalization", "base formation codec", "WAYS/paytable evaluation", "ordinary paid single-step LOSS", "complete base multi-step Round", "xSplit", "xBomb Wild", "durable local History projection", "HistoryDate original-matching HTTP 404"],
+    "forbiddenUntilNewEvidenceOrScope": ["Magic Mining runtime generation", "Lucky Wagon runtime generation", "feature-buy gameType 2..6", "xBET gameType 7", "synthesized HistoryDate schema", "Top response generation", "Redis encoding", "server symbol weights"],
+    "fixtureRule": "Fixtures are independent protocol oracles only and may never be read as runtime result sources."
+  },
+  "evidenceRefs": ["field-evidence-matrix.json", "protocol-handoff.json", "game-capabilities.json", "captures/2001007-Magic-Scroll-2/spin-index.jsonl"]
+}

@@ -1,0 +1,42 @@
+{
+  "game_platform_id": 1809,
+  "provider_gid": 2260,
+  "game_name": "Freedom Day",
+  "verified_at": "2026-08-22",
+  "local_url": "http://127.0.0.1:18090/?ai=luck_single_10229&btt=1&gid=2260&l=pt&language=pt-br&sip=127.0.0.1%3A18090&t=local-replay&token=local-replay",
+  "fixture_count": 500,
+  "fixture_source": "synthetic-local-closed-loop",
+  "real_provider_capture": false,
+  "minimum_bet": {
+    "bet_gold": 0.01,
+    "level": 1,
+    "base_bet": 20,
+    "ui_total_bet_brl": 0.20
+  },
+  "browser_verified": {
+    "page_load": true,
+    "normal_spin": true,
+    "history_summary": true,
+    "history_list": true,
+    "history_round_detail": true,
+    "feature_buy": true,
+    "free_spin_chain_10_to_0": true,
+    "big_win": true,
+    "activity_win_simulation": true,
+    "continuous_balance": true
+  },
+  "special_modes": {
+    "feature_buy_cost_brl": 15.0,
+    "free_spin_count": 10,
+    "free_spin_total_win_brl": 10.0,
+    "big_win_brl": 10.0,
+    "activity_win_brl": 2.0,
+    "verified_balance_path": [1000.0, 985.0, 995.0, 1004.8, 1006.6]
+  },
+  "unsupported": [
+    "real-provider-gameResult-capture",
+    "real-provider-special-mode-capture",
+    "real-activity-act_id",
+    "provider-rng-validation"
+  ]
+}

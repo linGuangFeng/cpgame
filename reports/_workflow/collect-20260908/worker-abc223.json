@@ -1,0 +1,44 @@
+{
+  "worker": "abc223",
+  "alive": true,
+  "phase": "DONE",
+  "currentGame": null,
+  "error": null,
+  "updatedAt": "2026-09-11T16:30:01.875Z",
+  "games": {
+    "16-Jungle-Fruit": {
+      "status": "GAME_DONE",
+      "loss": 926,
+      "win": 200,
+      "special": {
+        "scatterFreeRounds": 36,
+        "marySmallGame": 164
+      },
+      "resourcesReady": true,
+      "apiCatalog": true,
+      "notes": "existing original-http complete; need origin UI/API catalog"
+    },
+    "52-Cyber-GO": {
+      "status": "GAME_DONE",
+      "loss": 1205,
+      "win": 203,
+      "special": {
+        "FREE_SPINS": 54
+      },
+      "resourcesReady": true,
+      "apiCatalog": true,
+      "notes": "origin UI passes done; endpoints=4; secondPassNew=0"
+    },
+    "1090-Sharpshooter": {
+      "status": "GAME_DONE",
+      "loss": 1235,
+      "win": 200,
+      "special": {
+        "special_sgt_2": 633
+      },
+      "resourcesReady": true,
+      "apiCatalog": true,
+      "notes": "origin UI passes done; endpoints=4; secondPassNew=0"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "rawGameId": 2,
+  "rulesHash": "8574835fe15fd750d3ed7dcc98d2bf1b9329a2c6f03a14ce3a33ab03c445b196",
+  "fields": [
+    {"path": "config.bll/bsl/cc/cs/spl", "status": "CONFIRMED", "oracle": "original-http-config.json"},
+    {"path": "spin.data.bet_amount", "type": "number", "status": "CONFIRMED_1151_LIVE", "value": 0.5},
+    {"path": "spin.data.player.balance", "type": "string 2dp", "status": "CONFIRMED_1151_LIVE"},
+    {"path": "spin.data.rand_symbol_key_list", "type": "array[1][9]", "status": "CONFIRMED_1152"},
+    {"path": "spin.data.win_amount", "type": "number", "status": "CONFIRMED_1151_LIVE"},
+    {"path": "spin.data.win_payline_key_list", "type": "string[]", "status": "CONFIRMED_1151_LIVE"},
+    {"path": "spin.data.win_symbol_key_list", "type": "string[]", "status": "CONFIRMED_1151_LIVE"},
+    {"path": "history.row.tis", "type": "string", "status": "CONFIRMED_DETAIL_KEY_1152"},
+    {"path": "history.row.transfer_id", "type": "number > JS safe integer", "status": "CONFIRMED_UNSAFE_FOR_CORRELATION"},
+    {"path": "history.detail.win_payline_list[].payline_key", "type": "string", "status": "CONFIRMED"},
+    {"path": "higher bet scaling", "status": "UNKNOWN"},
+    {"path": "special/reward continuation fields", "status": "UNKNOWN_NOT_OBSERVED"},
+    {"path": "Redis origin key/member", "status": "UNKNOWN"},
+    {"path": "origin UI History navigation", "status": "UNKNOWN"}
+  ]
+}

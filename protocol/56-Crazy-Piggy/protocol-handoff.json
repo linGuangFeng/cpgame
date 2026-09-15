@@ -1,0 +1,1284 @@
+{
+  "schemaVersion": "2.0",
+  "gameId": 56,
+  "directoryName": "56-Crazy-Piggy",
+  "generatedAt": "2026-09-07T16:16:28.667Z",
+  "rulesVersion": "v1.5.10.250430",
+  "rulesHash": "7edd2945da54923875932aa9feb1bfd657c9c67cca832637060f8419573480ab",
+  "nodeScope": "PROTOCOL_AND_GAME_STATE_MACHINE_ANALYSIS",
+  "protocolSpec": "protocol-spec.md",
+  "protocolSpecJson": "protocol-spec.json",
+  "rulesHashDefinition": {
+    "algorithm": "SHA-256",
+    "orderedSources": [
+      "resources/56-Crazy-Piggy/en/extracted-rules/gameRules.json",
+      "resources/56-Crazy-Piggy/en/extracted-rules/paytable.json",
+      "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js",
+      "captures/56-Crazy-Piggy/source-modules/GameDataCommon.js",
+      "captures/56-Crazy-Piggy/source-modules/TurnTable.js",
+      "captures/56-Crazy-Piggy/source-modules/GameApi.js",
+      "captures/56-Crazy-Piggy/source-modules/BetLogic.js"
+    ],
+    "method": "按上列顺序拼接原始字节后计算 SHA-256"
+  },
+  "evidenceInventory": [
+    {
+      "id": "E-ID-LOBBY",
+      "source": "captures/56-Crazy-Piggy/account-and-game-match.json",
+      "behaviorIds": [
+        "B-ENTRY-IDENTITY"
+      ]
+    },
+    {
+      "id": "E-GLOBAL-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/GameGlobalConfig.js",
+      "behaviorIds": [
+        "B-ENTRY-IDENTITY",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-FIXED-PAYLINE-WIN",
+        "B-BOOSTER-WHEEL",
+        "B-REDIS-COMPLETE-ROUND"
+      ]
+    },
+    {
+      "id": "E-LANGUAGE-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/LanguageManager.js",
+      "behaviorIds": [
+        "B-LANGUAGE-FIRST-LOAD"
+      ]
+    },
+    {
+      "id": "E-LANGUAGE-INVENTORY",
+      "source": "reports/56-Crazy-Piggy/language-inventory.json",
+      "behaviorIds": [
+        "B-LANGUAGE-FIRST-LOAD",
+        "B-RULES-PAYTABLE-LAZY"
+      ]
+    },
+    {
+      "id": "E-FIRSTLOAD-NETWORK",
+      "source": "captures/56-Crazy-Piggy/first-load-en-network.json",
+      "behaviorIds": [
+        "B-SESSION-INIT",
+        "B-CONFIG-RESTORE"
+      ]
+    },
+    {
+      "id": "E-FIRSTLOAD-API",
+      "source": "fixtures/56-Crazy-Piggy/first-load-en-api.json",
+      "behaviorIds": [
+        "B-SESSION-INIT",
+        "B-CONFIG-RESTORE",
+        "B-FIXED-PAYLINE-WIN",
+        "B-BALANCE-ACCOUNTING"
+      ]
+    },
+    {
+      "id": "E-HTTP-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/Http.js",
+      "behaviorIds": [
+        "B-HTTP-CODEC",
+        "B-AUTH-REJECTION"
+      ]
+    },
+    {
+      "id": "E-MAIN-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/Main.js",
+      "behaviorIds": [
+        "B-LANGUAGE-FIRST-LOAD",
+        "B-SESSION-INIT",
+        "B-CONFIG-RESTORE"
+      ]
+    },
+    {
+      "id": "E-API-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/GameApi.js",
+      "behaviorIds": [
+        "B-HTTP-CODEC",
+        "B-SESSION-INIT",
+        "B-CONFIG-RESTORE",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-HISTORY-READ"
+      ]
+    },
+    {
+      "id": "E-CONFIG-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/GameConfigData.js",
+      "behaviorIds": [
+        "B-CONFIG-RESTORE",
+        "B-FIXED-PAYLINE-WIN"
+      ]
+    },
+    {
+      "id": "E-BET-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/BetLogic.js",
+      "behaviorIds": [
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-BALANCE-ACCOUNTING",
+        "B-REDIS-COMPLETE-ROUND"
+      ]
+    },
+    {
+      "id": "E-RULES-EN",
+      "source": "resources/56-Crazy-Piggy/en/extracted-rules/gameRules.json",
+      "behaviorIds": [
+        "B-ORDINARY-WIN",
+        "B-FIXED-PAYLINE-WIN",
+        "B-BOOSTER-WHEEL",
+        "B-RULES-PAYTABLE-LAZY",
+        "B-REDIS-COMPLETE-ROUND"
+      ]
+    },
+    {
+      "id": "E-PAYTABLE-EN",
+      "source": "resources/56-Crazy-Piggy/en/extracted-rules/paytable.json",
+      "behaviorIds": [
+        "B-FIXED-PAYLINE-WIN",
+        "B-BOOSTER-WHEEL",
+        "B-RULES-PAYTABLE-LAZY"
+      ]
+    },
+    {
+      "id": "E-DATA-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/GameDataCommon.js",
+      "behaviorIds": [
+        "B-CONFIG-RESTORE",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-FIXED-PAYLINE-WIN",
+        "B-BALANCE-ACCOUNTING",
+        "B-BOOSTER-WHEEL"
+      ]
+    },
+    {
+      "id": "E-GAMELOGIC-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/GameLogic.js",
+      "behaviorIds": [
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-BALANCE-ACCOUNTING",
+        "B-BOOSTER-WHEEL",
+        "B-REDIS-COMPLETE-ROUND"
+      ]
+    },
+    {
+      "id": "E-WHEEL-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/TurnTable.js",
+      "behaviorIds": [
+        "B-BOOSTER-WHEEL"
+      ]
+    },
+    {
+      "id": "E-HISTORY-UI-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/HistoryLogic.js",
+      "behaviorIds": [
+        "B-HISTORY-READ"
+      ]
+    },
+    {
+      "id": "E-HISTORY-DATA-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/HistoryData.js",
+      "behaviorIds": [
+        "B-FIXED-PAYLINE-WIN",
+        "B-HISTORY-READ"
+      ]
+    },
+    {
+      "id": "E-HISTORY-DETAIL-CODE",
+      "source": "captures/56-Crazy-Piggy/source-modules/HistoryDetailLogic.js",
+      "behaviorIds": [
+        "B-HISTORY-READ"
+      ]
+    },
+    {
+      "id": "E-SPIN-INDEX",
+      "source": "captures/56-Crazy-Piggy/spin-index.jsonl",
+      "behaviorIds": [
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-BALANCE-ACCOUNTING",
+        "B-BOOSTER-WHEEL",
+        "B-REDIS-COMPLETE-ROUND"
+      ]
+    },
+    {
+      "id": "E-SPIN-RAW",
+      "source": "fixtures/56-Crazy-Piggy/round-steps.jsonl",
+      "behaviorIds": [
+        "B-HTTP-CODEC",
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-FIXED-PAYLINE-WIN",
+        "B-BALANCE-ACCOUNTING",
+        "B-BOOSTER-WHEEL",
+        "B-REDIS-COMPLETE-ROUND"
+      ]
+    },
+    {
+      "id": "E-SCENARIO-COVERAGE",
+      "source": "reports/56-Crazy-Piggy/scenario-coverage.json",
+      "behaviorIds": [
+        "B-ORDINARY-LOSS",
+        "B-ORDINARY-WIN",
+        "B-BOOSTER-WHEEL"
+      ]
+    },
+    {
+      "id": "E-AUTH-REJECT-1",
+      "source": "fixtures/56-Crazy-Piggy/rejected-spin-responses.jsonl",
+      "behaviorIds": [
+        "B-AUTH-REJECTION"
+      ]
+    },
+    {
+      "id": "E-AUTH-REJECT-2",
+      "source": "fixtures/56-Crazy-Piggy/rejected-spin-responses-runtime-launch-token.jsonl",
+      "behaviorIds": [
+        "B-SESSION-INIT",
+        "B-AUTH-REJECTION"
+      ]
+    },
+    {
+      "id": "E-RULES-SCREEN",
+      "source": "screenshots/56-Crazy-Piggy/rules-controls-tr.png",
+      "behaviorIds": [
+        "B-FIXED-PAYLINE-WIN",
+        "B-BOOSTER-WHEEL",
+        "B-RULES-PAYTABLE-LAZY"
+      ]
+    },
+    {
+      "id": "E-PAYOUT-SCREEN",
+      "source": "screenshots/56-Crazy-Piggy/rules-page-tr.png",
+      "behaviorIds": [
+        "B-FIXED-PAYLINE-WIN",
+        "B-RULES-PAYTABLE-LAZY"
+      ]
+    },
+    {
+      "id": "E-BUY-SCAN",
+      "source": "captures/56-Crazy-Piggy/buy-entry-discovery.json",
+      "behaviorIds": [],
+      "disposition": "NEGATIVE_CAPABILITY_EVIDENCE",
+      "reason": "未发现当前游戏的特殊购买入口或端点；不得实现 Feature Buy。"
+    },
+    {
+      "id": "E-STATIC-VALIDATION",
+      "source": "reports/56-Crazy-Piggy/static-publish-validation.json",
+      "behaviorIds": [],
+      "disposition": "UPSTREAM_NODE_ACCEPTANCE",
+      "reason": "证明协议分析引用的标准化前端资源可纯静态加载，但不作为业务字段 oracle。"
+    },
+    {
+      "id": "E-PROTOCOL-SPEC-DERIVED",
+      "source": "protocol/56-Crazy-Piggy/protocol-spec.json",
+      "behaviorIds": [],
+      "disposition": "DERIVED_ANALYSIS_INDEX",
+      "reason": "供后续节点消费的协议汇总；独立验收必须回到上述规则、代码和原始样本。"
+    },
+    {
+      "id": "E-FIELD-MATRIX-DERIVED",
+      "source": "reports/56-Crazy-Piggy/field-evidence-matrix.json",
+      "behaviorIds": [],
+      "disposition": "DERIVED_EVIDENCE_MAP",
+      "reason": "字段级索引，不替代其 source/code/sample 三类原始证据。"
+    },
+    {
+      "id": "E-FRONTEND-WEIGHTS",
+      "source": "captures/56-Crazy-Piggy/source-modules/GameConfigData.js",
+      "behaviorIds": [],
+      "disposition": "CAPABILITY_ONLY_NOT_RUNTIME_ORACLE",
+      "reason": "randomReel 使用前端动画填充权重；不能作为服务端结果生成权重。"
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-ENTRY-IDENTITY",
+      "category": "ENTRY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-ID-LOBBY",
+        "E-GLOBAL-CODE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "当前目录绑定 gameId=56"
+        ],
+        "stateFields": [
+          "gid",
+          "gameName",
+          "lobbyProviderGameId"
+        ],
+        "transitionRules": [
+          "大厅 provider game id 454/card 50056.png 启动 CP gid=56"
+        ],
+        "outputs": [
+          "ID-name 56-Crazy-Piggy",
+          "display name Crazy Piggy"
+        ],
+        "terminationRules": [
+          "入口配置与前端 GameName 同时确认 Crazy Piggy"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-ID-LOBBY",
+          "E-GLOBAL-CODE"
+        ],
+        "assertions": [
+          "gid=56",
+          "GameName=Crazy Piggy",
+          "454 不得误写为 CP gid"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      }
+    },
+    {
+      "id": "B-LANGUAGE-FIRST-LOAD",
+      "category": "LOCALIZATION",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-LANGUAGE-CODE",
+        "E-LANGUAGE-INVENTORY",
+        "E-MAIN-CODE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "每种语言使用新导航",
+          "实际设置 l/language 参数"
+        ],
+        "stateFields": [
+          "l",
+          "language",
+          "CurLanguage"
+        ],
+        "transitionRules": [
+          "Main 把 l 交给 LanguageManager",
+          "pt 的入口/归档别名为 pt-br"
+        ],
+        "outputs": [
+          "10 种语言首载",
+          "每种语言 gameRulesCommon/gameRules/paytable"
+        ],
+        "terminationRules": [
+          "首载完成且对应语言清单、网络记录和规则资源均存在"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-LANGUAGE-CODE",
+          "E-LANGUAGE-INVENTORY"
+        ],
+        "assertions": [
+          "codes 恰为 en,pt,es,th,vi,id,bn,ko,fr,tr",
+          "10/10 首载成功",
+          "30/30 规则 JSON 导出"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "from": "launch query l=<code>",
+            "to": "LanguageManager.CurLanguage=<code> and localized resource request",
+            "evidenceRefs": [
+              "E-MAIN-CODE",
+              "E-LANGUAGE-INVENTORY"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-HTTP-CODEC",
+      "category": "TRANSPORT_CODEC",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-HTTP-CODE",
+        "E-API-CODE",
+        "E-SPIN-RAW"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "请求对象提供 Params，认证请求提供别名 Headers"
+        ],
+        "stateFields": [
+          "t",
+          "gid",
+          "contentType",
+          "code",
+          "info",
+          "data"
+        ],
+        "transitionRules": [
+          "web-token 映射到表单 t",
+          "game-id 映射到表单 gid",
+          "表单 URL 编码后 POST",
+          "code=200 时读取 data"
+        ],
+        "outputs": [
+          "application/x-www-form-urlencoded 请求",
+          "JSON success envelope"
+        ],
+        "terminationRules": [
+          "HTTP 完成且 success/failure envelope 已分类"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-HTTP-CODE",
+          "E-SPIN-RAW"
+        ],
+        "assertions": [
+          "不发送额外应用层密文",
+          "Spin 请求含 bl,bs,t,gid",
+          "成功响应为 code/info/data"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      }
+    },
+    {
+      "id": "B-SESSION-INIT",
+      "category": "SESSION_INIT",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FIRSTLOAD-NETWORK",
+        "E-FIRSTLOAD-API",
+        "E-MAIN-CODE",
+        "E-API-CODE",
+        "E-AUTH-REJECT-2"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "授权入口 launch token",
+          "gid=56"
+        ],
+        "stateFields": [
+          "launchToken",
+          "runtimeToken",
+          "player.id",
+          "player.balance",
+          "ping.enable",
+          "bsl",
+          "bll",
+          "spl"
+        ],
+        "transitionRules": [
+          "launch token -> auth/verify",
+          "verify.data.token -> config",
+          "config success -> SESSION_READY",
+          "launch token 不得直接作为 Spin runtime token"
+        ],
+        "outputs": [
+          "内存中的 runtime token",
+          "玩家初始余额",
+          "当前下注和赔付配置"
+        ],
+        "terminationRules": [
+          "verify 与 config 均 code=200，GameLogic 初始化完成"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FIRSTLOAD-NETWORK",
+          "E-FIRSTLOAD-API",
+          "E-MAIN-CODE",
+          "E-AUTH-REJECT-2"
+        ],
+        "assertions": [
+          "verify 严格早于 config",
+          "两类 token 不相同角色",
+          "错误 token Spin 返回失败且不计付费 Round"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "from": "POST auth/verify with launch t",
+            "to": "POST config with verify.data.token",
+            "evidenceRefs": [
+              "E-FIRSTLOAD-NETWORK",
+              "E-FIRSTLOAD-API",
+              "E-MAIN-CODE"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-CONFIG-RESTORE",
+      "category": "CONFIG_AND_LAST_RESULT",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FIRSTLOAD-NETWORK",
+        "E-FIRSTLOAD-API",
+        "E-MAIN-CODE",
+        "E-API-CODE",
+        "E-CONFIG-CODE",
+        "E-DATA-CODE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "SESSION_INIT verify success"
+        ],
+        "stateFields": [
+          "auto",
+          "bsl",
+          "bll",
+          "dbs",
+          "dbl",
+          "cc",
+          "cs",
+          "spl",
+          "last",
+          "ts"
+        ],
+        "transitionRules": [
+          "config 初始化下注列表和 spl",
+          "dbs/dbl 选择当前索引；找不到时前端回退 0",
+          "last 存在时恢复 rskl、bs、bl、结果展示与 pb"
+        ],
+        "outputs": [
+          "可下注 SESSION_READY",
+          "可选最近结果快照展示"
+        ],
+        "terminationRules": [
+          "GameLogic.init 完成；恢复 last 不创建新付费 Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FIRSTLOAD-API",
+          "E-API-CODE",
+          "E-CONFIG-CODE",
+          "E-DATA-CODE"
+        ],
+        "assertions": [
+          "bsl=[0.5,5,50]",
+          "bll=[1..10]",
+          "spl 含 8 个当前符号",
+          "config.last 不写入 spin-index 新行",
+          "dbl=50 不解释为赔付线数"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "from": "config.data.last",
+            "to": "GameData.CurGameResult and refreshresult without Spin request",
+            "evidenceRefs": [
+              "E-FIRSTLOAD-API",
+              "E-API-CODE",
+              "E-DATA-CODE"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-ORDINARY-LOSS",
+      "category": "PAID_ROUND_LOSS",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-API-CODE",
+        "E-BET-CODE",
+        "E-DATA-CODE",
+        "E-GAMELOGIC-CODE",
+        "E-GLOBAL-CODE",
+        "E-SPIN-INDEX",
+        "E-SPIN-RAW",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "SESSION_READY",
+          "无 active Round",
+          "余额足够",
+          "合法 bs/bl"
+        ],
+        "stateFields": [
+          "ba",
+          "pb",
+          "rskl",
+          "wa",
+          "wmkl",
+          "gm",
+          "small_game_type",
+          "fwa",
+          "fwtl",
+          "fwxl"
+        ],
+        "transitionRules": [
+          "发起一次付费 Spin",
+          "gm=0,wa=0,wmkl empty 表示普通输局",
+          "pb=previousPb-ba"
+        ],
+        "outputs": [
+          "3x3 无奖棋盘",
+          "完整局后余额"
+        ],
+        "terminationRules": [
+          "单响应完成，前端回到 Wait；不得追加免费/轮盘 Step"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-SPIN-INDEX",
+          "E-SPIN-RAW",
+          "E-GLOBAL-CODE"
+        ],
+        "assertions": [
+          "completeRoundCount=1153",
+          "五条路线独立复核均不中奖",
+          "wa=0",
+          "每局只有一个网络 Step"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      }
+    },
+    {
+      "id": "B-ORDINARY-WIN",
+      "category": "PAID_ROUND_WIN",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-API-CODE",
+        "E-BET-CODE",
+        "E-DATA-CODE",
+        "E-GAMELOGIC-CODE",
+        "E-RULES-EN",
+        "E-GLOBAL-CODE",
+        "E-SPIN-INDEX",
+        "E-SPIN-RAW",
+        "E-SCENARIO-COVERAGE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "SESSION_READY",
+          "无 active Round",
+          "余额足够",
+          "合法 bs/bl"
+        ],
+        "stateFields": [
+          "ba",
+          "pb",
+          "rskl",
+          "wa",
+          "wmkl",
+          "gm",
+          "small_game_type",
+          "fwa",
+          "fwtl",
+          "fwxl"
+        ],
+        "transitionRules": [
+          "发起一次付费 Spin",
+          "gm=0 且 wa>0 表示普通赢局",
+          "wmkl 的每个键按固定线路计奖",
+          "pb=previousPb-ba+wa"
+        ],
+        "outputs": [
+          "3x3 棋盘",
+          "稀疏线路中奖映射",
+          "总派奖与局后余额"
+        ],
+        "terminationRules": [
+          "线路动画结束后回到 Wait；无轮盘后续"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-SPIN-INDEX",
+          "E-SPIN-RAW",
+          "E-RULES-EN",
+          "E-GLOBAL-CODE"
+        ],
+        "assertions": [
+          "completeRoundCount=200",
+          "gm=0",
+          "wa=sum(symbolPay*bs*bl for wmkl keys)",
+          "每局只有一个网络 Step"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      }
+    },
+    {
+      "id": "B-FIXED-PAYLINE-WIN",
+      "category": "WIN_EVALUATION",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-GLOBAL-CODE",
+        "E-FIRSTLOAD-API",
+        "E-CONFIG-CODE",
+        "E-RULES-EN",
+        "E-PAYTABLE-EN",
+        "E-DATA-CODE",
+        "E-HISTORY-DATA-CODE",
+        "E-SPIN-RAW",
+        "E-RULES-SCREEN",
+        "E-PAYOUT-SCREEN"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "长度 9 的 column-major rskl",
+          "bs/bl 与 spl 可用"
+        ],
+        "stateFields": [
+          "rskl",
+          "wmkl",
+          "wa",
+          "bs",
+          "bl",
+          "spl"
+        ],
+        "transitionRules": [
+          "依次复核 routes 0..4",
+          "路线索引为 [0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]",
+          "每线奖=spl[symbol]*bs*bl",
+          "仅支付每条线最高奖"
+        ],
+        "outputs": [
+          "wmkl",
+          "wa"
+        ],
+        "terminationRules": [
+          "五条固定路线全部完成一次判定"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-EN",
+          "E-PAYTABLE-EN",
+          "E-GLOBAL-CODE",
+          "E-FIRSTLOAD-API",
+          "E-SPIN-RAW"
+        ],
+        "assertions": [
+          "paylineCount=5",
+          "线路 0..4 各有当前样本",
+          "普通赢 200 局公式 mismatch=0",
+          "PayLineCount=1 不作为线路数",
+          "WILD 不在当前 runtime symbol set"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      }
+    },
+    {
+      "id": "B-BALANCE-ACCOUNTING",
+      "category": "BALANCE_AND_SETTLEMENT",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-FIRSTLOAD-API",
+        "E-BET-CODE",
+        "E-DATA-CODE",
+        "E-GAMELOGIC-CODE",
+        "E-SPIN-INDEX",
+        "E-SPIN-RAW"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "已知 previousPb 或 verify.player.balance",
+          "收到完整 Spin 响应"
+        ],
+        "stateFields": [
+          "previousPb",
+          "ba",
+          "wa",
+          "pb",
+          "fwa"
+        ],
+        "transitionRules": [
+          "付费起点扣 ba",
+          "同一完整局把全部 wa 一次计入",
+          "nextPb=previousPb-ba+wa",
+          "Booster 的 fwa 已包含在 wa 内，不能重复入账"
+        ],
+        "outputs": [
+          "该 Round 唯一 post-round balance pb"
+        ],
+        "terminationRules": [
+          "余额更新与该 Round 完成原子对应；轮盘 Delivery 不再改服务端余额"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-FIRSTLOAD-API",
+          "E-SPIN-RAW",
+          "E-SPIN-INDEX"
+        ],
+        "assertions": [
+          "1304 个相邻 Spin 转换 mismatch=0",
+          "首局与 verify.balance 转换一致",
+          "wheel cp56-00105 前后公式一致",
+          "fwa 不重复加到 pb"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "from": "cp56-00104 pb=2221.90",
+            "to": "cp56-00105 ba=0.50,wa=160,pb=2381.40",
+            "then": "cp56-00106 ba=0.50,wa=0,pb=2380.90",
+            "evidenceRefs": [
+              "E-SPIN-RAW",
+              "E-SPIN-INDEX"
+            ]
+          },
+          {
+            "from": "cp56-00177 pb=3375.40",
+            "to": "cp56-00178 ba=0.50,wa=175,pb=3549.90",
+            "then": "cp56-00179 ba=0.50,wa=0,pb=3549.40",
+            "evidenceRefs": [
+              "E-SPIN-RAW"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-BOOSTER-WHEEL",
+      "category": "SPECIAL_FEATURE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-RULES-EN",
+        "E-PAYTABLE-EN",
+        "E-GLOBAL-CODE",
+        "E-DATA-CODE",
+        "E-GAMELOGIC-CODE",
+        "E-WHEEL-CODE",
+        "E-SPIN-INDEX",
+        "E-SPIN-RAW",
+        "E-SCENARIO-COVERAGE",
+        "E-RULES-SCREEN"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid rskl 九格同符号",
+          "符号不为 HOT/SEV",
+          "gm=1",
+          "small_game_type=2"
+        ],
+        "stateFields": [
+          "roundId",
+          "rskl",
+          "wmkl",
+          "gm",
+          "small_game_type",
+          "wa",
+          "fwa",
+          "fwtl",
+          "fwxl",
+          "wheelIndex",
+          "initialBaseAward"
+        ],
+        "transitionRules": [
+          "initialBaseAward=5*symbolPay*bs*bl",
+          "按 fwtl 顺序消费本地 Step",
+          "最后一个 fwtl 是终止落点且没有对应 fwxl",
+          "每个非终止 Step 使用对应 fwxl",
+          "fwa=initialBaseAward*sum(fwxl)",
+          "wa=initialBaseAward+fwa",
+          "所有 Step 保持原 paid roundId"
+        ],
+        "outputs": [
+          "五线初始奖",
+          "完整 fwtl/fwxl Delivery 序列",
+          "一次结算的 wa/pb"
+        ],
+        "terminationRules": [
+          "wheelIndex 到达 fwtl 末尾后不再有下一位置",
+          "TurnTable 隐藏并调用 GameLogic.onGameEnd",
+          "不发后续 Spin 请求"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-RULES-EN",
+          "E-GLOBAL-CODE",
+          "E-WHEEL-CODE",
+          "E-SPIN-RAW",
+          "E-SPIN-INDEX"
+        ],
+        "assertions": [
+          "39 个完整轮盘 Round",
+          "39/39 九格同符号且均非 HOT/SEV",
+          "39/39 fwtl.length=fwxl.length+1",
+          "39/39 奖金公式成立",
+          "轮盘位置不进入 spin-index 新行"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "roundId": "cp56-00105",
+            "steps": [
+              "fwtl[0]=0/fwxl[0]=1",
+              "fwtl[1]=4/fwxl[1]=1",
+              "fwtl[2]=6/fwxl[2]=1",
+              "fwtl[3]=3/fwxl[3]=2",
+              "fwtl[4]=7/fwxl[4]=2",
+              "fwtl[5]=5 terminal"
+            ],
+            "evidenceRefs": [
+              "E-SPIN-RAW",
+              "E-SPIN-INDEX",
+              "E-WHEEL-CODE"
+            ]
+          },
+          {
+            "roundId": "cp56-00178",
+            "steps": [
+              "fwtl[0]=0/fwxl[0]=1",
+              "fwtl[1]=6/fwxl[1]=1",
+              "fwtl[2]=4/fwxl[2]=2",
+              "fwtl[3]=2/fwxl[3]=2",
+              "fwtl[4]=1 terminal"
+            ],
+            "evidenceRefs": [
+              "E-SPIN-RAW",
+              "E-WHEEL-CODE"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-RULES-PAYTABLE-LAZY",
+      "category": "LAZY_RESOURCE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-LANGUAGE-INVENTORY",
+        "E-RULES-EN",
+        "E-PAYTABLE-EN",
+        "E-RULES-SCREEN",
+        "E-PAYOUT-SCREEN"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "主游戏加载完成",
+          "菜单打开"
+        ],
+        "stateFields": [
+          "CurLanguage",
+          "rules prefab",
+          "reward prefab"
+        ],
+        "transitionRules": [
+          "规则入口加载 gameRulesCommon+gameRules",
+          "奖表入口加载 paytable 与轮盘展示资源"
+        ],
+        "outputs": [
+          "当前语言规则页",
+          "当前语言奖表页"
+        ],
+        "terminationRules": [
+          "页面渲染完成且可关闭"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-LANGUAGE-INVENTORY",
+          "E-RULES-SCREEN",
+          "E-PAYOUT-SCREEN"
+        ],
+        "assertions": [
+          "规则和奖表均已主动访问",
+          "10 种语言三类 JSON 均存在",
+          "截图证明懒加载页面实际渲染"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "from": "menu rules/paytable click",
+            "to": "localized JSON/prefab rendered",
+            "evidenceRefs": [
+              "E-LANGUAGE-INVENTORY",
+              "E-RULES-SCREEN",
+              "E-PAYOUT-SCREEN"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-AUTH-REJECTION",
+      "category": "ERROR",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-HTTP-CODE",
+        "E-AUTH-REJECT-1",
+        "E-AUTH-REJECT-2"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "Spin 使用无效或错误角色 token"
+        ],
+        "stateFields": [
+          "httpStatus",
+          "dt",
+          "err.cd",
+          "err.msg",
+          "err.tid"
+        ],
+        "transitionRules": [
+          "HTTP 200 仍按失败处理",
+          "err.cd=1002 表示认证失败",
+          "不创建完成 Round、不扣注、不派奖"
+        ],
+        "outputs": [
+          "失败响应或等价本地错误"
+        ],
+        "terminationRules": [
+          "请求结束于失败状态；该尝试不进入最终 paidRoundStarts"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-AUTH-REJECT-1",
+          "E-AUTH-REJECT-2",
+          "E-HTTP-CODE"
+        ],
+        "assertions": [
+          "httpStatus=200",
+          "err.cd='1002'",
+          "dt=null",
+          "不在最终 spin-index 1392 行中"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      }
+    },
+    {
+      "id": "B-HISTORY-READ",
+      "category": "HISTORY_READ_ONLY",
+      "status": "UNKNOWN",
+      "reason": "当前前端代码已确认历史端点、请求顺序和消费字段，但没有当前游戏 log-list/log-view 原始响应；为避免把代码默认值冒充 wire schema，该行为保持未决且不阻塞 Round 生成。",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-API-CODE",
+        "E-HISTORY-UI-CODE",
+        "E-HISTORY-DATA-CODE",
+        "E-HISTORY-DETAIL-CODE"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "SESSION_READY",
+          "runtime token 可用"
+        ],
+        "stateFields": [
+          "page_index",
+          "begin_at",
+          "end_at",
+          "end",
+          "ll",
+          "transfer_id"
+        ],
+        "transitionRules": [
+          "log-list 从 page_index=1 开始",
+          "response.end=0 时前端递增页号",
+          "选择 ll[].tis 后以 transfer_id 调 log-view"
+        ],
+        "outputs": [
+          "已确认的请求顺序；响应字段仅代码消费清单"
+        ],
+        "terminationRules": [
+          "end!=0 时列表分页结束；detail 返回后展示当前 transfer_id"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-API-CODE",
+          "E-HISTORY-UI-CODE",
+          "E-HISTORY-DATA-CODE",
+          "E-HISTORY-DETAIL-CODE"
+        ],
+        "assertions": [
+          "端点和请求字段来自当前代码",
+          "没有原始响应 fixture",
+          "不得把代码默认值当捕获字段"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          {
+            "from": "log-list page_index/begin_at/end_at",
+            "to": "ll[].tis",
+            "then": "log-view transfer_id=tis",
+            "evidenceRefs": [
+              "E-HISTORY-UI-CODE",
+              "E-HISTORY-DETAIL-CODE",
+              "E-API-CODE"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "B-REDIS-COMPLETE-ROUND",
+      "category": "RUNTIME_SOURCE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-SPIN-RAW",
+        "E-SPIN-INDEX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "SESSION_READY",
+          "Redis db15 对应类别池非空"
+        ],
+        "stateFields": [
+          "outcome",
+          "integerMultiplier",
+          "CP56A1 completeRoundMember"
+        ],
+        "transitionRules": [
+          "先按 LOSS/WIN/SPECIAL 选择类别",
+          "再从对应索引的现有整数倍率中选择",
+          "LPOP 恰好一个完整局 member",
+          "GameRuleCore 与 ResultUtil 解码复核后一次投影"
+        ],
+        "outputs": [
+          "一局完整 rskl/wmkl/wa/gm/small_game_type/fwa/fwtl/fwxl"
+        ],
+        "terminationRules": [
+          "Redis 连接失败、类别无倍率或列表空均 HTTP 503，不生成、不回放 fixture"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "E-SPIN-RAW",
+          "E-SPIN-INDEX"
+        ],
+        "assertions": [
+          "0倍未中奖池存在",
+          "正整数倍率分桶与重算一致",
+          "同一完整局所有内嵌轮盘 Step 来自同一 ASCII member",
+          "幂等重试不重复 LPOP",
+          "空池失败关闭",
+          "运行时无生成和 fixture 路径"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": []
+      }
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "U-HISTORY-RAW-RESPONSE",
+      "status": "SAMPLE_INSUFFICIENT",
+      "classification": "NON_BLOCKING",
+      "reason": "log-list/log-view 的端点、请求顺序和前端消费字段已确认；原站仅归档了一个普通未中奖 History 详情，未覆盖中奖与轮盘详情。",
+      "evidenceRefs": [
+        "E-API-CODE",
+        "E-HISTORY-UI-CODE",
+        "E-HISTORY-DATA-CODE",
+        "E-HISTORY-DETAIL-CODE"
+      ],
+      "requiredAction": "实现前不得把代码默认值或其他游戏 fixture 当成当前响应；Round 生成不依赖历史响应。"
+    },
+    {
+      "id": "U-WHEEL-FWXL-GT2",
+      "status": "RARE_NOT_CAPTURED",
+      "classification": "NON_BLOCKING_CAP_POLICY",
+      "reason": "规则明确最高 21 倍，TurnTable 有高倍率显示转换，但 39 个完整轮盘 Round 的 fwxl 只有 1/2。",
+      "evidenceRefs": [
+        "E-RULES-EN",
+        "E-WHEEL-CODE",
+        "E-SPIN-RAW"
+      ],
+      "requiredAction": "不补造样本、不无限抓取；后续实现将规则/代码分支与已捕获 wire 公式分别验证并保留稀有覆盖标记。"
+    },
+    {
+      "id": "U-CODE-ONLY-RPX-RDRI-FBT",
+      "status": "DISPOSED_NOT_CURRENT_CAPABILITY",
+      "classification": "NON_BLOCKING",
+      "reason": "通用代码映射 rpx/rdri/fbt，但当前规则和 1392 个响应均未实例化。",
+      "evidenceRefs": [
+        "E-DATA-CODE",
+        "E-SPIN-RAW"
+      ],
+      "requiredAction": "不生成、不声明为当前玩法，除非出现新的当前游戏证据。"
+    },
+    {
+      "id": "U-WILD-AVAILABILITY",
+      "status": "CONFLICTING_GENERIC_TEXT_NO_RUNTIME_SYMBOL",
+      "classification": "NON_BLOCKING",
+      "reason": "paytable 有通用 Wild 替代文字，但当前 spl、SymbolList 和 1392 局无 WILD。",
+      "evidenceRefs": [
+        "E-PAYTABLE-EN",
+        "E-GLOBAL-CODE",
+        "E-FIRSTLOAD-API",
+        "E-SPIN-RAW"
+      ],
+      "requiredAction": "当前生成器禁止输出 WILD。"
+    },
+    {
+      "id": "U-REDIS-KEY-AND-CODEC",
+      "status": "IMPLEMENTATION_DEFINED_AND_VALIDATED",
+      "classification": "NON_BLOCKING_FOR_PROTOCOL_HANDOFF",
+      "reason": "原站协议不定义 Redis；本复刻已由 Loader/Controller v3 验证整数倍率索引、每 member 一整个 CP56A1 US-ASCII Round、DB15 与 rulesHash 门禁。",
+      "evidenceRefs": [
+        "E-SPIN-INDEX"
+      ],
+      "requiredAction": "保持 protocol-spec.json、game-capabilities.json、Loader 与 Controller v3 的 Redis 合同一致。"
+    },
+    {
+      "id": "U-SERVER-SYMBOL-WEIGHTS",
+      "status": "UNKNOWN",
+      "classification": "NON_BLOCKING",
+      "reason": "前端 SymbolWeightsList 仅用于动画 randomReel，没有服务端生成权重证据。",
+      "evidenceRefs": [
+        "E-GLOBAL-CODE",
+        "E-FRONTEND-WEIGHTS"
+      ],
+      "requiredAction": "正式配置不得暴露或使用该动画权重作为 server RNG 权重。"
+    }
+  ],
+  "handoffGate": {
+    "confirmedBehaviorCount": 13,
+    "notApplicableBehaviorContractCount": 0,
+    "unknownBehaviorContractCount": 1,
+    "allEvidenceDisposedOrLinked": true,
+    "allConfirmedContractsComplete": true,
+    "allConfirmedMultiStepBehaviorsHaveAdjacentEvidence": true,
+    "fixturesRuntimeUseAllowed": false,
+    "readyForIndependentProtocolAcceptance": true
+  },
+  "behaviorIds": [
+    "B-ENTRY-IDENTITY",
+    "B-LANGUAGE-FIRST-LOAD",
+    "B-HTTP-CODEC",
+    "B-SESSION-INIT",
+    "B-CONFIG-RESTORE",
+    "B-ORDINARY-LOSS",
+    "B-ORDINARY-WIN",
+    "B-FIXED-PAYLINE-WIN",
+    "B-BALANCE-ACCOUNTING",
+    "B-BOOSTER-WHEEL",
+    "B-RULES-PAYTABLE-LAZY",
+    "B-AUTH-REJECTION",
+    "B-HISTORY-READ",
+    "B-REDIS-COMPLETE-ROUND"
+  ],
+  "stateDefinitions": {
+    "SESSION_READY": "authenticated, no claimed Round",
+    "PAID_REQUEST_IN_FLIGHT": "one paid request awaiting one Redis claim",
+    "ORDINARY_RESULT_DELIVERY": "ordinary complete Round response projection",
+    "BOOSTER_BASE_DELIVERY": "Booster base award projection from claimed member",
+    "BOOSTER_WHEEL_STEP": "local frontend consumption of the same member fwtl/fwxl",
+    "ROUND_COMPLETE": "settled once, history committed, ready to return"
+  }
+}

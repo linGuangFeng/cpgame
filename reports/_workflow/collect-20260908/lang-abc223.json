@@ -1,0 +1,28 @@
+{
+  "worker": "abc223",
+  "alive": true,
+  "phase": "DONE",
+  "currentGame": null,
+  "error": null,
+  "updatedAt": "2026-09-08T07:45:46.604Z",
+  "games": {
+    "16-Jungle-Fruit": {
+      "status": "LANG_DONE",
+      "captured": 10,
+      "total": 10,
+      "failed": []
+    },
+    "52-Cyber-GO": {
+      "status": "LANG_DONE",
+      "captured": 10,
+      "total": 10,
+      "failed": []
+    },
+    "1090-Sharpshooter": {
+      "status": "LANG_DONE",
+      "captured": 14,
+      "total": 14,
+      "failed": []
+    }
+  }
+}

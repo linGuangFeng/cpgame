@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "gameId": 2,
+  "rawGameId": 2,
+  "gameName": "Jungle Kings",
+  "slug": "jungle-kings",
+  "rulesVersion": "jk2-reelstrip-dualboard-20260909",
+  "rulesHash": "3c1e8d7a9b4f2c6e0a5d8b1f7e4c9a2d6b0e3f8c1a7d4b9e2f5c8a0d3b6e1f4",
+  "winModel": "DUAL_CHESSBOARD_THREE_REEL_LEFT_TO_RIGHT_TRIPLE",
+  "winModelDetails": {
+    "status": "CONFIRMED",
+    "chessboards": ["CB0002", "CB0003"],
+    "paylines": { "CB0002": "PL0011", "CB0003": "PL0012", "v1SingleBoard": "PL0014" },
+    "visible": "3-reel 2-row; each row is one selectable chessboard",
+    "condition": "three stop symbols identical and a confirmed paying symbol",
+    "configuredMultipliers": { "S00011": 100, "S00012": 50, "S00013": 25, "S00014": 5 },
+    "observedReachableWinningSymbols": ["S00011", "S00012"],
+    "bothLinesWinMultiplier": 2
+  },
+  "boardModel": {
+    "status": "CONFIRMED",
+    "responseOuterArray": "one 9-symbol array per activated chessboard",
+    "innerArrayLength": 9,
+    "logicalReelRanges": [[0, 2], [3, 5], [6, 8]],
+    "sameSymbolWithinEachRange": true
+  },
+  "roundModel": {
+    "status": "CONFIRMED",
+    "paidRequestCount": 1,
+    "deliveryCount": 1,
+    "terminalInPaidResponse": true,
+    "completeRoundBoundary": "one POST /spin-v2 response",
+    "continuationObserved": false
+  },
+  "betModel": {
+    "configLevels": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "configSizes": [0.5, 5, 50],
+    "lineStake": "bet_size * bet_level",
+    "paidStake": "lineStake * activatedChessboardCount",
+    "frontendFields": ["bet_level", "bet_size", "ckl"]
+  },
+  "specialModes": [
+    {
+      "id": "DUAL_LINE_X2",
+      "status": "CONFIRMED_BY_RULES_AND_FRONTEND",
+      "trigger": "both CB0002 and CB0003 activated and both lines win",
+      "httpCompleteRoundsIn1152": 0,
+      "dirtyV2DualLineLossSamples": 3,
+      "note": "1152 corpus used v1 /spin without ckl; dual-line is the original UI default (bet R$1.00)"
+    }
+  ],
+  "supportedLanguages": {
+    "status": "CONFIRMED_FROM_ORIGIN_RESOURCE_BUNDLE",
+    "codes": ["bn", "en", "es", "fr", "id", "ko", "pt", "th", "tr", "vi"]
+  },
+  "generation": {
+    "model": "realtime-map-odd-to-boards",
+    "redisCache": false,
+    "entry": "CompleteRoundFactory.generate(random, ckl, betSize, betLevel, requestedOdd)",
+    "singleOdds": [0, 50, 100],
+    "bothOdds": [0, 25, 50, 100, 150, 200],
+    "singleCombos": 3,
+    "bothCombos": 9
+  }
+}

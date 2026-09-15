@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "batchId": "B",
+  "workflowTemplateVersionRead": 15,
+  "servicesReadCompletely": [
+    "WorkflowTemplateCatalog",
+    "GameArtifactLayoutService",
+    "CpgameLabService"
+  ],
+  "workflowStarted": false,
+  "auditedDirectories": [
+    "42-Lucky-Dragon",
+    "43-Lucky-Wheel",
+    "45-Rio-Carnival",
+    "50-Lucky-Cat-II"
+  ],
+  "artifactCategories": [
+    "resources",
+    "publish",
+    "server-api",
+    "generator",
+    "screenshots",
+    "captures",
+    "fixtures",
+    "protocol",
+    "redis-pack",
+    "reports"
+  ],
+  "commonAuditFindings": {
+    "resources": "CATALOG_IDENTITY_ONLY_NO_FIRST_LOAD_ARCHIVE",
+    "publish": "README_ONLY_MISSING_ROOT_INDEX_AND_PUBLISH_MANIFEST",
+    "server-api": "README_ONLY_NO_JAVA_PROJECT_NO_RESTART_DEMO",
+    "generator": "README_ONLY_NO_JAVA_PROJECT_NO_DIST",
+    "screenshots": "README_ONLY_NO_IMAGE_EVIDENCE",
+    "captures": "SCAFFOLD_PROFILE_AND_LEDGER_ONLY_NO_SPIN_INDEX_NO_RAW_EXCHANGES",
+    "fixtures": "README_ONLY_NO_PROTOCOL_ORACLE",
+    "protocol": "DRAFT_ONLY_MISSING_FINAL_GAME_CAPABILITIES_PROTOCOL_SPEC_AND_HANDOFF",
+    "redis-pack": "README_ONLY_NO_LOADER_OUTPUT_OR_VERIFIER_EVIDENCE",
+    "reports": "SCAFFOLD_STATUS_ONLY_MISSING_RUNTIME_GENERATION_VALIDATION_AND_MACHINE_TEST_REPORTS; V15_ORDINARY_AND_SPECIAL_TARGET_FIELDS_HAVE_BEEN_ADDED_WITH_ZERO_FORMAL_COUNTS"
+  },
+  "boundedPerGameTenCategoryAudit": {
+    "42-Lucky-Dragon": {
+      "resources": "IDENTITY_CATALOG_ONLY; FIRST_LOAD_ARCHIVE_MISSING",
+      "publish": "README_ONLY; ROOT_INDEX_AND_PUBLISH_MANIFEST_MISSING",
+      "server-api": "README_ONLY; HISTORY_ENDPOINT_AND_CLICK_CHAIN_IMPLEMENTATION_MISSING; JAVA_PROJECT_AND_RESTART_DEMO_MISSING",
+      "generator": "README_ONLY; UNIQUE_SHARED_JAVA_GAME_RULE_CORE_AND_DIST_MISSING",
+      "screenshots": "README_ONLY; IMAGE_EVIDENCE_MISSING",
+      "captures": "PROFILE_LEDGER_ONLY; SPIN_INDEX_AND_RAW_ORIGINAL_HTTP_EXCHANGES_MISSING; UI_10_ROUNDS_EXPLICITLY_NON_FORMAL",
+      "fixtures": "README_ONLY; PROTOCOL_ORACLE_MISSING",
+      "protocol": "MANUAL_UI_HISTORY_EVIDENCE_PLUS_DRAFTS_ONLY; FINAL_CAPABILITIES_SPEC_HANDOFF_MISSING",
+      "redis-pack": "README_ONLY; ATOMIC_APPEND_TRIM_LOADER_OUTPUT_AND_INDEPENDENT_VERIFIER_MISSING",
+      "reports": "STATUS_AND_SCENARIO_SCAFFOLD_ONLY; RUNTIME_GENERATION_VALIDATION_AND_MACHINE_TEST_REPORTS_MISSING"
+    },
+    "43-Lucky-Wheel": {
+      "resources": "IDENTITY_CATALOG_ONLY; FIRST_LOAD_ARCHIVE_MISSING",
+      "publish": "README_ONLY; ROOT_INDEX_AND_PUBLISH_MANIFEST_MISSING",
+      "server-api": "README_ONLY; HISTORY_CLICK_CHAIN_UNKNOWN; JAVA_PROJECT_AND_RESTART_DEMO_MISSING",
+      "generator": "README_ONLY; UNIQUE_SHARED_JAVA_GAME_RULE_CORE_AND_DIST_MISSING",
+      "screenshots": "README_ONLY; IMAGE_EVIDENCE_MISSING",
+      "captures": "PROFILE_LEDGER_ONLY; SPIN_INDEX_AND_RAW_ORIGINAL_HTTP_EXCHANGES_MISSING",
+      "fixtures": "README_ONLY; PROTOCOL_ORACLE_MISSING",
+      "protocol": "DRAFTS_ONLY; FINAL_CAPABILITIES_SPEC_HANDOFF_MISSING",
+      "redis-pack": "README_ONLY; ATOMIC_APPEND_TRIM_LOADER_OUTPUT_AND_INDEPENDENT_VERIFIER_MISSING",
+      "reports": "STATUS_AND_SCENARIO_SCAFFOLD_ONLY; RUNTIME_GENERATION_VALIDATION_AND_MACHINE_TEST_REPORTS_MISSING"
+    },
+    "45-Rio-Carnival": {
+      "resources": "IDENTITY_CATALOG_ONLY; FIRST_LOAD_ARCHIVE_MISSING",
+      "publish": "README_ONLY; ROOT_INDEX_AND_PUBLISH_MANIFEST_MISSING",
+      "server-api": "README_ONLY; HISTORY_CLICK_CHAIN_UNKNOWN; JAVA_PROJECT_AND_RESTART_DEMO_MISSING",
+      "generator": "README_ONLY; UNIQUE_SHARED_JAVA_GAME_RULE_CORE_AND_DIST_MISSING",
+      "screenshots": "README_ONLY; IMAGE_EVIDENCE_MISSING",
+      "captures": "PROFILE_LEDGER_ONLY; SPIN_INDEX_AND_RAW_ORIGINAL_HTTP_EXCHANGES_MISSING",
+      "fixtures": "README_ONLY; PROTOCOL_ORACLE_MISSING",
+      "protocol": "DRAFTS_ONLY; FINAL_CAPABILITIES_SPEC_HANDOFF_MISSING",
+      "redis-pack": "README_ONLY; ATOMIC_APPEND_TRIM_LOADER_OUTPUT_AND_INDEPENDENT_VERIFIER_MISSING",
+      "reports": "STATUS_AND_SCENARIO_SCAFFOLD_ONLY; RUNTIME_GENERATION_VALIDATION_AND_MACHINE_TEST_REPORTS_MISSING"
+    },
+    "50-Lucky-Cat-II": {
+      "resources": "IDENTITY_CATALOG_ONLY; FIRST_LOAD_ARCHIVE_MISSING",
+      "publish": "README_ONLY; ROOT_INDEX_AND_PUBLISH_MANIFEST_MISSING",
+      "server-api": "README_ONLY; HISTORY_CLICK_CHAIN_UNKNOWN; JAVA_PROJECT_AND_RESTART_DEMO_MISSING",
+      "generator": "README_ONLY; UNIQUE_SHARED_JAVA_GAME_RULE_CORE_AND_DIST_MISSING",
+      "screenshots": "README_ONLY; IMAGE_EVIDENCE_MISSING",
+      "captures": "PROFILE_LEDGER_ONLY; SPIN_INDEX_AND_RAW_ORIGINAL_HTTP_EXCHANGES_MISSING",
+      "fixtures": "README_ONLY; PROTOCOL_ORACLE_MISSING",
+      "protocol": "DRAFTS_ONLY; FINAL_CAPABILITIES_SPEC_HANDOFF_MISSING",
+      "redis-pack": "README_ONLY; ATOMIC_APPEND_TRIM_LOADER_OUTPUT_AND_INDEPENDENT_VERIFIER_MISSING",
+      "reports": "STATUS_AND_SCENARIO_SCAFFOLD_ONLY; RUNTIME_GENERATION_VALIDATION_AND_MACHINE_TEST_REPORTS_MISSING"
+    }
+  },
+  "historyClickability": {
+    "42": {
+      "status": "PASS_MANUAL_BROWSER_LIST_DETAIL_AND_RETURN_VISIBLE",
+      "clickChain": [
+        "HMS_HOME",
+        "HASH_GAME3_CP_SECTION",
+        "VISIBLE_CARD_RESOURCE_50042",
+        "IFRAME_MYIFRAME_PATH_42",
+        "GAME_CONTROL_CHEVRON",
+        "HISTORY_CONTROL",
+        "HISTORY_LIST",
+        "HISTORY_ROW",
+        "HISTORY_DETAIL",
+        "RETURN_CONTROL"
+      ],
+      "uiHistoryPaidRounds": 10,
+      "uiHistoryLossRounds": 9,
+      "uiHistoryWinRounds": 1,
+      "historyTotalBet": "5.00",
+      "historyNetResult": "26.50",
+      "candidateMechanism": "WILD_MULTIPLIER_X3",
+      "formalOriginalHttpRounds": 0,
+      "evidence": "protocol/42-Lucky-Dragon/browser-milestone-evidence.json"
+    },
+    "43": "NOT_TESTED",
+    "45": "NOT_TESTED",
+    "50": "NOT_TESTED"
+  },
+  "rawGameIdAudit": {
+    "derivedIdsAllowed": false,
+    "games": [
+      { "gameId": 42, "resourceCode": 50042, "directoryName": "42-Lucky-Dragon" },
+      { "gameId": 43, "resourceCode": 50043, "directoryName": "43-Lucky-Wheel" },
+      { "gameId": 45, "resourceCode": 50045, "directoryName": "45-Rio-Carnival" },
+      { "gameId": 50, "resourceCode": 50050, "directoryName": "50-Lucky-Cat-II" }
+    ],
+    "forbiddenDerivedIdPatternUsed": false
+  },
+  "implementationAudit": {
+    "protocol": "DRAFT_ONLY; UI evidence must not be promoted to ORIGINAL_AUTHORIZED_HTTP or a final contract",
+    "ruleCore": "MISSING_PURE_JAVA_SHARED_GAME_RULE_CORE_FOR_SERVER_AND_GENERATOR",
+    "serverApi": "README_ONLY; NO_BUILDABLE_JAVA_SERVICE_OR_RESTART_DEMO",
+    "generator": "README_ONLY; NO_BUILDABLE_JAVA_GENERATOR_NO_FAT_JAR_NO_SEEDLESS_EXTERNAL_CONFIG_NO_DIST_COMMAND",
+    "redis": "README_ONLY; NO_REDIS_PACK_LOADER_OUTPUT_OR_INDEPENDENT_VERIFIER",
+    "managementAcceptance": "NOT_RUN; prerequisites absent"
+  },
+  "browserRelease": {
+    "signal": "BROWSER_RELEASED_TO_C",
+    "hardReleaseSignal": "B_NODE_BROWSER_KERNEL_RESET",
+    "nodeBrowserKernelReset": true,
+    "browserCallsAllowedAfterRelease": false,
+    "userTabsMutatedDuringRelease": false
+  },
+  "captureProfileValidation": {
+    "tool": "reports/_workflow/tools/batch-b-round-evidence.mjs validate-profile",
+    "42": "PASS_READINESS_ONLY",
+    "43": "PASS_WAITING_STATE",
+    "45": "PASS_WAITING_STATE",
+    "50": "PASS_WAITING_STATE"
+  },
+  "expectedV15FinalCompliance": "FAIL_UNTIL_REAL_ARTIFACTS_AND_FORMAL_SAMPLING_EXIST",
+  "formalSampling": {
+    "42": { "paidRoundStarts": 0, "completedRoundCount": 0 },
+    "43": { "paidRoundStarts": 0, "completedRoundCount": 0 },
+    "45": { "paidRoundStarts": 0, "completedRoundCount": 0 },
+    "50": { "paidRoundStarts": 0, "completedRoundCount": 0 }
+  },
+  "uiVersusFormalSeparation": {
+    "gameId": 42,
+    "uiHistoryPaidRoundStarts": 10,
+    "uiHistoryOrdinaryLossRounds": 9,
+    "uiHistoryOrdinaryWinRounds": 1,
+    "uiHistoryTotalBet": "5.00",
+    "uiHistoryNetResult": "26.50",
+    "candidateMechanism": "WILD_MULTIPLIER_X3",
+    "formalOriginalHttpPaidRoundStarts": 0,
+    "formalCompletedRounds": 0,
+    "separationValidated": true,
+    "reason": "NO_RAW_REQUEST_RESPONSE_EXCHANGE_PERSISTED"
+  },
+  "singleBlockingCondition": "WAITING_FOR_EXPLICIT_RELEASE_BROWSER_TO_B_TO_CAPTURE_ORIGINAL_AUTHORIZED_HTTP_AND_DISCOVER_CURRENT_GAME_RULES_PROTOCOLS; UNKNOWN_RULES_MUST_NOT_BE_IMPLEMENTED",
+  "offlinePreparationMilestone": {
+    "status": "PASS_OFFLINE_PREPARATION_ONLY",
+    "browserUsed": false,
+    "completionClaim": false,
+    "historyUiContract": "protocol/42-Lucky-Dragon/ui-history-evidence-contract.json",
+    "historyUiAcceptanceMatrix": "reports/42-Lucky-Dragon/history-ui-acceptance-matrix.json",
+    "fixedPathGate": "reports/_workflow/tools/batch-b-offline-gate.mjs",
+    "gateReport": "reports/_workflow/batch-b-offline-gate-report.json",
+    "collectorGuard": "raw gid 42/43/45/50 only; integrationGameId rejected; formal source remains ORIGINAL_AUTHORIZED_HTTP",
+    "knownRuleImplementationAdded": false
+  },
+  "latestBrowserPreparationAttempt": {
+    "gameId": 43,
+    "attemptedAt": "2026-08-29T07:49:59+08:00",
+    "extensionInstanceId": "35d86d21-ac60-4133-9019-8c4645472100",
+    "resolvedBrowserId": "-4c22-4162-b097-cc01188fb7b7",
+    "exactInstanceConnected": true,
+    "ownHmsTabFound": true,
+    "ownHmsTabUrl": "https://hms-paddle.com/#/game3",
+    "operation": "CLAIM_EXACT_OWN_HMS_TAB_AND_READ_DOM",
+    "result": "BROWSER_CONTROL_BRIDGE_TIMEOUT_AND_SESSION_RESET",
+    "realSpinAttempted": false,
+    "transactionCreated": false,
+    "formalOriginalHttpPaidRoundStarts": 0,
+    "evidence": "reports/_workflow/batch-b-browser-bridge-attempt-2.json"
+  },
+  "completionClaim": false,
+  "status": "SCAFFOLD_AUDITED_NOT_ACCEPTED"
+}

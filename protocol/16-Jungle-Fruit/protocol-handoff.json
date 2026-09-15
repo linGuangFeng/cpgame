@@ -1,0 +1,785 @@
+{
+  "schemaVersion": 5,
+  "workflowTemplateVersion": 40,
+  "controllerContractVersion": 3,
+  "gameId": 16,
+  "rawGameId": 16,
+  "rulesVersion": "jf16-empirical-2026-09-08-v3",
+  "rulesHash": "164088c0440871c9bc33b631a1b6bfa5e00d3012db3b0e3694bb59ac683e1743",
+  "behaviorIds": [
+    "B-RAW-GID-16",
+    "B-HTTP-CODEC-ENDPOINTS",
+    "B-CONFIG-BET-PAYTABLE",
+    "B-COUNT-ANYWHERE-WIN",
+    "B-TUMBLE-X-SETTLEMENT",
+    "B-ORDINARY-INDEPENDENT-LOSS",
+    "B-MARY-SMALL-GAME",
+    "B-SCATTER-FREE-ROUNDS",
+    "B-COMPLETE-ROUND-PAYOUT",
+    "B-BALANCE-LEDGER",
+    "B-HISTORY-LIST-DETAIL-RETURN",
+    "B-REDIS-ATOMIC-ROUND-CLAIM",
+    "B-ORIGIN-PROBABILITY",
+    "B-ORIGIN-REDIS-CONSUMER",
+    "B-SUPPORTED-LANGUAGES",
+    "B-HIGHER-BET-COMBINATIONS"
+  ],
+  "evidenceInventory": [
+    {
+      "id": "E-PREFLIGHT",
+      "source": "captures/16-Jungle-Fruit/original-http-preflight.json",
+      "behaviorIds": [
+        "B-RAW-GID-16",
+        "B-HTTP-CODEC-ENDPOINTS",
+        "B-CONFIG-BET-PAYTABLE",
+        "B-COUNT-ANYWHERE-WIN",
+        "B-SUPPORTED-LANGUAGES",
+        "B-HIGHER-BET-COMBINATIONS"
+      ]
+    },
+    {
+      "id": "E-STEPS-2852",
+      "source": "captures/16-Jungle-Fruit/original-http-spin-index.jsonl",
+      "behaviorIds": [
+        "B-RAW-GID-16",
+        "B-HTTP-CODEC-ENDPOINTS",
+        "B-COUNT-ANYWHERE-WIN",
+        "B-TUMBLE-X-SETTLEMENT",
+        "B-ORDINARY-INDEPENDENT-LOSS",
+        "B-MARY-SMALL-GAME",
+        "B-SCATTER-FREE-ROUNDS",
+        "B-COMPLETE-ROUND-PAYOUT",
+        "B-BALANCE-LEDGER"
+      ]
+    },
+    {
+      "id": "E-ROUND-1126",
+      "source": "captures/16-Jungle-Fruit/round-index.jsonl",
+      "behaviorIds": [
+        "B-RAW-GID-16",
+        "B-ORDINARY-INDEPENDENT-LOSS",
+        "B-MARY-SMALL-GAME",
+        "B-SCATTER-FREE-ROUNDS",
+        "B-COMPLETE-ROUND-PAYOUT",
+        "B-REDIS-ATOMIC-ROUND-CLAIM"
+      ]
+    },
+    {
+      "id": "E-HISTORY-1126",
+      "source": "captures/16-Jungle-Fruit/history-1to1.jsonl",
+      "behaviorIds": [
+        "B-RAW-GID-16",
+        "B-COMPLETE-ROUND-PAYOUT",
+        "B-BALANCE-LEDGER",
+        "B-HISTORY-LIST-DETAIL-RETURN"
+      ]
+    },
+    {
+      "id": "E-HISTORY-PAGES",
+      "source": "captures/16-Jungle-Fruit/history-list-pages.json",
+      "behaviorIds": [
+        "B-HISTORY-LIST-DETAIL-RETURN"
+      ]
+    },
+    {
+      "id": "E-FINALIZATION",
+      "source": "captures/16-Jungle-Fruit/history-finalization.json",
+      "behaviorIds": [
+        "B-ORDINARY-INDEPENDENT-LOSS",
+        "B-MARY-SMALL-GAME",
+        "B-SCATTER-FREE-ROUNDS",
+        "B-COMPLETE-ROUND-PAYOUT",
+        "B-ORIGIN-PROBABILITY"
+      ]
+    },
+    {
+      "id": "E-CANONICAL",
+      "source": "protocol/16-Jungle-Fruit/rules-core-canonical.json",
+      "behaviorIds": [
+        "B-CONFIG-BET-PAYTABLE",
+        "B-COUNT-ANYWHERE-WIN",
+        "B-TUMBLE-X-SETTLEMENT",
+        "B-ORDINARY-INDEPENDENT-LOSS",
+        "B-MARY-SMALL-GAME",
+        "B-SCATTER-FREE-ROUNDS",
+        "B-COMPLETE-ROUND-PAYOUT"
+      ]
+    },
+    {
+      "id": "E-FIELD-MATRIX",
+      "source": "protocol/16-Jungle-Fruit/field-evidence-matrix.json",
+      "behaviorIds": [
+        "B-HTTP-CODEC-ENDPOINTS",
+        "B-HISTORY-LIST-DETAIL-RETURN",
+        "B-ORIGIN-REDIS-CONSUMER",
+        "B-SUPPORTED-LANGUAGES",
+        "B-HIGHER-BET-COMBINATIONS"
+      ]
+    },
+    {
+      "id": "E-LOCAL-REDIS",
+      "source": "redis-pack/16-Jungle-Fruit/redis-contract.json",
+      "behaviorIds": [
+        "B-REDIS-ATOMIC-ROUND-CLAIM",
+        "B-ORIGIN-REDIS-CONSUMER"
+      ]
+    },
+    {
+      "id": "E-LANGUAGES",
+      "source": "resources/16-Jungle-Fruit/language-evidence.json",
+      "behaviorIds": [
+        "B-SUPPORTED-LANGUAGES"
+      ]
+    },
+    {
+      "id": "E-NEW-SPIN-ARCHIVE",
+      "source": "fixtures/16-Jungle-Fruit/spin-full-from-box.tgz",
+      "behaviorIds": [
+        "B-HTTP-CODEC-ENDPOINTS",
+        "B-HIGHER-BET-COMBINATIONS"
+      ]
+    },
+    {
+      "id": "E-EMPIRICAL-MODEL",
+      "source": "reports/16-Jungle-Fruit/distribution-model.json",
+      "behaviorIds": [
+        "B-ORIGIN-PROBABILITY",
+        "B-TUMBLE-X-SETTLEMENT"
+      ]
+    },
+    {
+      "id": "E-COMBINED-AUDIT",
+      "source": "reports/16-Jungle-Fruit/original-round-audit.json",
+      "behaviorIds": [
+        "B-ORDINARY-INDEPENDENT-LOSS",
+        "B-MARY-SMALL-GAME",
+        "B-SCATTER-FREE-ROUNDS",
+        "B-COMPLETE-ROUND-PAYOUT"
+      ]
+    }
+  ],
+  "behaviorContracts": [
+    {
+      "id": "B-RAW-GID-16",
+      "category": "IDENTITY",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-PREFLIGHT",
+        "E-STEPS-2852",
+        "E-ROUND-1126",
+        "E-HISTORY-1126"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "artifact and request belong to Jungle Fruit"
+        ],
+        "stateFields": [
+          "rawGameId=16",
+          "slug=jungle-fruit",
+          "bid prefix=16-"
+        ],
+        "transitionRules": [
+          "accept only exact raw gid 16; never translate to an integration ID"
+        ],
+        "outputs": [
+          "all identity-bearing output uses 16"
+        ],
+        "terminationRules": [
+          "wrong gid fails before claim, generation, balance or History mutation"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/16-Jungle-Fruit/history-1to1.jsonl"
+        ],
+        "assertions": [
+          "1126/1126 rawGameId and bid prefixes are 16; every non-16 gid is rejected"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HTTP-CODEC-ENDPOINTS",
+      "category": "PROTOCOL",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-PREFLIGHT",
+        "E-STEPS-2852",
+        "E-FIELD-MATRIX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "form-urlencoded UTF-8 request"
+        ],
+        "stateFields": [
+          "bet_level",
+          "bet_size",
+          "gid/game-id",
+          "t/web-token",
+          "compatibility aliases bl/bs"
+        ],
+        "transitionRules": [
+          "decode form once and route config/spin/log-list/log-view without implicit Spin"
+        ],
+        "outputs": [
+          "plain JSON code/data/info envelope and captured field names/types"
+        ],
+        "terminationRules": [
+          "malformed request fails before state mutation"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/16-Jungle-Fruit/original-http-preflight.json",
+          "captures/16-Jungle-Fruit/original-http-spin-index.jsonl"
+        ],
+        "assertions": [
+          "paths, form fields and live response schema match authorized evidence"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-CONFIG-BET-PAYTABLE",
+      "category": "CONFIG",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-PREFLIGHT",
+        "E-CANONICAL"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "raw gid 16 config request"
+        ],
+        "stateFields": [
+          "bet_level_list",
+          "bet_size_list",
+          "symbol_pay_list",
+          "currency"
+        ],
+        "transitionRules": [
+          "return captured Config; decimal award uses paytable, bs and bl"
+        ],
+        "outputs": [
+          "levels 1..10, sizes 0.05/0.5/2.5 and exact paytable"
+        ],
+        "terminationRules": [
+          "Config is read-only and never creates a Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/16-Jungle-Fruit/original-http-preflight.json"
+        ],
+        "assertions": [
+          "Config arrays/currency/paytable deep-equal the capture and minimum bl=1 bs=0.05 gives bet_amount=1"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-COUNT-ANYWHERE-WIN",
+      "category": "GAME_RULE",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-PREFLIGHT",
+        "E-STEPS-2852",
+        "E-CANONICAL"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "one 36-symbol 6x6 board and valid bet"
+        ],
+        "stateFields": [
+          "column-major board",
+          "symbol counts",
+          "wire positions column*10+row"
+        ],
+        "transitionRules": [
+          "every paying symbol count >=8 wins; enumerate all its positions; award by Config paytable using decimal arithmetic"
+        ],
+        "outputs": [
+          "win_symbol_key_list",
+          "win_match_key_list",
+          "win_amount"
+        ],
+        "terminationRules": [
+          "counts below 8 and Scat/X never receive symbol pay"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "fixtures/16-Jungle-Fruit/oracle-summary.json",
+          "captures/16-Jungle-Fruit/original-http-spin-index.jsonl"
+        ],
+        "assertions": [
+          "recompute all 2852 Steps with zero winner, position or win_amount mismatch"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-TUMBLE-X-SETTLEMENT",
+      "category": "ROUND_STATE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-STEPS-2852",
+        "E-CANONICAL"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "a Step has one or more count-anywhere wins"
+        ],
+        "stateFields": [
+          "spin_status",
+          "win_amount",
+          "round_win_amount",
+          "win_x_key_list",
+          "ordered per-column survivors"
+        ],
+        "transitionRules": [
+          "remove winners, preserve survivors at column bottom, prepend replacements; status 0 accumulates win; following status 1 multiplies accumulator by sum X or x1"
+        ],
+        "outputs": [
+          "ordered continuation and terminal Deliveries from one Round"
+        ],
+        "terminationRules": [
+          "segment ends only on spin_status=1"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/16-Jungle-Fruit/original-http-spin-index.jsonl",
+          "fixtures/16-Jungle-Fruit/oracle-summary.json"
+        ],
+        "assertions": [
+          "1224 adjacent tumbles preserve survivors; 371 multiplied terminals match exactly"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "original-http-spin-index.jsonl same roundOrdinal consecutive stepOrdinal pairs"
+        ]
+      }
+    },
+    {
+      "id": "B-ORDINARY-INDEPENDENT-LOSS",
+      "category": "RESULT",
+      "status": "CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-STEPS-2852",
+        "E-ROUND-1126",
+        "E-FINALIZATION",
+        "E-CANONICAL"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid request with no active Round"
+        ],
+        "stateFields": [
+          "every paying symbol count <8",
+          "Scat count <3",
+          "no continuation"
+        ],
+        "transitionRules": [
+          "claim one pre-generated ASCII complete-Round LOSS member with LPOP and recompute it through the unique GameRuleCore"
+        ],
+        "outputs": [
+          "one ordinary spin_status=1 LOSS Delivery"
+        ],
+        "terminationRules": [
+          "failure to prove all predicates discards candidate without mutation"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/16-Jungle-Fruit/round-index.jsonl",
+          "captures/16-Jungle-Fruit/original-http-spin-index.jsonl"
+        ],
+        "assertions": [
+          "926 authorized LOSS complete Rounds have payout zero; generated members independently verify zero and single-Step terminal; runtime generation is disabled"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-MARY-SMALL-GAME",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-STEPS-2852",
+        "E-ROUND-1126",
+        "E-FINALIZATION",
+        "E-CANONICAL"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "paid winning Delivery enters complete pre-generated Mary Round"
+        ],
+        "stateFields": [
+          "small_game_type 0 then 1",
+          "continuing accumulator",
+          "X list",
+          "deliveryIndex"
+        ],
+        "transitionRules": [
+          "only small_game_type==1 classifies Mary; preserve all Steps and settle accumulated award at terminal X multiplier"
+        ],
+        "outputs": [
+          "all Mary Deliveries from one member in captured field schema"
+        ],
+        "terminationRules": [
+          "final Mary Step has spin_status=1; only then finalize History and clear active Round"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/16-Jungle-Fruit/original-http-spin-index.jsonl",
+          "captures/16-Jungle-Fruit/round-index.jsonl"
+        ],
+        "assertions": [
+          "164 complete Rounds satisfy the exact predicate; classification and terminal payout independently recalculate"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "roundOrdinal 6 scenes 6..7",
+          "all 164 same-round adjacent Step sequences"
+        ]
+      }
+    },
+    {
+      "id": "B-SCATTER-FREE-ROUNDS",
+      "category": "SPECIAL_MODE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-STEPS-2852",
+        "E-ROUND-1126",
+        "E-FINALIZATION",
+        "E-CANONICAL"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "base board has at least 3 Scat and a complete Free Round was pre-generated"
+        ],
+        "stateFields": [
+          "small_game_type=2",
+          "free_spin_num",
+          "now_free_spin_count",
+          "deliveryIndex",
+          "per-spin settlement accumulator"
+        ],
+        "transitionRules": [
+          "3/4/5 Scat awards 10/12/14; each Free terminal with 2 Scat adds 5; keep free ordinal fixed through its tumbles"
+        ],
+        "outputs": [
+          "base trigger and every Free/tumble Delivery from one member"
+        ],
+        "terminationRules": [
+          "final Step has spin_status=1 and now_free_spin_count==free_spin_num"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/16-Jungle-Fruit/original-http-spin-index.jsonl",
+          "captures/16-Jungle-Fruit/history-1to1.jsonl"
+        ],
+        "assertions": [
+          "36 complete Rounds satisfy Free predicate; 26/26 retriggers are +5 on 2 Scat; base then free order is exact"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "roundOrdinal 95 scenes 227..269 includes 10 to 15 to 20 to 25 retriggers",
+          "all 36 same-round adjacent Step sequences"
+        ]
+      }
+    },
+    {
+      "id": "B-COMPLETE-ROUND-PAYOUT",
+      "category": "ROUND",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-STEPS-2852",
+        "E-ROUND-1126",
+        "E-HISTORY-1126",
+        "E-FINALIZATION",
+        "E-CANONICAL"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "one immutable complete Round"
+        ],
+        "stateFields": [
+          "roundKey",
+          "deliveryIndex",
+          "all Step spin_status/round_win_amount",
+          "decimal payout"
+        ],
+        "transitionRules": [
+          "payout equals sum of round_win_amount for every spin_status==1 Step; never use only the last Step"
+        ],
+        "outputs": [
+          "one final payout, one History win_amount and one terminal balance"
+        ],
+        "terminationRules": [
+          "complete only after final ordered Delivery"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "fixtures/16-Jungle-Fruit/oracle-summary.json",
+          "captures/16-Jungle-Fruit/history-1to1.jsonl"
+        ],
+        "assertions": [
+          "1126 payouts agree to integer cents; History win_amount agrees; four known binary-float tails normalize to the same cents"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "original-http-spin-index.jsonl grouped by roundOrdinal and ordered by stepOrdinal"
+        ]
+      }
+    },
+    {
+      "id": "B-BALANCE-LEDGER",
+      "category": "BALANCE",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-STEPS-2852",
+        "E-HISTORY-1126"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "balance covers the paid bet and request is not an idempotent replay"
+        ],
+        "stateFields": [
+          "pre-bet balance",
+          "bet_amount",
+          "post-bet pre-payout balance_after",
+          "Round payout"
+        ],
+        "transitionRules": [
+          "debit once at paid start; credit each terminal segment once; sum of segment credits equals complete Round payout"
+        ],
+        "outputs": [
+          "two-decimal player.balance and History balance_after/win_amount"
+        ],
+        "terminationRules": [
+          "replays and History calls never repeat debit or segment credit"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/16-Jungle-Fruit/history-1to1.jsonl"
+        ],
+        "assertions": [
+          "1126/1126 balance_after + row.win_amount equals terminal balance"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "history-1to1.jsonl paired row/detail and corresponding Round terminal"
+        ]
+      }
+    },
+    {
+      "id": "B-HISTORY-LIST-DETAIL-RETURN",
+      "category": "HISTORY",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-HISTORY-1126",
+        "E-HISTORY-PAGES",
+        "E-FIELD-MATRIX"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "one or more finalized complete Rounds"
+        ],
+        "stateFields": [
+          "exact string tis",
+          "bid=16-{tis}",
+          "base_spin_list",
+          "free_spin_list",
+          "page state"
+        ],
+        "transitionRules": [
+          "list newest finalized rows; detail lookup uses tis string; playback concatenates base then free; return performs no Spin"
+        ],
+        "outputs": [
+          "History list, detail and unchanged active game/session state",
+          "History monetary fields are strings, win_match_key_list holds symbol_key/win_match_key/win_amount objects; Spin uses numeric amounts and arrays."
+        ],
+        "terminationRules": [
+          "missing tis fails read-only; numeric transfer_id is never a lookup key"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "captures/16-Jungle-Fruit/history-1to1.jsonl",
+          "captures/16-Jungle-Fruit/history-list-pages.json"
+        ],
+        "assertions": [
+          "1126 exact unique tis values map 1:1; 113 pages use 10 rows except final 6; ordered detail Steps match source; list/detail/return never mutate balance or member claim"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "history-1to1.jsonl row/detail pairs",
+          "history-list-pages.json adjacent pages"
+        ]
+      }
+    },
+    {
+      "id": "B-REDIS-ATOMIC-ROUND-CLAIM",
+      "category": "REDIS",
+      "status": "CONFIRMED",
+      "multiStep": true,
+      "evidenceRefs": [
+        "E-ROUND-1126",
+        "E-LOCAL-REDIS"
+      ],
+      "implementationContract": {
+        "preconditions": [
+          "pre-generated LOSS, MARY or FREE; no fabricated exclusive ordinary WIN"
+        ],
+        "stateFields": [
+          "roundKey",
+          "sessionId",
+          "member",
+          "deliveryIndex",
+          "idempotency response"
+        ],
+        "transitionRules": [
+          "choose win/loss, then an existing exact integer multiplier; LPOP one ASCII member; verify key mode/multiplier; deliver all remaining Steps from same active Round"
+        ],
+        "outputs": [
+          "exactly one next Delivery or idempotent replay"
+        ],
+        "terminationRules": [
+          "empty selected outcome fails before debit; corrupt member fails; no second claim while active; no fallback"
+        ]
+      },
+      "verificationContract": {
+        "independentOracleRefs": [
+          "redis-pack/16-Jungle-Fruit/redis-contract.json",
+          "fixtures/16-Jungle-Fruit/oracle-summary.json"
+        ],
+        "assertions": [
+          "one LPOP returns one complete Round; all modes are Redis-only; empty Redis fails before debit; one History row and payout occur at completion"
+        ],
+        "usesImplementationGeneratedExpected": false,
+        "adjacentStepEvidence": [
+          "complete member ordered Step sequence"
+        ]
+      }
+    },
+    {
+      "id": "B-ORIGIN-PROBABILITY",
+      "category": "PROBABILITY",
+      "status": "UNKNOWN",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FINALIZATION"
+      ],
+      "reason": "1126 observed outcomes do not establish origin symbol or mode weights"
+    },
+    {
+      "id": "B-ORIGIN-REDIS-CONSUMER",
+      "category": "REDIS",
+      "status": "UNKNOWN",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-FIELD-MATRIX",
+        "E-LOCAL-REDIS"
+      ],
+      "reason": "origin keys, member encoding, TTL and consumer partitioning were not captured; local contract makes no compatibility claim"
+    },
+    {
+      "id": "B-SUPPORTED-LANGUAGES",
+      "category": "RESOURCE",
+      "status": "CONFIRMED_ARCHIVED_SET",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-LANGUAGES"
+      ],
+      "implementationContract": {
+        "outputs": [
+          "bn",
+          "en",
+          "es",
+          "fr",
+          "id",
+          "ko",
+          "pt-br",
+          "th",
+          "tr",
+          "vi"
+        ]
+      },
+      "verificationContract": {
+        "assertions": [
+          "all ten archived bundles load the original Cocos canvas without failed resource requests"
+        ],
+        "usesImplementationGeneratedExpected": false
+      }
+    },
+    {
+      "id": "B-HIGHER-BET-COMBINATIONS",
+      "category": "BET",
+      "status": "PARTIALLY_CONFIRMED",
+      "multiStep": false,
+      "evidenceRefs": [
+        "E-PREFLIGHT",
+        "E-FIELD-MATRIX",
+        "E-NEW-SPIN-ARCHIVE"
+      ],
+      "reason": "New archive confirms bet_level=10 bet_size=0.05; full browser bet matrix pending",
+      "runtimeValidation": "PASS all 30 Config combinations in LOSS, MARY and FREE over actual HTTP; additional 60 winning/free complete Rounds and 735 Steps recomputed against archived raw Config. Exhaustive browser matrix not claimed."
+    }
+  ],
+  "unresolvedBehaviors": [
+    {
+      "id": "B-ORIGIN-PROBABILITY",
+      "reason": "origin probability/reel-weight source absent",
+      "evidenceRefs": [
+        "E-FINALIZATION"
+      ]
+    },
+    {
+      "id": "B-ORIGIN-REDIS-CONSUMER",
+      "reason": "only a separate local replica Redis contract is defined",
+      "evidenceRefs": [
+        "E-LOCAL-REDIS"
+      ]
+    },
+    {
+      "id": "B-HIGHER-BET-COMBINATIONS",
+      "reason": "New archive confirms bet_level=10 bet_size=0.05; full browser bet matrix pending",
+      "evidenceRefs": [
+        "E-PREFLIGHT"
+      ]
+    }
+  ],
+  "status": "READY_FOR_ACCEPTANCE",
+  "latestCombinedObservedCoverage": {
+    "ordinaryLoss": 2111,
+    "ordinaryNonFreeWinAndMary": 241,
+    "free": 55,
+    "total": 2407,
+    "rejectedCandidateSequences": 104,
+    "deduplicated": 39,
+    "report": "reports/16-Jungle-Fruit/original-round-audit.json"
+  },
+  "latestRuntimeValidation": [
+    "reports/16-Jungle-Fruit/api-empirical-validation.json",
+    "reports/16-Jungle-Fruit/api-failure-empirical-validation.json",
+    "reports/16-Jungle-Fruit/controller-empirical-v3-validation.json"
+  ],
+  "acceptanceReport": "reports/16-Jungle-Fruit/current-status.json"
+}

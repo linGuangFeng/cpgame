@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "draft": true,
+  "gameId": 42,
+  "gameName": "Lucky Dragon",
+  "rulesVersion": "UNKNOWN_WAITING_ORIGINAL_EVIDENCE",
+  "rulesHash": "UNKNOWN_WAITING_ORIGINAL_EVIDENCE",
+  "winModel": "UNKNOWN_WAITING_ORIGINAL_EVIDENCE",
+  "boardModel": {
+    "status": "UNKNOWN_WAITING_ORIGINAL_EVIDENCE"
+  },
+  "roundModel": {
+    "status": "UNKNOWN_WAITING_ORIGINAL_EVIDENCE"
+  },
+  "specialModes": [],
+  "supportedLanguages": {
+    "codes": [],
+    "status": "WAITING_CAPTURE"
+  },
+  "betModel": {
+    "minimumBet": {
+      "amount": "0.50",
+      "currency": "BRL",
+      "betLevel": 1,
+      "status": "CONFIRMED_MANUAL_BROWSER"
+    }
+  },
+  "runtimeIndependentLoss": {
+    "supported": false,
+    "status": "UNKNOWN_WAITING_RULE_AND_RUNTIME_EVIDENCE"
+  },
+  "redisContract": {
+    "status": "UNKNOWN_WAITING_CONSUMER_EVIDENCE"
+  },
+  "codecContract": {
+    "status": "UNKNOWN_WAITING_PROTOCOL_EVIDENCE"
+  },
+  "symbolWeights": {
+    "status": "UNKNOWN_WAITING_RULE_EVIDENCE",
+    "values": {}
+  },
+  "evidence": [
+    "resources/42-Lucky-Dragon/source-catalog-evidence.json",
+    "captures/42-Lucky-Dragon/capture-profile.json",
+    "protocol/42-Lucky-Dragon/browser-milestone-evidence.json"
+  ],
+  "handoffContract": {
+    "file": "protocol-handoff.draft.json",
+    "rulesHash": "UNKNOWN_WAITING_ORIGINAL_EVIDENCE",
+    "behaviorIds": [
+      "B-IDENTITY-LAUNCH",
+      "B-HISTORY-CLICKPATH",
+      "B-HISTORY-SESSION-AGGREGATE",
+      "B-HISTORY-WIN-OBSERVATION"
+    ]
+  },
+  "note": "DRAFT_ONLY：不是后续实现能力清单；真实规则、抓包和前端判定代码齐备后才生成 game-capabilities.json。"
+}

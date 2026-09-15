@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "workflowTemplateVersion": 15,
+  "rawGameId": 42,
+  "directoryName": "42-Lucky-Dragon",
+  "checkpointAt": "2026-08-31T12:13:08+08:00",
+  "status": "CODEX_RESTART_CHECKPOINT_READY_HISTORY_ONLY_RECOVERY_REQUIRED",
+  "liveState": {
+    "writerStarted": false,
+    "writerProcessAlive": false,
+    "writerLockPresent": false,
+    "unknownInFlight": false,
+    "paidOutcomeUnknown": false,
+    "browserHandlesReleasedByJsReset": true,
+    "externalChromeWindowsOrTabsClosed": false,
+    "networkCallsAllowedBeforeRestart": false
+  },
+  "committedEvidence": {
+    "formalOriginalAuthorizedHttpPaidStarts": 149,
+    "completedRounds": 149,
+    "historyMatchedOneToOne": 149,
+    "spinIndexRows": 149,
+    "roundIndexRows": 149,
+    "historyIndexRows": 149,
+    "currentCommittedBalanceBrl": 61755.15,
+    "currentGrossBetBrl": 74.5
+  },
+  "durablePending": {
+    "roundOrdinal": 150,
+    "intentId": "gid42-batch-150-1788149508492",
+    "status": "PAID_RESPONSE_DURABLE_HISTORY_PENDING",
+    "responseHttpStatus": 200,
+    "terminalBalanceBrl": 61754.65,
+    "paidBetBrl": 0.5,
+    "paidRequestRetryAllowed": false,
+    "requiredNextAction": "AFTER_CODEX_RESTART_RUN_EXACTLY_ONE_HISTORY_ONLY_RECOVERY_FOR_ROUND_150; DO_NOT_SEND_OR_RETRY SPIN"
+  },
+  "invariants": {
+    "formalAtLeastOne": true,
+    "committedHistoryOneToOne": true,
+    "globalPaidHistoryOneToOne": false,
+    "globalMismatchReason": "ROUND_150_PAID_RESPONSE_IS_DURABLE_BUT HISTORY_LIST_DETAIL_NOT_YET_CAPTURED",
+    "credentialMaterialPersisted": false,
+    "tokenOutput": false
+  },
+  "authorization": {
+    "minimumBetBrl": 0.5,
+    "maximumPaidStarts": 5000,
+    "maximumGrossBetBrl": 2500,
+    "received": true
+  },
+  "restartGate": {
+    "resumeFreshPaidCollector": false,
+    "historyOnlyRecoveryRequiredFirst": true,
+    "newPaidStartForbiddenUntilRound150CommittedOneToOne": true,
+    "waitForRootWakeup": true
+  }
+}

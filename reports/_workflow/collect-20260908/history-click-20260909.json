@@ -1,0 +1,45 @@
+[
+  {
+    "id": "2110-Bee-Workshop",
+    "names": [
+      "btn_Sure",
+      "btn_clickFlower",
+      "btn_clickGress",
+      "btn_add",
+      "btn_minus",
+      "btn_start",
+      "btn_auto",
+      "btn_turbo",
+      "btn_menu"
+    ],
+    "tap": {
+      "error": "NOT_FOUND",
+      "rect": {
+        "w": 1920,
+        "h": 953
+      }
+    },
+    "captured": null,
+    "at": "2026-09-09T02:28:20.948Z"
+  },
+  {
+    "id": "1780-Glacier-Treasure",
+    "names": [
+      "btn_history1",
+      "btn_buy_light",
+      "StartBtn_quan_71"
+    ],
+    "tap": {
+      "name": "btn_history1",
+      "x": 857.0014992503748,
+      "y": 622.4822308845577,
+      "w": 1416,
+      "h": 808,
+      "found": [
+        "btn_history1"
+      ]
+    },
+    "captured": null,
+    "at": "2026-09-09T02:28:33.145Z"
+  }
+]

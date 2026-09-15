@@ -1,0 +1,1202 @@
+{
+  "trigger": {
+    "fsn10Deliveries": 768,
+    "fsn10OnPaidNfsc0": 35,
+    "fsn10OnFree": 733,
+    "atStep": {
+      "0": 4,
+      "1": 12,
+      "2": 6,
+      "3": 4,
+      "4": 8,
+      "5": 1
+    },
+    "reelCount": {
+      "3": 18,
+      "4": 17
+    },
+    "blockCount": {
+      "4": 34,
+      "5": 1
+    },
+    "cellCount": {
+      "4": 20,
+      "5": 8,
+      "6": 5,
+      "7": 1,
+      "9": 1
+    },
+    "sflLen": {
+      "0": 14,
+      "1": 15,
+      "2": 5,
+      "4": 1
+    },
+    "ss": {
+      "1": 35
+    },
+    "prevSs": {
+      "0": 31,
+      "start": 4
+    },
+    "examples": [
+      {
+        "ord": 69,
+        "idx": 1,
+        "ss": 1,
+        "nfsc": 0,
+        "rpx": 0,
+        "wa": 0,
+        "sfl": [],
+        "gfl": [],
+        "reels": 4,
+        "blocks": 4,
+        "cells": 4,
+        "scat": [
+          {
+            "reel": 0,
+            "rowStart": 1,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 1
+          },
+          {
+            "reel": 1,
+            "rowStart": 5,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 15
+          },
+          {
+            "reel": 2,
+            "rowStart": 1,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 21
+          },
+          {
+            "reel": 5,
+            "rowStart": 3,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 53
+          }
+        ]
+      },
+      {
+        "ord": 91,
+        "idx": 0,
+        "ss": 1,
+        "nfsc": 0,
+        "rpx": 0,
+        "wa": 0,
+        "sfl": [
+          12,
+          22,
+          41,
+          42
+        ],
+        "gfl": [],
+        "reels": 4,
+        "blocks": 4,
+        "cells": 5,
+        "scat": [
+          {
+            "reel": 0,
+            "rowStart": 3,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 3
+          },
+          {
+            "reel": 1,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 10
+          },
+          {
+            "reel": 2,
+            "rowStart": 1,
+            "height": 2,
+            "symbol": "Scat",
+            "pos": 21
+          },
+          {
+            "reel": 3,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 30
+          }
+        ]
+      },
+      {
+        "ord": 119,
+        "idx": 4,
+        "ss": 1,
+        "nfsc": 0,
+        "rpx": 0,
+        "wa": 0,
+        "sfl": [
+          23,
+          42
+        ],
+        "gfl": [
+          31
+        ],
+        "reels": 3,
+        "blocks": 4,
+        "cells": 4,
+        "scat": [
+          {
+            "reel": 0,
+            "rowStart": 2,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 2
+          },
+          {
+            "reel": 1,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 10
+          },
+          {
+            "reel": 1,
+            "rowStart": 1,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 11
+          },
+          {
+            "reel": 2,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 20
+          }
+        ]
+      },
+      {
+        "ord": 126,
+        "idx": 1,
+        "ss": 1,
+        "nfsc": 0,
+        "rpx": 2,
+        "wa": 0,
+        "sfl": [],
+        "gfl": [],
+        "reels": 4,
+        "blocks": 4,
+        "cells": 5,
+        "scat": [
+          {
+            "reel": 0,
+            "rowStart": 3,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 3
+          },
+          {
+            "reel": 1,
+            "rowStart": 4,
+            "height": 2,
+            "symbol": "Scat",
+            "pos": 14
+          },
+          {
+            "reel": 2,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 20
+          },
+          {
+            "reel": 4,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 40
+          }
+        ]
+      },
+      {
+        "ord": 153,
+        "idx": 4,
+        "ss": 1,
+        "nfsc": 0,
+        "rpx": 0,
+        "wa": 0,
+        "sfl": [],
+        "gfl": [],
+        "reels": 4,
+        "blocks": 4,
+        "cells": 4,
+        "scat": [
+          {
+            "reel": 2,
+            "rowStart": 1,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 21
+          },
+          {
+            "reel": 3,
+            "rowStart": 5,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 35
+          },
+          {
+            "reel": 4,
+            "rowStart": 5,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 45
+          },
+          {
+            "reel": 5,
+            "rowStart": 2,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 52
+          }
+        ]
+      },
+      {
+        "ord": 241,
+        "idx": 4,
+        "ss": 1,
+        "nfsc": 0,
+        "rpx": 0,
+        "wa": 0,
+        "sfl": [
+          13,
+          42
+        ],
+        "gfl": [
+          41
+        ],
+        "reels": 3,
+        "blocks": 4,
+        "cells": 5,
+        "scat": [
+          {
+            "reel": 0,
+            "rowStart": 2,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 2
+          },
+          {
+            "reel": 0,
+            "rowStart": 3,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 3
+          },
+          {
+            "reel": 1,
+            "rowStart": 3,
+            "height": 2,
+            "symbol": "Scat",
+            "pos": 13
+          },
+          {
+            "reel": 3,
+            "rowStart": 3,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 33
+          }
+        ]
+      },
+      {
+        "ord": 251,
+        "idx": 2,
+        "ss": 1,
+        "nfsc": 0,
+        "rpx": 2,
+        "wa": 0,
+        "sfl": [
+          13,
+          41
+        ],
+        "gfl": [],
+        "reels": 3,
+        "blocks": 4,
+        "cells": 4,
+        "scat": [
+          {
+            "reel": 1,
+            "rowStart": 2,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 12
+          },
+          {
+            "reel": 4,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 40
+          },
+          {
+            "reel": 4,
+            "rowStart": 4,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 44
+          },
+          {
+            "reel": 5,
+            "rowStart": 4,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 54
+          }
+        ]
+      },
+      {
+        "ord": 261,
+        "idx": 1,
+        "ss": 1,
+        "nfsc": 0,
+        "rpx": 0,
+        "wa": 0,
+        "sfl": [],
+        "gfl": [],
+        "reels": 3,
+        "blocks": 4,
+        "cells": 4,
+        "scat": [
+          {
+            "reel": 0,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 0
+          },
+          {
+            "reel": 0,
+            "rowStart": 4,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 4
+          },
+          {
+            "reel": 2,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 20
+          },
+          {
+            "reel": 4,
+            "rowStart": 1,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 41
+          }
+        ]
+      }
+    ],
+    "threeReelNoTriggerOnTerminalPaid": 9,
+    "threeReelNoTriggerExamples": [
+      {
+        "ord": 89,
+        "idx": 3,
+        "reels": 3,
+        "blocks": 3,
+        "sfl": [
+          42
+        ],
+        "scat": [
+          {
+            "reel": 0,
+            "rowStart": 4,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 4
+          },
+          {
+            "reel": 1,
+            "rowStart": 2,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 12
+          },
+          {
+            "reel": 5,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 50
+          }
+        ]
+      },
+      {
+        "ord": 121,
+        "idx": 6,
+        "reels": 3,
+        "blocks": 3,
+        "sfl": [],
+        "scat": [
+          {
+            "reel": 0,
+            "rowStart": 3,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 3
+          },
+          {
+            "reel": 1,
+            "rowStart": 4,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 14
+          },
+          {
+            "reel": 2,
+            "rowStart": 2,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 22
+          }
+        ]
+      },
+      {
+        "ord": 159,
+        "idx": 11,
+        "reels": 3,
+        "blocks": 3,
+        "sfl": [],
+        "scat": [
+          {
+            "reel": 0,
+            "rowStart": 1,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 1
+          },
+          {
+            "reel": 1,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 10
+          },
+          {
+            "reel": 3,
+            "rowStart": 0,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 30
+          }
+        ]
+      },
+      {
+        "ord": 231,
+        "idx": 8,
+        "reels": 3,
+        "blocks": 3,
+        "sfl": [],
+        "scat": [
+          {
+            "reel": 0,
+            "rowStart": 3,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 3
+          },
+          {
+            "reel": 2,
+            "rowStart": 5,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 25
+          },
+          {
+            "reel": 3,
+            "rowStart": 1,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 31
+          }
+        ]
+      },
+      {
+        "ord": 626,
+        "idx": 10,
+        "reels": 3,
+        "blocks": 3,
+        "sfl": [
+          44
+        ],
+        "scat": [
+          {
+            "reel": 2,
+            "rowStart": 3,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 23
+          },
+          {
+            "reel": 4,
+            "rowStart": 1,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 41
+          },
+          {
+            "reel": 5,
+            "rowStart": 1,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 51
+          }
+        ]
+      },
+      {
+        "ord": 829,
+        "idx": 8,
+        "reels": 3,
+        "blocks": 3,
+        "sfl": [],
+        "scat": [
+          {
+            "reel": 1,
+            "rowStart": 5,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 15
+          },
+          {
+            "reel": 2,
+            "rowStart": 2,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 22
+          },
+          {
+            "reel": 3,
+            "rowStart": 4,
+            "height": 1,
+            "symbol": "Scat",
+            "pos": 34
+          }
+        ]
+      }
+    ]
+  },
+  "firstTrigger": {
+    "n": 35,
+    "idx": {
+      "0": 4,
+      "1": 12,
+      "2": 6,
+      "3": 4,
+      "4": 8,
+      "5": 1
+    },
+    "reels": {
+      "3": 18,
+      "4": 17
+    },
+    "afterCascade": 31,
+    "onFirstBoard": 4
+  },
+  "panVsRpx": {
+    "firstPaidWin": {
+      "rpx0_panBlocks0_panCells0": 94,
+      "rpx2_panBlocks1_panCells1": 66,
+      "rpx4_panBlocks2_panCells2": 15,
+      "rpx2_panBlocks1_panCells2": 3,
+      "rpx6_panBlocks3_panCells3": 4,
+      "rpx6_panBlocks3_panCells4": 2,
+      "rpx6_panBlocks3_panCells6": 2,
+      "rpx2_panBlocks1_panCells3": 2,
+      "rpx4_panBlocks2_panCells3": 5,
+      "rpx4_panBlocks2_panCells4": 1,
+      "rpx2_panBlocks1_panCells4": 1,
+      "rpx8_panBlocks4_panCells5": 1
+    },
+    "rpxIncWhenPanOnPrevWin": {
+      "yes": 126,
+      "no": 66
+    },
+    "rpxIncNoPan": 66,
+    "rpxStayWithPan": 563
+  },
+  "firstPaidWinRpx": {
+    "0": 94,
+    "2": 72,
+    "4": 21,
+    "6": 8,
+    "8": 1
+  },
+  "gflVsStacks": {
+    "nonempty": 479,
+    "equalsStackPos": 63,
+    "equalsStackAllCells": 0,
+    "equalsWmklFlat": 0,
+    "mismatchEx": [
+      {
+        "round": 19,
+        "gfl": [
+          14,
+          22
+        ],
+        "stackPos": [
+          14,
+          22,
+          42
+        ],
+        "wmklFlat": [
+          2,
+          11,
+          14,
+          23
+        ],
+        "rskl": [
+          "1H4",
+          "1H2",
+          "1T",
+          "1H1",
+          "1J",
+          "1A",
+          "1T",
+          "1H5",
+          "1A",
+          "2T",
+          "1H1",
+          "1H1"
+        ]
+      },
+      {
+        "round": 19,
+        "gfl": [
+          23
+        ],
+        "stackPos": [
+          14,
+          23,
+          42
+        ],
+        "wmklFlat": [
+          0,
+          2,
+          3,
+          10,
+          13,
+          14,
+          14,
+          14,
+          20,
+          21,
+          22,
+          23,
+          24,
+          31,
+          32
+        ],
+        "rskl": [
+          "1A",
+          "1H4",
+          "1H2",
+          "1H1",
+          "1J",
+          "1A",
+          "1Pan",
+          "1H5",
+          "1A",
+          "2Wild",
+          "1H1",
+          "1A"
+        ]
+      },
+      {
+        "round": 21,
+        "gfl": [
+          21
+        ],
+        "stackPos": [
+          21,
+          41
+        ],
+        "wmklFlat": [
+          2,
+          3,
+          4,
+          10,
+          12,
+          15,
+          20,
+          21,
+          30,
+          40,
+          50,
+          51
+        ],
+        "rskl": [
+          "1Q",
+          "1J",
+          "1H4",
+          "1H1",
+          "1H4",
+          "1H4",
+          "1H2",
+          "1H1",
+          "1H3",
+          "1H3",
+          "1H4",
+          "1H1"
+        ]
+      },
+      {
+        "round": 26,
+        "gfl": [
+          43
+        ],
+        "stackPos": [
+          33,
+          43
+        ],
+        "wmklFlat": [
+          2,
+          10,
+          12,
+          22,
+          30,
+          33,
+          40,
+          42,
+          51
+        ],
+        "rskl": [
+          "1T",
+          "1A",
+          "1H3",
+          "1H2",
+          "1T",
+          "1H3",
+          "1H4",
+          "1H3",
+          "1H1",
+          "1Pan",
+          "1K",
+          "1Q"
+        ]
+      },
+      {
+        "round": 29,
+        "gfl": [
+          32
+        ],
+        "stackPos": [
+          12,
+          14,
+          32,
+          42
+        ],
+        "wmklFlat": [
+          4,
+          10,
+          11,
+          12,
+          21,
+          30,
+          42,
+          50,
+          52
+        ],
+        "rskl": [
+          "1H1",
+          "1K",
+          "1A",
+          "1J",
+          "1H2",
+          "1H2",
+          "1H2",
+          "2H2",
+          "2H5",
+          "1H1",
+          "1H2",
+          "1H1"
+        ]
+      }
+    ]
+  },
+  "sflVs": {
+    "n": 322,
+    "eqWild": 0,
+    "eqPan": 0,
+    "eqStack": 8,
+    "eqScat": 0,
+    "other": 314,
+    "ex": [
+      {
+        "round": 2,
+        "sfl": [
+          22
+        ],
+        "wild": [
+          50
+        ],
+        "pan": [],
+        "stack": [
+          11,
+          21,
+          23,
+          31,
+          42
+        ],
+        "scat": [],
+        "rskl": [
+          "1H4",
+          "1H3",
+          "1H4",
+          "1T",
+          "1H1",
+          "1Q",
+          "4J",
+          "1H5",
+          "1T",
+          "2H1",
+          "2H3",
+          "1H2",
+          "1H2",
+          "3H2",
+          "1A",
+          "1Q",
+          "1A",
+          "1T",
+          "3T",
+          "1J",
+          "1Wild",
+          "1J",
+          "1H1",
+          "1T",
+          "1H4"
+        ]
+      },
+      {
+        "round": 3,
+        "sfl": [
+          11,
+          12
+        ],
+        "wild": [],
+        "pan": [],
+        "stack": [
+          11,
+          13,
+          22,
+          31,
+          41
+        ],
+        "scat": [
+          2
+        ],
+        "rskl": [
+          "1A",
+          "1Q",
+          "1Scat",
+          "1A",
+          "1J",
+          "1K",
+          "2H2",
+          "2K",
+          "1H3",
+          "1H5",
+          "1J",
+          "3H2",
+          "1H2",
+          "1H2",
+          "3K",
+          "1H3",
+          "1T",
+          "1H5",
+          "4T",
+          "1H4",
+          "1H3",
+          "1J",
+          "1H4",
+          "1H3",
+          "1A"
+        ]
+      },
+      {
+        "round": 5,
+        "sfl": [
+          11
+        ],
+        "wild": [],
+        "pan": [],
+        "stack": [
+          11,
+          23,
+          31
+        ],
+        "scat": [],
+        "rskl": [
+          "1J",
+          "1H1",
+          "1H1",
+          "1H3",
+          "1H4",
+          "1H5",
+          "4A",
+          "1T",
+          "1H2",
+          "1H3",
+          "1H1",
+          "2H2",
+          "1H5",
+          "1H3",
+          "4H5",
+          "1H4",
+          "1H4",
+          "1H1",
+          "1H3",
+          "1H3",
+          "1H2",
+          "1K",
+          "1Q",
+          "1H1",
+          "1K",
+          "1H1",
+          "1H4"
+        ]
+      },
+      {
+        "round": 6,
+        "sfl": [
+          31,
+          32,
+          42
+        ],
+        "wild": [],
+        "pan": [],
+        "stack": [
+          11,
+          13,
+          22,
+          31,
+          33,
+          41,
+          43
+        ],
+        "scat": [
+          35
+        ],
+        "rskl": [
+          "1H2",
+          "1H1",
+          "1T",
+          "1H5",
+          "1H5",
+          "1H2",
+          "2Q",
+          "3H4",
+          "1K",
+          "1T",
+          "3J",
+          "1H3",
+          "1H1",
+          "2K",
+          "2K",
+          "1Scat",
+          "1T",
+          "2T",
+          "3A",
+          "1H3",
+          "1H2",
+          "1T",
+          "1H1",
+          "1T"
+        ]
+      },
+      {
+        "round": 7,
+        "sfl": [
+          31,
+          41,
+          42
+        ],
+        "wild": [],
+        "pan": [
+          21,
+          22,
+          23
+        ],
+        "stack": [
+          11,
+          21,
+          31,
+          41,
+          43
+        ],
+        "scat": [],
+        "rskl": [
+          "1J",
+          "1T",
+          "1A",
+          "1H5",
+          "1H3",
+          "1H1",
+          "3K",
+          "1H3",
+          "1H2",
+          "1A",
+          "3Pan",
+          "1Q",
+          "1Q",
+          "1H3",
+          "4H1",
+          "1H3",
+          "1K",
+          "2H5",
+          "2H2",
+          "1H3",
+          "1H4",
+          "1H5",
+          "1H3",
+          "1Q",
+          "1A"
+        ]
+      },
+      {
+        "round": 8,
+        "sfl": [
+          21,
+          31,
+          41
+        ],
+        "wild": [],
+        "pan": [],
+        "stack": [
+          11,
+          21,
+          31,
+          33,
+          41
+        ],
+        "scat": [
+          31,
+          32
+        ],
+        "rskl": [
+          "1T",
+          "1A",
+          "1H4",
+          "1J",
+          "1H4",
+          "1H3",
+          "2H2",
+          "1Q",
+          "1H2",
+          "1Q",
+          "1H1",
+          "3H5",
+          "1H2",
+          "1Q",
+          "1J",
+          "2Scat",
+          "3A",
+          "1H5",
+          "3H3",
+          "1H5",
+          "1T",
+          "1A",
+          "1H2",
+          "1J",
+          "1H2",
+          "1J"
+        ]
+      }
+    ]
+  },
+  "intMult": {
+    "n": 200,
+    "int": 200,
+    "not": 0,
+    "samples": [
+      {
+        "rwa": 22.66,
+        "ratio": 1133,
+        "ok": true,
+        "ord": 11
+      },
+      {
+        "rwa": 40.86,
+        "ratio": 2043,
+        "ok": true,
+        "ord": 15
+      },
+      {
+        "rwa": 23.8,
+        "ratio": 1190,
+        "ok": true,
+        "ord": 19
+      },
+      {
+        "rwa": 21,
+        "ratio": 1050,
+        "ok": true,
+        "ord": 21
+      },
+      {
+        "rwa": 30.12,
+        "ratio": 1506,
+        "ok": true,
+        "ord": 26
+      },
+      {
+        "rwa": 58.08,
+        "ratio": 2904,
+        "ok": true,
+        "ord": 29
+      },
+      {
+        "rwa": 50.44,
+        "ratio": 2522,
+        "ok": true,
+        "ord": 31
+      },
+      {
+        "rwa": 53.4,
+        "ratio": 2670,
+        "ok": true,
+        "ord": 35
+      }
+    ]
+  },
+  "endPred": {
+    "n": 1092,
+    "match": 1092,
+    "mismatch": []
+  },
+  "extracts": {
+    "GameGlobalConfig": ".BundleMgr=u.BundleMgr.Instance,t.PlayerData=A.PlayerData,t.GameData=d.GameData,t.Http=h.Http,t.GameLogic=m.GameLogic,t.GameGlobalConfig=f.GameConfig,t}();n.GameApp=g,(\"undefined\"==typeof window?globalThis:window).GameApp=g,cc._RF.pop()},{\"./Common/AlterMgr\":\"AlterMgr\",\"./Common/BundleMgr\":\"BundleMgr\",\"./Common/EventMgr\":\"EventMgr\",\"./Common/GameConfig\":\"GameConfig\",\"./Common/Language/LanguageManager\":\"LanguageManager\",\"./GameData/GameConfigData\":\"GameConfigData\",\"./GameData/PlayerData\":\"PlayerData\",\"./GameLog/GameLog\":\"GameLog\",\"./NetWork/Http\":\"Http\",\"./Utils/GameAudio\":\"GameAudio\",\"./View/Game/GameData\":\"GameData\",\"./View/Game/GameGlobalConfig\":\"GameGlobalConfig\",\"./View/Game/GameLogic\":\"GameLogic\",\"./View/History/HistoryData\":\"HistoryData\"}],GameLogic:[function(t,e,n){\"use strict\";cc._RF.push(e,\"369a828ElxGuYhFK5bRN5ZJ\",\"GameLogic\");var o=this&&this.__spreadArrays||function(){for(var t=0,e=0,n=arguments.length;e<n;e++)t+=arguments[e].length;var o=Array(t),i=0;for(e=0;e<n;e++)for(var a=arguments[e],r=0",
+    "ColumnCount5": "=-1]=\"Cons\",t[t.Pros=1]=\"Pros\"}(n.RollDirectionType||(n.RollDirectionType={})),n.GameConfig={RowCount:6,TotalRowCount:7,ColumnCount:5,TopRowCount:4,RollWidth:708,TopRollIndex:6,RollHeight:588,RollMaxSpeeds:60,SpeedBase:45,SpeedAdd:0,SpeedBaseLevel:1,RollAddSpeeds:[5],RollMinusSpeeds:2,ImgChangeMinSpeed:15,AnimationMorePosY:30,EverOnceMovePosY:3,BlockNums:12,SpecailBlockAddNums:12,QuickBlockNums:4,RollStartDelay:100,AniamTimesScale:1},n.SmybolImgPath={Pan:\"Pan\",H2:\"Icon05\",H3:\"Icon04\",H4:\"Icon03\",H5:\"Icon02\",A:\"A\",K:\"K\",Q:\"Q\",J:\"J\",T:\"10\",H1:\"Icon06\",Scat:\"Scatter\",Wild:\"Wild\"},n.SmybolImgBgColor={Pan:\"#f47a6e\",H1:\"#d897da\",H2:\"#d7c3aa\",H3:\"#d7d2aa\",H4:\"#c8d7aa\",H5:\"#bfe0bd\",A:\"#aad5b3\",K:\"#a1d0c5\",Q:\"#aacad7\",J:\"#a0b0d3\",T:\"#989cc5\",Scat:\"#eb8d78\",Wild:\"#fa6161\"},n.SmybolLowList=[\"T\",\"J\",\"Q\",\"K\",\"A\"],n.DefaultMp4=\"\",cc._RF.pop()},{}],GameInit:[function(t,e,n){\"use strict\";cc._RF.push(e,\"b8619Vq9FNBMq91PB6SR0TW\",\"GameInit\"),Object.defineProperty(n,\"__esModule\",{value:!0}),n.GameApp=void 0;var o=t(\"./GameLo",
+    "TotalRowCount": "=Math.floor(Math.random()*(i.length-1));i[n]=i[s],i[s]=o}a.push(i.map(function(n,o){var a=1;return 0!=t&&t<r.GameConfig.TotalRowCount-2&&(a=e[Math.floor(Math.random()*e.length)]),(o<5||o==i.length-1)&&(a=1),new c({symbol_key:n,nums:a})}))},p=0;p<r.GameConfig.TotalRowCount;p++)u(p);return this.backReels=o(a),a},t.prototype.addResultToReel=function(t,e){var n;if(e)for(var i in this.reels[t]=o(this.backReels[t]),this.reels[t].length,(n=this.reels[t]).push.apply(n,e),e);},t.prototype.initConfig=function(t){this.payline_count=20,this.reel_count=6,this.base_multiplier=t.bsl,i.GameLogic.getInstance().minBetSize=a.default.transformNumber(this.base_multiplier[0]),i.GameLogic.getInstance().maxBetSize=a.default.transformNumber(this.base_multiplier[this.base_multiplier.length-1]),this.multiplier=t.bll,i.GameLogic.getInstance().minBetLeave=String(this.multiplier[0]),i.GameLogic.getInstance().maxBetLeave=String(this.multiplier[this.multiplier.length-1]),this.autoTimes=t.auto,this.symbol_pay_list=t.spl,this.reels=this.r",
+    "initConfig": "for(var i in this.reels[t]=o(this.backReels[t]),this.reels[t].length,(n=this.reels[t]).push.apply(n,e),e);},t.prototype.initConfig=function(t){this.payline_count=20,this.reel_count=6,this.base_multiplier=t.bsl,i.GameLogic.getInstance().minBetSize=a.default.transformNumber(this.base_multiplier[0]),i.GameLogic.getInstance().maxBetSize=a.default.transformNumber(this.base_multiplier[this.base_multiplier.length-1]),this.multiplier=t.bll,i.GameLogic.getInstance().minBetLeave=String(this.multiplier[0]),i.GameLogic.getInstance().maxBetLeave=String(this.multiplier[this.multiplier.length-1]),this.autoTimes=t.auto,this.symbol_pay_list=t.spl,this.reels=this.randomReel()},Object.defineProperty(t.prototype,\"PlayLineCount\",{get:function(){return this.payline_count},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"BaseMultiplier\",{get:function(){return this.base_multiplier},enumerable:!1,configurable:!0}),t.prototype.getBaseMultiplierByIndex=function(t){return this.BaseMultiplier[t]},t.prototype.getMult",
+    "payline_count": "(this.backReels[t]),this.reels[t].length,(n=this.reels[t]).push.apply(n,e),e);},t.prototype.initConfig=function(t){this.payline_count=20,this.reel_count=6,this.base_multiplier=t.bsl,i.GameLogic.getInstance().minBetSize=a.default.transformNumber(this.base_multiplier[0]),i.GameLogic.getInstance().maxBetSize=a.default.transformNumber(this.base_multiplier[this.base_multiplier.length-1]),this.multiplier=t.bll,i.GameLogic.getInstance().minBetLeave=String(this.multiplier[0]),i.GameLogic.getInstance().maxBetLeave=String(this.multiplier[this.multiplier.length-1]),this.autoTimes=t.auto,this.symbol_pay_list=t.spl,this.reels=this.randomReel()},Object.defineProperty(t.prototype,\"PlayLineCount\",{get:function(){return this.payline_count},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"BaseMultiplier\",{get:function(){return this.base_multiplier},enumerable:!1,configurable:!0}),t.prototype.getBaseMultiplierByIndex=function(t){return this.BaseMultiplier[t]},t.prototype.getMultiplierByIndex=function(t){re",
+    "CurBetmulti": "2,\"0\");var b=u[y];this.win_match_amount[C]=(i.GameApp.ConfigData.symbol_pay_list[b][_.length]*s.GameLogic.getInstance().CurBetmulti).toFixed(2)}var v={};if(d){var I=0,G=[];this.seed_largerModel_symbol_list=[];var S=0,w=0,E=0,R=[10,20,30,40];for(var y in d){var B=d[y],L=Number(B[0]);B=B.slice(1),S+=L,G[w]||(G[w]=[]);var O=NaN,D=\"\"+w+E;\"Pan\"==B&&(O=s.GameLogic.getInstance().loaclPanInfo.has(D)?0:2,I++,s.GameLogic.getInstance().loaclPanInfo.set(D,!0));var M=new l({item_idx:\"r\"+y,symbol_key:B,coord:D,times:O,nums:L});v[D]=L,w>0&&w<5&&0==E?(G[6]||(G[6]=[]),G[6].push(M),E++,S=0):(E++,G[w].push(M),5==S&&(S=0,w++,E=0))}s.GameLogic.getInstance().IsLiveTimesNums=I;for(var P=0,T=A;P<T.length;P++){B=T[P];var N=String(B).padStart(2,\"0\");-1!=R.indexOf(B)?G[r.GameConfig.TopRollIndex][N[1]].type=o.Silver:G[N[0]][Number(N[1])-1].type=o.Silver}for(var k=0,x=p;k<x.length;k++)B=x[k],N=String(B).padStart(2,\"0\"),-1!=R.indexOf(B)?G[r.GameConfig.TopRollIndex][N[1]].type=o.Gold:G[N[0]][Number(N[1])-1].type=o.Gold;if(a.default.isN",
+    "randomReel": "isCanTurbo=!0}return t.getInstance=function(){return this._instance||(this._instance=new t),this._instance},t.prototype.randomReel=function(){var t=[8,10,15,12,20,12,30,14,30,20,30,2,6],e=[1,1,1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4],n=[\"Pan\",\"H1\",\"H2\",\"H3\",\"H4\",\"H5\",\"A\",\"K\",\"Q\",\"J\",\"T\",\"Wild\",\"Scat\"],i=[],a=[];for(var s in t){var l=new Array(t[s]).fill(n[s]);i.push.apply(i,l)}for(var u=function(t){for(var n=0;n<i.length;n++){var o=i[n],s=Math.floor(Math.random()*(i.length-1));i[n]=i[s],i[s]=o}a.push(i.map(function(n,o){var a=1;return 0!=t&&t<r.GameConfig.TotalRowCount-2&&(a=e[Math.floor(Math.random()*e.length)]),(o<5||o==i.length-1)&&(a=1),new c({symbol_key:n,nums:a})}))},p=0;p<r.GameConfig.TotalRowCount;p++)u(p);return this.backReels=o(a),a},t.prototype.addResultToReel=function(t,e){var n;if(e)for(var i in this.reels[t]=o(this.backReels[t]),this.reels[t].length,(n=this.reels[t]).push.apply(n,e),e);},t.prototype.initConfig=function(t){this.payline_count=20,this.reel_count=6,this.base_multiplier=t.bsl,i.GameLog",
+    "SymbolWeights": null,
+    "HttpHeaderMap": "his._lockPlay=!0,A.GameLogic.getInstance().isQuickCache&&(this.btnPlay.getComponent(cc.Button).interactable=!1);var e={\"web-token\":d.PlayerData.getInstance().Token,\"game-id\":p.GameData.getInstance().GameId},n={bl:GameApp.ConfigData.getMultiplierByIndex(p.GameData.getInstance().CurMultiplierIndex),bs:GameApp.ConfigData.getBaseMultiplierByIndex(p.GameData.getInstance().CurBaseMultiplierIndex)};GameApp.ActivityData&&GameApp.ActivityData.instance.isFreeGame()&&(n.ec=GameApp.ActivityData.instance.ActivityCode);var o=this;this.onAnimaPlayClick(),y.default.playBtnPlayEffect(),A.GameLogic.getInstance().onPlayBet(function(){t.onReshAuto(),GameApp.isFirst=!1,o.dispatchEvent(\"GAME_START\"),A.GameLogic.getInstance().IsFreeGame||o.onRreshWins(0)});var i={Params:n,Headers:e};if(!A.GameLogic.getInstance().IsFreeGame){if(!(GameApp.ActivityData&&GameApp.ActivityData.instance.isFreeGame()||p.GameData.getInstance().FreeData.isFree)){var a=d.PlayerData.getInstance().getCoins()-A.GameLogic.getInstance().CurBetGold;o.onRreshCoi",
+    "encodeForm": "=function(){function t(){}return t.encodeFormData=function(t){var e=[],n=/%20/g;for(var o in t){var i=t[o].toString(),a=encodeURIComponent(o).replace(n,\"+\")+\"=\"+encodeURIComponent(i).replace(n,\"+\");e.push(a)}return e.join(\"&\")},t.post=function(e,n,o,i){var r=this;void 0===i&&(i=\"string\");var c=new XMLHttpRequest;if(c.open(\"POST\",e,!0),o)for(var s in o)a[s]&&(!n&&(n={}),n[a[s]]=o[s]);var l=\"application/x-www-form-urlencoded\",u=t.encodeFormData(n);return\"json\"==i&&(u=JSON.stringify(n),l=\"application/json\"),c.setRequestHeader(\"Content-Type\",l),new Promise(function(t,e){c.ontimeout=function(t){e(t)},c.onerror=function(t){e(t)},c.onreadystatechange=function(){4===c.readyState&&r._cancelResponseData(c,t,e)},c.send(u)})},t.get=function(t,e,n){var o=this,i=e?\"?\":\"\";for(var a in e)\"?\"!=i&&(i+=\"&\"),i+=a+\"=\"+e[a];t+=encodeURI(i);var r=new XMLHttpRequest;if(r.open(\"GET\",t,!0),n)for(var c in n)r.setRequestHeader(c,n[c]);return new Promise(function(t,e){r.ontimeout=function(t){e(t)},r.onerror=function(t){e(t)},r.onread",
+    "GameResultsCtor": "ng(t.frwa)),c.GameData.getInstance().RoundReward=(Number(c.GameData.getInstance().RoundReward)+Number(t.wa)).toFixed(2),this.free_spin_num=t.fsn,this.now_free_spin_count=t.nfsc,c.GameData.getInstance().FreeGameTimes=this.free_spin_num-this.now_free_spin_count,this.free_spin_num==this.now_free_spin_count&&1==m||0==this.free_spin_num?s.GameLogic.getInstance().IsFreeGame=!1:s.GameLogic.getInstance().IsFreeGame=!0,s.GameLogic.getInstance().isRealEnd=1==m&&t.fsn==t.nfsc,1==m&&s.GameLogic.getInstance().loaclPanInfo.clear()}return Object.defineProperty(t.prototype,\"Award_Balance\",{get:function(){return Number(this.award_balance)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"Round_Win_Amount\",{get:function(){return Number(this.round_win_amount)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"IsFreeGameFirst\",{get:function(){return!this.spin_status&&this.free_spin_num>0&&0==this.now_free_spin_count},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"ReelRew",
+    "IsFreeGameFirst": "get:function(){return Number(this.round_win_amount)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"IsFreeGameFirst\",{get:function(){return!this.spin_status&&this.free_spin_num>0&&0==this.now_free_spin_count},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"ReelRewardIndexs\",{get:function(){return this.reel.map(function(t){return t.seed_index-1})},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"CurWinGold\",{get:function(){return Number(this.round_win_amount)},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"FreeGameCount\",{get:function(){return this.free_spin_num-this.now_free_spin_count},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,\"AllFreeWinAmount\",{get:function(){return Number(this.all_free_win_amount)},enumerable:!1,configurable:!0}),t}();n.GameResults=u;var p=function(){function t(t){this.id=0,this.balance=\"0\",n.ctorCopyData.call(this,t)}return Object.defineProperty(t.prototype,\"Balance\",{get:function(){r",
+    "gflUse": "t=0,this.now_free_spin_count=0,this.all_free_win_amount=\"\",this.wmkl_count=0,n.ctorCopyData.call(this,t);var u=t.wskl,p=t.gfl,A=t.sfl,d=(t.pl,t.rskl),h=t.wmkl,m=t.ss,f=t.remove_num,g=t.rpx;for(var y in this.totalTimes=g||1,this.remove_num=f,this.win_match_amount={},h){var _=h[y],C=_[_.length-1];C=String(C).padStart(2,\"0\");var b=u[y];this.win_match_amount[C]=(i.GameApp.ConfigData.symbol_pay_list[b][_.length]*s.GameLogic.getInstance().CurBetmulti).toFixed(2)}var v={};if(d){var I=0,G=[];this.seed_largerModel_symbol_list=[];var S=0,w=0,E=0,R=[10,20,30,40];for(var y in d){var B=d[y],L=Number(B[0]);B=B.slice(1),S+=L,G[w]||(G[w]=[]);var O=NaN,D=\"\"+w+E;\"Pan\"==B&&(O=s.GameLogic.getInstance().loaclPanInfo.has(D)?0:2,I++,s.GameLogic.getInstance().loaclPanInfo.set(D,!0));var M=new l({item_idx:\"r\"+y,symbol_key:B,coord:D,times:O,nums:L});v[D]=L,w>0&&w<5&&0==E?(G[6]||(G[6]=[]),G[6].push(M),E++,S=0):(E++,G[w].push(M),5==S&&(S=0,w++,E=0))}s.GameLogic.getInstance().IsLiveTimesNums=I;for(var P=0,T=A;P<T.length;P++){B=T[P];v",
+    "sflUse": ".now_free_spin_count=0,this.all_free_win_amount=\"\",this.wmkl_count=0,n.ctorCopyData.call(this,t);var u=t.wskl,p=t.gfl,A=t.sfl,d=(t.pl,t.rskl),h=t.wmkl,m=t.ss,f=t.remove_num,g=t.rpx;for(var y in this.totalTimes=g||1,this.remove_num=f,this.win_match_amount={},h){var _=h[y],C=_[_.length-1];C=String(C).padStart(2,\"0\");var b=u[y];this.win_match_amount[C]=(i.GameApp.ConfigData.symbol_pay_list[b][_.length]*s.GameLogic.getInstance().CurBetmulti).toFixed(2)}var v={};if(d){var I=0,G=[];this.seed_largerModel_symbol_list=[];var S=0,w=0,E=0,R=[10,20,30,40];for(var y in d){var B=d[y],L=Number(B[0]);B=B.slice(1),S+=L,G[w]||(G[w]=[]);var O=NaN,D=\"\"+w+E;\"Pan\"==B&&(O=s.GameLogic.getInstance().loaclPanInfo.has(D)?0:2,I++,s.GameLogic.getInstance().loaclPanInfo.set(D,!0));var M=new l({item_idx:\"r\"+y,symbol_key:B,coord:D,times:O,nums:L});v[D]=L,w>0&&w<5&&0==E?(G[6]||(G[6]=[]),G[6].push(M),E++,S=0):(E++,G[w].push(M),5==S&&(S=0,w++,E=0))}s.GameLogic.getInstance().IsLiveTimesNums=I;for(var P=0,T=A;P<T.length;P++){B=T[P];var N=Str",
+    "remove_num": "mount=\"\",this.wmkl_count=0,n.ctorCopyData.call(this,t);var u=t.wskl,p=t.gfl,A=t.sfl,d=(t.pl,t.rskl),h=t.wmkl,m=t.ss,f=t.remove_num,g=t.rpx;for(var y in this.totalTimes=g||1,this.remove_num=f,this.win_match_amount={},h){var _=h[y],C=_[_.length-1];C=String(C).padStart(2,\"0\");var b=u[y];this.win_match_amount[C]=(i.GameApp.ConfigData.symbol_pay_list[b][_.length]*s.GameLogic.getInstance().CurBetmulti).toFixed(2)}var v={};if(d){var I=0,G=[];this.seed_largerModel_symbol_list=[];var S=0,w=0,E=0,R=[10,20,30,40];for(var y in d){var B=d[y],L=Number(B[0]);B=B.slice(1),S+=L,G[w]||(G[w]=[]);var O=NaN,D=\"\"+w+E;\"Pan\"==B&&(O=s.GameLogic.getInstance().loaclPanInfo.has(D)?0:2,I++,s.GameLogic.getInstance().loaclPanInfo.set(D,!0));var M=new l({item_idx:\"r\"+y,symbol_key:B,coord:D,times:O,nums:L});v[D]=L,w>0&&w<5&&0==E?(G[6]||(G[6]=[]),G[6].push(M),E++,S=0):(E++,G[w].push(M),5==S&&(S=0,w++,E=0))}s.GameLogic.getInstance().IsLiveTimesNums=I;for(var P=0,T=A;P<T.length;P++){B=T[P];var N=String(B).padStart(2,\"0\");-1!=R.indexOf(B)?G[",
+    "PanDouble": "ANIMA_FREEGANE_BLOCK_SHOW,this.onFreeGameBlockShow.bind(this)),this.registerEvent(g.Event_Key.ANIMA_PANDOUBLE_SHOW,this.onShowPanDouble.bind(this)),this.registerEvent(g.Event_Key.ANIMA_SYMBOL_REWARDEND,this.onAnimaSpineCom.bind(this)),this.registerEvent(g.Event_Key.ANIMA_BLOCK_SHOCK,this.onAnimaBlockShock.bind(this)),this.registerEvent(g.Event_Key.ANIMA_BLOCK_STOPSHOCK,this.onAnimaStopBlockShock.bind(this)),this.registerEvent(g.Event_Key.ANIMA_HIDE_MARK,this.onAnimaHideMark.bind(this)),this.registerEvent(g.Event_Key.GAME_START,this.onGameStart.bind(this)),this.node.width=p.GameConfig.RollWidth/f.GameApp.ConfigData.ReelCount,this._nodes=[]},e.prototype.start=function(){this.initLineInfo()},e.prototype.onGameStart=function(){this.node.zIndex=this._rowIndex},e.prototype.initLineInfo=function(){var t=this;if(!d.default.isNull(this._rowIndex))for(var e=h.GameData.getInstance().BlockSize.height,n=-3.5*e,o=0,i=function(i){var r=m.GameLogic.getInstance().getIndexByBlockShowData(a._rowIndex),c=r.nums*e/2+o/2,s=n+c",
+    "timesField": ").setNormalImg()})},e.prototype.onShowPanDouble=function(){this._nodes.forEach(function(t){t.getComponent(\"BlockLogic\")._symbolData.times&&(t.getComponent(\"BlockLogic\").onShowPanDouble(),t.getComponent(\"BlockLogic\")._symbolData.times=0)})},e.prototype.updateBlockLine=function(){var t=this,e=0,n=function(){++e==t._nodes.length&&h.GameData.getInstance().setRollStatus(h.RollStatusType.Slow,t._rowIndex)},o=null,i=function(e){o=e;var n=t._nodes.concat(),i=null,a=0;n.forEach(function(t){if(!i)return i=t.y,void(a=t.getComponent(\"BlockLogic\")._symbolData.nums);i<t.y&&(i=t.y,a=t.getComponent(\"BlockLogic\")._symbolData.nums)});var r=o.getComponent(\"BlockLogic\")._symbolData.nums;o.y=i+(a+r)/2*h.GameData.getInstance().BlockSize.height};this._nodes.sort(function(t,e){return e.y-t.y}),this._nodes.forEach(function(t){return t.getComponent(\"BlockLogic\").updateBlock(n,i)})},e.prototype.onBackAnima=function(){this._nodes.forEach(function(t){return t.getComponent(\"BlockLogic\").onBackAnima()})},e.prototype.onAdjustPos=functio",
+    "GameName": null
+  }
+}

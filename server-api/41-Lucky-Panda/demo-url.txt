@@ -1,0 +1,1 @@
+http://127.0.0.1:50100/play/41-Lucky-Panda/index.html?gid=41&l=en&ai=luck_single_41&btt=1&t=local-demo&sip=127.0.0.1%3A50100&apiHost=127.0.0.1%3A50100

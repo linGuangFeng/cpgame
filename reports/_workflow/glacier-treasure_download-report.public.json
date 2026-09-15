@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "platformGameId": 1780,
+  "gameName": "Glacier Treasure",
+  "runId": "20260902T103846701Z",
+  "startedAt": "2026-09-02T10:38:46.701Z",
+  "finishedAt": "2026-09-02T10:38:55.648Z",
+  "operationBoundary": {
+    "resourcesOnly": true,
+    "httpMethod": "GET",
+    "spinRequests": 0,
+    "historyRequests": 0,
+    "paidRequests": 0,
+    "browserDownloadPromptsUsed": 0,
+    "urlGuessingOrAssetPathSynthesis": false
+  },
+  "sourceEvidence": {
+    "verifiedPrivateEntry": true,
+    "browserObservedTotal": 98,
+    "exactStaticUrls": 94,
+    "excludedDynamicApiUrls": 4,
+    "allowedInitialHosts": [
+      "static.cpgame.io"
+    ],
+    "stableAcrossSecondInventory": true
+  },
+  "results": {
+    "total": 94,
+    "succeeded": 94,
+    "failed": 0,
+    "downloadedBytes": 11823654,
+    "statusCounts": {
+      "200": 94
+    },
+    "contentTypeCounts": {
+      "application/javascript": 14,
+      "image/png": 64,
+      "application/json": 8,
+      "application/octet-stream": 4,
+      "image/jpeg": 3,
+      "audio/mpeg": 1
+    },
+    "stalledByFiveMinuteWatchdog": false
+  },
+  "manifests": {
+    "publicDownloadItems": {
+      "path": "/Volumes/hd/cpgame/resources/1780-Glacier-Treasure/programmatic-http/20260902T103846701Z/download-items.public.jsonl",
+      "sha256": "b2312fd2cc329d5c021dbfe9e98801aaed249b031285248d3eb10e48186cf258",
+      "urlsRedactedToHostAndPath": true
+    }
+  },
+  "outputDirectory": "/Volumes/hd/cpgame/resources/1780-Glacier-Treasure/programmatic-http/20260902T103846701Z",
+  "credentialSafety": {
+    "exactEntryUrlPrinted": false,
+    "queryValuesIncludedInPublicArtifacts": false,
+    "tokenLeakScanPassed": true
+  },
+  "stageDirectory": "/Users/a1/Downloads/glacier-treasure-stage/20260902T103846701Z",
+  "resourceFolder": "1780-Glacier-Treasure"
+}
