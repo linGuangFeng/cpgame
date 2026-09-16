@@ -7,7 +7,7 @@ import java.util.HexFormat;
 
 /** Shared identity embedded in both HTTP round output and the per-game Redis Loader. */
 public final class FreedomDayRulesMetadata {
-    public static final String VERSION = "freedom-day-1809-v2-defect-fix";
+    public static final String VERSION = "freedom-day-1809-v3-multiplier-carry";
     private static final String DESCRIPTOR = """
             board=6x5+4;symbols=1..13;ball=1;scatter=12;wild=13;
             normalWeights=466,4431,4436,4124,4263,4038,4120,4187,4138,4145,4082,754,200;
@@ -16,7 +16,8 @@ public final class FreedomDayRulesMetadata {
             5:6,10,12,15|6:6,10,12,15|7:4,6,8,10|8:4,6,8,10|
             9:1,2,3,4|10:1,2,3,4|11:1,2,3,4;
             scatterFreeSpins=visible-stacked=1-4:10,+2;oneTriggerPerReel;oneTriggerOnTopStrip;triggerBoardNoWin;
-            normalIncrement=1;freeIncrement=2;freeStartMultiplier=2;maxFreeSpins=30;
+            normalStartMultiplier=1;freeStartMultiplier=2;ballIncrement=2;visibleBallCollectsOnZeroWin=true;
+            compactIndependentLoss=#,#1,#2,#3;maxFreeSpins=30;
             grids=contiguous-same-reel-height-2..4-including-scatter-and-ball;gf=gold-grid;sl=silver-grid;
             ordinaryLossBallPolicy=50pct-baseline-plus-50pct-no-ball
             """;
