@@ -11,8 +11,8 @@ public final class GameRuleCore {
     public static final int CELLS = COLS * ROWS;
     public static final int SCATTER = 100;
     public static final int FEATURE_PLACEHOLDER = 0;
-    public static final String RULES_VERSION = "2300-monster-slayer-v3-buy-buckets";
-    public static final String RULES_HASH = "df686c42f1c1891704b88742db554a38644ff719c46a6de3f436857647a3b781";
+    public static final String RULES_VERSION = "2300-monster-slayer-v4-base-bet-multiplier";
+    public static final String RULES_HASH = "86af201a56e901c629e2f8d202b515b5d31fad77956ac8353b6b8886e385b61c";
 
     private static final int[][] PAY = {
             {}, {50,100,750}, {40,80,500}, {35,50,250}, {30,40,200}, {30,40,150},

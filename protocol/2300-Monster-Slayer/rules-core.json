@@ -2,7 +2,7 @@
   "schemaVersion": "3.0",
   "gameId": 2300,
   "gameName": "Monster Slayer",
-  "rulesVersion": "2300-monster-slayer-v3-buy-buckets",
+  "rulesVersion": "2300-monster-slayer-v4-base-bet-multiplier",
   "board": {
     "columns": 5,
     "rows": 3,
@@ -96,7 +96,7 @@
   "redis": {
     "database": 15,
     "multiplierScale": 100,
-    "multiplierFormula": "exact roundTotalWin / paidBet * 100",
+    "multiplierFormula": "exact roundTotalWin / baseBet * 100; buy cost multiplier affects charge only",
     "memberPrefix": "MS1",
     "maxMembersPerMultiplier": 300
   },

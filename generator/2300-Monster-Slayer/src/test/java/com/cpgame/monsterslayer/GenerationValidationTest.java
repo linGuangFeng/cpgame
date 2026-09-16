@@ -108,6 +108,8 @@ final class GenerationValidationTest {
                 GameRuleCore.CompleteRound round=factory.generateBuy(type,random);
                 assertEquals(type,round.buyType());
                 assertEquals(GameRuleCore.RoundClass.BUY_FEATURE,ResultUtil.evaluate(round).roundClass());
+                assertEquals(ResultUtil.evaluate(round).multiplierCenti(),ResultUtil.redisMultiplierCenti(round),
+                        "buy price must not change the base-bet Redis multiplier for type="+type);
                 assertEquals(0,round.steps().get(round.steps().size()-1).nextType());
                 String member=codec.encode(round);
                 assertEquals(type,codec.decode(member).buyType());

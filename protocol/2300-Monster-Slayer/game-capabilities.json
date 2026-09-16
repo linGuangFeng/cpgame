@@ -2,8 +2,8 @@
   "schemaVersion": "3.0",
   "gameId": 2300,
   "gameName": "Monster Slayer",
-  "rulesVersion": "2300-monster-slayer-v3-buy-buckets",
-  "rulesHash": "df686c42f1c1891704b88742db554a38644ff719c46a6de3f436857647a3b781",
+  "rulesVersion": "2300-monster-slayer-v4-base-bet-multiplier",
+  "rulesHash": "86af201a56e901c629e2f8d202b515b5d31fad77956ac8353b6b8886e385b61c",
   "behaviorIds": [
     "B001_ENTRY_BOOTSTRAP",
     "B002_LANGUAGE",

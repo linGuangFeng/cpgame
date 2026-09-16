@@ -72,9 +72,8 @@ public final class ResultUtil {
     }
 
     public static int redisMultiplierCenti(GameRuleCore.CompleteRound round) {
-        RoundResult result = evaluate(round);
-        int multiple = GameRuleCore.buyMultiple(round.buyType());
-        if (multiple <= 1) return result.multiplierCenti();
-        return (int) Math.round(result.multiplierCenti() / (double) multiple);
+        // Redis倍率始终以最基础押注为分母。购买倍数只用于扣款，不能改变
+        // 牌面实际倍率，更不能通过除以购买价后四舍五入破坏倍率桶精度。
+        return evaluate(round).multiplierCenti();
     }
 }
