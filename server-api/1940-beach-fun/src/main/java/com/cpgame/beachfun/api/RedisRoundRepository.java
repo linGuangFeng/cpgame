@@ -1,5 +1,7 @@
 package com.cpgame.beachfun.api;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.beachfun.core.*;
 import redis.clients.jedis.Jedis;
 import java.security.SecureRandom;
@@ -20,30 +22,13 @@ final class RedisRoundRepository implements AutoCloseable {
         // Exactly one outcome coin toss per paid start. An empty selected side fails.
         boolean win=random.nextBoolean();
         boolean special=win && random.nextBoolean();
-        String index=special?String.format("MaryKeyList_%09d",GAME_ID):String.format("PerKeyList_%09d",GAME_ID);
-        List<Integer> available=new ArrayList<>();
-        for(String value:redis.zrange(index,0,-1)){
-            int multiplier=Integer.parseInt(value);
-            if(!win && multiplier!=0) continue;
-            if(win && multiplier<=0) continue;
-            if(redis.llen(listKey(special,multiplier))>0) available.add(multiplier);
+        Integer selected = choosePool(special, win);
+        if (selected == null && win) {
+            special = !special;
+            selected = choosePool(special, true);
         }
-        if(available.isEmpty() && win && !special){
-            special=true; index=String.format("MaryKeyList_%09d",GAME_ID);
-            for(String value:redis.zrange(index,0,-1)){
-                int multiplier=Integer.parseInt(value);
-                if(multiplier>0 && redis.llen(listKey(true,multiplier))>0) available.add(multiplier);
-            }
-        }
-        if(available.isEmpty() && win && special){
-            special=false; index=String.format("PerKeyList_%09d",GAME_ID);
-            for(String value:redis.zrange(index,0,-1)){
-                int multiplier=Integer.parseInt(value);
-                if(multiplier>0 && redis.llen(listKey(false,multiplier))>0) available.add(multiplier);
-            }
-        }
-        if(available.isEmpty())throw new CacheEmptyException("empty "+(win?"WIN":"LOSS")+" pool");
-        int multiplier=available.get(random.nextInt(available.size()));
+        if (selected == null) throw new CacheEmptyException("empty " + (win ? "WIN" : "LOSS") + " pool");
+        int multiplier = selected;
         long len=redis.llen(listKey(special,multiplier));
         if(len<=0)throw new CacheEmptyException("selected bucket became empty");
         String member=redis.lindex(listKey(special,multiplier), random.nextInt((int)Math.min(len,Integer.MAX_VALUE)));
@@ -58,6 +43,18 @@ final class RedisRoundRepository implements AutoCloseable {
         if(member==null)throw new CacheEmptyException("empty LOSS initialization pool");
         var round=codec.decode(member);if(round.win()||round.freeFeature())throw new IllegalStateException("invalid idle member");
         return round.deliveries().get(0);
+    }
+    private Integer choosePool(boolean special, boolean win) {
+        String index = String.format(special ? "MaryKeyList_%09d" : "PerKeyList_%09d", GAME_ID);
+        return RedisFloorLookup.choose(this::floorCommand, index, m -> listKey(special, m),
+                random, win ? 1 : 0, win ? Integer.MAX_VALUE : 0);
+    }
+    private Object floorCommand(String... args) {
+        return switch (args[0]) {
+            case "ZREVRANGEBYSCORE" -> redis.zrevrangeByScore(args[1], args[2], args[3], 0, 1);
+            case "LLEN" -> redis.llen(args[1]);
+            default -> throw new IllegalArgumentException("unexpected lookup command");
+        };
     }
     private String listKey(boolean special,int multiplier){
         return special?String.format("MaryLog:%09d:%06d",GAME_ID,multiplier):String.format("BetLog:0%08d:%06d",GAME_ID,multiplier);

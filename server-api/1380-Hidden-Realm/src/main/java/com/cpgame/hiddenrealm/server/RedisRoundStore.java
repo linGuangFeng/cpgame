@@ -1,5 +1,7 @@
 package com.cpgame.hiddenrealm.server;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.hiddenrealm.core.CompleteRound;
 import com.cpgame.hiddenrealm.core.GameRuleCore;
 import com.cpgame.hiddenrealm.core.RedisKeys;
@@ -74,16 +76,20 @@ final class RedisRoundStore implements AutoCloseable {
     }
 
     private void collect(List<int[]> available, boolean special, boolean lossOnly) {
-        String index = special ? RedisKeys.maryIndex(game) : RedisKeys.normalIndex(game);
-        List<String> entries = jedis.zrange(index, 0, -1);
-        for (String entry : entries) {
-            int multiple = Integer.parseInt(entry);
-            if (lossOnly && multiple != 0) continue;
-            if (!lossOnly && multiple <= 0) continue;
-            String list = special ? RedisKeys.maryList(game, multiple) : RedisKeys.normalList(game, multiple);
-            if (jedis.llen(list) > 0) available.add(new int[] {special ? 1 : 0, multiple});
-        }
+        Integer multiplier = RedisFloorLookup.choose(this::floorCommand,
+                special ? RedisKeys.maryIndex(game) : RedisKeys.normalIndex(game),
+                m -> special ? RedisKeys.maryList(game, m) : RedisKeys.normalList(game, m),
+                random, lossOnly ? 0 : 1, lossOnly ? 0 : Integer.MAX_VALUE);
+        if (multiplier != null) available.add(new int[]{special ? 1 : 0, multiplier});
     }
+    private Object floorCommand(String... args) {
+        return switch (args[0]) {
+            case "ZREVRANGEBYSCORE" -> jedis.zrevrangeByScore(args[1], args[2], args[3], 0, 1);
+            case "LLEN" -> jedis.llen(args[1]);
+            default -> throw new IllegalArgumentException("unexpected lookup command");
+        };
+    }
+    
 
     @Override public void close() { jedis.close(); }
 }

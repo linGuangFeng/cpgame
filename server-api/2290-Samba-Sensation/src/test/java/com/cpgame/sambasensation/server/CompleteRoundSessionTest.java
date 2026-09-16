@@ -91,7 +91,7 @@ class CompleteRoundSessionTest {
         redis.seed(false, 0, inc0, inc1, inc2, inc3, invalidFinalOrdinary, unchanged);
         redis.seed(true, TestRoundMembers.multiplier(reward), reward);
         SambaSensationService service = new SambaSensationService(new RedisRoundStore(redis, 2290),
-                new BigDecimal("10000"), new ScriptedRandom(false, false, false, false, true, false));
+                new BigDecimal("10000"), new ScriptedRandom(false, false, false, false, true, false).offsets(0, 1, 2, 3, 0, 5));
         for (int i = 0; i < 4; i++) {
             JsonNode paid = service.spin(form("cross-round", "1"), "cross-" + i);
             assertEquals(i + 1, paid.path("data").path("props").path("coins").path("count").asInt());
@@ -152,8 +152,12 @@ class CompleteRoundSessionTest {
 
     private static final class ScriptedRandom extends SecureRandom {
         private final ArrayDeque<Boolean> booleans = new ArrayDeque<>();
+        private final ArrayDeque<Long> offsets = new ArrayDeque<>();
+        ScriptedRandom offsets(long... values) { for (long value : values) offsets.add(value); return this; }
         ScriptedRandom(boolean... values) { for (boolean value : values) booleans.add(value); }
         @Override public boolean nextBoolean() { return booleans.isEmpty() ? false : booleans.removeFirst(); }
         @Override public int nextInt(int bound) { return 0; }
+        @Override public long nextLong(long origin, long bound) { return bound - 1; }
+        @Override public long nextLong(long bound) { return offsets.isEmpty() ? 0 : Math.floorMod(offsets.removeFirst(), bound); }
     }
 }

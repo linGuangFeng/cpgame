@@ -1,4 +1,6 @@
 package com.cpgame.sharpshooter.server;
+
+import com.cpgame.demo.redis.RedisFloorLookup;
 import com.cpgame.sharpshooter.core.*;
 import redis.clients.jedis.*;
 import java.security.SecureRandom;
@@ -43,16 +45,22 @@ final class RedisRoundStore implements AutoCloseable {
   if(special!=RedisKeys.special(analysis.outcome()))throw new IllegalStateException("Redis member does not match its pool");
   return new Claim(member,round,analysis);
  }
- private void collect(List<int[]> available,boolean special,Integer multiplier,boolean lossOnly){
-  String index=special?RedisKeys.maryIndex(game):RedisKeys.normalIndex(game);
-  List<String> entries=multiplier==null?jedis.zrange(index,0,-1):jedis.zrangeByScore(index,multiplier,multiplier);
-  for(String entry:entries){
-   int multiple=Integer.parseInt(entry);
-   if(lossOnly && multiple!=0) continue;
-   if(!lossOnly && multiple<=0) continue;
-   String list=special?RedisKeys.maryList(game,multiple):RedisKeys.normalList(game,multiple);
-   if(jedis.llen(list)>0) available.add(new int[]{special?1:0,multiple});
-  }
+ private void collect(List<int[]> available, boolean special, Integer multiplier, boolean lossOnly) {
+  int minimum = multiplier != null ? multiplier : lossOnly ? 0 : 1;
+  int maximum = multiplier != null ? multiplier : lossOnly ? 0 : Integer.MAX_VALUE;
+  if ((lossOnly && minimum != 0) || (!lossOnly && maximum <= 0)) return;
+  Integer selected = RedisFloorLookup.choose(this::floorCommand,
+    special ? RedisKeys.maryIndex(game) : RedisKeys.normalIndex(game),
+    m -> special ? RedisKeys.maryList(game,m) : RedisKeys.normalList(game,m), random, minimum, maximum);
+  if(selected != null) available.add(new int[]{special ? 1 : 0, selected});
  }
+ private Object floorCommand(String... args) {
+        return switch (args[0]) {
+            case "ZREVRANGEBYSCORE" -> jedis.zrevrangeByScore(args[1], args[2], args[3], 0, 1);
+            case "LLEN" -> jedis.llen(args[1]);
+            default -> throw new IllegalArgumentException("unexpected lookup command");
+        };
+    }
+    
  @Override public void close(){jedis.close();}
 }

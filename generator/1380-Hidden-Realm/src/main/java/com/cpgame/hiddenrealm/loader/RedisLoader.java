@@ -27,9 +27,9 @@ public final class RedisLoader {
         try (Reader r = new InputStreamReader(new FileInputStream(args[0]), StandardCharsets.UTF_8)) { p.load(r); LoaderLimits.checkKeys(p); }
         String host = req(p, "redis.host"), game = req(p, "redis.game-id");
         int port = num(p, "redis.port", 1, 65535), db = num(p, "redis.database", 0, 15);
-        int loss = num(p, "generation.loss-count", 0, 1_000_000);
-        int win = num(p, "generation.win-count", 0, 1_000_000);
-        int special = num(p, "generation.special-count", 0, 1_000_000);
+        int loss = num(p, "generation.loss-count", 0, Integer.MAX_VALUE);
+        int win = num(p, "generation.win-count", 0, Integer.MAX_VALUE);
+        int special = num(p, "generation.special-count", 0, Integer.MAX_VALUE);
         int cap = num(p, "generation.max-members-per-multiplier", 1, 1_000_000);
 
         RedisKeys.prefix(game);

@@ -1,6 +1,7 @@
 package com.cpgame.replica.luckypanda;
 
 import com.hd.pg.appapi.business.vo.cpgame.luckypanda.GameRuleCore;
+import com.hd.pg.appapi.business.vo.cpgame.luckypanda.LuckyPandaFrameAssigner;
 import com.hd.pg.appapi.business.vo.cpgame.luckypanda.LuckyPandaIndependentLossGenerator;
 import com.hd.pg.appapi.business.vo.cpgame.luckypanda.LuckyPandaRpxTracker;
 import com.hd.pg.appapi.business.vo.cpgame.luckypanda.LuckyPandaSymbol;
@@ -192,8 +193,9 @@ public final class CompleteRoundCodec {
             int pans = Integer.parseInt(encoded.substring(1));
             LuckyPandaBoard board = LuckyPandaIndependentLossGenerator.generateWithPanCount(RANDOM, pans);
             int rpx = context.next(board, nfsc);
+            LuckyPandaFrameAssigner.Frames frames = LuckyPandaFrameAssigner.assign(board, RANDOM);
             context.restore(rpx, nfsc);
-            return List.of(new CompleteRoundFact.PageFact(board, rpx, List.of(), List.of()));
+            return List.of(new CompleteRoundFact.PageFact(board, rpx, frames.gfl(), frames.sfl()));
         }
         String[] pages = encoded.split(";", -1);
         List<CompleteRoundFact.PageFact> out = new ArrayList<>(pages.length);

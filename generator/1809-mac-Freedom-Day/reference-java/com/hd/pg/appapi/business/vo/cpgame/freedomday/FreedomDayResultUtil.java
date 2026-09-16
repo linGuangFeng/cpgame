@@ -76,8 +76,10 @@ public final class FreedomDayResultUtil {
 
         // 倍率球只在当前页真实中奖并发生消除时收集。普通局的 1 是无球时的
         // 基础倍率占位，第一个倍率球应从 0 累加到 x2，而不是得到错误的 x3。
+        // Visible multiplier balls are collected even on a no-win page and carry
+        // into later free Spins.
         int multiplier = Math.max(1, baseMultiplier);
-        if (!winningSymbols.isEmpty() && ballCount > 0) {
+        if (ballCount > 0) {
             int accumulated = baseMultiplier == 1 && ballIncrement == 2 ? 0 : baseMultiplier;
             multiplier = accumulated + ballCount * ballIncrement;
         }

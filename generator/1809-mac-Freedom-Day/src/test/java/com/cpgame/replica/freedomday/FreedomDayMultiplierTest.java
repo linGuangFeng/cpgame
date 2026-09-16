@@ -36,17 +36,15 @@ class FreedomDayMultiplierTest {
     }
 
     @Test
-    void terminalPageDoesNotCollectVisibleBalls() {
+    void noWinPageStillCollectsVisibleBallsForFollowingFreeSpins() {
         int[] prop = noWinBoard();
         prop[2] = 1;
-        prop[17] = 1;
-        prop[29] = 1;
 
         FreedomDayEvaluation result = FreedomDayResultUtil.evaluate(
                 new FreedomDayBoard(prop, new int[]{2, 3, 4, 5}), BigDecimal.ONE, 4, 2);
 
         assertTrue(result.getWins().isEmpty());
-        assertEquals(4, result.getMultiplier());
+        assertEquals(6, result.getMultiplier());
         assertEquals(0, result.getTotalWin().signum());
     }
 

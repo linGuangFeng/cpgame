@@ -50,7 +50,7 @@ class CascadeAndFreeWalkTest {
         @SuppressWarnings("unchecked")
         Map<String, Object> hist = (Map<String, Object>) history.get("data");
         assertEquals(1, hist.get("lc"));
-        assertEquals(0L, fake.command("LLEN", "BetLog:000000041:"
+        assertEquals(1L, fake.command("LLEN", "BetLog:000000041:"
                 + String.format("%06d", generated.actualMultiplier())));
     }
 
@@ -109,11 +109,11 @@ class CascadeAndFreeWalkTest {
         private final boolean win;
         CountingRandom(boolean win) { this.win = win; }
         @Override public boolean nextBoolean() { return win; }
-        @Override public int nextInt(int bound) { return 0; }
+        @Override public int nextInt(int bound) { return bound - 1; }
     }
 
     private static final class AlwaysWinRandom extends SecureRandom {
         @Override public boolean nextBoolean() { return true; }
-        @Override public int nextInt(int bound) { return 0; }
+        @Override public int nextInt(int bound) { return bound - 1; }
     }
 }

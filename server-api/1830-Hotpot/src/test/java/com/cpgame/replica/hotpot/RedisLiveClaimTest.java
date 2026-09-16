@@ -3,6 +3,8 @@ package com.cpgame.replica.hotpot;
 import com.hd.pg.appapi.business.model.cpgame.hotpot.HotpotRoundKind;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.Properties;
 
@@ -10,12 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RedisLiveClaimTest {
     @Test
-    void realDb15YieldsCompleteRoundAndEmptyWouldFail() throws Exception {
+    void configuredCacheYieldsCompleteRoundAndEmptyWouldFail() throws Exception {
         Properties config = new Properties();
-        config.setProperty("redis.host", "192.168.10.3");
-        config.setProperty("redis.port", "6379");
-        config.setProperty("redis.database", "15");
-        config.setProperty("redis.game-id", "1830");
+        try (var reader = Files.newBufferedReader(Path.of("D:/work/hd/cpgame/server-api/1830-Hotpot/dist/controller.properties"))) {
+            config.load(reader);
+        }
+        assertEquals("8001830", config.getProperty("redis.game-id"));
+        assertEquals("0", config.getProperty("redis.database"));
         try (RedisRoundStore store = RedisRoundStore.connect(config)) {
             RedisRoundStore.ClaimedRound claimed = store.claim(new SecureRandom());
             assertNotNull(claimed.member());

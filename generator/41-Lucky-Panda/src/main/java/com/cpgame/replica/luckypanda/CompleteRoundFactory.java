@@ -34,9 +34,15 @@ public final class CompleteRoundFactory {
 
     public GeneratedRound generate(Random random, int maxConsecutiveWins, int maxMarySpins,
                                    Map<WeightScene, int[]> weights, boolean forceOrdinaryLoss) {
+        return generate(random, maxConsecutiveWins, maxMarySpins, weights, forceOrdinaryLoss, false);
+    }
+
+    public GeneratedRound generate(Random random, int maxConsecutiveWins, int maxMarySpins,
+                                   Map<WeightScene, int[]> weights, boolean forceOrdinaryLoss,
+                                   boolean specialOpening) {
         if (maxConsecutiveWins < 1) throw new IllegalArgumentException("max-consecutive-wins must be >= 1");
         if (maxMarySpins < 1) throw new IllegalArgumentException("max-mary-spins must be >= 1");
-        LuckyPandaBoardGenerator boards = new LuckyPandaBoardGenerator(random, weights);
+        LuckyPandaBoardGenerator boards = new LuckyPandaBoardGenerator(random, weights, specialOpening);
         LuckyPandaBoard start;
         try {
             start = forceOrdinaryLoss

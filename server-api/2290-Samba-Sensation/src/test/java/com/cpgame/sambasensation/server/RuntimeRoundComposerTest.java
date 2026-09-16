@@ -25,7 +25,7 @@ class RuntimeRoundComposerTest {
             assertEquals("cached-ordinary-win", round.member());
             assertEquals(1, round.fact().steps().size());
             int requestedFloor = floor;
-            assertThrows(IllegalStateException.class, () -> composer.composePaid(new ConstraintRandom(), requestedFloor, state));
+            assertEquals(expected, composer.composePaid(new ConstraintRandom(), requestedFloor, state).multiplier());
         }
     }
 
@@ -103,7 +103,7 @@ class RuntimeRoundComposerTest {
         assertEquals(6, round.fact().steps().size());
         assertEquals(0, round.fact().scatterDelta());
         assertEquals("runtime-natural-mary", round.member());
-        assertEquals(0, redis.size(true, cachedMultiplier));
+        assertEquals(1, redis.size(true, cachedMultiplier));
         assertTrue(round.multiplier() <= 10_000 * 25);
     }
 
@@ -122,6 +122,7 @@ class RuntimeRoundComposerTest {
             int cursor;
             @Override public long nextLong(long bound) { return bound==10?board[cursor++ % 15]-1:0; }
             @Override public int nextInt(int bound) { return 0; }
+        @Override public long nextLong(long origin, long bound) { return bound - 1; }
         };
         GameRuleCore.CollectionState state = new GameRuleCore.CollectionState(28,new int[5],false);
         RedisRoundStore.ClaimedRound round = composer.composePaid(random,1,state);
@@ -150,5 +151,6 @@ class RuntimeRoundComposerTest {
             return bound == 9 ? symbol++ % bound : 0;
         }
         @Override public int nextInt(int bound) { return 0; }
+        @Override public long nextLong(long origin, long bound) { return bound - 1; }
     }
 }

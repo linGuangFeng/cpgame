@@ -1,5 +1,7 @@
 package com.cpgame.sambasensation.server;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.sambasensation.core.GameRuleCore;
 import com.cpgame.sambasensation.core.MinimalRoundFactCodec;
 import com.cpgame.sambasensation.core.ResultUtil;
@@ -50,148 +52,111 @@ final class RedisRoundStore implements AutoCloseable {
         if (random == null) throw new IllegalArgumentException("SecureRandom required");
         if (requestedBetType < 1 || requestedBetType > 3) throw new IllegalArgumentException("bet_type must be 1..3");
         boolean wantWin = random.nextBoolean();
-        List<Bucket> buckets = wantWin ? paidWinningBuckets(requestedBetType, collectionState)
-                : lossBuckets(requestedBetType, collectionState);
-        if (buckets.isEmpty()) throw empty(wantWin ? "中奖池为空" : "未中奖池为空");
-        return claimFromBuckets(random, buckets, ClaimPurpose.PAID);
+        ClaimedRound normal = claimPool(random, false, wantWin, ClaimPurpose.PAID, requestedBetType, collectionState);
+        if (!wantWin) {
+            if (normal == null) throw empty("未中奖池为空");
+            return normal;
+        }
+        ClaimedRound special = claimPool(random, true, true, ClaimPurpose.PAID, requestedBetType, collectionState);
+        if (normal == null && special == null) throw empty("目标以下中奖池为空");
+        if (normal == null) return special;
+        if (special == null) return normal;
+        int specialWeight = special.kind() == GameRuleCore.RoundClass.COIN_COLLECTION_REWARD ? COIN_REWARD_BUCKET_WEIGHT : 1;
+        return random.nextInt(specialWeight + 1) == 0 ? normal : special;
     }
 
     /** 购买就是同一 mali/Free 状态；只从 Mary 池领取带购买触发页的完整六步 member。 */
     synchronized ClaimedRound claimFeatureBuy(SecureRandom random, GameRuleCore.CollectionState collectionState) throws IOException {
-        List<Bucket> buckets = buckets(true, true, ClaimPurpose.FEATURE_BUY, 1, collectionState);
-        if (buckets.isEmpty()) throw empty("购买所需的 mali member 已耗尽");
-        return claimFromBuckets(random, buckets, ClaimPurpose.FEATURE_BUY);
+        ClaimedRound claimed = claimPool(random, true, true, ClaimPurpose.FEATURE_BUY, 1, collectionState);
+        if (claimed == null) throw empty("目标以下无购买所需的 mali member");
+        return claimed;
     }
 
     /** 为运行时金币满盘局领取无Scatter、无金币副作用且不超过剩余预算的普通中奖牌面。 */
     synchronized ClaimedRound claimPurePaidTemplateAtMost(SecureRandom random, int betType,
                                                            int maxMultiplier) throws IOException {
         if (maxMultiplier <= 0) return null;
-        List<Integer> eligible = new ArrayList<>();
-        for (Object item : asList(redis.command("ZRANGE", RedisKeyContract.normalIndex(GAME_ID, betType), "0", "-1"))) {
-            int multiplier = Integer.parseInt(String.valueOf(item));
-            if (multiplier <= 0 || multiplier > maxMultiplier) continue;
-            eligible.add(multiplier);
-        }
-        while (!eligible.isEmpty()) {
-            int multiplier = eligible.remove(random.nextInt(eligible.size()));
-            List<ClaimedRound> members = new ArrayList<>();
-            String key = RedisKeyContract.normalList(GAME_ID, multiplier, betType);
-            for (Object raw : asList(redis.command("LRANGE", key, "0", "-1"))) {
-                try {
-                    ClaimedRound checked = verify(String.valueOf(raw), false, multiplier, ClaimPurpose.PAID);
-                    GameRuleCore.CompleteRoundFact fact = checked.fact();
-                    if (fact.betType() == betType && fact.scatterDelta() == 0
-                            && checked.kind() == GameRuleCore.RoundClass.ORDINARY_WIN) members.add(checked);
-                } catch (IllegalArgumentException | IllegalStateException ignored) { }
-            }
-            while (!members.isEmpty()) {
-                ClaimedRound selected = members.remove(random.nextInt(members.size()));
-                return selected;
-            }
+        var buckets = RedisFloorLookup.open(redis::command, RedisKeyContract.normalIndex(GAME_ID, betType),
+                m -> RedisKeyContract.normalList(GAME_ID, m, betType), random, 1, maxMultiplier);
+        Integer multiplier;
+        while ((multiplier = buckets.next()) != null) {
+            ClaimedRound claimed = readEligible(random, RedisKeyContract.normalList(GAME_ID, multiplier, betType),
+                    false, multiplier, ClaimPurpose.PAID,
+                    checked -> checked.fact().betType() == betType && checked.fact().scatterDelta() == 0
+                            && checked.kind() == GameRuleCore.RoundClass.ORDINARY_WIN);
+            if (claimed != null) return claimed;
         }
         return null;
     }
 
     /** 只领取缓存六步局的五个Free尾页；触发页由运行时生成器负责。 */
     synchronized TailTemplate claimFreeTailAtMost(SecureRandom random, int maxMultiplier) throws IOException {
-        List<TailCandidate> candidates = new ArrayList<>();
-        for (Object item : asList(redis.command("ZRANGE", RedisKeyContract.specialIndex(GAME_ID), "0", "-1"))) {
-            int indexedMultiplier = Integer.parseInt(String.valueOf(item));
-            String key = RedisKeyContract.specialList(GAME_ID, indexedMultiplier);
-            for (Object raw : asList(redis.command("LRANGE", key, "0", "-1"))) {
-                String member = String.valueOf(raw);
-                try {
-                    ClaimedRound checked = verify(member, true, indexedMultiplier, ClaimPurpose.PAID);
-                    GameRuleCore.CompleteRoundFact fact = checked.fact();
-                    if (checked.kind() != GameRuleCore.RoundClass.FREE_SPINS_SPECIAL || fact.steps().size() != 6) continue;
-                    int tailMultiplier = 0;
-                    for (int step = 1; step < 6; step++) tailMultiplier += ResultUtil.evaluateDelivery(fact, step).multiplier();
-                    if (tailMultiplier <= maxMultiplier) candidates.add(new TailCandidate(key, member, fact.steps().subList(1, 6), tailMultiplier));
-                } catch (IllegalArgumentException | IllegalStateException ignored) { }
-            }
-        }
-        while (!candidates.isEmpty()) {
-            TailCandidate selected = candidates.remove(random.nextInt(candidates.size()));
-            return new TailTemplate(selected.steps(), selected.multiplier());
+        if (maxMultiplier < 0) return null;
+        // The index is the complete round's payout, not the five-page tail's payout.
+        var buckets = RedisFloorLookup.open(redis::command, RedisKeyContract.specialIndex(GAME_ID),
+                m -> RedisKeyContract.specialList(GAME_ID, m), random, 0, Integer.MAX_VALUE);
+        Integer multiplier;
+        while ((multiplier = buckets.next()) != null) {
+            ClaimedRound selected = readEligible(random, RedisKeyContract.specialList(GAME_ID, multiplier),
+                    true, multiplier, ClaimPurpose.PAID,
+                    checked -> checked.kind() == GameRuleCore.RoundClass.FREE_SPINS_SPECIAL
+                            && checked.fact().steps().size() == 6 && tailMultiplier(checked.fact()) <= maxMultiplier);
+            if (selected != null) return new TailTemplate(selected.fact().steps().subList(1, 6), tailMultiplier(selected.fact()));
         }
         return null;
     }
 
-    private List<Bucket> lossBuckets(int betType, GameRuleCore.CollectionState collectionState) throws IOException {
-        List<String> eligible = eligibleMembers(false, 0, ClaimPurpose.PAID, betType, collectionState);
-        return eligible.isEmpty() ? List.of() : List.of(new Bucket(false, 0, eligible));
+    private static int tailMultiplier(GameRuleCore.CompleteRoundFact fact) {
+        int total = 0;
+        for (int step = 1; step < 6; step++) total += ResultUtil.evaluateDelivery(fact, step).multiplier();
+        return total;
     }
 
-    private List<Bucket> paidWinningBuckets(int betType, GameRuleCore.CollectionState collectionState) throws IOException {
-        List<Bucket> result = new ArrayList<>();
-        result.addAll(buckets(false, true, ClaimPurpose.PAID, betType, collectionState));
-        result.addAll(buckets(true, true, ClaimPurpose.PAID, betType, collectionState));
-        List<Bucket> weighted = new ArrayList<>(result);
-        for (Bucket bucket : result) {
-            if (!containsCoinReward(bucket)) continue;
-            // 金币满槽是5000个原厂付费起点中仅22次的稀有分支。这里只放大“已存在且
-            // 与当前会话前态相邻合法”的实际倍率桶；不生成牌、不改倍率、不突破上限。
-            // 新局仍先随机中/不中，再在对应池中随机倍率，最后原子领取一个完整member。
-            for (int copy = 1; copy < COIN_REWARD_BUCKET_WEIGHT; copy++) weighted.add(bucket);
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    private ClaimedRound claimPool(SecureRandom random, boolean special, boolean positive,
+            ClaimPurpose purpose, int betType, GameRuleCore.CollectionState collectionState) throws IOException {
+        var buckets = RedisFloorLookup.open(redis::command,
+                special ? RedisKeyContract.specialIndex(GAME_ID) : RedisKeyContract.normalIndex(GAME_ID),
+                m -> special ? RedisKeyContract.specialList(GAME_ID, m) : RedisKeyContract.normalList(GAME_ID, m),
+                random, positive ? 1 : 0, positive ? Integer.MAX_VALUE : 0);
+        Integer multiplier;
+        while ((multiplier = buckets.next()) != null) {
+            String key = special ? RedisKeyContract.specialList(GAME_ID, multiplier) : RedisKeyContract.normalList(GAME_ID, multiplier);
+            ClaimedRound claimed = readEligible(random, key, special, multiplier, purpose, checked ->
+                    GameRuleCore.canApplyCollectionTransition(collectionState, checked.fact())
+                    && (purpose == ClaimPurpose.FEATURE_BUY
+                        ? checked.fact().entryKind() == GameRuleCore.EntryKind.FEATURE_BUY_INITIAL
+                        : checked.fact().entryKind() == GameRuleCore.EntryKind.PAID_INITIAL && checked.fact().betType() == betType));
+            if (claimed != null) return claimed;
         }
-        return weighted;
+        return null;
     }
 
-    private boolean containsCoinReward(Bucket bucket) {
-        for (String member : bucket.eligibleMembers()) {
-            if (codec.verify(member).roundClass() == GameRuleCore.RoundClass.COIN_COLLECTION_REWARD) return true;
-        }
-        return false;
-    }
-
-    private List<Bucket> buckets(boolean special, boolean positiveOnly, ClaimPurpose purpose, int betType,
-                                 GameRuleCore.CollectionState collectionState) throws IOException {
-        String index = special ? RedisKeyContract.specialIndex(GAME_ID) : RedisKeyContract.normalIndex(GAME_ID);
-        List<Bucket> result = new ArrayList<>();
-        for (Object item : asList(redis.command("ZRANGE", index, "0", "-1"))) {
-            int multiplier = Integer.parseInt(String.valueOf(item));
-            if (positiveOnly && multiplier <= 0) continue;
-            List<String> eligible = eligibleMembers(special, multiplier, purpose, betType, collectionState);
-            if (!eligible.isEmpty()) result.add(new Bucket(special, multiplier, eligible));
-        }
-        return result;
-    }
-
-    private List<String> eligibleMembers(boolean special, int multiplier, ClaimPurpose purpose, int betType,
-                                         GameRuleCore.CollectionState collectionState) throws IOException {
-        String key = special ? RedisKeyContract.specialList(GAME_ID, multiplier) : RedisKeyContract.normalList(GAME_ID, multiplier);
-        List<String> result = new ArrayList<>();
-        for (Object item : asList(redis.command("LRANGE", key, "0", "-1"))) {
-            String member = String.valueOf(item);
+    private ClaimedRound readEligible(SecureRandom random, String key, boolean special, int multiplier,
+            ClaimPurpose purpose, java.util.function.Predicate<ClaimedRound> accepts) throws IOException {
+        long length = number(redis.command("LLEN", key));
+        if (length <= 0) return null;
+        long start = random.nextLong(length);
+        for (long visited = 0; visited < length; visited++) {
+            Object raw = redis.command("LINDEX", key, Long.toString((start + visited) % length));
+            if (raw == null) continue;
             try {
-                ClaimedRound checked = verify(member, special, multiplier, purpose);
-                if (purpose == ClaimPurpose.FEATURE_BUY
-                        && checked.fact().entryKind() == GameRuleCore.EntryKind.FEATURE_BUY_INITIAL
-                        && GameRuleCore.canApplyCollectionTransition(collectionState, checked.fact())) result.add(member);
-                if (purpose == ClaimPurpose.PAID
-                        && checked.fact().entryKind() == GameRuleCore.EntryKind.PAID_INITIAL
-                        && checked.fact().betType() == betType
-                        && GameRuleCore.canApplyCollectionTransition(collectionState, checked.fact())) result.add(member);
-            } catch (IllegalArgumentException | IllegalStateException invalid) {
-                // 非本入口 member 留在原池；例如购买不能拿自然 Free 或金币局。
-            }
+                ClaimedRound checked = verify(raw.toString(), special, multiplier, purpose);
+                if (accepts.test(checked)) return checked;
+            } catch (IllegalArgumentException | IllegalStateException ignored) { }
         }
-        return result;
-    }
-
-    private ClaimedRound claimFromBuckets(SecureRandom random, List<Bucket> initial, ClaimPurpose purpose) throws IOException {
-        List<Bucket> buckets = new ArrayList<>(initial);
-        while (!buckets.isEmpty()) {
-            Bucket bucket = buckets.remove(random.nextInt(buckets.size()));
-            String member;
-            List<String> eligible = new ArrayList<>(bucket.eligibleMembers());
-            while (!eligible.isEmpty()) {
-                member = eligible.remove(random.nextInt(eligible.size()));
-                return verify(member, bucket.special(), bucket.multiplier(), purpose);
-            }
-        }
-        throw empty("所选结果类别在领取时已耗尽");
+        return null;
     }
 
     private ClaimedRound verify(String payload, boolean special, int multiplier, ClaimPurpose purpose) {
@@ -242,6 +207,4 @@ final class RedisRoundStore implements AutoCloseable {
     record ClaimedRound(GameRuleCore.CompleteRoundFact fact, ResultUtil.Evaluation evaluation,
                         GameRuleCore.RoundClass kind, boolean special, int multiplier, String member) { }
     record TailTemplate(List<GameRuleCore.Step> steps, int multiplier) { }
-    private record TailCandidate(String key, String member, List<GameRuleCore.Step> steps, int multiplier) { }
-    private record Bucket(boolean special, int multiplier, List<String> eligibleMembers) { }
 }

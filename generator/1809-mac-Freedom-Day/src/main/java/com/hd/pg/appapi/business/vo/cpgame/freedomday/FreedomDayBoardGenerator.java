@@ -1,5 +1,6 @@
 package com.hd.pg.appapi.business.vo.cpgame.freedomday;
 
+import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -62,24 +63,42 @@ public final class FreedomDayBoardGenerator {
     }
 
     public FreedomDayBoard generate(boolean freeMode, boolean specialOpening) {
-        int[] weights = freeMode ? freeWeights
-                : (specialOpening ? specialEntryOpeningWeights(normalWeights) : normalWeights);
+        int[] ordinary = freeMode ? freeWeights : normalWeights;
+        int[] first = (!freeMode && specialOpening) ? specialEntryOpeningWeights(ordinary) : ordinary;
         int[] prop = new int[FreedomDayBoard.MAIN_SIZE];
         int[] trl = new int[FreedomDayBoard.TOP_SIZE];
+        boolean[] seenTrigger = new boolean[FreedomDayBoard.REEL_COUNT];
+        boolean topTrigger = false;
         for (int reel = 0; reel < FreedomDayBoard.REEL_COUNT; reel++) {
             if (reel == 0 || reel == FreedomDayBoard.REEL_COUNT - 1) {
                 for (int row = 0; row < FreedomDayBoard.ROW_COUNT; row++) {
-                    prop[reel * FreedomDayBoard.ROW_COUNT + row] = nextSymbol(weights);
+                    int symbol = nextSymbol(seenTrigger[reel] ? ordinary : first, !seenTrigger[reel]);
+                    if (symbol == SCATTER) seenTrigger[reel] = true;
+                    prop[reel * FreedomDayBoard.ROW_COUNT + row] = symbol;
                 }
             } else {
-                fillStackedReel(prop, reel, weights);
+                fillStackedReel(prop, reel, first, ordinary, seenTrigger);
             }
         }
-        for (int i = 0; i < trl.length; i++) trl[i] = nextSymbol(weights);
-        return withMergedSymbols(prop, trl);
+        for (int i = 0; i < trl.length; i++) {
+            int reel = i + 1;
+            boolean allowScatter = !seenTrigger[reel] && !topTrigger;
+            int symbol = nextSymbol(seenTrigger[reel] ? ordinary : first, allowScatter);
+            if (symbol == SCATTER) {
+                seenTrigger[reel] = true;
+                topTrigger = true;
+            }
+            trl[i] = symbol;
+        }
+        enforceTriggerCaps(prop, trl, freeMode, Set.of(), Set.of());
+        FreedomDayBoard board = withMergedSymbols(prop, trl);
+        if (FreedomDayResultUtil.countVisibleSymbol(board, SCATTER) >= 4) {
+            board = stripWaysWinsKeepingScatter(board, freeMode);
+        }
+        return board;
     }
 
-    private void fillStackedReel(int[] prop, int reel, int[] weights) {
+    private void fillStackedReel(int[] prop, int reel, int[] first, int[] ordinary, boolean[] seenTrigger) {
         int row = 0;
         while (row < FreedomDayBoard.ROW_COUNT) {
             int remaining = FreedomDayBoard.ROW_COUNT - row;
@@ -91,7 +110,8 @@ public final class FreedomDayBoardGenerator {
                 else if (roll < 90) height = Math.min(3, remaining);
                 else height = Math.min(4, remaining);
             }
-            int symbol = nextSymbol(weights);
+            int symbol = nextSymbol(seenTrigger[reel] ? ordinary : first, !seenTrigger[reel]);
+            if (symbol == SCATTER) seenTrigger[reel] = true;
             if (!mergeable(symbol)) height = 1;
             for (int offset = 0; offset < height; offset++) {
                 prop[reel * FreedomDayBoard.ROW_COUNT + row + offset] = symbol;
@@ -127,42 +147,71 @@ public final class FreedomDayBoardGenerator {
         int thirdOffset = 2 * FreedomDayBoard.ROW_COUNT;
         for (int row = 0; row < FreedomDayBoard.ROW_COUNT; row++) {
             int index = thirdOffset + row;
+            if (prop[index] == SCATTER) continue;
             prop[index] = safeThirdReelSymbol(prop[index], forbiddenOnThird, hasForbidden, freeMode);
         }
         // trl[1] 是第三列上方的额外格，也属于第三列 Ways 判定。
-        trl[1] = safeThirdReelSymbol(trl[1], forbiddenOnThird, hasForbidden, freeMode);
+        if (trl[1] != SCATTER) {
+            trl[1] = safeThirdReelSymbol(trl[1], forbiddenOnThird, hasForbidden, freeMode);
+        }
 
         return withMergedSymbols(prop, trl);
     }
 
-    /** 购买模式的入口盘：先随机出牌，再随机放置恰好 4 个 Scatter。 */
+    /** 购买/触发入口盘：4 个可见 Scatter，同一列和顶轴各最多 1 个，且本盘不中奖。 */
     public FreedomDayBoard generateFeatureTrigger() {
+        FreedomDayBoard board = null;
+        for (int attempt = 0; attempt < 16; attempt++) {
+            board = placeFourTriggers();
+            board = stripWaysWinsKeepingScatter(board, false);
+            FreedomDayEvaluation evaluation = FreedomDayResultUtil.evaluate(board, BigDecimal.ONE, 1, 2);
+            if (evaluation.getWins().isEmpty() && evaluation.getScatterCount() == 4) return board;
+        }
+        return stripWaysWinsKeepingScatter(board, false);
+    }
+
+    private FreedomDayBoard placeFourTriggers() {
         FreedomDayBoard board = generate(false);
         int[] prop = board.getProp();
         int[] trl = board.getTrl();
-        // 清除自然 Scatter，保证免费次数可预测，再在全部 34 格中无放回选 4 格。
-        for (int i = 0; i < prop.length; i++) if (prop[i] == SCATTER) prop[i] = 2 + random.nextInt(10);
-        for (int i = 0; i < trl.length; i++) if (trl[i] == SCATTER) trl[i] = 2 + random.nextInt(10);
-        boolean[] used = new boolean[FreedomDayBoard.MAIN_SIZE + FreedomDayBoard.TOP_SIZE];
-        for (int count = 0; count < 4; count++) {
-            int position;
-            do { position = random.nextInt(used.length); } while (used[position]);
-            used[position] = true;
-            if (position < prop.length) prop[position] = SCATTER;
-            else trl[position - prop.length] = SCATTER;
+        for (int i = 0; i < prop.length; i++) if (prop[i] == SCATTER) prop[i] = nextNonScatterNonWildSymbol(false);
+        for (int i = 0; i < trl.length; i++) if (trl[i] == SCATTER) trl[i] = nextNonScatterNonWildSymbol(false);
+        int[] reels = {0, 1, 2, 3, 4, 5};
+        for (int i = reels.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            int tmp = reels[i];
+            reels[i] = reels[j];
+            reels[j] = tmp;
         }
+        boolean placedTop = false;
+        for (int i = 0; i < 4; i++) {
+            int reel = reels[i];
+            boolean onTop = !placedTop && reel >= 1 && reel <= 4 && random.nextBoolean();
+            if (onTop) {
+                trl[reel - 1] = SCATTER;
+                placedTop = true;
+            } else {
+                prop[reel * FreedomDayBoard.ROW_COUNT + random.nextInt(FreedomDayBoard.ROW_COUNT)] = SCATTER;
+            }
+        }
+        enforceTriggerCaps(prop, trl, false, Set.of(), Set.of());
         return withMergedSymbols(prop, trl);
     }
 
     public int nextSymbol(boolean freeMode) {
-        return nextSymbol(freeMode ? freeWeights : normalWeights);
+        return nextSymbol(freeMode ? freeWeights : normalWeights, true);
     }
 
-    private int nextSymbol(int[] weights) {
+    private int nextSymbol(int[] weights, boolean allowScatter) {
         int total = 0;
-        for (int weight : weights) total += weight;
+        for (int i = 0; i < weights.length; i++) {
+            if (!allowScatter && i == SCATTER - 1) continue;
+            total += weights[i];
+        }
+        if (total <= 0) return 2 + random.nextInt(10);
         int value = random.nextInt(total);
         for (int i = 0; i < weights.length; i++) {
+            if (!allowScatter && i == SCATTER - 1) continue;
             value -= weights[i];
             if (value < 0) return i + 1;
         }
@@ -208,7 +257,7 @@ public final class FreedomDayBoardGenerator {
             for (int symbol = 1; symbol <= 11; symbol++)
                 if (!forbidden[symbol] && (symbol != BALL || allowBall)) allowed++;
             // 第一列最多5种自然符号，移除前两列Wild后，至少有6个普通符号可选。
-            if (allowed == 0) return SCATTER;
+            if (allowed == 0) return nextNonScatterNonWildSymbol(freeMode);
             int selected = random.nextInt(allowed);
             for (int symbol = 1; symbol <= 11; symbol++) {
                 if (forbidden[symbol] || (symbol == BALL && !allowBall)) continue;
@@ -232,19 +281,17 @@ public final class FreedomDayBoardGenerator {
 
     private void limitScatterCount(int[] prop, int[] trl, boolean freeMode) {
         int kept = 0;
-        for (int i = 0; i < prop.length; i++) {
-            if (prop[i] != SCATTER) continue;
-            if (++kept > 3) prop[i] = nextNonScatterNonWildSymbol(freeMode);
-        }
-        for (int i = 0; i < trl.length; i++) {
-            if (trl[i] != SCATTER) continue;
-            if (++kept > 3) trl[i] = nextNonScatterNonWildSymbol(freeMode);
+        for (int reel = 0; reel < FreedomDayBoard.REEL_COUNT; reel++) {
+            if (!reelHasScatter(prop, trl, reel)) continue;
+            if (++kept > 3) replaceAllScatterOnReel(prop, trl, reel, freeMode);
         }
     }
 
     private int nextNonScatterNonWildSymbol(boolean freeMode) {
         int symbol;
-        do { symbol = nextSymbol(freeMode); } while (symbol == SCATTER || symbol == WILD);
+        int guard = 0;
+        do { symbol = nextSymbol(freeMode); } while ((symbol == SCATTER || symbol == WILD) && ++guard < 32);
+        if (symbol == SCATTER || symbol == WILD) return 2 + random.nextInt(10);
         return symbol;
     }
 
@@ -291,8 +338,11 @@ public final class FreedomDayBoardGenerator {
             }
             int fill = FreedomDayBoard.ROW_COUNT - survivorIndexes.size();
             int start = reel * FreedomDayBoard.ROW_COUNT + fill;
+            boolean survivorScatter = false;
+            for (int oldIndex : survivorIndexes) if (oldProp[oldIndex] == SCATTER) survivorScatter = true;
+            int[] weights = freeMode ? freeWeights : normalWeights;
             for (int row = 0; row < fill; row++) {
-                nextProp[reel * FreedomDayBoard.ROW_COUNT + row] = nextSymbol(freeMode);
+                nextProp[reel * FreedomDayBoard.ROW_COUNT + row] = nextSymbol(weights, !survivorScatter);
             }
             for (int i = 0; i < survivorIndexes.size(); i++) {
                 int oldIndex = survivorIndexes.get(i);
@@ -323,15 +373,30 @@ public final class FreedomDayBoardGenerator {
             }
         }
 
-        mergeReelRuns(nextProp, 1, 4, 0, FreedomDayBoard.ROW_COUNT, survivorCells, nextGrids, nextGold, nextSilver);
-
         int[] oldTop = board.getTrl();
         int[] nextTop = new int[FreedomDayBoard.TOP_SIZE];
         List<Integer> topSurvivors = new ArrayList<>();
         for (int i = 0; i < oldTop.length; i++) if (!removedTop.contains(i)) topSurvivors.add(oldTop[i]);
+        boolean topHasScatter = false;
+        for (int symbol : topSurvivors) if (symbol == SCATTER) topHasScatter = true;
         int i = 0;
         for (; i < topSurvivors.size(); i++) nextTop[i] = topSurvivors.get(i);
-        for (; i < nextTop.length; i++) nextTop[i] = nextSymbol(freeMode);
+        int[] weights = freeMode ? freeWeights : normalWeights;
+        for (; i < nextTop.length; i++) {
+            int reel = i + 1;
+            boolean allowScatter = !topHasScatter && !reelHasMainScatter(nextProp, reel);
+            int symbol = nextSymbol(weights, allowScatter);
+            if (symbol == SCATTER) topHasScatter = true;
+            nextTop[i] = symbol;
+        }
+        Set<Integer> protectedScatter = new HashSet<>();
+        for (int index : survivorCells) if (nextProp[index] == SCATTER) protectedScatter.add(index);
+        Set<Integer> protectedTop = new HashSet<>();
+        for (int topIndex = 0; topIndex < topSurvivors.size(); topIndex++) {
+            if (topSurvivors.get(topIndex) == SCATTER) protectedTop.add(topIndex);
+        }
+        enforceTriggerCaps(nextProp, nextTop, freeMode, protectedScatter, protectedTop);
+        mergeReelRuns(nextProp, 1, 4, 0, FreedomDayBoard.ROW_COUNT, survivorCells, nextGrids, nextGold, nextSilver);
         return new FreedomDayBoard(nextProp, nextTop, nextGrids, nextGold, nextSilver);
     }
 
@@ -368,7 +433,7 @@ public final class FreedomDayBoardGenerator {
                     for (int offset = 0; offset < height; offset++) group.add(start + row + offset);
                     List<Integer> frozen = List.copyOf(group);
                     grids.add(frozen);
-                    assignFrame(frozen, gold, silver);
+                    if (symbol != SCATTER) assignFrame(frozen, gold, silver);
                     row += height;
                 } else {
                     row++;
@@ -384,7 +449,145 @@ public final class FreedomDayBoardGenerator {
     }
 
     private static boolean mergeable(int symbol) {
-        return symbol == WILD || (symbol >= 2 && symbol <= 11);
+        return FreedomDayGridRules.mergeable(symbol);
+    }
+
+    private FreedomDayBoard stripWaysWinsKeepingScatter(FreedomDayBoard board, boolean freeMode) {
+        int[] prop = board.getProp();
+        int[] trl = board.getTrl();
+        FreedomDayBoard candidate = applyWaysBreak(prop, trl, freeMode);
+        if (FreedomDayResultUtil.evaluate(candidate, BigDecimal.ONE, 1, 2).getWins().isEmpty()) return candidate;
+        boolean[] firstMatches = matchingSymbolsOnReel(prop, trl, 0);
+        boolean[] secondMatches = matchingSymbolsOnReel(prop, trl, 1);
+        int safe = 11;
+        for (int symbol = 2; symbol <= 11; symbol++) {
+            if (!firstMatches[symbol] || !secondMatches[symbol]) {
+                safe = symbol;
+                break;
+            }
+        }
+        int thirdOffset = 2 * FreedomDayBoard.ROW_COUNT;
+        for (int row = 0; row < FreedomDayBoard.ROW_COUNT; row++) {
+            if (prop[thirdOffset + row] != SCATTER) prop[thirdOffset + row] = safe;
+        }
+        if (trl[1] != SCATTER) trl[1] = safe;
+        enforceTriggerCaps(prop, trl, freeMode, Set.of(), Set.of());
+        return withMergedSymbols(prop, trl);
+    }
+
+    private FreedomDayBoard applyWaysBreak(int[] prop, int[] trl, boolean freeMode) {
+        replaceWildsOnFirstTwoReels(prop, trl, freeMode);
+        boolean[] firstMatches = matchingSymbolsOnReel(prop, trl, 0);
+        boolean[] secondMatches = matchingSymbolsOnReel(prop, trl, 1);
+        boolean[] forbiddenOnThird = new boolean[12];
+        boolean hasForbidden = false;
+        for (int symbol = 1; symbol <= 11; symbol++) {
+            forbiddenOnThird[symbol] = firstMatches[symbol] && secondMatches[symbol];
+            hasForbidden |= forbiddenOnThird[symbol];
+        }
+        int thirdOffset = 2 * FreedomDayBoard.ROW_COUNT;
+        for (int row = 0; row < FreedomDayBoard.ROW_COUNT; row++) {
+            int index = thirdOffset + row;
+            if (prop[index] == SCATTER) continue;
+            prop[index] = safeThirdReelSymbol(prop[index], forbiddenOnThird, hasForbidden, freeMode);
+        }
+        if (trl[1] != SCATTER) {
+            trl[1] = safeThirdReelSymbol(trl[1], forbiddenOnThird, hasForbidden, freeMode);
+        }
+        enforceTriggerCaps(prop, trl, freeMode, Set.of(), Set.of());
+        return withMergedSymbols(prop, trl);
+    }
+
+    private void enforceTriggerCaps(int[] prop, int[] trl, boolean freeMode,
+                                    Set<Integer> protectedMain, Set<Integer> protectedTop) {
+        for (int reel = 0; reel < FreedomDayBoard.REEL_COUNT; reel++) {
+            List<int[]> runs = scatterRunsOnReel(prop, reel);
+            if (runs.isEmpty()) continue;
+            int[] keep = null;
+            for (int[] run : runs) {
+                if (runOverlapsProtected(reel, run, protectedMain)) {
+                    keep = run;
+                    break;
+                }
+            }
+            if (keep == null) keep = runs.get(0);
+            for (int[] run : runs) {
+                if (run[0] == keep[0] && run[1] == keep[1]) continue;
+                replaceScatterRun(prop, reel, run, freeMode, protectedMain);
+            }
+        }
+        boolean topSeen = false;
+        for (int i = 0; i < trl.length; i++) {
+            if (trl[i] != SCATTER) continue;
+            boolean protectedCell = protectedTop != null && protectedTop.contains(i);
+            if (protectedCell) {
+                topSeen = true;
+                continue;
+            }
+            int reel = i + 1;
+            if (topSeen || reelHasMainScatter(prop, reel)) {
+                trl[i] = nextNonScatterNonWildSymbol(freeMode);
+            } else {
+                topSeen = true;
+            }
+        }
+    }
+
+    private static List<int[]> scatterRunsOnReel(int[] prop, int reel) {
+        List<int[]> runs = new ArrayList<>();
+        int offset = reel * FreedomDayBoard.ROW_COUNT;
+        int row = 0;
+        while (row < FreedomDayBoard.ROW_COUNT) {
+            if (prop[offset + row] != SCATTER) {
+                row++;
+                continue;
+            }
+            int start = row;
+            while (row < FreedomDayBoard.ROW_COUNT && prop[offset + row] == SCATTER) row++;
+            runs.add(new int[]{start, row});
+        }
+        return runs;
+    }
+
+    private static boolean runOverlapsProtected(int reel, int[] run, Set<Integer> protectedMain) {
+        if (protectedMain == null || protectedMain.isEmpty()) return false;
+        int offset = reel * FreedomDayBoard.ROW_COUNT;
+        for (int row = run[0]; row < run[1]; row++) {
+            if (protectedMain.contains(offset + row)) return true;
+        }
+        return false;
+    }
+
+    private void replaceScatterRun(int[] prop, int reel, int[] run, boolean freeMode, Set<Integer> protectedMain) {
+        int offset = reel * FreedomDayBoard.ROW_COUNT;
+        for (int row = run[0]; row < run[1]; row++) {
+            int index = offset + row;
+            if (protectedMain != null && protectedMain.contains(index)) continue;
+            prop[offset + row] = nextNonScatterNonWildSymbol(freeMode);
+        }
+    }
+
+    private void replaceAllScatterOnReel(int[] prop, int[] trl, int reel, boolean freeMode) {
+        int offset = reel * FreedomDayBoard.ROW_COUNT;
+        for (int row = 0; row < FreedomDayBoard.ROW_COUNT; row++) {
+            if (prop[offset + row] == SCATTER) prop[offset + row] = nextNonScatterNonWildSymbol(freeMode);
+        }
+        if (reel >= 1 && reel <= 4 && trl[reel - 1] == SCATTER) {
+            trl[reel - 1] = nextNonScatterNonWildSymbol(freeMode);
+        }
+    }
+
+    private static boolean reelHasScatter(int[] prop, int[] trl, int reel) {
+        if (reelHasMainScatter(prop, reel)) return true;
+        return reel >= 1 && reel <= 4 && trl[reel - 1] == SCATTER;
+    }
+
+    private static boolean reelHasMainScatter(int[] prop, int reel) {
+        int offset = reel * FreedomDayBoard.ROW_COUNT;
+        for (int row = 0; row < FreedomDayBoard.ROW_COUNT; row++) {
+            if (prop[offset + row] == SCATTER) return true;
+        }
+        return false;
     }
 
     private int nextTransformSymbol(boolean freeMode) {

@@ -42,11 +42,29 @@ public class ProtocolCodec {
         config.put("cs", "R$");
         config.put("dbl", new BigDecimal("0.5"));
         config.put("dbs", new BigDecimal("0.02"));
-        config.put("last", last);
+        config.put("last", configLast(session, last));
         config.put("ls", lastSummary(session, last));
         config.put("spl", paytable());
         config.put("ts", Instant.now().getEpochSecond());
         return config;
+    }
+
+    /** Config restores a historical step: unlike Spin, its wmkl entries are objects. */
+    private Map<String, Object> configLast(PlayerSession session, SpinStep last) {
+        RoundPlan round = session.activeRound != null ? session.activeRound
+                : session.history.isEmpty() ? null : session.history.getFirst().round;
+        int betLevel = round == null ? 1 : round.betLevel;
+        BigDecimal betSize = round == null ? new BigDecimal("0.02") : round.betSize;
+        List<Map<String, Object>> matches = new ArrayList<>();
+        for (WinMatch match : CoinMasterResultUtil.evaluate(last.rskl, betLevel, betSize, last.rpx).matches()) {
+            matches.add(linked("sk", match.symbol, "wa", match.win.setScale(2).toPlainString(),
+                    "wmk", match.coordinates));
+        }
+        return linked("ba", last.ba, "bl", betLevel, "bs", betSize,
+                "frwa", last.frwa, "fsn", last.fsn, "gfl", last.gfl, "gt", last.gt,
+                "nfsc", last.nfsc, "pb", last.pb, "rpx", last.rpx, "rskl", last.rskl,
+                "rwa", last.rwa, "small_game_type", last.small_game_type, "ss", last.ss,
+                "wa", last.wa, "wmkl", matches, "wskl", last.wskl);
     }
 
     private Map<String, Object> lastSummary(PlayerSession session, SpinStep last) {

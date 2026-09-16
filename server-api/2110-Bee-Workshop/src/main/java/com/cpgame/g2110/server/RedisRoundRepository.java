@@ -1,5 +1,7 @@
 package com.cpgame.g2110.server;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.g2110.core.*;
 import redis.clients.jedis.Jedis;
 
@@ -43,47 +45,44 @@ final class RedisRoundRepository implements AutoCloseable {
 
     private Claimed claimKind(GameRuleCore.RoundKind kind) {
         boolean special = RedisKeys.special(kind);
-        List<Integer> ratios = ratios(special, kind == GameRuleCore.RoundKind.ORDINARY_LOSS, kind == GameRuleCore.RoundKind.ORDINARY_WIN);
-        while (!ratios.isEmpty()) {
-            int multiplier = ratios.remove(random.nextInt(ratios.size()));
+        boolean loss = kind == GameRuleCore.RoundKind.ORDINARY_LOSS;
+        var buckets = buckets(special, kind == GameRuleCore.RoundKind.ORDINARY_WIN ? 1 : 0,
+                loss ? 0 : Integer.MAX_VALUE);
+        Integer multiplier;
+        while ((multiplier = buckets.next()) != null) {
             Claimed claimed = readMember(special, multiplier);
-            if (claimed == null) continue;
-            if (claimed.round.kind() != kind) continue;
-            return claimed;
+            if (claimed != null && claimed.round.kind() == kind) return claimed;
         }
         throw new CacheEmptyException("empty " + kind);
     }
 
-    private Claimed claimLoss() {
-        if (ratios(false, true, false).isEmpty()) return null;
-        return readMember(false, 0);
-    }
+    private Claimed claimLoss() { return readMember(false, 0); }
 
     private Claimed claimWin() {
-        List<int[]> candidates = new ArrayList<>();
-        for (boolean special : new boolean[]{false, true}) {
-            for (int multiplier : ratios(special, false, true)) {
-                candidates.add(new int[]{special ? 1 : 0, multiplier});
+        boolean firstSpecial = random.nextBoolean();
+        for (boolean special : new boolean[]{firstSpecial, !firstSpecial}) {
+            var buckets = buckets(special, 1, Integer.MAX_VALUE);
+            Integer multiplier;
+            while ((multiplier = buckets.next()) != null) {
+                Claimed claimed = readMember(special, multiplier);
+                if (claimed != null) return claimed;
             }
-        }
-        while (!candidates.isEmpty()) {
-            int[] chosen = candidates.remove(random.nextInt(candidates.size()));
-            Claimed claimed = readMember(chosen[0] == 1, chosen[1]);
-            if (claimed != null) return claimed;
         }
         return null;
     }
 
-    private List<Integer> ratios(boolean special, boolean lossOnly, boolean positiveOnly) {
-        List<Integer> out = new ArrayList<>();
-        for (String raw : jedis.zrange(RedisKeys.index(special), 0, -1)) {
-            int multiplier = Integer.parseInt(raw);
-            if (lossOnly && multiplier != 0) continue;
-            if (positiveOnly && multiplier <= 0) continue;
-            if (llen(special, multiplier) > 0) out.add(multiplier);
-        }
-        return out;
+    private RedisFloorLookup.Cursor<RuntimeException> buckets(boolean special, int minimum, int maximum) {
+        return RedisFloorLookup.open(this::floorCommand, RedisKeys.index(special),
+                m -> RedisKeys.list(special, m), random, minimum, maximum);
     }
+    private Object floorCommand(String... args) {
+        return switch (args[0]) {
+            case "ZREVRANGEBYSCORE" -> jedis.zrevrangeByScore(args[1], args[2], args[3], 0, 1);
+            case "LLEN" -> jedis.llen(args[1]);
+            default -> throw new IllegalArgumentException("unexpected lookup command");
+        };
+    }
+    
 
     private long llen(boolean special, int multiplier) {
         return jedis.llen(RedisKeys.list(special, multiplier));

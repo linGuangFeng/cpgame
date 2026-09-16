@@ -40,7 +40,7 @@ public final class FreedomDayResultUtil {
     public static FreedomDayEvaluation evaluate(FreedomDayBoard board, BigDecimal unitBet,
                                                  int baseMultiplier, int ballIncrement) {
         if (board == null || unitBet == null || unitBet.signum() < 0) throw new IllegalArgumentException();
-        int ballCount = countSymbol(board, BALL);
+        int ballCount = countVisibleSymbol(board, BALL);
         List<Integer> winningSymbols = new ArrayList<>();
         List<Integer> winningReelCounts = new ArrayList<>();
         List<Integer> winningWays = new ArrayList<>();
@@ -74,10 +74,11 @@ public final class FreedomDayResultUtil {
             winningTopPositions.add(top);
         }
 
-        // 倍率球只在当前页真实中奖并发生消除时收集。普通局的 1 是无球时的
-        // 基础倍率占位，第一个倍率球应从 0 累加到 x2，而不是得到错误的 x3。
+        // 倍率球只要可见就会收集；免费局即使当前页未中奖，也会把增量带到
+        // 后续 Spin。普通局的 1 是无球时的基础倍率占位，第一个倍率球应从
+        // 0 累加到 x2，而不是得到错误的 x3。
         int multiplier = Math.max(1, baseMultiplier);
-        if (!winningSymbols.isEmpty() && ballCount > 0) {
+        if (ballCount > 0) {
             int accumulated = baseMultiplier == 1 && ballIncrement == 2 ? 0 : baseMultiplier;
             multiplier = accumulated + ballCount * ballIncrement;
         }
@@ -96,17 +97,21 @@ public final class FreedomDayResultUtil {
             totalMultiplier = totalMultiplier.add(rawMultiplier);
         }
 
-        int scatterCount = countSymbol(board, SCATTER);
+        int scatterCount = countVisibleSymbol(board, SCATTER);
         int freeSpins = scatterCount >= 4 ? 10 + (scatterCount - 4) * 2 : 0;
         return new FreedomDayEvaluation(wins, totalMultiplier,
                 unitBet.multiply(totalMultiplier).setScale(2, RoundingMode.HALF_UP),
                 scatterCount, freeSpins, multiplier);
     }
 
-    private static int countSymbol(FreedomDayBoard board, int symbol) {
+    /** 主盘+trl 可见符号数；叠组算 1。Scatter 免费次数与倍率球均按可见符号计。 */
+    public static int countVisibleSymbol(FreedomDayBoard board, int symbol) {
         int count = 0;
-        for (int value : board.getProp()) if (value == symbol) count++;
-        for (int value : board.getTrl()) if (value == symbol) count++;
+        for (int reel = 0; reel < FreedomDayBoard.REEL_COUNT; reel++) {
+            for (FreedomDayBoard.Position position : board.positionsOnReel(reel)) {
+                if (position.getSymbol() == symbol) count++;
+            }
+        }
         return count;
     }
 

@@ -1,5 +1,7 @@
 package com.cpgame.replica.crazygems;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -572,27 +574,14 @@ public final class CrazyGemsController {
         }
 
         private DrawnRound takeFrom(SecureRandom random) throws IOException {
-            String index = RedisKeys.index(gameId);
-            List<Object> ratios = asList(redis.command("ZRANGE", index, "0", "-1"));
-            if (ratios.isEmpty()) return null;
-            List<int[]> weighted = new ArrayList<>();
-            int total = 0;
-            for (Object ratioObj : ratios) {
-                int ratio = Integer.parseInt(ratioObj.toString());
-                if (ratio <= 0) continue;
-                long len = llen(ratio);
-                if (len <= 0) continue;
-                total += (int) Math.min(len, Integer.MAX_VALUE);
-                weighted.add(new int[]{ratio, (int) Math.min(len, Integer.MAX_VALUE)});
+            var buckets = RedisFloorLookup.open(redis::command, RedisKeys.index(gameId),
+                    m -> RedisKeys.list(gameId, m), random, 1, Integer.MAX_VALUE);
+            Integer ratio;
+            while ((ratio = buckets.next()) != null) {
+                DrawnRound round = readMember(ratio, random);
+                if (round != null) return round;
             }
-            if (total <= 0) return null;
-            int pick = random.nextInt(total);
-            int cursor = 0;
-            for (int[] item : weighted) {
-                cursor += item[1];
-                if (pick < cursor) return readMember(item[0], random);
-            }
-            return readMember(weighted.get(weighted.size() - 1)[0], random);
+            return null;
         }
 
         private long llen(int ratio) throws IOException {

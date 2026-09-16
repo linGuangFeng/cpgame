@@ -26,8 +26,9 @@ class RuntimeSafetyTest {
             assertFalse(joined.contains("spin-index.jsonl"));
             assertFalse(joined.contains("IndependentLossGenerator"));
             assertTrue(joined.contains("config.getProperty(\"redis.host\""));
-            assertTrue(joined.contains("LPOP"));
-            assertFalse(joined.contains("LINDEX"));
+            assertFalse(joined.contains("LPOP"));
+            assertTrue(joined.contains("LINDEX"));
+            assertTrue(joined.contains("ZREVRANGEBYSCORE"));
             assertTrue(joined.contains("redis-db15-complete-round"));
             assertTrue(joined.contains("不准改成内存出牌"));
         }

@@ -64,25 +64,33 @@ public final class EdmManiaBoardGenerator {
     }
 
     public EdmManiaBoard generate(boolean freeMode, boolean specialOpening) {
-        int[] weights = freeMode ? freeWeights
-                : (specialOpening ? specialEntryOpeningWeights(normalWeights) : normalWeights);
+        int[] ordinary = freeMode ? freeWeights : normalWeights;
+        int[] first = (!freeMode && specialOpening) ? specialEntryOpeningWeights(ordinary) : ordinary;
         int[] prop = new int[EdmManiaBoard.MAIN_SIZE];
         int[] trl = new int[EdmManiaBoard.TOP_SIZE];
+        boolean[] seenTrigger = new boolean[EdmManiaBoard.REEL_COUNT];
         for (int reel = 0; reel < EdmManiaBoard.REEL_COUNT; reel++) {
             if (reel == 0 || reel == EdmManiaBoard.REEL_COUNT - 1) {
                 for (int row = 0; row < EdmManiaBoard.ROW_COUNT; row++) {
-                    prop[reel * EdmManiaBoard.ROW_COUNT + row] = nextSymbol(weights);
+                    int symbol = nextSymbol(seenTrigger[reel] ? ordinary : first);
+                    if (symbol == SCATTER) seenTrigger[reel] = true;
+                    prop[reel * EdmManiaBoard.ROW_COUNT + row] = symbol;
                 }
             } else {
-                fillStackedReel(prop, reel, weights);
+                fillStackedReel(prop, reel, first, ordinary, seenTrigger);
             }
         }
-        for (int i = 0; i < trl.length; i++) trl[i] = nextSymbol(weights);
+        for (int i = 0; i < trl.length; i++) {
+            int reel = i + 1;
+            int symbol = nextSymbol(seenTrigger[reel] ? ordinary : first);
+            if (symbol == SCATTER) seenTrigger[reel] = true;
+            trl[i] = symbol;
+        }
         enforceObservedCaps(prop, trl, freeMode);
         return withMergedSymbols(prop, trl);
     }
 
-    private void fillStackedReel(int[] prop, int reel, int[] weights) {
+    private void fillStackedReel(int[] prop, int reel, int[] first, int[] ordinary, boolean[] seenTrigger) {
         int row = 0;
         while (row < EdmManiaBoard.ROW_COUNT) {
             int remaining = EdmManiaBoard.ROW_COUNT - row;
@@ -94,7 +102,8 @@ public final class EdmManiaBoardGenerator {
                 else if (roll < 90) height = Math.min(3, remaining);
                 else height = Math.min(4, remaining);
             }
-            int symbol = nextSymbol(weights);
+            int symbol = nextSymbol(seenTrigger[reel] ? ordinary : first);
+            if (symbol == SCATTER) seenTrigger[reel] = true;
             if (!mergeable(symbol)) height = 1;
             for (int offset = 0; offset < height; offset++) {
                 prop[reel * EdmManiaBoard.ROW_COUNT + row + offset] = symbol;

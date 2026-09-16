@@ -16,8 +16,17 @@ class IndependentLossMarkerTest {
         return new CompleteRoundFact.PageFact(b, tracker.next(b, spin), List.of(), List.of());
     }
     LuckyPandaBoard trigger() {
-        List<String> tokens = new ArrayList<>(loss(0).toRskl());
-        for (int i : new int[]{0, 5, 11, 17}) tokens.set(i, "1Scat");
+        List<String> tokens = new ArrayList<>();
+        for (int n = 0; n < 34; n++) tokens.add("1T");
+        tokens.set(0, "1H1");
+        tokens.set(1, "1H2");
+        tokens.set(2, "1H3");
+        tokens.set(3, "1H4");
+        tokens.set(4, "1H5");
+        tokens.set(0, "1Scat");
+        tokens.set(5, "1Scat");
+        tokens.set(11, "1Scat");
+        tokens.set(17, "1Scat");
         return LuckyPandaBoard.fromRskl(tokens);
     }
     CompleteRoundFact freeRound(boolean retrigger) {
@@ -60,6 +69,24 @@ class IndependentLossMarkerTest {
                 assertEquals(compact, codec.encode(after));
             }
         }
+    }
+
+    @Test void materializedZeroMarkerHasLongFrames() {
+        int framed = 0;
+        int tall = 0;
+        for (int i = 0; i < 80; i++) {
+            CompleteRoundFact fact = codec.decode("#" + (i % 6));
+            var page = fact.paid().get(0);
+            for (int reel = 1; reel <= 4; reel++) {
+                for (var token : page.board().reel(reel)) {
+                    if (!token.top() && token.height() >= 2) tall++;
+                }
+            }
+            framed += page.gfl().size() + page.sfl().size();
+            assertEquals("#" + (i % 6), codec.encode(fact));
+        }
+        assertTrue(tall > 0);
+        assertTrue(framed > 0);
     }
 
     @Test void everySupportedPanCountIsReallyZeroAndFresh() {

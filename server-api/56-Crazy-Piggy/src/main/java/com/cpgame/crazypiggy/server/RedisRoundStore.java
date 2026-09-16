@@ -1,5 +1,7 @@
 package com.cpgame.crazypiggy.server;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.crazypiggy.generator.GameRuleCore;
 import com.cpgame.crazypiggy.generator.MinimalRoundFactCodec;
 import com.cpgame.crazypiggy.generator.RedisLoader;
@@ -24,8 +26,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class RedisRoundStore {
     private final AppConfig config;
     private final AtomicLong outcomeCursor = new AtomicLong();
-    private final AtomicLong normalRatioCursor = new AtomicLong();
-    private final AtomicLong specialRatioCursor = new AtomicLong();
+    private final java.security.SecureRandom random = new java.security.SecureRandom();
     private final MinimalRoundFactCodec codec = new MinimalRoundFactCodec(new RoundFactory(), new RoundVerifier());
     private final GameRuleCore core = GameRuleCore.forRestoration();
 
@@ -36,17 +37,17 @@ public class RedisRoundStore {
         Outcome outcome = chooseOutcome();
         try (Connection redis = Connection.connect(config)) {
             int ratio = switch (outcome) {
-                case LOSS -> requireNonEmpty(redis, false, List.of(0));
-                case WIN -> requireNonEmpty(redis, false, positiveRatios(redis, false));
-                case SPECIAL -> requireNonEmpty(redis, true, positiveRatios(redis, true));
+                case LOSS -> requireNonEmpty(redis, false, 0, 0);
+                case WIN -> requireNonEmpty(redis, false, 1, Integer.MAX_VALUE);
+                case SPECIAL -> requireNonEmpty(redis, true, 1, Integer.MAX_VALUE);
             };
             String key = outcome == Outcome.SPECIAL ? RedisLoader.specialList(config.redisGameId(), ratio)
                     : RedisLoader.normalList(config.redisGameId(), ratio);
             Object length = redis.command("LLEN", key);
             long len = length instanceof Long n ? n : Long.parseLong(String.valueOf(length));
             if (len <= 0) throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
-            int offset = (int) Math.floorMod(outcomeCursor.get(), Math.min(len, Integer.MAX_VALUE));
-            Object raw = redis.command("LINDEX", key, Integer.toString(offset));
+            long offset = random.nextLong(len);
+            Object raw = redis.command("LINDEX", key, Long.toString(offset));
             if (!(raw instanceof String payload)) throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
             RoundResult base = codec.decodeRedisMember(payload);
             RoundMode actual = ResultUtil.analyze(base).mode();
@@ -76,29 +77,15 @@ public class RedisRoundStore {
         return point < config.winWeight() ? Outcome.WIN : Outcome.SPECIAL;
     }
 
-    private List<Integer> positiveRatios(Connection redis, boolean special) throws IOException {
-        String index = special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId());
-        Object value = redis.command("ZRANGE", index, "0", "-1");
-        List<Integer> result = new ArrayList<>();
-        if (value instanceof List<?> list) for (Object item : list) {
-            int ratio = Integer.parseInt(item.toString());
-            if (ratio > 0) result.add(ratio);
-        }
-        return result;
-    }
+    
 
-    private int requireNonEmpty(Connection redis, boolean special, List<Integer> ratios) throws IOException {
-        List<Integer> available = new ArrayList<>();
-        for (int ratio : ratios) {
-            String key = special ? RedisLoader.specialList(config.redisGameId(), ratio)
-                    : RedisLoader.normalList(config.redisGameId(), ratio);
-            Object length = redis.command("LLEN", key);
-            if (length instanceof Long n && n > 0) available.add(ratio);
-        }
-        if (available.isEmpty()) throw new PoolUnavailableException("REDIS_POOL_EMPTY",
-                special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId()));
-        AtomicLong cursor = special ? specialRatioCursor : normalRatioCursor;
-        return available.get((int) Math.floorMod(cursor.getAndIncrement(), available.size()));
+    private int requireNonEmpty(Connection redis, boolean special, int minimum, int maximum) throws IOException {
+        String index = special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId());
+        Integer selected = RedisFloorLookup.choose(redis::command, index,
+                m -> special ? RedisLoader.specialList(config.redisGameId(), m) : RedisLoader.normalList(config.redisGameId(), m),
+                random, minimum, maximum);
+        if (selected == null) throw new PoolUnavailableException("REDIS_POOL_EMPTY", index);
+        return selected;
     }
 
     private enum Outcome { LOSS, WIN, SPECIAL }

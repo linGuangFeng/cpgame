@@ -1,5 +1,7 @@
 package com.cpgame.saci.server;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.saci.generator.GameRuleCore;
 import com.cpgame.saci.generator.MinimalRoundFactCodec;
 import com.cpgame.saci.generator.RedisLoader;
@@ -61,21 +63,14 @@ public class RedisRoundStore {
 
     RoundCandidate claimCandidate(boolean special, RoundMode required) {
         try (Connection redis = Connection.connect(config)) {
-            List<Integer> ratios = special ? positiveRatios(redis, true)
-                    : required == RoundMode.ORDINARY_LOSS ? List.of(0) : positiveRatios(redis, false);
-            List<Integer> available = new ArrayList<>();
-            for (int ratio : ratios) {
-                String key = special ? RedisLoader.specialList(config.redisGameId(), ratio)
-                        : RedisLoader.normalList(config.redisGameId(), ratio);
-                Object length = redis.command("LLEN", key);
-                if (length instanceof Long n && n > 0) available.add(ratio);
-            }
-            if (available.isEmpty()) {
-                throw new PoolUnavailableException("REDIS_POOL_EMPTY",
-                        special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId()));
-            }
-            while (!available.isEmpty()) {
-                int ratio = available.remove(random.nextInt(available.size()));
+            int minimum = required == RoundMode.ORDINARY_LOSS ? 0 : 1;
+            int maximum = required == RoundMode.ORDINARY_LOSS ? 0 : Integer.MAX_VALUE;
+            String index = special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId());
+            var cursor = RedisFloorLookup.open(redis::command, index,
+                    m -> special ? RedisLoader.specialList(config.redisGameId(), m) : RedisLoader.normalList(config.redisGameId(), m),
+                    random, minimum, maximum);
+            Integer ratio;
+            while ((ratio = cursor.next()) != null) {
                 String key = special ? RedisLoader.specialList(config.redisGameId(), ratio)
                         : RedisLoader.normalList(config.redisGameId(), ratio);
                 Object length = redis.command("LLEN", key);
@@ -107,31 +102,9 @@ public class RedisRoundStore {
         }
     }
 
-    private List<Integer> positiveRatios(Connection redis, boolean special) throws IOException {
-        String index = special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId());
-        Object value = redis.command("ZRANGE", index, "0", "-1");
-        List<Integer> result = new ArrayList<>();
-        if (value instanceof List<?> list) for (Object item : list) {
-            int ratio = Integer.parseInt(item.toString());
-            if (ratio > 0) result.add(ratio);
-        }
-        return result;
-    }
+    
 
-    private int requireNonEmpty(Connection redis, boolean special, List<Integer> ratios) throws IOException {
-        List<Integer> available = new ArrayList<>();
-        for (int ratio : ratios) {
-            String key = special ? RedisLoader.specialList(config.redisGameId(), ratio)
-                    : RedisLoader.normalList(config.redisGameId(), ratio);
-            Object length = redis.command("LLEN", key);
-            if (length instanceof Long n && n > 0) available.add(ratio);
-        }
-        if (available.isEmpty()) {
-            throw new PoolUnavailableException("REDIS_POOL_EMPTY",
-                    special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId()));
-        }
-        return available.get(random.nextInt(available.size()));
-    }
+    
 
     enum Outcome { LOSS, WIN, FREE }
 

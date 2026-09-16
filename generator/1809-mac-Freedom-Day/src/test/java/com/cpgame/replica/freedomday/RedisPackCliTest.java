@@ -41,7 +41,7 @@ class RedisPackCliTest {
             assertFalse(payload.startsWith("{") || payload.startsWith("["));
             assertFalse(payload.contains("featureBuy"));
             for (String spin : payload.split("\\|")) {
-                if (!"#".equals(spin)) assertEquals(0, spin.length() % 34);
+                if (!spin.matches("#(?:[1-3])?")) assertEquals(0, spin.length() % 34);
             }
             CompleteRoundCodec codec = new CompleteRoundCodec();
             CompleteRoundFact fact = codec.decode(payload, "SPECIAL".equals(row.path("mode").asText()));

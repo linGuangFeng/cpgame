@@ -84,6 +84,7 @@ class ControllerApiTest {
             String ping = post(client, base + "/cp/api/v1/ping", "gid=41&t=api-test");
             assertTrue(ping.contains("\"code\":200"));
 
+            fake.command("LPOP", "BetLog:000000041:000000");
             String empty = post(client, base + "/cp/api/v1/lucky-panda/spin", "gid=41&t=api-test&bs=0.02&bl=1");
             assertTrue(empty.contains("\"code\":503"));
             assertTrue(empty.toLowerCase().contains("empty") || empty.toLowerCase().contains("cache"));

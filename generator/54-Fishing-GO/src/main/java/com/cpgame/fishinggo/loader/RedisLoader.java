@@ -28,9 +28,9 @@ public final class RedisLoader {
         String host = req(p, "redis.host");
         int port = num(p, "redis.port", 1, 65535), db = num(p, "redis.database", 0, 15);
 
-        int loss = num(p, "generation.loss-count", 0, 1_000_000);
-        int win = num(p, "generation.win-count", 0, 1_000_000);
-        int special = num(p, "generation.special-count", 0, 1_000_000);
+        int loss = num(p, "generation.loss-count", 0, Integer.MAX_VALUE);
+        int win = num(p, "generation.win-count", 0, Integer.MAX_VALUE);
+        int special = num(p, "generation.special-count", 0, Integer.MAX_VALUE);
         int cap = num(p, "generation.max-members-per-multiplier", 1, 1_000_000);
         DefaultJedisClientConfig.Builder cfg = DefaultJedisClientConfig.builder().database(db)
                 .connectionTimeoutMillis(num(p, "redis.connect-timeout-ms", 1, 120000))

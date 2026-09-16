@@ -86,6 +86,8 @@ class ControllerApiTest {
     private static final class AlwaysLossRandom extends java.security.SecureRandom {
         @Override public boolean nextBoolean() { return false; }
         @Override public int nextInt(int bound) { return 0; }
+        @Override public long nextLong(long origin, long bound) { return bound - 1; }
+        @Override public long nextLong(long bound) { return 0; }
     }
 
     private static CompleteRoundFact lossFact() {

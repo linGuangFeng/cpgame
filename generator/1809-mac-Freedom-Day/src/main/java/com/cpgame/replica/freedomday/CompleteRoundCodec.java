@@ -22,7 +22,7 @@ import java.util.StringJoiner;
 
 /**
  * Redis 极简 member：每页 68 字符（34 符号 + Z + 20 占格/框 + 补齐），付费/免费 Spin 用 {@code |}。
- * 独立、单页、无状态变化的无奖 Spin 编为 #，解码时生成真实零倍盘。
+ * 独立、单页无奖 Spin 按可见 x2 球数量编为 #、#1、#2、#3，解码时生成真实零倍盘。
  * 连消链（包括结束页）和免费触发盘不压缩。旧 34/68 字符 member 仍可解码。
  */
 public final class CompleteRoundCodec {
@@ -50,10 +50,13 @@ public final class CompleteRoundCodec {
         // Pages have no delimiter; paid/free Spin boundaries use '|'.
         StringJoiner spins = new StringJoiner("|");
         for (List<CompleteRoundFact.BoardFact> spin : fact.spins()) {
-            if (compactLosses && spin.size() == 1
-                    && FreedomDayIndependentLossGenerator.isIndependentLoss(board(spin.get(0)))) {
-                spins.add(INDEPENDENT_LOSS);
-                continue;
+            if (compactLosses && spin.size() == 1) {
+                FreedomDayBoard candidate = board(spin.get(0));
+                if (FreedomDayIndependentLossGenerator.isCompactableLoss(candidate)) {
+                    int balls = FreedomDayResultUtil.countVisibleSymbol(candidate, FreedomDayResultUtil.BALL);
+                    spins.add(balls == 0 ? INDEPENDENT_LOSS : INDEPENDENT_LOSS + balls);
+                    continue;
+                }
             }
             StringBuilder pages = new StringBuilder(spin.size() * PAGE_WITH_FRAMES);
             for (CompleteRoundFact.BoardFact page : spin) {
@@ -102,8 +105,11 @@ public final class CompleteRoundCodec {
         List<List<CompleteRoundFact.BoardFact>> spins = new ArrayList<>(encodedSpins.length);
         for (String encodedSpin : encodedSpins) {
             // 只接受整个 Spin token；绝不替换连消页或牌面中的字符 0。
-            if (INDEPENDENT_LOSS.equals(encodedSpin)) {
-                FreedomDayBoard loss = LOSSES.generate(LOSS_RANDOM, !spins.isEmpty());
+            int markerBalls = markerBallCount(encodedSpin);
+            if (markerBalls >= 0) {
+                // Recreate the exact visible ball count so both the client animation
+                // and the carried multiplier match the compressed Spin.
+                FreedomDayBoard loss = LOSSES.generateMarkerLoss(LOSS_RANDOM, !spins.isEmpty(), markerBalls);
                 spins.add(List.of(new CompleteRoundFact.BoardFact(
                         Arrays.stream(loss.getProp()).boxed().toList(),
                         Arrays.stream(loss.getTrl()).boxed().toList(),
@@ -138,6 +144,15 @@ public final class CompleteRoundCodec {
             spins.add(List.copyOf(pages));
         }
         return new CompleteRoundFact(CompleteRoundFact.VERSION, featureBuy, spins);
+    }
+
+    private static int markerBallCount(String token) {
+        if (INDEPENDENT_LOSS.equals(token)) return 0;
+        if (token != null && token.length() == 2 && token.charAt(0) == '#') {
+            int count = Character.digit(token.charAt(1), 10);
+            if (count >= 1 && count <= FreedomDayIndependentLossGenerator.MAX_MARKER_BALLS) return count;
+        }
+        return -1;
     }
 
     private void appendFrames(StringBuilder target, CompleteRoundFact.BoardFact page) {

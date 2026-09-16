@@ -11,19 +11,17 @@ import com.hd.pg.appapi.business.vo.cpgame.luckypanda.RoundClass;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 /**
- * Demo 只从 Redis db=15 领取一条完整局 member。
- * 先随机中/不中，再在对应奖池已有倍率中随机一个，一次 LPOP 整局。
+ * Demo 只从配置的 Redis 读取一条完整局 member。
+ * 先随机中/不中；中奖随机目标倍数，向下找最近有数据的桶，再随机读取完整局。
  * 连消/免费不在这里抽。购买不是玩法，因此没有 BUY 桶；Scatter 免费进 Mary 索引。
  * runtimeIndependentLoss.supported=true 不是当场出牌许可：不中奖走 0 倍池。
  */
 final class RedisRoundStore implements AutoCloseable {
     static final int MAX_CONSECUTIVE = 10;
-    private static final int GID = GameRuleCore.GAME_ID;
 
     private final RedisCommands redis;
     private final long gameId;
@@ -54,7 +52,7 @@ final class RedisRoundStore implements AutoCloseable {
         ClaimedRound claimed = wantWin ? claimWin(random) : claimLoss(random);
         if (claimed == null) claimed = wantWin ? claimLoss(random) : claimWin(random);
         if (claimed == null) {
-            throw new IllegalStateException("Redis round cache is empty host=18.234.101.161 db=15 gameId=41");
+            throw new IllegalStateException("Redis round cache is empty for gameId=" + gameId);
         }
         return claimed;
     }
@@ -64,22 +62,41 @@ final class RedisRoundStore implements AutoCloseable {
     }
 
     private ClaimedRound claimWin(SecureRandom random) throws IOException {
-        List<Bucket> buckets = new ArrayList<>();
-        collectPositive(false, buckets);
-        collectPositive(true, buckets);
-        if (buckets.isEmpty()) return null;
-        Bucket bucket = buckets.get(random.nextInt(buckets.size()));
-        return readMember(bucket.special, bucket.multiplier, random);
+        boolean firstSpecial = random.nextBoolean();
+        for (boolean special : new boolean[]{firstSpecial, !firstSpecial}) {
+            String index = index(special);
+            List<Object> highest = asList(redis.command("ZREVRANGE", index, "0", "0"));
+            if (highest.isEmpty()) continue;
+            int maximum = Integer.parseInt(highest.get(0).toString());
+            if (maximum <= 0) continue;
+            int target = random.nextInt(maximum) + 1;
+            ClaimedRound found = atOrBelow(special, target, random);
+            if (found != null) return found;
+        }
+        return null;
     }
 
-    private void collectPositive(boolean special, List<Bucket> target) throws IOException {
-        String index = special ? RedisKeyContract.specialIndex(gameId) : RedisKeyContract.normalIndex(gameId);
-        List<Object> raw = asList(redis.command("ZRANGE", index, "0", "-1"));
-        for (Object item : raw) {
-            int ratio = Integer.parseInt(item.toString());
-            if (ratio <= 0) continue;
-            if (llen(special, ratio) > 0) target.add(new Bucket(special, ratio));
+    ClaimedRound atOrBelow(boolean special, int target, SecureRandom random) throws IOException {
+        if (target < 1) return null;
+        String upper = Integer.toString(target);
+        int previous = 0;
+        while (true) {
+            List<Object> found = asList(redis.command("ZREVRANGEBYSCORE", index(special), upper, "0", "LIMIT", "0", "1"));
+            if (found.isEmpty()) return null;
+            int ratio = Integer.parseInt(found.get(0).toString());
+            if (ratio < 0 || ratio > target || (previous > 0 && ratio >= previous)) {
+                throw new IllegalStateException("Redis multiplier index is inconsistent");
+            }
+            ClaimedRound round = readMember(special, ratio, random);
+            if (round != null) return round;
+            // Only an empty/disappeared selected bucket needs another downward lookup.
+            previous = ratio;
+            upper = "(" + ratio;
         }
+    }
+
+    private String index(boolean special) {
+        return special ? RedisKeyContract.specialIndex(gameId) : RedisKeyContract.normalIndex(gameId);
     }
 
     private long llen(boolean special, int ratio) throws IOException {
@@ -93,9 +110,9 @@ final class RedisRoundStore implements AutoCloseable {
         long len = llen(special, ratio);
         if (len <= 0) return null;
         String list = special ? RedisKeyContract.specialList(gameId, ratio) : RedisKeyContract.normalList(gameId, ratio);
-        Object popped = redis.command("LPOP", list);
-        if (popped == null) return null;
-        String payload = popped.toString();
+        Object member = redis.command("LINDEX", list, Long.toString(random.nextLong(len)));
+        if (member == null) return null;
+        String payload = member.toString();
         if (payload.isEmpty() || payload.charAt(0) == '{' || payload.charAt(0) == '[') {
             throw new IllegalStateException("cached member must be compact ASCII, not JSON");
         }
@@ -135,5 +152,4 @@ final class RedisRoundStore implements AutoCloseable {
     record ClaimedRound(CompleteRoundFact fact, RoundVerification verification, RoundClass kind,
                         boolean special, int ratio, String member) { }
 
-    private record Bucket(boolean special, int multiplier) { }
 }

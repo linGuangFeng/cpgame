@@ -63,7 +63,12 @@ public final class FreedomDayRoundProtocolCli {
             List<CompleteRoundFact.BoardFact> boards = fact.spins().get(spinIndex);
             for (int pageIndex = 0; pageIndex < boards.size(); pageIndex++) {
                 CompleteRoundFact.BoardFact boardFact = boards.get(pageIndex);
-                FreedomDayBoard board = new FreedomDayBoard(toArray(boardFact.prop()), toArray(boardFact.trl()));
+                // Multiplier/scatter symbols inside a merged frame are one visible symbol.
+                // Keep the frame metadata when replaying Redis facts; dropping it makes a
+                // 2-4 cell frame count once per occupied cell and corrupts the carried multiplier.
+                FreedomDayBoard board = new FreedomDayBoard(
+                        toArray(boardFact.prop()), toArray(boardFact.trl()),
+                        boardFact.grids(), boardFact.gf(), boardFact.sl());
                 FreedomDayEvaluation evaluation = FreedomDayResultUtil.evaluate(board, unitBet, multiplier, increment);
                 if (pageIndex == 0) awarded = evaluation.getAwardedFreeSpins();
                 spinMultiplier = spinMultiplier.add(evaluation.getTotalMultiplier());

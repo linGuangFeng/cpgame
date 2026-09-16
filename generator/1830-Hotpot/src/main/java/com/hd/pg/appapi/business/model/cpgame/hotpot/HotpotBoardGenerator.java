@@ -42,6 +42,7 @@ public final class HotpotBoardGenerator {
     private final int[] paidCascade;
     private final int[] freeStart;
     private final int[] freeCascade;
+    private final boolean boostFirstColumnScatter;
 
     public HotpotBoardGenerator() {
         this(new SecureRandom());
@@ -52,12 +53,18 @@ public final class HotpotBoardGenerator {
     }
 
     public HotpotBoardGenerator(Random random, int[] paidStart, int[] cascade, int[] freeStart) {
+        this(random, paidStart, cascade, freeStart, false);
+    }
+
+    public HotpotBoardGenerator(Random random, int[] paidStart, int[] cascade, int[] freeStart,
+                                boolean boostFirstColumnScatter) {
         if (random == null) throw new IllegalArgumentException("random is required");
         this.random = random;
         this.paidStart = validated(paidStart, "paid-start");
         this.paidCascade = maskPaid(validated(cascade, "cascade"));
         this.freeStart = maskFree(validated(freeStart, "free-start"));
         this.freeCascade = maskFree(validated(cascade, "free-cascade"));
+        this.boostFirstColumnScatter = boostFirstColumnScatter;
     }
 
     public static int[] defaultPaidStartWeights() { return DEFAULT_PAID_START_WEIGHTS.clone(); }
@@ -81,7 +88,13 @@ public final class HotpotBoardGenerator {
 
     public HotpotBoard generate(HotpotSymbolScene scene) {
         int[] prop = new int[HotpotBoard.SIZE];
-        for (int i = 0; i < prop.length; i++) prop[i] = nextAllowed(scene, prop, i, maxScatterOnPage(scene));
+        boolean seenTrigger = false;
+        for (int i = 0; i < prop.length; i++) {
+            if (i % HotpotBoard.ROWS == 0) seenTrigger = false;
+            int symbol = nextAllowed(scene, prop, i, maxScatterOnPage(scene), seenTrigger);
+            if (symbol == HotpotResultUtil.SCATTER) seenTrigger = true;
+            prop[i] = symbol;
+        }
         return new HotpotBoard(prop);
     }
 
@@ -152,13 +165,22 @@ public final class HotpotBoardGenerator {
         throw new IllegalStateException("unhandled symbol scene: " + scene);
     }
 
-    private int nextAllowed(HotpotSymbolScene scene, int[] prop, int index, int maxBoardScatter) {
+    private int nextAllowed(HotpotSymbolScene scene, int[] prop, int index, int maxBoardScatter,
+                            boolean columnHasTrigger) {
+        int[] weights = weightsForDraw(scene, columnHasTrigger);
         for (int attempt = 0; attempt < 32; attempt++) {
-            int symbol = pick(weightsFor(scene));
+            int symbol = pick(weights);
             if (symbol != HotpotResultUtil.SCATTER) return symbol;
             if (scatterAllowed(prop, index, 0, maxBoardScatter)) return symbol;
         }
         return pickNonScatter(scene);
+    }
+
+    private int[] weightsForDraw(HotpotSymbolScene scene, boolean columnHasTrigger) {
+        if (boostFirstColumnScatter && scene == HotpotSymbolScene.PAID_START && !columnHasTrigger) {
+            return specialEntryOpeningWeights(paidStart);
+        }
+        return weightsFor(scene);
     }
 
     private int nextAllowedFill(HotpotSymbolScene scene, int[] next, int index, int keepScatter,
@@ -189,9 +211,12 @@ public final class HotpotBoardGenerator {
     }
 
     private static int maxScatterOnPage(HotpotSymbolScene scene) {
-        return (scene == HotpotSymbolScene.FREE_START || scene == HotpotSymbolScene.FREE_CASCADE)
-                ? HotpotResultUtil.MAX_SCATTER_FREE_START_PAGE
-                : HotpotResultUtil.MAX_SCATTER_PAID_PAGE;
+        if (scene == HotpotSymbolScene.FREE_START || scene == HotpotSymbolScene.FREE_CASCADE) {
+            // 2+ Scatter on a free page is a legal origin retrigger, but after GetFreeTimesView
+            // the original Game1830 page enters ADDSCATTER / FreeSpinWon and never resumes BetClick.
+            return HotpotResultUtil.FREE_SCATTER_RETRIGGER - 1;
+        }
+        return HotpotResultUtil.MAX_SCATTER_PAID_PAGE;
     }
 
     private static boolean scatterAllowed(int[] prop, int index, int extraColumnScatter, int maxBoardScatter) {

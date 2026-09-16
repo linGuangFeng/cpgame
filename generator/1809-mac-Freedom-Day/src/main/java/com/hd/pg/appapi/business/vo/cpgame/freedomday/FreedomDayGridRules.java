@@ -82,6 +82,7 @@ public final class FreedomDayGridRules {
     }
 
     public static boolean mergeable(int symbol) {
-        return symbol == 13 || (symbol >= 2 && symbol <= 11);
+        // 原厂内轴 Ball/Scatter 均可叠成 2–4 高；叠组是一个可见符号。
+        return symbol >= 1 && symbol <= 13;
     }
 }

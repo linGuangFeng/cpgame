@@ -75,7 +75,6 @@ public final class RedisDirectLoader {
         Map<Integer, Integer> normalPerRatio = new HashMap<>();
         Map<Integer, Integer> specialPerRatio = new HashMap<>();
         Map<WeightScene, int[]> ordinary = config.weights();
-        Map<WeightScene, int[]> specialEntry = boostedScatter(ordinary);
         int drawsInEntry = 0;
         boolean specialEntryMode = false;
         boolean seededLoss = false;
@@ -96,7 +95,7 @@ public final class RedisDirectLoader {
                 CompleteRoundFactory.GeneratedRound generated;
                 try {
                     generated = factory.generate(random, config.maxConsecutiveWins(), config.maxMarySpins(),
-                            specialEntryMode ? specialEntry : ordinary, forceLoss);
+                            ordinary, forceLoss, specialEntryMode);
                 } catch (CompleteRoundFactory.RoundRejectedException rejected) {
                     counters.skippedOverlongRounds++;
                     drawsInEntry++;
@@ -183,7 +182,7 @@ public final class RedisDirectLoader {
         return terminal.board().scatterTokens() >= 5;
     }
 
-    /** 特殊入口只放大付费首局 Scatter 概率 *10；连消/免费仍用原表，是否还能出触发符号由原规则决定。 */
+    /** 特殊入口把付费首局 Scatter *10，但每列出现第一个触发符号后恢复原权重。连消/免费仍用原表。 */
     static Map<WeightScene, int[]> boostedScatter(Map<WeightScene, int[]> ordinary) {
         EnumMap<WeightScene, int[]> boosted = new EnumMap<>(WeightScene.class);
         for (WeightScene scene : WeightScene.values()) {

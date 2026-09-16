@@ -26,6 +26,15 @@ final class FakeRedisCommands implements RedisCommands {
         return switch (args[0]) {
             case "PING" -> "PONG";
             case "SELECT", "AUTH" -> "OK";
+            case "ZREVRANGEBYSCORE" -> {
+                if (args.length != 7 || !args[4].equals("LIMIT") || !args[5].equals("0") || !args[6].equals("1"))
+                    throw new AssertionError("floor lookup must fetch one bucket");
+                boolean exclusive = args[2].startsWith("(");
+                int max = Integer.parseInt(exclusive ? args[2].substring(1) : args[2]);
+                int min = Integer.parseInt(args[3]);
+                yield zsets.getOrDefault(args[1], new TreeSet<>()).descendingSet().stream()
+                        .filter(n -> n >= min && (exclusive ? n < max : n <= max)).limit(1).map(String::valueOf).toList();
+            }
             case "ZRANGE" -> {
                 TreeSet<Integer> set = zsets.getOrDefault(args[1], new TreeSet<>());
                 List<Object> out = new ArrayList<>();

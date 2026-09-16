@@ -107,7 +107,7 @@ public final class RedisPackCli {
         root.put("sourceGameId", SOURCE_GAME_ID);
         root.put("redisGameId", c.redisGameId());
         root.put("cacheUnit", "ONE_COMPLETE_ROUND_PER_PAID_BET");
-        root.put("memberFormat", "ASCII: independent no-win Spin = #; otherwise 68 chars per page, pages concatenated, spins separated by |");
+        root.put("memberFormat", "ASCII: independent no-win Spin = #/#1/#2/#3 by visible x2-ball count; otherwise 68 chars per page, pages concatenated, spins separated by |");
         root.put("normalIndexKey", normalIndex(c.redisGameId()));
         root.put("specialIndexKey", maryIndex(c.redisGameId()));
         root.put("generationPolicy", "NATURAL_RANDOM; zero and positive multipliers stored by actual ratio; independent no-win Spin encoded as #; newest members retained");
@@ -137,7 +137,7 @@ public final class RedisPackCli {
     private static String readme(Config c) {
         return "# Freedom Day 1809 Redis Pack\n\n"
                 + "每个 Redis LIST member 是一局从付费开始到全部连消/免费局结束的完整事实牌面；中奖结果由 `CompleteRoundCodec` 使用 `FreedomDayResultUtil` 反推。\n\n"
-                + "生成策略：使用 SecureRandom 自然随机生成完整局；零倍及正倍数按 Util 反推的实际倍率写入对应 Key；仅无上下牌面关联的独立无奖 Spin 编为 #，连消结束盘和免费触发盘保留，不筛选或追逐指定倍率。每个倍率本次最多生成 `" + c.maxMembersPerMultiplier() + "` 局，导入后通过 LTRIM 只保留该 Key 最新的相同数量。最大连续中奖 `" + c.maxConsecutiveWins() + "`，单个完整局最大玛丽免费 Spin `" + c.maxMarySpins() + "`，超限整局丢弃。\n\n"
+                + "生成策略：使用 SecureRandom 自然随机生成完整局；零倍及正倍数按 Util 反推的实际倍率写入对应 Key；仅无上下牌面关联的独立无奖 Spin 按可见 x2 球数量编码为 #/#1/#2/#3，连消结束盘和免费触发盘保留，不筛选或追逐指定倍率。每个倍率本次最多生成 `" + c.maxMembersPerMultiplier() + "` 局，导入后通过 LTRIM 只保留该 Key 最新的相同数量。最大连续中奖 `" + c.maxConsecutiveWins() + "`，单个完整局最大玛丽免费 Spin `" + c.maxMarySpins() + "`，超限整局丢弃。\n\n"
                 + "```powershell\n"
                 + "mvn.cmd -q test\n"
                 + "mvn.cmd -q exec:java -Dexec.mainClass=com.cpgame.replica.freedomday.RedisPackCli -Dexec.args=\"--output redis-pack/1809-mac-Freedom-Day"

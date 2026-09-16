@@ -300,6 +300,9 @@ public final class CpgameOriginalPagePlaythrough {
             return "末页有 " + lastScatter + " 个 Scatter 但 frees.st==0；"
                     + "GetFreeTimesView 不会弹出，GAME_ENDED 后开始按钮保持置灰";
         }
+        if (type == 2 && lastScatter >= 2) {
+            return "免费末页有 " + lastScatter + " 个 Scatter；GetFreeTimesView 点开始后原站会进 ADDSCATTER/FreeSpinWon，剩余次数停在盘面上";
+        }
         return null;
     }
 

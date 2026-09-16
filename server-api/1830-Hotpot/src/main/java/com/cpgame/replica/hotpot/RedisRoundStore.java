@@ -1,20 +1,23 @@
 package com.cpgame.replica.hotpot;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.hd.pg.appapi.business.model.cpgame.hotpot.GameRuleCore;
 import com.hd.pg.appapi.business.model.cpgame.hotpot.HotpotGameRuleCore;
 import com.hd.pg.appapi.business.model.cpgame.hotpot.HotpotRoundKind;
+import com.hd.pg.appapi.business.model.cpgame.hotpot.HotpotSpinMode;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 /**
- * Demo 只从 Redis db=15 领取一条完整局 member。
- * 先随机中/不中，再在对应奖池已有倍率中随机一个。连消/免费不在这里抽。
+ * Demo 只从配置的 Redis（redis.game-id 命名空间）领取一条完整局 member。
+ * 先随机中/不中，再以对应奖池现存最大倍率为上限抽目标并向下查找。连消/免费不在这里抽。
  * 本游戏无购买入口，因此没有 BUY 桶；Scatter 免费进 Mary 索引（平台特殊池名，不是 1809 Mary 玩法）。
- * runtimeIndependentLoss.supported=true 不是当场出牌许可：不中奖走 0 倍池。
+ * runtimeIndependentLoss.supported=true 不是当场出牌许可：不中奖走 0 倍池；0 倍桶空时回退另一结果池。
  */
 public final class RedisRoundStore implements AutoCloseable {
     public static final String PROTOCOL_HASH = HotpotRulesMetadata.PROTOCOL_HASH;
@@ -23,14 +26,24 @@ public final class RedisRoundStore implements AutoCloseable {
 
     private final RedisCommands redis;
     private final long gameId;
+    private final String redisHost;
+    private final int redisDatabase;
     private final GameRuleCore core;
     private final CompleteRoundCodec codec;
+    private final HotpotSpinProjector projector;
 
     public RedisRoundStore(RedisCommands redis, long gameId) {
+        this(redis, gameId, "18.234.101.161", 0);
+    }
+
+    RedisRoundStore(RedisCommands redis, long gameId, String redisHost, int redisDatabase) {
         this.redis = redis;
         this.gameId = gameId;
+        this.redisHost = redisHost == null || redisHost.isBlank() ? "18.234.101.161" : redisHost.trim();
+        this.redisDatabase = redisDatabase;
         this.core = new HotpotGameRuleCore();
         this.codec = new CompleteRoundCodec();
+        this.projector = new HotpotSpinProjector();
         if (core.rawGameId() != 1830) throw new IllegalStateException("GameRuleCore gid must be 1830");
         if (!PROTOCOL_HASH.equals("01123dc898992e5e38efb1f58b816c844093dfcf07939e2cefa3153022b61c01")) {
             throw new IllegalStateException("rulesHash mismatch with protocol-handoff.json");
@@ -40,7 +53,9 @@ public final class RedisRoundStore implements AutoCloseable {
     public static RedisRoundStore connect(Properties config) throws IOException {
         long gameId = Long.parseLong(config.getProperty("redis.game-id", "8001830").trim());
         if (gameId <= 0) throw new IllegalArgumentException("redis.game-id must be positive");
-        return new RedisRoundStore(SocketRedisCommands.connect(config), gameId);
+        String host = config.getProperty("redis.host", "18.234.101.161").trim();
+        int database = Integer.parseInt(config.getProperty("redis.database", "0").trim());
+        return new RedisRoundStore(SocketRedisCommands.connect(config), gameId, host, database);
     }
 
     /**
@@ -51,9 +66,8 @@ public final class RedisRoundStore implements AutoCloseable {
         if (random == null) throw new IllegalArgumentException("SecureRandom is required");
         boolean wantWin = random.nextBoolean();
         ClaimedRound claimed = wantWin ? claimWin(random) : claimLoss(random);
-        if (claimed == null) {
-            throw new IllegalStateException("Redis round cache is empty host=18.234.101.161 db=15 gameId=1830");
-        }
+        if (claimed == null) claimed = wantWin ? claimLoss(random) : claimWin(random);
+        if (claimed == null) throw empty("no ordinary/special member");
         return claimed;
     }
 
@@ -65,10 +79,7 @@ public final class RedisRoundStore implements AutoCloseable {
             case ORDINARY_WIN -> claimOrdinaryWin(random);
             case SCATTER_FREE_SPINS -> claimSpecial(random);
         };
-        if (claimed == null) {
-            throw new IllegalStateException("Redis round cache has no " + kind
-                    + " member host=18.234.101.161 db=15 gameId=1830");
-        }
+        if (claimed == null) throw empty("has no " + kind + " member");
         if (claimed.kind() != kind) {
             throw new IllegalStateException("claimed member is " + claimed.kind() + " not " + kind);
         }
@@ -81,38 +92,26 @@ public final class RedisRoundStore implements AutoCloseable {
     }
 
     private ClaimedRound claimWin(SecureRandom random) throws IOException {
-        List<Integer> ordinary = positiveRatios(false);
-        List<Integer> special = positiveRatios(true);
-        if (ordinary.isEmpty() && special.isEmpty()) return null;
-        boolean useSpecial;
-        if (ordinary.isEmpty()) useSpecial = true;
-        else if (special.isEmpty()) useSpecial = false;
-        else useSpecial = random.nextBoolean();
-        return useSpecial ? claimSpecial(random) : claimOrdinaryWin(random);
+        boolean special = random.nextBoolean();
+        ClaimedRound claimed = claimPool(special, random);
+        return claimed != null ? claimed : claimPool(!special, random);
     }
 
-    private ClaimedRound claimOrdinaryWin(SecureRandom random) throws IOException {
-        List<Integer> ratios = positiveRatios(false);
-        if (ratios.isEmpty()) return null;
-        return readMember(false, ratios.get(random.nextInt(ratios.size())), random);
-    }
+    private ClaimedRound claimOrdinaryWin(SecureRandom random) throws IOException { return claimPool(false, random); }
 
-    private ClaimedRound claimSpecial(SecureRandom random) throws IOException {
-        List<Integer> ratios = positiveRatios(true);
-        if (ratios.isEmpty()) return null;
-        return readMember(true, ratios.get(random.nextInt(ratios.size())), random);
-    }
+    private ClaimedRound claimSpecial(SecureRandom random) throws IOException { return claimPool(true, random); }
 
-    private List<Integer> positiveRatios(boolean special) throws IOException {
-        String index = special ? RedisKeys.maryIndex(gameId) : RedisKeys.normalIndex(gameId);
-        List<Object> raw = asList(redis.command("ZRANGE", index, "0", "-1"));
-        List<Integer> ratios = new ArrayList<>();
-        for (Object item : raw) {
-            int ratio = Integer.parseInt(item.toString());
-            if (ratio <= 0) continue;
-            if (llen(special, ratio) > 0) ratios.add(ratio);
+    private ClaimedRound claimPool(boolean special, SecureRandom random) throws IOException {
+        var buckets = RedisFloorLookup.open(redis::command,
+                special ? RedisKeys.maryIndex(gameId) : RedisKeys.normalIndex(gameId),
+                m -> special ? RedisKeys.maryList(gameId, m) : RedisKeys.normalList(gameId, m),
+                random, 1, Integer.MAX_VALUE);
+        Integer ratio;
+        while ((ratio = buckets.next()) != null) {
+            ClaimedRound claimed = readMember(special, ratio, random);
+            if (claimed != null) return claimed;
         }
-        return ratios;
+        return null;
     }
 
     private long llen(boolean special, int ratio) throws IOException {
@@ -134,6 +133,7 @@ public final class RedisRoundStore implements AutoCloseable {
         }
         CompleteRoundFact fact = codec.decode(payload);
         RoundVerification verification = codec.verify(fact, MAX_CONSECUTIVE, MAX_FREE);
+        if (unplayableReason(fact) != null) return null;
         HotpotRoundKind kind = core.classifyRound(verification.scatterFreeSpins(), verification.multiplier());
         if (special && kind != HotpotRoundKind.SCATTER_FREE_SPINS) {
             throw new IllegalStateException("Mary pool member is not SCATTER_FREE_SPINS");
@@ -150,11 +150,30 @@ public final class RedisRoundStore implements AutoCloseable {
         return new ClaimedRound(fact, verification, kind, special, ratio, payload);
     }
 
-    @SuppressWarnings("unchecked")
-    private static List<Object> asList(Object value) {
-        if (value == null) return List.of();
-        if (value instanceof List<?> list) return (List<Object>) list;
-        return List.of();
+    private String unplayableReason(CompleteRoundFact fact) {
+        int remaining = 0;
+        int totalAwarded = 0;
+        BigDecimal featureWin = BigDecimal.ZERO.setScale(2);
+        BigDecimal gold = new BigDecimal("10000.00");
+        for (int spinIndex = 0; spinIndex < fact.spins().size(); spinIndex++) {
+            List<CompleteRoundFact.BoardFact> pages = fact.spins().get(spinIndex);
+            HotpotSpinMode mode = spinIndex == 0 ? HotpotSpinMode.PAID : HotpotSpinMode.FREE;
+            HotpotSpinProjector.ProjectedSpin projected = projector.project(
+                    pages, mode, new BigDecimal("0.02"), 1, gold, 1L, remaining, totalAwarded, featureWin);
+            String reason = HotpotClientRoundWalk.hangReason(projected.data());
+            if (reason != null) return reason;
+            remaining = projected.remaining();
+            totalAwarded = projected.totalAwarded();
+            featureWin = projected.featureWin();
+            gold = projected.data().path("end_gold").decimalValue();
+        }
+        return null;
+    }
+
+    private IllegalStateException empty(String detail) {
+        return new IllegalStateException("Redis round cache is empty host=" + redisHost
+                + " db=" + redisDatabase + " gameId=" + gameId
+                + (detail == null || detail.isBlank() ? "" : " " + detail));
     }
 
     @Override

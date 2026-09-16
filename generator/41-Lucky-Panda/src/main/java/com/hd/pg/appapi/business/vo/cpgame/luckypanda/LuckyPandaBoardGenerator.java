@@ -13,26 +13,41 @@ import java.util.Set;
  * Inner-main stack heights are per-entry from training holdout-excluded captures, not a
  * single mixed table and not independent per-cell draws on refill.
  * <p>
+ * Adjacent same-symbol stacks stay separate RLE blocks (capture has {@code 2K,2K}).
+ * Cascade refill must not merge into surviving framed stacks, or the long frame grows up.
+ * <p>
  * Help long-frame: winning silver becomes a random gold-framed paying symbol; winning
  * gold becomes Wild (gold Pan stays Pan — 5/5 capture exceptions). Non-winning frames
  * ride survivors. Help Wild only on reels 2-5; never on the inner top overlay.
+ * <p>
+ * Special-entry Scatter *10 applies only to the first trigger token in each column;
+ * later tokens in that column use the ordinary weight.
  */
 public final class LuckyPandaBoardGenerator {
+    public static final int COLUMN_FIRST_TRIGGER_BOOST = 10;
     private static final int SAMPLE_ATTEMPTS = 80;
     private static final int FRAME_NONE = 0;
     private static final int FRAME_SILVER = 1;
     private static final int FRAME_GOLD = 2;
+    private static final int SCAT_INDEX = LuckyPandaSymbol.SCAT.ordinal();
 
     private final Random random;
     private final Map<WeightScene, int[]> weights;
     private final Map<WeightScene, int[]> heights;
+    private final boolean boostFirstColumnScatter;
 
     public record CascadeResult(LuckyPandaBoard board, LuckyPandaFrameAssigner.Frames frames) { }
 
     public LuckyPandaBoardGenerator(Random random, Map<WeightScene, int[]> weights) {
+        this(random, weights, false);
+    }
+
+    public LuckyPandaBoardGenerator(Random random, Map<WeightScene, int[]> weights,
+                                    boolean boostFirstColumnScatter) {
         if (random == null) throw new IllegalArgumentException("random is required");
         if (weights == null) throw new IllegalArgumentException("weights are required");
         this.random = random;
+        this.boostFirstColumnScatter = boostFirstColumnScatter;
         EnumMap<WeightScene, int[]> copy = new EnumMap<>(WeightScene.class);
         EnumMap<WeightScene, int[]> heightCopy = new EnumMap<>(WeightScene.class);
         for (WeightScene scene : WeightScene.values()) {
@@ -53,17 +68,28 @@ public final class LuckyPandaBoardGenerator {
         this.heights = Map.copyOf(heightCopy);
     }
 
-    LuckyPandaBoardGenerator independentCopy() { return new LuckyPandaBoardGenerator(new java.security.SecureRandom(), weights); }
+    LuckyPandaBoardGenerator independentCopy() {
+        return new LuckyPandaBoardGenerator(new java.security.SecureRandom(), weights, boostFirstColumnScatter);
+    }
+
     String lossConfigurationKey() {
-        StringBuilder key=new StringBuilder();for(WeightScene scene:WeightScene.values())key.append(scene).append(java.util.Arrays.toString(weights.get(scene)));
+        StringBuilder key = new StringBuilder();
+        key.append(boostFirstColumnScatter);
+        for (WeightScene scene : WeightScene.values()) key.append(scene).append(java.util.Arrays.toString(weights.get(scene)));
         return key.toString();
     }
 
     LuckyPandaBoard lossSeed(WeightScene scene) {
-        List<List<LuckyPandaSymbol>> cells = sampleCells(scene);
-        for (List<LuckyPandaSymbol> column : cells) for (int i=0;i<column.size();i++)
-            if (!column.get(i).paying()) column.set(i,nextNonScatterNonWild(scene));
-        return LuckyPandaBoard.fromCells(cells);
+        LuckyPandaBoard board = sampleBoard(scene);
+        List<String> rskl = new ArrayList<>();
+        for (List<LuckyPandaToken> reel : board.reels()) {
+            for (LuckyPandaToken token : reel) {
+                LuckyPandaSymbol symbol = token.symbol().paying()
+                        ? token.symbol() : nextNonScatterNonWild(scene);
+                rskl.add(token.height() + symbol.wireName());
+            }
+        }
+        return LuckyPandaBoard.fromRskl(rskl);
     }
 
     public LuckyPandaBoard generate(WeightScene scene) {
@@ -72,7 +98,7 @@ public final class LuckyPandaBoardGenerator {
 
     public LuckyPandaBoard generate(WeightScene scene, int maxScatterTokens, boolean allowWild) {
         for (int attempt = 0; attempt < SAMPLE_ATTEMPTS; attempt++) {
-            LuckyPandaBoard board = LuckyPandaBoard.fromCells(sampleCells(scene));
+            LuckyPandaBoard board = sampleBoard(scene);
             if (acceptable(board, maxScatterTokens, allowWild)) return board;
         }
         throw new IllegalStateException("unable to sample a board within captured symbol caps");
@@ -128,130 +154,129 @@ public final class LuckyPandaBoardGenerator {
         Set<Integer> winning = winningCoords(evaluation);
         Set<Integer> silver = new HashSet<>(prevSfl == null ? List.of() : prevSfl);
         Set<Integer> gold = new HashSet<>(prevGfl == null ? List.of() : prevGfl);
-        List<List<FramedCell>> next = new ArrayList<>(LuckyPandaBoard.REEL_COUNT);
+        List<List<FramedToken>> next = new ArrayList<>(LuckyPandaBoard.REEL_COUNT);
         for (int reel = 0; reel < LuckyPandaBoard.REEL_COUNT; reel++) {
-            List<FramedCell> transformed = transformReel(board.reel(reel), winning, silver, gold, refill);
+            List<FramedToken> transformed = transformReel(board.reel(reel), winning, silver, gold, refill);
             next.add(fallFramed(reel, transformed, refill));
         }
-        List<List<LuckyPandaSymbol>> cells = new ArrayList<>(LuckyPandaBoard.REEL_COUNT);
-        int[][] cellFrame = new int[LuckyPandaBoard.REEL_COUNT][];
-        for (int reel = 0; reel < LuckyPandaBoard.REEL_COUNT; reel++) {
-            List<FramedCell> column = next.get(reel);
-            cellFrame[reel] = new int[column.size()];
-            List<LuckyPandaSymbol> symbols = new ArrayList<>(column.size());
-            for (int i = 0; i < column.size(); i++) {
-                symbols.add(column.get(i).symbol);
-                cellFrame[reel][i] = column.get(i).frame;
-            }
-            cells.add(symbols);
+        List<String> rskl = new ArrayList<>();
+        for (List<FramedToken> column : next) {
+            for (FramedToken token : column) rskl.add(token.height() + token.symbol().wireName());
         }
-        LuckyPandaBoard rebuilt = LuckyPandaBoard.fromCells(cells);
+        LuckyPandaBoard rebuilt = LuckyPandaBoard.fromRskl(rskl);
         List<Integer> persistGold = new ArrayList<>();
         List<Integer> persistSilver = new ArrayList<>();
         for (int reel = 0; reel < LuckyPandaBoard.REEL_COUNT; reel++) {
-            int row = 0;
-            for (LuckyPandaToken token : rebuilt.reel(reel)) {
-                int frame = FRAME_NONE;
-                for (int i = 0; i < token.height(); i++) {
-                    frame = Math.max(frame, cellFrame[reel][row + i]);
-                }
-                row += token.height();
+            List<FramedToken> column = next.get(reel);
+            List<LuckyPandaToken> rebuiltCol = rebuilt.reel(reel);
+            if (column.size() != rebuiltCol.size()) {
+                throw new IllegalStateException("cascade token count mismatch on reel " + reel);
+            }
+            for (int i = 0; i < column.size(); i++) {
+                LuckyPandaToken token = rebuiltCol.get(i);
+                int frame = column.get(i).frame();
                 if (token.top() || token.height() < 2 || token.reel() < 1 || token.reel() > 4) continue;
                 if (frame == FRAME_GOLD) persistGold.add(token.coord());
                 else if (frame == FRAME_SILVER) persistSilver.add(token.coord());
             }
         }
-        LuckyPandaFrameAssigner.Frames frames = LuckyPandaFrameAssigner.complete(
-                rebuilt, persistGold, persistSilver, random);
+        LuckyPandaFrameAssigner.Frames frames = LuckyPandaFrameAssigner.persist(
+                rebuilt, persistGold, persistSilver);
         return new CascadeResult(rebuilt, frames);
     }
 
-    private List<FramedCell> transformReel(List<LuckyPandaToken> tokens, Set<Integer> winning,
-                                           Set<Integer> silver, Set<Integer> gold, WeightScene refill) {
-        List<FramedCell> cells = new ArrayList<>();
+    private List<FramedToken> transformReel(List<LuckyPandaToken> tokens, Set<Integer> winning,
+                                            Set<Integer> silver, Set<Integer> gold, WeightScene refill) {
+        List<FramedToken> kept = new ArrayList<>();
         for (LuckyPandaToken token : tokens) {
             int frame = gold.contains(token.coord()) ? FRAME_GOLD
                     : silver.contains(token.coord()) ? FRAME_SILVER : FRAME_NONE;
             boolean win = winning.contains(token.coord());
             if (win && frame == FRAME_SILVER) {
                 LuckyPandaSymbol symbol = nextNonScatterNonWild(refill);
-                for (int i = 0; i < token.height(); i++) cells.add(new FramedCell(symbol, FRAME_GOLD));
+                kept.add(new FramedToken(symbol, token.height(), FRAME_GOLD, token.top()));
             } else if (win && frame == FRAME_GOLD) {
                 // 178/183 gold wins became same-height Wild. 5/5 remaining were gold Pan and stayed Pan.
                 boolean keepPan = token.symbol() == LuckyPandaSymbol.PAN;
                 LuckyPandaSymbol symbol = keepPan ? LuckyPandaSymbol.PAN : LuckyPandaSymbol.WILD;
                 int outFrame = keepPan ? FRAME_GOLD : FRAME_NONE;
-                for (int i = 0; i < token.height(); i++) cells.add(new FramedCell(symbol, outFrame));
-            } else if (win) {
-                for (int i = 0; i < token.height(); i++) cells.add(null);
-            } else {
-                for (int i = 0; i < token.height(); i++) cells.add(new FramedCell(token.symbol(), frame));
+                kept.add(new FramedToken(symbol, token.height(), outFrame, token.top()));
+            } else if (!win) {
+                kept.add(new FramedToken(token.symbol(), token.height(), frame, token.top()));
             }
         }
-        return cells;
+        return kept;
     }
 
-    private List<FramedCell> fallFramed(int reel, List<FramedCell> cells, WeightScene refill) {
+    private List<FramedToken> fallFramed(int reel, List<FramedToken> kept, WeightScene refill) {
         if (reel == 0 || reel == 5) {
-            List<FramedCell> survivors = new ArrayList<>();
-            for (FramedCell cell : cells) {
-                if (cell != null) survivors.add(cell);
+            int used = 0;
+            for (FramedToken token : kept) used += token.height();
+            int holes = LuckyPandaBoard.ROW_COUNTS[reel] - used;
+            List<FramedToken> column = new ArrayList<>(kept.size() + holes);
+            for (int i = 0; i < holes; i++) {
+                column.add(new FramedToken(nextSymbol(refill, reel, false, false), 1, FRAME_NONE, false));
             }
-            List<FramedCell> column = new ArrayList<>(cells.size());
-            int holes = cells.size() - survivors.size();
-            for (int i = 0; i < holes; i++) column.add(new FramedCell(nextSymbol(refill, reel, false), FRAME_NONE));
-            column.addAll(survivors);
+            column.addAll(kept);
             return column;
         }
-        FramedCell top = cells.get(0) == null
-                ? new FramedCell(nextSymbol(refill, reel, true), FRAME_NONE)
-                : cells.get(0);
-        List<FramedCell> main = new ArrayList<>();
-        for (int i = 1; i < cells.size(); i++) {
-            if (cells.get(i) != null) main.add(cells.get(i));
+        FramedToken top;
+        List<FramedToken> main = new ArrayList<>();
+        if (!kept.isEmpty() && kept.get(0).top()) {
+            top = kept.get(0);
+            main.addAll(kept.subList(1, kept.size()));
+        } else {
+            top = new FramedToken(nextSymbol(refill, reel, true, false), 1, FRAME_NONE, true);
+            main.addAll(kept);
         }
-        int holes = (cells.size() - 1) - main.size();
-        List<FramedCell> column = new ArrayList<>(cells.size());
+        int used = 0;
+        for (FramedToken token : main) used += token.height();
+        int holes = 5 - used;
+        List<FramedToken> column = new ArrayList<>();
         column.add(top);
         column.addAll(fillInnerHoles(holes, refill));
         column.addAll(main);
         return column;
     }
 
-    private List<FramedCell> fillInnerHoles(int holes, WeightScene scene) {
-        List<FramedCell> filled = new ArrayList<>(holes);
+    private List<FramedToken> fillInnerHoles(int holes, WeightScene scene) {
+        List<FramedToken> filled = new ArrayList<>();
         int placed = 0;
         while (placed < holes) {
             int height = nextInnerHeight(holes - placed, scene);
             LuckyPandaSymbol symbol = nextSymbol(scene);
-            for (int i = 0; i < height; i++) filled.add(new FramedCell(symbol, FRAME_NONE));
+            filled.add(new FramedToken(symbol, height, FRAME_NONE, false));
             placed += height;
         }
         return filled;
     }
 
-    private List<List<LuckyPandaSymbol>> sampleCells(WeightScene scene) {
-        List<List<LuckyPandaSymbol>> cells = new ArrayList<>(LuckyPandaBoard.REEL_COUNT);
+    private LuckyPandaBoard sampleBoard(WeightScene scene) {
+        List<String> rskl = new ArrayList<>();
         for (int reel = 0; reel < LuckyPandaBoard.REEL_COUNT; reel++) {
-            List<LuckyPandaSymbol> column = new ArrayList<>(LuckyPandaBoard.ROW_COUNTS[reel]);
+            boolean seenTrigger = false;
             if (reel == 0 || reel == 5) {
                 for (int row = 0; row < LuckyPandaBoard.ROW_COUNTS[reel]; row++) {
-                    column.add(nextSymbol(scene, reel, false));
+                    LuckyPandaSymbol symbol = nextSymbol(scene, reel, false, seenTrigger);
+                    if (symbol == LuckyPandaSymbol.SCAT) seenTrigger = true;
+                    rskl.add("1" + symbol.wireName());
                 }
             } else {
-                column.add(nextSymbol(scene, reel, true));
+                LuckyPandaSymbol top = nextSymbol(scene, reel, true, seenTrigger);
+                if (top == LuckyPandaSymbol.SCAT) seenTrigger = true;
+                rskl.add("1" + top.wireName());
                 int filled = 1;
                 while (filled < LuckyPandaBoard.ROW_COUNTS[reel]) {
                     int remaining = LuckyPandaBoard.ROW_COUNTS[reel] - filled;
                     int height = nextInnerHeight(remaining, scene);
-                    LuckyPandaSymbol symbol = nextSymbol(scene);
-                    for (int i = 0; i < height; i++) column.add(symbol);
+                    LuckyPandaSymbol symbol = nextSymbol(scene, reel, false, seenTrigger);
+                    if (symbol == LuckyPandaSymbol.SCAT) seenTrigger = true;
+                    rskl.add(height + symbol.wireName());
                     filled += height;
                 }
             }
-            cells.add(column);
         }
-        return cells;
+        return LuckyPandaBoard.fromRskl(rskl);
     }
 
     private int nextInnerHeight(int remaining, WeightScene scene) {
@@ -269,26 +294,36 @@ public final class LuckyPandaBoardGenerator {
     }
 
     public LuckyPandaSymbol nextSymbol(WeightScene scene) {
+        return pickSymbol(scene, false);
+    }
+
+    LuckyPandaSymbol nextSymbol(WeightScene scene, int reel, boolean innerTop, boolean columnHasTrigger) {
+        boolean banWild = innerTop || reel == 0 || reel == 5;
+        if (!banWild) return pickSymbol(scene, columnHasTrigger);
+        for (int i = 0; i < 40; i++) {
+            LuckyPandaSymbol symbol = pickSymbol(scene, columnHasTrigger);
+            if (symbol != LuckyPandaSymbol.WILD) return symbol;
+        }
+        return nextNonScatterNonWild(scene);
+    }
+
+    private LuckyPandaSymbol pickSymbol(WeightScene scene, boolean columnHasTrigger) {
         int[] table = weights.get(scene);
         int total = 0;
-        for (int value : table) total += value;
+        for (int i = 0; i < table.length; i++) total += scatterWeight(scene, table[i], i, columnHasTrigger);
         int pick = random.nextInt(total);
         LuckyPandaSymbol[] values = LuckyPandaSymbol.values();
         for (int i = 0; i < values.length; i++) {
-            pick -= table[i];
+            pick -= scatterWeight(scene, table[i], i, columnHasTrigger);
             if (pick < 0) return values[i];
         }
         return LuckyPandaSymbol.T;
     }
 
-    LuckyPandaSymbol nextSymbol(WeightScene scene, int reel, boolean innerTop) {
-        boolean banWild = innerTop || reel == 0 || reel == 5;
-        if (!banWild) return nextSymbol(scene);
-        for (int i = 0; i < 40; i++) {
-            LuckyPandaSymbol symbol = nextSymbol(scene);
-            if (symbol != LuckyPandaSymbol.WILD) return symbol;
-        }
-        return nextNonScatterNonWild(scene);
+    private int scatterWeight(WeightScene scene, int weight, int index, boolean columnHasTrigger) {
+        if (index != SCAT_INDEX) return weight;
+        if (!boostFirstColumnScatter || scene != WeightScene.PAID_START || columnHasTrigger) return weight;
+        return Math.multiplyExact(weight, COLUMN_FIRST_TRIGGER_BOOST);
     }
 
     public LuckyPandaSymbol nextNonScatterNonWild(WeightScene scene) {
@@ -307,5 +342,5 @@ public final class LuckyPandaBoardGenerator {
         return coords;
     }
 
-    private record FramedCell(LuckyPandaSymbol symbol, int frame) { }
+    private record FramedToken(LuckyPandaSymbol symbol, int height, int frame, boolean top) { }
 }

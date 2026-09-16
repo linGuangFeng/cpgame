@@ -45,8 +45,8 @@ public final class LuckyPandaFrameAssigner {
     }
 
     /**
-     * Keep surviving gold/silver coords, then roll new frames only on still-unmarked
-     * frameable stacks (new refill and unframed survivors).
+     * Opening pages only. Cascade must not call this: capture never turns an unframed
+     * surviving stack into silver (2265 stay none / 0 gain silver).
      */
     public static Frames complete(LuckyPandaBoard board, List<Integer> persistGold,
                                   List<Integer> persistSilver, Random random) {
@@ -70,6 +70,19 @@ public final class LuckyPandaFrameAssigner {
                 }
             }
         }
+        return finish(board, gfl, sfl);
+    }
+
+    /** Keep surviving gold/silver only. New refill and unframed survivors stay unframed. */
+    public static Frames persist(LuckyPandaBoard board, List<Integer> persistGold, List<Integer> persistSilver) {
+        return finish(board,
+                persistGold == null ? List.of() : persistGold,
+                persistSilver == null ? List.of() : persistSilver);
+    }
+
+    private static Frames finish(LuckyPandaBoard board, List<Integer> persistGold, List<Integer> persistSilver) {
+        List<Integer> gfl = new ArrayList<>(persistGold);
+        List<Integer> sfl = new ArrayList<>(persistSilver);
         if (gfl.size() > GFL_MAX) gfl = new ArrayList<>(gfl.subList(0, GFL_MAX));
         if (sfl.size() > SFL_MAX) sfl = new ArrayList<>(sfl.subList(0, SFL_MAX));
         Collections.sort(gfl);

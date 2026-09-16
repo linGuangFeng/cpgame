@@ -41,10 +41,17 @@ public final class CompleteRoundFactory {
 
     public GeneratedRound generate(Random random, int maxConsecutiveWins, int maxFreeSpins,
                                    int[] paidStartWeights, int[] cascadeWeights, int[] freeStartWeights) {
+        return generate(random, maxConsecutiveWins, maxFreeSpins, paidStartWeights, cascadeWeights, freeStartWeights, false);
+    }
+
+    public GeneratedRound generate(Random random, int maxConsecutiveWins, int maxFreeSpins,
+                                   int[] paidStartWeights, int[] cascadeWeights, int[] freeStartWeights,
+                                   boolean boostFirstColumnScatter) {
         if (maxConsecutiveWins < 1) throw new IllegalArgumentException("max-consecutive-wins must be >= 1");
         if (maxFreeSpins < 1) throw new IllegalArgumentException("max-free-spins must be >= 1");
         if (random == null) throw new IllegalArgumentException("random source is required");
-        HotpotBoardGenerator boards = new HotpotBoardGenerator(random, paidStartWeights, cascadeWeights, freeStartWeights);
+        HotpotBoardGenerator boards = new HotpotBoardGenerator(
+                random, paidStartWeights, cascadeWeights, freeStartWeights, boostFirstColumnScatter);
         List<List<CompleteRoundFact.BoardFact>> spins = new ArrayList<>();
 
         SpinResult paid = generateSpin(boards, boards.generate(HotpotSymbolScene.PAID_START),

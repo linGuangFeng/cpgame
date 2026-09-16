@@ -15,8 +15,9 @@ public final class FreedomDayRulesMetadata {
             pay=1:30,40,50,80|2:20,25,30,50|3:10,25,30,40|4:8,15,20,30|
             5:6,10,12,15|6:6,10,12,15|7:4,6,8,10|8:4,6,8,10|
             9:1,2,3,4|10:1,2,3,4|11:1,2,3,4;
-            scatterFreeSpins=4:10,+2;normalIncrement=1;freeIncrement=2;freeStartMultiplier=2;maxFreeSpins=30;
-            grids=contiguous-same-reel-height-2..4;gf=gold-grid;sl=silver-grid;
+            scatterFreeSpins=visible-stacked=1-4:10,+2;oneTriggerPerReel;oneTriggerOnTopStrip;triggerBoardNoWin;
+            normalIncrement=1;freeIncrement=2;freeStartMultiplier=2;maxFreeSpins=30;
+            grids=contiguous-same-reel-height-2..4-including-scatter-and-ball;gf=gold-grid;sl=silver-grid;
             ordinaryLossBallPolicy=50pct-baseline-plus-50pct-no-ball
             """;
     public static final String HASH = sha256(DESCRIPTOR);

@@ -54,15 +54,21 @@ public final class MonsterSlayerBoardGenerator {
     }
 
     public int[] generate(boolean freeMode, boolean specialOpening) {
-        int[] weights = freeMode ? maryWeights
-                : (specialOpening ? specialEntryOpeningWeights(normalWeights) : normalWeights);
+        int[] ordinary = freeMode ? maryWeights : normalWeights;
+        int[] first = (!freeMode && specialOpening) ? specialEntryOpeningWeights(ordinary) : ordinary;
         int scatterCap = specialOpening ? 2 : 1;
         int[] board = new int[GameRuleCore.CELLS];
         int scatters = 0;
+        boolean[] seenTrigger = new boolean[GameRuleCore.COLS];
         for (int cell = 0; cell < board.length; cell++) {
+            int col = cell / GameRuleCore.ROWS;
             boolean scatterAllowed = cell >= 3 && cell < 12 && scatters < scatterCap;
+            int[] weights = seenTrigger[col] ? ordinary : first;
             board[cell] = nextSymbol(weights, scatterAllowed);
-            if (board[cell] == SCATTER) scatters++;
+            if (board[cell] == SCATTER) {
+                scatters++;
+                seenTrigger[col] = true;
+            }
         }
         return board;
     }

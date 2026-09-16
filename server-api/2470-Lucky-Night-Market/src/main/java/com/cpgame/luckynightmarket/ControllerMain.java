@@ -1,5 +1,7 @@
 package com.cpgame.luckynightmarket;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.sun.net.httpserver.*;
 import java.io.*;
 import java.math.*;
@@ -21,7 +23,6 @@ public final class ControllerMain {
     private final Properties properties; private final Path publish; private final int port;
     private final SecureRandom random=new SecureRandom(); private final AtomicLong ids=new AtomicLong(System.currentTimeMillis()*1000L);
     private final ConcurrentHashMap<String,Session> sessions=new ConcurrentHashMap<>();
-    private volatile Map<RoundFact.Mode,List<String>> modeKeys=Map.of(); private volatile long indexedAt;
     private final AtomicLong redisReads=new AtomicLong(); private final AtomicLong paidRounds=new AtomicLong();
     public ControllerMain(Properties p,Path publish,int port){if(!"8002470".equals(p.getProperty("redis.game-id","8002470")))throw new IllegalArgumentException("redis.game-id must be 2470");this.properties=p;this.publish=publish.toAbsolutePath().normalize();this.port=port;}
     public static void main(String[] args)throws Exception {
@@ -42,8 +43,8 @@ public final class ControllerMain {
         if(exchange.getRequestMethod().equals("OPTIONS")){exchange.sendResponseHeaders(204,-1);exchange.close();return;}
         String path=exchange.getRequestURI().getPath();
         try {
-            if(path.equals("/health")){json(exchange,200,Json.map("ok",true,"gameId",GAME,"service","controller","contractVersion",3,"port",port,"source","redis-complete-round","samplingVersion","demo-balanced-v2","paidRounds",paidRounds.get()));return;}
-            if(path.equals("/demo/statistics")){Map<String,String> params=params(exchange);Session s=session(exchange,params);synchronized(s){json(exchange,200,Json.map("gameId",GAME,"paidRounds",s.rounds,"modeCounts",s.counts,"redisReads",redisReads.get(),"lastRedisKey",s.lastKey,"lastMemberSha256",s.memberHash,"pendingSteps",s.active==null?0:s.active.steps().size()-s.cursor,"balance",s.balance,"samplingVersion","demo-balanced-v2","sampling","Approximately 40% loss / 40% ordinary win / 10% wheel / 10% feature per paid round; 90% of ordinary wins below 5x total bet; weighted random selection from Redis complete rounds"));}return;}
+            if(path.equals("/health")){json(exchange,200,Json.map("ok",true,"gameId",GAME,"service","controller","contractVersion",3,"port",port,"source","redis-complete-round","samplingVersion","demo-target-floor-v3","paidRounds",paidRounds.get()));return;}
+            if(path.equals("/demo/statistics")){Map<String,String> params=params(exchange);Session s=session(exchange,params);synchronized(s){json(exchange,200,Json.map("gameId",GAME,"paidRounds",s.rounds,"modeCounts",s.counts,"redisReads",redisReads.get(),"lastRedisKey",s.lastKey,"lastMemberSha256",s.memberHash,"pendingSteps",s.active==null?0:s.active.steps().size()-s.cursor,"balance",s.balance,"samplingVersion","demo-target-floor-v3","sampling","Approximately 40% loss / 40% ordinary win / 10% wheel / 10% feature per paid round; 90% of ordinary wins below 5x total bet; random target capped by current pool maximum, downward bucket lookup, random complete round"));}return;}
             if(path.startsWith("/cp/")||path.startsWith("/single_game.")||path.startsWith("/account/")||path.startsWith("/config/")||path.startsWith("/Goldgame/")||path.startsWith("/goldgame/")||path.startsWith("/activity/")){
                 Map<String,String> params=params(exchange);Session s=session(exchange,params);String endpoint=path.startsWith("/cp/")?path.substring(3):path;Object data;
                 if(endpoint.equals("/activity/verifyInviteCode")){json(exchange,200,envelope(1,noActivity(),"No active promotion"));return;}
@@ -87,26 +88,60 @@ public final class ControllerMain {
         if(!fingerprint.isEmpty()){s.replies.put(fingerprint,data);while(s.replies.size()>128)s.replies.remove(s.replies.keySet().iterator().next());}return data;
     }
     private Map<String,Object> base(Session s,String id,BigDecimal bet,int level,BigDecimal cost,BigDecimal win,BigDecimal before,BigDecimal after){return Json.map("b",bet,"bg",cost,"cg",win.subtract(cost),"cl",0,"eg",after,"f",List.of(),"l",level,"o",BigDecimal.ZERO,"oid",id,"rid",id,"sg",before,"small_game_type",0,"start_gold",before,"t",1,"tw",win,"u",24700001);}
-    private Selected selectRound(Session session)throws Exception {
-        try(RedisClient redis=new RedisClient(properties)){
-            refreshIndexes(redis);RoundFact.Mode mode=chooseMode(session.counts,random,Double.parseDouble(properties.getProperty("demo.win-probability","0.60")));
-            List<String> keys=modeKeys.getOrDefault(mode,List.of());
-            if(mode==RoundFact.Mode.ORDINARY_WIN)keys=chooseOrdinaryBand(keys,random,
-                Double.parseDouble(properties.getProperty("demo.ordinary-small-win-probability","0.90")));
-            return readMode(redis,keys,mode);
+    private Selected selectRound(Session session) throws Exception {
+        try (RedisClient redis = new RedisClient(properties)) {
+            RoundFact.Mode mode = chooseMode(session.counts, random,
+                    Double.parseDouble(properties.getProperty("demo.win-probability", "0.60")));
+            if (mode == RoundFact.Mode.ORDINARY_WIN) {
+                double probability = Double.parseDouble(properties.getProperty("demo.ordinary-small-win-probability", "0.90"));
+                probability(probability);
+                boolean small = random.nextDouble() < probability;
+                Selected selected = readMode(redis, mode, small ? 1 : 25, small ? 24 : Integer.MAX_VALUE);
+                if (selected == null) selected = readMode(redis, mode, small ? 25 : 1, small ? Integer.MAX_VALUE : 24);
+                if (selected != null) return selected;
+            } else {
+                Selected selected = readMode(redis, mode, 0,
+                        mode == RoundFact.Mode.ORDINARY_LOSS ? 0 : Integer.MAX_VALUE);
+                if (selected != null) return selected;
+            }
+            throw new IOException("No valid Redis member at or below target for " + mode);
         }
     }
-    private Selected readMode(RedisClient redis,List<String> candidateKeys,RoundFact.Mode mode)throws IOException {
-        List<String> keys=new ArrayList<>(candidateKeys);
-        while(!keys.isEmpty()){
-            String key=keys.remove(random.nextInt(keys.size()));Object raw=redis.command("LRANGE",key,"0","-1");redisReads.incrementAndGet();if(!(raw instanceof List<?> members)||members.isEmpty())continue;
-            List<?> shuffled=new ArrayList<>(members);Collections.shuffle(shuffled,random);
-            for(Object member:shuffled){String text=member.toString();try{
-                RoundFact decoded=RoundCodec.decode(text);
-                if(decoded.mode()==mode&&ResultUtil.totalUnits(decoded)==bucket(key))return new Selected(key,text,decoded);
-            }catch(IllegalArgumentException ignored){}}
+    private Selected readMode(RedisClient redis, RoundFact.Mode mode, int minimum, int maximum) throws IOException {
+        String index = mode == RoundFact.Mode.LUCKY_WHEEL ? PRE : mode == RoundFact.Mode.LUCKY_FEATURE ? MARY : PER;
+        String prefix = mode == RoundFact.Mode.LUCKY_WHEEL ? "PreLog:108002470:"
+                : mode == RoundFact.Mode.LUCKY_FEATURE ? "MaryLog:008002470:" : "BetLog:008002470:";
+        var buckets = RedisFloorLookup.<IOException>open(args -> floorCommand(redis, prefix, args), index,
+                m -> prefix + String.format(Locale.ROOT, "%06d", m), random, minimum, maximum);
+        Integer multiplier;
+        while ((multiplier = buckets.next()) != null) {
+            String key = prefix + String.format(Locale.ROOT, "%06d", multiplier);
+            long length = Long.parseLong(redis.command("LLEN", key).toString());
+            if (length <= 0) continue;
+            long start = random.nextLong(length);
+            for (long visited = 0; visited < length; visited++) {
+                Object raw = redis.command("LINDEX", key, Long.toString((start + visited) % length));
+                redisReads.incrementAndGet();
+                if (raw == null) continue;
+                String text = raw.toString();
+                try {
+                    RoundFact decoded = RoundCodec.decode(text);
+                    if (decoded.mode() == mode && ResultUtil.totalUnits(decoded) == multiplier)
+                        return new Selected(key, text, decoded);
+                } catch (IllegalArgumentException ignored) { }
+            }
         }
-        indexedAt=0;throw new IOException("No valid Redis member for "+mode);
+        return null;
+    }
+    private Object floorCommand(RedisClient redis, String prefix, String... args) throws IOException {
+        Object result = redis.command(args);
+        if (!args[0].equals("ZREVRANGEBYSCORE") || !(result instanceof List<?> entries)) return result;
+        List<String> normalized = new ArrayList<>();
+        for (Object entry : entries) {
+            String value = entry.toString();
+            normalized.add(value.startsWith(prefix) ? value.substring(prefix.length()) : value);
+        }
+        return normalized;
     }
     /** Demo-only weighted draws; no fixed rotation or runtime dealing, and no Loader changes. */
     public static RoundFact.Mode chooseMode(Map<String,Integer> counts,Random rng,double winProbability){
@@ -143,23 +178,8 @@ public final class ControllerMain {
     private static void probability(double p){
         if(!Double.isFinite(p)||p<0||p>1)throw new IllegalArgumentException("Invalid demo probability");
     }
-    private synchronized void refreshIndexes(RedisClient redis)throws IOException{
-        if(System.currentTimeMillis()-indexedAt<60_000&&!modeKeys.isEmpty())return;
-        List<String> keys=new ArrayList<>(index(redis,PER,"BetLog:008002470:"));keys.addAll(index(redis,MARY,"MaryLog:008002470:"));keys.addAll(index(redis,PRE,"PreLog:108002470:"));
-        List<List<String>> commands=new ArrayList<>();for(String key:keys)commands.add(List.of("LRANGE",key,"0","127"));
-        List<Object> pages=commands.isEmpty()?List.of():redis.batch(commands);EnumMap<RoundFact.Mode,List<String>> found=new EnumMap<>(RoundFact.Mode.class);
-        for(int i=0;i<keys.size();i++){
-            String key=keys.get(i);EnumSet<RoundFact.Mode> observed=EnumSet.noneOf(RoundFact.Mode.class);Object raw=pages.get(i);int offset=0;
-            while(raw instanceof List<?> members&&!members.isEmpty()){
-                for(Object member:members)try{RoundFact round=RoundCodec.decode(member.toString());if(ResultUtil.totalUnits(round)!=bucket(key))continue;boolean match=key.startsWith("PreLog:108002470:")?round.mode()==RoundFact.Mode.LUCKY_WHEEL:key.startsWith("MaryLog:008002470:")?round.mode()==RoundFact.Mode.LUCKY_FEATURE:round.mode()==RoundFact.Mode.ORDINARY_LOSS||round.mode()==RoundFact.Mode.ORDINARY_WIN;if(match){observed.add(round.mode());break;}}catch(IllegalArgumentException ignored){}
-                boolean allPossible=key.startsWith("PreLog:108002470:")?observed.contains(RoundFact.Mode.LUCKY_WHEEL):key.startsWith("MaryLog:008002470:")?observed.contains(RoundFact.Mode.LUCKY_FEATURE):!observed.isEmpty();
-                if(members.size()<128||allPossible)break;offset+=128;raw=redis.command("LRANGE",key,Integer.toString(offset),Integer.toString(offset+127));
-            }
-            for(RoundFact.Mode mode:observed)found.computeIfAbsent(mode,k->new ArrayList<>()).add(key);
-        }
-        EnumMap<RoundFact.Mode,List<String>> snapshot=new EnumMap<>(RoundFact.Mode.class);found.forEach((mode,values)->snapshot.put(mode,List.copyOf(values)));modeKeys=Collections.unmodifiableMap(snapshot);indexedAt=System.currentTimeMillis();
-    }
-    private List<String> index(RedisClient redis,String index,String prefix)throws IOException{Object raw=redis.command("ZRANGE",index,"0","-1");if(!(raw instanceof List<?> values))return List.of();List<String> keys=new ArrayList<>();for(Object value:values){String s=value.toString();if(s.startsWith(prefix)&&s.substring(prefix.length()).matches("[0-9]{6}"))keys.add(s);else if(s.matches("[0-9]{1,6}"))keys.add(prefix+String.format(Locale.ROOT,"%06d",Integer.parseInt(s)));}return List.copyOf(keys);}
+    
+    
     private static int bucket(String key){return Integer.parseInt(key.substring(key.lastIndexOf(':')+1));}
     private Object history(Session s,Map<String,String> p){int page=Math.max(1,Integer.parseInt(p.getOrDefault("page","1"))),size=Math.min(50,Math.max(1,Integer.parseInt(p.getOrDefault("limit",p.getOrDefault("page_size","20")))));long start=Long.parseLong(p.getOrDefault("start","0")),end=Long.parseLong(p.getOrDefault("end",Long.toString(Long.MAX_VALUE)));List<Map<String,Object>> all=s.history.stream().filter(r->{long t=((Number)r.get("time")).longValue();return t>=start&&t<=end;}).toList();int from=(int)Math.min(all.size(),((long)page-1)*size);BigDecimal bet=BigDecimal.ZERO,change=BigDecimal.ZERO;for(var r:all){bet=bet.add((BigDecimal)r.get("bg"));change=change.add((BigDecimal)r.get("cg"));}return Json.map("list",all.subList(from,Math.min(all.size(),from+size)),"totals",Json.map("bet_golds",bet,"change_golds",change,"total",all.size()));}
     private Object historyDays(Session s,Map<String,String> p){

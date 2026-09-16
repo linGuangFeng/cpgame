@@ -28,7 +28,8 @@ class FreedomDayIndependentLossGeneratorTest {
         for (int i = 0; i < samples; i++) {
             FreedomDayBoard board = boards.generateIndependentLossCandidate((i & 1) == 1);
             if (FreedomDayIndependentLossGenerator.isIndependentLoss(board)) successes++;
-            assertTrue(scatterCount(board) < 4);
+            assertTrue(com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayResultUtil
+                    .countVisibleSymbol(board, 12) < 4);
         }
         double successRate = successes / (double) samples;
         assertTrue(successRate >= FreedomDayIndependentLossGenerator.REQUIRED_FIRST_ATTEMPT_SUCCESS_RATE,
@@ -81,14 +82,39 @@ class FreedomDayIndependentLossGeneratorTest {
         int[] mary = new int[13]; mary[11] = 1;
         FreedomDayBoardGenerator generator = new FreedomDayBoardGenerator(new Random(1L), normal, mary);
         assertTrue(java.util.Arrays.stream(generator.generate(false).getProp()).allMatch(v -> v == 1));
-        assertTrue(java.util.Arrays.stream(generator.generate(true).getProp()).allMatch(v -> v == 12));
+        FreedomDayBoard maryBoard = generator.generate(true);
+        assertTrue(com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayResultUtil
+                .countVisibleSymbol(maryBoard, 12) >= 4);
+        assertTrue(com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayResultUtil
+                .evaluate(maryBoard, java.math.BigDecimal.ONE, 1, 2).getWins().isEmpty());
+        assertTriggerLayout(maryBoard);
     }
 
-    private static int scatterCount(FreedomDayBoard board) {
-        int count = 0;
-        for (int symbol : board.getProp()) if (symbol == 12) count++;
-        for (int symbol : board.getTrl()) if (symbol == 12) count++;
-        return count;
+    static void assertTriggerLayout(FreedomDayBoard board) {
+        int[] prop = board.getProp();
+        int[] trl = board.getTrl();
+        int top = 0;
+        for (int symbol : trl) if (symbol == 12) top++;
+        assertTrue(top <= 1, "top strip may hold at most one scatter");
+        for (int reel = 0; reel < 6; reel++) {
+            int runs = 0;
+            int row = 0;
+            int offset = reel * 5;
+            while (row < 5) {
+                if (prop[offset + row] == 12) {
+                    runs++;
+                    while (row < 5 && prop[offset + row] == 12) row++;
+                } else {
+                    row++;
+                }
+            }
+            boolean topOnReel = reel >= 1 && reel <= 4 && trl[reel - 1] == 12;
+            if (topOnReel) assertEquals(0, runs, "a reel cannot hold both main and top scatter");
+            else assertTrue(runs <= 1, "a reel may hold at most one scatter group");
+            long visible = board.positionsOnReel(reel).stream()
+                    .filter(position -> position.getSymbol() == 12).count();
+            assertTrue(visible <= 1, "a reel may hold at most one visible Scatter");
+        }
     }
 
     private static final class CountingZeroRandom extends Random {

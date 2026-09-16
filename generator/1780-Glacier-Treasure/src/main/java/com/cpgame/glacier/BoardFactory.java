@@ -31,17 +31,17 @@ public final class BoardFactory {
     public void resetIds() { nextId = 1; }
 
     public Board initial(boolean free, boolean specialOpening) {
-        int[] weights = free ? model.freeInitial : model.paidInitial;
-        if (specialOpening) weights = model.boostScatter(weights);
+        int[] ordinary = free ? model.freeInitial : model.paidInitial;
+        int[] first = specialOpening && !free ? model.boostScatter(ordinary) : ordinary;
         for (int attempt = 0; attempt < 80; attempt++) {
             resetIds();
-            Board board = build(weights, free);
+            Board board = build(first, ordinary, free);
             if (legal(board, free)) return board;
         }
         throw new CompleteRoundFactory.RoundRejectedException("cannot sample initial board inside captured caps");
     }
 
-    Board lossSeed() { resetIds(); return build(model.paidInitial, false); }
+    Board lossSeed() { resetIds(); return build(model.paidInitial, model.paidInitial, false); }
 
     public Board featureTrigger() {
         for (int attempt = 0; attempt < 200; attempt++) {
@@ -89,7 +89,7 @@ public final class BoardFactory {
         throw new CompleteRoundFactory.RoundRejectedException("cannot refill inside captured caps");
     }
 
-    private Board build(int[] weights, boolean free) {
+    private Board build(int[] firstWeights, int[] restWeights, boolean free) {
         var cols = new ArrayList<List<Symbol>>();
         for (int c = 0; c < 6; c++) {
             List<GenerationModel.Segment> segs = (c == 0 || c == 5)
@@ -99,11 +99,22 @@ public final class BoardFactory {
                 : model.innerStructure(random);
             var col = new ArrayList<Symbol>();
             var others = new ArrayList<List<Symbol>>(cols);
-            for (GenerationModel.Segment seg : segs) col.add(newSymbol(c, seg, weights, free, col, others));
+            boolean seenTrigger = false;
+            for (GenerationModel.Segment seg : segs) {
+                int[] weights = seenTrigger ? restWeights : firstWeights;
+                Symbol symbol = newSymbol(c, seg, weights, free, col, others);
+                if (symbol.prop() == SCATTER) seenTrigger = true;
+                col.add(symbol);
+            }
             cols.add(col);
         }
         var hs = new ArrayList<Symbol>();
-        for (int i = 0; i < 4; i++) hs.add(horizontalSymbol(weights, free, cols, hs));
+        for (int i = 0; i < 4; i++) {
+            int reel = i + 1;
+            boolean seen = false;
+            for (Symbol symbol : cols.get(reel)) if (symbol.prop() == SCATTER) seen = true;
+            hs.add(horizontalSymbol(seen ? restWeights : firstWeights, free, cols, hs));
+        }
         return new Board(cols, hs);
     }
 

@@ -1,5 +1,7 @@
 package com.cpgame.replica.beeworkshop;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,60 +41,42 @@ final class RedisRoundRepository implements AutoCloseable {
 
     private Claimed claimKind(GameRuleCore.RoundKind kind) throws IOException {
         boolean special = RedisKeys.special(kind);
-        List<Integer> ratios = ratios(special, kind == GameRuleCore.RoundKind.ORDINARY_LOSS, kind != GameRuleCore.RoundKind.ORDINARY_LOSS);
-        while (!ratios.isEmpty()) {
-            int multiplier = ratios.remove(random.nextInt(ratios.size()));
-            Claimed claimed = popMember(special, multiplier);
-            if (claimed == null) continue;
-            if (claimed.round.kind() != kind) continue;
-            return claimed;
+        boolean loss = kind == GameRuleCore.RoundKind.ORDINARY_LOSS;
+        var buckets = buckets(special, loss ? 0 : 1, loss ? 0 : Integer.MAX_VALUE);
+        Integer multiplier;
+        while ((multiplier = buckets.next()) != null) {
+            Claimed claimed = readMember(special, multiplier);
+            if (claimed != null && claimed.round.kind() == kind) return claimed;
         }
         throw new CacheEmptyException("empty " + kind);
     }
 
-    private Claimed claimLoss() throws IOException {
-        if (ratios(false, true, false).isEmpty()) return null;
-        return popMember(false, 0);
-    }
+    private Claimed claimLoss() throws IOException { return readMember(false, 0); }
 
     private Claimed claimWin() throws IOException {
-        List<int[]> candidates = new ArrayList<>();
-        for (boolean special : new boolean[]{false, true}) {
-            for (int multiplier : ratios(special, false, true)) {
-                candidates.add(new int[]{special ? 1 : 0, multiplier});
+        boolean firstSpecial = random.nextBoolean();
+        for (boolean special : new boolean[]{firstSpecial, !firstSpecial}) {
+            var buckets = buckets(special, 1, Integer.MAX_VALUE);
+            Integer multiplier;
+            while ((multiplier = buckets.next()) != null) {
+                Claimed claimed = readMember(special, multiplier);
+                if (claimed != null) return claimed;
             }
-        }
-        while (!candidates.isEmpty()) {
-            int[] chosen = candidates.remove(random.nextInt(candidates.size()));
-            Claimed claimed = popMember(chosen[0] == 1, chosen[1]);
-            if (claimed != null) return claimed;
         }
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    private List<Integer> ratios(boolean special, boolean lossOnly, boolean positiveOnly) throws IOException {
-        Object raw = redis.command("ZRANGE", RedisKeys.index(gameId, special), "0", "-1");
-        List<Integer> out = new ArrayList<>();
-        if (!(raw instanceof List<?> values)) return out;
-        for (Object value : values) {
-            int multiplier = Integer.parseInt(String.valueOf(value));
-            if (lossOnly && multiplier != 0) continue;
-            if (positiveOnly && multiplier <= 0) continue;
-            Object len = redis.command("LLEN", RedisKeys.list(gameId, special, multiplier));
-            if (len instanceof Long n && n > 0) out.add(multiplier);
-        }
-        return out;
+    private RedisFloorLookup.Cursor<IOException> buckets(boolean special, int minimum, int maximum) throws IOException {
+        return RedisFloorLookup.open(redis::command, RedisKeys.index(gameId, special),
+                m -> RedisKeys.list(gameId, special, m), random, minimum, maximum);
     }
 
-    private Claimed popMember(boolean special, int multiplier) throws IOException {
+    private Claimed readMember(boolean special, int multiplier) throws IOException {
         String list = RedisKeys.list(gameId, special, multiplier);
-        Object popped = redis.command("RPOP", list);
+        long length = Long.parseLong(redis.command("LLEN", list).toString());
+        if (length <= 0) return null;
+        Object popped = redis.command("LINDEX", list, Long.toString(random.nextLong(length)));
         if (popped == null) return null;
-        Object remaining = redis.command("LLEN", list);
-        if (remaining instanceof Long n && n == 0) {
-            redis.command("ZREM", RedisKeys.index(gameId, special), Integer.toString(multiplier));
-        }
         var round = codec.decode(String.valueOf(popped));
         rules.validate(round);
         if (util.integerMultiplier(round) != multiplier) throw new IllegalStateException("bucket/member multiplier mismatch");

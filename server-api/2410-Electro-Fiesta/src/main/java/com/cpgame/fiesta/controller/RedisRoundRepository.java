@@ -1,5 +1,7 @@
 package com.cpgame.fiesta.controller;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.fiesta.*;
 import redis.clients.jedis.Jedis;
 import java.security.SecureRandom;
@@ -11,21 +13,13 @@ final class RedisRoundRepository implements AutoCloseable {
     synchronized GameRound claim(){
         boolean wantWin=random.nextBoolean();
         boolean special=wantWin && random.nextBoolean();
-        String index=special?RedisKeys.maryIndex(gameId):RedisKeys.normalIndex(gameId);
-        List<String> choices=jedis.zrange(index,0,-1);
-        if(choices.isEmpty() && wantWin && !special){
-            special=true; index=RedisKeys.maryIndex(gameId); choices=jedis.zrange(index,0,-1);
+        Integer selected = choosePool(special, wantWin);
+        if (selected == null && wantWin && !special) {
+            special = true;
+            selected = choosePool(true, true);
         }
-        List<Integer> ratios=new ArrayList<>();
-        for(String choice:choices){
-            int multiplier=Integer.parseInt(choice);
-            if(!wantWin && multiplier!=0) continue;
-            if(wantWin && multiplier<=0) continue;
-            String list=special?RedisKeys.maryList(gameId,multiplier):RedisKeys.normalList(gameId,multiplier);
-            if(jedis.llen(list)>0) ratios.add(multiplier);
-        }
-        if(ratios.isEmpty())throw new CacheEmptyException("Redis "+(wantWin?"win":"loss")+" index is empty");
-        int multiplier=ratios.get(random.nextInt(ratios.size()));
+        if (selected == null) throw new CacheEmptyException("Redis " + (wantWin ? "win" : "loss") + " index is empty");
+        int multiplier = selected;
         String list=special?RedisKeys.maryList(gameId,multiplier):RedisKeys.normalList(gameId,multiplier);
         long len=jedis.llen(list);
         if(len<=0)throw new CacheEmptyException("all selected Redis multiplier buckets are empty");
@@ -36,6 +30,19 @@ final class RedisRoundRepository implements AutoCloseable {
         if(analysis.integerMultiplier()!=multiplier || RedisKeys.special(analysis.outcome())!=special)
             throw new IllegalStateException("cached member failed multiplier/pool check");
         return round;
+    }
+    private Integer choosePool(boolean special, boolean win) {
+        return RedisFloorLookup.choose(this::floorCommand,
+                special ? RedisKeys.maryIndex(gameId) : RedisKeys.normalIndex(gameId),
+                m -> special ? RedisKeys.maryList(gameId, m) : RedisKeys.normalList(gameId, m),
+                random, win ? 1 : 0, win ? Integer.MAX_VALUE : 0);
+    }
+    private Object floorCommand(String... args) {
+        return switch (args[0]) {
+            case "ZREVRANGEBYSCORE" -> jedis.zrevrangeByScore(args[1], args[2], args[3], 0, 1);
+            case "LLEN" -> jedis.llen(args[1]);
+            default -> throw new IllegalArgumentException("unexpected lookup command");
+        };
     }
     @Override public void close(){jedis.close();}
     static final class CacheEmptyException extends RuntimeException{CacheEmptyException(String message){super(message);}}

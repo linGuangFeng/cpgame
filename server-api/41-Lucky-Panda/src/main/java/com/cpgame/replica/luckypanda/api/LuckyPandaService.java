@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Session, balance, History and complete-Round continuation.
- * A new paid Spin LPOP's one Redis member; cascade/free only project that member.
+ * A new paid Spin randomly reads one Redis member; cascade/free only project that member.
  */
 final class LuckyPandaService {
     private static final int HISTORY_PAGE = 10;

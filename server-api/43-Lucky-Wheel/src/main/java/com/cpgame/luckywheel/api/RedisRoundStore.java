@@ -1,5 +1,7 @@
 package com.cpgame.luckywheel.api;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.luckywheel.core.CompleteRoundFactory;
 import com.cpgame.luckywheel.core.GameRound;
 import com.cpgame.luckywheel.core.MinimalFactCodec;
@@ -43,17 +45,15 @@ final class RedisRoundStore implements AutoCloseable {
 
     synchronized GameRound claim(RoundRequest request) throws IOException {
         int betProfile = request.betProfile();
-        List<Bucket> lossBuckets = new ArrayList<>();
-        List<Bucket> winBuckets = new ArrayList<>();
-        collect(false, betProfile, RedisKeyContract.normalIndex(gameId, betProfile), lossBuckets, winBuckets);
-        collect(true, betProfile, RedisKeyContract.specialIndex(gameId, betProfile), lossBuckets, winBuckets);
-        if (lossBuckets.isEmpty() || winBuckets.isEmpty()) {
-            throw new IOException("gid43 Redis中或不中奖池不完整");
-        }
-        // 合同顺序：先独立随机决定中或不中，再在对应奖池已有的实际倍率桶中随机。
-        List<Bucket> selectedOutcome = random.nextBoolean() ? winBuckets : lossBuckets;
-        while (!selectedOutcome.isEmpty()) {
-            Bucket bucket = selectedOutcome.remove(random.nextInt(selectedOutcome.size()));
+        boolean wantWin = random.nextBoolean();
+        boolean firstSpecial = wantWin && random.nextBoolean();
+        for (boolean pool : wantWin ? new boolean[]{firstSpecial, !firstSpecial} : new boolean[]{false}) {
+            var cursor = RedisFloorLookup.open(redis::command, pool ? RedisKeyContract.specialIndex(gameId, betProfile) : RedisKeyContract.normalIndex(gameId, betProfile),
+                    m -> pool ? RedisKeyContract.specialList(gameId, betProfile, m) : RedisKeyContract.normalList(gameId, betProfile, m), random,
+                    wantWin ? 1 : 0, wantWin ? Integer.MAX_VALUE : 0);
+            Integer multiplier;
+            while ((multiplier = cursor.next()) != null) {
+            Bucket bucket = new Bucket(betProfile, pool, multiplier);
             String listKey = bucket.special
                     ? RedisKeyContract.specialList(gameId, bucket.betProfile, bucket.multiplier)
                     : RedisKeyContract.normalList(gameId, bucket.betProfile, bucket.multiplier);
@@ -81,26 +81,11 @@ final class RedisRoundStore implements AutoCloseable {
             random.nextBytes(keyBytes);
             return factory.create(request, facts, "LW43-" + HexFormat.of().formatHex(keyBytes));
         }
+        }
         throw new IOException("gid43 Redis完整局缓存池为空");
     }
 
-    private void collect(boolean special, int betProfile, String indexKey, List<Bucket> lossTarget,
-                         List<Bucket> winTarget) throws IOException {
-        Object reply = redis.command("ZRANGE", indexKey, "0", "-1");
-        if (!(reply instanceof List<?> values)) return;
-        for (Object value : values) {
-            int multiplier;
-            try { multiplier = Integer.parseInt(String.valueOf(value)); }
-            catch (NumberFormatException error) { throw new IOException("Redis倍率不是整数", error); }
-            if (multiplier < 0 || (special && multiplier == 0)) continue;
-            String listKey = special
-                    ? RedisKeyContract.specialList(gameId, betProfile, multiplier)
-                    : RedisKeyContract.normalList(gameId, betProfile, multiplier);
-            if (Long.parseLong(String.valueOf(redis.command("LLEN", listKey))) > 0) {
-                (multiplier == 0 ? lossTarget : winTarget).add(new Bucket(betProfile, special, multiplier));
-            }
-        }
-    }
+    
 
     @Override public void close() throws IOException { redis.close(); }
     private record Bucket(int betProfile, boolean special, int multiplier) { }

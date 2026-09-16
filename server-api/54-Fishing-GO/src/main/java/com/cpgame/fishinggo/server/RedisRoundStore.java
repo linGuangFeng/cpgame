@@ -1,5 +1,7 @@
 package com.cpgame.fishinggo.server;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.fishinggo.core.CompleteRound;
 import com.cpgame.fishinggo.core.RedisKeys;
 import com.cpgame.fishinggo.core.ResultUtil;
@@ -61,46 +63,38 @@ final class RedisRoundStore implements AutoCloseable {
     }
 
     private Claim claimExact(Selection selection) {
-        List<int[]> available = new ArrayList<>();
-        int wantScatter = 0;
-        switch (selection) {
-            case LOSS -> collect(available, false, 0, 0);
-            case SMALL_WIN -> collect(available, false, 1, 100);
-            case BIG_WIN -> collect(available, false, 101, 399);
-            case MEGA_WIN -> collect(available, false, 400, 599);
-            case SUPER_WIN -> collect(available, false, 600, Integer.MAX_VALUE);
-            case WIN -> collect(available, false, 1, Integer.MAX_VALUE);
-            case SPECIAL -> collect(available, true, 0, Integer.MAX_VALUE);
-            case SPECIAL_X1 -> { collect(available, true, 0, Integer.MAX_VALUE); wantScatter = 5; }
-            case SPECIAL_X2 -> { collect(available, true, 0, Integer.MAX_VALUE); wantScatter = 6; }
-            case SPECIAL_X3 -> { collect(available, true, 0, Integer.MAX_VALUE); wantScatter = 7; }
-            case ANY -> {
-                if (random.nextBoolean()) collect(available, false, 0, 0);
-                else {
-                    collect(available, false, 1, Integer.MAX_VALUE);
-                    collect(available, true, 0, Integer.MAX_VALUE);
-                }
+        if (selection == Selection.ANY) {
+            if (!random.nextBoolean()) return claimExact(Selection.LOSS);
+            boolean special = random.nextBoolean();
+            try { return claimExact(special ? Selection.SPECIAL : Selection.WIN); }
+            catch (CacheEmptyException empty) { return claimExact(special ? Selection.WIN : Selection.SPECIAL); }
+        }
+        boolean special = selection.name().startsWith("SPECIAL");
+        int minimum = switch(selection) {
+            case LOSS, SPECIAL, SPECIAL_X1, SPECIAL_X2, SPECIAL_X3 -> 0;
+            case BIG_WIN -> 101; case MEGA_WIN -> 400; case SUPER_WIN -> 600; default -> 1;
+        };
+        int maximum = switch(selection) {
+            case LOSS -> 0; case SMALL_WIN -> 100; case BIG_WIN -> 399; case MEGA_WIN -> 599; default -> Integer.MAX_VALUE;
+        };
+        int wantScatter = switch(selection) { case SPECIAL_X1 -> 5; case SPECIAL_X2 -> 6; case SPECIAL_X3 -> 7; default -> 0; };
+        var cursor = RedisFloorLookup.open(this::floorCommand,
+                special ? RedisKeys.maryIndex() : RedisKeys.normalIndex(),
+                m -> special ? RedisKeys.maryList(m) : RedisKeys.normalList(m), random, minimum, maximum);
+        Integer multiplier;
+        while ((multiplier = cursor.next()) != null) {
+            int[] selected = {special ? 1 : 0, multiplier};
+            if (wantScatter == 0) return read(selected, -1);
+            long length = jedis.llen(listKey(selected));
+            List<Integer> offsets = new ArrayList<>();
+            for(int i=0;i<length && i<Integer.MAX_VALUE;i++) offsets.add(i);
+            java.util.Collections.shuffle(offsets, random);
+            for(int offset: offsets) {
+                Claim result=read(selected,offset);
+                if(matchesScatter(result,wantScatter)) return result;
             }
         }
-        if (available.isEmpty()) throw new CacheEmptyException("selected pool empty");
-        Claim last = null;
-        int tries = Math.max(24, available.size());
-        for (int i = 0; i < tries; i++) {
-            last = read(available.get(random.nextInt(available.size())), -1);
-            if (matchesScatter(last, wantScatter)) return last;
-        }
-        if (wantScatter > 0) {
-            for (int[] chosen : available) {
-                long len = jedis.llen(listKey(chosen));
-                int n = (int) Math.min(len, 8);
-                for (int i = 0; i < n; i++) {
-                    last = read(chosen, i);
-                    if (matchesScatter(last, wantScatter)) return last;
-                }
-            }
-        }
-        if (last == null) throw new CacheEmptyException("member exhausted");
-        return last;
+        throw new CacheEmptyException("selected pool empty: " + selection);
     }
 
     private static List<Selection> fallbacks(Selection selection) {
@@ -141,20 +135,14 @@ final class RedisRoundStore implements AutoCloseable {
         return chosen[0] == 1 ? RedisKeys.maryList(chosen[1]) : RedisKeys.normalList(chosen[1]);
     }
 
-    private void collect(List<int[]> available, boolean special, int minOdds, int maxOdds) {
-        String index = special ? RedisKeys.maryIndex() : RedisKeys.normalIndex();
-        for (String entry : jedis.zrange(index, 0, -1)) {
-            int m;
-            try {
-                m = Integer.parseInt(entry);
-            } catch (NumberFormatException ignored) {
-                continue;
-            }
-            if (m < minOdds || m > maxOdds) continue;
-            String list = special ? RedisKeys.maryList(m) : RedisKeys.normalList(m);
-            if (jedis.llen(list) > 0) available.add(new int[] {special ? 1 : 0, m});
-        }
+    private Object floorCommand(String... args) {
+        return switch (args[0]) {
+            case "ZREVRANGEBYSCORE" -> jedis.zrevrangeByScore(args[1], args[2], args[3], 0, 1);
+            case "LLEN" -> jedis.llen(args[1]);
+            default -> throw new IllegalArgumentException("unexpected lookup command");
+        };
     }
+    
 
     @Override public void close() { jedis.close(); }
 }

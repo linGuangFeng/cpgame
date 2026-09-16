@@ -34,10 +34,19 @@ final class FakeRedisCommands implements RedisCommands {
 
     @Override public Object command(String... args) {
         return switch (args[0]) {
+            case "ZREVRANGEBYSCORE" -> {
+                if (args.length != 7 || !args[4].equals("LIMIT") || !args[5].equals("0") || !args[6].equals("1"))
+                    throw new AssertionError("floor lookup must fetch one bucket");
+                boolean exclusive = args[2].startsWith("(");
+                int max = Integer.parseInt(exclusive ? args[2].substring(1) : args[2]);
+                int min = Integer.parseInt(args[3]);
+                yield indexes.getOrDefault(args[1], new TreeSet<>()).descendingSet().stream()
+                        .filter(n -> n >= min && (exclusive ? n < max : n <= max)).limit(1).map(String::valueOf).toList();
+            }
             case "ZRANGE" -> new ArrayList<>(indexes.getOrDefault(args[1], new TreeSet<>())).stream().map(String::valueOf).toList();
             case "LRANGE" -> new ArrayList<>(lists.getOrDefault(args[1], List.of()));
             case "LINDEX" -> {
-                List<String> values = lists.getOrDefault(args[1], List.of()); yield values.isEmpty() ? null : values.get(0);
+                List<String> values = lists.getOrDefault(args[1], List.of()); int index = Integer.parseInt(args[2]); yield index >= 0 && index < values.size() ? values.get(index) : null;
             }
             case "LLEN" -> (long) lists.getOrDefault(args[1], List.of()).size();
             case "LREM" -> remove(args[1], args[3]);

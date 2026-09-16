@@ -114,5 +114,7 @@ class ScatterRoundWalkTest {
     private static final class AlwaysWinRandom extends SecureRandom {
         @Override public boolean nextBoolean() { return true; }
         @Override public int nextInt(int bound) { return 0; }
+        @Override public long nextLong(long origin, long bound) { return bound - 1; }
+        @Override public long nextLong(long bound) { return 0; }
     }
 }

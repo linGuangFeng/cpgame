@@ -35,16 +35,82 @@ class IndependentLossMarkerTest {
             assertTrue(evaluation.getWins().isEmpty());
             assertEquals(0, evaluation.getAwardedFreeSpins());
             assertEquals(38, evaluation.getMultiplier(), "no multiplier increment on an independent loss");
+            assertEquals(0, FreedomDayResultUtil.countVisibleSymbol(
+                    board(fact.spins().get(0).get(0)), FreedomDayResultUtil.BALL),
+                    "marker board must not make the client display a phantom +2");
             assertEquals("#", codec.encode(fact));
             different.add(codec.encodeFull(fact));
         }
         assertTrue(different.size() > 1, "markers must generate fresh boards");
         assertEquals(0, codec.verify("#", 10).multiplier().signum());
-        for (String malformed : List.of("0", "##", "|#", "#|", "#" + SAMPLE.split("\\|")[1])) {
+        for (String malformed : List.of("0", "##", "#0", "#4", "#01", "|#", "#|",
+                "#" + SAMPLE.split("\\|")[1])) {
             assertThrows(IllegalArgumentException.class, () -> codec.decode(malformed), malformed);
         }
         assertThrows(IllegalArgumentException.class, () -> codec.verify("#|#", 10));
         assertThrows(IllegalArgumentException.class, () -> codec.verify("#", 10, true));
+    }
+
+    @Test void numberedMarkersRecreateExactBallCountAndCarryMultiplierOnZeroWin() {
+        CompleteRoundCodec codec = new CompleteRoundCodec();
+        FreedomDayIndependentLossGenerator generator = new FreedomDayIndependentLossGenerator();
+        for (int balls = 0; balls <= FreedomDayIndependentLossGenerator.MAX_MARKER_BALLS; balls++) {
+            String marker = balls == 0 ? "#" : "#" + balls;
+            FreedomDayBoard generated = generator.generateMarkerLoss(new Random(1809L + balls), true, balls);
+            CompleteRoundFact fact = new CompleteRoundFact(1, false, List.of(List.of(fact(generated))));
+            assertEquals(marker, codec.encode(fact));
+
+            FreedomDayBoard decoded = board(codec.decode(marker).spins().get(0).get(0));
+            assertEquals(balls, FreedomDayResultUtil.countVisibleSymbol(decoded, FreedomDayResultUtil.BALL));
+            var evaluation = FreedomDayResultUtil.evaluate(decoded, BigDecimal.ONE, 4, 2);
+            assertTrue(evaluation.getWins().isEmpty());
+            assertEquals(0, evaluation.getAwardedFreeSpins());
+            assertEquals(4 + balls * 2, evaluation.getMultiplier());
+            assertEquals(0, evaluation.getTotalWin().signum());
+        }
+    }
+
+    @Test void numberedMarkersCarryIntoTheNextWinningSpin() throws Exception {
+        CompleteRoundCodec codec = new CompleteRoundCodec();
+        FreedomDayBoard paidLoss = board(codec.decode("#").spins().get(0).get(0));
+        FreedomDayBoard oneBallLoss = board(codec.decode("#1").spins().get(0).get(0));
+        FreedomDayBoard twoBallLoss = board(codec.decode("#2").spins().get(0).get(0));
+
+        int[] winningProp = noWinSymbols();
+        removeExtraSymbol(winningProp, 9, 3);
+        winningProp[0] = 9;
+        winningProp[5] = 9;
+        winningProp[10] = 9;
+        FreedomDayBoard winning = new FreedomDayBoard(winningProp, new int[]{2, 3, 4, 5});
+
+        CompleteRoundFact fact = new CompleteRoundFact(1, false, List.of(
+                List.of(fact(paidLoss)), List.of(fact(oneBallLoss)),
+                List.of(fact(twoBallLoss)), List.of(fact(winning))));
+        JsonNode spins = protocol(fact);
+
+        assertEquals(4, spins.get(1).get("_ending_multiplier").asInt(), "#1: x2 -> x4");
+        assertEquals(8, spins.get(2).get("_ending_multiplier").asInt(), "#2: x4 -> x8");
+        JsonNode wins = spins.get(3).get("props").get(0).get("win_arr");
+        assertFalse(wins.isEmpty());
+        for (JsonNode win : wins) assertEquals(8, win.get("m").asInt());
+        assertEquals(8, spins.get(3).get("_ending_multiplier").asInt());
+    }
+
+    @Test void protocolCountsOneLongMultiplierFrameAsOneVisibleBall() throws Exception {
+        CompleteRoundCodec codec = new CompleteRoundCodec();
+        FreedomDayBoard paidLoss = board(codec.decode("#").spins().get(0).get(0));
+        int[] prop = noWinSymbols();
+        prop[5] = FreedomDayResultUtil.BALL;
+        prop[6] = FreedomDayResultUtil.BALL;
+        prop[7] = FreedomDayResultUtil.BALL;
+        FreedomDayBoard longBall = new FreedomDayBoard(prop, new int[]{2, 3, 4, 5},
+                List.of(List.of(5, 6, 7)), List.of(), List.of());
+        CompleteRoundFact fact = new CompleteRoundFact(1, false,
+                List.of(List.of(fact(paidLoss)), List.of(fact(longBall))));
+
+        JsonNode spins = protocol(fact);
+        assertEquals(4, spins.get(1).get("_ending_multiplier").asInt(),
+                "a three-cell multiplier frame is one visible x2 ball");
     }
 
     @Test void suppliedRoundPreservesCascadePagesFreeCountAndCarriedMultiplier() throws Exception {
@@ -61,6 +127,12 @@ class IndependentLossMarkerTest {
         CompleteRoundFact materialized = codec.decode(compact);
         assertEquals(codec.verify(original, 10, 30), codec.verify(materialized, 10, 30));
         assertEquals(11, materialized.spins().size());
+        for (int index : List.of(1, 2, 3, 5, 7, 8, 9, 10)) {
+            FreedomDayBoard markerBoard = board(materialized.spins().get(index).get(0));
+            assertTrue(FreedomDayIndependentLossGenerator.isMarkerLoss(markerBoard), "spin " + index);
+            assertEquals(4, FreedomDayResultUtil.evaluate(markerBoard, BigDecimal.ONE, 4, 2).getMultiplier(),
+                    "a carried x4 must remain visually and arithmetically x4");
+        }
         JsonNode before = protocol(original);
         JsonNode after = protocol(materialized);
         for (int i = 0; i < before.size(); i++) {
@@ -76,15 +148,11 @@ class IndependentLossMarkerTest {
 
     @Test void scatterTriggerAndRetriggerNeverBecomeMarkers() {
         var boards = new FreedomDayBoardGenerator(new Random(1809));
-        FreedomDayBoard trigger = null;
-        for (int i = 0; i < 1000; i++) {
-            FreedomDayBoard candidate = boards.generateFeatureTrigger();
-            if (FreedomDayResultUtil.evaluate(candidate, BigDecimal.ONE, 1, 2).getWins().isEmpty()) {
-                trigger = candidate;
-                break;
-            }
-        }
-        assertNotNull(trigger);
+        FreedomDayBoard trigger = boards.generateFeatureTrigger();
+        var evaluation = FreedomDayResultUtil.evaluate(trigger, BigDecimal.ONE, 1, 2);
+        assertTrue(evaluation.getWins().isEmpty());
+        assertEquals(4, evaluation.getScatterCount());
+        assertEquals(10, evaluation.getAwardedFreeSpins());
         assertFalse(FreedomDayIndependentLossGenerator.isIndependentLoss(trigger));
         CompleteRoundFact fact = new CompleteRoundFact(1, false, List.of(List.of(fact(trigger)), List.of(fact(trigger))));
         CompleteRoundCodec codec = new CompleteRoundCodec();
@@ -130,5 +198,22 @@ class IndependentLossMarkerTest {
     private static CompleteRoundFact.BoardFact fact(FreedomDayBoard board) {
         return new CompleteRoundFact.BoardFact(Arrays.stream(board.getProp()).boxed().toList(),
                 Arrays.stream(board.getTrl()).boxed().toList(), board.getGrids(), board.getGoldFrames(), board.getSilverFrames());
+    }
+
+    private static int[] noWinSymbols() {
+        int[] prop = new int[30];
+        for (int reel = 0; reel < 6; reel++) {
+            for (int row = 0; row < 5; row++) prop[reel * 5 + row] = 2 + (reel + row * 3) % 10;
+        }
+        return prop;
+    }
+
+    private static void removeExtraSymbol(int[] prop, int symbol, int reelCount) {
+        for (int reel = 0; reel < reelCount; reel++) {
+            for (int row = 0; row < 5; row++) {
+                int index = reel * 5 + row;
+                if (prop[index] == symbol) prop[index] = 8;
+            }
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.cpgame.luckydragon.api;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.luckydragon.core.GameRuleCore;
 import com.cpgame.luckydragon.core.IndependentRoundVerifier;
 import com.cpgame.luckydragon.core.MinimalFactCodec;
@@ -47,18 +49,15 @@ final class RedisRoundStore implements LuckyDragonService.RoundProvider {
 
     @Override
     public synchronized LuckyDragonService.ClaimedRound claim(RoundRequest request) throws IOException {
-        List<Bucket> available = new ArrayList<>();
-        collect(false, RedisKeyContract.normalIndex(gameId), available);
-        collect(true, RedisKeyContract.specialIndex(gameId), available);
-        List<Bucket> losses = available.stream().filter(bucket -> bucket.multiplier == 0).collect(java.util.stream.Collectors.toCollection(ArrayList::new));
-        List<Bucket> wins = available.stream().filter(bucket -> bucket.multiplier > 0).collect(java.util.stream.Collectors.toCollection(ArrayList::new));
-        if (losses.isEmpty() && wins.isEmpty()) throw new IOException("Redis round pools are empty for raw gid 42");
-        // 平台合同要求两段选择：先安全随机决定 WIN/LOSS，再从该侧已有整数倍率桶中随机领取。
-        // 这避免把桶数量误当成中/不中概率；完整 Round member 仍只领取一次。
-        boolean wantWin = losses.isEmpty() || (!wins.isEmpty() && random.nextBoolean());
-        List<Bucket> selected = wantWin ? wins : losses;
-        while (!selected.isEmpty()) {
-            Bucket bucket = selected.remove(random.nextInt(selected.size()));
+        boolean wantWin = random.nextBoolean();
+        boolean firstSpecial = wantWin && random.nextBoolean();
+        for (boolean pool : wantWin ? new boolean[]{firstSpecial, !firstSpecial} : new boolean[]{false}) {
+            var cursor = RedisFloorLookup.open(redis::command, pool ? RedisKeyContract.specialIndex(gameId) : RedisKeyContract.normalIndex(gameId),
+                    m -> pool ? RedisKeyContract.specialList(gameId, m) : RedisKeyContract.normalList(gameId, m), random,
+                    wantWin ? 1 : 0, wantWin ? Integer.MAX_VALUE : 0);
+            Integer multiplier;
+            while ((multiplier = cursor.next()) != null) {
+            Bucket bucket = new Bucket(pool, multiplier);
             String key = bucket.special
                 ? RedisKeyContract.specialList(gameId, bucket.multiplier)
                 : RedisKeyContract.normalList(gameId, bucket.multiplier);
@@ -89,23 +88,11 @@ final class RedisRoundStore implements LuckyDragonService.RoundProvider {
             }
             return new LuckyDragonService.ClaimedRound(cached.roundKey(), result, member);
         }
+        }
         throw new IOException("selected Redis WIN/LOSS side became empty for raw gid 42");
     }
 
-    private void collect(boolean special, String index, List<Bucket> target) throws IOException {
-        Object reply = redis.command("ZRANGE", index, "0", "-1");
-        if (!(reply instanceof List<?> values)) return;
-        for (Object value : values) {
-            int multiplier;
-            try { multiplier = Integer.parseInt(String.valueOf(value)); }
-            catch (NumberFormatException error) { throw new IOException("non-integer Redis multiplier", error); }
-            if (multiplier < 0 || (special && multiplier == 0)) continue;
-            String key = special ? RedisKeyContract.specialList(gameId, multiplier)
-                : RedisKeyContract.normalList(gameId, multiplier);
-            Object length = redis.command("LLEN", key);
-            if (Long.parseLong(String.valueOf(length)) > 0) target.add(new Bucket(special, multiplier));
-        }
-    }
+    
 
     private record Bucket(boolean special, int multiplier) { }
 

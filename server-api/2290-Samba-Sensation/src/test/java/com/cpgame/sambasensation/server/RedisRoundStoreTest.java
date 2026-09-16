@@ -12,10 +12,10 @@ class RedisRoundStoreTest {
         RedisRoundStore store = new RedisRoundStore(new FakeRedisCommands(), 2290);
         IllegalStateException error = assertThrows(IllegalStateException.class, () -> store.claimPaid(
                 new FixedRandom(false), 1, GameRuleCore.CollectionState.initial()));
-        assertTrue(error.getMessage().contains("192.168.10.3:6379 db=15"));
+        assertTrue(error.getMessage().contains("Redis round cache unavailable/empty"));
     }
 
-    @Test void paidClaimFiltersBetTypeAndAtomicallyRemovesOneMember() throws Exception {
+    @Test void paidClaimFiltersBetTypeWithoutConsumingMember() throws Exception {
         FakeRedisCommands redis = new FakeRedisCommands();
         String oneAxis = TestRoundMembers.loss(1), threeAxes = TestRoundMembers.loss(3);
         redis.seed(false, 0, oneAxis, threeAxes);
@@ -23,7 +23,7 @@ class RedisRoundStoreTest {
                 new FixedRandom(false), 3, GameRuleCore.CollectionState.initial());
         assertEquals(3, claimed.fact().betType());
         assertEquals(GameRuleCore.RoundClass.ORDINARY_LOSS, claimed.kind());
-        assertEquals(1, redis.size(false, 0));
+        assertEquals(2, redis.size(false, 0));
     }
 
     @Test void purchaseUsesMaryPoolButOnlyFeatureBuyEntry() throws Exception {
@@ -36,7 +36,7 @@ class RedisRoundStoreTest {
                 new FixedRandom(true), GameRuleCore.CollectionState.initial());
         assertEquals(GameRuleCore.EntryKind.FEATURE_BUY_INITIAL, claimed.fact().entryKind());
         assertEquals(GameRuleCore.RoundClass.FREE_SPINS_SPECIAL, claimed.kind());
-        assertEquals(1, redis.size(true, multiplier));
+        assertEquals(2, redis.size(true, multiplier));
     }
 
     @Test void normalPaidClaimChoosesLossOrWinBeforeRandomMultiplier() throws Exception {
@@ -57,5 +57,7 @@ class RedisRoundStoreTest {
         FixedRandom(boolean value) { this.value = value; }
         @Override public boolean nextBoolean() { return value; }
         @Override public int nextInt(int bound) { return 0; }
+        @Override public long nextLong(long origin, long bound) { return bound - 1; }
+        @Override public long nextLong(long bound) { return 0; }
     }
 }

@@ -14,13 +14,13 @@ class ScatterFreeGenerationTest {
     void boostedEntryCanProduceScatterFreeCompleteRound() {
         CompleteRoundFactory factory = new CompleteRoundFactory(new BigDecimal("0.02"), 1);
         CompleteRoundCodec codec = new CompleteRoundCodec();
-        var weights = RedisDirectLoader.boostedScatter(CompleteRoundFactoryTest.weights());
+        var weights = CompleteRoundFactoryTest.weights();
         Random random = new Random(41041);
         int found = 0;
         for (int i = 0; i < 400 && found == 0; i++) {
             CompleteRoundFactory.GeneratedRound generated;
             try {
-                generated = factory.generate(random, 10, 30, weights, false);
+                generated = factory.generate(random, 10, 30, weights, false, true);
             } catch (CompleteRoundFactory.RoundRejectedException rejected) {
                 continue;
             }

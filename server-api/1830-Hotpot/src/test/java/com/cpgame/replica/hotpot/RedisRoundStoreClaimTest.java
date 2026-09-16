@@ -16,6 +16,9 @@ class RedisRoundStoreClaimTest {
         RedisRoundStore store = new RedisRoundStore(new FakeRedisCommands(), 1830L);
         IllegalStateException ex = assertThrows(IllegalStateException.class, () -> store.claim(new SecureRandom()));
         assertTrue(ex.getMessage().contains("empty"));
+        assertTrue(ex.getMessage().contains("gameId=1830"));
+        assertTrue(ex.getMessage().contains("db=0"));
+        assertFalse(ex.getMessage().contains("db=15"));
         assertFalse(ex.getMessage().toLowerCase().contains("memory"));
     }
 
@@ -63,6 +66,28 @@ class RedisRoundStoreClaimTest {
     }
 
     @Test
+    void emptyLossPoolFallsBackToExistingWin() throws Exception {
+        FakeRedisCommands fake = new FakeRedisCommands();
+        CompleteRoundCodec codec = new CompleteRoundCodec();
+        CompleteRoundFactory factory = new CompleteRoundFactory();
+        Random random = new Random(1830L);
+        CompleteRoundFactory.GeneratedRound win = null;
+        for (int i = 0; i < 8000 && win == null; i++) {
+            try {
+                CompleteRoundFactory.GeneratedRound generated = factory.generate(random, 10, 30);
+                if (generated.kind() == HotpotRoundKind.ORDINARY_WIN) win = generated;
+            } catch (CompleteRoundFactory.RoundRejectedException ignored) {
+            }
+        }
+        assertNotNull(win);
+        fake.seed(false, win.multiplier(), codec.encode(win.fact()));
+        RedisRoundStore store = new RedisRoundStore(fake, 1830L);
+        RedisRoundStore.ClaimedRound claimed = store.claim(new AlwaysLossRandom());
+        assertEquals(HotpotRoundKind.ORDINARY_WIN, claimed.kind());
+        assertEquals(win.multiplier(), claimed.ratio());
+    }
+
+    @Test
     void jsonMemberIsRejected() {
         FakeRedisCommands fake = new FakeRedisCommands();
         fake.seed(false, 0, "{\"prop\":[]}");
@@ -79,5 +104,7 @@ class RedisRoundStoreClaimTest {
     private static final class AlwaysLossRandom extends SecureRandom {
         @Override public boolean nextBoolean() { return false; }
         @Override public int nextInt(int bound) { return 0; }
+        @Override public long nextLong(long origin, long bound) { return bound - 1; }
+        @Override public long nextLong(long bound) { return 0; }
     }
 }

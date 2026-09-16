@@ -1,5 +1,7 @@
 package com.hd.cpgame.jungleparty.api;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.hd.cpgame.jungleparty.GameRuleCore;
 import com.hd.cpgame.jungleparty.IndependentVerifier;
 import com.hd.cpgame.jungleparty.MemberCodec;
@@ -117,26 +119,27 @@ public final class ServerMain {
             Boolean.parseBoolean(requiredConfig("redis.ssl")))) {
             redis.auth(config.getProperty("redis.username", ""), config.getProperty("redis.password", ""));
             redis.select(Integer.parseInt(requiredConfig("redis.database")));
-            List<Bucket> available = new ArrayList<>();
-            collect(redis, false, gameId, available); collect(redis, true, gameId, available);
-            List<Bucket> losses = available.stream().filter(bucket -> bucket.multiplier == 0 && !bucket.special).collect(java.util.stream.Collectors.toCollection(ArrayList::new));
-            List<Bucket> wins = available.stream().filter(bucket -> bucket.multiplier > 0).collect(java.util.stream.Collectors.toCollection(ArrayList::new));
-            List<Bucket> selected;
-            if (requested == GameRuleCore.Scenario.ORDINARY_LOSS) selected = losses;
-            else if (requested == GameRuleCore.Scenario.ORDINARY_WIN) selected = wins.stream().filter(bucket -> !bucket.special).collect(java.util.stream.Collectors.toCollection(ArrayList::new));
-            else if (requested == GameRuleCore.Scenario.SCATTER_FREE_ROUNDS) selected = wins.stream().filter(bucket -> bucket.special).collect(java.util.stream.Collectors.toCollection(ArrayList::new));
-            else {
-                if (losses.isEmpty() && wins.isEmpty()) throw new IllegalStateException("Redis gid33 multiplier pools are empty");
-                // Platform contract: choose WIN/LOSS first, then choose a currently available integer multiplier bucket.
-                boolean wantWin = losses.isEmpty() || (!wins.isEmpty() && RANDOM.nextBoolean());
-                selected = wantWin ? wins : losses;
-            }
-            while (!selected.isEmpty()) {
-                Bucket bucket = selected.remove(RANDOM.nextInt(selected.size()));
+            boolean explicit = requested == GameRuleCore.Scenario.ORDINARY_LOSS
+                    || requested == GameRuleCore.Scenario.ORDINARY_WIN
+                    || requested == GameRuleCore.Scenario.SCATTER_FREE_ROUNDS;
+            boolean firstWin = requested != GameRuleCore.Scenario.ORDINARY_LOSS
+                    && (explicit || RANDOM.nextBoolean());
+            for (int side = 0; side < (explicit ? 1 : 2); side++) {
+                boolean wantWin = side == 0 ? firstWin : !firstWin;
+                boolean firstSpecial = wantWin && (requested == GameRuleCore.Scenario.SCATTER_FREE_ROUNDS
+                        || (!explicit && RANDOM.nextBoolean()));
+                boolean[] pools = explicit || !wantWin ? new boolean[]{firstSpecial}
+                        : new boolean[]{firstSpecial, !firstSpecial};
+                for (boolean special : pools) {
+                    var buckets = RedisFloorLookup.open(redis::command,
+                            special ? RedisKeyContract.specialIndex(gameId) : RedisKeyContract.normalIndex(gameId),
+                            m -> special ? RedisKeyContract.specialList(gameId, m) : RedisKeyContract.normalList(gameId, m),
+                            RANDOM, wantWin ? 1 : 0, wantWin ? Integer.MAX_VALUE : 0);
+                    Integer multiplier;
+                    while ((multiplier = buckets.next()) != null) {
+                        Bucket bucket = new Bucket(special, multiplier);
                 String key = bucket.special ? RedisKeyContract.specialList(gameId, bucket.multiplier) : RedisKeyContract.normalList(gameId, bucket.multiplier);
-                // Demo rounds are a bounded, pre-generated Redis pool. Rotate the selected
-                // member atomically instead of consuming it permanently; otherwise a healthy
-                // installation inevitably starts returning HTTP 503 after enough Spins.
+                // Randomly read a cached complete round without consuming it.
                 long len = redis.llen(key);
                 if (len <= 0) continue;
                 Object claimed = redis.command("LINDEX", key, Integer.toString(RANDOM.nextInt((int) Math.min(len, Integer.MAX_VALUE))));
@@ -147,20 +150,13 @@ public final class ServerMain {
                     throw new IllegalStateException("Redis member classification does not match selected bucket");
                 return GameRuleCore.reprice(cached, level, size);
             }
+                }
+            }
             throw new IllegalStateException("selected Redis gid33 WIN/LOSS side became empty");
         }
     }
 
-    private static void collect(RedisRoundWriter redis, boolean special, long gameId, List<Bucket> target) throws IOException {
-        String index = special ? RedisKeyContract.specialIndex(gameId) : RedisKeyContract.normalIndex(gameId);
-        for (String text : redis.zrange(index)) {
-            int multiplier;
-            try { multiplier = Integer.parseInt(text); } catch (NumberFormatException error) { throw new IOException("non-integer Redis multiplier", error); }
-            if (multiplier < 0 || (special && multiplier == 0)) continue;
-            String key = special ? RedisKeyContract.specialList(gameId, multiplier) : RedisKeyContract.normalList(gameId, multiplier);
-            if (redis.llen(key) > 0) target.add(new Bucket(special, multiplier));
-        }
-    }
+    
 
     private static void historyList(HttpExchange e) throws IOException {
         if (!getOrPost(e)) return; Map<String,String> values = "POST".equalsIgnoreCase(e.getRequestMethod()) ? form(e) : query(e);

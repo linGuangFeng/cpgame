@@ -1,5 +1,7 @@
 package com.cpgame.replica.edmmania;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -588,13 +590,7 @@ public final class EdmManiaController {
 
         DrawnRound takeSpecial(SecureRandom random) throws IOException {
             ensure();
-            List<Integer> available = new ArrayList<>();
-            for (int ratio : ratios(true)) {
-                if (ratio > 0 && llen(true, ratio) > 0) available.add(ratio);
-            }
-            if (available.isEmpty()) throw new IllegalStateException("PREGENERATED_CACHE_EMPTY");
-            int ratio = available.get(random.nextInt(available.size()));
-            DrawnRound drawn = readMember(true, ratio, random);
+            DrawnRound drawn = takePool(true, random);
             if (drawn == null) throw new IllegalStateException("PREGENERATED_CACHE_EMPTY");
             return drawn;
         }
@@ -604,26 +600,22 @@ public final class EdmManiaController {
         }
 
         private DrawnRound takeWin(SecureRandom random) throws IOException {
-            List<int[]> candidates = new ArrayList<>();
-            for (boolean special : new boolean[]{false, true}) {
-                for (int ratio : ratios(special)) {
-                    if (ratio <= 0) continue;
-                    if (llen(special, ratio) > 0) candidates.add(new int[]{special ? 1 : 0, ratio});
-                }
-            }
-            if (candidates.isEmpty()) return null;
-            int[] chosen = candidates.get(random.nextInt(candidates.size()));
-            return readMember(chosen[0] == 1, chosen[1], random);
+            boolean special = random.nextBoolean();
+            DrawnRound drawn = takePool(special, random);
+            return drawn != null ? drawn : takePool(!special, random);
         }
 
-        private List<Integer> ratios(boolean special) throws IOException {
+        private DrawnRound takePool(boolean special, SecureRandom random) throws IOException {
             String index = special ? RedisPackCli.maryIndex(gameId) : RedisPackCli.normalIndex(gameId);
-            Object raw = redis.command("ZRANGE", index, "0", "-1");
-            List<Integer> out = new ArrayList<>();
-            if (raw instanceof List<?> list) {
-                for (Object item : list) out.add(Integer.parseInt(item.toString()));
+            var buckets = RedisFloorLookup.open(redis::command, index,
+                    m -> special ? RedisPackCli.maryList(gameId, m) : RedisPackCli.normalList(gameId, m),
+                    random, 1, Integer.MAX_VALUE);
+            Integer ratio;
+            while ((ratio = buckets.next()) != null) {
+                DrawnRound drawn = readMember(special, ratio, random);
+                if (drawn != null) return drawn;
             }
-            return out;
+            return null;
         }
 
         private long llen(boolean special, int ratio) throws IOException {

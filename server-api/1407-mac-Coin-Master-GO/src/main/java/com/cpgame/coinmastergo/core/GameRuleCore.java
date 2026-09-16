@@ -138,10 +138,15 @@ public class GameRuleCore {
     }
 
     private List<String> runtimeRandomBoard(boolean opening) {
-        SymbolTable table = opening ? openingTable : subsequentTable;
         List<String> board = new ArrayList<>(GameRules.TRANSPORT_CELLS);
-        for (int index = 0; index < GameRules.TRANSPORT_CELLS; index++) {
-            board.add(runtimeRandomSymbol(table));
+        for (int reel = 0; reel < GameRules.REELS; reel++) {
+            boolean seenTrigger = false;
+            for (int row = 0; row < GameRules.TRANSPORT_ROWS; row++) {
+                SymbolTable table = opening && !seenTrigger ? openingTable : subsequentTable;
+                String symbol = runtimeRandomSymbol(table);
+                if ("SC".equals(symbol)) seenTrigger = true;
+                board.add(symbol);
+            }
         }
         return board;
     }

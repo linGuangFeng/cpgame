@@ -24,18 +24,27 @@ public final class BeeWorkshopBoardGenerator {
     }
 
     public int[] generate(Random random) {
+        return generate(random, false);
+    }
+
+    public int[] generate(Random random, boolean specialOpening) {
+        int[] ordinary = weights;
+        int[] first = specialOpening ? specialEntryOpeningWeights(ordinary) : ordinary;
         int[] board = new int[GameRuleCore.CELLS];
         for (int reel = 0; reel < GameRuleCore.REELS; reel++) {
+            boolean seenTrigger = false;
             for (int row = 0; row < GameRuleCore.ROWS; row++) {
-                board[reel * GameRuleCore.ROWS + row] = draw(random, reel);
+                int symbol = draw(random, reel, seenTrigger ? ordinary : first);
+                if (symbol == GameRuleCore.SCATTER) seenTrigger = true;
+                board[reel * GameRuleCore.ROWS + row] = symbol;
             }
         }
         return board;
     }
 
-    private int draw(Random random, int reel) {
+    private int draw(Random random, int reel, int[] source) {
         int total = 0;
-        int[] local = weights.clone();
+        int[] local = source.clone();
         if (reel == 0 || reel == 4) local[GameRuleCore.WILD - 1] = 0;
         for (int weight : local) {
             if (weight < 0) throw new IllegalArgumentException("negative symbol weight");

@@ -31,10 +31,11 @@ class RuntimeGenerationValidationTest {
         assertFalse(text.contains("fixtures/1830-Hotpot"));
         assertFalse(text.contains("spin-index.jsonl"));
         assertTrue(text.contains("formal controller config must not contain"));
-        assertTrue(text.contains("192.168.10.3"));
+        assertTrue(text.contains("redis.game-id"));
         assertTrue(text.contains("selectsWinOrLossThenExistingMultiplier")
                 || text.contains("先随机中/不中"));
         assertTrue(text.contains("Redis round cache is empty"));
+        assertFalse(text.contains("db=15 gameId=1830"));
         ObjectMapper json = new ObjectMapper();
         ObjectNode report = json.createObjectNode();
         report.put("schemaVersion", "1.0");
@@ -43,8 +44,9 @@ class RuntimeGenerationValidationTest {
         report.put("result", "PASS");
         report.put("scriptedScenarioRotation", false);
         report.put("fixedBoardRuntime", false);
-        report.put("redisHost", "192.168.10.3");
-        report.put("redisDatabase", 15);
+        report.put("redisHost", "18.234.101.161");
+        report.put("redisDatabase", 0);
+        report.put("redisGameId", "8001830");
         report.put("demoReadsRedisCache", true);
         report.put("selectsWinOrLossThenMultiplier", true);
         report.put("completeRoundsPreloaded", true);
@@ -69,7 +71,8 @@ class RuntimeGenerationValidationTest {
         assertEquals("PASS", written.path("result").asText());
         assertFalse(written.path("scriptedScenarioRotation").asBoolean());
         assertFalse(written.path("fixedBoardRuntime").asBoolean());
-        assertEquals("192.168.10.3", written.path("redisHost").asText());
-        assertEquals(15, written.path("redisDatabase").asInt());
+        assertEquals("18.234.101.161", written.path("redisHost").asText());
+        assertEquals(0, written.path("redisDatabase").asInt());
+        assertEquals("8001830", written.path("redisGameId").asText());
     }
 }

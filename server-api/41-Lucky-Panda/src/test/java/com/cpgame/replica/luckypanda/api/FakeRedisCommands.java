@@ -13,6 +13,7 @@ final class FakeRedisCommands implements RedisCommands {
     private final Map<String, TreeSet<Integer>> zsets = new LinkedHashMap<>();
     private final Map<String, List<String>> lists = new LinkedHashMap<>();
     boolean closed;
+    final List<List<String>> calls = new ArrayList<>();
 
     void seed(boolean special, int ratio, String member) {
         long id = 41L;
@@ -24,6 +25,7 @@ final class FakeRedisCommands implements RedisCommands {
 
     @Override
     public Object command(String... args) throws IOException {
+        calls.add(List.of(args));
         if (closed) throw new IOException("redis closed");
         return switch (args[0]) {
             case "PING" -> "PONG";
@@ -33,6 +35,17 @@ final class FakeRedisCommands implements RedisCommands {
                 List<Object> out = new ArrayList<>();
                 for (Integer value : set) out.add(Integer.toString(value));
                 yield out;
+            }
+            case "ZREVRANGE" -> {
+                var set = zsets.getOrDefault(args[1], new TreeSet<>());
+                yield set.isEmpty() ? List.of() : List.of(Integer.toString(set.last()));
+            }
+            case "ZREVRANGEBYSCORE" -> {
+                var set = zsets.getOrDefault(args[1], new TreeSet<>());
+                boolean exclusive = args[2].startsWith("(");
+                int upper = Integer.parseInt(exclusive ? args[2].substring(1) : args[2]);
+                Integer floor = exclusive ? set.lower(upper) : set.floor(upper);
+                yield floor == null || floor < Integer.parseInt(args[3]) ? List.of() : List.of(floor.toString());
             }
             case "LLEN" -> (long) lists.getOrDefault(args[1], List.of()).size();
             case "LPOP" -> {

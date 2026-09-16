@@ -166,6 +166,59 @@ class HotpotClientRoundWalkTest {
     }
 
     @Test
+    void freeLastPageRetriggerIsAHangAfterGetFreeTimesView() {
+        ObjectNode data = playableEnvelope();
+        data.put("type", 2);
+        data.put("change_gold", 0);
+        data.put("total_win", 0);
+        data.with("frees").put("st", 7).put("tt", 15);
+        ObjectNode page = data.putArray("props").addObject();
+        ArrayNode prop = page.putArray("prop");
+        for (int i = 0; i < 36; i++) prop.add((i % 9) + 1);
+        prop.set(2, JSON.getNodeFactory().numberNode(11));
+        prop.set(14, JSON.getNodeFactory().numberNode(11));
+        page.putArray("win_arr");
+        String reason = HotpotClientRoundWalk.hangReason(data);
+        assertNotNull(reason);
+        assertTrue(reason.contains("ADDSCATTER") || reason.contains("FreeSpinWon"), reason);
+    }
+
+    @Test
+    void generatedFreeSpinsDoNotRetriggerOnTheOpeningPage() {
+        CompleteRoundFactory factory = new CompleteRoundFactory();
+        Random random = new Random(1830L);
+        int seenFree = 0;
+        for (int i = 0; i < 800 && seenFree < 40; i++) {
+            try {
+                CompleteRoundFactory.GeneratedRound round = factory.generate(random, 10, 30);
+                HotpotSpinProjector projector = new HotpotSpinProjector();
+                int remaining = 0;
+                int totalAwarded = 0;
+                java.math.BigDecimal feature = java.math.BigDecimal.ZERO;
+                for (int spin = 0; spin < round.fact().spins().size(); spin++) {
+                    HotpotSpinMode mode = spin == 0 ? HotpotSpinMode.PAID : HotpotSpinMode.FREE;
+                    JsonNode data = projector.project(round.fact().spins().get(spin), mode,
+                            new BigDecimal("0.02"), 1, new BigDecimal("10000.00"), 1L,
+                            remaining, totalAwarded, feature).data();
+                    assertNull(HotpotClientRoundWalk.hangReason(data), HotpotClientRoundWalk.hangReason(data));
+                    if (spin > 0) {
+                        seenFree++;
+                        int scatter = 0;
+                        JsonNode last = data.path("props").get(data.path("props").size() - 1).path("prop");
+                        for (JsonNode cell : last) if (cell.asInt() == 11) scatter++;
+                        assertTrue(scatter < 2, "free last page scatter=" + scatter);
+                    }
+                    remaining = data.path("frees").path("st").asInt();
+                    totalAwarded = data.path("frees").path("tt").asInt();
+                    feature = data.path("frees").path("twa").decimalValue();
+                }
+            } catch (CompleteRoundFactory.RoundRejectedException ignored) {
+            }
+        }
+        assertTrue(seenFree >= 8, "seenFree=" + seenFree);
+    }
+
+    @Test
     void scatterMustNotRepeatInOneApiColumn() {
         ObjectNode data = playableEnvelope();
         data.with("frees").put("st", 10).put("tt", 10);

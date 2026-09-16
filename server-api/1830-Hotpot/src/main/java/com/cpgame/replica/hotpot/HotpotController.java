@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Controller 交付合同 v3：唯一受管 PID、平台注入 5xxxx 端口。
- * 只把 generator 里那一份 GameRuleCore 接到协议；Demo 结果只从 18.234.101.161:8021 db=15 领取完整局。
+ * 只把 generator 里那一份 GameRuleCore 接到协议；Demo 结果只从配置的 Redis 领取完整局。
  */
 public final class HotpotController {
     private static final ObjectMapper JSON = new ObjectMapper();
@@ -84,10 +84,11 @@ public final class HotpotController {
             try { redis.close(); } catch (IOException ignored) { }
         }, "hotpot-controller-stop"));
         server.start();
-        System.out.printf("CONTROLLER_READY gameId=1830 port=%d pid=%d rulesVersion=%s rulesHash=%s engineHash=%s publish=%s redis=%s:%s db=%s%n",
+        System.out.printf("CONTROLLER_READY gameId=1830 port=%d pid=%d rulesVersion=%s rulesHash=%s engineHash=%s publish=%s redis=%s:%s db=%s redisGameId=%s%n",
                 port, ProcessHandle.current().pid(), HotpotRulesMetadata.VERSION, HotpotRulesMetadata.PROTOCOL_HASH,
                 HotpotRulesMetadata.HASH, publish, config.getProperty("redis.host", "18.234.101.161"),
-                config.getProperty("redis.port", "8021"), config.getProperty("redis.database", "0"));
+                config.getProperty("redis.port", "8021"), config.getProperty("redis.database", "0"),
+                config.getProperty("redis.game-id", "8001830"));
     }
 
     private void handle(HttpExchange exchange) throws IOException {

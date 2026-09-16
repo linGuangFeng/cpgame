@@ -23,7 +23,7 @@ class RedisRoundStoreClaimTest {
     }
 
     @Test
-    void lpopClaimsLossMemberOnce() throws Exception {
+    void randomlyReadsLossWithoutConsumingCache() throws Exception {
         FakeRedisCommands fake = new FakeRedisCommands();
         String loss = TestMembers.lossMember();
         fake.seed(false, 0, loss);
@@ -34,8 +34,8 @@ class RedisRoundStoreClaimTest {
         assertFalse(claimed.member().startsWith("{"));
         assertEquals(loss, claimed.member());
         assertTrue(claimed.member().matches("#[0-9]+"));
-        IllegalStateException empty = assertThrows(IllegalStateException.class, () -> store.claim(new AlwaysLossRandom()));
-        assertTrue(empty.getMessage().contains("empty"));
+        assertEquals(loss, store.claim(new AlwaysLossRandom()).member());
+        assertEquals(1L, fake.command("LLEN", "BetLog:000000041:000000"));
     }
 
     @Test
@@ -61,11 +61,11 @@ class RedisRoundStoreClaimTest {
 
     private static final class AlwaysLossRandom extends SecureRandom {
         @Override public boolean nextBoolean() { return false; }
-        @Override public int nextInt(int bound) { return 0; }
+        @Override public int nextInt(int bound) { return bound - 1; }
     }
 
     private static final class AlwaysWinRandom extends SecureRandom {
         @Override public boolean nextBoolean() { return true; }
-        @Override public int nextInt(int bound) { return 0; }
+        @Override public int nextInt(int bound) { return bound - 1; }
     }
 }

@@ -105,7 +105,6 @@ public final class RedisDirectLoader {
         Map<Integer, Integer> normalPerRatio = new HashMap<>();
         Map<Integer, Integer> specialPerRatio = new HashMap<>();
         int[] ordinaryOpening = config.normalWeights();
-        int[] specialOpening = specialEntryOpeningWeights(ordinaryOpening);
         int normalMembers = counters.lossMembers;
         int specialMembers = 0;
         int drawsInEntry = 0;
@@ -123,8 +122,7 @@ public final class RedisDirectLoader {
                 CompleteRoundFactory.GeneratedRound generated;
                 try {
                     generated = factory.generate(random, config.maxConsecutiveWins(), config.maxMarySpins(),
-                            specialEntry ? specialOpening : ordinaryOpening,
-                            config.cascadeWeights(), config.maryWeights());
+                            ordinaryOpening, config.cascadeWeights(), config.maryWeights(), specialEntry);
                 } catch (CompleteRoundFactory.RoundRejectedException rejected) {
                     counters.skippedCandidateLimitRounds++;
                     drawsInEntry++;

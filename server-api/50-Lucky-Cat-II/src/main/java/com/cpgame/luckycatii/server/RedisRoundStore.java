@@ -1,5 +1,7 @@
 package com.cpgame.luckycatii.server;
 
+import com.cpgame.demo.redis.RedisFloorLookup;
+
 import com.cpgame.luckycatii.GameRuleCore;
 import com.cpgame.luckycatii.GameRules;
 import com.cpgame.luckycatii.MinimalRoundFactCodec;
@@ -41,9 +43,9 @@ public final class RedisRoundStore {
         Outcome outcome = chooseOutcome();
         try (Connection redis = Connection.connect(config)) {
             int ratio = switch (outcome) {
-                case LOSS -> requireNonEmpty(redis, false, List.of(0));
-                case WIN -> requireNonEmpty(redis, false, positiveRatios(redis, false));
-                case SPECIAL -> requireNonEmpty(redis, true, allRatios(redis, true));
+                case LOSS -> requireNonEmpty(redis, false, 0, 0);
+                case WIN -> requireNonEmpty(redis, false, 1, Integer.MAX_VALUE);
+                case SPECIAL -> requireNonEmpty(redis, true, 0, Integer.MAX_VALUE);
             };
             String key = outcome == Outcome.SPECIAL ? RedisLoader.specialList(config.redisGameId(), ratio)
                     : RedisLoader.normalList(config.redisGameId(), ratio);
@@ -83,31 +85,17 @@ public final class RedisRoundStore {
         return point < config.winWeight() ? Outcome.WIN : Outcome.SPECIAL;
     }
 
-    private List<Integer> positiveRatios(Connection redis, boolean special) throws IOException {
-        List<Integer> result = new ArrayList<>();
-        for (int ratio : allRatios(redis, special)) if (ratio > 0) result.add(ratio);
-        return result;
-    }
+    
 
-    private List<Integer> allRatios(Connection redis, boolean special) throws IOException {
+    
+
+    private int requireNonEmpty(Connection redis, boolean special, int minimum, int maximum) throws IOException {
         String index = special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId());
-        Object value = redis.command("ZRANGE", index, "0", "-1");
-        List<Integer> result = new ArrayList<>();
-        if (value instanceof List<?> list) for (Object item : list) result.add(Integer.parseInt(item.toString()));
-        return result;
-    }
-
-    private int requireNonEmpty(Connection redis, boolean special, List<Integer> ratios) throws IOException {
-        List<Integer> available = new ArrayList<>();
-        for (int ratio : ratios) {
-            String key = special ? RedisLoader.specialList(config.redisGameId(), ratio)
-                    : RedisLoader.normalList(config.redisGameId(), ratio);
-            Object length = redis.command("LLEN", key);
-            if (length instanceof Long n && n > 0) available.add(ratio);
-        }
-        if (available.isEmpty()) throw new PoolUnavailableException("REDIS_POOL_EMPTY",
-                special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId()));
-        return available.get(random.nextInt(available.size()));
+        Integer selected = RedisFloorLookup.choose(redis::command, index,
+                m -> special ? RedisLoader.specialList(config.redisGameId(), m) : RedisLoader.normalList(config.redisGameId(), m),
+                random, minimum, maximum);
+        if (selected == null) throw new PoolUnavailableException("REDIS_POOL_EMPTY", index);
+        return selected;
     }
 
     private enum Outcome { LOSS, WIN, SPECIAL }

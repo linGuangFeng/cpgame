@@ -131,6 +131,9 @@ public final class HotpotClientRoundWalk {
         if (paid && lastScatter >= HotpotResultUtil.PAID_SCATTER_TRIGGER && data.path("frees").path("st").asInt() <= 0) {
             return "last page has " + lastScatter + " Scatter but frees.st==0; GetFreeTimesView never opens and GAME_ENDED leaves the start button disabled";
         }
+        if (!paid && lastScatter >= HotpotResultUtil.FREE_SCATTER_RETRIGGER) {
+            return "last page has " + lastScatter + " Scatter during free; after GetFreeTimesView the original page enters ADDSCATTER/FreeSpinWon and remaining free spins stay stuck";
+        }
         return null;
     }
 

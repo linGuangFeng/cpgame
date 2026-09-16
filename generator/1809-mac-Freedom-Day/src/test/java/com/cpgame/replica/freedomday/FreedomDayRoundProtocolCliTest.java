@@ -27,7 +27,8 @@ class FreedomDayRoundProtocolCliTest {
                     foundWin = true;
                     for (JsonNode position : win.path("p")) {
                         assertTrue(position.isArray(), "main win positions must be nested arrays for the client animation");
-                        assertEquals(1, position.size());
+                        assertFalse(position.isEmpty());
+                        assertTrue(position.size() <= 4, "a visible symbol/frame occupies at most four cells");
                     }
                 }
             }
