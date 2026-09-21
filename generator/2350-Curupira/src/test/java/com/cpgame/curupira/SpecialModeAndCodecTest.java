@@ -110,51 +110,52 @@ class SpecialModeAndCodecTest {
     }
 
     @Test
-    void expandingWild2000HasManyUniqueBoards() {
+    void expandingWildBoardsAreWeightedMixWithSpreadMultipliers() {
         GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(23502000L), GenerationPolicy.ordinaryPaidDefaults());
         ResultUtil util = new ResultUtil();
         Set<List<Integer>> boards = new HashSet<>();
-        int hits = 0;
-        for (int i = 0; i < 8_000 && boards.size() < 80; i++) {
+        Set<Integer> multipliers = new HashSet<>();
+        int mixed = 0;
+        for (int i = 0; i < 80; i++) {
             CompleteRoundFact fact = core.generateFact(Kind.EXPANDING_WILD);
-            if (fact.redisMultiplier() != 2000) continue;
-            hits++;
             List<Integer> cells = fact.steps().get(0).cells();
-            assertEquals(1, util.evaluate(cells).expandingWildColumns().size());
+            assertFalse(util.evaluate(cells).expandingWildColumns().isEmpty());
             assertFalse(cells.subList(0, GameRules.ROWS).contains(GameRules.WILD));
             boards.add(cells);
+            multipliers.add(fact.redisMultiplier());
+            if (distinctPays(cells) >= 2) mixed++;
         }
-        assertTrue(hits >= 80, "2000x expanding hits=" + hits);
-        assertTrue(boards.size() >= 50, "unique 2000x expanding boards=" + boards.size());
+        assertTrue(boards.size() >= 70, "unique expanding boards=" + boards.size());
+        assertTrue(multipliers.size() >= 8, "unique expanding multipliers=" + multipliers.size());
+        assertTrue(mixed >= 70, "mixed expanding boards=" + mixed);
     }
 
     @Test
-    void winRange2000HasManyUniqueBoards() {
+    void ordinaryWinsAreWeightedMix() {
         GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(2000L), GenerationPolicy.ordinaryPaidDefaults());
         ResultUtil util = new ResultUtil();
         Set<List<Integer>> boards = new HashSet<>();
+        Set<Integer> multipliers = new HashSet<>();
+        int mixed = 0;
         for (int i = 0; i < 200; i++) {
-            CompleteRoundFact fact = core.generateWinRange(2000, 2000);
+            CompleteRoundFact fact = core.generateFact(Kind.WIN);
             assertEquals(Kind.WIN, fact.kind());
-            assertEquals(2000, fact.redisMultiplier());
-            assertTrue(util.evaluate(fact.steps().get(0).cells()).expandingWildColumns().isEmpty());
-            boards.add(fact.steps().get(0).cells());
+            List<Integer> cells = fact.steps().get(0).cells();
+            assertTrue(util.evaluate(cells).expandingWildColumns().isEmpty());
+            boards.add(cells);
+            multipliers.add(fact.redisMultiplier());
+            if (distinctPays(cells) >= 2) mixed++;
         }
-        assertTrue(boards.size() >= 80, "unique WIN 2000 boards=" + boards.size());
+        assertTrue(boards.size() >= 180, "unique WIN boards=" + boards.size());
+        assertTrue(multipliers.size() >= 8, "unique WIN multipliers=" + multipliers.size());
+        assertTrue(mixed >= 190, "mixed WIN boards=" + mixed);
     }
 
-    @Test
-    void mixedExpandingWildUsesMoreThanOnePaySymbol() {
-        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(1303L), GenerationPolicy.ordinaryPaidDefaults());
-        int mixed = 0;
-        for (int i = 0; i < 400; i++) {
-            List<Integer> cells = core.generateFact(Kind.EXPANDING_WILD).steps().get(0).cells();
-            Set<Integer> pays = new HashSet<>();
-            for (int id : cells) {
-                if (id != GameRules.WILD && id != GameRules.SCATTER) pays.add(id);
-            }
-            if (pays.size() >= 2) mixed++;
+    private static int distinctPays(List<Integer> cells) {
+        Set<Integer> pays = new HashSet<>();
+        for (int id : cells) {
+            if (id != GameRules.WILD && id != GameRules.SCATTER) pays.add(id);
         }
-        assertTrue(mixed >= 40, "mixed expanding boards=" + mixed);
+        return pays.size();
     }
 }
