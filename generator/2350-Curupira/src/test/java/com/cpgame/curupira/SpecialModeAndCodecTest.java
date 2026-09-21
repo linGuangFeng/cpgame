@@ -32,7 +32,7 @@ class SpecialModeAndCodecTest {
         assertEquals("MaryLog:000002350:000010", keys.listFor(Kind.FREE_EW, 10, 2350));
         assertEquals("MaryLog:100002350:000010", keys.listFor(Kind.HOLD, 10, 2350));
         assertEquals(List.of("MaryKeyList_000002350"), keys.indexesToWrite(Kind.FREE_EW, 2350));
-        assertEquals(List.of("MaryKeyList_100002350", "PerKeyList_100002350"), keys.indexesToWrite(Kind.HOLD, 2350));
+        assertEquals(List.of("MaryKeyList_100002350"), keys.indexesToWrite(Kind.HOLD, 2350));
         assertNotEquals(keys.indexFor(Kind.FREE_EW, 2350), keys.indexFor(Kind.HOLD, 2350));
         assertThrows(IllegalArgumentException.class, () -> keys.indexFor(Kind.TRIGGER, 2350));
         assertThrows(IllegalArgumentException.class, () -> keys.indexesToWrite(Kind.TRIGGER, 2350));

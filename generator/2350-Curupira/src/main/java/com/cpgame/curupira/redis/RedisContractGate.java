@@ -8,8 +8,9 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * 平台 Redis Key 合同（结构对齐 2300 分前缀，ID 只属于 2350）。
- * 触发局不进缓存。选关后只有两种结果：Mary 0 = Free Expanding Wild，Mary 1 = Hold &amp; Spins。
+ * 平台 Redis Key 合同。触发局不进缓存。
+ * Mary 0 = Free Expanding Wild；Mary 1 = Hold &amp; Spins。
+ * Hold 只写 MaryKeyList_1*，禁止再写 PerKeyList_1*。
  */
 public final class RedisContractGate {
     public static final int GAME_ID = 2350;
@@ -49,12 +50,7 @@ public final class RedisContractGate {
 
     public List<String> indexesToWrite(Kind kind, int gameId) {
         if (kind == Kind.TRIGGER) throw new IllegalArgumentException("trigger boards are live and not cached");
-        LinkedHashSet<String> keys = new LinkedHashSet<>();
-        keys.add(indexFor(kind, gameId));
-        if (!kind.ordinary() && digitFor(kind) != DIGIT_FREE_EW) {
-            keys.add("PerKeyList_" + prefix(digitFor(kind), gameId));
-        }
-        return List.copyOf(keys);
+        return List.of(indexFor(kind, gameId));
     }
 
     public String listFor(Kind kind, int multiplier, int gameId) {
@@ -80,7 +76,6 @@ public final class RedisContractGate {
         keys.add(normalIndex(gameId));
         keys.add(specialIndex(gameId));
         keys.add("MaryKeyList_" + prefix(DIGIT_HOLD, gameId));
-        keys.add("PerKeyList_" + prefix(DIGIT_HOLD, gameId));
         return List.copyOf(keys);
     }
 

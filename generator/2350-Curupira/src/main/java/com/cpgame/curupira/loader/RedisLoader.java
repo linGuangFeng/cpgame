@@ -59,24 +59,47 @@ public final class RedisLoader {
         int free = special == 0 ? 0 : Math.max(1, special / 2);
         int hold = special == 0 ? 0 : Math.max(0, special - free);
         try (RedisListClient redis = new RedisListClient(config)) {
-            redis.clearGame(config.redisGameId());
-            written += write(core, verifier, resultUtil, codec, keys, pending, buckets, counts,
-                    Kind.LOSS, loss, config, redis);
-            written += write(core, verifier, resultUtil, codec, keys, pending, buckets, counts, Kind.WIN, win, config, redis);
-            written += write(core, verifier, resultUtil, codec, keys, pending, buckets, counts,
-                    Kind.EXPANDING_WILD, ew, config, redis);
-            written += write(core, verifier, resultUtil, codec, keys, pending, buckets, counts,
-                    Kind.FREE_EW, free, config, redis);
-            written += write(core, verifier, resultUtil, codec, keys, pending, buckets, counts,
-                    Kind.HOLD, hold, config, redis);
-            if (!pending.isEmpty()) {
-                redis.appendBatch(pending, config.maxMembersPerMultiplier());
+            System.out.printf("2350 loader start redisGameId=%d ordinary=%d special=%d loss=%d win=%d ew=%d free=%d hold=%d batchSize=%d (round-robin batches; no cache wipe)%n",
+                    config.redisGameId(), ordinary, special, loss, win, ew, free, hold, config.batchSize());
+            Kind[] phases = {Kind.FREE_EW, Kind.HOLD, Kind.WIN, Kind.EXPANDING_WILD, Kind.LOSS};
+            int[] remaining = {free, hold, win, ew, loss};
+            while (true) {
+                boolean any = false;
+                for (int p = 0; p < phases.length; p++) {
+                    if (remaining[p] <= 0) continue;
+                    any = true;
+                    int got = write(core, verifier, resultUtil, codec, keys, pending, buckets, counts,
+                            phases[p], 1, config, redis);
+                    remaining[p] -= got;
+                    written += got;
+                    if (pending.size() >= config.batchSize()) {
+                        redis.appendBatch(pending, config.maxMembersPerMultiplier());
+                        pending.clear();
+                        transactions++;
+                    }
+                }
+                if (!any) break;
+            }
+        } catch (java.io.IOException redisError) {
+            if (transactions > 0 && redisProgressStop(redisError)) {
+                System.out.println("[warn] Redis stopped after " + transactions
+                        + " transactions: " + redisError.getMessage());
                 pending.clear();
-                transactions++;
+            } else {
+                throw redisError;
             }
         }
         return new LoadSummary(config.redisGameId(), written, transactions, buckets.size(),
                 Map.copyOf(counts), RulesContract.RULES_HASH);
+    }
+
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
     }
 
     private static int write(GameRuleCore core, RoundVerifier verifier, ResultUtil resultUtil,

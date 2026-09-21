@@ -7,9 +7,10 @@
 普通付费局从 Redis 领取。Scatter 触发局实时生成不中奖 3 Scatter 盘，不写入缓存。
 前端选关后，从对应 Mary 前缀领取后续完整结果，与触发步拼成同一局 History：
 
-- 普通 LOSS/WIN/Expanding Wild：`PerKeyList_000002350` / `BetLog:000002350:xxxxxx`
-- 选 Expanding Wild（type=2/3, game_type=2）：`MaryKeyList_000002350` / `MaryLog:000002350:xxxxxx`
-- 选 Hold & Spins（type=2/3, game_type=3）：`MaryKeyList_100002350` / `MaryLog:100002350:xxxxxx`
+- 普通 LOSS/WIN/Expanding Wild：`PerKeyList_008002350` / `BetLog:008002350:xxxxxx`（`redis.game-id=8002350`）
+- 选 Expanding Wild（type=2/3, game_type=2）：`MaryKeyList_008002350` / `MaryLog:008002350:xxxxxx`
+- 选 Hold & Spins（type=2/3, game_type=3）：`MaryKeyList_108002350` / `MaryLog:108002350:xxxxxx`
+- Hold 只进 Mary 1，禁止再写 `PerKeyList_108002350`
 
 Demo 20 局付费轮询覆盖 LOSS、WIN、Expanding Wild 与实时 Scatter 选关；选关后 type=2 按 game_type
 领取 Mary 0 或 Mary 1；购买走 type=3，领同一套选关结果。生产链路使用 `SecureRandom`；可复现的确定性随机仅存在于测试源码。
