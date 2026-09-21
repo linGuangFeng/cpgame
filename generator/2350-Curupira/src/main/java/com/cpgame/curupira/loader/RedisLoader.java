@@ -49,6 +49,7 @@ public final class RedisLoader {
         RedisContractGate keys = new RedisContractGate();
         Set<Integer> buckets = new HashSet<>();
         Map<Kind, Integer> counts = new EnumMap<>(Kind.class);
+        Set<String> uniqueHigh = new HashSet<>();
         List<RedisListClient.Entry> pending = new ArrayList<>(config.batchSize());
         long written = 0, transactions = 0;
         int ordinary = config.normalCount();
@@ -69,7 +70,7 @@ public final class RedisLoader {
                     if (remaining[p] <= 0) continue;
                     any = true;
                     int got = write(core, verifier, resultUtil, codec, keys, pending, buckets, counts,
-                            phases[p], 1, config, redis);
+                            uniqueHigh, phases[p], 1, config, redis);
                     remaining[p] -= got;
                     written += got;
                     if (pending.size() >= config.batchSize()) {
@@ -105,7 +106,7 @@ public final class RedisLoader {
     private static int write(GameRuleCore core, RoundVerifier verifier, ResultUtil resultUtil,
                              MinimalFactCodec codec, RedisContractGate keys,
                              List<RedisListClient.Entry> pending, Set<Integer> buckets,
-                             Map<Kind, Integer> counts, Kind kind, int target,
+                             Map<Kind, Integer> counts, Set<String> uniqueHigh, Kind kind, int target,
                              EngineConfiguration config, RedisListClient redis) throws Exception {
         int produced = 0;
         long attempts=0;
@@ -122,6 +123,15 @@ public final class RedisLoader {
                 continue;
             }
             String member = codec.encodeFact(fact);
+            if (multiplier >= 200 && (kind == Kind.WIN || kind == Kind.EXPANDING_WILD)
+                    && uniqueHigh.contains(member)) {
+                i--;
+                continue;
+            }
+            if (multiplier >= 200 && (kind == Kind.WIN || kind == Kind.EXPANDING_WILD)
+                    && uniqueHigh.size() < 30_000) {
+                uniqueHigh.add(member);
+            }
             CompleteRoundFact decoded = codec.decode(member);
             verifier.verifyFact(decoded);
             if (decoded.kind() != fact.kind() || decoded.entry() != fact.entry()

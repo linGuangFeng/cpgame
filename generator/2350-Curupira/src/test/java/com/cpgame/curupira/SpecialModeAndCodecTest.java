@@ -11,7 +11,9 @@ import com.cpgame.curupira.model.FeatureStep;
 import com.cpgame.curupira.redis.RedisContractGate;
 import org.junit.jupiter.api.Test;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SpecialModeAndCodecTest {
@@ -105,5 +107,54 @@ class SpecialModeAndCodecTest {
                 }
             }
         }
+    }
+
+    @Test
+    void expandingWild2000HasManyUniqueBoards() {
+        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(23502000L), GenerationPolicy.ordinaryPaidDefaults());
+        ResultUtil util = new ResultUtil();
+        Set<List<Integer>> boards = new HashSet<>();
+        int hits = 0;
+        for (int i = 0; i < 8_000 && boards.size() < 80; i++) {
+            CompleteRoundFact fact = core.generateFact(Kind.EXPANDING_WILD);
+            if (fact.redisMultiplier() != 2000) continue;
+            hits++;
+            List<Integer> cells = fact.steps().get(0).cells();
+            assertEquals(1, util.evaluate(cells).expandingWildColumns().size());
+            assertFalse(cells.subList(0, GameRules.ROWS).contains(GameRules.WILD));
+            boards.add(cells);
+        }
+        assertTrue(hits >= 80, "2000x expanding hits=" + hits);
+        assertTrue(boards.size() >= 50, "unique 2000x expanding boards=" + boards.size());
+    }
+
+    @Test
+    void winRange2000HasManyUniqueBoards() {
+        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(2000L), GenerationPolicy.ordinaryPaidDefaults());
+        ResultUtil util = new ResultUtil();
+        Set<List<Integer>> boards = new HashSet<>();
+        for (int i = 0; i < 200; i++) {
+            CompleteRoundFact fact = core.generateWinRange(2000, 2000);
+            assertEquals(Kind.WIN, fact.kind());
+            assertEquals(2000, fact.redisMultiplier());
+            assertTrue(util.evaluate(fact.steps().get(0).cells()).expandingWildColumns().isEmpty());
+            boards.add(fact.steps().get(0).cells());
+        }
+        assertTrue(boards.size() >= 80, "unique WIN 2000 boards=" + boards.size());
+    }
+
+    @Test
+    void mixedExpandingWildUsesMoreThanOnePaySymbol() {
+        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(1303L), GenerationPolicy.ordinaryPaidDefaults());
+        int mixed = 0;
+        for (int i = 0; i < 400; i++) {
+            List<Integer> cells = core.generateFact(Kind.EXPANDING_WILD).steps().get(0).cells();
+            Set<Integer> pays = new HashSet<>();
+            for (int id : cells) {
+                if (id != GameRules.WILD && id != GameRules.SCATTER) pays.add(id);
+            }
+            if (pays.size() >= 2) mixed++;
+        }
+        assertTrue(mixed >= 40, "mixed expanding boards=" + mixed);
     }
 }

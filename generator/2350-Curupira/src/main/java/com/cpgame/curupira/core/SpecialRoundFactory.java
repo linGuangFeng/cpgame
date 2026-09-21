@@ -56,10 +56,14 @@ public final class SpecialRoundFactory {
     }
 
     public CompleteRoundFact generateWinRange(int minMultiplier, int maxMultiplier) {
-        if (minMultiplier >= 200 && maxMultiplier >= 3000) {
-            List<Integer> board = new ArrayList<>(java.util.Collections.nCopies(GameRules.CELL_COUNT, 1));
-            EvaluatedBoard evaluated = util.evaluate(board);
-            if (evaluated.multiplierSum() >= minMultiplier && evaluated.multiplierSum() <= maxMultiplier) {
+        if (maxMultiplier >= 75) {
+            for (int i = 0; i < 40_000; i++) {
+                List<Integer> board = (i & 1) == 0 ? fourOakWinBoard() : fiveOakWinBoard();
+                EvaluatedBoard evaluated = util.evaluate(board);
+                if (evaluated.scatterCount() >= GameRules.SCATTER_TRIGGER) continue;
+                if (!evaluated.expandingWildColumns().isEmpty() || evaluated.awards().isEmpty()) continue;
+                int o = evaluated.multiplierSum();
+                if (o < minMultiplier || o > maxMultiplier) continue;
                 return ordinary(Kind.WIN, board);
             }
         }
@@ -76,7 +80,16 @@ public final class SpecialRoundFactory {
     }
 
     private CompleteRoundFact generateWin(boolean expanding) {
-        if (!expanding) return generateWinRange(1, Integer.MAX_VALUE);
+        if (!expanding) {
+            if (random.nextInt(5) == 0) {
+                try {
+                    return generateWinRange(125, Integer.MAX_VALUE);
+                } catch (IllegalStateException ignored) {
+                    // fall through to any WIN
+                }
+            }
+            return generateWinRange(1, Integer.MAX_VALUE);
+        }
         for (int i = 0; i < 20_000; i++) {
             List<Integer> board = expandingBoard();
             EvaluatedBoard evaluated = util.evaluate(board);
@@ -149,15 +162,99 @@ public final class SpecialRoundFactory {
         return new CompleteRoundFact(ids.next(), kind, entry, steps);
     }
 
+    /**
+     * 扩展 Wild：约六成做成 5 连高倍（同符号 + 额外 Wild），其余做成混色盘。
+     * 5 连家族在同一倍数下靠额外 Wild 位置变化出大量牌面，例如符号 2 的 2000 倍。
+     */
     private List<Integer> expandingBoard() {
-        int column = 1 + random.nextInt(3);
-        int pay = GameRules.NON_SPECIAL_SYMBOLS.get(random.nextInt(GameRules.NON_SPECIAL_SYMBOLS.size()));
+        return random.nextInt(5) < 3 ? fiveOakExpandingBoard() : mixedExpandingBoard();
+    }
+
+    /** 一列整列 Wild，其余格子混色，接近原厂第 10 局。 */
+    private List<Integer> mixedExpandingBoard() {
+        int column = 1 + random.nextInt(4);
         List<Integer> board = new ArrayList<>(GameRules.CELL_COUNT);
         for (int i = 0; i < GameRules.CELL_COUNT; i++) {
             int col = i / GameRules.ROWS;
-            board.add(col == column ? GameRules.WILD : pay);
+            if (col == column) {
+                board.add(GameRules.WILD);
+            } else if (col == 0) {
+                board.add(symbols.nextFrom(GameRules.FIRST_REEL_SYMBOLS));
+            } else {
+                int draw = random.nextInt(8);
+                if (draw == 0) board.add(GameRules.WILD);
+                else board.add(symbols.nextFrom(GameRules.NON_SPECIAL_SYMBOLS));
+            }
         }
+        capWildsPerColumn(board, column);
         return GameRules.atMostOneScatterPerColumn(board);
+    }
+
+    /**
+     * 25 线都是同一符号 5 连：倍数 = 25 × 该符号 5 连赔付。
+     * 扩展列在第 2–5 轴；其他轴最多 2 个 Wild，首轴保持赔付符号。
+     */
+    private List<Integer> fiveOakExpandingBoard() {
+        int pay = GameRules.NON_SPECIAL_SYMBOLS.get(random.nextInt(GameRules.NON_SPECIAL_SYMBOLS.size()));
+        int ewCol = 1 + random.nextInt(4);
+        int[] cells = new int[GameRules.CELL_COUNT];
+        for (int col = 0; col < GameRules.COLUMNS; col++) {
+            int extra = (col == 0 || col == ewCol) ? 0 : random.nextInt(3);
+            fillColumn(cells, col, col == ewCol ? GameRules.WILD : pay, extra);
+        }
+        return toList(cells);
+    }
+
+    /** 无扩展列的 5 连，倍数与 fiveOakExpanding 相同，种类是普通 WIN。 */
+    private List<Integer> fiveOakWinBoard() {
+        int pay = GameRules.NON_SPECIAL_SYMBOLS.get(random.nextInt(GameRules.NON_SPECIAL_SYMBOLS.size()));
+        int[] cells = new int[GameRules.CELL_COUNT];
+        for (int col = 0; col < GameRules.COLUMNS; col++) {
+            fillColumn(cells, col, pay, col == 0 ? 0 : random.nextInt(3));
+        }
+        return toList(cells);
+    }
+
+    /**
+     * 前 4 轴同一符号、第 5 轴换成其他赔付符号：25 线都是 4 连。
+     * 符号 1 的 4 连是 2000 倍，第 5 轴与额外 Wild 位置提供组合。
+     */
+    private List<Integer> fourOakWinBoard() {
+        int pay = GameRules.NON_SPECIAL_SYMBOLS.get(random.nextInt(GameRules.NON_SPECIAL_SYMBOLS.size()));
+        List<Integer> others = new ArrayList<>();
+        for (int id : GameRules.NON_SPECIAL_SYMBOLS) if (id != pay) others.add(id);
+        int[] cells = new int[GameRules.CELL_COUNT];
+        for (int col = 0; col < 4; col++) {
+            fillColumn(cells, col, pay, col == 0 ? 0 : random.nextInt(3));
+        }
+        for (int row = 0; row < GameRules.ROWS; row++) {
+            cells[4 * GameRules.ROWS + row] = others.get(random.nextInt(others.size()));
+        }
+        return toList(cells);
+    }
+
+    private void fillColumn(int[] cells, int col, int fill, int extraWilds) {
+        extraWilds = Math.min(2, Math.max(0, extraWilds));
+        int base = col * GameRules.ROWS;
+        for (int row = 0; row < GameRules.ROWS; row++) cells[base + row] = fill;
+        if (col == 0 || extraWilds == 0 || fill == GameRules.WILD) return;
+        List<Integer> rows = new ArrayList<>(List.of(0, 1, 2));
+        shuffle(rows);
+        for (int i = 0; i < extraWilds; i++) cells[base + rows.get(i)] = GameRules.WILD;
+    }
+
+    private void capWildsPerColumn(List<Integer> board, int reservedEw) {
+        for (int col = 0; col < GameRules.COLUMNS; col++) {
+            if (col == reservedEw) continue;
+            List<Integer> wildRows = new ArrayList<>();
+            for (int row = 0; row < GameRules.ROWS; row++) {
+                if (board.get(col * GameRules.ROWS + row) == GameRules.WILD) wildRows.add(row);
+            }
+            while (wildRows.size() >= GameRules.ROWS) {
+                int row = wildRows.remove(random.nextInt(wildRows.size()));
+                board.set(col * GameRules.ROWS + row, symbols.nextFrom(GameRules.NON_SPECIAL_SYMBOLS));
+            }
+        }
     }
 
     private List<Integer> scatterBoard(int count) {
@@ -181,8 +278,10 @@ public final class SpecialRoundFactory {
         for (int i = 0; i < GameRules.CELL_COUNT; i++) {
             int col = i / GameRules.ROWS;
             if (col == column) board.add(GameRules.WILD);
+            else if (col != 0 && random.nextInt(6) == 0) board.add(GameRules.WILD);
             else board.add(symbols.nextFrom(GameRules.NON_SPECIAL_SYMBOLS));
         }
+        capWildsPerColumn(board, column);
         return List.copyOf(board);
     }
 
