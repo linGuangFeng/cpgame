@@ -12,7 +12,6 @@ import com.cpgame.crazypiggy.generator.model.RoundFacts;
 import com.cpgame.crazypiggy.generator.model.RoundMode;
 import com.cpgame.crazypiggy.generator.model.RoundResult;
 
-import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.InetSocketAddress;
@@ -29,39 +28,15 @@ public class RedisRoundStore {
     private final java.security.SecureRandom random = new java.security.SecureRandom();
     private final MinimalRoundFactCodec codec = new MinimalRoundFactCodec(new RoundFactory(), new RoundVerifier());
     private final GameRuleCore core = GameRuleCore.forRestoration();
+    private final GameRuleCore losses = new GameRuleCore();
 
     public RedisRoundStore(AppConfig config) { this.config = config; }
     RedisRoundStore() { this.config = null; }
 
     public RoundResult claim(BigDecimal bs, int bl) {
-        Outcome outcome = chooseOutcome();
+        if (chooseOutcome() == Outcome.LOSS) return losses.generateIndependentLoss(bs, bl);
         try (Connection redis = Connection.connect(config)) {
-            int ratio = switch (outcome) {
-                case LOSS -> requireNonEmpty(redis, false, 0, 0);
-                case WIN -> requireNonEmpty(redis, false, 1, Integer.MAX_VALUE);
-                case SPECIAL -> requireNonEmpty(redis, true, 1, Integer.MAX_VALUE);
-            };
-            String key = outcome == Outcome.SPECIAL ? RedisLoader.specialList(config.redisGameId(), ratio)
-                    : RedisLoader.normalList(config.redisGameId(), ratio);
-            Object length = redis.command("LLEN", key);
-            long len = length instanceof Long n ? n : Long.parseLong(String.valueOf(length));
-            if (len <= 0) throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
-            long offset = random.nextLong(len);
-            Object raw = redis.command("LINDEX", key, Long.toString(offset));
-            if (!(raw instanceof String payload)) throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
-            RoundResult base = codec.decodeRedisMember(payload);
-            RoundMode actual = ResultUtil.analyze(base).mode();
-            if ((outcome == Outcome.LOSS && actual != RoundMode.ORDINARY_LOSS)
-                    || (outcome == Outcome.WIN && actual != RoundMode.ORDINARY_WIN)
-                    || (outcome == Outcome.SPECIAL && actual != RoundMode.BOOSTER_WHEEL))
-                throw new PoolUnavailableException("REDIS_MEMBER_CATEGORY_MISMATCH", key);
-            RoundFacts projected = new RoundFacts(base.roundKey(), base.createdAtEpochSecond(), bs, bl,
-                    base.symbols(), base.wheelPositions(), base.wheelMultipliers());
-            RoundResult round = core.restore(projected);
-            int projectedRatio = ResultUtil.analyze(round).totalAward()
-                    .divide(ResultUtil.analyze(round).betAmount()).intValueExact();
-            if (projectedRatio != ratio) throw new PoolUnavailableException("REDIS_MEMBER_RATIO_MISMATCH", key);
-            return round;
+            return take(redis, bs, bl);
         } catch (PoolUnavailableException ex) {
             throw ex;
         } catch (Exception ex) {
@@ -69,26 +44,45 @@ public class RedisRoundStore {
         }
     }
 
+    private RoundResult take(Connection redis, BigDecimal bs, int bl) throws IOException {
+        int ratio = requireNonEmpty(redis, 1, Integer.MAX_VALUE);
+        String key = RedisLoader.normalList(config.redisGameId(), ratio);
+        Object length = redis.command("LLEN", key);
+        long len = length instanceof Long n ? n : Long.parseLong(String.valueOf(length));
+        if (len <= 0) throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
+        long offset = random.nextLong(len);
+        Object raw = redis.command("LINDEX", key, Long.toString(offset));
+        if (!(raw instanceof String payload)) throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
+        RoundResult base = codec.decodeRedisMember(payload);
+        RoundMode actual = ResultUtil.analyze(base).mode();
+        if (actual != RoundMode.ORDINARY_WIN && actual != RoundMode.BOOSTER_WHEEL)
+            throw new PoolUnavailableException("REDIS_MEMBER_CATEGORY_MISMATCH", key);
+        RoundFacts projected = new RoundFacts(base.roundKey(), base.createdAtEpochSecond(), bs, bl,
+                base.symbols(), base.wheelPositions(), base.wheelMultipliers());
+        RoundResult round = core.restore(projected);
+        int projectedRatio = ResultUtil.analyze(round).totalAward()
+                .divide(ResultUtil.analyze(round).betAmount()).intValueExact();
+        if (projectedRatio != ratio) throw new PoolUnavailableException("REDIS_MEMBER_RATIO_MISMATCH", key);
+        return round;
+    }
+
     private Outcome chooseOutcome() {
         int total = Math.addExact(config.lossWeight(), Math.addExact(config.winWeight(), config.specialWeight()));
         int point = (int) Math.floorMod(outcomeCursor.getAndIncrement() * 7_919L, total);
         if (point < config.lossWeight()) return Outcome.LOSS;
-        point -= config.lossWeight();
-        return point < config.winWeight() ? Outcome.WIN : Outcome.SPECIAL;
+        return Outcome.WIN;
     }
 
-    
-
-    private int requireNonEmpty(Connection redis, boolean special, int minimum, int maximum) throws IOException {
-        String index = special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId());
+    private int requireNonEmpty(Connection redis, int minimum, int maximum) throws IOException {
+        String index = RedisLoader.normalIndex(config.redisGameId());
         Integer selected = RedisFloorLookup.choose(redis::command, index,
-                m -> special ? RedisLoader.specialList(config.redisGameId(), m) : RedisLoader.normalList(config.redisGameId(), m),
+                m -> RedisLoader.normalList(config.redisGameId(), m),
                 random, minimum, maximum);
         if (selected == null) throw new PoolUnavailableException("REDIS_POOL_EMPTY", index);
         return selected;
     }
 
-    private enum Outcome { LOSS, WIN, SPECIAL }
+    private enum Outcome { LOSS, WIN }
 
     public static final class PoolUnavailableException extends RuntimeException {
         private final String code;

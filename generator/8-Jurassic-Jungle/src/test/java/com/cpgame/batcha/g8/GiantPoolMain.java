@@ -21,7 +21,7 @@ public final class GiantPoolMain {
             while (written < want && candidates < 20000) {
                 CompleteRound round = factory.generate(RoundMode.DRAGON, random, config.betSize(), config.betLevel());
                 candidates++;
-                boolean giant = round.steps().stream().anyMatch(step -> step.removeStatus() == 4);
+                boolean giant = GameRuleCore.reachedGiant(round.steps());
                 if (!giant) continue;
                 verifier.verify(round);
                 writer.write(round);

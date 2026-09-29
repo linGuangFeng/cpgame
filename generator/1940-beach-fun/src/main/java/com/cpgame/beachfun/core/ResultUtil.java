@@ -12,8 +12,8 @@ public final class ResultUtil {
     public static double money(double v){return decimal(v).setScale(2,RoundingMode.HALF_UP).doubleValue();}
     private static BigDecimal decimal(double v){if(!Double.isFinite(v))throw new IllegalArgumentException("non-finite money");return BigDecimal.valueOf(v);}
     public static int integerMultiplier(GameRuleCore.CompleteRound r){
-        if(r.totalUnits()%20!=0)throw new IllegalArgumentException("Round is not an exact integer payout multiplier");
-        return Math.toIntExact(r.totalUnits()/20);
+        // Redis = paytable units = award/(betSize×betLevel). Do not divide by 20 lines/ways factor.
+        return Math.toIntExact(r.totalUnits());
     }
     public static String outcome(GameRuleCore.CompleteRound r){return r.win()?"WIN":"LOSS";}
     public static void verify(GameRuleCore.CompleteRound r){

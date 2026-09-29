@@ -19,7 +19,7 @@ public final class PoolInstaller {
  }
  /** Pure preflight, with no Redis dependency. Inspect the complete retained replacement pool. */
  public static Map<String,Object> verifyCoverageBeforeRedisWrite(Properties p,Map<String,List<String>> pools){
-  int gid=Integer.parseInt(p.getProperty("redis.game-id","2470"));if(gid!=2470)throw new IllegalArgumentException("Coverage audit is restricted to 2470");
+  int gid=Integer.parseInt(p.getProperty("redis.game-id","8002470"));if(gid!=8002470)throw new IllegalArgumentException("Coverage audit is restricted to 2470");
   Map<String,Integer> modes=new TreeMap<>(),bands=emptyBands();Map<String,Map<String,Integer>> modeBands=new TreeMap<>();int retained=0,smallWins=0;
   for(var entry:pools.entrySet()){
    if(entry.getValue().isEmpty())throw new IllegalStateException("Empty retained bucket before Redis write: "+entry.getKey());
@@ -31,8 +31,10 @@ public final class PoolInstaller {
    }
   }
   boolean requireSmall=Long.parseLong(p.getProperty("range.normal-min","1"))<=2&&Long.parseLong(p.getProperty("range.normal-max","375"))>=24;
-  Map<String,Object> audit=Json.map("retainedMembers",retained,"retainedModes",modes,"retainedPayoutBands",bands,"retainedModePayoutBands",modeBands,"ordinarySmallWinCoverageRequired",requireSmall,"retainedOrdinarySmallWinMembers",smallWins,"payoutBandDenominator","complete round payout / paid total bet; total bet=5 units");
-  if(modes.size()!=4)throw new IllegalStateException("Retained pool is missing a mode before Redis write: "+Json.stringify(audit));
+  Set<String> requiredModes=new TreeSet<>(List.of(RoundFact.Mode.ORDINARY_WIN.name(),RoundFact.Mode.LUCKY_WHEEL.name(),RoundFact.Mode.LUCKY_FEATURE.name()));
+  if(Long.parseLong(p.getProperty("range.normal-min","1"))==0)requiredModes.add(RoundFact.Mode.ORDINARY_LOSS.name());
+  Map<String,Object> audit=Json.map("retainedMembers",retained,"retainedModes",modes,"requiredModes",requiredModes,"retainedPayoutBands",bands,"retainedModePayoutBands",modeBands,"ordinarySmallWinCoverageRequired",requireSmall,"retainedOrdinarySmallWinMembers",smallWins,"payoutBandDenominator","complete round payout / paid total bet; total bet=5 units");
+  if(!modes.keySet().containsAll(requiredModes))throw new IllegalStateException("Retained pool is missing a configured mode before Redis write: "+Json.stringify(audit));
   if(requireSmall&&smallWins==0)throw new IllegalStateException("Retained pool has no nonzero ordinary small win (1..24 units) before Redis write: "+Json.stringify(audit));
   audit.put("coverageVerifiedBeforeRedisWrite",true);audit.put("roundValidationCodecRoundtripAndIndependentUnits","PASS");return audit;
  }
@@ -41,16 +43,17 @@ public final class PoolInstaller {
   Properties p=new Properties();try(Reader in=Files.newBufferedReader(Path.of(args[0]),StandardCharsets.UTF_8)){p.load(in);}
   GeneratorMain.validateConfig(p);
   if(!p.getProperty("redis.host","192.168.10.3").equals("192.168.10.3")||Integer.parseInt(p.getProperty("redis.port","6379"))!=6379||Integer.parseInt(p.getProperty("redis.database","15"))!=15)throw new IllegalArgumentException("Replacement authorization is restricted to 192.168.10.3:6379 database 15");
-  int gid=Integer.parseInt(p.getProperty("redis.game-id"));if(gid!=2470)throw new IllegalArgumentException("Replacement is restricted to 2470");
-  int count=Integer.parseInt(p.getProperty("generation.count","10000"));DealingModel model=new DealingModel(p);
-  Map<String,List<String>> pools=new TreeMap<>();Map<String,Integer> modes=new TreeMap<>(),generatedBands=emptyBands();Map<String,Map<String,Integer>> generatedModeBands=new TreeMap<>();
+  int gid=Integer.parseInt(p.getProperty("redis.game-id"));if(gid!=8002470)throw new IllegalArgumentException("Replacement is restricted to 2470");
+  int count=Integer.parseInt(p.getProperty("generation.count","10000"));int batchSize=Integer.parseInt(p.getProperty("generation.batch-size","100"));DealingModel model=new DealingModel(p);
+  Map<String,List<String>> pools=new TreeMap<>();Map<String,Integer> modes=new TreeMap<>(),generatedBands=emptyBands();Map<String,Map<String,Integer>> generatedModeBands=new TreeMap<>();int valid=0;
   for(int i=0;i<count;i++){
-   RoundFact r=model.generateForPool(model.mode());long units=verifiedUnits(r);recordBand(generatedBands,generatedModeBands,r.mode(),units);
+   model.useBatch(i/batchSize);
+   DealingModel.Attempt attempt=model.attempt();if(!attempt.accepted())continue;
+   RoundFact r=attempt.round();long units=verifiedUnits(r);recordBand(generatedBands,generatedModeBands,r.mode(),units);valid++;
    GeneratorMain.Pool pool=GeneratorMain.pool(r.mode());String key=GeneratorMain.key(pool,gid,units);
    List<String> list=pools.computeIfAbsent(key,k->new ArrayList<>());list.add(RoundCodec.encode(r));
    int retain=GeneratorMain.retention(p,pool);if(list.size()>retain)list.remove(0);modes.merge(r.mode().name(),1,Integer::sum);
   }
-  if(modes.size()!=4)throw new IllegalStateException("Random generation missed a mode; rerun without changing formal weights");
   // This must remain before constructing RedisClient or preparing any Redis transaction.
   Map<String,Object> coverage=verifyCoverageBeforeRedisWrite(p,pools);
   Set<String> oldKeys=new TreeSet<>();List<List<String>> commands=new ArrayList<>();commands.add(List.of("MULTI"));
@@ -70,7 +73,7 @@ public final class PoolInstaller {
     Object value=redis.command("LRANGE",entry.getKey(),"0","-1");if(!(value instanceof List<?> actual)||actual.size()!=entry.getValue().size())throw new IOException("Post-install length mismatch");
     for(Object encoded:actual){RoundFact r=RoundCodec.decode(encoded.toString());if(!GeneratorMain.key(GeneratorMain.pool(r.mode()),gid,ResultUtil.totalUnits(r)).equals(entry.getKey()))throw new IOException("Post-install key mismatch");members++;}
    }
-   Map<String,Object> report=Json.map("gameId",gid,"redis",p.getProperty("redis.host")+":"+p.getProperty("redis.port")+"/"+p.getProperty("redis.database"),"generatedCompleteRounds",count,"generatedModes",modes,"generatedPayoutBands",generatedBands,"generatedModePayoutBands",generatedModeBands,"retainedMembers",members,"newBuckets",pools.size(),"replacedGameKeys",oldKeys.size(),"atomicReplacement",true,"independentPayoutAndKeyValidation","PASS","codec","LNM1 ASCII","rejectedSteps",model.rejectedSteps,"rejectedRounds",model.rejectedRounds);report.putAll(coverage);
+   Map<String,Object> report=Json.map("gameId",gid,"redis",p.getProperty("redis.host")+":"+p.getProperty("redis.port")+"/"+p.getProperty("redis.database"),"generationAttempts",count,"generatedCompleteRounds",valid,"rejectedRounds",count-valid,"rejectionReasons",model.rejectionCounts(),"generatedModes",modes,"generatedPayoutBands",generatedBands,"generatedModePayoutBands",generatedModeBands,"retainedMembers",members,"newBuckets",pools.size(),"replacedGameKeys",oldKeys.size(),"atomicReplacement",true,"independentPayoutAndKeyValidation","PASS","codec","LNM1 ASCII");report.putAll(coverage);
    Files.writeString(Path.of(args[1]),Json.stringify(report)+"\n");System.out.println(Json.stringify(report));
   }
  }

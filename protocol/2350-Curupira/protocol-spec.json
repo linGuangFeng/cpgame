@@ -193,8 +193,16 @@
       "initRoom, retryGameResult, replay and History never increment spinCount.",
       "Captured ordinary paid responses terminate in one Step because f=[] and no feature state is active.",
       "No dedicated Delivery endpoint was observed. Front-end code would request each future free/reward Step through gameResult type=2 and must associate it with the originating paid Round.",
-      "Because no complete special Round was captured, exact rid stability, charge timing, f transitions and History.results adjacency for those modes remain unresolved and must not be implemented."
+      "Because no complete special Round was captured, exact original rid stability, charge timing, f transitions and History.results adjacency remain unresolved; the local Mary projection must stay explicitly labeled as an engineering contract rather than original wire evidence."
     ]
+  },
+  "localFeatureProjection": {
+    "status": "ENABLED_ENGINEERING_CONTRACT_ORIGINAL_WIRE_UNRESOLVED",
+    "trigger": "a complete paid TRIGGER fact is stored in ordinary type0 and opens one feature selection",
+    "freeExpandingWild": {"request":{"type":2,"game_type":2},"redisFamily":"Mary type0","steps":6,"constraints":["exactly one triple-Wild column per Step","fewer than three Scatter per Step; retrigger not implemented","complete fact generated before Redis write"]},
+    "holdAndSpins": {"request":{"type":2,"game_type":3},"redisFamily":"Mary type1","constraints":["start with three","each new Coin adds one","Coin value 1..10","terminate on remaining zero or all 15 positions filled","complete fact generated before Redis write"]},
+    "sharedRestrictions": ["no target result or payout input","no captured sample template","Demo reads Redis only","never describe local projection as captured original wire"],
+    "featureBuy": "type=3 remains unsupported and safely rejected"
   },
   "ordinaryIndependentOracles": [
     "res.ps length is 15 and every symbol belongs to the current-game enum",
@@ -207,11 +215,11 @@
     "an independent LOSS has wa=[], tw=0, f=[], and Scatter count below 3"
   ],
   "unresolved": [
-    {"id":"FREE_EXPANDING_WILD_WIRE","actualPaidRounds":10,"disposition":"do not implement until a complete adjacent Step sequence is captured"},
-    {"id":"HOLD_AND_SPINS_WIRE","actualPaidRounds":10,"disposition":"do not implement until activation, Coin transitions and termination are captured"},
+    {"id":"FREE_EXPANDING_WILD_WIRE","actualPaidRounds":10,"disposition":"original wire remains unresolved; use the labeled Mary type0 rule projection and recalibrate when a complete adjacent original sequence is captured"},
+    {"id":"HOLD_AND_SPINS_WIRE","actualPaidRounds":10,"disposition":"original wire remains unresolved; use the labeled Mary type1 rule projection and recalibrate when activation, Coin transitions and termination are captured"},
     {"id":"FEATURE_BUY_WIRE","actualPaidRounds":10,"disposition":"do not implement purchase; entry/code exists but no purchase was authorized or captured"},
-    {"id":"SYMBOL_WEIGHTS","disposition":"no reel strips or server weights found; do not inherit or guess"},
-    {"id":"REDIS_CODEC","disposition":"no current-game Redis evidence; do not inherit keys or member format"},
+    {"id":"SYMBOL_WEIGHTS","disposition":"no reel strips or official server weights found; 10-round/150-cell empirical counts are SAMPLE_INSUFFICIENT and may only seed explicitly labeled local weights"},
+    {"id":"REDIS_CODEC","disposition":"no original Redis evidence; local delivery contract uses ordinary type0 plus Mary type0/type1 and compact CU1 complete facts including zero, and must not be presented as an original-server observation"},
     {"id":"FIELD_cl","disposition":"observed zero only; keep opaque"},
     {"id":"FIELD_t","disposition":"redacted/opaque; do not guess"}
   ],

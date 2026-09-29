@@ -6,6 +6,7 @@ import com.hd.cpgame.riocarnival.core.RoundFactsCodec;
 import com.hd.cpgame.riocarnival.core.RoundResult;
 import com.hd.cpgame.riocarnival.core.RoundVerifier;
 import com.hd.cpgame.riocarnival.core.SecureRoundRandom;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -19,37 +20,100 @@ public final class RedisLoader {
     private static final int MINIMUM_BET_LEVEL = 1;
 
     public LoadSummary load(GeneratorConfig config) throws Exception {
-        GameRuleCore core = new GameRuleCore(new SecureRoundRandom());
+        GameRuleCore core = new GameRuleCore(new SecureRoundRandom(), config.normalWeights, config.freeWeights);
         RoundFactsCodec codec = new RoundFactsCodec();
         List<Member> pending = new ArrayList<Member>(config.batchSize);
         Counters counters = new Counters();
         try (RedisConnection redis = RedisConnection.connect(config)) {
-            while (counters.normal < config.normalCount || counters.special < config.specialCount || counters.loss < config.outputLimits.lossTarget(config.lossCount)) {
-                LoaderLimits.checkAttempts(++counters.candidates, (long) config.normalCount + config.specialCount + config.lossCount);
-                GeneratedRound round = counters.loss < config.outputLimits.lossTarget(config.lossCount) ? core.generateIndependentLoss(MINIMUM_BET_SIZE, MINIMUM_BET_LEVEL) : core.generate(MINIMUM_BET_SIZE, MINIMUM_BET_LEVEL);
-                RoundResult result = RoundVerifier.verify(round);
-                boolean special = "FREE_SPINS".equals(result.mode);
-                int ratio = result.redisRatio(round);
-                if (!config.outputLimits.accepts(special, ratio)) continue;
-                if (special && counters.special>=config.specialCount) continue;
-                if (!special && ratio==0 && counters.loss>=config.lossCount) continue;
-                if (!special && ratio>0 && counters.normal>=config.normalCount) continue;
-
-                String member = codec.encode(round);
-                GeneratedRound decoded = codec.decode(member);
-                RoundResult decodedResult = RoundVerifier.verify(decoded);
-                if (!result.mode.equals(decodedResult.mode) || ratio != decodedResult.redisRatio(decoded))
-                    throw new IllegalStateException("完整 Round Codec 往返后的模式或实际倍率不一致");
-
-                pending.add(new Member(special, ratio, member));
-                if(special)counters.special++; else if(ratio==0)counters.loss++; else counters.normal++;
-                counters.accept(special, ratio, result.freeStepCount);
-                if (pending.size() >= config.batchSize) flush(redis, pending, config, counters);
+            int lossLeft = config.outputLimits.lossTarget(config.lossCount);
+            int winLeft = config.normalCount;
+            int specialLeft = config.specialCount;
+            long target = (long) config.normalCount + config.specialCount + config.lossCount;
+            while (lossLeft > 0 || winLeft > 0 || specialLeft > 0) {
+                LoaderLimits.checkAttempts(++counters.candidates, target);
+                GeneratedRound round;
+                RoundResult peek;
+                try {
+                    round = core.generate(MINIMUM_BET_SIZE, MINIMUM_BET_LEVEL);
+                    peek = RoundVerifier.verify(round);
+                } catch (RuntimeException rejected) {
+                    counters.limitSkipped++;
+                    continue;
+                }
+                boolean free = "FREE_SPINS".equals(peek.mode);
+                int ratio = peek.redisRatio(round);
+                if (free && specialLeft > 0) {
+                    if (commit(round, true, false, config, codec, pending, redis, counters)) specialLeft--;
+                    continue;
+                }
+                if (!free && ratio > 0 && winLeft > 0) {
+                    if (commit(round, false, false, config, codec, pending, redis, counters)) winLeft--;
+                    continue;
+                }
+                if (!free && ratio == 0 && lossLeft > 0) {
+                    if (commit(round, false, true, config, codec, pending, redis, counters)) lossLeft--;
+                    continue;
+                }
+                if (lossLeft > 0) {
+                    try {
+                        if (commit(core.generateIndependentLoss(MINIMUM_BET_SIZE, MINIMUM_BET_LEVEL),
+                                false, true, config, codec, pending, redis, counters)) lossLeft--;
+                    } catch (RuntimeException rejected) {
+                        counters.limitSkipped++;
+                    }
+                }
             }
             flush(redis, pending, config, counters);
+        } catch (IOException redisError) {
+            if (counters.batches > 0 && redisProgressStop(redisError)) {
+                System.out.println("[warn] Redis stopped after " + counters.batches
+                        + " batches: " + redisError.getMessage());
+                pending.clear();
+            } else {
+                throw redisError;
+            }
         }
         System.out.println("lossMembers="+counters.loss);
         return counters.summary(config.redisGameId);
+    }
+
+    private static boolean commit(GeneratedRound round, boolean wantSpecial, boolean wantLoss,
+                                  GeneratorConfig config, RoundFactsCodec codec, List<Member> pending,
+                                  RedisConnection redis, Counters counters) throws Exception {
+        RoundResult result = RoundVerifier.verify(round);
+        boolean special = "FREE_SPINS".equals(result.mode);
+        int ratio = result.redisRatio(round);
+        if (wantSpecial != special) return false;
+        if (wantLoss && ratio != 0) return false;
+        if (!wantSpecial && !wantLoss && ratio <= 0) return false;
+        if (!config.outputLimits.accepts(special, ratio)) return false;
+        String member;
+        GeneratedRound decoded;
+        try {
+            member = codec.encode(round);
+            decoded = codec.decode(member);
+        } catch (Exception invalidMember) {
+            counters.limitSkipped++;
+            return false;
+        }
+        RoundResult decodedResult;
+        try {
+            decodedResult = RoundVerifier.verify(decoded);
+        } catch (RuntimeException invalidRound) {
+            counters.limitSkipped++;
+            return false;
+        }
+        if (!result.mode.equals(decodedResult.mode) || ratio != decodedResult.redisRatio(decoded)) {
+            counters.limitSkipped++;
+            return false;
+        }
+        pending.add(new Member(special, ratio, member));
+        if (special) counters.special++;
+        else if (ratio == 0) counters.loss++;
+        else counters.normal++;
+        counters.accept(special, ratio, result.freeStepCount);
+        if (pending.size() >= config.batchSize) flush(redis, pending, config, counters);
+        return true;
     }
 
     private static void flush(RedisConnection redis, List<Member> pending,
@@ -77,6 +141,15 @@ public final class RedisLoader {
     }
     static String maryList(long gameId, int ratio) {
         return String.format(Locale.ROOT, "MaryLog:%09d:%06d", gameId, ratio);
+    }
+
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("已关闭连接") || text.contains("closed") || text.contains("中止了一个已建立")
+                || text.contains("EXECABORT") || text.contains("Broken pipe");
     }
 
     private static final class Member {

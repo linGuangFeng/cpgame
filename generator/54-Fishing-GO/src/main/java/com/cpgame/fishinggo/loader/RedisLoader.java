@@ -1,6 +1,7 @@
 package com.cpgame.fishinggo.loader;
 
 import com.cpgame.fishinggo.core.CompleteRound;
+import com.cpgame.fishinggo.core.DealingWeights;
 import com.cpgame.fishinggo.core.ProtocolConstants;
 import com.cpgame.fishinggo.core.RedisKeys;
 import com.cpgame.fishinggo.core.ResultUtil;
@@ -17,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Locale;
 import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Properties;
 import java.util.TreeMap;
 
@@ -40,24 +42,30 @@ public final class RedisLoader {
         if (!username.isEmpty()) cfg.user(username);
         if (!password.isEmpty()) cfg.password(password);
         if (!"8000054".equals(req(p, "redis.game-id"))) throw new IllegalArgumentException("redis.game-id must be positive");
-        RoundGenerator generator = new RoundGenerator(new SecureRandom());
+        DealingWeights weights = weights(p);
+        RoundGenerator generator = new RoundGenerator(new SecureRandom(), weights);
         ResultUtil util = new ResultUtil();
         RoundCodec codec = new RoundCodec();
         Map<String, Integer> counts = new TreeMap<>();
         LoaderLimits limits = new LoaderLimits(p);
         loss = limits.lossTarget(loss);
+        int lossGoal = loss, winGoal = win, specialGoal = special;
         long[] attempts = {0};
-        int sc5 = special * 25 / 41, sc6 = special * 12 / 41, sc7 = special - sc5 - sc6;
+        long scTotal = weights.entryScatter().values().stream().mapToLong(Integer::longValue).sum();
+        int sc5 = (int) ((long) special * weights.entryScatter().get(5) / scTotal);
+        int sc6 = (int) ((long) special * weights.entryScatter().get(6) / scTotal), sc7 = special - sc5 - sc6;
         try (Jedis jedis = new Jedis(host, port, cfg.build())) {
             jedis.connect();
             if (!"PONG".equalsIgnoreCase(jedis.ping())) throw new IllegalStateException("redis ping failed");
-            for (int i = 0; i < loss; i++) if (!write(jedis, generator.loss(), util, codec, cap, counts, limits, attempts)) i--;
-            for (int i = 0; i < win; i++) if (!write(jedis, generator.win(), util, codec, cap, counts, limits, attempts)) i--;
-            for (int i = 0; i < sc5; i++) if (!write(jedis, generator.special(5), util, codec, cap, counts, limits, attempts)) i--;
-            for (int i = 0; i < sc6; i++) if (!write(jedis, generator.special(6), util, codec, cap, counts, limits, attempts)) i--;
-            for (int i = 0; i < sc7; i++) if (!write(jedis, generator.special(7), util, codec, cap, counts, limits, attempts)) i--;
+            while (loss > 0 || win > 0 || sc5 > 0 || sc6 > 0 || sc7 > 0) {
+                if (win > 0 && write(jedis, generator.win(), util, codec, cap, counts, limits, attempts)) win--;
+                if (sc5 > 0 && write(jedis, generator.special(5), util, codec, cap, counts, limits, attempts)) sc5--;
+                if (sc6 > 0 && write(jedis, generator.special(6), util, codec, cap, counts, limits, attempts)) sc6--;
+                if (sc7 > 0 && write(jedis, generator.special(7), util, codec, cap, counts, limits, attempts)) sc7--;
+                if (loss > 0 && write(jedis, generator.loss(), util, codec, cap, counts, limits, attempts)) loss--;
+            }
             System.out.printf(Locale.ROOT, "Loaded Fishing GO loss=%d win=%d special=%d rulesHash=%s buckets=%s%n",
-                    loss, win, special, ProtocolConstants.RULES_HASH, counts);
+                    lossGoal, winGoal, specialGoal, ProtocolConstants.RULES_HASH, counts);
         }
     }
 
@@ -75,9 +83,9 @@ public final class RedisLoader {
         String list = RedisKeys.list(a.outcome(), a.odds());
         String index = RedisKeys.index(a.outcome());
         Transaction tx = jedis.multi();
+        tx.zadd(index, (double) a.odds(), Integer.toString(a.odds()));
         tx.rpush(list, member);
         tx.ltrim(list, -(specialPool ? limits.specialCap : cap), -1);
-        tx.zadd(index, (double) a.odds(), Integer.toString(a.odds()));
         tx.exec();
         counts.merge(list, 1, Integer::sum);
         return true;
@@ -92,5 +100,21 @@ public final class RedisLoader {
         int v = Integer.parseInt(req(p, key));
         if (v < min || v > max) throw new IllegalArgumentException(key);
         return v;
+    }
+
+    private static DealingWeights weights(Properties p) {
+        return new DealingWeights(symbols(p, "paid", ProtocolConstants.ORDER),
+                symbols(p, "free", ProtocolConstants.ORDER),
+                symbols(p, "entry", DealingWeights.FILL),
+                Map.of(5, num(p, "generation.entry-scatter.5-weight", 1, Integer.MAX_VALUE),
+                        6, num(p, "generation.entry-scatter.6-weight", 1, Integer.MAX_VALUE),
+                        7, num(p, "generation.entry-scatter.7-weight", 1, Integer.MAX_VALUE)));
+    }
+
+    private static Map<String, Integer> symbols(Properties p, String mode, java.util.List<String> symbols) {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        for (String symbol : symbols)
+            result.put(symbol, num(p, "generation.symbol." + symbol + "." + mode + "-weight", 1, Integer.MAX_VALUE));
+        return result;
     }
 }

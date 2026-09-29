@@ -20,9 +20,6 @@ public record CompleteRound(
         mode = Objects.requireNonNull(mode, "mode");
         paidBet = Objects.requireNonNull(paidBet, "paidBet").stripTrailingZeros();
         betSize = Objects.requireNonNull(betSize, "betSize").stripTrailingZeros();
-        if (paidBet.signum() <= 0 || betSize.signum() <= 0 || betLevel < 1) {
-            throw new IllegalArgumentException("bet values must be positive");
-        }
         steps = List.copyOf(Objects.requireNonNull(steps, "steps"));
         if (steps.isEmpty()) throw new IllegalArgumentException("complete Round needs at least one Step");
         payout = Objects.requireNonNull(payout, "payout").stripTrailingZeros();

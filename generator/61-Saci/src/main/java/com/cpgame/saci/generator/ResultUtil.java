@@ -198,9 +198,10 @@ public final class ResultUtil {
         RoundMode mode = inferMode(round.steps());
         if (mode != round.mode()) throw new IllegalArgumentException("Round 分类与独立反推不一致");
         BigDecimal totalWin = round.totalWin();
-        int hundredths = totalWin.divide(bet, 2, RoundingMode.HALF_UP)
-                .movePointRight(2).setScale(0, RoundingMode.HALF_UP).intValueExact();
-        return new ResultAnalysis(mode, bet, totalWin, hundredths, round.steps().size());
+        BigDecimal unit = round.bs().multiply(BigDecimal.valueOf(round.bl()));
+        int multiplier = totalWin.signum() == 0 ? 0
+                : totalWin.divide(unit, 0, RoundingMode.UNNECESSARY).intValueExact();
+        return new ResultAnalysis(mode, bet, totalWin, multiplier, round.steps().size());
     }
 
     public static RoundMode inferMode(List<SpinStep> steps) {
@@ -220,10 +221,16 @@ public final class ResultUtil {
         return value.setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
     }
 
-    public static int multiplierHundredths(BigDecimal totalWin, BigDecimal bet) {
-        if (bet.signum() <= 0) throw new IllegalArgumentException("下注必须为正");
-        return totalWin.divide(bet, 2, RoundingMode.HALF_UP)
-                .movePointRight(2).setScale(0, RoundingMode.HALF_UP).intValueExact();
+    /** @deprecated name kept; value is integer award/(betSize×betLevel), not hundredths. */
+    public static int multiplierHundredths(BigDecimal totalWin, BigDecimal betSize, int betLevel) {
+        return multiplier(totalWin, betSize, betLevel);
+    }
+
+    public static int multiplier(BigDecimal totalWin, BigDecimal betSize, int betLevel) {
+        if (betSize == null || betSize.signum() <= 0 || betLevel < 1) throw new IllegalArgumentException("下注必须为正");
+        if (totalWin == null || totalWin.signum() == 0) return 0;
+        BigDecimal unit = betSize.multiply(BigDecimal.valueOf(betLevel));
+        return totalWin.divide(unit, 0, RoundingMode.UNNECESSARY).intValueExact();
     }
 
     public enum EnergyBranch { UNCHANGED, INCREMENT, FULL_TRIGGER }

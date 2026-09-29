@@ -1,36 +1,24 @@
 package com.cpgame.curupira.loader;
 
-import com.cpgame.curupira.codec.MinimalFactCodec;
 import com.cpgame.curupira.config.EngineConfiguration;
-import com.cpgame.curupira.core.GameRuleCore;
-import com.cpgame.curupira.core.ResultUtil;
 import com.cpgame.curupira.core.RulesContract;
-import com.cpgame.curupira.model.CompleteRoundFact;
-import com.cpgame.curupira.model.CompleteRoundFact.Kind;
 import com.cpgame.curupira.random.SecureRandomSource;
-import com.cpgame.curupira.redis.RedisContractGate;
 import com.cpgame.curupira.redis.RedisListClient;
-import com.cpgame.curupira.verify.RoundVerifier;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
-/** 使用当前游戏 GameRuleCore 生成普通与特殊完整局，并直写平台 Redis。 */
+/** 使用统一尝试次数与批次权重循环，把规则生成的完整普通局写入 Redis。 */
 public final class RedisLoader {
     private RedisLoader() { }
 
     public static void main(String[] args) throws Exception {
         LoadSummary summary = run(config(args));
-        System.out.printf("生成完成 sourceGameId=%d redisGameId=%d written=%d loss=%d win=%d ew=%d free=%d hold=%d buckets=%d transactions=%d rulesHash=%s%n",
-                RulesContract.GAME_ID, summary.redisGameId(), summary.written(),
-                summary.counts().getOrDefault(Kind.LOSS, 0), summary.counts().getOrDefault(Kind.WIN, 0),
-                summary.counts().getOrDefault(Kind.EXPANDING_WILD, 0),
-                summary.counts().getOrDefault(Kind.FREE_EW, 0), summary.counts().getOrDefault(Kind.HOLD, 0),
-                summary.multiplierBuckets(), summary.transactions(), summary.rulesHash());
+        System.out.printf(
+                "生成完成 sourceGameId=%d redisGameId=%d attempts=%d accepted=%d rejected=%d batches=%d transactions=%d buckets=%d counts=%s rejectReasons=%s rulesHash=%s%n",
+                RulesContract.GAME_ID, summary.redisGameId(), summary.generation().attempts(),
+                summary.generation().accepted(), summary.generation().rejected(), summary.generation().batches(),
+                summary.transactions(), summary.generation().multiplierFrequency().size(),
+                summary.generation().acceptedByKind(), summary.generation().rejectedByReason(), RulesContract.RULES_HASH);
     }
 
     public static LoadSummary run(Path configPath) throws Exception {
@@ -38,120 +26,34 @@ public final class RedisLoader {
     }
 
     public static LoadSummary run(EngineConfiguration config) throws Exception {
-        com.cpgame.curupira.core.GenerationPolicy configuredPolicy = config.generationPolicy();
-        com.cpgame.curupira.core.GenerationPolicy candidatePolicy = new com.cpgame.curupira.core.GenerationPolicy(
-                configuredPolicy.symbolWeights(), configuredPolicy.constructionAttempts(), configuredPolicy.fallbackSamples(),
-                Integer.MAX_VALUE, configuredPolicy.maxSpecialSteps(), configuredPolicy.maxConsecutiveWins());
-        GameRuleCore core = new GameRuleCore(new SecureRandomSource(), candidatePolicy);
-        RoundVerifier verifier = new RoundVerifier(candidatePolicy);
-        ResultUtil resultUtil = new ResultUtil();
-        MinimalFactCodec codec = new MinimalFactCodec();
-        RedisContractGate keys = new RedisContractGate();
-        Set<Integer> buckets = new HashSet<>();
-        Map<Kind, Integer> counts = new EnumMap<>(Kind.class);
-        Set<String> uniqueHigh = new HashSet<>();
-        List<RedisListClient.Entry> pending = new ArrayList<>(config.batchSize());
-        long written = 0, transactions = 0;
-        int ordinary = config.normalCount();
-        int special = Math.max(config.specialCount(), 0);
-        int loss = config.outputLimits().lossTarget(ordinary / 3);
-        int win = ordinary - loss - ordinary / 3;
-        int ew = ordinary - loss - win;
-        int free = special == 0 ? 0 : Math.max(1, special / 2);
-        int hold = special == 0 ? 0 : Math.max(0, special - free);
+        AtomicLong transactions = new AtomicLong();
         try (RedisListClient redis = new RedisListClient(config)) {
-            System.out.printf("2350 loader start redisGameId=%d ordinary=%d special=%d loss=%d win=%d ew=%d free=%d hold=%d batchSize=%d (round-robin batches; no cache wipe)%n",
-                    config.redisGameId(), ordinary, special, loss, win, ew, free, hold, config.batchSize());
-            Kind[] phases = {Kind.FREE_EW, Kind.HOLD, Kind.WIN, Kind.EXPANDING_WILD, Kind.LOSS};
-            int[] remaining = {free, hold, win, ew, loss};
-            while (true) {
-                boolean any = false;
-                for (int p = 0; p < phases.length; p++) {
-                    if (remaining[p] <= 0) continue;
-                    any = true;
-                    int got = write(core, verifier, resultUtil, codec, keys, pending, buckets, counts,
-                            uniqueHigh, phases[p], 1, config, redis);
-                    remaining[p] -= got;
-                    written += got;
-                    if (pending.size() >= config.batchSize()) {
-                        redis.appendBatch(pending, config.maxMembersPerMultiplier());
-                        pending.clear();
-                        transactions++;
-                    }
-                }
-                if (!any) break;
-            }
-        } catch (java.io.IOException redisError) {
-            if (transactions > 0 && redisProgressStop(redisError)) {
-                System.out.println("[warn] Redis stopped after " + transactions
-                        + " transactions: " + redisError.getMessage());
-                pending.clear();
-            } else {
-                throw redisError;
-            }
+            System.out.printf(
+                    "2350 loader start redisGameId=%d attempts=%d batchSize=%d cycle=%d normalRetention=%d maryRetention=%d (no cache wipe)%n",
+                    config.redisGameId(), config.generationCount(), config.batchSize(), config.cycleLength(),
+                    config.normalRetention(), config.maryRetention());
+            GenerationRun.Summary generation = GenerationRun.execute(config, new SecureRandomSource(),
+                    (batch, phase, entries) -> {
+                        if (!entries.isEmpty()) {
+                            redis.appendBatch(entries, config.normalRetention());
+                            transactions.incrementAndGet();
+                        }
+                        if (batch < 10 || (batch + 1) % 100 == 0 || batch + 1 == expectedBatches(config)) {
+                            System.out.printf("progress batch=%d phase=%d attemptsInBatch=%d acceptedInBatch=%d%n",
+                                    batch + 1, phase, batchAttempts(config, batch), entries.size());
+                        }
+                    });
+            return new LoadSummary(config.redisGameId(), transactions.get(), generation);
         }
-        return new LoadSummary(config.redisGameId(), written, transactions, buckets.size(),
-                Map.copyOf(counts), RulesContract.RULES_HASH);
     }
 
-    static boolean redisProgressStop(Throwable error) {
-        String text = error == null ? "" : String.valueOf(error.getMessage());
-        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
-        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
-                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
-                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
-                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
+    private static int expectedBatches(EngineConfiguration config) {
+        return Math.toIntExact((config.generationCount() + config.batchSize() - 1L) / config.batchSize());
     }
 
-    private static int write(GameRuleCore core, RoundVerifier verifier, ResultUtil resultUtil,
-                             MinimalFactCodec codec, RedisContractGate keys,
-                             List<RedisListClient.Entry> pending, Set<Integer> buckets,
-                             Map<Kind, Integer> counts, Set<String> uniqueHigh, Kind kind, int target,
-                             EngineConfiguration config, RedisListClient redis) throws Exception {
-        int produced = 0;
-        long attempts=0;
-        for (int i = 0; i < target; i++) {
-            com.cpgame.curupira.config.LoaderLimits.checkAttempts(++attempts, target);
-            CompleteRoundFact fact = core.generateFact(kind);
-            verifier.verifyFact(fact);
-            int multiplier = resultUtil.redisMultiplier(fact);
-            if (kind == Kind.TRIGGER) {
-                throw new IllegalStateException("trigger boards are live and must not be written to Redis");
-            }
-            if (!config.outputLimits().accepts(!kind.ordinary(), multiplier) || multiplier > (kind.ordinary() ? config.normalMaxWinMultiplier() : config.specialMaxWinMultiplier())) {
-                i--;
-                continue;
-            }
-            String member = codec.encodeFact(fact);
-            if (multiplier >= 200 && (kind == Kind.WIN || kind == Kind.EXPANDING_WILD)
-                    && uniqueHigh.contains(member)) {
-                i--;
-                continue;
-            }
-            if (multiplier >= 200 && (kind == Kind.WIN || kind == Kind.EXPANDING_WILD)
-                    && uniqueHigh.size() < 30_000) {
-                uniqueHigh.add(member);
-            }
-            CompleteRoundFact decoded = codec.decode(member);
-            verifier.verifyFact(decoded);
-            if (decoded.kind() != fact.kind() || decoded.entry() != fact.entry()
-                    || decoded.steps().size() != fact.steps().size()
-                    || resultUtil.redisMultiplier(decoded) != multiplier) {
-                throw new IllegalStateException("Codec 回读完整局事实不一致");
-            }
-            pending.add(new RedisListClient.Entry(
-                    keys.indexesToWrite(fact.kind(), config.redisGameId()),
-                    keys.listFor(fact.kind(), multiplier, config.redisGameId()),
-                    multiplier, member));
-            buckets.add(multiplier);
-            counts.merge(kind, 1, Integer::sum);
-            produced++;
-            if (pending.size() >= config.batchSize()) {
-                redis.appendBatch(pending, config.maxMembersPerMultiplier());
-                pending.clear();
-            }
-        }
-        return produced;
+    private static int batchAttempts(EngineConfiguration config, int zeroBasedBatch) {
+        long start = (long) zeroBasedBatch * config.batchSize();
+        return (int) Math.min(config.batchSize(), config.generationCount() - start);
     }
 
     private static Path config(String[] args) {
@@ -162,6 +64,5 @@ public final class RedisLoader {
         return Path.of(args.length == 0 ? "generator.properties" : args[0]).toAbsolutePath().normalize();
     }
 
-    public record LoadSummary(int redisGameId, long written, long transactions, int multiplierBuckets,
-                              Map<Kind, Integer> counts, String rulesHash) { }
+    public record LoadSummary(int redisGameId, long transactions, GenerationRun.Summary generation) { }
 }

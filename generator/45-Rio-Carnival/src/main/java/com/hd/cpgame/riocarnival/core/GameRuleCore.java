@@ -20,6 +20,9 @@ public final class GameRuleCore {
     }
 
     public GeneratedRound generate(BigDecimal betSize, int betLevel) {
+        if (betSize == null || betSize.signum() <= 0 || betLevel < 1) {
+            throw new IllegalArgumentException("bet must be positive");
+        }
         return roundFactory.create(betSize, betLevel);
     }
 

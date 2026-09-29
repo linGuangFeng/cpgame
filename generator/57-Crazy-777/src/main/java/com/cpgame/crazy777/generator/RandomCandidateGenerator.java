@@ -7,62 +7,56 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.random.RandomGenerator;
 
 /**
- * 从训练集完整联合状态 kernel 抽样。不逐格抽符号，也不拼接未中奖盘。
- * 允许的变换只做上下翻转和左右换轴，保持五条线集合与特殊符号计数不变。
+ * 中奖/免费仍从训练联合 kernel 抽样。独立 LOSS 按 BLANK 交替卷轴构造，并拆开可见线颜色。
  */
 public final class RandomCandidateGenerator {
     private static final String MODEL_RESOURCE = "/crazy777-joint-kernels.txt";
     private static final Model MODEL = loadModel();
+    private static final SymbolWeights OBSERVED = SymbolWeights.empiricalDefaults();
+    private final WeightedPool losses;
+    private final WeightedPool wins;
+    private final WeightedPool frees;
+
+    public RandomCandidateGenerator() { this(OBSERVED); }
+
+    public RandomCandidateGenerator(SymbolWeights weights) {
+        losses = pool(MODEL.losses, weights.normal(), OBSERVED.normal(), null, null);
+        wins = pool(MODEL.wins, weights.normal(), OBSERVED.normal(), null, null);
+        frees = pool(MODEL.frees, weights.entry(), OBSERVED.entry(), weights.free(), OBSERVED.free());
+    }
 
     public RoundCandidate independentLoss(RandomGenerator random) {
-        return generateLossWithCandidates(random, () -> independentLossCandidate(random));
+        return new IndependentLossGenerator().generate(random);
     }
-    RoundCandidate generateLossWithCandidates(RandomGenerator random, java.util.function.Supplier<RoundCandidate> proposals) {
-        for (int attempt = 0; attempt < 5; attempt++) {
-            RoundCandidate candidate = proposals.get();
-            if (candidate != null && isIndependentLoss(candidate)) return candidate;
-        }
-        return DEFAULT_LOSSES.get(random.nextInt(10));
-    }
-
     public RoundCandidate independentLossCandidate(RandomGenerator random) {
-        return transform(choose(MODEL.losses, random), random);
-    }
-
-    private static boolean isIndependentLoss(RoundCandidate c) {
-        return c.boards().size() == 1 && !ResultUtil.isScatterTrigger(c.boards().get(0)) && ResultUtil.evaluateRegularLines(c.boards().get(0)).isEmpty();
-    }
-
-    private static final List<RoundCandidate> DEFAULT_LOSSES = createLossDefaults();
-    private static List<RoundCandidate> createLossDefaults() {
-        List<RoundCandidate> defaults = new ArrayList<>(10);
-        for (RoundCandidate c : MODEL.losses) {
-            if (!isIndependentLoss(c)) throw new ExceptionInInitializerError("invalid LOSS model entry");
-            if (defaults.size() < 10) defaults.add(c);
-        }
-        if (defaults.size() != 10) throw new ExceptionInInitializerError("ten default losses required");
-        return List.copyOf(defaults);
+        return new IndependentLossGenerator().candidate(random);
     }
 
     public RoundCandidate ordinaryWin(RandomGenerator random) {
-        return transform(choose(MODEL.wins, random), random);
+        return sanitizePresentationOnlyLosses(transform(wins.choose(random), random), random);
     }
 
     public RoundCandidate freeSpins(RandomGenerator random) {
-        return transform(choose(MODEL.frees, random), random);
+        return sanitizePresentationOnlyLosses(transform(frees.choose(random), random), random);
     }
 
     public RoundCandidate natural(RandomGenerator random) {
         int total = MODEL.losses.size() + MODEL.wins.size() + MODEL.frees.size();
         int pick = random.nextInt(total);
-        if (pick < MODEL.losses.size()) return transform(MODEL.losses.get(pick), random);
+        if (pick < MODEL.losses.size()) {
+            return sanitizePresentationOnlyLosses(transform(losses.choose(random), random), random);
+        }
         pick -= MODEL.losses.size();
-        if (pick < MODEL.wins.size()) return transform(MODEL.wins.get(pick), random);
-        return transform(MODEL.frees.get(pick - MODEL.wins.size()), random);
+        if (pick < MODEL.wins.size()) {
+            return sanitizePresentationOnlyLosses(transform(wins.choose(random), random), random);
+        }
+        return sanitizePresentationOnlyLosses(transform(frees.choose(random), random), random);
     }
 
     public int trainingKernelCount() {
@@ -74,18 +68,53 @@ public final class RandomCandidateGenerator {
     public int freeKernelCount() { return MODEL.frees.size(); }
 
     public double measureFirstAttemptLossSuccess(RandomGenerator random, int samples) {
-        for (int i = 0; i < samples; i++) {
-            List<String> board = independentLossCandidate(random).boards().get(0);
-            if (ResultUtil.isScatterTrigger(board) || !ResultUtil.evaluateRegularLines(board).isEmpty()) {
-                return 0.0d;
-            }
-        }
-        return 1.0d;
+        return new IndependentLossGenerator().measureFirstAttemptLossSuccess(random, samples);
     }
 
-    private static RoundCandidate choose(List<RoundCandidate> values, RandomGenerator random) {
-        if (values.isEmpty()) throw new IllegalStateException("训练模型缺少所需完整局类别");
-        return values.get(random.nextInt(values.size()));
+    private static WeightedPool pool(List<RoundCandidate> values,
+                                     Map<String, Integer> first, Map<String, Integer> observedFirst,
+                                     Map<String, Integer> continuation, Map<String, Integer> observedContinuation) {
+        double[] logs = new double[values.size()];
+        double max = Double.NEGATIVE_INFINITY;
+        for (int i = 0; i < values.size(); i++) {
+            RoundCandidate candidate = values.get(i);
+            double value = boardLogWeight(candidate.boards().get(0), first, observedFirst);
+            if (continuation != null) for (int page = 1; page < candidate.boards().size(); page++)
+                value += boardLogWeight(candidate.boards().get(page), continuation, observedContinuation);
+            logs[i] = value;
+            max = Math.max(max, value);
+        }
+        double[] cumulative = new double[logs.length];
+        double total = 0;
+        for (int i = 0; i < logs.length; i++) cumulative[i] = total += Math.exp(logs[i] - max);
+        return new WeightedPool(values, cumulative, total);
+    }
+
+    private static double boardLogWeight(List<String> board, Map<String, Integer> configured,
+                                         Map<String, Integer> observed) {
+        double result = 0;
+        for (String symbol : board) result += Math.log((double) configured.get(symbol) / observed.get(symbol));
+        return result;
+    }
+
+    private record WeightedPool(List<RoundCandidate> values, double[] cumulative, double total) {
+        RoundCandidate choose(RandomGenerator random) {
+            int index = Arrays.binarySearch(cumulative, random.nextDouble(total));
+            if (index < 0) index = -index - 1;
+            return values.get(Math.min(index, values.size() - 1));
+        }
+    }
+
+    private static RoundCandidate sanitizePresentationOnlyLosses(RoundCandidate candidate, RandomGenerator random) {
+        List<List<String>> boards = new ArrayList<>(candidate.boards());
+        boolean changed = false;
+        for (int page = 0; page < candidate.boards().size(); page++) {
+            if (ResultUtil.hasPresentationOnlyWin(candidate.boards().get(page), page > 0)) {
+                boards.set(page, new IndependentLossGenerator().generate(random).boards().get(0));
+                changed = true;
+            }
+        }
+        return changed ? new RoundCandidate(boards) : candidate;
     }
 
     private static RoundCandidate transform(RoundCandidate source, RandomGenerator random) {

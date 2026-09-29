@@ -22,21 +22,30 @@ public final class RedisLoader {
         List<Member> pending = new ArrayList<Member>(config.batchSize);
         Counters counters = new Counters();
         try (RedisConnection redis = RedisConnection.connect(config)) {
-            clearExistingGameKeys(redis, config.redisGameId);
-            for (int i = 0; i < config.outputLimits.lossTarget(config.lossCount); i++) {
-                if (!accept(core.generateCompleteRound(config.paidBet, RoundMode.LOSS), RoundMode.LOSS,
-                        false, config, core, codec, pending, redis, counters)) i--;
-            }
-            for (int i = 0; i < config.winCount; i++) {
-                if (!accept(core.generateCompleteRound(config.paidBet, RoundMode.BASE_WIN), RoundMode.BASE_WIN,
-                        false, config, core, codec, pending, redis, counters)) i--;
-            }
-            for (int i = 0; i < config.specialCount; i++) {
-                RoundMode mode = (i % 2 == 0) ? RoundMode.XSPLIT : RoundMode.XBOMB_WILD;
-                if (!accept(core.generateCompleteRound(config.paidBet, mode), mode,
-                        true, config, core, codec, pending, redis, counters)) i--;
+            int lossLeft = config.outputLimits.lossTarget(config.lossCount);
+            int winLeft = config.winCount;
+            int specialLeft = config.specialCount;
+            int specialDone = 0;
+            while (lossLeft > 0 || winLeft > 0 || specialLeft > 0) {
+                if (winLeft > 0 && accept(core.generateCompleteRound(config.paidBet, RoundMode.BASE_WIN), RoundMode.BASE_WIN,
+                        false, config, core, codec, pending, redis, counters)) winLeft--;
+                if (specialLeft > 0) {
+                    RoundMode mode = (specialDone % 2 == 0) ? RoundMode.XSPLIT : RoundMode.XBOMB_WILD;
+                    if (accept(core.generateCompleteRound(config.paidBet, mode), mode,
+                            true, config, core, codec, pending, redis, counters)) { specialLeft--; specialDone++; }
+                }
+                if (lossLeft > 0 && accept(core.generateCompleteRound(config.paidBet, RoundMode.LOSS), RoundMode.LOSS,
+                        false, config, core, codec, pending, redis, counters)) lossLeft--;
             }
             flush(redis, pending, config, counters);
+        } catch (java.io.IOException redisError) {
+            if (counters.batches > 0 && redisProgressStop(redisError)) {
+                System.out.println("[warn] Redis stopped after " + counters.batches
+                        + " batches: " + redisError.getMessage());
+                pending.clear();
+            } else {
+                throw redisError;
+            }
         }
         return counters.summary(config.redisGameId);
     }
@@ -66,15 +75,13 @@ public final class RedisLoader {
                                RedisConnection redis, Counters counters) throws Exception {
         LoaderLimits.checkAttempts(++counters.candidates, (long) config.lossCount + config.winCount + config.specialCount);
         ResultUtil.RoundAnalysis analysis = core.resultUtil().analyzeCompleteRound(round, config.generationPolicy);
-        if (analysis.getMode() != expected) throw new IllegalStateException("生成类别与目标池不一致");
+        if (analysis.getMode() != expected) return false;
         int ratio = core.resultUtil().integerRatio(round, config.generationPolicy);
         if (!config.outputLimits.accepts(special, ratio)) return false;
         if (expected == RoundMode.LOSS) {
-            if (ratio != 0 || analysis.getPayout().signum() != 0) {
-                throw new IllegalStateException("LOSS 必须写入 0 倍未中奖池");
-            }
+            if (ratio != 0 || analysis.getPayout().signum() != 0) return false;
         } else if (ratio <= 0) {
-            throw new IllegalStateException("中奖/特殊完整局不能写入 0 倍");
+            return false;
         }
         java.math.BigDecimal maximum = special ? config.specialMaxWinMultiplier : config.normalMaxWinMultiplier;
         if (analysis.getActualMultiplier().compareTo(maximum) > 0) {
@@ -123,6 +130,15 @@ public final class RedisLoader {
     }
     public static String specialList(long id, int ratio) {
         return String.format(Locale.ROOT, "MaryLog:%09d:%06d", id, ratio);
+    }
+
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
     }
 
     private static final class Member {

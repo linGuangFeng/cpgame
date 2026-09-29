@@ -1,27 +1,26 @@
 # 2350 Curupira 完整 Round 结果引擎
 
 本 Maven 工程提供试玩 API 与 Loader 共用的唯一一份 Java `GameRuleCore`。工程将随机候选生成、
-基于当前游戏证据的 `ResultUtil`、完整局 `RoundFactory`、最小事实编码门禁、Redis Loader 与独立
-复核器分离实现。
+基于当前游戏证据的 `ResultUtil`、最小事实编码门禁、Redis Loader 与独立复核器分离实现。
+Demo 只复用这里产出的 JAR 做解码/规则复核，不在请求现场调用候选生成。
 
-普通付费局从 Redis 领取。Scatter 触发局实时生成不中奖 3 Scatter 盘，不写入缓存。
-前端选关后，从对应 Mary 前缀领取后续完整结果，与触发步拼成同一局 History：
+当前正式范围生成三类完整事实：普通付费起点、6 Step 免费扩展 Wild、完整 Hold & Spins 序列。
+生成器先按显式场景权重选择场景，再自然生成并独立校验；不接受目标类别、目标奖金或样本局模板。
+普通候选中的 3+ Scatter 分类为 `TRIGGER` 并写普通类型 0，为后续二选一功能提供缓存起点。
+免费模式写 `Mary type0`，Hold 写 `Mary type1`；购买模式仍不生成。
 
-- 普通 LOSS/WIN/Expanding Wild：`PerKeyList_008002350` / `BetLog:008002350:xxxxxx`（`redis.game-id=8002350`）
-- 选 Expanding Wild（type=2/3, game_type=2）：`MaryKeyList_008002350` / `MaryLog:008002350:xxxxxx`
-- 选 Hold & Spins（type=2/3, game_type=3）：`MaryKeyList_108002350` / `MaryLog:108002350:xxxxxx`
-- Hold 只进 Mary 1，禁止再写 `PerKeyList_108002350`
-
-Demo 20 局付费轮询覆盖 LOSS、WIN、Expanding Wild 与实时 Scatter 选关；选关后 type=2 按 game_type
-领取 Mary 0 或 Mary 1；购买走 type=3，领同一套选关结果。生产链路使用 `SecureRandom`；可复现的确定性随机仅存在于测试源码。
+普通和触发结果写入 `PerKeyList_008002350` / `BetLog:008002350:xxxxxx`，免费模式写
+`MaryKeyList_008002350` / `MaryLog:008002350:xxxxxx`，Hold 写
+`MaryKeyList_108002350` / `MaryLog:108002350:xxxxxx`（`redis.game-id=8002350`）。
+0 倍与正倍都保存完整 `CU1` 事实；禁止 `CU1PL;#`
+之类读取时现场物化的标记。生产链路使用 `SecureRandom`；确定性随机仅在测试源码中使用。
 
 构建命令：`mvn.cmd clean package`。交付目录是 `dist`，`target` 仅为构建缓存。
 
 
-## 独立无奖标记（2026-09-14）
+## 权重与批次
 
-本次只接普通付费单步 LOSS，保留 CU1 版本和入口/种类头，编码为 `CU1PL;#`。解析器调用共享 ConstructiveLossGenerator 物化真实零奖盘面，禁止带入免费触发或整列扩展 Wild。
-
-FREE_EW / BUY_FE（免费扩展 Wild）、HOLD / BUY_HS（锁币）、TRIGGER 及其他种类仍完整保存。本次未接免费扩展 Wild 的专用零奖生成逻辑；锁币中即使当前没有新增奖金，也不得替换前后继承的格子与剩余次数。只有 `CU1PL;#` 接受标记，其他模式的 `#` 明确拒绝。
-
-新解析器兼容已有完整编码。每次领取 Redis member 后只物化一次，校验、后续交付、重试与历史共用该事实；Redis 为空时仍失败。零奖生成最多尝试 5 次，并有 10 个已校验默认盘（41 按 PAN 数量分别保存）。先更新消费端 JAR，再使用新 Loader 写入带标记的数据。Loader JAR 通过 Maven package 交付到本游戏 dist 目录。
+基础权重来自现有 10 个连续原站付费局的 150 格计数，仅是有偏的小样本经验值，不代表官方转轴或 RTP。
+`generation.count` 是唯一总尝试次数；普通/免费/Hold 默认场景权重为 8/1/1。每批使用同一套符号权重，按“基础 → 逐牌单独 3 倍 → 基础”循环。
+无效候选不修改牌面、不重试补量。每列最多一枚 Scatter 是用户确认的当前游戏约束，发牌时直接限制可选集合。
+Hold 的空位/Coin 默认临时工程权重为 9/1，Coin 面值 1..10 均匀；这些配置不是原站概率证据。

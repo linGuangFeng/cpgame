@@ -11,8 +11,9 @@ public final class RedisKeys {
 
     private RedisKeys() { }
 
+    /** Only Scatter FREE belongs in MaryKeyList/MaryLog. MARY is ordinary cascade win (small_game_type=1) and uses BetLog. */
     public static boolean special(RoundMode mode) {
-        return mode == RoundMode.MARY || mode == RoundMode.FREE;
+        return mode == RoundMode.FREE;
     }
 
     public static String normalIndex() { return String.format("PerKeyList_%09d", GAME_ID); }

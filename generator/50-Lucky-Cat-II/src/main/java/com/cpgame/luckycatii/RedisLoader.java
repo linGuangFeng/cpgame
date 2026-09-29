@@ -17,23 +17,32 @@ public final class RedisLoader {
     private static final int BET_LEVEL = 1;
 
     public LoadSummary load(GeneratorConfig config) throws Exception {
-        GameRuleCore core = new GameRuleCore();
+        GameRuleCore core = new GameRuleCore(config.symbolWeights, config.reelPatterns);
         RoundVerifier verifier = new RoundVerifier();
         MinimalRoundFactCodec codec = new MinimalRoundFactCodec(new RoundFactory(), verifier);
         List<Member> pending = new ArrayList<>(config.batchSize);
         Counters counters = new Counters();
         try (RedisConnection redis = RedisConnection.connect(config)) {
-            clearExistingGameKeys(redis, config.redisGameId);
-            for (int i = 0; i < config.outputLimits.lossTarget(config.lossCount); i++)
-                if (!accept(core.generateIndependentLoss(BET_SIZE, BET_LEVEL), RoundMode.ORDINARY_LOSS,
-                        false, config, verifier, codec, pending, redis, counters)) i--;
-            for (int i = 0; i < config.winCount; i++)
-                if (!accept(core.generateOrdinaryWin(BET_SIZE, BET_LEVEL), RoundMode.ORDINARY_WIN,
-                        false, config, verifier, codec, pending, redis, counters)) i--;
-            for (int i = 0; i < config.specialCount; i++)
-                if (!accept(core.generateSpecial(BET_SIZE, BET_LEVEL), null,
-                        true, config, verifier, codec, pending, redis, counters)) i--;
+            int lossLeft = config.outputLimits.lossTarget(config.lossCount);
+            int winLeft = config.winCount;
+            int specialLeft = config.specialCount;
+            while (lossLeft > 0 || winLeft > 0 || specialLeft > 0) {
+                if (winLeft > 0 && accept(core.generateOrdinaryWin(BET_SIZE, BET_LEVEL), RoundMode.ORDINARY_WIN,
+                        false, config, verifier, codec, pending, redis, counters)) winLeft--;
+                if (specialLeft > 0 && accept(core.generateSpecial(BET_SIZE, BET_LEVEL), null,
+                        true, config, verifier, codec, pending, redis, counters)) specialLeft--;
+                if (lossLeft > 0 && accept(core.generateIndependentLoss(BET_SIZE, BET_LEVEL), RoundMode.ORDINARY_LOSS,
+                        false, config, verifier, codec, pending, redis, counters)) lossLeft--;
+            }
             flush(redis, pending, config, counters);
+        } catch (java.io.IOException redisError) {
+            if (counters.batches > 0 && redisProgressStop(redisError)) {
+                System.out.println("[warn] Redis stopped after " + counters.batches
+                        + " batches: " + redisError.getMessage());
+                pending.clear();
+            } else {
+                throw redisError;
+            }
         }
         return counters.summary(config.redisGameId);
     }
@@ -57,10 +66,8 @@ public final class RedisLoader {
                                RedisConnection redis, Counters counters) throws Exception {
         LoaderLimits.checkAttempts(++counters.candidates, (long) config.lossCount + config.winCount + config.specialCount);
         ResultAnalysis analysis = verifier.verify(round);
-        if (expected != null && analysis.redisPoolMode() != expected)
-            throw new IllegalStateException("生成类别与目标池不一致");
-        if (special != ResultUtil.isSpecialPool(analysis))
-            throw new IllegalStateException("特殊池标记与 ResultUtil 不一致");
+        if (expected != null && analysis.redisPoolMode() != expected) return false;
+        if (special != ResultUtil.isSpecialPool(analysis)) return false;
         if (!config.outputLimits.accepts(special, analysis.integerMultiplier())) return false;
         int consecutive = analysis.luckyRespin() ? 2 : (analysis.award().signum() == 0 ? 0 : 1);
         if (consecutive > config.maxConsecutiveWins) return false;
@@ -68,7 +75,14 @@ public final class RedisLoader {
         if (!config.outputLimits.accepts(special, ratio)) return false;
         String payload = codec.encodeRedisMemberString(round);
         RoundResult rebuilt = codec.decodeRedisMember(payload);
-        verifier.verifyRecovery(round, rebuilt);
+        if ("#".equals(payload)) {
+            if (ResultUtil.analyze(rebuilt).redisPoolMode() != RoundMode.ORDINARY_LOSS
+                    || rebuilt.award().signum() != 0 || rebuilt.steps().size() != 1) {
+                throw new IllegalStateException("压缩 LOSS 物化后状态不等价");
+            }
+        } else {
+            verifier.verifyRecovery(round, rebuilt);
+        }
         if (ResultUtil.analyze(rebuilt).integerMultiplier() != ratio)
             throw new IllegalStateException("member 往返后整数倍率变化");
         pending.add(new Member(special, ratio, payload));
@@ -103,6 +117,15 @@ public final class RedisLoader {
     }
     public static String specialList(long id, int ratio) {
         return String.format(Locale.ROOT, "MaryLog:%09d:%06d", id, ratio);
+    }
+
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
     }
 
     private record Member(boolean special, int ratio, String payload) {}

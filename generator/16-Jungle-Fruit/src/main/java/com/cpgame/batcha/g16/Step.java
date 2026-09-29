@@ -24,7 +24,6 @@ public record Step(
         if (deliveryIndex < 0) throw new IllegalArgumentException("deliveryIndex must be non-negative");
         betAmount = Objects.requireNonNull(betAmount, "betAmount").stripTrailingZeros();
         betSize = Objects.requireNonNull(betSize, "betSize").stripTrailingZeros();
-        if (betLevel < 1) throw new IllegalArgumentException("betLevel must be positive");
         symbols = List.copyOf(Objects.requireNonNull(symbols, "symbols"));
         if (symbols.size() != GameRuleCore.CELLS) throw new IllegalArgumentException("Jungle Fruit board must contain 36 symbols");
         if (spinStatus != 0 && spinStatus != 1) throw new IllegalArgumentException("spinStatus must be 0 or 1");

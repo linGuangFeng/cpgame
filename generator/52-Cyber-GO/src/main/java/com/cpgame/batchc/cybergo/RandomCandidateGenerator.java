@@ -1,76 +1,72 @@
 package com.cpgame.batchc.cybergo;
-import java.util.*;
-import java.util.random.RandomGenerator;
-/** Joint three-cell reel transitions conditioned on observed left-to-right state. */
-public final class RandomCandidateGenerator {
- private static final List<String> SYMBOLS=List.of("S1","S2","S3","S4","A","K","Q","J","WILD","SC");
- private record Window(String symbols,int count) { }
- private static final Map<String,List<Window>> STATES=new HashMap<>();
- static {
-  for(String line:EmpiricalReelModel.STATES) {
-   String[] parts=line.split("=",2);
-   STATES.put(parts[0],Arrays.stream(parts[1].split(" ")).map(item->{String[] p=item.split(":");return new Window(p[0],Integer.parseInt(p[1]));}).toList());
-  }
- }
- private final RandomGenerator random;
- public RandomCandidateGenerator(RandomGenerator random){this.random=Objects.requireNonNull(random);}
- public RandomCandidateGenerator(RandomGenerator random,SymbolWeights ignored){this(random);}
- public List<String> paidBoardCandidate(){return board(0);}
- public List<String> freeBoardCandidate(){return board(1);}
- private List<String> board(int entry){
-  List<String> board=new ArrayList<>(15);int prefix=255,sc=0,wild=0,qualified=0;
-  for(int reel=0;reel<5;reel++){
-   String key=entry+","+reel+","+prefix+","+sc+","+wild+","+qualified;
-   List<Window> windows=STATES.get(key);
-   if(windows==null)throw new IllegalStateException("Unobserved generative state: "+key);
-   int draw=random.nextInt(windows.stream().mapToInt(Window::count).sum());Window picked=null;
-   for(Window w:windows){draw-=w.count();if(draw<0){picked=w;break;}}
-   if(picked==null)throw new IllegalStateException("Empty transition distribution");
-   int mask=0;
-   for(char c:picked.symbols().toCharArray()){
-    int symbol=c-'0';board.add(SYMBOLS.get(symbol));
-    if(symbol==9)sc++;else if(symbol==8){wild++;mask=255;}else mask|=1<<symbol;
-   }
-   prefix&=mask;if(reel==2&&prefix!=0)qualified=1;
-  }
-  return List.copyOf(board);
- }
 
- // Loss-conditioned paths through the existing correlated-reel state graph.
- // Computed once; a request draws exactly five reel windows without rejection.
- private static final Map<String,List<Window>> LOSS_STATES=lossStates();
- private static Map<String,List<Window>> lossStates(){
-  Map<String,List<Window>> out=new HashMap<>();
-  eligible("0,0,255,0,0,0",out);
-  return Map.copyOf(out);
- }
- private static boolean eligible(String key,Map<String,List<Window>> out){
-  int[] state=Arrays.stream(key.split(",")).mapToInt(Integer::parseInt).toArray();
-  if(state[3]>=3||state[5]!=0)return false;
-  if(state[1]==5)return true;
-  if(out.containsKey(key))return !out.get(key).isEmpty();
-  List<Window> safe=new ArrayList<>();
-  for(Window w:STATES.getOrDefault(key,List.of()))if(eligible(nextState(state,w),out))safe.add(w);
-  out.put(key,List.copyOf(safe));return !safe.isEmpty();
- }
- private static String nextState(int[] s,Window w){
-  int mask=0,sc=s[3],wild=s[4];
-  for(char c:w.symbols().toCharArray()){
-   int symbol=c-'0';if(symbol==9)sc++;else if(symbol==8){wild++;mask=255;}else mask|=1<<symbol;
-  }
-  int prefix=s[2]&mask,qualified=s[5];if(s[1]==2&&prefix!=0)qualified=1;
-  return "0,"+(s[1]+1)+","+prefix+","+sc+","+wild+","+qualified;
- }
- public List<String> independentLossCandidate(){
-  String key="0,0,255,0,0,0";List<String> board=new ArrayList<>(15);
-  for(int reel=0;reel<5;reel++){
-   List<Window> windows=LOSS_STATES.get(key);
-   if(windows==null||windows.isEmpty())throw new IllegalStateException("loss-conditioned model empty");
-   int ticket=random.nextInt(windows.stream().mapToInt(Window::count).sum());Window picked=windows.get(0);
-   for(Window w:windows){ticket-=w.count();if(ticket<0){picked=w;break;}}
-   for(char c:picked.symbols().toCharArray())board.add(SYMBOLS.get(c-'0'));
-   key=nextState(Arrays.stream(key.split(",")).mapToInt(Integer::parseInt).toArray(),picked);
-  }
-  return List.copyOf(board);
- }
+import static com.cpgame.batchc.cybergo.CyberGoRules.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.random.RandomGenerator;
+
+/**
+ * Rule-capped weighted deal. Each cell is sampled from legal symbols for that reel and entry,
+ * with scatter/wild ceilings applied while drawing. Joint capture kernels are not used.
+ */
+public final class RandomCandidateGenerator {
+    private final RandomGenerator random;
+    private final SymbolWeights weights;
+
+    public RandomCandidateGenerator(RandomGenerator random) {
+        this(random, SymbolWeights.localDefaults());
+    }
+
+    public RandomCandidateGenerator(RandomGenerator random, SymbolWeights weights) {
+        this.random = Objects.requireNonNull(random);
+        this.weights = Objects.requireNonNull(weights);
+    }
+
+    public List<String> paidBoardCandidate() {
+        return board(false);
+    }
+
+    public List<String> freeBoardCandidate() {
+        return board(true);
+    }
+
+    public List<String> independentLossCandidate() {
+        return IndependentLoss.candidate(random);
+    }
+
+    private List<String> board(boolean free) {
+        Map<String, Integer> table = free ? weights.free() : weights.normal();
+        String[] cells = new String[VISIBLE_CELLS];
+        for (int reel = 0; reel < REELS; reel++) {
+            boolean scatterUsed = false;
+            boolean wildUsed = false;
+            for (int row = 0; row < ROWS; row++) {
+                String symbol = pick(table, free, reel, scatterUsed, wildUsed);
+                cells[reel * ROWS + row] = symbol;
+                if (SCATTER.equals(symbol)) scatterUsed = true;
+                if (WILD.equals(symbol)) wildUsed = true;
+            }
+        }
+        return IndependentLoss.board(cells);
+    }
+
+    private String pick(Map<String, Integer> table, boolean free, int reel, boolean scatterUsed, boolean wildUsed) {
+        int total = 0;
+        for (String symbol : PAYING_SYMBOLS) total += table.get(symbol);
+        if (!free && !scatterUsed) total += table.get(SCATTER);
+        if (allowsWild(reel) && !wildUsed) total += table.get(WILD);
+        int ticket = random.nextInt(total);
+        for (String symbol : PAYING_SYMBOLS) {
+            ticket -= table.get(symbol);
+            if (ticket < 0) return symbol;
+        }
+        if (!free && !scatterUsed) {
+            ticket -= table.get(SCATTER);
+            if (ticket < 0) return SCATTER;
+        }
+        return WILD;
+    }
 }

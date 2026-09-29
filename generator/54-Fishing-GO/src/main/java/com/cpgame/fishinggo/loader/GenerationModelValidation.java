@@ -37,7 +37,7 @@ public final class GenerationModelValidation {
             String member = codec.encode(round);
             CompleteRound back = codec.decode(member, generator);
             if (!member.equals(codec.encode(back))) throw new IllegalStateException("codec");
-            if (!member.startsWith("FG1|") || member.startsWith("FG1|{")) throw new IllegalStateException("member");
+            if (!member.equals("#") && !member.startsWith("FG2|")) throw new IllegalStateException("member");
             facts.add(member);
             switch (a.outcome()) {
                 case LOSS -> {
@@ -71,7 +71,7 @@ public final class GenerationModelValidation {
                   "gameName": "Fishing GO",
                   "rulesHash": "%s",
                   "status": "PASS",
-                  "oracle": "Origin holdout pages vs independent ResultUtil 243-ways; generated rounds rebuilt by ResultUtil; FG1 codec roundtrip",
+                  "oracle": "Origin holdout pages vs independent ResultUtil 243-ways; generated rounds rebuilt by ResultUtil; FG2 codec roundtrip",
                   "usesImplementationGeneratedExpected": false,
                   "trainingComplete": %d,
                   "holdoutRounds": 100,

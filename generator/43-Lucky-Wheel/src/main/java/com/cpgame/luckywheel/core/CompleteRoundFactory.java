@@ -40,11 +40,11 @@ public final class CompleteRoundFactory {
             default -> throw new UnsupportedOperationException("未启用或无证据模式: md=" + facts.mode());
         }
 
-        BigDecimal bet = BigDecimal.valueOf((long) request.betLevel() * request.betSize());
+        BigDecimal bet = LuckyWheelStake.ba(request.betLevel());
         BigDecimal settled = request.balanceBefore().subtract(bet).add(totalAward).setScale(2, RoundingMode.HALF_UP);
         List<String> nonBlank = facts.baseSymbols().stream().filter(symbol -> !"H0".equals(symbol)).toList();
         SpinResult result = new SpinResult(
-                bet, request.betLevel(), request.betSize(), now.getEpochSecond(), feature, featureAward,
+                bet, request.betLevel(), LuckyWheelStake.cs(request.betLevel()), now.getEpochSecond(), feature, featureAward,
                 facts.mode() == 3 ? List.of(Integer.toString(facts.luckyWheelAward())) : facts.respinSymbols(),
                 feature, 1, facts.mode(), settled.toPlainString(), facts.multiplier(),
                 facts.baseSymbols(), facts.mode() == 3 ? 2 : 0, totalAward, nonBlank

@@ -36,20 +36,23 @@ for(String key:p.stringPropertyNames())if(key.startsWith("generation.symbol.")||
    j.connect();String password=p.getProperty("redis.password","").trim();if(!password.isEmpty())j.auth(password);j.select(db);
    if(Boolean.parseBoolean(p.getProperty("redis.clear-game-prefix","false")))clearKnownBuckets(j);
    Transaction tx=null;int pending=0;
-   for(var target:targets.entrySet())for(int i=0;i<target.getValue();i++){
+   var kinds=new ArrayList<>(targets.keySet());
+   EntrySchedule schedule=new EntrySchedule(targets.values().stream().mapToInt(Integer::intValue).toArray());
+   for(int phase;(phase=schedule.next())>=0;){
+    var kind=kinds.get(phase);
     LoaderLimits.checkAttempts(++attempts,(long)normal+special);
-    var round=factory.generate(target.getKey());rules.validate(round);
+    var round=factory.generate(kind);rules.validate(round);
     long coreUnits=round.steps().stream().mapToLong(s->rules.payoutUnits(s.board())).sum();
     if(coreUnits!=util.totalUnits(round))throw new IllegalStateException("independent ResultUtil disagrees");
     String member=codec.encode(round);if(!member.equals(codec.encode(codec.decode(member))))throw new IllegalStateException("codec round trip");
-    int multiplier=util.integerMultiplier(round);boolean specialRound=RedisKeys.special(target.getKey());
-    if(!limits.accepts(specialRound,multiplier)){i--;continue;}
+    int multiplier=util.integerMultiplier(round);boolean specialRound=RedisKeys.special(kind);
+    if(!limits.accepts(specialRound,multiplier)){continue;}
     int streak=0,longest=0;for(var step:round.steps()){streak=rules.payoutUnits(step.board())>0?streak+1:0;longest=Math.max(longest,streak);}
-    if(longest>maxWins||round.kind()==GameRuleCore.RoundKind.FREE_STICKY_SYMBOLS&&round.steps().size()-1>maxFree){i--;continue;}
+    if(longest>maxWins||round.kind()==GameRuleCore.RoundKind.FREE_STICKY_SYMBOLS&&round.steps().size()-1>maxFree){continue;}
     String index=RedisKeys.index(specialRound),list=RedisKeys.list(specialRound,multiplier);
     if(tx==null)tx=j.multi();tx.zadd(index,multiplier,Integer.toString(multiplier));
     tx.rpush(list,member);tx.ltrim(list,-(specialRound?specialCap:cap),-1);if(++pending>=batchSize){if(tx.exec()==null)throw new IllegalStateException("Redis EXEC aborted");tx=null;pending=0;}
-    written.merge(target.getKey().name(),1,Integer::sum);
+    written.merge(kind.name(),1,Integer::sum);schedule.accepted(phase);
    }
    if(tx!=null&&tx.exec()==null)throw new IllegalStateException("Redis EXEC aborted");
   }

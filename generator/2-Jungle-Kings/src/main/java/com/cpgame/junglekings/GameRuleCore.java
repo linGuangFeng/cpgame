@@ -84,13 +84,6 @@ public final class GameRuleCore {
         return CONFIRMED_WIN_SYMBOLS.contains(symbol);
     }
 
-    public static void validateBet(BigDecimal betSize, int betLevel) {
-        if (betSize == null || BET_SIZES.stream().noneMatch(value -> value.compareTo(betSize) == 0)) {
-            throw new IllegalArgumentException("bet_size must be one of 0.5, 5, 50");
-        }
-        if (!BET_LEVELS.contains(betLevel)) throw new IllegalArgumentException("bet_level must be 1..10");
-    }
-
     public static List<String> parseChessboards(String ckl) {
         if (ckl == null || ckl.isBlank()) return List.of(CB_TOP, CB_BOTTOM);
         List<String> keys = new ArrayList<>();
@@ -160,7 +153,6 @@ public final class GameRuleCore {
 
     public static CompleteRound materialize(List<String> chessboards, List<List<String>> boards,
                                             BigDecimal betSize, int betLevel) {
-        validateBet(betSize, betLevel);
         if (chessboards == null || chessboards.isEmpty() || boards == null
                 || chessboards.size() != boards.size()) {
             throw new IllegalArgumentException("chessboards and boards must align");
@@ -173,7 +165,6 @@ public final class GameRuleCore {
     }
 
     public static BigDecimal lineStake(BigDecimal betSize, int betLevel) {
-        validateBet(betSize, betLevel);
         return money(betSize.multiply(BigDecimal.valueOf(betLevel)));
     }
 

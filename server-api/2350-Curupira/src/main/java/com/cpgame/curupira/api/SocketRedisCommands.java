@@ -36,7 +36,7 @@ final class SocketRedisCommands implements RedisCommands {
             throw new IllegalArgumentException("unauthorized Redis endpoint: " + host + ":" + port);
         }
         boolean ssl = Boolean.parseBoolean(config.getProperty("redis.ssl", "false"));
-        int connectTimeout = Integer.parseInt(config.getProperty("redis.connect-timeout-ms", "5000"));
+        int connectTimeout = Integer.parseInt(config.getProperty("redis.connect-timeout-ms", "30000"));
         int socketTimeout = Integer.parseInt(config.getProperty("redis.socket-timeout-ms", "30000"));
         Socket socket = ssl ? SSLSocketFactory.getDefault().createSocket() : new Socket();
         socket.connect(new InetSocketAddress(host, port), connectTimeout);

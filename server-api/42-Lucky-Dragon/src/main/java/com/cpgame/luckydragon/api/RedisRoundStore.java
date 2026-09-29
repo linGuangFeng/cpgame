@@ -1,9 +1,8 @@
 package com.cpgame.luckydragon.api;
 
-import com.cpgame.demo.redis.RedisFloorLookup;
-
 import com.cpgame.luckydragon.core.GameRuleCore;
 import com.cpgame.luckydragon.core.IndependentRoundVerifier;
+import com.cpgame.luckydragon.core.LuckyDragonMultiplierCatalog;
 import com.cpgame.luckydragon.core.MinimalFactCodec;
 import com.cpgame.luckydragon.core.OutcomeType;
 import com.cpgame.luckydragon.core.ResultUtil;
@@ -48,53 +47,39 @@ final class RedisRoundStore implements LuckyDragonService.RoundProvider {
     }
 
     @Override
-    public synchronized LuckyDragonService.ClaimedRound claim(RoundRequest request) throws IOException {
-        boolean wantWin = random.nextBoolean();
-        boolean firstSpecial = wantWin && random.nextBoolean();
-        for (boolean pool : wantWin ? new boolean[]{firstSpecial, !firstSpecial} : new boolean[]{false}) {
-            var cursor = RedisFloorLookup.open(redis::command, pool ? RedisKeyContract.specialIndex(gameId) : RedisKeyContract.normalIndex(gameId),
-                    m -> pool ? RedisKeyContract.specialList(gameId, m) : RedisKeyContract.normalList(gameId, m), random,
-                    wantWin ? 1 : 0, wantWin ? Integer.MAX_VALUE : 0);
-            Integer multiplier;
-            while ((multiplier = cursor.next()) != null) {
-            Bucket bucket = new Bucket(pool, multiplier);
-            String key = bucket.special
-                ? RedisKeyContract.specialList(gameId, bucket.multiplier)
-                : RedisKeyContract.normalList(gameId, bucket.multiplier);
-            Object length = redis.command("LLEN", key);
-            long len = Long.parseLong(String.valueOf(length));
-            if (len <= 0) continue;
-            Object value = redis.command("LINDEX", key, Integer.toString(random.nextInt((int) Math.min(len, Integer.MAX_VALUE))));
-            if (value == null) continue;
-            String member = value.toString();
-            if (!StandardCharsets.US_ASCII.newEncoder().canEncode(member)
-                || member.startsWith("{") || member.startsWith("[")) {
-                throw new IOException("cached member is not minimal ASCII");
-            }
-            RoundFacts cached = codec.decode(member.getBytes(StandardCharsets.US_ASCII));
-            if (cached.deliveryIndex() != 0 || !cached.terminal()) {
-                throw new IOException("gid42 cached Round is not one terminal delivery");
-            }
-            RoundFacts projected = new RoundFacts(request.betSize(), request.betLevel(), cached.symbols(),
-                cached.reelMultiplier(), cached.roundKey(), cached.deliveryIndex(), cached.terminal());
-            SpinResult result = ResultUtil.analyze(rules, projected);
-            verifier.verify(request, result);
-            int actual = ResultUtil.positiveMultiplier(rules, projected);
-            boolean isSpecial = result.outcome() == OutcomeType.WILD_MULTIPLIER_X3
-                || result.outcome() == OutcomeType.WILD_MULTIPLIER_X5
-                || result.outcome() == OutcomeType.WILD_MULTIPLIER_X9;
-            if (actual != bucket.multiplier || isSpecial != bucket.special) {
-                throw new IOException("cached member classification does not match Redis bucket");
-            }
-            return new LuckyDragonService.ClaimedRound(cached.roundKey(), result, member);
+    public synchronized LuckyDragonService.ClaimedRound claim(RoundRequest request, int requestedOdd) throws IOException {
+        int floored = LuckyDragonMultiplierCatalog.floorOdd(requestedOdd);
+        boolean special = LuckyDragonMultiplierCatalog.special(floored);
+        String key = special
+            ? RedisKeyContract.specialList(gameId, floored)
+            : RedisKeyContract.normalList(gameId, floored);
+        Object length = redis.command("LLEN", key);
+        long len = Long.parseLong(String.valueOf(length));
+        if (len <= 0) throw new IOException("selected Redis bucket empty for odd " + floored);
+        Object value = redis.command("LINDEX", key, Integer.toString(random.nextInt((int) Math.min(len, Integer.MAX_VALUE))));
+        if (value == null) throw new IOException("selected Redis bucket empty for odd " + floored);
+        String member = value.toString();
+        if (!StandardCharsets.US_ASCII.newEncoder().canEncode(member)
+            || member.startsWith("{") || member.startsWith("[")) {
+            throw new IOException("cached member is not minimal ASCII");
         }
+        RoundFacts cached = codec.decode(member.getBytes(StandardCharsets.US_ASCII));
+        if (cached.deliveryIndex() != 0 || !cached.terminal()) {
+            throw new IOException("gid42 cached Round is not one terminal delivery");
         }
-        throw new IOException("selected Redis WIN/LOSS side became empty for raw gid 42");
+        RoundFacts projected = new RoundFacts(request.betSize(), request.betLevel(), cached.symbols(),
+            cached.reelMultiplier(), cached.roundKey(), cached.deliveryIndex(), cached.terminal());
+        SpinResult result = ResultUtil.analyze(rules, projected);
+        verifier.verify(request, result);
+        int actual = ResultUtil.positiveMultiplier(rules, projected);
+        boolean isSpecial = result.outcome() == OutcomeType.WILD_MULTIPLIER_X3
+            || result.outcome() == OutcomeType.WILD_MULTIPLIER_X5
+            || result.outcome() == OutcomeType.WILD_MULTIPLIER_X9;
+        if (actual != floored || isSpecial != special) {
+            throw new IOException("cached member classification does not match Redis bucket");
+        }
+        return new LuckyDragonService.ClaimedRound(cached.roundKey(), result, member);
     }
-
-    
-
-    private record Bucket(boolean special, int multiplier) { }
 
     private static final class RedisConnection implements AutoCloseable {
         private final Socket socket;

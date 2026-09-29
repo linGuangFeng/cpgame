@@ -16,7 +16,8 @@ public record RoundFacts(int betProfile, int mode, List<String> baseSymbols, int
                 if (multiplier != 1 || !respinSymbols.isEmpty() || luckyWheelAward != 0) throw new IllegalArgumentException("md=0 最小事实不合法");
             }
             case 1 -> {
-                if ((multiplier != 2 && multiplier != 5) || !respinSymbols.isEmpty() || luckyWheelAward != 0) {
+                if ((multiplier != 2 && multiplier != 5 && multiplier != 10)
+                        || !respinSymbols.isEmpty() || luckyWheelAward != 0) {
                     throw new IllegalArgumentException("md=1 最小事实不合法");
                 }
             }
@@ -24,9 +25,8 @@ public record RoundFacts(int betProfile, int mode, List<String> baseSymbols, int
                 if (multiplier != 1 || respinSymbols.size() != expectedSize || luckyWheelAward != 0) throw new IllegalArgumentException("md=2 最小事实不合法");
             }
             case 3 -> {
-                if (betProfile != 5 || multiplier != 1 || !respinSymbols.isEmpty()
-                        || (luckyWheelAward != 50 && luckyWheelAward != 150)) {
-                    throw new IllegalArgumentException("md=3 只允许 bet>=5 且使用已捕获的50/150标量奖励");
+                if (betProfile != 5 || multiplier != 1 || !respinSymbols.isEmpty() || luckyWheelAward <= 0) {
+                    throw new IllegalArgumentException("md=3 只允许 bet>=5 且转盘定额为正");
                 }
             }
             default -> throw new UnsupportedOperationException("未启用或无证据模式: md=" + mode);

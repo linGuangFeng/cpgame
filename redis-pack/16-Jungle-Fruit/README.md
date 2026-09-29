@@ -3,7 +3,7 @@
 本目录定义 raw gid `16` 的**本地复刻** Redis 合同，不声称兼容未捕获的原站 Redis 消费者。
 
 - 正式 Loader 只写已经由唯一 Java `GameRuleCore` 生成、再由 `IndependentVerifier` 独立复核的完整 Round。
-- 证据中的 200 个 WIN 全部属于 Mary（164）或 Scatter Free Rounds（36），因此不声称原站普通 WIN 的概率或权重。Browser 验收需要的普通 WIN 池只用已确认的全盘计数与赔付 Core 构造单 Step 正式 member，并继续经过独立 Verifier。
+- 证据中的 200 个 WIN 全部属于 Mary 连消（164）或 Scatter Free Rounds（36），因此不声称原站单步普通 WIN 的概率或权重。Redis 普通池（PerKeyList/BetLog）写 LOSS 与 MARY 连消中奖；特殊池（MaryKeyList/MaryLog）只写 Scatter FREE。
 - 一个 member 覆盖付费入口至全部 Mary/Free/Tumble 结束。Delivery 不可单独入池。
 - 首次领取由 Redis `LPOP` 原子完成；一个极简 ASCII member 固定同一完整局的全部有序 Step。
 - 最后一条 Delivery 后只结算一次余额并写一条 History row/detail。

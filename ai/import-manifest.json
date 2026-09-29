@@ -1,0 +1,17 @@
+{
+  "sourceWorkspace": "/Volumes/ChangJiang/share_work/demo- game",
+  "destination": "/Volumes/hd/cpgame",
+  "backup": "/Volumes/hd/cpgame/docs/rules-history/20260923-111010/before-sync.tar.gz",
+  "scope": "rules/skills only; CP-specific connections and operations preserved",
+  "conflictsResolved": [
+    "runtime zero-round generation retired in rules",
+    "sample-template generation forbidden",
+    "sample absence is not rule prohibition",
+    "capture coverage minimum vs fixed quotas"
+  ],
+  "sourceHashes": {
+    "复刻要求.md": "d029202e832f65d54e8f3090a79dd8587e6021076b048673299b24560d1cf225",
+    "抓包要求.md": "9bffcb1ce806d90e26d9bb8ba8652d3ff3ade309bc20c15c1ba7e76d40a11cfc",
+    "fcgame/ai/source/rules/fc-remake-hard.md": "dcd04ec093fc44fbd895ac22fce887aeac921fde73f748e50c4e772c8ce7b960"
+  }
+}

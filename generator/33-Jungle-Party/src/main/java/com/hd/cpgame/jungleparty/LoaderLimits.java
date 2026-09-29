@@ -7,6 +7,13 @@ import java.util.Properties;
 public final class LoaderLimits {
     private final BigDecimal normalMin, normalMax, specialMin, specialMax;
     public final int specialCap;
+    private static boolean weightKey(String key) {
+        if (!key.startsWith("generation.symbol.")) return false;
+        String[] parts = key.split("\\.");
+        return parts.length == 4
+                && java.util.Set.of("9","A","H1","H2","H3","H4","H5","J","K","Q","T","Wild","Scat").contains(parts[2])
+                && java.util.Set.of("normal-weight","entry-weight","free-weight").contains(parts[3]);
+    }
     public LoaderLimits(Properties p) {
         normalMin = number(p, "0", "generation.normal-min-win-multiplier", "range.normal-min");
         specialMin = number(p, "0", "generation.special-min-win-multiplier", "generation.mary-min-win-multiplier", "range.special-min");
@@ -20,9 +27,9 @@ public final class LoaderLimits {
     public boolean accepts(boolean special, BigDecimal value) {
         return value.compareTo(special ? specialMin : normalMin)>=0 && value.compareTo(special ? specialMax : normalMax)<=0;
     }
-    /** Redis stores hundredths; configuration limits are total-bet multipliers. */
-    public boolean acceptsHundredths(boolean special, int hundredths) {
-        return accepts(special, BigDecimal.valueOf(hundredths, 2));
+    /** Same as {@link #accepts(boolean, int)}: Redis bucket and config share integer betSize×betLevel units. */
+    public boolean acceptsMultiplier(boolean special, int multiplier) {
+        return accepts(special, multiplier);
     }
     public int lossTarget(int configured) { return accepts(false, 0) ? configured : 0; }
     public static long attemptLimit(long target) { return Math.max(100_000L, Math.multiplyExact(Math.max(1, target), 10_000L)); }
@@ -31,7 +38,7 @@ public final class LoaderLimits {
     }
     public static void checkKeys(Properties p) {
         java.util.Set<String> allowed=new java.util.HashSet<String>(java.util.Arrays.asList("generation.batch-size","generation.mary-max-win-multiplier","generation.mary-min-win-multiplier","generation.max-consecutive-wins","generation.max-members-per-multiplier","generation.normal-count","generation.normal-max-total-multiplier","generation.normal-max-total-win-multiplier","generation.normal-max-win-multiplier","generation.normal-min-win-multiplier","generation.normal-pool-max-win-multiplier","generation.special-count","generation.special-max-members-per-multiplier","generation.special-max-total-multiplier","generation.special-max-total-win-multiplier","generation.special-max-win-multiplier","generation.special-min-win-multiplier","generation.special-pool-max-win-multiplier","range.normal-max","range.normal-min","range.special-max","range.special-min","redis.connect-timeout-ms","redis.database","redis.game-id","redis.host","redis.password","redis.port","redis.socket-timeout-ms","redis.ssl","redis.username","retention.special-per-multiplier"));
-        for(String key:p.stringPropertyNames())if(!allowed.contains(key))throw new IllegalArgumentException("未知或未支持的配置项: "+key);
+        for(String key:p.stringPropertyNames())if(!allowed.contains(key) && !weightKey(key)){if(key.toLowerCase(java.util.Locale.ROOT).contains("seed"))throw new IllegalArgumentException("正式配置禁止 seed: "+key);System.err.println("[warn] unused generator.properties key: "+key);};
         for(String key:new String[]{"redis.ssl","redis.clear-game-prefix","generation.clear-existing"})if(p.containsKey(key)&&!p.getProperty(key).trim().equalsIgnoreCase("true")&&!p.getProperty(key).trim().equalsIgnoreCase("false"))throw new IllegalArgumentException(key+" must be true or false");
         new LoaderLimits(p);
     }

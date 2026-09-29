@@ -4,8 +4,36 @@ set "SCRIPT_DIR=%~dp0"
 set "LOADER_JAR=%SCRIPT_DIR%crazy777-loader.jar"
 set "LOADER_CONFIG=%SCRIPT_DIR%generator.properties"
 set "NO_PAUSE="
-if /I "%~1"=="--no-pause" set "NO_PAUSE=1"
+set "POOL="
 
+:parse
+if "%~1"=="" goto parsed
+if /I "%~1"=="--no-pause" (
+  set "NO_PAUSE=1"
+  shift
+  goto parse
+)
+if /I "%~1"=="ordinary" (
+  set "POOL=ordinary"
+  shift
+  goto parse
+)
+if /I "%~1"=="mary" (
+  set "POOL=mary"
+  shift
+  goto parse
+)
+if /I "%~1"=="both" (
+  set "POOL=both"
+  shift
+  goto parse
+)
+echo [ERROR] Unknown argument: %~1
+echo 用法: run-loader.cmd [ordinary^|mary^|both] [--no-pause]
+goto :failed
+
+:parsed
+if not defined POOL set "POOL=both"
 if not exist "%LOADER_JAR%" (
   echo [ERROR] Loader JAR not found: %LOADER_JAR%
   goto :failed
@@ -20,8 +48,8 @@ if errorlevel 1 (
   goto :failed
 )
 
-echo Starting Crazy 777 Redis round loader...
-call java -Dfile.encoding=UTF-8 -jar "%LOADER_JAR%" "%LOADER_CONFIG%"
+echo Starting Crazy 777 %POOL% loader...
+call java -Dfile.encoding=UTF-8 -jar "%LOADER_JAR%" %POOL% "%LOADER_CONFIG%"
 set "LOADER_EXIT=%ERRORLEVEL%"
 if not "%LOADER_EXIT%"=="0" goto :failed
 echo [OK] Generation and Redis writes completed.

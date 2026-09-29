@@ -9,7 +9,6 @@ public final class IndependentVerifier {
 
     public void verify(CompleteRound round) {
         if (round.rawGameId() != GameRuleCore.RAW_GAME_ID) fail("raw game id is not 2");
-        GameRuleCore.validateBet(round.betSize(), round.betLevel());
         if (round.chessboards().isEmpty() || round.chessboards().size() > 2) fail("ckl must be 1 or 2 boards");
         if (round.boards().size() != round.chessboards().size()) fail("board count does not match ckl");
         for (int i = 0; i < round.boards().size(); i++) {

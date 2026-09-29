@@ -144,14 +144,14 @@ public final class ServerMain {
 
         synchronized void mount() throws java.io.IOException {
             if (service != null) return;
-            service = new LuckyWheelService(new PersistentSessionRepository(stateDir), RedisRoundStore.connect(config));
+            service = new LuckyWheelService(new PersistentSessionRepository(stateDir));
             generation++;
         }
 
         synchronized void unmount() {
             LuckyWheelService previous = service;
             service = null;
-            if (previous != null) try { previous.close(); } catch (java.io.IOException ignored) { }
+            if (previous != null) previous.close();
         }
 
         LuckyWheelService service() { return service; }

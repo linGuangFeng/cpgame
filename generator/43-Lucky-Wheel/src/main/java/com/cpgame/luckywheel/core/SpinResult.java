@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public record SpinResult(
-        BigDecimal ba, int bl, int bs, long ca, String fsk, BigDecimal fwa,
+        BigDecimal ba, int bl, BigDecimal bs, long ca, String fsk, BigDecimal fwa,
         List<String> fwi, String fws, int gt, int md, String pb, int rpx,
         List<String> rskl, int smallGameType, BigDecimal wa, List<String> wskl
 ) implements Serializable {
@@ -21,7 +21,7 @@ public record SpinResult(
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("ba", number(ba));
         data.put("bl", bl);
-        data.put("bs", bs);
+        data.put("bs", number(bs));
         data.put("ca", ca);
         data.put("fsk", fsk);
         data.put("fwa", number(fwa));

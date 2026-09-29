@@ -1,7 +1,6 @@
 package com.cpgame.curupira.api;
 
 import com.cpgame.curupira.codec.SignaptCodec;
-import com.cpgame.curupira.core.GameRuleCore;
 import com.cpgame.curupira.core.RulesContract;
 import com.cpgame.curupira.session.SessionState;
 import com.cpgame.curupira.session.SessionStore;
@@ -25,15 +24,13 @@ public final class ApiController {
     private final SessionStore sessions;
     private final SignaptCodec signapt;
     private final RoundSource rounds;
-    private final GameRuleCore core;
     private final boolean signatureRequired;
 
-    public ApiController(SessionStore sessions, SignaptCodec signapt, RoundSource rounds, GameRuleCore core,
+    public ApiController(SessionStore sessions, SignaptCodec signapt, RoundSource rounds,
                          @Value("${curupira.signature.required}") boolean signatureRequired) {
         this.sessions = sessions;
         this.signapt = signapt;
         this.rounds = rounds;
-        this.core = core;
         this.signatureRequired = signatureRequired;
     }
 
@@ -77,7 +74,7 @@ public final class ApiController {
         SessionState session = sessions.require(form.get("token"));
         String idempotencyKey = idempotencyKey(form, headerIdempotencyKey);
         return ResponseFactory.success(session.play(type, gameType, decimal(form, "bet"),
-                integer(form, "level"), idempotencyKey, rounds, core));
+                integer(form, "level"), idempotencyKey, rounds));
     }
 
     @RequestMapping(path = "/cp/Goldgame/user_game_history", method = RequestMethod.POST,

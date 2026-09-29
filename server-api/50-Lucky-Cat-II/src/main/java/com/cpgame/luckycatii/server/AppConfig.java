@@ -11,6 +11,10 @@ public record AppConfig(int port, BigDecimal initialBalance, Path publishDirecto
                         int redisDatabase, int redisConnectTimeoutMs, int redisSocketTimeoutMs,
                         long redisGameId, int lossWeight, int winWeight, int specialWeight) {
     public static AppConfig load(Path file, int port) throws Exception {
+        return load(file, port, null);
+    }
+
+    public static AppConfig load(Path file, int port, Path publishOverride) throws Exception {
         if (port < 50000 || port > 59999) throw new IllegalArgumentException("port must be 50000-59999");
         Properties p = new Properties();
         if (file != null && Files.isRegularFile(file)) {
@@ -23,7 +27,9 @@ public record AppConfig(int port, BigDecimal initialBalance, Path publishDirecto
                 throw new IllegalArgumentException("managed Controller forbids hard-coded port settings");
             }
         }
-        Path publish = (file == null ? Path.of(".") : file.toAbsolutePath().getParent()).resolve(
+        Path publish = publishOverride != null
+                ? publishOverride.toAbsolutePath().normalize()
+                : (file == null ? Path.of(".") : file.toAbsolutePath().getParent()).resolve(
                 p.getProperty("publish.directory", "../../../publish/50-Lucky-Cat-II")).normalize();
         if (!Files.isRegularFile(publish.resolve("index.html")))
             throw new IllegalArgumentException("publish.directory 缺少 index.html: " + publish);

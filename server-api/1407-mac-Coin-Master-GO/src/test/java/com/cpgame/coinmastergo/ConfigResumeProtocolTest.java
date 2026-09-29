@@ -55,6 +55,31 @@ class ConfigResumeProtocolTest {
         assertThat(mapper.valueToTree(s.lastStep).at("/wmkl/0").isArray()).isTrue();
     }
 
+    @Test void historyWmklWaExcludesRoundPayMultiplier() {
+        PlayerSession s = pausedSession();
+        s.lastStep.rpx = 2;
+        s.lastStep.wa = new BigDecimal("0.40");
+        JsonNode last = config(s).path("last");
+        assertThat(last.path("rpx").asInt()).isEqualTo(2);
+        assertThat(last.path("wa").decimalValue()).isEqualByComparingTo("0.40");
+        assertThat(last.at("/wmkl/0/wa").asText()).isEqualTo("0.20");
+
+        RoundPlan round = s.activeRound;
+        round.transferId = "hist-rpx";
+        round.paidBid = "55-hist-rpx";
+        round.createdAt = 1;
+        round.postDebitBalance = s.balance;
+        round.totalWin = new BigDecimal("0.40");
+        SpinStep step = s.lastStep;
+        round.deliveries = List.of(new RoundDelivery("BASE", List.of(step)));
+        s.history.add(new HistoryRecord(round, 1));
+        GameSessionService service = mock(GameSessionService.class);
+        JsonNode detail = mapper.valueToTree(new ProtocolCodec(service).historyDetail(s, "hist-rpx"));
+        assertThat(detail.at("/bsl/0/rpx").asInt()).isEqualTo(2);
+        assertThat(detail.at("/bsl/0/wa").decimalValue()).isEqualByComparingTo("0.40");
+        assertThat(detail.at("/bsl/0/wmkl/0/wa").asText()).isEqualTo("0.20");
+    }
+
     @Test void freeResumeAndCompletedRoundRestoreActualNonDefaultBet() {
         PlayerSession s = pausedSession();
         s.activeRound.betLevel = 7;

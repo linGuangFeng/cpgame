@@ -20,7 +20,6 @@ public final class BlessingRoundFactory {
     public static BlessingRound generate(SecureRandom random, int betType, BigDecimal betSize, int level,
                                         int requestedOdd) {
         if (betType < TYPE_FIRE || betType > TYPE_BOTH) throw new IllegalArgumentException("bet_type 1|2|3");
-        if (level < 1 || level > 10) throw new IllegalArgumentException("level 1..10");
         int floored = BlessingMultiplierCatalog.floorOdd(betType, requestedOdd);
         if(floored==0){
             int[][] pages=LOSS_POOL.generate(()->lossCandidate(random),random::nextInt);

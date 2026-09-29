@@ -24,6 +24,11 @@ public final class ResultUtil {
         return positiveMultiplier(facts, analyze(core, facts));
     }
 
+    public static int positiveMultiplier(RoundRequest request, SpinResult result) {
+        if (result.payout().signum() == 0) return 0;
+        return result.payout().divide(request.paidBet()).intValueExact();
+    }
+
     private static int positiveMultiplier(RoundFacts facts, SpinResult result) {
         if (result.payout().signum() == 0) return 0;
         BigDecimal paidBet = facts.betSize().multiply(BigDecimal.valueOf(facts.betLevel()));

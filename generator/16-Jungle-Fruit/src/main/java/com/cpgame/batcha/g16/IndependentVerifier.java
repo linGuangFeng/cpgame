@@ -24,7 +24,6 @@ public final class IndependentVerifier {
 
     public Verification verify(CompleteRound round) {
         if (round.rawGameId() != GameRuleCore.RAW_GAME_ID) fail("raw game id is not 16");
-        GameRuleCore.validateBet(round.betSize(), round.betLevel());
         BigDecimal expectedPaidBet = round.betSize()
             .multiply(BigDecimal.valueOf(20L * round.betLevel())).stripTrailingZeros();
         equal(expectedPaidBet, round.paidBet(), "paid bet");
@@ -84,7 +83,9 @@ public final class IndependentVerifier {
         equal(payout, round.payout(), "Round payout");
         equal(resultUtil.payout(round), round.payout(), "terminal-Step payout sum");
         if (resultUtil.mode(round) != round.mode()) fail("Round mode classification differs");
-        BigDecimal multiplier = payout.divide(round.paidBet(), 8, RoundingMode.HALF_UP).stripTrailingZeros();
+        BigDecimal unit = round.betSize().multiply(BigDecimal.valueOf(round.betLevel()));
+        BigDecimal multiplier = unit.signum() == 0 ? BigDecimal.ZERO
+            : payout.divide(unit, 0, RoundingMode.UNNECESSARY).stripTrailingZeros();
         equal(multiplier, round.multiplier(), "Round multiplier");
         if (multiplier.compareTo(maximumRoundMultiplier) > 0) fail("maximum Round multiplier exceeded");
         verifyModeState(round);
@@ -95,7 +96,14 @@ public final class IndependentVerifier {
     public Verification verifyCodecRoundTrip(CompleteRound round, MemberCodec codec) {
         Verification before = verify(round);
         CompleteRound decoded = codec.decode(codec.encode(round));
-        if (!round.equals(decoded)) fail("minimal member codec round-trip differs");
+        verify(decoded);
+        if (round.mode() != RoundMode.LOSS && !round.equals(decoded)) {
+            fail("minimal member codec round-trip differs");
+        }
+        if (round.mode() == RoundMode.LOSS && (decoded.mode() != RoundMode.LOSS
+            || decoded.payout().signum() != 0 || decoded.steps().size() != 1)) {
+            fail("compressed loss marker changed outcome or state");
+        }
         return before;
     }
 

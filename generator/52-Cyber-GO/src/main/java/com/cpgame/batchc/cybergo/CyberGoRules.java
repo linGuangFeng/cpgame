@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-/** 只固化 game-capabilities/protocol-spec 已确认的当前游戏规则。 */
+/** 只固化 game-capabilities / protocol-spec / config.spl 已确认的当前游戏规则。 */
 public final class CyberGoRules {
     public static final int GAME_ID = 52;
     public static final String GAME_NAME = "Cyber GO";
@@ -29,6 +29,23 @@ public final class CyberGoRules {
             "S3", Map.of(3, 15, 4, 30, 5, 60),
             "S4", Map.of(3, 10, 4, 15, 5, 45));
     public static final Map<Integer, Integer> FREE_SPIN_AWARDS = Map.of(3, 12, 4, 15, 5, 20);
+    public static final int SCATTER_PER_REEL = 1;
+    public static final int SCATTER_BOARD_MAX = 5;
+    public static final int WILD_PER_REEL = 1;
+    public static final int WILD_BOARD_MAX = 3;
+    public static final int FREE_SCATTER = 0;
+    public static final int FREE_INITIAL_MULTIPLIER = 2;
+    public static final int FREE_MULTIPLIER_STEP = 2;
+    public static final int FREE_WILDS_PER_STEP = 3;
+    public static final int FREE_MAX_MULTIPLIER = 20;
 
     private CyberGoRules() { }
+
+    public static boolean allowsWild(int reel) {
+        return reel >= 1 && reel <= 3;
+    }
+
+    public static int freeSpinsFor(int scatters) {
+        return FREE_SPIN_AWARDS.getOrDefault(scatters, 0);
+    }
 }

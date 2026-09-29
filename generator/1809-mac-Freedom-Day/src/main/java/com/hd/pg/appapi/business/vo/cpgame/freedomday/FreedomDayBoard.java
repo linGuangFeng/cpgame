@@ -43,10 +43,12 @@ public final class FreedomDayBoard {
     }
 
     private static List<List<Integer>> immutableGroups(List<List<Integer>> groups) {
-        if (groups == null) return List.of();
+        if (groups == null) return Collections.unmodifiableList(new ArrayList<>());
         List<List<Integer>> copy = new ArrayList<>(groups.size());
-        for (List<Integer> group : groups) copy.add(group == null ? List.of() : List.copyOf(group));
-        return List.copyOf(copy);
+        for (List<Integer> group : groups) {
+            copy.add(group == null ? new ArrayList<>() : new ArrayList<>(group));
+        }
+        return Collections.unmodifiableList(copy);
     }
 
     private static void validate(int[] symbols) {
@@ -96,7 +98,7 @@ public final class FreedomDayBoard {
             this.indices = indices;
         }
         public static Position main(List<Integer> indices, int symbol) {
-            return new Position(false, indices.get(indices.size() - 1), symbol, List.copyOf(indices));
+            return new Position(false, indices.get(indices.size() - 1), symbol, new ArrayList<>(indices));
         }
         public static Position top(int index, int symbol) { return new Position(true, index, symbol, List.of(index)); }
         public boolean isTop() { return top; }

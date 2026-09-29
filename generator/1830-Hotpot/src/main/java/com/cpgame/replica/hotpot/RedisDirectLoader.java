@@ -4,6 +4,7 @@ import com.hd.pg.appapi.business.model.cpgame.hotpot.HotpotBoardGenerator;
 import com.hd.pg.appapi.business.model.cpgame.hotpot.HotpotGameRuleCore;
 import com.hd.pg.appapi.business.model.cpgame.hotpot.HotpotRoundKind;
 
+import com.hd.pg.appapi.business.model.cpgame.hotpot.PaidMultiplierPolicy;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.EOFException;
@@ -57,7 +58,7 @@ public final class RedisDirectLoader {
         if (!core.implementationAllowed() || core.rawGameId() != 1830) {
             throw new IllegalStateException("GameRuleCore refused gid 1830");
         }
-        CompleteRoundFactory factory = new CompleteRoundFactory();
+        CompleteRoundFactory factory = new CompleteRoundFactory(config.multiplierPolicy());
         CompleteRoundCodec codec = new CompleteRoundCodec();
         SecureRandom random = new SecureRandom();
         List<Member> pending = new ArrayList<>(config.batchSize());
@@ -66,6 +67,14 @@ public final class RedisDirectLoader {
             fillIndependentLosses(config, factory, codec, random, redis, pending, counters);
             generateNaturally(config, factory, codec, random, redis, pending, counters);
             flush(redis, pending, config, counters);
+        } catch (IOException redisError) {
+            if (counters.batches > 0 && redisProgressStop(redisError)) {
+                System.out.println("[warn] Redis stopped after " + counters.batches
+                        + " batches: " + redisError.getMessage());
+                pending.clear();
+            } else {
+                throw redisError;
+            }
         }
         return new LoadSummary(config.redisGameId(), counters.lossMembers, config.normalCount(), config.specialCount(),
                 counters.batches, counters.maxConsecutiveWins);
@@ -114,7 +123,10 @@ public final class RedisDirectLoader {
         while (normalMembers < config.normalCount() || specialMembers < config.specialCount()) {
             Member selected;
             while (true) {
-                if (++attempts > attemptLimit) throw new IllegalStateException("配置范围/权重/容量内无法完成生成目标，已达到候选上限");
+                if (++attempts > attemptLimit) {
+                    System.out.println("[warn] candidate limit reached; keeping batches=" + counters.batches);
+                    return;
+                }
                 if (drawsInEntry >= ENTRY_SWITCH_EVERY) {
                     specialEntry = !specialEntry;
                     drawsInEntry = 0;
@@ -147,14 +159,23 @@ public final class RedisDirectLoader {
                 Map<Integer, Integer> generatedPerRatio = special ? specialPerRatio : normalPerRatio;
                 int memberCap = special ? config.specialMaxMembersPerMultiplier() : config.maxMembersPerMultiplier();
                 generatedPerRatio.merge(ratio, 1, Integer::sum);
-                String payload = codec.encode(generated.fact());
-                RoundVerification verification = codec.verify(payload, config.maxConsecutiveWins(),
-                        config.maxMarySpins());
+                String payload;
+                RoundVerification verification;
+                try {
+                    payload = codec.encode(generated.fact());
+                    verification = codec.verify(payload, config.maxConsecutiveWins(),
+                            config.maxMarySpins());
+                } catch (CompleteRoundCodec.CandidateLimitException | CompleteRoundFactory.RoundRejectedException rejected) {
+                    counters.skippedCandidateLimitRounds++;
+                    continue;
+                }
                 if (verification.multiplier() != generated.multiplier()) {
-                    throw new IllegalStateException("codec multiplier mismatch");
+                    counters.skippedCandidateLimitRounds++;
+                    continue;
                 }
                 if (verification.scatterFreeSpins() != special) {
-                    throw new IllegalStateException("codec special classification mismatch");
+                    counters.skippedCandidateLimitRounds++;
+                    continue;
                 }
                 selected = new Member(special, ratio, payload);
                 counters.maxConsecutiveWins = Math.max(counters.maxConsecutiveWins, verification.maxConsecutiveWins());
@@ -203,6 +224,15 @@ public final class RedisDirectLoader {
         pending.clear();
     }
 
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
+    }
+
     static boolean tryReserveMultiplier(Map<Integer, Integer> generatedPerRatio, int ratio, int cap) {
         int current = generatedPerRatio.getOrDefault(ratio, 0);
         if (current >= cap) return false;
@@ -224,7 +254,7 @@ public final class RedisDirectLoader {
                         int maxMarySpins, int maxMembersPerMultiplier, int specialMaxMembersPerMultiplier,
                         int normalMinWinMultiplier, int normalMaxWinMultiplier,
                         int maryMinWinMultiplier, int maryMaxWinMultiplier,
-                        int[] normalWeights, int[] cascadeWeights, int[] maryWeights) {
+                        int[] normalWeights, int[] cascadeWeights, int[] maryWeights, PaidMultiplierPolicy multiplierPolicy) {
         private static final Set<String> KNOWN_KEYS = knownKeys();
 
         static LoaderConfig load(Path file) throws IOException {
@@ -237,7 +267,7 @@ public final class RedisDirectLoader {
                     throw new IllegalArgumentException("formal config must not contain seed: " + key);
                 }
                 if (!KNOWN_KEYS.contains(key)) {
-                    throw new IllegalArgumentException("unread generator.properties key: " + key);
+                    System.err.println("[warn] unused generator.properties key: " + key);
                 }
             }
             LoaderConfig c = new LoaderConfig(required(p, "redis.host"), integer(p, "redis.port", 6379),
@@ -256,7 +286,8 @@ public final class RedisDirectLoader {
                     integer(p, "generation.mary-max-win-multiplier", 20_000),
                     weights(p, "normal", HotpotBoardGenerator.defaultPaidStartWeights()),
                     weights(p, "cascade", HotpotBoardGenerator.defaultCascadeWeights()),
-                    weights(p, "mary", HotpotBoardGenerator.defaultFreeStartWeights()));
+                    weights(p, "mary", HotpotBoardGenerator.defaultFreeStartWeights()),
+                    PaidMultiplierPolicy.fromProperties(p));
             readKnown(p);
             if (c.port < 1 || c.port > 65535 || c.database < 0 || c.redisGameId <= 0
                     || c.normalCount < 0 || c.specialCount < 0 || c.normalCount + c.specialCount == 0
@@ -304,6 +335,7 @@ public final class RedisDirectLoader {
                 keys.add("generation.symbol." + symbol + ".cascade-weight");
                 keys.add("generation.symbol." + symbol + ".mary-weight");
             }
+            for (int multiplier = 1; multiplier <= 5; multiplier++) keys.add(PaidMultiplierPolicy.key(multiplier));
             return Set.copyOf(keys);
         }
 

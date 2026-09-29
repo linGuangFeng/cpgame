@@ -1,0 +1,8 @@
+---
+name: cpgame-publish-layout
+description: CP 发布布局
+---
+
+# CP 发布布局
+
+复用当前 publish/<ID-Name> 与有效原站资源，根目录必须有 index.html 和 publish-manifest.json，不依赖 _hosts。只补缺口，核对管理封面和多语言资源。发布按 cpgame-s3-upload skill。

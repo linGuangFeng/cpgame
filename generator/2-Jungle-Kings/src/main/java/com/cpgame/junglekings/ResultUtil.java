@@ -14,7 +14,6 @@ public final class ResultUtil {
 
     public static Evaluation evaluate(List<String> chessboards, List<List<String>> boards,
                                       BigDecimal betSize, int betLevel) {
-        GameRuleCore.validateBet(betSize, betLevel);
         if (chessboards == null || boards == null || chessboards.size() != boards.size()
                 || chessboards.isEmpty()) {
             throw new IllegalArgumentException("chessboards and boards must align");

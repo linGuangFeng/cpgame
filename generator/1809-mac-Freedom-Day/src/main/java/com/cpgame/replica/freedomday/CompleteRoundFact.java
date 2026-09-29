@@ -1,5 +1,6 @@
 package com.cpgame.replica.freedomday;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /** Fact-only Redis member. Every entry is one paid round through its final delivery. */
@@ -26,8 +27,12 @@ public record CompleteRoundFact(int v, boolean featureBuy, List<List<BoardFact>>
         }
 
         private static List<List<Integer>> immutableGroups(List<List<Integer>> groups) {
-            if (groups == null) return List.of();
-            return groups.stream().map(List::copyOf).toList();
+            if (groups == null) return new ArrayList<>();
+            List<List<Integer>> copy = new ArrayList<>();
+            for (List<Integer> group : groups) {
+                copy.add(group == null ? new ArrayList<>() : new ArrayList<>(group));
+            }
+            return copy;
         }
     }
 }

@@ -15,7 +15,7 @@ public final class ServiceContractTestMain {
         var facts = new RoundFacts(new BigDecimal("0.5"), 1, List.of("H0", "H2", "H3"), 0, "42-test-member");
         var result = ResultUtil.analyze(facts);
         int[] claims = {0};
-        LuckyDragonService service = new LuckyDragonService(state, new BigDecimal("1000"), request -> {
+        LuckyDragonService service = new LuckyDragonService(state, new BigDecimal("1000"), (request, odd) -> {
             claims[0]++;
             return new LuckyDragonService.ClaimedRound(facts.roundKey(), result, "v2|test-member");
         });
@@ -41,7 +41,7 @@ public final class ServiceContractTestMain {
             throw new AssertionError("complete Round delivery state mismatch");
         }
         Map<String,Object> balanceBeforeRestart = service.balance(session);
-        LuckyDragonService restarted = new LuckyDragonService(state, new BigDecimal("1000"), request -> {
+        LuckyDragonService restarted = new LuckyDragonService(state, new BigDecimal("1000"), (request, odd) -> {
             claims[0]++;
             return new LuckyDragonService.ClaimedRound(facts.roundKey(), result, "v2|unexpected-second-claim");
         });

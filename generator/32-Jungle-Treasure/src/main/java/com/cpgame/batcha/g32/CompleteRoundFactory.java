@@ -10,7 +10,7 @@ public final class CompleteRoundFactory {
     private final ZeroLossSupport<List<String>> lossBoards;
 
     private final int maximumCascades;
-    private final EmpiricalColumnModel model = EmpiricalColumnModel.instance();
+    private EmpiricalColumnModel model;
 
     public CompleteRoundFactory(int maximumCascades, int maximumSpecialSpins) {
         if (maximumCascades < 1) throw new IllegalArgumentException("cascade limit");
@@ -22,9 +22,18 @@ public final class CompleteRoundFactory {
         lossBoards=new ZeroLossSupport<>(()->lossBoardCandidate(defaultsRandom),this::validLossBoard,List::copyOf);
     }
 
+    public CompleteRoundFactory(int maximumCascades, int maximumSpecialSpins, EmpiricalColumnModel model) {
+        this(maximumCascades, maximumSpecialSpins);
+        this.model = Objects.requireNonNull(model);
+    }
+
+    private EmpiricalColumnModel model() {
+        if (model == null) model = EmpiricalColumnModel.instance();
+        return model;
+    }
+
     public CompleteRound generate(RoundMode requested, SecureRandom random, BigDecimal betSize, int betLevel) {
         Objects.requireNonNull(random);
-        GameRuleCore.validateBet(betSize, betLevel);
         if(requested==RoundMode.LOSS){
             List<String> board=lossBoards.generate(()->lossBoardCandidate(random),random::nextInt);
             BigDecimal paid=GameRuleCore.paidBet(betSize,betLevel);
@@ -94,7 +103,7 @@ public final class CompleteRoundFactory {
 
     private Cascade.Board initial(String entry, SecureRandom random) {
         List<String> rskl = new ArrayList<>();
-        for (int c = 0; c < 6; c++) rskl.addAll(model.drawReel(entry, c, random));
+        for (int c = 0; c < 6; c++) rskl.addAll(model().drawReel(entry, c, random));
         if (!GameRuleCore.legalSpecials(rskl)) throw new Rejected();
         GameRuleCore.parse(rskl);
         List<Integer> silver = new ArrayList<>();
@@ -107,7 +116,7 @@ public final class CompleteRoundFactory {
     }
 
     private Cascade.Board refill(Cascade.Board previous, GameRuleCore.BoardResult result, SecureRandom random) {
-        Cascade.Board next = Cascade.next(previous, result, random, model);
+        Cascade.Board next = Cascade.next(previous, result, random, model());
         if (!GameRuleCore.legalSpecials(next.tokens())) throw new Rejected();
         GameRuleCore.parse(next.tokens());
         return next;
@@ -118,18 +127,21 @@ public final class CompleteRoundFactory {
     }
 
     public List<String> lossBoardCandidate(SecureRandom random){
-        List<String> raw=new ArrayList<>();for(int c=0;c<6;c++)raw.addAll(model.drawReel("PAID_INITIAL",c,random));
-        List<Token> tokens=GameRuleCore.parse(raw);int scat=0,wild=0,h1=0;
-        for(int i=0;i<tokens.size();i++){
-            Token t=tokens.get(i);String symbol=t.symbol();
-            boolean replace=symbol.equals("Scat")&&++scat>3 || symbol.equals("Wild")&&(t.reel()<2||++wild>2)
-                || symbol.equals("H1")&&++h1>2;
-            if(replace)raw.set(i,t.height()+GameRuleCore.TRANSFORM_SYMBOLS.get(random.nextInt(GameRuleCore.TRANSFORM_SYMBOLS.size())));
+        List<String> raw=new ArrayList<>();
+        java.util.Set<String> first=new java.util.HashSet<>();
+        for(int i=0;i<5;i++){
+            String symbol=GameRuleCore.TRANSFORM_SYMBOLS.get(random.nextInt(GameRuleCore.TRANSFORM_SYMBOLS.size()));
+            first.add(symbol);
+            raw.add("1"+symbol);
         }
-        tokens=GameRuleCore.parse(raw);java.util.Set<String> first=new java.util.HashSet<>();
-        for(Token t:tokens)if(t.reel()==0)first.add(t.symbol());
-        List<String> allowed=new ArrayList<>();for(String v:GameRuleCore.TRANSFORM_SYMBOLS)if(!first.contains(v))allowed.add(v);
-        for(int i=0;i<tokens.size();i++){Token t=tokens.get(i);if(t.reel()==1&&first.contains(t.symbol()))raw.set(i,t.height()+allowed.get(random.nextInt(allowed.size())));}
+        List<String> rest=new ArrayList<>();
+        for(String symbol:GameRuleCore.TRANSFORM_SYMBOLS)if(!first.contains(symbol))rest.add(symbol);
+        if(rest.isEmpty())rest.addAll(GameRuleCore.TRANSFORM_SYMBOLS);
+        for(int reel=1;reel<6;reel++){
+            int tokens=reel==5?5:6;
+            List<String> pool=reel==1?rest:GameRuleCore.TRANSFORM_SYMBOLS;
+            for(int i=0;i<tokens;i++)raw.add("1"+pool.get(random.nextInt(pool.size())));
+        }
         return List.copyOf(raw);
     }
     private boolean validLossBoard(List<String> b){return GameRuleCore.legalSpecials(b)

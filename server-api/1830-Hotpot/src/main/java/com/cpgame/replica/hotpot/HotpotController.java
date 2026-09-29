@@ -86,7 +86,7 @@ public final class HotpotController {
         server.start();
         System.out.printf("CONTROLLER_READY gameId=1830 port=%d pid=%d rulesVersion=%s rulesHash=%s engineHash=%s publish=%s redis=%s:%s db=%s redisGameId=%s%n",
                 port, ProcessHandle.current().pid(), HotpotRulesMetadata.VERSION, HotpotRulesMetadata.PROTOCOL_HASH,
-                HotpotRulesMetadata.HASH, publish, config.getProperty("redis.host", "18.234.101.161"),
+                HotpotRulesMetadata.HASH, publish, config.getProperty("redis.host", "54.172.218.28"),
                 config.getProperty("redis.port", "8021"), config.getProperty("redis.database", "0"),
                 config.getProperty("redis.game-id", "8001830"));
     }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayBoard;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayEvaluation;
+import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayGridRules;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayResultUtil;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayWin;
 
@@ -61,6 +62,8 @@ public final class FreedomDayRoundProtocolCli {
             int awarded = 0;
             ArrayNode pages = mapper.createArrayNode();
             List<CompleteRoundFact.BoardFact> boards = fact.spins().get(spinIndex);
+            FreedomDayBoard previous = null;
+            FreedomDayEvaluation previousEval = null;
             for (int pageIndex = 0; pageIndex < boards.size(); pageIndex++) {
                 CompleteRoundFact.BoardFact boardFact = boards.get(pageIndex);
                 // Multiplier/scatter symbols inside a merged frame are one visible symbol.
@@ -69,20 +72,27 @@ public final class FreedomDayRoundProtocolCli {
                 FreedomDayBoard board = new FreedomDayBoard(
                         toArray(boardFact.prop()), toArray(boardFact.trl()),
                         boardFact.grids(), boardFact.gf(), boardFact.sl());
-                FreedomDayEvaluation evaluation = FreedomDayResultUtil.evaluate(board, unitBet, multiplier, increment);
+                int newBalls = FreedomDayGridRules.countNewBalls(previous, previousEval, board);
+                FreedomDayEvaluation evaluation = FreedomDayResultUtil.evaluate(
+                        board, unitBet, multiplier, increment, newBalls);
                 if (pageIndex == 0) awarded = evaluation.getAwardedFreeSpins();
                 spinMultiplier = spinMultiplier.add(evaluation.getTotalMultiplier());
                 multiplier = evaluation.getMultiplier();
                 pages.add(page(mapper, boardFact, evaluation));
+                previous = board;
+                previousEval = evaluation;
             }
             if (freeMode) freeMultiplier = multiplier;
             BigDecimal spinWin = unitBet.multiply(spinMultiplier).setScale(2, RoundingMode.HALF_UP);
             if (freeMode) cumulativeFreeWin = cumulativeFreeWin.add(spinWin);
             ObjectNode payload = mapper.createObjectNode();
             String oid = "JAVA-1809-" + orderBase + "-" + String.format("%03d", spinIndex + 1);
+            int type = freeMode ? 2 : ((fact.featureBuy() || awarded > 0) ? 3 : 1);
             payload.put("oid", oid).put("time", now).put("level", level).put("total_win", spinWin)
-                    .put("win_gold", spinWin).put("type", freeMode ? 2 : (fact.featureBuy() ? 3 : 1));
+                    .put("win_gold", spinWin).put("type", type)
+                    .put("small_game_type", freeMode ? 2 : 0);
             payload.set("props", pages);
+            payload.set("result", pages.deepCopy());
             payload.put("_ending_multiplier", multiplier).put("_awarded_free_spins", awarded)
                     .put("_free_index", spinIndex).put("_free_total", freeTotal)
                     .put("_cumulative_free_win", cumulativeFreeWin).put("_unit_bet", unitBet)
@@ -106,7 +116,8 @@ public final class FreedomDayRoundProtocolCli {
             ObjectNode item = mapper.createObjectNode();
             ArrayNode mainPositions = mapper.createArrayNode();
             for (List<Integer> positions : win.getMainPositionGroups()) {
-                mainPositions.add(mapper.valueToTree(positions));
+                if (positions.isEmpty()) continue;
+                mainPositions.addArray().add(positions.get(positions.size() - 1));
             }
             item.set("p", mainPositions);
             item.set("h", mapper.valueToTree(win.getTopPositions()));

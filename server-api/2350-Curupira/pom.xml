@@ -14,7 +14,7 @@
   <artifactId>curupira-server-api</artifactId>
   <version>1.0.0</version>
   <name>2350-Curupira Server API</name>
-  <description>Evidence-bound Java API and GameRuleCore for game 2350 Curupira</description>
+  <description>Redis-backed evidence-bound Java API for game 2350 Curupira</description>
 
   <properties>
     <java.version>21</java.version>
@@ -50,7 +50,25 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
-    <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-antrun-plugin</artifactId><version>3.1.0</version><executions><execution><id>copy-dist-delivery</id><phase>package</phase><goals><goal>run</goal></goals><configuration><target><mkdir dir="${project.basedir}/dist"/><copy file="${project.build.directory}/curupira-server-api-1.0.0.jar" tofile="${project.basedir}/dist/curupira-server-api.jar" overwrite="true"/></target></configuration></execution></executions></plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-dist-delivery</id>
+            <phase>package</phase>
+            <goals><goal>run</goal></goals>
+            <configuration>
+              <target>
+                <mkdir dir="${project.basedir}/dist"/>
+                <copy file="${project.build.directory}/curupira-server-api-1.0.0.jar"
+                      tofile="${project.basedir}/dist/controller.jar" overwrite="true"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 </plugins>
   </build>
 </project>

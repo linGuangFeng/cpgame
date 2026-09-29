@@ -35,12 +35,11 @@ public final class GameRules {
         return reel * 3 + row;
     }
 
-    public static boolean legalBet(BigDecimal betSize, int betLevel) {
-        if (betSize == null || !BET_LEVELS.contains(betLevel)) return false;
-        return BET_SIZES.stream().anyMatch(v -> v.compareTo(betSize) == 0);
-    }
-
     public static BigDecimal betAmount(BigDecimal betSize, int betLevel) {
         return betSize.multiply(BigDecimal.valueOf((long) betLevel * PAYLINE_COUNT)).stripTrailingZeros();
+    }
+
+    public static boolean positiveStake(BigDecimal betSize, int betLevel) {
+        return betSize != null && betSize.signum() > 0 && betLevel > 0;
     }
 }

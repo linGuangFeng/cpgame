@@ -2,7 +2,8 @@ package com.cpgame.batcha.g8;
 
 /**
  * Local replica Redis key contract. Origin consumer protocol is UNKNOWN.
- * PerKeyList holds LOSS and ordinary WIN; MaryKeyList holds DRAGON complete Rounds.
+ * PerKeyList holds LOSS, ordinary WIN, and earth/water/fire dragon Rounds.
+ * MaryKeyList holds giant-dragon complete Rounds only (remove_status=4).
  * Ratio is integer paytable-unit sum (payout/bet*10).
  */
 public final class RedisKeys {

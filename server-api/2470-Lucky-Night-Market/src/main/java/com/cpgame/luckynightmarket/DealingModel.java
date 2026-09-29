@@ -1,181 +1,179 @@
 package com.cpgame.luckynightmarket;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
-/** A fitted conditional reel-vector Markov model; never loads provider responses. */
+/**
+ * 正式的一次尝试生成器：先随机生成完整事实，再结算、分类和过滤；失败不在本次尝试内补抽。
+ */
 public final class DealingModel {
-    private final Map<String,Object> model, entries;
-    private final SecureRandom random;
-    private final double backoff;
-    private final int attemptLimit;
+    public enum Scenario { ORDINARY, LUCKY_FEATURE, LUCKY_WHEEL }
+
+    public record Attempt(Scenario scenario, RoundFact round, long units, String rejectionReason) {
+        public boolean accepted() { return rejectionReason == null; }
+    }
+
+    private static final double ORDINARY_LOSS_SAMPLE_WEIGHT = 2353.0d;
+    private static final double ORDINARY_WIN_SAMPLE_WEIGHT = 430.0d;
+    private static final double FEATURE_SAMPLE_WEIGHT = 115.0d;
+    private static final double WHEEL_SAMPLE_WEIGHT = 2.0d;
+
+    private final SecureRandom random = new SecureRandom();
     private final Properties config;
-    private final ZeroLossSupport<RoundFact.Step> losses;
-    private final ZeroLossSupport<RoundFact.Step> featureLosses;
-    public long rejectedSteps, rejectedRounds;
+    private final SymbolWeightSchedule symbolWeights;
+    private final RuleBasedBoardGenerator boards;
+    private final Map<String, Long> rejectionCounts = new LinkedHashMap<>();
+    private long attemptedRounds;
+    private long acceptedRounds;
+
     public DealingModel(Properties config) throws IOException {
-        this.config=config; this.random=new SecureRandom();
-        try(InputStream in=DealingModel.class.getResourceAsStream("/dealing-model.json")) {
-            if(in==null)throw new IOException("Embedded fitted model missing");
-            model=Json.object(Json.parse(new String(in.readAllBytes(),StandardCharsets.UTF_8)));
+        this.config = config;
+        int retiredAttemptLimit = Integer.parseInt(config.getProperty("generation.attempt-limit", "100000"));
+        if (retiredAttemptLimit < 1) throw new IllegalArgumentException("Invalid retired generation.attempt-limit");
+
+        // 兼容旧配置；新生成器不再读取列模型，也不会在一次尝试中按此值回退或重抽。
+        double retiredBackoff = Double.parseDouble(config.getProperty("model.column-backoff-probability", "0.15"));
+        if (!Double.isFinite(retiredBackoff) || retiredBackoff < 0.0d || retiredBackoff > 1.0d) {
+            throw new IllegalArgumentException("Invalid retired model.column-backoff-probability");
         }
-        entries=Json.object(model.get("entries"));
-        backoff=Double.parseDouble(config.getProperty("model.column-backoff-probability",model.get("columnBackoffProbability").toString()));
-        attemptLimit=Integer.parseInt(config.getProperty("generation.attempt-limit","100000"));
-        if(!Double.isFinite(backoff)||backoff<0||backoff>1||attemptLimit<100)throw new IllegalArgumentException("Invalid model limits");
-        if(Integer.parseInt(config.getProperty("generation.feature-steps","8"))!=8)throw new IllegalArgumentException("The original feature has exactly eight steps");
-        losses=new ZeroLossSupport<>(this::lossCandidate,s->validLoss(s,false),s->s);
-        // Initialize ten verified reserves once. Runtime feature markers try at most five raw proposals.
-        featureLosses=new ZeroLossSupport<>(()->step("featureLater",0),s->validLoss(s,true),s->s);
-    }
-    public Map<String,Object> metadata(){return model;}
-    public static int bin(long units){int[] bounds={0,49,174,249,499,999,2499,16000};for(int i=0;i<bounds.length;i++)if(units<=bounds[i])return i;throw new IllegalArgumentException("Units exceed model support");}
-    private int n(Object value){return ((Number)value).intValue();}
-    private String pick(Map<String,Object> weights){
-        double sum=0;for(Object v:weights.values()){double weight=((Number)v).doubleValue();if(!Double.isFinite(weight)||weight<0)throw new IllegalArgumentException("Invalid sampling weight");sum+=weight;}
-        if(!Double.isFinite(sum)||sum<=0)throw new IllegalArgumentException("Empty sampling support");
-        double draw=random.nextDouble()*sum;String last=null;
-        for(var e:weights.entrySet()){last=e.getKey();draw-=((Number)e.getValue()).doubleValue();if(draw<0)return last;}return last;
-    }
-    private List<Integer> ints(String text){return Arrays.stream(text.split(",")).map(Integer::parseInt).toList();}
-    private Map<String,Object> objectAt(Object list,int index){return Json.object(((List<?>)list).get(index));}
-    private boolean inCaps(RoundFact.Step s,Map<String,Object> e){
-        int[] counts=new int[7];List<?> allowed=(List<?>)e.get("positionSymbols");
-        for(int p=0;p<9;p++){int symbol=s.ps().get(p);counts[symbol]++;if(!((List<?>)allowed.get(p)).stream().anyMatch(x->n(x)==symbol))return false;}
-        if(counts[0]>n(e.get("wildBoardMax")))return false;
-        for(int c=0;c<3;c++){int wild=0;for(int r=0;r<3;r++)if(s.ps().get(c*3+r)==0)wild++;if(wild>n(((List<?>)e.get("wildColumnMax")).get(c)))return false;}
-        for(int sId=0;sId<7;sId++)if(counts[sId]>n(((List<?>)e.get("symbolBoardMax")).get(sId)))return false;
-        if(s.muls().stream().filter(x->x==0).count()>n(e.get("maxTickets")))return false;
-        List<?> ticketPositions=(List<?>)e.get("ticketPositions");
-        for(int p=0;p<3;p++)if(s.muls().get(p)==0){final int position=p;if(ticketPositions.stream().noneMatch(x->n(x)==position))return false;}
-        return true;
-    }
-    public RoundFact.Step step(String entry,int targetBin){
-        Map<String,Object> e=Json.object(entries.get(entry));
-        Map<String,Object> groups=Json.object(e.get("groups"));
-        Map<String,Object> g=Json.object(groups.get(Integer.toString(targetBin)));
-        for(int attempt=0;attempt<attemptLimit;attempt++){
-            RoundFact.Step s=stepCandidate(entry,e,g);
-            long units=GameRuleCore.evaluate(s,entry.startsWith("feature")).units();
-            if(inCaps(s,e)&&units<=n(g.get("maxUnits"))&&bin(units)==targetBin)return s;
-            rejectedSteps++;
+        if (Integer.parseInt(config.getProperty("generation.feature-steps", "8")) != GameRuleCore.FEATURE_STEPS) {
+            throw new IllegalArgumentException("The original feature has exactly eight steps");
         }
-        throw new IllegalStateException("Unable to generate entry "+entry+" bin "+targetBin+" within bounded attempts");
-    }
-    private RoundFact.Step stepCandidate(String entry, Map<String,Object> e, Map<String,Object> g) {
-        // Preserve the original conditional reel vectors and joint multiplier triples.
-        Map<String,Object> reels=entry.equals("wheel")?Json.object(e.get("reelStatistics")):g;
-        double entryBackoff=entry.equals("wheel")?1:backoff;
-        List<Integer> ps=new ArrayList<>();String previous=null;
-        for(int col=0;col<3;col++){
-            Map<String,Object> weights=objectAt(reels.get("columns"),col);
-            if(col>0&&random.nextDouble()>=entryBackoff){Object conditioned=objectAt(reels.get("transitions"),col-1).get(previous);if(conditioned!=null)weights=Json.object(conditioned);}
-            previous=pick(weights);ps.addAll(ints(previous));
-        }
-        List<Integer> muls=ints(pick(Json.object(g.get("multipliers"))));
-        int wem=entry.equals("wheel")?Integer.parseInt(pick(Json.object(g.get("wheelPrizes")))):0;
-        return new RoundFact.Step(ps,muls,wem);
+
+        this.symbolWeights = new SymbolWeightSchedule(config);
+        this.boards = new RuleBasedBoardGenerator(random, symbolWeights);
     }
 
-    private boolean validLoss(RoundFact.Step step, boolean feature) {
-        return step != null && !step.wheel()
-                && inCaps(step,Json.object(entries.get(feature?"featureLater":"ordinary")))
-                && GameRuleCore.evaluate(step,feature).units()==0
-                && ResultUtil.evaluate(step,feature).units()==0;
+    public Map<String, Object> metadata() {
+        return Json.map(
+                "generator", "weighted-symbol-random-facts-then-settlement",
+                "sampleBoardCandidates", 0,
+                "sampleColumnCandidates", 0,
+                "sampleWinningCombinations", 0,
+                "sampleMultiplierTriples", 0,
+                "symbolRange", List.of(0, 1, 2, 3, 4, 5, 6),
+                "symbolPositions", "全部九个位置均按当前单牌权重随机",
+                "reelMultipliers", List.of(1, 2, 3, 5, 10, 15),
+                "wheelPrizes", List.of(1, 3, 5, 8, 10, 15, 20, 30, 50, 100, 200, 1000),
+                "featureSteps", GameRuleCore.FEATURE_STEPS,
+                "sampleRole", "只提供基础权重和场景频率参考，不定义牌面或倍率可达上限");
     }
 
-    /** Only ordinary loss or featureLater; featureStart and wheel never use a marker. */
-    public RoundFact.Step independentLoss(boolean feature) {
-        if(!feature)return ordinaryStep(false);
-        Map<String,Object> e=Json.object(entries.get("featureLater"));
-        Map<String,Object> g=Json.object(Json.object(e.get("groups")).get("0"));
-        return featureLosses.generate(()->stepCandidate("featureLater",e,g),random::nextInt);
+    public static int bin(long units) {
+        int[] bounds = {0, 49, 174, 249, 499, 999, 2499, 16000};
+        for (int i = 0; i < bounds.length; i++) if (units <= bounds[i]) return i;
+        throw new IllegalArgumentException("Units exceed rule support");
     }
 
-    /** Natural entry-level draws. Rejection classifies an already dealt board; no symbols are patched. */
-    private RoundFact.Step ordinaryStep(boolean winning){
-        if(!winning)return losses.generate(this::lossCandidate,random::nextInt);
-        Map<String,Object> e=Json.object(entries.get("ordinary"));
-        Map<String,Object> reels=Json.object(e.get("reelStatistics"));
-        for(int attempt=0;attempt<attemptLimit;attempt++){
-            List<Integer> ps=new ArrayList<>();String previous=null;
-            for(int col=0;col<3;col++){
-                Map<String,Object> weights=objectAt(reels.get("columns"),col);
-                if(col>0&&random.nextDouble()>=backoff){Object conditioned=objectAt(reels.get("transitions"),col-1).get(previous);if(conditioned!=null)weights=Json.object(conditioned);}
-                previous=pick(weights);ps.addAll(ints(previous));
-            }
-            RoundFact.Step step=new RoundFact.Step(ps,ints(pick(Json.object(reels.get("multipliers")))),0);
-            long units=GameRuleCore.evaluate(step,false).units();
-            if(inCaps(step,e)&&units<=n(reels.get("maxUnits"))&&(units>0)==winning)return step;
-            rejectedSteps++;
-        }
-        throw new IllegalStateException("Unable to generate ordinary "+(winning?"win":"loss")+" within bounded attempts");
-    }
-    public RoundFact.Mode mode(){
-        Map<String,Object> weights=new LinkedHashMap<>(Json.object(model.get("modeCounts")));
-        for(String key:new ArrayList<>(weights.keySet())){double scale=Double.parseDouble(config.getProperty("mode.weight."+key,"1"));if(scale<0||!Double.isFinite(scale))throw new IllegalArgumentException("Invalid mode weight");weights.put(key,((Number)weights.get(key)).doubleValue()*scale);}
-        return RoundFact.Mode.valueOf(pick(weights));
-    }
-    public RoundFact.Mode poolMode(){
-        Map<String,Object> weights=new LinkedHashMap<>(Json.object(model.get("modeCounts")));
-        if(Long.parseLong(config.getProperty("range.normal-min","1"))>0)weights.remove("ORDINARY_LOSS");
-        for(String key:new ArrayList<>(weights.keySet())){double scale=Double.parseDouble(config.getProperty("mode.weight."+key,"1"));if(scale<0||!Double.isFinite(scale))throw new IllegalArgumentException("Invalid mode weight");weights.put(key,((Number)weights.get(key)).doubleValue()*scale);}
-        return RoundFact.Mode.valueOf(pick(weights));
-    }
-    private int randomBin(String entry,boolean excludeZero){Map<String,Object>w=new LinkedHashMap<>(Json.object(Json.object(entries.get(entry)).get("binCounts")));if(excludeZero)w.remove("0");return Integer.parseInt(pick(w));}
-    public RoundFact generate(RoundFact.Mode mode){
-        for(int attempt=0;attempt<attemptLimit;attempt++){
-            List<RoundFact.Step> steps=new ArrayList<>();
-            switch(mode){
-                case ORDINARY_LOSS->steps.add(ordinaryStep(false));
-                case ORDINARY_WIN->steps.add(ordinaryStep(true));
-                case LUCKY_WHEEL->steps.add(step("wheel",randomBin("wheel",false)));
-                case LUCKY_FEATURE->{
-                    steps.add(step("featureStart",0));int prior=0;
-                    for(int i=0;i<7;i++){
-                        Map<String,Object> transition=objectAt(model.get("featureBinTransitions"),i);
-                        Object weights=transition.get(Integer.toString(prior));
-                        prior=weights==null?randomBin("featureLater",false):Integer.parseInt(pick(Json.object(weights)));
-                        steps.add(step("featureLater",prior));
-                    }
-                }
-            }
-            RoundFact round=new RoundFact(mode,steps);long units=GameRuleCore.totalUnits(round);
-            if(mode==RoundFact.Mode.LUCKY_FEATURE){long wins=steps.stream().filter(s->GameRuleCore.evaluate(s,true).units()>0).count();
-                if(units<=0||units>n(model.get("featureMaxTotalUnits"))||wins<n(model.get("featureWinCountMin"))||wins>n(model.get("featureWinCountMax"))){rejectedRounds++;continue;}}
-            GameRuleCore.validate(round);
-            if(GameRuleCore.totalUnits(round)!=ResultUtil.totalUnits(round))throw new IllegalStateException("Independent oracle disagreement");return round;
-        }
-        throw new IllegalStateException("Unable to generate complete round within bounded attempts");
-    }
-    public RoundFact generate(){return generate(mode());}
-    public RoundFact generateForPool(RoundFact.Mode mode){
-        boolean special=mode==RoundFact.Mode.LUCKY_FEATURE||mode==RoundFact.Mode.LUCKY_WHEEL;
-        long min=Long.parseLong(config.getProperty(special?"range.special-min":"range.normal-min",special?"25":"1"));
-        long max=Long.parseLong(config.getProperty(special?"range.special-max":"range.normal-max",special?"500":"375"));
-        for(int i=0;i<attemptLimit;i++){RoundFact r=generate(mode);long u=GameRuleCore.totalUnits(r);if(u>=min&&u<=max)return r;rejectedRounds++;}
-        throw new IllegalStateException("Configured payout range has insufficient generation support for "+mode);
+    public void useBatch(long batchIndex) {
+        symbolWeights.useBatch(batchIndex);
     }
 
-    private final Map<String,List<List<Integer>>> lossColumns=new java.util.concurrent.ConcurrentHashMap<>();
-    public RoundFact.Step lossCandidate(){
-        Map<String,Object> reels=Json.object(Json.object(entries.get("ordinary")).get("reelStatistics"));
-        List<Integer> ps=new ArrayList<>(9);int first=0;
-        for(int c=0;c<3;c++){
-            final int col=c,forbidden=c==1?first:0;
-            List<List<Integer>> pool=lossColumns.computeIfAbsent(c+":"+forbidden,key->{
-                List<List<Integer>> out=new ArrayList<>();
-                for(var e:objectAt(reels.get("columns"),col).entrySet()){
-                    List<Integer> tuple=ints(e.getKey());if(new HashSet<>(tuple).size()!=3)continue;
-                    if(tuple.stream().anyMatch(v->v==0||(forbidden&(1<<v))!=0))continue;
-                    for(int i=0;i<n(e.getValue());i++)out.add(tuple);
-                }
-                if(out.isEmpty())throw new IllegalStateException("no loss reel support");return List.copyOf(out);
-            });
-            List<Integer> tuple=pool.get(random.nextInt(pool.size()));ps.addAll(tuple);if(c==0)for(int v:tuple)first|=1<<v;
-        }
-        return new RoundFact.Step(ps,ints(pick(Json.object(reels.get("multipliers")))),0);
+    public String symbolWeightProfile() {
+        return symbolWeights.boostedSymbolName();
     }
+
+    /** 与正式入口完全相同的一次候选生成及配置过滤。 */
+    public Attempt attempt() {
+        return attemptScenario(weightedScenario(), true);
+    }
+
+    /** 测试规则可达性时强制场景，但仍只随机一次事实，不指定中奖结果，也不在内部重抽。 */
+    Attempt attemptScenario(Scenario scenario, boolean applyConfiguredRange) {
+        attemptedRounds++;
+        RoundFact round = switch (scenario) {
+            case ORDINARY -> ordinaryRound();
+            case LUCKY_WHEEL -> new RoundFact(RoundFact.Mode.LUCKY_WHEEL, List.of(boards.wheel()));
+            case LUCKY_FEATURE -> featureRound();
+        };
+        long units = GameRuleCore.totalUnits(round);
+
+        if (round.mode() == RoundFact.Mode.LUCKY_FEATURE
+                && GameRuleCore.evaluate(round.steps().get(0), true).units() != 0) {
+            return reject(scenario, round, units, "FEATURE_START_NOT_ZERO");
+        }
+        if (units > (long) GameRuleCore.MAX_TOTAL_BET_MULTIPLIER * GameRuleCore.BET_BASE) {
+            return reject(scenario, round, units, "ADVERTISED_MAX_EXCEEDED");
+        }
+
+        GameRuleCore.validate(round);
+        if (units != ResultUtil.totalUnits(round)) {
+            throw new IllegalStateException("Independent oracle disagreement");
+        }
+        if (applyConfiguredRange) {
+            boolean special = scenario != Scenario.ORDINARY;
+            long min = configuredRange(special, true);
+            long max = configuredRange(special, false);
+            if (units < min) return reject(scenario, round, units, special ? "SPECIAL_BELOW_CONFIGURED_MIN" : "NORMAL_BELOW_CONFIGURED_MIN");
+            if (units > max) return reject(scenario, round, units, special ? "SPECIAL_ABOVE_CONFIGURED_MAX" : "NORMAL_ABOVE_CONFIGURED_MAX");
+        }
+
+        acceptedRounds++;
+        return new Attempt(scenario, round, units, null);
+    }
+
+    private RoundFact ordinaryRound() {
+        RoundFact.Step step = boards.ordinary();
+        RoundFact.Mode mode = GameRuleCore.evaluate(step, false).units() == 0
+                ? RoundFact.Mode.ORDINARY_LOSS : RoundFact.Mode.ORDINARY_WIN;
+        return new RoundFact(mode, List.of(step));
+    }
+
+    private RoundFact featureRound() {
+        List<RoundFact.Step> steps = new ArrayList<>(GameRuleCore.FEATURE_STEPS);
+        for (int index = 0; index < GameRuleCore.FEATURE_STEPS; index++) {
+            steps.add(boards.featureStep());
+        }
+        return new RoundFact(RoundFact.Mode.LUCKY_FEATURE, steps);
+    }
+
+    private Scenario weightedScenario() {
+        double ordinary = ORDINARY_LOSS_SAMPLE_WEIGHT * modeScale("ORDINARY_LOSS")
+                + ORDINARY_WIN_SAMPLE_WEIGHT * modeScale("ORDINARY_WIN");
+        double feature = FEATURE_SAMPLE_WEIGHT * modeScale("LUCKY_FEATURE");
+        double wheel = WHEEL_SAMPLE_WEIGHT * modeScale("LUCKY_WHEEL");
+        double total = ordinary + feature + wheel;
+        if (!(total > 0.0d) || !Double.isFinite(total)) {
+            throw new IllegalArgumentException("No enabled generation scenarios");
+        }
+        double draw = random.nextDouble() * total;
+        if ((draw -= ordinary) < 0.0d) return Scenario.ORDINARY;
+        if ((draw -= feature) < 0.0d) return Scenario.LUCKY_FEATURE;
+        return Scenario.LUCKY_WHEEL;
+    }
+
+    private double modeScale(String mode) {
+        String key = "mode.weight." + mode;
+        double value;
+        try {
+            value = Double.parseDouble(config.getProperty(key, "1").trim());
+        } catch (RuntimeException error) {
+            throw new IllegalArgumentException("Invalid mode weight: " + key, error);
+        }
+        if (!Double.isFinite(value) || value < 0.0d) throw new IllegalArgumentException("Invalid mode weight: " + key);
+        return value;
+    }
+
+    private long configuredRange(boolean special, boolean minimum) {
+        String key = special
+                ? (minimum ? "range.special-min" : "range.special-max")
+                : (minimum ? "range.normal-min" : "range.normal-max");
+        String fallback = special ? (minimum ? "25" : "500") : (minimum ? "1" : "375");
+        return Long.parseLong(config.getProperty(key, fallback));
+    }
+
+    private Attempt reject(Scenario scenario, RoundFact round, long units, String reason) {
+        rejectionCounts.merge(reason, 1L, Long::sum);
+        return new Attempt(scenario, round, units, reason);
+    }
+
+    public long attemptedRounds() { return attemptedRounds; }
+    public long acceptedRounds() { return acceptedRounds; }
+    public long rejectedRounds() { return attemptedRounds - acceptedRounds; }
+    public Map<String, Long> rejectionCounts() { return Map.copyOf(rejectionCounts); }
 }

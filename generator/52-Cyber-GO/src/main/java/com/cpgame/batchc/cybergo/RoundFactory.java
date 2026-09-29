@@ -15,24 +15,28 @@ import java.util.random.RandomGenerator;
 public final class RoundFactory {
     private static final int MAX_CANDIDATE_ATTEMPTS = 10_000;
     private final RandomGenerator random;
-    private final RandomCandidateGenerator candidates;
+    private RandomCandidateGenerator candidates;
     private final CompleteRoundVerifier verifier;
     private final GenerationLimits limits;
 
     public RoundFactory(RandomGenerator random, GenerationLimits limits) {
         this.random = Objects.requireNonNull(random);
         this.limits = Objects.requireNonNull(limits);
-        this.candidates = new RandomCandidateGenerator(random, limits.symbolWeights());
         this.verifier = new CompleteRoundVerifier(limits);
         if (LossDefaults.BOARDS.size() != 10) throw new IllegalStateException("loss defaults");
+    }
+
+    private RandomCandidateGenerator candidates() {
+        if (candidates == null) candidates = new RandomCandidateGenerator(random, limits.symbolWeights());
+        return candidates;
     }
 
     /** 不预选模式：先产生自然候选，再由ResultUtil反推真实类型。 */
     public CompleteRound createRandomCompleteRound() {
         for (int attempt = 0; attempt < MAX_CANDIDATE_ATTEMPTS; attempt++) {
-            List<String> paidBoard = candidates.paidBoardCandidate();
+            List<String> paidBoard = candidates().paidBoardCandidate();
             ResultUtil.Evaluation evaluation = RuleEvaluator.evaluate(paidBoard, MINIMUM_BET_LEVEL, MINIMUM_BET_SIZE);
-            if (evaluation.scatterCount() > 5) continue;
+            if (evaluation.scatterCount() > SCATTER_BOARD_MAX) continue;
             CompleteRound round = evaluation.scatterCount() >= 3
                     ? buildFreeRound(paidBoard, evaluation, null)
                     : buildOrdinaryRound(paidBoard, evaluation);
@@ -41,7 +45,7 @@ public final class RoundFactory {
         throw new IllegalStateException("无法在安全重试上限内生成完整Round");
     }
 
-    public CompleteRound createOrdinaryLoss() { return generateWithCandidates(candidates::independentLossCandidate); }
+    public CompleteRound createOrdinaryLoss() { return generateWithCandidates(() -> IndependentLoss.candidate(random)); }
     CompleteRound generateWithCandidates(java.util.function.Supplier<List<String>> proposals) {
         for (int attempt=0; attempt<5; attempt++) {
             List<String> board = proposals.get();
@@ -61,10 +65,10 @@ public final class RoundFactory {
     private static final class LossDefaults {
         static final List<List<String>> BOARDS = create();
         private static List<List<String>> create() {
-            var generator = new RandomCandidateGenerator(new java.security.SecureRandom());
+            var random = new java.security.SecureRandom();
             List<List<String>> defaults = new ArrayList<>(10);
             for (int i=0;i<10;i++) {
-                List<String> b=generator.independentLossCandidate();
+                List<String> b=IndependentLoss.candidate(random);
                 if (!RuleEvaluator.evaluate(b, MINIMUM_BET_LEVEL, MINIMUM_BET_SIZE).isLoss())
                     throw new ExceptionInInitializerError("invalid default loss");
                 defaults.add(b);
@@ -74,23 +78,22 @@ public final class RoundFactory {
     }
 
     public CompleteRound createOrdinaryWin() {
-        for (int attempt = 0; attempt < MAX_CANDIDATE_ATTEMPTS; attempt++) {
-            List<String> board = candidates.paidBoardCandidate();
+        for (int attempt = 0; attempt < 5; attempt++) {
+            List<String> board = IndependentWin.generate(random);
             ResultUtil.Evaluation evaluation = RuleEvaluator.evaluate(board, MINIMUM_BET_LEVEL, MINIMUM_BET_SIZE);
-            if (evaluation.baseWin().signum() > 0 && evaluation.scatterCount() < 3) {
-                CompleteRound round = buildOrdinaryRound(board, evaluation);
-                if (withinLimits(round)) return round;
-            }
+            if (evaluation.scatterCount() >= 3 || evaluation.baseWin().signum() <= 0) continue;
+            CompleteRound round = buildOrdinaryRound(board, evaluation);
+            if (round.kind() == RoundKind.ORDINARY_WIN && withinLimits(round)) return round;
         }
-        throw new IllegalStateException("无法在安全重试上限内生成普通WIN");
+        throw new IllegalStateException("无法在安全重试上限内生成普通中奖完整Round");
     }
 
     public CompleteRound createFreeSpinRound() {
-        for (int attempt = 0; attempt < MAX_CANDIDATE_ATTEMPTS; attempt++) {
-            List<String> board = candidates.paidBoardCandidate();
-            ResultUtil.Evaluation evaluation = RuleEvaluator.evaluate(board, MINIMUM_BET_LEVEL, MINIMUM_BET_SIZE);
+        for (int attempt = 0; attempt < 40; attempt++) {
+            IndependentFree.Plan plan = IndependentFree.plan(random);
+            ResultUtil.Evaluation evaluation = RuleEvaluator.evaluate(plan.paid(), MINIMUM_BET_LEVEL, MINIMUM_BET_SIZE);
             if (evaluation.scatterCount() < 3 || evaluation.scatterCount() > 5) continue;
-            CompleteRound round = buildFreeRound(board, evaluation, null);
+            CompleteRound round = buildFreeRound(plan.paid(), evaluation, plan.free());
             if (withinLimits(round)) return round;
         }
         throw new IllegalStateException("无法在安全重试上限内生成免费完整Round");
@@ -134,17 +137,17 @@ public final class RoundFactory {
         steps.add(step(roundKey, 0, paidBoard, paid, MINIMUM_BET, freeSpins, 0, 1, 1,
                 cumulative, 0, 1, now));
 
-        int multiplier = 2;
+        int multiplier = FREE_INITIAL_MULTIPLIER;
         int collectedWilds = 0;
         for (int index = 1; index <= freeSpins; index++) {
             List<String> board = suppliedFreeBoards == null
-                    ? candidates.freeBoardCandidate() : suppliedFreeBoards.get(index - 1);
+                    ? candidates().freeBoardCandidate() : suppliedFreeBoards.get(index - 1);
             ResultUtil.Evaluation evaluation = RuleEvaluator.evaluate(board, MINIMUM_BET_LEVEL, MINIMUM_BET_SIZE);
-            if (evaluation.scatterCount() != 0) throw new IllegalArgumentException("免费盘面不得出现Scatter");
+            if (evaluation.scatterCount() != FREE_SCATTER) throw new IllegalArgumentException("免费盘面不得出现Scatter");
             collectedWilds += evaluation.wildCount();
-            while (collectedWilds >= 3 && multiplier < 20) {
-                multiplier = Math.min(20, multiplier + 2);
-                collectedWilds -= 3;
+            while (collectedWilds >= FREE_WILDS_PER_STEP && multiplier < FREE_MAX_MULTIPLIER) {
+                multiplier = Math.min(FREE_MAX_MULTIPLIER, multiplier + FREE_MULTIPLIER_STEP);
+                collectedWilds -= FREE_WILDS_PER_STEP;
             }
             BigDecimal win = evaluation.baseWin().multiply(BigDecimal.valueOf(multiplier)).setScale(2, RoundingMode.HALF_UP);
             cumulative = cumulative.add(win).setScale(2);

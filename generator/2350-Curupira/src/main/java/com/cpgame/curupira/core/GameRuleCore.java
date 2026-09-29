@@ -1,28 +1,74 @@
 package com.cpgame.curupira.core;
-import com.cpgame.curupira.model.*;
-import com.cpgame.curupira.random.*;
+
+import com.cpgame.curupira.model.CompleteRoundFact;
+import com.cpgame.curupira.model.CompleteRoundFact.EntryKind;
+import com.cpgame.curupira.model.CompleteRoundFact.Kind;
+import com.cpgame.curupira.model.EvaluatedBoard;
+import com.cpgame.curupira.model.FeatureStep;
+import com.cpgame.curupira.model.FeatureStep.Role;
+import com.cpgame.curupira.random.RandomSource;
+import com.cpgame.curupira.random.SecureRandomSource;
+import com.cpgame.curupira.random.WeightedSymbolSampler;
 import com.cpgame.curupira.verify.RoundVerifier;
-import java.math.*;
-import java.time.Instant;
-/** 试玩 API 与 Loader 共用的唯一正式规则核心。 */
-public final class GameRuleCore{
- private final RoundFactory factory;private final ConstructiveLossGenerator losses;private final RoundVerifier verifier;private final SpecialRoundFactory specials;private final RoundIdGenerator ids=new RoundIdGenerator();
- public GameRuleCore(){this(new SecureRandomSource(),GenerationPolicy.ordinaryPaidDefaults());}
- public GameRuleCore(RandomSource random,GenerationPolicy policy){ResultUtil util=new ResultUtil();WeightedSymbolSampler sampler=new WeightedSymbolSampler(random,policy.symbolWeights());CandidateBoardGenerator candidates=new CandidateBoardGenerator(sampler);factory=new RoundFactory(candidates,util,policy);losses=new ConstructiveLossGenerator(sampler,candidates,util,policy);verifier=new RoundVerifier(policy);specials=new SpecialRoundFactory(random,policy);}
- public CompleteRound generateCompleteRound(){CompleteRound r=factory.generateCompletePaidRound();verifier.verify(r);return r;}
- public com.cpgame.curupira.model.CompleteRoundFact generateFact(com.cpgame.curupira.model.CompleteRoundFact.Kind kind){
-  com.cpgame.curupira.model.CompleteRoundFact fact=specials.generate(kind);
-  verifier.verifyFact(fact);
-  return fact;
- }
- public com.cpgame.curupira.model.CompleteRoundFact generateWinRange(int minMultiplier,int maxMultiplier){
-  com.cpgame.curupira.model.CompleteRoundFact fact=specials.generateWinRange(minMultiplier,maxMultiplier);
-  verifier.verifyFact(fact);
-  return fact;
- }
- public RoundResult generatePaidRound(BigDecimal lineBet,int level,BigDecimal start,long user,String token){validate(lineBet,level);BigDecimal bet=money(lineBet.multiply(BigDecimal.valueOf((long)level*GameRules.PAYLINE_COUNT)));if(start.compareTo(bet)<0)throw new InsufficientBalanceException();EvaluatedBoard e=generateCompleteRound().deliveries().get(0).evaluatedBoard();BigDecimal win=money(lineBet.multiply(BigDecimal.valueOf(level)).multiply(BigDecimal.valueOf(e.multiplierSum()))),change=money(win.subtract(bet));return new RoundResult(ids.next(),1,money(lineBet),level,bet,money(start),change,money(start.add(change)),e.multiplierSum(),win,e,Instant.now(),user,token,true);}
- public RoundResult generateInitialRoomProjection(BigDecimal balance,long user,String token){EvaluatedBoard e=losses.nextLoss();return new RoundResult(0,0,GameRules.MINIMUM_LINE_BET,1,BigDecimal.ZERO.setScale(2),money(balance),BigDecimal.ZERO.setScale(2),money(balance),0,BigDecimal.ZERO.setScale(2),e,Instant.now(),user,token,false);}
- private static void validate(BigDecimal b,int l){if(b==null||b.compareTo(GameRules.MINIMUM_LINE_BET)<0||l<1)throw new IllegalArgumentException("Invalid Curupira bet or level");}
- public static BigDecimal money(BigDecimal v){return v.setScale(2,RoundingMode.HALF_UP);}
- public static final class InsufficientBalanceException extends RuntimeException{public InsufficientBalanceException(){super("Insufficient balance");}}
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
+
+/** Loader 与 Demo 共用的独立 Java 规则核心；每次调用只生成一个自然候选事实。 */
+public final class GameRuleCore {
+    private final CandidateBoardGenerator candidates;
+    private final MaryRoundGenerator mary;
+    private final ResultUtil resultUtil = new ResultUtil();
+    private final RoundVerifier verifier = new RoundVerifier();
+    private final RoundIdGenerator ids = new RoundIdGenerator();
+
+    public GameRuleCore() {
+        this(new SecureRandomSource(), GenerationPolicy.ordinaryPaidDefaults(), 9, 1);
+    }
+
+    public GameRuleCore(RandomSource random, GenerationPolicy policy) {
+        this(random, policy, 9, 1);
+    }
+
+    public GameRuleCore(RandomSource random, GenerationPolicy policy, int holdEmptyWeight, int holdCoinWeight) {
+        WeightedSymbolSampler sampler = new WeightedSymbolSampler(random, policy.symbolWeights());
+        candidates = new CandidateBoardGenerator(sampler);
+        mary = new MaryRoundGenerator(random, sampler, holdEmptyWeight, holdCoinWeight);
+    }
+
+    /** 不接受目标类别或目标奖金；先发牌，再由独立规则分类。 */
+    public CompleteRoundFact generatePaidCandidate() {
+        List<Integer> board = candidates.nextBoard();
+        EvaluatedBoard evaluated = resultUtil.evaluate(board);
+        Kind kind = resultUtil.classifyPaid(evaluated);
+        Role role = kind == Kind.TRIGGER ? Role.TRIGGER : Role.ORDINARY;
+        FeatureStep step = kind == Kind.TRIGGER
+                ? FeatureStep.symbol(role, board, evaluated, 1, 1, 1, 1, 1)
+                : FeatureStep.symbol(role, board, evaluated, 0, 0, 0, 1, 1);
+        CompleteRoundFact fact = new CompleteRoundFact(ids.next(), kind, EntryKind.PAID, List.of(step));
+        verifier.verifyFact(fact);
+        return fact;
+    }
+
+    /** 免费扩展 Wild 是独立 Mary 场景选择，不是按奖金结果造局。 */
+    public CompleteRoundFact generateFreeExpandingWildCandidate() {
+        CompleteRoundFact fact = mary.freeExpandingWild();
+        verifier.verifyFact(fact);
+        return fact;
+    }
+
+    /** Hold & Spins 是独立 Mary 场景选择，不是按奖金结果造局。 */
+    public CompleteRoundFact generateHoldAndSpinsCandidate() {
+        CompleteRoundFact fact = mary.holdAndSpins();
+        verifier.verifyFact(fact);
+        return fact;
+    }
+
+    public static BigDecimal money(BigDecimal value) {
+        return value.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public static final class InsufficientBalanceException extends RuntimeException {
+        public InsufficientBalanceException() { super("Insufficient balance"); }
+    }
 }

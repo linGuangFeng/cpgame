@@ -43,7 +43,8 @@ class ProtocolGateTest {
             }
         }
         assertThat(behaviorIds).containsExactlyInAnyOrderElementsOf(RulesContract.BEHAVIOR_IDS);
-        assertThat(RulesContract.UNSUPPORTED_UNKNOWN_BEHAVIORS).isEmpty();
+        assertThat(RulesContract.UNSUPPORTED_UNKNOWN_BEHAVIORS).containsExactly(
+                "B007_FEATURE_BUY");
     }
 
     private JsonNode read(String name) throws Exception {

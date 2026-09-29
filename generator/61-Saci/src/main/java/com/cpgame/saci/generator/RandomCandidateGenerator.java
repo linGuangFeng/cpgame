@@ -2,6 +2,7 @@ package com.cpgame.saci.generator;
 
 import com.cpgame.saci.generator.model.RoundCandidate;
 import com.cpgame.saci.generator.model.RoundMode;
+import com.cpgame.saci.generator.model.StepFact;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.random.RandomGenerator;
 
-/** 从训练集完整联合 kernel 抽样整局。不逐格抽符号，也不拼接未中奖盘。 */
+/** 中奖/特色仍从训练联合 kernel 抽样。独立 LOSS 按 Ways 切断前两轴构造。 */
 public final class RandomCandidateGenerator {
     private static final String MODEL_RESOURCE = "/saci-joint-kernels.txt";
     private static final Model MODEL = loadModel();
@@ -29,7 +30,16 @@ public final class RandomCandidateGenerator {
     }
 
     public RoundCandidate independentLossCandidate(RandomGenerator random) {
-        return choose(MODEL.byMode.get(RoundMode.ORDINARY_LOSS), random);
+        List<String> ordinary=new ArrayList<>(List.of("1","2","3","4","5","6","7","8"));
+        List<String> first=ordinary.subList(0,4);
+        List<String> second=ordinary.subList(4,ordinary.size());
+        List<String> rskl=new ArrayList<>(15);
+        for(int row=0;row<3;row++)rskl.add("1"+first.get(random.nextInt(first.size()))+"1");
+        for(int row=0;row<3;row++)rskl.add("1"+second.get(random.nextInt(second.size()))+"1");
+        for(int reel=2;reel<5;reel++)
+            for(int row=0;row<3;row++)rskl.add("1"+ordinary.get(random.nextInt(ordinary.size()))+"1");
+        StepFact step=new StepFact(rskl,List.of(),List.of(),List.of(),0,1,0,0,0,0,1,0,0);
+        return new RoundCandidate(RoundMode.ORDINARY_LOSS,List.of(step));
     }
 
     private static boolean isIndependentLoss(RoundCandidate c) {
@@ -38,12 +48,14 @@ public final class RandomCandidateGenerator {
 
     private static final List<RoundCandidate> DEFAULT_LOSSES = createLossDefaults();
     private static List<RoundCandidate> createLossDefaults() {
+        RandomCandidateGenerator generator = new RandomCandidateGenerator();
+        java.security.SecureRandom random = new java.security.SecureRandom();
         List<RoundCandidate> defaults = new ArrayList<>(10);
-        for (RoundCandidate c : MODEL.byMode.get(RoundMode.ORDINARY_LOSS)) {
-            if (!isIndependentLoss(c)) throw new ExceptionInInitializerError("invalid LOSS model entry");
-            if (defaults.size() < 10) defaults.add(c);
+        for (int i = 0; i < 10; i++) {
+            RoundCandidate c = generator.independentLossCandidate(random);
+            if (!isIndependentLoss(c)) throw new ExceptionInInitializerError("invalid constructed loss");
+            defaults.add(c);
         }
-        if (defaults.size() != 10) throw new ExceptionInInitializerError("ten default losses required");
         return List.copyOf(defaults);
     }
 

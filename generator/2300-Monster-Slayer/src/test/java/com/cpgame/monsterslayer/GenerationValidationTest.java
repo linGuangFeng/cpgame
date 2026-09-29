@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.*;
 
 final class GenerationValidationTest {
@@ -44,7 +45,11 @@ final class GenerationValidationTest {
                 else assertTrue(board[cell]>=1&&board[cell]<=10);
             }
             assertTrue(scatters<=1);
-            String member=codec.encode(round);assertEquals(member,codec.encode(codec.decode(member)));
+            byte[] member=codec.encode(round);
+            assertTrue(startsWithAscii(member, "MS3N;"));
+            assertEquals(20,member.length);
+            assertFalse(containsAscii(member, ","));
+            assertArrayEquals(member,codec.encode(codec.decode(member)));
         }
     }
     @Test void generatorPropertiesExpose1809StyleSymbolWeights() throws Exception {
@@ -83,53 +88,123 @@ final class GenerationValidationTest {
             assertThrows(IllegalArgumentException.class,()->new GameRuleCore.CompleteRound(false,
                     List.of(new GameRuleCore.Step(board,0,0))));
     }
-    @Test void specialGenerationFailsBeforeInventingState(){
-        assertThrows(IllegalStateException.class,()->new CompleteRoundFactory().generateSpecial(new SecureRandom()));
-    }
-    @Test void buyTemplatesRoundTripAndStayInPrefixPools(){
-        CompleteRoundFactory factory=new CompleteRoundFactory();MinimalRoundFactCodec codec=new MinimalRoundFactCodec();
+    @Test void huntingRoundsAreGeneratedFromRulesAndCrossOldTemplateCeilings(){
+        CompleteRoundFactory factory=new CompleteRoundFactory(); MinimalRoundFactCodec codec=new MinimalRoundFactCodec();
         SecureRandom random=new SecureRandom();
-        assertEquals("PerKeyList_000002300", com.cpgame.monsterslayer.redis.RedisKeyContract.normalIndex(2300));
-        assertEquals("BetLog:000002300:000350", com.cpgame.monsterslayer.redis.RedisKeyContract.normalList(2300, 350));
-        assertEquals("MaryKeyList_000002300", com.cpgame.monsterslayer.redis.RedisKeyContract.buyIndex(3));
-        assertEquals("MaryLog:000002300:000350", com.cpgame.monsterslayer.redis.RedisKeyContract.buyList(3, 350));
-        assertEquals("PerKeyList_100002300", com.cpgame.monsterslayer.redis.RedisKeyContract.buyPerKeyIndex(4));
-        assertEquals("MaryKeyList_100002300", com.cpgame.monsterslayer.redis.RedisKeyContract.buyIndex(4));
-        assertEquals("MaryLog:100002300:000350", com.cpgame.monsterslayer.redis.RedisKeyContract.buyList(4, 350));
-        assertEquals("PerKeyList_200002300", com.cpgame.monsterslayer.redis.RedisKeyContract.buyPerKeyIndex(5));
-        assertEquals("MaryKeyList_200002300", com.cpgame.monsterslayer.redis.RedisKeyContract.buyIndex(5));
-        assertEquals("MaryLog:200002300:000350", com.cpgame.monsterslayer.redis.RedisKeyContract.buyList(5, 350));
-        assertFalse(com.cpgame.monsterslayer.redis.RedisKeyContract.buyIndexesToWrite(3)
-                .contains("PerKeyList_000002300"));
-        for(int type:new int[]{3,4,5}){
-            boolean sawGt4=false;
-            boolean sawStoredRoles=false;
-            for(int i=0;i<80;i++){
-                GameRuleCore.CompleteRound round=factory.generateBuy(type,random);
-                assertEquals(type,round.buyType());
-                assertEquals(GameRuleCore.RoundClass.BUY_FEATURE,ResultUtil.evaluate(round).roundClass());
-                assertEquals(ResultUtil.evaluate(round).multiplierCenti(),ResultUtil.redisMultiplierCenti(round),
-                        "buy price must not change the base-bet Redis multiplier for type="+type);
+        for(int type:new int[]{0,3,4,5}){
+            Set<String> members=new HashSet<>(); Set<Integer> multipliers=new HashSet<>(); int high=0;
+            for(int i=0;i<1000;i++){
+                var round=type==0?factory.generateSpecial(random):factory.generateBuy(type,random);
+                int multiplier=ResultUtil.redisMultiplierCenti(round);if(multiplier>=10000&&multiplier<=30000)high++;
+                byte[] member=codec.encode(round);members.add(java.util.HexFormat.of().formatHex(member));multipliers.add(multiplier);
+                assertTrue(startsWithAscii(member, "MS4B"));assertFalse(containsAscii(member, "{\""));
+                assertEquals(multiplier,ResultUtil.redisMultiplierCenti(codec.decode(member)));
                 assertEquals(0,round.steps().get(round.steps().size()-1).nextType());
-                String member=codec.encode(round);
-                assertEquals(type,codec.decode(member).buyType());
-                for(GameRuleCore.Step step:round.steps()) {
-                    if(step.gameType()==4) sawGt4=true;
-                    if(step.feature().roles()!=null && step.feature().roles().startsWith("[")) sawStoredRoles=true;
-                }
             }
-            assertTrue(sawStoredRoles,"buy type="+type+" must replay captured f.r");
-            if(type==4){
-                for(int i=0;i<1000 && !sawGt4;i++){
-                    for(GameRuleCore.Step step:factory.generateBuy(4,random).steps()) if(step.gameType()==4) sawGt4=true;
-                }
-                assertTrue(sawGt4,"buy type=4 corpus must include captured gt=4");
+            assertEquals(1000,members.size());assertTrue(multipliers.size()>100,"not restricted to 20 captured results");
+            assertTrue(high>0,"new rule-valid results must cross 10000 inside the configured 30000 cap");
+        }
+    }
+    @Test void sharedFactoryKeepsConcurrentHuntingRoundsIndependent() throws Exception {
+        var factory=new CompleteRoundFactory();var pool=java.util.concurrent.Executors.newFixedThreadPool(4);
+        try {
+            List<java.util.concurrent.Callable<Set<String>>> jobs=new ArrayList<>();
+            for(int worker=0;worker<4;worker++) jobs.add(()->{var random=new SecureRandom();var codec=new MinimalRoundFactCodec();Set<String> out=new HashSet<>();
+                for(int i=0;i<100;i++){var round=factory.generateBuy(3+i%3,random);GameRuleCore.validate(round);out.add(java.util.HexFormat.of().formatHex(codec.encode(round)));}return out;});
+            Set<String> all=new HashSet<>();for(var future:pool.invokeAll(jobs))all.addAll(future.get());assertEquals(400,all.size());
+        } finally {pool.shutdownNow();}
+    }
+    @Test void corruptedWeaponTraceCannotBeAcceptedAsAValidRound(){
+        var factory=new CompleteRoundFactory();var round=factory.generateBuy(3,new SecureRandom());
+        var steps=new ArrayList<>(round.steps());var step=steps.get(1);var f=step.feature();
+        var trace=HuntTrace.decode(f.roles());var actions=new ArrayList<>(trace.actions());var a=actions.get(0);
+        actions.set(0,new HuntTrace.Action(a.weapon(),a.direction(),a.row(),a.blocked()==0?1:0,a.health(),a.multiplier(),a.next(),a.before(),a.after(),a.hearts(),a.animals(),a.split(),a.wild1(),a.wild2()));
+        byte[] changed=HuntTrace.encode(new HuntTrace.Trace(trace.spin(),trace.mode(),trace.buy(),actions));
+        steps.set(1,new GameRuleCore.Step(step.board(),step.gameType(),step.nextType(),new GameRuleCore.FeatureFacts(f.hearts(),f.locCell(),f.locId(),f.bl(),f.iu(),f.t(),f.rbs(),changed)));
+        var invalid=new GameRuleCore.CompleteRound(true,3,steps);assertThrows(IllegalArgumentException.class,()->ResultUtil.evaluate(invalid));
+    }
+    @Test void everyBuyCorpusMemberUsesCompactLosslessStateFacts() throws Exception {
+        MinimalRoundFactCodec codec=new MinimalRoundFactCodec();
+        for(int type:new int[]{3,4,5}){
+            String resource="/monster-slayer-buy-"+type+".txt";
+            String raw;
+            try(var in=GenerationValidationTest.class.getResourceAsStream(resource)){
+                assertNotNull(in,resource);
+                raw=new String(in.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8).trim();
+            }
+            for(String legacy:raw.split("\\R")){
+                GameRuleCore.CompleteRound original=codec.decodeBuyTemplate(type,legacy);
+                byte[] compact=codec.encode(original);
+                GameRuleCore.CompleteRound decoded=codec.decode(compact);
+                assertRoundFactsEqual(original,decoded);
+                assertTrue(compact.length<legacy.length(),
+                        ()->"compact state framing must remain smaller: compact="+compact.length+" legacy="+legacy.length());
+                assertArrayEquals(compact,codec.encode(decoded));
             }
         }
+    }
+    @Test void legacyMs1AndMs2RemainReadableDuringRollingUpgrade(){
+        MinimalRoundFactCodec codec=new MinimalRoundFactCodec();
+        var oldNormal=codec.decode("MS1N;0.0.2,6,6,6,A,A,4,3,7,3,7,8,9,7,3");
+        assertEquals(20,codec.encode(oldNormal).length);
+        var factory=new CompleteRoundFactory();
+        var buy=factory.generateBuy(3,new SecureRandom());
+        String legacyStep=buy.steps().stream().map(GenerationValidationTest::legacyFeatureStep)
+                .reduce((a,b)->a+"/"+b).orElseThrow();
+        var decoded=codec.decode("MS2B1;"+legacyStep);
+        assertEquals(3,decoded.buyType());
+        assertEquals(buy.steps().size(),decoded.steps().size());
+    }
+
+    private static void assertRoundFactsEqual(GameRuleCore.CompleteRound expected,GameRuleCore.CompleteRound actual){
+        assertEquals(expected.special(),actual.special());
+        assertEquals(expected.buyType(),actual.buyType());
+        assertEquals(expected.steps().size(),actual.steps().size());
+        for(int i=0;i<expected.steps().size();i++){
+            var a=expected.steps().get(i);var b=actual.steps().get(i);
+            assertEquals(a.gameType(),b.gameType());assertEquals(a.nextType(),b.nextType());
+            assertArrayEquals(a.board(),b.board());
+            assertArrayEquals(a.feature().hearts(),b.feature().hearts());
+            assertArrayEquals(a.feature().locCell(),b.feature().locCell());
+            assertArrayEquals(a.feature().locId(),b.feature().locId());
+            assertArrayEquals(a.feature().bl(),b.feature().bl());
+            assertArrayEquals(a.feature().iu(),b.feature().iu());
+            assertArrayEquals(a.feature().t(),b.feature().t());
+            assertArrayEquals(a.feature().rbs(),b.feature().rbs());
+            assertArrayEquals(a.feature().roles(),b.feature().roles(),"f.r animation facts must round-trip exactly");
+        }
+    }
+
+    private static String legacyFeatureStep(GameRuleCore.Step step){
+        StringBuilder out=new StringBuilder().append(step.gameType()).append('.').append(step.nextType()).append('.');
+        int[] board=step.board();for(int i=0;i<board.length;i++){if(i>0)out.append(',');out.append(board[i]);}
+        var f=step.feature();out.append("|H");appendInts(out,f.hearts(),',');out.append("|L");
+        int[] lc=f.locCell(),li=f.locId();for(int i=0;i<lc.length;i++){if(i>0)out.append(';');out.append(lc[i]).append(':').append(li[i]);}
+        out.append("|A");int[] bl=f.bl(),iu=f.iu(),t=f.t();for(int i=0;i<bl.length;i++){if(i>0)out.append(';');out.append(bl[i]).append('.').append(iu[i]).append('.').append(t[i]);}
+        out.append("|R");appendInts(out,f.rbs(),',');out.append("|G").append(java.util.HexFormat.of().formatHex(f.roles()));return out.toString();
+    }
+    private static void appendInts(StringBuilder out,int[] values,char separator){
+        for(int i=0;i<values.length;i++){if(i>0)out.append(separator);out.append(values[i]);}
     }
     @Test void featureAwardsBeginWithNaturalPayingSymbol(){
         int[]board={1,0,10,0,2,3,0,4,5,6,7,8,9,10,2};
         for(ResultUtil.Award a:ResultUtil.evaluateStep(new GameRuleCore.Step(board,1,1)).awards())
             assertEquals(a.symbol(),board[a.cells().get(0)]);
     }
+
+    private static boolean startsWithAscii(byte[] data, String prefix) {
+        byte[] p = prefix.getBytes(java.nio.charset.StandardCharsets.US_ASCII);
+        if (data.length < p.length) return false;
+        for (int i = 0; i < p.length; i++) if (data[i] != p[i]) return false;
+        return true;
+    }
+    private static boolean containsAscii(byte[] data, String needle) {
+        byte[] n = needle.getBytes(java.nio.charset.StandardCharsets.US_ASCII);
+        outer: for (int i = 0; i + n.length <= data.length; i++) {
+            for (int j = 0; j < n.length; j++) if (data[i + j] != n[j]) continue outer;
+            return true;
+        }
+        return false;
+    }
+
 }

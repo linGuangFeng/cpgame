@@ -103,8 +103,7 @@ public final class FishingGoController {
             if (s.active == null) {
                 int bl = Integer.parseInt(q.getOrDefault("bl", "1"));
                 BigDecimal bs = new BigDecimal(q.getOrDefault("bs", "0.02"));
-                if (bl != 1 || bs.compareTo(ProtocolConstants.MIN_BET_SIZE) != 0)
-                    throw new IllegalArgumentException("only bl=1 bs=0.02");
+                if (bl < 1 || bs.signum() <= 0) throw new IllegalArgumentException("bs/bl must be positive");
                 RedisRoundStore.Selection sel = selection(q.getOrDefault("outcome", "any"), s);
                 RedisRoundStore.Claim claim = redis.claim(sel);
                 System.out.printf("FishingGO demo paid=%d cycle=%s odds=%d special=%s%n",
@@ -114,21 +113,23 @@ public final class FishingGoController {
                 s.deliveryIndex = 0;
                 s.transferId = Long.toUnsignedString(transfers.incrementAndGet());
                 s.lastCreatedAt = Instant.now().getEpochSecond();
+                s.betSize = bs;
+                s.betLevel = bl;
+                s.stakeFactor = bs.multiply(BigDecimal.valueOf(bl)).divide(ProtocolConstants.MIN_BET_SIZE);
+                s.paidBet = scale(ProtocolConstants.MIN_TOTAL_BET, s.stakeFactor);
                 s.activeSteps.clear();
-                s.balance = s.balance.subtract(ProtocolConstants.MIN_TOTAL_BET);
+                s.balance = s.balance.subtract(s.paidBet);
             }
             CompleteRound.Step step = s.active.steps().get(s.deliveryIndex);
             Map<String, Object> data = project(s, step);
             Map<String, Object> last = new LinkedHashMap<>(data);
-            last.put("bl", 1);
-            last.put("bs", ProtocolConstants.MIN_BET_SIZE);
             last.put("ca", s.lastCreatedAt);
             s.lastSpin = last;
             s.activeSteps.add(data);
             boolean terminal = step.terminal();
             s.deliveryIndex++;
             if (terminal) {
-                s.balance = s.balance.add(s.active.steps().get(s.active.steps().size() - 1).rwa());
+                s.balance = s.balance.add(scale(s.active.steps().get(s.active.steps().size() - 1).rwa(), s.stakeFactor));
                 s.history.addFirst(historyRecord(s, s.balance));
                 while (s.history.size() > 30) s.history.removeLast();
                 s.active = null;
@@ -142,20 +143,22 @@ public final class FishingGoController {
     private Map<String, Object> project(SessionState s, CompleteRound.Step step) {
         ResultUtil.Win win = util.evaluate(step.board(), step.rpx());
         boolean terminal = step.terminal();
-        BigDecimal pb = terminal ? s.balance.add(s.active.steps().get(s.active.steps().size() - 1).rwa()) : s.balance;
+        BigDecimal pb = terminal ? s.balance.add(scale(s.active.steps().get(s.active.steps().size() - 1).rwa(), s.stakeFactor)) : s.balance;
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("apx", step.apx());
-        data.put("ba", step.ba());
+        data.put("ba", scale(step.ba(), s.stakeFactor));
+        data.put("bl", s.betLevel);
+        data.put("bs", s.betSize);
         data.put("fsn", step.fsn());
         data.put("gt", step.gt());
         data.put("nfsc", step.nfsc());
         data.put("pb", money(pb));
         data.put("rpx", step.rpx());
         data.put("rskl", step.board());
-        data.put("rwa", step.rwa());
+        data.put("rwa", scale(step.rwa(), s.stakeFactor));
         data.put("small_game_type", step.smallGameType());
         data.put("ss", step.ss());
-        data.put("wa", step.wa());
+        data.put("wa", scale(step.wa(), s.stakeFactor));
         data.put("wmkl", win.coords());
         data.put("wskl", win.symbols());
         return data;
@@ -188,7 +191,7 @@ public final class FishingGoController {
         CompleteRound round = s.active;
         BigDecimal tw = round.steps().get(round.steps().size() - 1).rwa();
         Map<String, Object> rec = new LinkedHashMap<>();
-        rec.put("ba", ProtocolConstants.MIN_TOTAL_BET.stripTrailingZeros().toPlainString());
+        rec.put("ba", s.paidBet.stripTrailingZeros().toPlainString());
         rec.put("baf", money(balanceAfter));
         rec.put("bid", "54-" + s.transferId);
         rec.put("ca", s.lastCreatedAt);
@@ -196,7 +199,7 @@ public final class FishingGoController {
         rec.put("gm", null);
         rec.put("gt", 54);
         rec.put("tis", s.transferId);
-        rec.put("wa", tw.stripTrailingZeros().toPlainString());
+        rec.put("wa", scale(tw, s.stakeFactor).stripTrailingZeros().toPlainString());
         rec.put("steps", new ArrayList<>(s.activeSteps));
         rec.put("transfer_id", s.transferId);
         return rec;
@@ -242,25 +245,31 @@ public final class FishingGoController {
     private Map<String, Object> historyStep(Map<String, Object> spin, String bid, long ca) {
         Map<String, Object> data = new LinkedHashMap<>(spin);
         data.put("bid", bid);
-        data.put("bl", 1);
-        data.put("bs", "0.02");
         data.put("ca", ca);
-        data.put("ba", Integer.valueOf(1).equals(spin.get("gt")) ? "0.40" : 0);
         @SuppressWarnings("unchecked")
         List<String> board = (List<String>) spin.get("rskl");
         int rpx = ((Number) spin.get("rpx")).intValue();
+        BigDecimal bs = new BigDecimal(String.valueOf(spin.get("bs")));
+        int bl = ((Number) spin.get("bl")).intValue();
+        BigDecimal factor = bs.multiply(BigDecimal.valueOf(bl)).divide(ProtocolConstants.MIN_BET_SIZE);
         ResultUtil.Win win = util.evaluate(board, rpx);
         List<Map<String, Object>> matches = new ArrayList<>();
         for (int i = 0; i < win.symbols().size(); i++) {
             Map<String, Object> match = new LinkedHashMap<>();
             match.put("sk", win.symbols().get(i));
-            match.put("wa", util.symbolPayout(win.symbols().get(i), win.coords().get(i), rpx)
-                    .setScale(2, RoundingMode.HALF_UP).toPlainString());
+            // Origin history UI does amount = wmkl.wa * rpx next to
+            // bet_size x bet_level x payout x ways x rpx.
+            match.put("wa", util.symbolPayout(win.symbols().get(i), win.coords().get(i), 1)
+                    .multiply(factor).setScale(2, RoundingMode.HALF_UP).toPlainString());
             match.put("wmk", win.coords().get(i));
             matches.add(match);
         }
         data.put("wmkl", matches);
         return data;
+    }
+
+    private static BigDecimal scale(BigDecimal value, BigDecimal factor) {
+        return value.multiply(factor).setScale(2, RoundingMode.HALF_UP);
     }
 
     private RedisRoundStore.Selection selection(String raw, SessionState s) {

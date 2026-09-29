@@ -2,9 +2,9 @@ package com.cpgame.curupira;
 
 import com.cpgame.curupira.codec.MinimalFactCodec;
 import com.cpgame.curupira.core.ResultUtil;
-import com.cpgame.curupira.model.CompleteRound;
-import com.cpgame.curupira.model.RoundAnalysis;
+import com.cpgame.curupira.model.CompleteRoundFact;
 import com.cpgame.curupira.redis.RedisContractGate;
+import com.cpgame.curupira.verify.RoundVerifier;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -20,59 +20,76 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
+import java.util.Set;
 
 /** 从隔离 Redis 读回正式 Loader 结果，并以 Codec 与 ResultUtil 独立复核。 */
 public final class RedisValidationProbe {
     private RedisValidationProbe() { }
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 4) {
-            throw new IllegalArgumentException("用法：RedisValidationProbe host port database perBucketCap");
+        if (args.length != 5) {
+            throw new IllegalArgumentException(
+                    "用法：RedisValidationProbe host port database normalPerBucketCap maryPerBucketCap");
         }
         String host = args[0];
         int port = Integer.parseInt(args[1]);
         int database = Integer.parseInt(args[2]);
-        int cap = Integer.parseInt(args[3]);
+        int normalCap = Integer.parseInt(args[3]);
+        int maryCap = Integer.parseInt(args[4]);
         RedisContractGate keys = new RedisContractGate();
         MinimalFactCodec codec = new MinimalFactCodec();
         ResultUtil resultUtil = new ResultUtil();
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         int memberCount = 0;
         int trimmedBuckets = 0;
+        boolean sawZero = false;
 
         try (RespClient redis = new RespClient(host, port, database)) {
-            List<byte[]> ratios = redis.array("ZRANGE", keys.normalIndex(2350), "0", "-1");
-            if (ratios.isEmpty()) throw new IllegalStateException("实际倍率索引为空");
-            for (byte[] ratioBytes : ratios) {
-                int multiplier = Integer.parseInt(text(ratioBytes));
-                if (multiplier <= 0) throw new IllegalStateException("0 倍或负倍数进入索引");
-                String listKey = keys.resultKey("ORDINARY_PAID", multiplier, 2350);
-                List<byte[]> members = redis.array("LRANGE", listKey, "0", "-1");
-                if (members.isEmpty() || members.size() > cap) {
-                    throw new IllegalStateException("倍率桶容量错误：" + multiplier + " -> " + members.size());
-                }
-                if (members.size() == cap) trimmedBuckets++;
-                for (byte[] member : members) {
-                    CompleteRound round = codec.decodeRound(member);
-                    RoundAnalysis analysis = resultUtil.analyzeRound(round);
-                    if (analysis.actualMultiplier() != multiplier
-                            || !"ORDINARY_PAID".equals(analysis.resultPool())) {
-                        throw new IllegalStateException("Codec/ResultUtil 反推与 Redis 倍率桶不一致");
+            List<Family> families = List.of(
+                    new Family("NORMAL_PAID", CompleteRoundFact.Kind.LOSS, normalCap,
+                            Set.of(CompleteRoundFact.Kind.LOSS, CompleteRoundFact.Kind.WIN,
+                                    CompleteRoundFact.Kind.EXPANDING_WILD, CompleteRoundFact.Kind.TRIGGER)),
+                    new Family("FREE_EXPANDING_WILD", CompleteRoundFact.Kind.FREE_EW, maryCap,
+                            Set.of(CompleteRoundFact.Kind.FREE_EW)),
+                    new Family("HOLD_AND_SPINS", CompleteRoundFact.Kind.HOLD, maryCap,
+                            Set.of(CompleteRoundFact.Kind.HOLD)));
+            int bucketCount = 0;
+            for (Family family : families) {
+                List<byte[]> ratios = redis.array("ZRANGE", keys.indexFor(family.keyKind(), 2350), "0", "-1");
+                if (ratios.isEmpty()) throw new IllegalStateException(family.label() + " 实际倍率索引为空");
+                bucketCount += ratios.size();
+                for (byte[] ratioBytes : ratios) {
+                    int multiplier = Integer.parseInt(text(ratioBytes));
+                    if (multiplier < 0) throw new IllegalStateException("负倍数进入索引");
+                    if (family.keyKind() == CompleteRoundFact.Kind.LOSS) sawZero |= multiplier == 0;
+                    String listKey = keys.listFor(family.keyKind(), multiplier, 2350);
+                    List<byte[]> members = redis.array("LRANGE", listKey, "0", "-1");
+                    if (members.isEmpty() || members.size() > family.cap()) {
+                        throw new IllegalStateException(family.label() + " 倍率桶容量错误："
+                                + multiplier + " -> " + members.size());
                     }
-                    digest.update(ByteBuffer.allocate(4).putInt(member.length).array());
-                    digest.update(member);
-                    memberCount++;
+                    if (members.size() == family.cap()) trimmedBuckets++;
+                    for (byte[] member : members) {
+                        CompleteRoundFact fact = codec.decode(new String(member, StandardCharsets.US_ASCII));
+                        new RoundVerifier().verifyFact(fact);
+                        if (resultUtil.redisMultiplier(fact) != multiplier || !family.allowedKinds().contains(fact.kind())) {
+                            throw new IllegalStateException(family.label() + " Codec/ResultUtil 反推与 Redis 倍率桶不一致");
+                        }
+                        digest.update(ByteBuffer.allocate(4).putInt(member.length).array());
+                        digest.update(member);
+                        memberCount++;
+                    }
                 }
             }
             if (trimmedBuckets == 0) throw new IllegalStateException("没有倍率桶达到裁剪容量，无法证明 LTRIM 生效");
-            if (redis.array("ZRANGE", keys.normalIndex(2350), "0", "-1")
-                    .stream().map(RedisValidationProbe::text).anyMatch("0"::equals)) {
-                throw new IllegalStateException("发现 0 倍索引");
-            }
+            if (!sawZero) throw new IllegalStateException("未发现正式生成的 0 倍完整局");
             System.out.printf("PROBE_RESULT=PASS buckets=%d members=%d trimmedBuckets=%d digest=%s%n",
-                    ratios.size(), memberCount, trimmedBuckets, HexFormat.of().formatHex(digest.digest()));
+                    bucketCount, memberCount, trimmedBuckets, HexFormat.of().formatHex(digest.digest()));
         }
     }
+
+    private record Family(String label, CompleteRoundFact.Kind keyKind, int cap,
+                          Set<CompleteRoundFact.Kind> allowedKinds) { }
 
     private static String text(byte[] value) {
         return new String(value, StandardCharsets.UTF_8);

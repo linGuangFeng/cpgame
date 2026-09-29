@@ -81,7 +81,7 @@ public final class EdmManiaController {
         server.start();
         System.out.printf("CONTROLLER_READY gameId=2010 port=%d pid=%d rulesVersion=%s rulesHash=%s publish=%s redis=%s:%s db=%s%n",
                 port, ProcessHandle.current().pid(), EdmManiaRulesMetadata.VERSION, EdmManiaRulesMetadata.HASH,
-                publish, config.getProperty("redis.host", "18.234.101.161"),
+                publish, config.getProperty("redis.host", "54.172.218.28"),
                 config.getProperty("redis.port", "8021"),
                 config.getProperty("redis.database", "0"));
         try { redis.ensure(); }
@@ -419,7 +419,12 @@ public final class EdmManiaController {
                 return new ParsedBet(size, level, unit, charged, featureBuy);
             }
         }
-        throw new IllegalArgumentException("unsupported bet_gold");
+        BigDecimal unit = raw.multiply(BigDecimal.valueOf(level));
+        BigDecimal waysCharge = unit.multiply(BigDecimal.valueOf(WAYS)).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal charged = featureBuy
+                ? waysCharge.multiply(BigDecimal.valueOf(BUY_MULTIPLE)).setScale(2, RoundingMode.HALF_UP)
+                : waysCharge;
+        return new ParsedBet(raw, level, unit, charged, featureBuy);
     }
 
     private SessionState session(HttpExchange exchange) { return session(exchange, query(exchange.getRequestURI().getRawQuery())); }
@@ -565,11 +570,15 @@ public final class EdmManiaController {
             if (redis != null) return;
             synchronized (lock) {
                 if (redis != null) return;
-                int port = Integer.parseInt(config.getProperty("redis.port", "8021"));
+                int port = Integer.parseInt(config.getProperty("redis.port", "8016"));
                 int database = Integer.parseInt(config.getProperty("redis.database", "0"));
-                String host = config.getProperty("redis.host", "18.234.101.161");
-                if (!host.equals("18.234.101.161") || port != 8021 || database < 0) {
-                    throw new IllegalStateException("EDM Mania Demo requires Redis 18.234.101.161:8021 db=15");
+                String host = config.getProperty("redis.host", "54.172.218.28");
+                boolean aws = "18.234.101.161".equals(host) && port == 8021;
+                boolean nas = "192.168.10.3".equals(host) && port == 6379;
+                boolean local = "127.0.0.1".equals(host) && port == 6379;
+                boolean fd = "54.172.218.28".equals(host) && port == 8016;
+                if ((!aws && !nas && !local && !fd) || database < 0) {
+                    throw new IllegalStateException("unauthorized Redis endpoint: " + host + ":" + port);
                 }
                 redis = RedisDirectLoader.RedisConnection.connect(host, port,
                         config.getProperty("redis.username", ""),

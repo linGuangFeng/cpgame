@@ -6,7 +6,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -22,12 +21,12 @@ public final class RedisListClient implements AutoCloseable {
     }
 
     private final Socket socket;
-    private final int specialCap;
+    private final int maryCap;
     private final InputStream in;
     private final OutputStream out;
 
     public RedisListClient(EngineConfiguration config) throws IOException {
-        specialCap = config.outputLimits().specialCap;
+        maryCap = config.maryRetention();
         socket = config.redisSsl() ? SSLSocketFactory.getDefault().createSocket() : new Socket();
         socket.connect(new InetSocketAddress(config.redisHost(), config.redisPort()), config.redisConnectTimeoutMs());
         socket.setSoTimeout(config.redisSocketTimeoutMs());
@@ -41,24 +40,6 @@ public final class RedisListClient implements AutoCloseable {
         if (!"PONG".equals(command("PING"))) throw new IOException("Redis PING 失败");
     }
 
-    public void clearGame(int gameId) throws IOException {
-        RedisContractGate keys = new RedisContractGate();
-        LinkedHashSet<String> doomed = new LinkedHashSet<>(keys.allIndexKeys(gameId));
-        for (String pattern : keys.scanPatterns(gameId)) {
-            doomed.addAll(scan(pattern));
-        }
-        List<String> batch = new ArrayList<>();
-        for (String key : doomed) {
-            if (key == null || key.isBlank()) continue;
-            batch.add(key);
-            if (batch.size() >= 200) {
-                delete(batch);
-                batch.clear();
-            }
-        }
-        if (!batch.isEmpty()) delete(batch);
-    }
-
     public void appendBatch(List<Entry> entries, int maximum) throws IOException {
         if (entries.isEmpty()) return;
         List<byte[][]> commands = new ArrayList<>();
@@ -69,7 +50,7 @@ public final class RedisListClient implements AutoCloseable {
                 commands.add(args("ZADD", indexKey, ratio, ratio));
             }
             commands.add(new byte[][]{bytes("RPUSH"), bytes(entry.listKey()), bytes(entry.member())});
-            int cap = entry.listKey().startsWith("MaryLog:") ? specialCap : maximum;
+            int cap = entry.listKey().startsWith("MaryLog:") ? maryCap : maximum;
             commands.add(args("LTRIM", entry.listKey(), "-" + cap, "-1"));
         }
         commands.add(args("EXEC"));
@@ -81,29 +62,6 @@ public final class RedisListClient implements AutoCloseable {
         if (!(exec instanceof List<?> values) || values.size() != commands.size() - 2) {
             throw new IOException("Redis EXEC 返回数量不匹配");
         }
-    }
-
-    private List<String> scan(String pattern) throws IOException {
-        List<String> found = new ArrayList<>();
-        String cursor = "0";
-        do {
-            Object raw = command("SCAN", cursor, "MATCH", pattern, "COUNT", "200");
-            if (!(raw instanceof List<?> parts) || parts.size() != 2) {
-                throw new IOException("Redis SCAN 返回值非法");
-            }
-            cursor = text(parts.get(0));
-            if (parts.get(1) instanceof List<?> keys) {
-                for (Object item : keys) found.add(text(item));
-            }
-        } while (!"0".equals(cursor));
-        return found;
-    }
-
-    private void delete(List<String> keys) throws IOException {
-        String[] args = new String[keys.size() + 1];
-        args[0] = "DEL";
-        for (int i = 0; i < keys.size(); i++) args[i + 1] = keys.get(i);
-        command(args);
     }
 
     private Object command(String... values) throws IOException { write(args(values)); out.flush(); return read(); }
@@ -150,10 +108,6 @@ public final class RedisListClient implements AutoCloseable {
         List<Object> values = new ArrayList<>(length);
         for (int i = 0; i < length; i++) values.add(read());
         return values;
-    }
-    private static String text(Object value) {
-        if (value instanceof byte[] bytes) return new String(bytes, StandardCharsets.UTF_8);
-        return String.valueOf(value);
     }
     private static byte[] bytes(String value) { return value.getBytes(StandardCharsets.UTF_8); }
     @Override public void close() throws IOException { socket.close(); }

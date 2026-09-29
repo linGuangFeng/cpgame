@@ -7,6 +7,12 @@ import org.junit.jupiter.api.Test;
 
 class RoundGeneratorTest {
     @Test void tenThousandFreshRoundsRespectJointStatesAndCaps(){Properties p=properties();RoundGenerator g=new RoundGenerator(new SecureRandom(),p);GameRuleCore rules=new GameRuleCore();ResultUtil results=new ResultUtil(rules);EnumSet<CompleteRound.Outcome> seen=EnumSet.noneOf(CompleteRound.Outcome.class);for(int i=0;i<10000;i++){CompleteRound r=g.generate();rules.validateHardCaps(r);assertTrue(results.evaluate(r).totalMultiplier()>=0);seen.add(rules.classify(r));}assertEquals(EnumSet.allOf(CompleteRound.Outcome.class),seen);}
+    @Test void lossCandidatesRespectPositionDomainsWithoutLegacySymbolSettings(){
+        Properties p=properties();p.keySet().removeIf(k->k.toString().startsWith("generation.symbol."));
+        RoundGenerator g=new RoundGenerator(new SecureRandom(),p);GameRuleCore rules=new GameRuleCore();
+        for(int i=0;i<100000;i++)assertEquals(CompleteRound.Outcome.ORDINARY_LOSS,rules.classify(g.lossCandidate()));
+        for(int i=0;i<100;i++)assertEquals(CompleteRound.Outcome.ORDINARY_LOSS,rules.classify(g.generateLoss()));
+    }
     @Test void rejectsMissingOrZeroDirectSymbolWeight(){Properties missing=properties();missing.remove("generation.symbol.initial.blank");assertThrows(IllegalArgumentException.class,()->new RoundGenerator(new SecureRandom(),missing));Properties zero=properties();zero.setProperty("generation.symbol.respin-redeal.ten","0");assertThrows(IllegalArgumentException.class,()->new RoundGenerator(new SecureRandom(),zero));}
     private static Properties properties(){
         Properties p=new Properties();

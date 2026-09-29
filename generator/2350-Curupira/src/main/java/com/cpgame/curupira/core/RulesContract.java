@@ -15,7 +15,8 @@ public final class RulesContract {
             "B007_FEATURE_BUY", "B008_INITIAL_CONFIG_REQUEST", "B009_ROOM_INIT",
             "B010_PAID_ROUND", "B011_HISTORY_REQUESTS", "B012_GAME_IDENTITY",
             "B013_MAIN_GAME_EXPANDING_WILD", "B014_HTTP_SIGNING_CODEC", "B015_USER_INFO_REQUEST");
-    public static final List<String> UNSUPPORTED_UNKNOWN_BEHAVIORS = List.of();
+    public static final List<String> UNSUPPORTED_UNKNOWN_BEHAVIORS = List.of(
+            "B007_FEATURE_BUY");
 
     private RulesContract() {}
 }

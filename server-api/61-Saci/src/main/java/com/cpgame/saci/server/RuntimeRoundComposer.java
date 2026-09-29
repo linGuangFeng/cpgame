@@ -30,8 +30,10 @@ final class RuntimeRoundComposer {
             return core.restore(new RoundFacts(
                     UUID.randomUUID().toString().replace("-", ""), bl, bs, free), startingBalance);
         }
-        RoundCandidate ordinary = store.claimCandidate(false,
-                outcome == RedisRoundStore.Outcome.LOSS ? RoundMode.ORDINARY_LOSS : RoundMode.ORDINARY_WIN);
+        if (outcome == RedisRoundStore.Outcome.LOSS) {
+            return store.independentLoss(bl, bs, startingBalance);
+        }
+        RoundCandidate ordinary = store.claimCandidate(false, RoundMode.ORDINARY_WIN);
         ResultUtil.EnergyProjection projection = ResultUtil.applyEnergyTransition(energy, ordinary.steps());
         RoundCandidate vortex = projection.vortex()
                 ? store.claimCandidate(true, RoundMode.WILD_VORTEX)

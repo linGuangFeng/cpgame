@@ -12,18 +12,24 @@ import org.springframework.stereotype.Service;
 public final class RedisRoundPool {
     private final SecureRandom random=new SecureRandom();
     private final RoundFactsCodec codec=new RoundFactsCodec();
+    private final CompleteRoundFactory lossFactory=new CompleteRoundFactory(new RandomBoardCandidateGenerator(new SecureRoundRandom()), new SecureRoundRandom());
     private final String username,password,host;
     private final int port,database;
     @Value("${redis.game-id:8000045}") private long gameId;
-    public RedisRoundPool(@Value("${redis.host:18.234.101.161}") String host,@Value("${redis.port:8021}") int port,
+    public RedisRoundPool(@Value("${redis.host:54.172.218.28}") String host,@Value("${redis.port:8016}") int port,
                           @Value("${redis.database:0}") int database,@Value("${redis.username:}") String username,
                           @Value("${redis.password:}") String password){
-        if(!"18.234.101.161".equals(host)||port!=8021||database<0)throw new IllegalArgumentException("Rio45 requires 18.234.101.161:8021 DB15");
+        boolean nas = "192.168.10.3".equals(host) && port == 6379;
+        boolean aws = "18.234.101.161".equals(host) && port == 8021;
+        boolean fd = "54.172.218.28".equals(host) && port == 8016;
+        boolean local = "127.0.0.1".equals(host) && port == 6379;
+        if((!nas && !aws && !fd && !local) || database < 0) throw new IllegalArgumentException("unauthorized Redis endpoint: " + host + ":" + port);
         this.host=host;this.port=port;this.database=database;this.username=username;this.password=password;
     }
     public GeneratedRound claim(BigDecimal bs,int bl) {
-        if(!GameRules.BET_SIZES.contains(bs)||!GameRules.BET_LEVELS.contains(bl))throw new IllegalArgumentException("Unsupported bet");
+        if(bs==null||bs.signum()<=0||bl<1)throw new IllegalArgumentException("stake must be positive");
         boolean win=random.nextInt(1406)<253; // Outcome is chosen before any mode or multiplier.
+        if(!win) return lossFactory.createIndependentLoss(bs,bl);
         try(RedisConnection redis=RedisConnection.connect(host,port,database,username,password)) {
             boolean special;
             long gameId=this.gameId;

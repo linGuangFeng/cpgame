@@ -21,7 +21,6 @@ public final class IndependentVerifier {
 
     public Verification verify(CompleteRound round) {
         if (round.rawGameId() != GameRuleCore.RAW_GAME_ID) fail("raw game id is not 32");
-        GameRuleCore.validateBet(round.betSize(), round.betLevel());
         equal(GameRuleCore.paidBet(round.betSize(), round.betLevel()), round.paidBet(), "paid bet");
         if (round.steps().isEmpty() || round.steps().getLast().spinStatus() != 1
             || round.steps().getLast().freeSpinNum() != round.steps().getLast().nowFreeSpinCount()) {

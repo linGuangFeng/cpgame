@@ -197,14 +197,16 @@ final class CpgameRedisCacheService {
                     if (key != null && !key.isBlank() && belongsToGame(key, target.gameIds)) lists.add(key);
                 }
             }
-            int deletedLists = lists.isEmpty() ? 0 : (int) redis.del(lists);
-            if (lists.isEmpty()) {
+            // Always clear via indexes when present. Do not rely on a client-uploaded list of
+            // every BetLog/MaryLog key (that body hits Request too large on big games like 2300).
+            int deletedLists = 0;
+            if (!indexes.isEmpty()) {
                 for (String indexKey : indexes) {
                     DeleteResult one = deleteIndex(redis, indexKey);
                     deletedLists += one.deletedLists();
                 }
-            } else if (!indexes.isEmpty()) {
-                redis.del(new ArrayList<>(indexes));
+            } else if (!lists.isEmpty()) {
+                deletedLists = (int) redis.del(lists);
             }
             return new DeleteResult(true, "已删除全部索引和结果", deletedLists, indexes.size());
         } catch (IOException error) {
@@ -317,7 +319,7 @@ final class CpgameRedisCacheService {
     static String groupName(String key, Collection<Long> gameIds) {
         if (key == null || key.isBlank() || !belongsToGame(key, gameIds)) return null;
         String mapped = mapLogFamily(key);
-        Matcher match = Pattern.compile("^(PerKeyList|MaryKeyList)_(.)").matcher(mapped);
+        Matcher match = Pattern.compile("^(PerKeyList|MaryKeyList)_(.+)$").matcher(mapped);
         if (!match.find()) return null;
         return match.group(1) + "_" + match.group(2);
     }

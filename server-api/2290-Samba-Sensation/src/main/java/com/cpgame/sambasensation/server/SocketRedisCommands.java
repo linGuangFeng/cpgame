@@ -26,11 +26,15 @@ final class SocketRedisCommands implements RedisCommands {
     }
 
     static SocketRedisCommands connect(Properties config) throws IOException {
-        String host = config.getProperty("redis.host", "18.234.101.161").trim();
-        int port = Integer.parseInt(config.getProperty("redis.port", "8021").trim());
+        String host = config.getProperty("redis.host", "54.172.218.28").trim();
+        int port = Integer.parseInt(config.getProperty("redis.port", "8016").trim());
         int database = Integer.parseInt(config.getProperty("redis.database", "0").trim());
-        if (!"18.234.101.161".equals(host) || port != 8021 || database < 0) {
-            throw new IllegalArgumentException("Demo Redis 固定为 18.234.101.161:8021 db=15");
+        boolean aws = "18.234.101.161".equals(host) && port == 8021;
+        boolean nas = "192.168.10.3".equals(host) && port == 6379;
+        boolean local = "127.0.0.1".equals(host) && port == 6379;
+        boolean fd = "54.172.218.28".equals(host) && port == 8016;
+        if ((!aws && !nas && !local && !fd) || database < 0) {
+            throw new IllegalArgumentException("unauthorized Redis endpoint: " + host + ":" + port);
         }
         boolean ssl = Boolean.parseBoolean(config.getProperty("redis.ssl", "false"));
         int connectTimeout = Integer.parseInt(config.getProperty("redis.connect-timeout-ms", "5000"));

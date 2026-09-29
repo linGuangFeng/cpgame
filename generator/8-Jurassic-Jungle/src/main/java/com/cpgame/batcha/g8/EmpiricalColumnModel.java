@@ -21,6 +21,8 @@ public final class EmpiricalColumnModel {
     private final Map<String, Integer> totals = new HashMap<>();
     private final Map<String, int[]> cellWeights = new HashMap<>();
     private final Map<String, Integer> cellTotals = new HashMap<>();
+    private final Map<String, Long> observedNormal = new HashMap<>();
+    private final Map<String, Long> observedSpecial = new HashMap<>();
 
     private EmpiricalColumnModel() {
         try (InputStream in = getClass().getResourceAsStream("/jj8-column-model.tsv")) {
@@ -41,7 +43,11 @@ public final class EmpiricalColumnModel {
                 slots.computeIfAbsent(key, ignored -> new ArrayList<>()).add(new Block(symbols, cumulative));
                 String cellKey = f[0] + "|" + f[1];
                 int[] weights = cellWeights.computeIfAbsent(cellKey, ignored -> new int[9]);
-                for (String symbol : symbols) weights[symbolId(symbol)] += count;
+                boolean special = isSpecialEntry(f[0]);
+                for (String symbol : symbols) {
+                    weights[symbolId(symbol)] += count;
+                    (special ? observedSpecial : observedNormal).merge(symbol, (long) count, Long::sum);
+                }
                 cellTotals.merge(cellKey, count * symbols.size(), Integer::sum);
             }
         } catch (IOException | NoSuchAlgorithmException e) {
@@ -49,11 +55,74 @@ public final class EmpiricalColumnModel {
         }
     }
 
+    public static EmpiricalColumnModel configured(java.util.Map<String, Double> weights) {
+        if (weights.isEmpty()) return INSTANCE;
+        EmpiricalColumnModel model = new EmpiricalColumnModel();
+        model.overrides = adjustmentRatios(model, weights);
+        for (var entry : model.slots.entrySet()) {
+            boolean special = !entry.getKey().startsWith("PAID_INITIAL|") && !entry.getKey().startsWith("BASE_REFILL|");
+            double sum = 0;
+            int previous = 0;
+            java.util.List<WeightedBlock> blocks = new java.util.ArrayList<>();
+            for (Block block : entry.getValue()) {
+                double weight = block.cumulative() - previous;
+                previous = block.cumulative();
+                for (String symbol : block.symbols())
+                    weight *= model.overrides.getOrDefault("generation.symbol." + symbol
+                        + (special ? ".special-weight" : ".normal-weight"), 1.0);
+                sum += weight;
+                blocks.add(new WeightedBlock(block.symbols(), sum));
+            }
+            if (!Double.isFinite(sum) || sum <= 0) throw new IllegalArgumentException("Invalid model weights: " + entry.getKey());
+            model.weighted.put(entry.getKey(), java.util.List.copyOf(blocks));
+        }
+        return model;
+    }
+
+    public static long observedWeight(String symbol, boolean special) {
+        Long value = (special ? INSTANCE.observedSpecial : INSTANCE.observedNormal).get(symbol);
+        if (value == null) throw new IllegalArgumentException("Unobserved symbol " + symbol);
+        return value;
+    }
+
+    private static Map<String, Double> adjustmentRatios(EmpiricalColumnModel model, Map<String, Double> configured) {
+        Map<String, Double> result = new HashMap<>();
+        for (String symbol : List.of("S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9")) {
+            for (boolean special : new boolean[]{false, true}) {
+                String key = "generation.symbol." + symbol + (special ? ".special-weight" : ".normal-weight");
+                double observed = observedWeight(symbol, special);
+                double requested = configured.getOrDefault(key, observed);
+                result.put(key, requested / observed);
+            }
+        }
+        return Map.copyOf(result);
+    }
+
+    private static boolean isSpecialEntry(String entry) {
+        return !entry.equals("PAID_INITIAL") && !entry.equals("BASE_REFILL");
+    }
+    private java.util.Map<String, Double> overrides = java.util.Map.of();
+    private final java.util.Map<String, java.util.List<WeightedBlock>> weighted = new java.util.HashMap<>();
+    private record WeightedBlock(List<String> symbols, double cumulative) { }
+    private List<String> drawWeighted(String key, SecureRandom random) {
+        var blocks = weighted.get(key);
+        if (blocks == null) return null;
+        double target = random.nextDouble() * blocks.getLast().cumulative();
+        int low = 0, high = blocks.size() - 1;
+        while (low < high) {
+            int middle = (low + high) >>> 1;
+            if (target < blocks.get(middle).cumulative()) high = middle; else low = middle + 1;
+        }
+        return blocks.get(low).symbols();
+    }
+
     public static EmpiricalColumnModel instance() { return INSTANCE; }
 
     public List<String> draw(String entry, int column, int length, SecureRandom random) {
         if (length == 0) return List.of();
         String key = entry + "|" + column + "|" + length;
+        List<String> adjusted = drawWeighted(key, random);
+        if (adjusted != null) return adjusted;
         List<Block> blocks = slots.get(key);
         if (blocks != null) {
             int target = random.nextInt(totals.get(key));
@@ -82,9 +151,17 @@ public final class EmpiricalColumnModel {
         if (weights == null || total == null || total <= 0) {
             throw new IllegalArgumentException("Unobserved dealing entry " + entry + "|" + column);
         }
-        int target = random.nextInt(total);
+        boolean special = !entry.equals("PAID_INITIAL") && !entry.equals("BASE_REFILL");
+        double[] adjusted = new double[weights.length];
+        double weightedTotal = 0;
         for (int i = 0; i < weights.length; i++) {
-            target -= weights[i];
+            adjusted[i] = weights[i] * overrides.getOrDefault("generation.symbol.S" + (i + 1)
+                + (special ? ".special-weight" : ".normal-weight"), 1.0);
+            weightedTotal += adjusted[i];
+        }
+        double target = random.nextDouble() * weightedTotal;
+        for (int i = 0; i < weights.length; i++) {
+            target -= adjusted[i];
             if (target < 0) return "S" + (i + 1);
         }
         return "S9";

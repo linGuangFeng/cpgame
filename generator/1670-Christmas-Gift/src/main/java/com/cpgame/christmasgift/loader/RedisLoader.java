@@ -14,11 +14,9 @@ import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 /** Offline candidate generator and atomic Redis loader for game 1670. */
 public final class RedisLoader {
@@ -35,12 +33,12 @@ public final class RedisLoader {
         List<Pending> batch = new ArrayList<>();
         int ordinaryAccepted = 0;
         int featureAccepted = 0;
-        long attempts = 0;
+        long attempts = 0; long written=0;
+        EntrySchedule schedule=new EntrySchedule(settings.normalCount(),settings.specialCount());
 
         try (RedisClient redis = arguments.dryRun() ? null : settings.open()) {
-            while (ordinaryAccepted < settings.normalCount() || featureAccepted < settings.specialCount()) {
-                boolean special = featureAccepted < settings.specialCount()
-                    && (ordinaryAccepted >= settings.normalCount() || featureAccepted * settings.normalCount() <= ordinaryAccepted * settings.specialCount());
+            for(int phase;(phase=schedule.next())>=0;) {
+                boolean special=phase==1;
                 GameRuleCore.CompleteRound candidate = special ? factory.christmasGiftFeature() : ordinaryAccepted == 0 && settings.outputLimits().accepts(false,0) ? factory.ordinaryLoss() : factory.ordinary();
                 GameRuleCore.Evaluation evaluation = verifier.verify(candidate);
                 int multiplier = ResultUtil.multiplier(candidate);
@@ -53,12 +51,14 @@ public final class RedisLoader {
                 int maximum = special ? settings.specialMaxWinMultiplier() : settings.normalMaxWinMultiplier();
                 if (!settings.outputLimits().accepts(special,multiplier) || multiplier > maximum) continue;
                 batch.add(new Pending(index, list, Integer.toString(multiplier), codec.encode(candidate)));
+                schedule.accepted(phase);
                 if (special) featureAccepted++; else ordinaryAccepted++;
+                if(batch.size()>=settings.batchSize()){replace(redis,batch,settings);if(redis!=null)written+=batch.size();batch.clear();}
             }
-            replace(redis, batch, settings);
+            replace(redis, batch, settings);if(redis!=null)written+=batch.size();batch.clear();
         }
         System.out.printf("生成完成 ordinary=%d feature=%d attempts=%d redisLoaded=%d dryRun=%s rulesHash=%s%n",
-            ordinaryAccepted, featureAccepted, attempts, arguments.dryRun() ? 0 : batch.size(), arguments.dryRun(), GameRuleCore.RULES_HASH);
+            ordinaryAccepted, featureAccepted, attempts, written, arguments.dryRun(), GameRuleCore.RULES_HASH);
     }
 
     private static int consecutiveWins(List<Pending> batch) {
@@ -78,19 +78,6 @@ public final class RedisLoader {
                 new Bucket(pending.indexKey(), pending.multiplier(), new ArrayList<>()));
             bucket.members().add(pending.member());
         }
-        Set<String> listsToDelete = new LinkedHashSet<>(buckets.keySet());
-        for (String multiplier : redis.zrange(settings.normalIndexKey())) {
-            listsToDelete.add(settings.normalListKey(Integer.parseInt(multiplier)));
-        }
-        for (String multiplier : redis.zrange(settings.specialIndexKey())) {
-            listsToDelete.add(settings.specialListKey(Integer.parseInt(multiplier)));
-        }
-
-        redis.command("MULTI");
-        for (String list : listsToDelete) redis.command("DEL", list);
-        redis.command("DEL", settings.normalIndexKey());
-        redis.command("DEL", settings.specialIndexKey());
-        if (!(redis.command("EXEC") instanceof List<?>)) throw new IOException("Redis removal did not commit");
         int pending=0;
         for (Map.Entry<String, Bucket> entry : buckets.entrySet()) {
             Bucket bucket=entry.getValue();

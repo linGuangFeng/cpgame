@@ -35,46 +35,37 @@ public final class RedisRoundStore {
     private final SecureRandom random = new SecureRandom();
     private final MinimalRoundFactCodec codec = new MinimalRoundFactCodec(new RoundFactory(), new RoundVerifier());
     private final GameRuleCore core = GameRuleCore.forRestoration();
+    private final GameRuleCore losses = new GameRuleCore();
 
     public RedisRoundStore(AppConfig config) { this.config = config; }
 
     public RoundResult claim(BigDecimal bs, int bl) {
-        if (!GameRules.legalBet(bs, bl)) throw new IllegalArgumentException("非法下注档位");
-        Outcome outcome = chooseOutcome();
+        if (!GameRules.positiveStake(bs, bl)) throw new IllegalArgumentException("下注必须为正数");
+        Outcome preferred = chooseOutcome();
+        if (preferred == Outcome.LOSS) return independentLoss(bs, bl);
         try (Connection redis = Connection.connect(config)) {
-            int ratio = switch (outcome) {
-                case LOSS -> requireNonEmpty(redis, false, 0, 0);
-                case WIN -> requireNonEmpty(redis, false, 1, Integer.MAX_VALUE);
-                case SPECIAL -> requireNonEmpty(redis, true, 0, Integer.MAX_VALUE);
-            };
-            String key = outcome == Outcome.SPECIAL ? RedisLoader.specialList(config.redisGameId(), ratio)
-                    : RedisLoader.normalList(config.redisGameId(), ratio);
-            Object length = redis.command("LLEN", key);
-            long len = length instanceof Long n ? n : Long.parseLong(String.valueOf(length));
-            if (len <= 0) throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
-            int offset = random.nextInt((int) Math.min(len, Integer.MAX_VALUE));
-            Object raw = redis.command("LINDEX", key, Integer.toString(offset));
-            if (!(raw instanceof String payload) || payload.isEmpty())
-                throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
-            if (payload.charAt(0) == '{' || payload.charAt(0) == '[')
-                throw new PoolUnavailableException("REDIS_MEMBER_NOT_ASCII", key);
-            RoundResult base = codec.decodeRedisMember(payload);
-            ResultAnalysis actual = ResultUtil.analyze(base);
-            if ((outcome == Outcome.LOSS && actual.redisPoolMode() != RoundMode.ORDINARY_LOSS)
-                    || (outcome == Outcome.WIN && actual.redisPoolMode() != RoundMode.ORDINARY_WIN)
-                    || (outcome == Outcome.SPECIAL && !ResultUtil.isSpecialPool(actual)))
-                throw new PoolUnavailableException("REDIS_MEMBER_CATEGORY_MISMATCH", key);
-            RoundFacts projected = new RoundFacts(base.roundKey(), base.createdAtEpochSecond(), bs, bl,
-                    base.paidBoard(), base.finalBoard(), base.rpx(), base.gameMode() == 1);
-            RoundResult round = core.restore(projected);
-            if (ResultUtil.analyze(round).integerMultiplier() != ratio)
-                throw new PoolUnavailableException("REDIS_MEMBER_RATIO_MISMATCH", key);
-            return round;
+            PoolUnavailableException last = null;
+            for (Outcome outcome : order(preferred)) {
+                if (outcome == Outcome.LOSS) continue;
+                try {
+                    RoundResult round = take(redis, outcome, bs, bl);
+                    if (round != null) return round;
+                } catch (PoolUnavailableException ex) {
+                    if ("REDIS_UNAVAILABLE".equals(ex.code())) throw ex;
+                    last = ex;
+                }
+            }
+            throw last != null ? last : new PoolUnavailableException("REDIS_POOL_EMPTY",
+                    RedisLoader.normalIndex(config.redisGameId()));
         } catch (PoolUnavailableException ex) {
             throw ex;
         } catch (Exception ex) {
             throw new PoolUnavailableException("REDIS_UNAVAILABLE", ex.getMessage());
         }
+    }
+
+    private RoundResult independentLoss(BigDecimal bs, int bl) {
+        return losses.generateIndependentLoss(bs, bl);
     }
 
     private Outcome chooseOutcome() {
@@ -85,17 +76,53 @@ public final class RedisRoundStore {
         return point < config.winWeight() ? Outcome.WIN : Outcome.SPECIAL;
     }
 
-    
+    private static Outcome[] order(Outcome preferred) {
+        Outcome[] out = new Outcome[3];
+        out[0] = preferred;
+        int n = 1;
+        for (Outcome outcome : Outcome.values()) if (outcome != preferred) out[n++] = outcome;
+        return out;
+    }
 
-    
-
-    private int requireNonEmpty(Connection redis, boolean special, int minimum, int maximum) throws IOException {
+    private RoundResult take(Connection redis, Outcome outcome, BigDecimal bs, int bl) throws IOException {
+        boolean special = outcome == Outcome.SPECIAL;
+        int minimum = outcome == Outcome.LOSS ? 0 : 1;
+        int maximum = outcome == Outcome.LOSS ? 0 : Integer.MAX_VALUE;
         String index = special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId());
-        Integer selected = RedisFloorLookup.choose(redis::command, index,
+        Integer ratio = RedisFloorLookup.choose(redis::command, index,
                 m -> special ? RedisLoader.specialList(config.redisGameId(), m) : RedisLoader.normalList(config.redisGameId(), m),
                 random, minimum, maximum);
-        if (selected == null) throw new PoolUnavailableException("REDIS_POOL_EMPTY", index);
-        return selected;
+        if (ratio == null) throw new PoolUnavailableException("REDIS_POOL_EMPTY", index);
+        String key = special ? RedisLoader.specialList(config.redisGameId(), ratio)
+                : RedisLoader.normalList(config.redisGameId(), ratio);
+        Object length = redis.command("LLEN", key);
+        long len = length instanceof Long n ? n : Long.parseLong(String.valueOf(length));
+        if (len <= 0) throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
+        int attempts = (int) Math.min(len, 16);
+        int start = random.nextInt((int) Math.min(len, Integer.MAX_VALUE));
+        RuntimeException last = null;
+        for (int i = 0; i < attempts; i++) {
+            try {
+                Object raw = redis.command("LINDEX", key, Integer.toString((int) ((start + i) % len)));
+                if (!(raw instanceof String payload) || payload.isEmpty()) continue;
+                if (payload.charAt(0) == '{' || payload.charAt(0) == '[') continue;
+                RoundResult base = codec.decodeRedisMember(payload);
+                ResultAnalysis actual = ResultUtil.analyze(base);
+                if ((outcome == Outcome.LOSS && actual.redisPoolMode() != RoundMode.ORDINARY_LOSS)
+                        || (outcome == Outcome.WIN && actual.redisPoolMode() != RoundMode.ORDINARY_WIN)
+                        || (outcome == Outcome.SPECIAL && !ResultUtil.isSpecialPool(actual)))
+                    continue;
+                RoundFacts projected = new RoundFacts(base.roundKey(), base.createdAtEpochSecond(), bs, bl,
+                        base.paidBoard(), base.finalBoard(), base.rpx(), base.gameMode() == 1);
+                RoundResult round = core.restore(projected);
+                if (ResultUtil.analyze(round).integerMultiplier() != ratio) continue;
+                return round;
+            } catch (RuntimeException ex) {
+                last = ex;
+            }
+        }
+        if (last != null) throw last;
+        throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
     }
 
     private enum Outcome { LOSS, WIN, SPECIAL }

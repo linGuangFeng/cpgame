@@ -19,12 +19,16 @@ final class RedisRoundRepository implements AutoCloseable {
     private final ResultUtil util = new ResultUtil(rules);
 
     RedisRoundRepository(Properties p) {
-        String host = p.getProperty("redis.host", "18.234.101.161");
-        int port = Integer.parseInt(p.getProperty("redis.port", "8021"));
+        String host = p.getProperty("redis.host", "54.172.218.28");
+        int port = Integer.parseInt(p.getProperty("redis.port", "8016"));
         int db = Integer.parseInt(p.getProperty("redis.database", "0"));
         RedisKeys.requireGame(p.getProperty("redis.game-id", "8002110"));
-        if (!host.equals("18.234.101.161") || port != 8021 || db < 0) {
-            throw new IllegalArgumentException("Bee Workshop requires Redis 18.234.101.161:8021 DB15");
+        boolean nas = "192.168.10.3".equals(host) && port == 6379;
+        boolean aws = "18.234.101.161".equals(host) && port == 8021;
+        boolean fd = "54.172.218.28".equals(host) && port == 8016;
+        boolean local = "127.0.0.1".equals(host) && port == 6379;
+        if ((!nas && !aws && !fd && !local) || db < 0) {
+            throw new IllegalArgumentException("unauthorized Redis endpoint: " + host + ":" + port);
         }
         jedis = new Jedis(host, port, 3000);
         jedis.connect();
@@ -39,6 +43,7 @@ final class RedisRoundRepository implements AutoCloseable {
         }
         boolean wantWin = random.nextInt(1428) >= 1189;
         Claimed claimed = wantWin ? claimWin() : claimLoss();
+        if (claimed == null) claimed = wantWin ? claimLoss() : claimWin();
         if (claimed == null) throw new CacheEmptyException("empty PerKeyList/MaryKeyList");
         return claimed;
     }

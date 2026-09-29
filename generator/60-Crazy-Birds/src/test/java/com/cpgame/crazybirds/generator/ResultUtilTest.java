@@ -1,6 +1,7 @@
 package com.cpgame.crazybirds.generator;
 
 import com.cpgame.crazybirds.generator.model.WinWay;
+import com.cpgame.crazybirds.generator.model.RoundResult;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -48,5 +49,21 @@ final class ResultUtilTest {
                 "A", "A", "Q", "J");
         assertTrue(ResultUtil.isScatterTrigger(board));
         assertEquals(3, ResultUtil.scatterReels(board));
+    }
+
+    @Test
+    void minimumPaytableWinIsExactlyQuarterXAndBucket25() {
+        List<String> board = List.of(
+                "S5", "9", "10", "J",
+                "S5", "Q", "K", "A",
+                "S2", "S3", "S4", "A",
+                "S2", "S3", "S4", "A",
+                "S2", "S3", "S4", "A",
+                "S2", "S3", "S4", "A");
+        RoundResult round = new GameRuleCore().build("quarter", 1, BigDecimal.ONE,
+                BigDecimal.TEN, List.of(board));
+
+        assertEquals(new BigDecimal("0.25"), round.totalWin());
+        assertEquals(25, GameRules.cacheMultiplier(new RoundVerifier().verify(round).totalMultiplier()));
     }
 }

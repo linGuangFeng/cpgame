@@ -38,7 +38,6 @@ public final class RoundFactory {
 
     private RoundResult create(RoundCandidate candidate, BigDecimal betSize, int betLevel,
                                String roundKey, long createdAtEpochSecond) {
-        if (!GameRules.legalBet(betSize, betLevel)) throw new IllegalArgumentException("非法下注档位");
         List<String> paid = List.copyOf(candidate.paidBoard());
         List<String> fin = List.copyOf(candidate.finalBoard());
         if (paid.size() != 9 || fin.size() != 9) throw new IllegalArgumentException("候选牌面必须为 3×3 九格");

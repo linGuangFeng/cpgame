@@ -5,7 +5,7 @@ import static com.cpgame.batchc.cybergo.CyberGoRules.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Cyber GO 本地复刻候选分布；所有权重为正数，不声明或冒充原厂 RTP。 */
+/** Per-symbol dealing weights. Numbers may follow capture frequencies; dealing itself uses rule caps. */
 public record SymbolWeights(Map<String, Integer> normal, Map<String, Integer> free) {
     public SymbolWeights {
         normal = Map.copyOf(validate(normal, true, "普通"));
@@ -14,11 +14,13 @@ public record SymbolWeights(Map<String, Integer> normal, Map<String, Integer> fr
 
     public static SymbolWeights localDefaults() {
         Map<String, Integer> normal = new LinkedHashMap<>();
-        normal.put("S1", 5); normal.put("S2", 6); normal.put("S3", 7); normal.put("S4", 8);
-        normal.put("A", 10); normal.put("K", 10); normal.put("Q", 12); normal.put("J", 12);
-        normal.put(WILD, 2); normal.put(SCATTER, 3);
-        Map<String, Integer> free = new LinkedHashMap<>(normal);
-        free.remove(SCATTER); // B04 已确认免费盘面不出现 Scatter。
+        normal.put("S1", 3099); normal.put("S2", 2758); normal.put("S3", 2514); normal.put("S4", 2310);
+        normal.put("A", 2098); normal.put("K", 2132); normal.put("Q", 2223); normal.put("J", 2081);
+        normal.put(WILD, 724); normal.put(SCATTER, 491);
+        Map<String, Integer> free = new LinkedHashMap<>();
+        free.put("S1", 1810); free.put("S2", 1654); free.put("S3", 1732); free.put("S4", 1764);
+        free.put("A", 478); free.put("K", 505); free.put("Q", 430); free.put("J", 445);
+        free.put(WILD, 452); // Captured free transitions contain no Scatter.
         return new SymbolWeights(normal, free);
     }
 

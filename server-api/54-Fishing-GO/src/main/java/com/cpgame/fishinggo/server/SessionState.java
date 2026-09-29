@@ -1,6 +1,7 @@
 package com.cpgame.fishinggo.server;
 
 import com.cpgame.fishinggo.core.CompleteRound;
+import com.cpgame.fishinggo.core.ProtocolConstants;
 
 import java.math.BigDecimal;
 import java.util.ArrayDeque;
@@ -16,6 +17,10 @@ final class SessionState {
     int deliveryIndex;
     String transferId;
     long lastCreatedAt;
+    BigDecimal betSize = ProtocolConstants.MIN_BET_SIZE;
+    int betLevel = ProtocolConstants.MIN_BET_LEVEL;
+    BigDecimal stakeFactor = BigDecimal.ONE;
+    BigDecimal paidBet = ProtocolConstants.MIN_TOTAL_BET;
     Map<String, Object> lastSpin;
     int paidRounds;
     final Deque<Map<String, Object>> history = new ArrayDeque<>();

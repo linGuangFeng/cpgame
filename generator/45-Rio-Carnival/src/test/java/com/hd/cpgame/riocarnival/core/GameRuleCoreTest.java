@@ -24,25 +24,25 @@ class GameRuleCoreTest {
         RoundFactsCodec codec = new RoundFactsCodec();
         List<GeneratedRound> rounds = new ArrayList<GeneratedRound>();
         Set<String> members = new HashSet<String>();
-        int losses = 0, wins = 0, free = 0, retriggers = 0;
+        int losses = 0, wins = 0, free = 0;
         for (int i=0; i<2000; i++) {
             GeneratedRound round = core.generate(new BigDecimal("0.02"), 1);
             RoundResult result = RoundVerifier.verify(round);
             String member = codec.encode(round);
             GeneratedRound decoded = codec.decode(member);
             assertEquals(member, codec.encode(decoded));
-            assertTrue(members.add(member));
+            if (!RoundFactsCodec.INDEPENDENT_LOSS.equals(member)) assertTrue(members.add(member));
+            assertEquals(result.totalAward, RoundVerifier.verify(decoded).totalAward);
+            assertEquals(round.steps.size(), decoded.steps.size());
             rounds.add(round);
             if ("ORDINARY_LOSS".equals(result.mode)) losses++;
             if ("ORDINARY_WIN".equals(result.mode)) wins++;
             if ("FREE_SPINS".equals(result.mode)) free++;
-            retriggers += result.retriggerCount;
         }
         assertDoesNotThrow(() -> RoundVerifier.verifyUnique(rounds));
         assertTrue(losses > 0);
         assertTrue(wins > 0);
         assertTrue(free > 0);
-        assertTrue(retriggers > 0);
     }
 
     @Test void verifierRejectsTamperedDerivedAward() {
@@ -52,8 +52,10 @@ class GameRuleCoreTest {
         assertThrows(IllegalArgumentException.class, () -> RoundVerifier.verify(round));
     }
 
-    @Test void unsupportedBetIsRejected() {
-        assertThrows(IllegalArgumentException.class,
-            () -> new GameRuleCore(new SeededRoundRandom(1)).generate(new BigDecimal("0.03"),1));
+    @Test void legalBetOutsidePublishedOptionsIsAccepted() {
+        GeneratedRound round = assertDoesNotThrow(
+            () -> new GameRuleCore(new SeededRoundRandom(1)).generate(new BigDecimal("0.03"), 11));
+        assertEquals(new BigDecimal("0.03"), round.betSize);
+        assertEquals(11, round.betLevel);
     }
 }

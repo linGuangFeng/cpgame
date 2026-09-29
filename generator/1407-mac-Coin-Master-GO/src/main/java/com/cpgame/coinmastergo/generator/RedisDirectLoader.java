@@ -98,6 +98,14 @@ public final class RedisDirectLoader {
                 if (pending.size() >= configuration.batchSize) flush(writer, pending, configuration, counters);
             }
             flush(writer, pending, configuration, counters);
+        } catch (Exception redisError) {
+            if (counters.batches > 0 && redisProgressStop(redisError)) {
+                System.out.println("[warn] Redis stopped after " + counters.batches
+                        + " batches: " + redisError.getMessage());
+                pending.clear();
+            } else {
+                throw redisError;
+            }
         }
         return counters.summary(configuration.redisGameId, core.rulesHash());
     }
@@ -125,6 +133,15 @@ public final class RedisDirectLoader {
     }
     /** 0倍是规则引擎自然生成的结果；写Redis的取舍固定在代码中，不提供概率或开关配置。 */
     static boolean shouldPersist(BigDecimal value) { return value.signum() >= 0; }
+
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
+    }
 
     /** 特殊入口只把付费首局 SC 概率乘 10；连消/免费仍用原倍数。 */
     static Map<String, Integer> specialEntryOpeningWeights(Map<String, Integer> ordinary) {

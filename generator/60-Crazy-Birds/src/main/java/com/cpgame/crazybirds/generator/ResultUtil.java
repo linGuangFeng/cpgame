@@ -34,6 +34,32 @@ public final class ResultUtil {
         if (wild > 8) throw new IllegalArgumentException("整盘 WILD 超过抓包上限");
     }
 
+    /**
+     * 原站 961 个付费阶段牌面、433 个免费阶段牌面的共同位置约束：
+     * 首轴不出 Wild，每轴至多一个 Scatter、至多一个 Wild 家族符号；
+     * 付费阶段只出普通 WILD，免费阶段只出 WILDX2/3/5。
+     */
+    public static void validateBoardForStage(List<String> board, boolean freeStep) {
+        validateBoard(board);
+        var allowed = freeStep ? GameRules.FREE_SYMBOLS : GameRules.PAID_SYMBOLS;
+        for (int reel = 0; reel < GameRules.REEL_COUNT; reel++) {
+            int scatter = 0;
+            int wild = 0;
+            for (int row = 0; row < GameRules.ROWS; row++) {
+                String symbol = board.get(GameRules.indexOf(reel, row));
+                if (!allowed.contains(symbol)) {
+                    throw new IllegalArgumentException((freeStep ? "免费" : "付费")
+                            + "阶段禁止符号 " + symbol);
+                }
+                if ("SC".equals(symbol)) scatter++;
+                if (GameRules.isWild(symbol)) wild++;
+            }
+            if (scatter > 1) throw new IllegalArgumentException("每轴最多一个 SC: reel=" + reel);
+            if (wild > 1) throw new IllegalArgumentException("每轴最多一个 WILD: reel=" + reel);
+            if (reel == 0 && wild > 0) throw new IllegalArgumentException("首轴禁止 WILD");
+        }
+    }
+
     public static int scatterReels(List<String> board) {
         validateBoard(board);
         int reels = 0;

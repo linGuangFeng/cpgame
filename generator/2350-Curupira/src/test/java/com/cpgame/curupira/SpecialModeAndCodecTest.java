@@ -6,156 +6,98 @@ import com.cpgame.curupira.core.GameRules;
 import com.cpgame.curupira.core.GenerationPolicy;
 import com.cpgame.curupira.core.ResultUtil;
 import com.cpgame.curupira.model.CompleteRoundFact;
+import com.cpgame.curupira.model.CompleteRoundFact.EntryKind;
 import com.cpgame.curupira.model.CompleteRoundFact.Kind;
 import com.cpgame.curupira.model.FeatureStep;
 import com.cpgame.curupira.redis.RedisContractGate;
-import org.junit.jupiter.api.Test;
-import java.util.EnumSet;
-import java.util.HashSet;
+import com.cpgame.curupira.verify.RoundVerifier;
 import java.util.List;
-import java.util.Set;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SpecialModeAndCodecTest {
-    @Test
-    void redisKeysFollowPlatformContract() {
+    @Test void redisKeysKeepNormalPer0AndTwoStableMaryTypes() {
         RedisContractGate keys = new RedisContractGate();
         assertEquals("PerKeyList_000002350", keys.normalIndex(2350));
-        assertEquals("MaryKeyList_000002350", keys.specialIndex(2350));
-        assertEquals("BetLog:000002350:000000", keys.resultKey("ORDINARY_PAID", 0, 2350));
-        assertEquals("BetLog:000002350:000050", keys.resultKey("ORDINARY_PAID", 50, 2350));
-        assertEquals("MaryLog:000002350:000375", keys.resultKey("SPECIAL", 375, 2350));
-        assertEquals("PerKeyList_000002350", keys.indexFor(Kind.LOSS, 2350));
-        assertEquals("PerKeyList_000002350", keys.indexFor(Kind.EXPANDING_WILD, 2350));
+        assertEquals("PerKeyList_000002350", keys.indexFor(Kind.TRIGGER, 2350));
         assertEquals("MaryKeyList_000002350", keys.indexFor(Kind.FREE_EW, 2350));
         assertEquals("MaryKeyList_100002350", keys.indexFor(Kind.HOLD, 2350));
-        assertEquals("MaryKeyList_000002350", keys.indexFor(Kind.BUY_FE, 2350));
-        assertEquals("MaryKeyList_100002350", keys.indexFor(Kind.BUY_HS, 2350));
-        assertEquals("MaryLog:000002350:000010", keys.listFor(Kind.FREE_EW, 10, 2350));
-        assertEquals("MaryLog:100002350:000010", keys.listFor(Kind.HOLD, 10, 2350));
-        assertEquals(List.of("MaryKeyList_000002350"), keys.indexesToWrite(Kind.FREE_EW, 2350));
-        assertEquals(List.of("MaryKeyList_100002350"), keys.indexesToWrite(Kind.HOLD, 2350));
-        assertNotEquals(keys.indexFor(Kind.FREE_EW, 2350), keys.indexFor(Kind.HOLD, 2350));
-        assertThrows(IllegalArgumentException.class, () -> keys.indexFor(Kind.TRIGGER, 2350));
-        assertThrows(IllegalArgumentException.class, () -> keys.indexesToWrite(Kind.TRIGGER, 2350));
+        assertEquals("BetLog:000002350:000000", keys.listFor(Kind.TRIGGER, 0, 2350));
+        assertEquals("MaryLog:000002350:000050", keys.listFor(Kind.FREE_EW, 50, 2350));
+        assertEquals("MaryLog:100002350:000125", keys.listFor(Kind.HOLD, 125, 2350));
+        assertEquals(3, keys.allIndexKeys(2350).size());
     }
 
-    @Test
-    void liveTriggerIsNonWinningScatterBoard() {
-        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(2350), GenerationPolicy.ordinaryPaidDefaults());
-        ResultUtil util = new ResultUtil();
-        for (int i = 0; i < 20; i++) {
-            CompleteRoundFact trigger = core.generateFact(Kind.TRIGGER);
-            var board = util.evaluate(trigger.steps().get(0).cells());
-            assertEquals(GameRules.SCATTER_TRIGGER, board.scatterCount());
-            assertTrue(board.awards().isEmpty());
-            assertEquals(0, board.multiplierSum());
-            assertEquals(0, trigger.redisMultiplier());
-        }
-    }
-
-    @Test
-    void asciiMemberRoundTripsEveryKind() {
-        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(235020), GenerationPolicy.ordinaryPaidDefaults());
+    @Test void ordinaryAndTriggerFullMembersRoundTrip() {
+        GameRuleCore core = core(235020);
         MinimalFactCodec codec = new MinimalFactCodec();
-        ResultUtil util = new ResultUtil();
-        for (Kind kind : Kind.values()) {
-            CompleteRoundFact fact = core.generateFact(kind);
+        RoundVerifier verifier = new RoundVerifier();
+        boolean triggerObserved = false;
+        for (int index = 0; index < 5_000; index++) {
+            CompleteRoundFact fact = core.generatePaidCandidate();
             String member = codec.encodeFact(fact);
-            assertFalse(member.startsWith("{"));
-            assertTrue(member.startsWith("CU1"));
             CompleteRoundFact decoded = codec.decode(member);
-            assertEquals(kind, decoded.kind());
-            assertEquals(fact.steps().size(), decoded.steps().size());
-            assertEquals(util.redisMultiplier(fact), util.redisMultiplier(decoded));
+            verifier.verifyFact(decoded);
+            assertEquals(fact.kind(), decoded.kind());
+            assertEquals(fact.steps(), decoded.steps());
+            assertSeparatorLimit(member);
+            triggerObserved |= fact.kind() == Kind.TRIGGER;
         }
+        assertTrue(triggerObserved, "自然付费候选应能到达 Scatter trigger");
     }
 
-    @Test
-    void freeAndHoldTerminateAndTriggerHasThreeScatters() {
-        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(42), GenerationPolicy.ordinaryPaidDefaults());
-        CompleteRoundFact free = core.generateFact(Kind.FREE_EW);
-        assertEquals(6, free.steps().size());
-        assertEquals(0, free.steps().get(5).st());
-        for (FeatureStep step : free.steps()) {
-            assertEquals(1, new ResultUtil().evaluate(step.cells()).expandingWildColumns().size());
-        }
-        CompleteRoundFact hold = core.generateFact(Kind.HOLD);
-        assertEquals(0, hold.steps().get(hold.steps().size() - 1).st());
-        CompleteRoundFact trigger = core.generateFact(Kind.TRIGGER);
-        assertEquals(GameRules.SCATTER_TRIGGER, new ResultUtil().evaluate(trigger.steps().get(0).cells()).scatterCount());
-        assertEquals(EnumSet.of(Kind.BUY_FE), EnumSet.of(core.generateFact(Kind.BUY_FE).kind()));
-        assertEquals(Kind.BUY_HS, core.generateFact(Kind.BUY_HS).kind());
-    }
-
-    @Test
-    void boardsNeverPlaceTwoScattersInOneColumn() {
-        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(7), GenerationPolicy.ordinaryPaidDefaults());
-        for (int i = 0; i < 200; i++) {
-            for (Kind kind : List.of(Kind.LOSS, Kind.WIN, Kind.EXPANDING_WILD, Kind.TRIGGER, Kind.FREE_EW)) {
-                CompleteRoundFact fact = kind == Kind.WIN ? core.generateWinRange(1, 10_000) : core.generateFact(kind);
-                for (FeatureStep step : fact.steps()) {
-                    if (step.role() == FeatureStep.Role.HOLD) continue;
-                    int[] perCol = new int[GameRules.COLUMNS];
-                    List<Integer> cells = step.cells();
-                    for (int idx = 0; idx < cells.size(); idx++) {
-                        if (cells.get(idx) == GameRules.SCATTER) perCol[idx / GameRules.ROWS]++;
-                    }
-                    for (int c = 0; c < perCol.length; c++) {
-                        assertTrue(perCol[c] <= 1, "column " + c + " has " + perCol[c] + " scatters");
-                    }
-                }
+    @Test void bothMaryKindsAreNaturalCompleteFactsAndCompact() {
+        GameRuleCore core = core(235021);
+        MinimalFactCodec codec = new MinimalFactCodec();
+        RoundVerifier verifier = new RoundVerifier();
+        for (int index = 0; index < 200; index++) {
+            CompleteRoundFact free = core.generateFreeExpandingWildCandidate();
+            CompleteRoundFact hold = core.generateHoldAndSpinsCandidate();
+            assertEquals(Kind.FREE_EW, free.kind());
+            assertEquals(GameRules.FREE_EXPANDING_WILD_COUNT, free.steps().size());
+            assertEquals(Kind.HOLD, hold.kind());
+            assertTrue(hold.steps().size() <= GameRules.HOLD_START_SPINS + GameRules.COIN_TOTAL_COUNT);
+            for (CompleteRoundFact fact : List.of(free, hold)) {
+                String member = codec.encodeFact(fact);
+                CompleteRoundFact decoded = codec.decode(member);
+                verifier.verifyFact(decoded);
+                assertEquals(fact.kind(), decoded.kind());
+                assertEquals(fact.steps(), decoded.steps());
+                assertSeparatorLimit(member);
             }
         }
     }
 
-    @Test
-    void expandingWildBoardsAreWeightedMixWithSpreadMultipliers() {
-        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(23502000L), GenerationPolicy.ordinaryPaidDefaults());
-        ResultUtil util = new ResultUtil();
-        Set<List<Integer>> boards = new HashSet<>();
-        Set<Integer> multipliers = new HashSet<>();
-        int mixed = 0;
-        for (int i = 0; i < 80; i++) {
-            CompleteRoundFact fact = core.generateFact(Kind.EXPANDING_WILD);
-            List<Integer> cells = fact.steps().get(0).cells();
-            assertFalse(util.evaluate(cells).expandingWildColumns().isEmpty());
-            assertFalse(cells.subList(0, GameRules.ROWS).contains(GameRules.WILD));
-            boards.add(cells);
-            multipliers.add(fact.redisMultiplier());
-            if (distinctPays(cells) >= 2) mixed++;
-        }
-        assertTrue(boards.size() >= 70, "unique expanding boards=" + boards.size());
-        assertTrue(multipliers.size() >= 8, "unique expanding multipliers=" + multipliers.size());
-        assertTrue(mixed >= 70, "mixed expanding boards=" + mixed);
+    @Test void sameColumnDoubleScatterIsRejectedByIndependentRules() {
+        List<Integer> invalid = List.of(
+                31,31,1,
+                2,3,4,
+                11,12,13,
+                14,1,2,
+                3,4,11);
+        assertFalse(GameRules.hasAtMostOneScatterPerColumn(invalid));
+        assertThrows(IllegalArgumentException.class, () -> new ResultUtil().evaluate(invalid));
     }
 
-    @Test
-    void ordinaryWinsAreWeightedMix() {
-        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(2000L), GenerationPolicy.ordinaryPaidDefaults());
-        ResultUtil util = new ResultUtil();
-        Set<List<Integer>> boards = new HashSet<>();
-        Set<Integer> multipliers = new HashSet<>();
-        int mixed = 0;
-        for (int i = 0; i < 200; i++) {
-            CompleteRoundFact fact = core.generateFact(Kind.WIN);
-            assertEquals(Kind.WIN, fact.kind());
-            List<Integer> cells = fact.steps().get(0).cells();
-            assertTrue(util.evaluate(cells).expandingWildColumns().isEmpty());
-            boards.add(cells);
-            multipliers.add(fact.redisMultiplier());
-            if (distinctPays(cells) >= 2) mixed++;
-        }
-        assertTrue(boards.size() >= 180, "unique WIN boards=" + boards.size());
-        assertTrue(multipliers.size() >= 8, "unique WIN multipliers=" + multipliers.size());
-        assertTrue(mixed >= 190, "mixed WIN boards=" + mixed);
+    @Test void manuallyEncodedTriggerMustCarryTheConfirmedSelectionState() {
+        List<Integer> cells = List.of(31,1,2, 31,3,4, 31,11,12, 13,14,1, 2,3,4);
+        var evaluated = new ResultUtil().evaluate(cells);
+        CompleteRoundFact invalid = new CompleteRoundFact(10_000_000_000_000_001L, Kind.TRIGGER,
+                EntryKind.PAID, List.of(FeatureStep.symbol(FeatureStep.Role.TRIGGER,
+                cells, evaluated, 0, 0, 0, 1, 1)));
+        assertThrows(IllegalArgumentException.class, () -> new RoundVerifier().verifyFact(invalid));
     }
 
-    private static int distinctPays(List<Integer> cells) {
-        Set<Integer> pays = new HashSet<>();
-        for (int id : cells) {
-            if (id != GameRules.WILD && id != GameRules.SCATTER) pays.add(id);
+    private static GameRuleCore core(long seed) {
+        return new GameRuleCore(new DeterministicRandomSource(seed),
+                GenerationPolicy.ordinaryPaidDefaults(), 9, 1);
+    }
+
+    private static void assertSeparatorLimit(String member) {
+        for (char separator : new char[]{';', '/', ':', '.'}) {
+            long count = member.chars().filter(value -> value == separator).count();
+            assertTrue((double) count / member.length() <= 0.20,
+                    () -> "separator " + separator + " exceeds 20% in " + member);
         }
-        return pays.size();
     }
 }

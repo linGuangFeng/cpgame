@@ -25,7 +25,8 @@ public final class LoaderMain {
     public static LoadSummary run(LoaderConfig config) throws Exception {
         SecureRandom random = new SecureRandom();
         CompleteRoundFactory factory = new CompleteRoundFactory(
-            config.maximumCascades(), config.maximumSpecialSpins());
+            config.maximumCascades(), config.maximumSpecialSpins(),
+            EmpiricalColumnModel.configured(config.outputLimits().symbolWeights));
         IndependentVerifier verifier = new IndependentVerifier(config.maximumRoundMultiplier(),
             config.maximumCascades(), config.maximumSpecialSpins());
         MemberCodec codec = new MemberCodec();
@@ -47,18 +48,35 @@ public final class LoaderMain {
                 verifier.verifyCodecRoundTrip(round, codec);
                 String key = RedisKeys.list(round.mode(), round.multiplier());
                 int current = processCounts.getOrDefault(key, 0);
-                RedisRoundWriter.WriteResult result = writer.write(round);
-                if (result.written()) {
-                    processCounts.put(key, current + 1);
-                    written++;
-                    if (written % 20 == 0) System.out.println("LOADER_PROGRESS written=" + written + " candidates=" + candidates);
+                try {
+                    RedisRoundWriter.WriteResult result = writer.write(round);
+                    if (result.written()) {
+                        processCounts.put(key, current + 1);
+                        written++;
+                        if (written % 20 == 0) System.out.println("LOADER_PROGRESS written=" + written + " candidates=" + candidates);
+                    }
+                } catch (java.io.IOException redisError) {
+                    if (written > 0 && redisProgressStop(redisError)) {
+                        System.out.println("[warn] Redis stopped after written=" + written + ": " + redisError.getMessage());
+                        break;
+                    }
+                    throw redisError;
                 }
             }
         }
         if (written < config.totalMembers()) {
-            throw new IllegalStateException("达到候选上限，已安全停止；写入 " + written + "/" + config.totalMembers());
+            System.out.println("[warn] 达到候选上限或 Redis 限制，已写入 " + written + "/" + config.totalMembers());
         }
         return new LoadSummary(written, candidates, Map.copyOf(processCounts));
+    }
+
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
     }
 
     static Path configPath(String[] args) {

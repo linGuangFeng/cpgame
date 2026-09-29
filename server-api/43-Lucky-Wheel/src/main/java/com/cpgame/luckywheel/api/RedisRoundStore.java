@@ -67,7 +67,7 @@ final class RedisRoundStore implements AutoCloseable {
                     || member.startsWith("{") || member.startsWith("[")) {
                 throw new IOException("缓存member不是极简ASCII事实");
             }
-            RoundFacts facts = codec.decodeRedisMember(member.getBytes(StandardCharsets.US_ASCII));
+            RoundFacts facts = codec.decodeRedisMember(member.getBytes(StandardCharsets.US_ASCII), betProfile);
             if (facts.betProfile() != betProfile) throw new IOException("缓存完整局下注档案与隔离池不一致");
             ResultAnalysis analysis = ResultUtil.analyze(facts);
             int actual;

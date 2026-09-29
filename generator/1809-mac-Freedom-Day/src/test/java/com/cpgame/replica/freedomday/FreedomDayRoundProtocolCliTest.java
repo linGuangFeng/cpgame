@@ -27,8 +27,9 @@ class FreedomDayRoundProtocolCliTest {
                     foundWin = true;
                     for (JsonNode position : win.path("p")) {
                         assertTrue(position.isArray(), "main win positions must be nested arrays for the client animation");
-                        assertFalse(position.isEmpty());
-                        assertTrue(position.size() <= 4, "a visible symbol/frame occupies at most four cells");
+                        assertEquals(1, position.size(), "each win_arr.p item must contain one visible-block anchor");
+                        assertTrue(isGridAnchor(page.path("grids"), position.get(0).asInt()),
+                                "a stacked win must use the last grids cell as its anchor");
                     }
                 }
             }
@@ -36,6 +37,15 @@ class FreedomDayRoundProtocolCliTest {
             assertEquals(0, terminal.path("win_arr").size());
         }
         assertTrue(foundWin, "test round must include at least one win");
+    }
+
+    private static boolean isGridAnchor(JsonNode groups, int cell) {
+        for (JsonNode group : groups) {
+            for (JsonNode occupied : group) {
+                if (occupied.asInt() == cell) return group.get(group.size() - 1).asInt() == cell;
+            }
+        }
+        return true;
     }
 
     @Test void overlongNaturalCascadesAreRejectedInsteadOfKillingGeneration() {

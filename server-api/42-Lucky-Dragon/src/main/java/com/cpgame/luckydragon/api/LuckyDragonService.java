@@ -2,6 +2,7 @@ package com.cpgame.luckydragon.api;
 
 import com.cpgame.luckydragon.core.GameRuleCore;
 import com.cpgame.luckydragon.core.IndependentRoundVerifier;
+import com.cpgame.luckydragon.core.LuckyDragonMultiplierCatalog;
 import com.cpgame.luckydragon.core.RoundRequest;
 import com.cpgame.luckydragon.core.SpinResult;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,20 +31,47 @@ final class LuckyDragonService {
     private final GameRuleCore rules = new GameRuleCore();
     private final IndependentRoundVerifier verifier = new IndependentRoundVerifier(rules);
     private final RoundProvider roundProvider;
+    private final String roundSource;
+    private final boolean runtimeDeal;
     private final Map<String,SessionState> sessions = new ConcurrentHashMap<>();
     private final Map<String,SessionState> launchAliases = new ConcurrentHashMap<>();
     private final AtomicLong ids = new AtomicLong(System.currentTimeMillis() << 20);
     private final Path stateDirectory;
     private final BigDecimal initialBalance;
+    private final SecureRandom random = new SecureRandom();
 
     LuckyDragonService(Path stateDirectory, BigDecimal initialBalance, Properties config) throws IOException {
-        this(stateDirectory, initialBalance, RedisRoundStore.connect(config));
+        this(stateDirectory, initialBalance, ProviderChoice.from(config));
+    }
+
+    private LuckyDragonService(Path stateDirectory, BigDecimal initialBalance, ProviderChoice choice) throws IOException {
+        this(stateDirectory, initialBalance, choice.provider, choice.roundSource, choice.runtimeDeal);
+    }
+
+    private record ProviderChoice(RoundProvider provider, String roundSource, boolean runtimeDeal) {
+        static ProviderChoice from(Properties config) throws IOException {
+            boolean redisEnabled = Boolean.parseBoolean(config.getProperty("redis.enabled", "true").trim());
+            String mode = config.getProperty("generation.mode", redisEnabled ? "redis" : "realtime").trim();
+            boolean realtime = !redisEnabled || "realtime".equalsIgnoreCase(mode);
+            RoundProvider provider = realtime ? RealtimeRoundStore.create(config) : RedisRoundStore.connect(config);
+            return new ProviderChoice(
+                provider,
+                realtime ? "realtime-java-rule-core" : "redis-db15-complete-round",
+                realtime);
+        }
     }
 
     LuckyDragonService(Path stateDirectory, BigDecimal initialBalance, RoundProvider roundProvider) throws IOException {
+        this(stateDirectory, initialBalance, roundProvider, "redis-db15-complete-round", false);
+    }
+
+    LuckyDragonService(Path stateDirectory, BigDecimal initialBalance, RoundProvider roundProvider,
+                       String roundSource, boolean runtimeDeal) throws IOException {
         this.stateDirectory = stateDirectory.toAbsolutePath().normalize();
         this.initialBalance = money(initialBalance);
         this.roundProvider = java.util.Objects.requireNonNull(roundProvider, "roundProvider");
+        this.roundSource = java.util.Objects.requireNonNull(roundSource, "roundSource");
+        this.runtimeDeal = runtimeDeal;
         Files.createDirectories(this.stateDirectory);
     }
 
@@ -95,13 +124,19 @@ final class LuckyDragonService {
         }
         BigDecimal betSize = decimal(form.get("bs"), "bs");
         int betLevel = integer(form.get("bl"), "bl");
-        if (!GameRuleCore.BET_SIZES.contains(betSize.stripTrailingZeros())) throw new ApiException(400, "unsupported bs");
-        if (!GameRuleCore.BET_LEVELS.contains(betLevel)) throw new ApiException(400, "unsupported bl");
         RoundRequest request = new RoundRequest(betSize, betLevel);
         if (state.balance.compareTo(request.paidBet()) < 0) throw new ApiException(409, "insufficient balance");
+        String rawOdd = first(form.get("odd"), form.get("odds"));
+        int requestedOdd;
+        if (rawOdd == null) {
+            requestedOdd = LuckyDragonMultiplierCatalog.sampleRequestedOdd(random);
+        } else {
+            try { requestedOdd = Integer.parseInt(rawOdd); }
+            catch (NumberFormatException error) { throw new ApiException(400, "invalid odd"); }
+        }
         ClaimedRound claimed;
-        try { claimed = roundProvider.claim(request); }
-        catch (Exception error) { throw new ApiException(503, "Redis complete-Round cache unavailable: " + error.getMessage()); }
+        try { claimed = roundProvider.claim(request, requestedOdd); }
+        catch (Exception error) { throw new ApiException(503, "complete Round provider unavailable: " + error.getMessage()); }
         SpinResult candidate = claimed.result();
         verifier.verify(request, candidate);
         long now = Instant.now().getEpochSecond();
@@ -159,7 +194,8 @@ final class LuckyDragonService {
 
     Map<String,Object> status() {
         return map("status", "UP", "gameId", 42, "rulesHash", GameRuleCore.RULES_HASH,
-            "roundSource", "redis-db15-complete-round", "runtimeDeal", false,
+            "roundSource", roundSource, "runtimeDeal", runtimeDeal,
+            "generation", runtimeDeal ? "realtime" : "redis-cache",
             "managedProcessPid", ProcessHandle.current().pid(),
             "controllerClassLoaderIdentity", Integer.toHexString(System.identityHashCode(getClass().getClassLoader())),
             "sessionCount", sessions.size());
@@ -171,7 +207,7 @@ final class LuckyDragonService {
             "rpx", round.result.reelMultiplier(), "rskl", round.result.symbols(),
             "wa", round.result.payout(), "wsk", round.result.winningSymbol(),
             "roundKey", round.roundKey, "deliveryIndex", round.deliveryIndex,
-            "terminal", round.terminal, "_source", "redis-db15-complete-round");
+            "terminal", round.terminal, "_source", roundSource);
     }
 
     private Map<String,Object> listRow(RoundState round) {
@@ -345,7 +381,7 @@ final class LuckyDragonService {
     }
 
     interface RoundProvider {
-        ClaimedRound claim(RoundRequest request) throws Exception;
+        ClaimedRound claim(RoundRequest request, int requestedOdd) throws Exception;
     }
 
     record ClaimedRound(String roundKey, SpinResult result, String member) { }

@@ -155,12 +155,15 @@ public final class FreedomDayController {
         BigDecimal cumulative = value.remove("_cumulative_free_win").decimalValue();
         int endingMultiplier = value.remove("_ending_multiplier").asInt();
         value.remove("_awarded_free_spins");
+        int level = Math.max(1, value.path("level").asInt());
+        BigDecimal betSize = unitBet.divide(BigDecimal.valueOf(level), 8, RoundingMode.HALF_UP).stripTrailingZeros();
         BigDecimal charged = freeIndex == 0
                 ? unitBet.multiply(BigDecimal.valueOf(20L * (featureBuy ? 75L : 1L))) : BigDecimal.ZERO;
         BigDecimal spinWin = value.path("total_win").decimalValue();
         BigDecimal start = state.balance;
         state.balance = start.subtract(charged).add(spinWin).setScale(2, RoundingMode.HALF_UP);
         value.put("order_id", value.path("oid").asText());
+        value.put("bet", betSize);
         value.put("bet_gold", charged); value.put("change_gold", spinWin.subtract(charged));
         value.put("start_gold", start); value.put("end_gold", state.balance);
         value.put("odds", charged.signum() == 0 ? BigDecimal.ZERO
@@ -171,19 +174,79 @@ public final class FreedomDayController {
             value.put("frees", false);
         } else {
             ObjectNode frees = value.putObject("frees");
+            BigDecimal chargedStake = unitBet.multiply(BigDecimal.valueOf(20L * (featureBuy ? 75L : 1L)));
             frees.put("tt", freeTotal).put("st", Math.max(0, freeTotal - freeIndex)).put("twa", cumulative)
                     .put("lwa", freeIndex > 0 ? spinWin : BigDecimal.ZERO).put("m", endingMultiplier)
-                    .put("ba", unitBet.multiply(BigDecimal.valueOf(20L * (featureBuy ? 75L : 1L))))
-                    .put("bet", unitBet);
+                    .put("ba", freeIndex == 0 ? chargedStake : BigDecimal.ZERO)
+                    .put("bet", betSize).put("l", level);
         }
-        value.put("small_game_type", 0);
+        boolean freeStep = freeIndex > 0;
+        value.put("small_game_type", freeStep ? 2 : 0);
+        if (!freeStep) {
+            active.paidOid = value.path("oid").asText();
+            if (freeTotal > 0 || featureBuy) value.put("type", 3);
+        } else if (active.paidOid == null) {
+            active.paidOid = value.path("oid").asText();
+        }
         value.put("roundKey", active.roundKey).put("deliveryIndex", deliveryIndex)
                 .put("deliveryCount", active.deliveries.size()).put("_source", "formal-java-rule-core");
+        value.set("result", value.path("props").deepCopy());
         active.nextIndex++;
         state.lastDelivery = value.deepCopy();
-        state.history.add(value.deepCopy());
+        appendRoundHistory(state, active, value, betSize, freeStep);
         if (active.nextIndex >= active.deliveries.size()) state.active = null;
         return value;
+    }
+
+    /**
+     * Origin history is one list row per paid round. Free/Mary deliveries belong in
+     * {@code results[]}; they are not separate list items. Header {@code bet}/{@code bet_gold}
+     * stay the paid unit and charged stake; {@code change_gold} is the running round net.
+     */
+    private void appendRoundHistory(SessionState state, ActiveRound active, ObjectNode spin, BigDecimal betSize,
+                                    boolean freeStep) {
+        ObjectNode step = historyStep(spin, betSize, freeStep, active.paidOid);
+        if (!freeStep || active.historyRow == null) {
+            ObjectNode row = spin.deepCopy();
+            stripInternal(row);
+            row.remove("extend");
+            row.put("bet", betSize);
+            row.put("order_id", spin.path("oid").asText() + "-" + PROVIDER_GID);
+            row.set("result", spin.path("props").deepCopy());
+            ArrayNode results = row.putArray("results");
+            results.add(step);
+            active.historyRow = row;
+            state.history.add(0, row);
+            return;
+        }
+        active.historyRow.withArray("results").add(step);
+        BigDecimal roundChange = BigDecimal.ZERO;
+        for (JsonNode item : active.historyRow.path("results")) {
+            roundChange = roundChange.add(item.path("change_gold").decimalValue());
+        }
+        active.historyRow.put("change_gold", roundChange);
+    }
+
+    private ObjectNode historyStep(ObjectNode spin, BigDecimal betSize, boolean freeStep, String paidOid) {
+        ObjectNode step = spin.deepCopy();
+        stripInternal(step);
+        step.remove("time");
+        step.remove("order_id");
+        step.remove("extend");
+        if (freeStep) {
+            step.put("bet", betSize);
+            step.put("bet_gold", BigDecimal.ZERO);
+            if (paidOid != null) step.put("forder_id", paidOid);
+            if (step.path("frees").isObject()) step.with("frees").put("ba", 0);
+        } else {
+            step.put("bet", false);
+        }
+        step.set("result", spin.path("props").deepCopy());
+        return step;
+    }
+
+    private static void stripInternal(ObjectNode node) {
+        node.remove(List.of("roundKey", "deliveryIndex", "deliveryCount", "_source"));
     }
 
     private ObjectNode initResponse(SessionState state) throws Exception {
@@ -211,6 +274,7 @@ public final class FreedomDayController {
         data.put("oid", "INIT-1809").put("order_id", "INIT-1809").put("bet_gold", 0)
                 .put("change_gold", 0).put("win_gold", 0).put("total_win", 0).put("end_gold", balance)
                 .put("small_game_type", 0).put("frees", false);
+        data.set("result", data.path("props").deepCopy());
         return data;
     }
 
@@ -265,25 +329,20 @@ public final class FreedomDayController {
         int page = positiveInt(form.getOrDefault("page", "1"), "page");
         int pageSize = positiveInt(form.getOrDefault("page_size", "30"), "page_size");
         synchronized (state) {
-            List<ObjectNode> ordered = state.history.stream().sorted(Comparator.comparingLong(n -> -n.path("time").asLong())).toList();
-            BigDecimal bet = ordered.stream().map(n -> n.path("bet_gold").decimalValue()).reduce(BigDecimal.ZERO, BigDecimal::add);
-            BigDecimal change = ordered.stream().map(n -> n.path("change_gold").decimalValue()).reduce(BigDecimal.ZERO, BigDecimal::add);
-            ObjectNode data = historyData(bet, change); ArrayNode list = data.withArray("list");
-            int from = Math.min(ordered.size(), (page - 1) * pageSize), to = Math.min(ordered.size(), from + pageSize);
-            for (ObjectNode spin : ordered.subList(from, to)) {
-                ObjectNode row = list.addObject();
-                row.put("order_id", spin.path("order_id").asText()).put("time", spin.path("time").asLong())
-                        .put("bet", spin.path("bet_gold").decimalValue()).put("bet_gold", spin.path("bet_gold").decimalValue())
-                        .put("change_gold", spin.path("change_gold").decimalValue()).put("type", spin.path("type").asInt())
-                        .put("roundKey", spin.path("roundKey").asText()).put("deliveryIndex", spin.path("deliveryIndex").asInt());
-                row.set("extend", spin.path("extend").deepCopy());
-                ObjectNode result = row.putArray("results").addObject();
-                result.put("time", spin.path("time").asLong()).put("end_gold", spin.path("end_gold").decimalValue())
-                        .put("level", spin.path("level").asInt()).put("change_gold", spin.path("change_gold").decimalValue())
-                        .put("bet_gold", spin.path("bet_gold").decimalValue());
-                result.set("result", spin.path("props").deepCopy());
-            }
-            ObjectNode response = ok(); response.set("data", data); return response;
+            List<ObjectNode> ordered = state.history.stream()
+                    .sorted(Comparator.comparingLong(n -> -n.path("time").asLong())).toList();
+            BigDecimal bet = ordered.stream().map(n -> n.path("bet_gold").decimalValue())
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal change = ordered.stream().map(n -> n.path("change_gold").decimalValue())
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            ObjectNode data = historyData(bet, change);
+            ArrayNode list = data.withArray("list");
+            int from = Math.min(ordered.size(), (page - 1) * pageSize);
+            int to = Math.min(ordered.size(), from + pageSize);
+            for (ObjectNode round : ordered.subList(from, to)) list.add(round.deepCopy());
+            ObjectNode response = ok();
+            response.set("data", data);
+            return response;
         }
     }
 
@@ -424,7 +483,10 @@ public final class FreedomDayController {
     private record HostPort(String host, int port) { String authority() { return host + ":" + port; } }
     private static final class ActiveRound {
         final String roundKey; final List<ObjectNode> deliveries; int nextIndex;
-        ActiveRound(String roundKey, List<ObjectNode> deliveries, int nextIndex) { this.roundKey = roundKey; this.deliveries = deliveries; this.nextIndex = nextIndex; }
+        String paidOid; ObjectNode historyRow;
+        ActiveRound(String roundKey, List<ObjectNode> deliveries, int nextIndex) {
+            this.roundKey = roundKey; this.deliveries = deliveries; this.nextIndex = nextIndex;
+        }
     }
     private static final class SessionState {
         final String key; BigDecimal balance; ActiveRound active; ObjectNode lastDelivery;

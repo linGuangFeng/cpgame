@@ -139,7 +139,6 @@ public final class ServerMain {
                     BigDecimal betSize = new BigDecimal(firstNonBlank(
                             form.get("bet_size"), form.get("bs"), "0.5"));
                     List<String> chessboards = GameRuleCore.parseChessboards(form.get("ckl"));
-                    GameRuleCore.validateBet(betSize, betLevel);
                     String rawOdd = firstNonBlank(form.get("odd"), form.get("odds"));
                     int requestedOdd = rawOdd == null
                             ? JungleKingsMultiplierCatalog.sampleRequestedOdd(RANDOM, chessboards)

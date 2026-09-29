@@ -60,8 +60,6 @@ public final class ResultUtil {
      */
     public static RoundResult infer(GeneratedRound round) {
         if (round == null || round.steps == null || round.steps.isEmpty()) throw new IllegalArgumentException("Round 不能为空");
-        if (!GameRules.BET_SIZES.contains(round.betSize) || !GameRules.BET_LEVELS.contains(round.betLevel))
-            throw new IllegalArgumentException("押注不在当前游戏配置内");
         SpinStep first = round.steps.get(0);
         requireBoard(first.rskl);
         int paidScatters = scatterCount(first.rskl);

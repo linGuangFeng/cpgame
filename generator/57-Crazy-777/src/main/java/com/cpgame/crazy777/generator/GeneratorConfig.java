@@ -7,7 +7,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashSet;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -40,6 +42,7 @@ public final class GeneratorConfig {
     final int maxConsecutiveWins;
     final BigDecimal normalMaxWinMultiplier;
     final BigDecimal specialMaxWinMultiplier;
+    final SymbolWeights symbolWeights;
 
     private GeneratorConfig(Properties p) {
         outputLimits = new LoaderLimits(p);
@@ -53,14 +56,17 @@ public final class GeneratorConfig {
         connectTimeoutMs = integer(p, "redis.connect-timeout-ms", 1, Integer.MAX_VALUE);
         socketTimeoutMs = integer(p, "redis.socket-timeout-ms", 1, Integer.MAX_VALUE);
         redisGameId = longValue(p, "redis.game-id", 1, 999_999_999L);
-        lossCount = integer(p, "generation.loss-count", 0, MAX_TARGET);
-        winCount = integer(p, "generation.win-count", 0, MAX_TARGET);
-        specialCount = integer(p, "generation.special-count", 0, MAX_TARGET);
+        if (redisGameId != 8_000_057L) throw new IllegalArgumentException("redis.game-id must be 8000057");
+        lossCount = integer(p, "generation.loss-count", 1, MAX_TARGET);
+        winCount = integer(p, "generation.win-count", 1, MAX_TARGET);
+        specialCount = integer(p, "generation.special-count", 1, MAX_TARGET);
         batchSize = integer(p, "generation.batch-size", 1, 10_000);
         maxMembersPerMultiplier = integer(p, "generation.max-members-per-multiplier", 1, 1_000_000);
         maxConsecutiveWins = integer(p, "generation.max-consecutive-wins", 1, 11);
         normalMaxWinMultiplier = decimal(p, "generation.normal-max-win-multiplier");
         specialMaxWinMultiplier = decimal(p, "generation.special-max-win-multiplier");
+        symbolWeights = new SymbolWeights(weights(p, "normal", SymbolWeights.ALL),
+                weights(p, "entry", SymbolWeights.ALL), weights(p, "free", SymbolWeights.FREE));
     }
 
     public static GeneratorConfig load(Path file) throws IOException {
@@ -74,11 +80,23 @@ public final class GeneratorConfig {
 
     private static void rejectUnknownKeys(Properties p) {
         Set<String> allowed = new LinkedHashSet<>(FIXED_KEYS);
+        for (String symbol : SymbolWeights.ALL) {
+            allowed.add("generation.symbol." + symbol + ".normal-weight");
+            allowed.add("generation.symbol." + symbol + ".entry-weight");
+        }
+        for (String symbol : SymbolWeights.FREE) allowed.add("generation.symbol." + symbol + ".free-weight");
         for (String key : p.stringPropertyNames()) {
             String lower = key.toLowerCase(Locale.ROOT);
             if (lower.contains("seed")) throw new IllegalArgumentException("正式配置禁止 seed: " + key);
-            if (!allowed.contains(key)) throw new IllegalArgumentException("配置项未被正式代码读取或已禁止: " + key);
+            if (!allowed.contains(key)) {if(key.toLowerCase(java.util.Locale.ROOT).contains("seed"))throw new IllegalArgumentException("正式配置禁止 seed: "+key);System.err.println("[warn] unused generator.properties key: "+key);};
         }
+    }
+
+    private static Map<String, Integer> weights(Properties p, String mode, java.util.List<String> symbols) {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        for (String symbol : symbols)
+            result.put(symbol, integer(p, "generation.symbol." + symbol + "." + mode + "-weight", 1, Integer.MAX_VALUE));
+        return result;
     }
 
     private static String required(Properties p, String key) {

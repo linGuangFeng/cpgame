@@ -12,7 +12,7 @@ import java.util.*;
 final class RedisRoundStore implements AutoCloseable {
     private final RedisClient redis;private final int gid;private final RoundCodec codec=new RoundCodec(new GameRuleCore());private final GameRuleCore rules=new GameRuleCore();
     private RedisRoundStore(RedisClient redis,int gid){this.redis=redis;this.gid=gid;}
-    static RedisRoundStore connect(Properties p)throws IOException{int gid=integer(p,"redis.game-id",2210),db=integer(p,"redis.database",15);if(gid<1||db < 0)throw new IllegalArgumentException("controller requires positive redis.game-id and non-negative database");return new RedisRoundStore(RedisClient.connect(p.getProperty("redis.host","18.234.101.161").trim(),integer(p,"redis.port",8021),p.getProperty("redis.username","").trim(),p.getProperty("redis.password",""),db,Boolean.parseBoolean(p.getProperty("redis.ssl","false")),integer(p,"redis.connect-timeout-ms",5000),integer(p,"redis.socket-timeout-ms",30000)),gid);}
+    static RedisRoundStore connect(Properties p)throws IOException{int gid=integer(p,"redis.game-id",8002210),db=integer(p,"redis.database",0);if(gid<1||db < 0)throw new IllegalArgumentException("controller requires positive redis.game-id and non-negative database");return new RedisRoundStore(RedisClient.connect(p.getProperty("redis.host","54.172.218.28").trim(),integer(p,"redis.port",8016),p.getProperty("redis.username","").trim(),p.getProperty("redis.password",""),db,Boolean.parseBoolean(p.getProperty("redis.ssl","false")),integer(p,"redis.connect-timeout-ms",5000),integer(p,"redis.socket-timeout-ms",30000)),gid);}
     Claimed claim(SecureRandom random) throws IOException {
         boolean wantWin = random.nextBoolean();
         boolean firstSpecial = random.nextBoolean();

@@ -56,6 +56,9 @@ public final class GeneratorSelfTest {
                 CompleteRound round = factory.generate(mode, random, new BigDecimal("0.05"), 1);
                 assert round.mode() == mode : mode + " classified as " + round.mode();
                 verifier.verifyCodecRoundTrip(round, codec);
+                String full = new String(codec.encodeFull(round), java.nio.charset.StandardCharsets.US_ASCII);
+                assert full.startsWith("JF16A3|");
+                assert !full.contains(",");
                 BigDecimal payout = round.steps().stream().filter(step -> step.spinStatus() == 1)
                     .map(Step::roundWinAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
                 assert payout.compareTo(round.payout()) == 0;
@@ -79,12 +82,21 @@ public final class GeneratorSelfTest {
         }
         writer.write(factory.generate(RoundMode.LOSS, random, new BigDecimal("0.05"), 1));
         int before = store.totalMembers();
+        assert !RedisKeys.special(RoundMode.LOSS) && !RedisKeys.special(RoundMode.MARY) && RedisKeys.special(RoundMode.FREE);
         Optional<RedisRoundWriter.ClaimedRound> claimed = writer.claimAny(List.of(RoundMode.MARY), random);
         assert claimed.isPresent();
         assert claimed.get().round().mode() == RoundMode.MARY;
-        assert claimed.get().poolKey().startsWith("MaryLog:000000016:");
+        assert claimed.get().poolKey().startsWith("BetLog:008000016:");
         assert store.totalMembers() == before;
         assert writer.claimAny(List.of(RoundMode.LOSS), random).orElseThrow().round().mode() == RoundMode.LOSS;
+        CompleteRound free = factory.generate(RoundMode.FREE, random, new BigDecimal("0.05"), 1);
+        if (free.multiplier().stripTrailingZeros().scale() == 0) {
+            writer.write(free);
+            Optional<RedisRoundWriter.ClaimedRound> special = writer.claimAny(List.of(RoundMode.FREE), random);
+            assert special.isPresent();
+            assert special.get().round().mode() == RoundMode.FREE;
+            assert special.get().poolKey().startsWith("MaryLog:008000016:");
+        }
     }
 
     private static List<String> safeBoard() {

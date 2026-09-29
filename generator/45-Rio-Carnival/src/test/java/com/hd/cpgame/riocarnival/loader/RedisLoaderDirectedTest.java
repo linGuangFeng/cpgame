@@ -19,7 +19,7 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RedisLoaderDirectedTest {
-    @Test void empiricalDealingModelProducesEverySymbolAndRejectsPerCellOverrides() {
+    @Test void empiricalDealingModelProducesEverySymbolAndUsesWindowWeightOverrides() {
         for (String symbol : GameRules.SYMBOLS) {
             assertTrue(GameRules.DEFAULT_NORMAL_WEIGHTS.get(symbol) > 0, symbol);
             assertTrue(GameRules.DEFAULT_FREE_WEIGHTS.get(symbol) > 0, symbol);
@@ -33,8 +33,15 @@ class RedisLoaderDirectedTest {
         for (String symbol : GameRules.SYMBOLS) assertTrue(counts.get(symbol) > 0, symbol);
         assertNotEquals(counts.get("Scat"), counts.get("H1"));
         Map<String,Integer> changed=new LinkedHashMap<String,Integer>(GameRules.DEFAULT_NORMAL_WEIGHTS);
-        changed.put("9",changed.get("9")+1);
-        assertThrows(IllegalArgumentException.class,()->new RandomBoardCandidateGenerator(new DeterministicRandom(1),changed,GameRules.DEFAULT_FREE_WEIGHTS));
+        changed.put("9",changed.get("9")*4);
+        RandomBoardCandidateGenerator base = new RandomBoardCandidateGenerator(new DeterministicRandom(1));
+        RandomBoardCandidateGenerator adjusted = new RandomBoardCandidateGenerator(new DeterministicRandom(1),changed,GameRules.DEFAULT_FREE_WEIGHTS);
+        int baseNines=0,adjustedNines=0;
+        for(int i=0;i<10_000;i++){
+            baseNines+=java.util.Collections.frequency(base.nextBoard(false,false),"9");
+            adjustedNines+=java.util.Collections.frequency(adjusted.nextBoard(false,false),"9");
+        }
+        assertTrue(adjustedNines>baseNines,baseNines+" -> "+adjustedNines);
     }
 
     @Test void configurationRejectsOldJsonlSwitchesSeedZeroWeightsAndOversizedTargets() throws Exception {
@@ -63,8 +70,9 @@ class RedisLoaderDirectedTest {
             assertEquals(8, summary.normalMembers);
             assertEquals(2, summary.specialMembers);
             assertTrue(summary.batches >= 4);
-            assertTrue(redis.zsets.containsKey("Rio45:v3:normal:ratios"));
-            assertTrue(redis.zsets.containsKey("Rio45:v3:special:ratios"));
+            long gameId = Long.parseLong(p.getProperty("redis.game-id"));
+            assertTrue(redis.zsets.containsKey(RedisLoader.normalIndex(gameId)));
+            assertTrue(redis.zsets.containsKey(RedisLoader.maryIndex(gameId)));
             assertEquals(summary.batches, redis.transactions.size());
             for (List<List<String>> transaction : redis.transactions) {
                 assertEquals(0, transaction.size() % 3);
@@ -81,14 +89,14 @@ class RedisLoaderDirectedTest {
             int specialMembers = 0;
             for (Map.Entry<String, List<String>> entry : redis.lists.entrySet()) {
                 assertTrue(entry.getValue().size() <= 2, entry.getKey());
-                boolean special = entry.getKey().startsWith("Rio45:v3:special:");
+                boolean special = entry.getKey().startsWith("MaryLog:");
                 for (String payload : entry.getValue()) {
                     GeneratedRound round = codec.decode(payload);
                     RoundResult result = RoundVerifier.verify(round);
                     assertTrue(round.terminal());
                     assertEquals(special, "FREE_SPINS".equals(result.mode));
                     assertTrue(result.redisRatio(round) >= 0);
-                    assertTrue(entry.getKey().endsWith(":"+result.redisRatio(round)));
+                    assertTrue(entry.getKey().endsWith(String.format(":%06d", result.redisRatio(round))));
                     if (special) { assertTrue(round.steps.size() > 1); specialMembers++; }
                     else { assertEquals(1, round.steps.size()); normalMembers++; }
                 }

@@ -16,27 +16,35 @@ public final class RedisLoader {
         int gid=integer(p,"redis.game-id"),normalCount=integer(p,"generation.normal-count"),specialCount=integer(p,"generation.special-count"),batchSize=integer(p,"generation.batch-size"),maxMembers=integer(p,"generation.max-members-per-multiplier"),maxConsecutiveWins=integer(p,"generation.max-consecutive-wins"),maxUnits=integer(p,"generation.max-win-units");
         if(gid <= 0||normalCount<0||specialCount<0||batchSize<1||maxMembers<1||maxConsecutiveWins<1)throw new IllegalArgumentException("invalid required generation contract");
         int[]paidWeights=weights(p,"generation.symbol."),freeWeights=weights(p,"generation.free-symbol.");
-        var secureRandom=new SecureRandom();var factory=new RoundFactory(secureRandom,paidWeights,freeWeights);Map<Integer,List<String>>normal=new TreeMap<>(),special=new TreeMap<>();
+        var secureRandom=new SecureRandom();var factory=new RoundFactory(secureRandom,paidWeights,freeWeights);
         int losses=0,wins=0,small=0,free=0,consecutive=0;
-        for(int i=0;i<normalCount;i++){LoaderLimits.checkAttempts(++attempts,(long)normalCount+specialCount);
-            GameRuleCore.CompleteRound round;
-            int selector=secureRandom.nextInt(10000);
-            if(selector<1743){round=factory.smallGame();consecutive=0;}
-            else if(selector<3230){round=factory.ordinary(true);consecutive++;}
-            else{round=factory.ordinary(false);consecutive=0;}
-            if(!acceptsRound(round,false,limits,maxUnits,maxConsecutiveWins)){i--;continue;}
-            if(selector<1743)small++;else if(selector<3230)wins++;else losses++;
-            add(normal,round,maxUnits);
-        }
-        for(int i=0;i<specialCount;){
-            LoaderLimits.checkAttempts(++attempts,(long)normalCount+specialCount);
-            GameRuleCore.CompleteRound r;
-            try { r=factory.freeReward(); }
-            catch(RoundFactory.CandidateLimitException rejected) { continue; }
-            if(!acceptsRound(r,true,limits,maxUnits,maxConsecutiveWins))continue;
-            add(special,r,maxUnits);free++;i++;
-        }
-        try(var redis=open(p)){redis.ping();redis.append(normalIndex(gid),buckets(false,normal,gid),maxMembers,batchSize);redis.append(specialIndex(gid),buckets(true,special,gid),limits.specialCap,batchSize);}
+        int nLeft=normalCount,sLeft=specialCount;
+        try(var redis=open(p)){redis.ping();
+        while(nLeft>0||sLeft>0){
+            Map<Integer,List<String>> nBatch=new TreeMap<>(),sBatch=new TreeMap<>();
+            if(nLeft>0){LoaderLimits.checkAttempts(++attempts,(long)normalCount+specialCount);
+                GameRuleCore.CompleteRound round;
+                int selector=secureRandom.nextInt(10000);
+                if(selector<1743){round=factory.smallGame();consecutive=0;}
+                else if(selector<3230){round=factory.ordinary(true);consecutive++;}
+                else{round=factory.ordinary(false);consecutive=0;}
+                if(acceptsRound(round,false,limits,maxUnits,maxConsecutiveWins)){
+                    if(selector<1743)small++;else if(selector<3230)wins++;else losses++;
+                    add(nBatch,round,maxUnits);nLeft--;
+                }
+            }
+            if(sLeft>0){
+                LoaderLimits.checkAttempts(++attempts,(long)normalCount+specialCount);
+                try {
+                    GameRuleCore.CompleteRound r=factory.freeReward();
+                    if(acceptsRound(r,true,limits,maxUnits,maxConsecutiveWins)){
+                        add(sBatch,r,maxUnits);free++;sLeft--;
+                    }
+                } catch(RoundFactory.CandidateLimitException ignored) {}
+            }
+            if(!nBatch.isEmpty())redis.append(normalIndex(gid),buckets(false,nBatch,gid),maxMembers,batchSize);
+            if(!sBatch.isEmpty())redis.append(specialIndex(gid),buckets(true,sBatch,gid),limits.specialCap,batchSize);
+        }}
         System.out.printf("LOAD_COMPLETE COMPLETE_PASS rulesHash=%s normal=%d loss=%d win=%d small=%d free=%d batch=%d redis=db15%n",GameRuleCore.RULES_HASH,normalCount,losses,wins,small,free,batchSize);
     }
     static boolean acceptsRound(GameRuleCore.CompleteRound round, boolean special,

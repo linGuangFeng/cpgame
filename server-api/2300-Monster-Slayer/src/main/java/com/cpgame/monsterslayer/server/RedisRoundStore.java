@@ -37,7 +37,14 @@ final class RedisRoundStore implements AutoCloseable {
         throw empty("ordinary loss pool is empty");
     }
     synchronized Claimed claimPaidRound() throws IOException {
-        return claimOutcome(random.nextBoolean());
+        // A configured positive minimum deliberately excludes the loss bucket.
+        // Choose only outcomes present in the cache; preserve 50/50 when both exist.
+        boolean hasLoss = false, hasWin = false;
+        for (String value : buckets(RedisKeyContract.normalIndex(gameId))) {
+            if (multiplier(value) == 0) hasLoss = true; else hasWin = true;
+        }
+        if (!hasLoss && !hasWin) throw empty("ordinary multiplier index is empty");
+        return claimOutcome(hasWin && (!hasLoss || random.nextBoolean()));
     }
     synchronized Claimed claimOutcome(boolean winning) throws IOException {
         Map<Integer, List<Pool>> available = new TreeMap<>();

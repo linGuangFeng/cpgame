@@ -46,10 +46,6 @@ public final class GameRules {
     private GameRules() {}
 
     public static BigDecimal betAmount(int bl, BigDecimal bs) {
-        BigDecimal size = bs.stripTrailingZeros();
-        if (!BET_LEVELS.contains(bl) || BET_SIZES.stream().noneMatch(v -> v.compareTo(size) == 0)) {
-            throw new IllegalArgumentException("不支持的下注 bl=" + bl + ", bs=" + bs);
-        }
-        return size.multiply(BigDecimal.valueOf(bl));
+        return bs.stripTrailingZeros().multiply(BigDecimal.valueOf(bl));
     }
 }

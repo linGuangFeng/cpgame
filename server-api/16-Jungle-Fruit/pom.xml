@@ -11,6 +11,24 @@
   <dependencies><dependency><groupId>com.cpgame.batcha</groupId><artifactId>jungle-fruit-generator</artifactId><version>1.0.0</version></dependency></dependencies>
   <build><plugins><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-shade-plugin</artifactId><version>3.6.0</version>
     <executions><execution><phase>package</phase><goals><goal>shade</goal></goals><configuration><outputFile>${project.basedir}/dist/controller.jar</outputFile><createDependencyReducedPom>false</createDependencyReducedPom>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>**/*column-model.tsv</exclude>
+                    <exclude>**/*-model.tsv</exclude>
+                    <exclude>**/generation-model*.tsv</exclude>
+                    <exclude>**/*joint-kernels.txt</exclude>
+                    <exclude>**/*holdout-kernels.txt</exclude>
+                    <exclude>**/*kernels.txt</exclude>
+                    <exclude>**/dealing-model.json</exclude>
+                    <exclude>**/deal-model.json</exclude>
+                    <exclude>**/reel-model.json</exclude>
+                    <exclude>**/*-distribution.tsv</exclude>
+                    <exclude>**/holdout-pages.txt</exclude>
+                  </excludes>
+                </filter>
+              </filters>
       <transformers><transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"><mainClass>com.cpgame.junglefruit.api.ServerMain</mainClass></transformer></transformers>
     </configuration></execution></executions>
   </plugin></plugins></build>

@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 /** Redis-only complete-round source. Empty or invalid pools fail closed. */
 @Component
 public final class RedisRoundPool {
-    @Value("${redis.host:18.234.101.161}") String host;
-    @Value("${redis.port:8021}") int port;
+    @Value("${redis.host:54.172.218.28}") String host;
+    @Value("${redis.port:8016}") int port;
     @Value("${redis.database:0}") int database;
     @Value("${redis.game-id:8002060}") long gameId;
     @Value("${redis.password:}") String password;

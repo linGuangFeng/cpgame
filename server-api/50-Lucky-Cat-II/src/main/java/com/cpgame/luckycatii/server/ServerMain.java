@@ -14,17 +14,9 @@ public final class ServerMain {
         Map<String, String> options = options(args);
         int port = requiredPort(options);
         Path configPath = Path.of(options.getOrDefault("config", "dist/controller.properties")).toAbsolutePath().normalize();
-        if (options.get("publish") != null && !options.get("publish").isBlank()) {
-            System.setProperty("lucky-cat-ii.publish", options.get("publish"));
-        }
-        AppConfig config = AppConfig.load(configPath, port);
-        if (options.get("publish") != null && !options.get("publish").isBlank()) {
-            config = new AppConfig(config.port(), config.initialBalance(),
-                    Path.of(options.get("publish")).toAbsolutePath().normalize(),
-                    config.redisHost(), config.redisPort(), config.redisUsername(), config.redisPassword(),
-                    config.redisDatabase(), config.redisConnectTimeoutMs(), config.redisSocketTimeoutMs(),
-                    config.redisGameId(), config.lossWeight(), config.winWeight(), config.specialWeight());
-        }
+        Path publish = options.get("publish") != null && !options.get("publish").isBlank()
+                ? Path.of(options.get("publish")).toAbsolutePath().normalize() : null;
+        AppConfig config = AppConfig.load(configPath, port, publish);
         LuckyCatIIServer server = new LuckyCatIIServer(config);
         Runtime.getRuntime().addShutdownHook(new Thread(server::close, "lucky-cat-ii-controller-stop"));
         server.start();

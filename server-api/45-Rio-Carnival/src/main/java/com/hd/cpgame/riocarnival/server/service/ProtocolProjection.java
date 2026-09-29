@@ -76,7 +76,10 @@ public final class ProtocolProjection {
     @SuppressWarnings("unchecked")
     private List<Map<String,Object>> historyMatches(GeneratedRound r,SpinStep s){
         List<Map<String,Object>> out=new ArrayList<Map<String,Object>>(); if(!(s.wmkl instanceof Map))return out;
-        WinEvaluation evaluation=ResultUtil.evaluate(s.rskl,r.betSize,r.betLevel,s.rpx);
+        // Origin log-view wmkl[].wa is the line pay before rpx (wild x2 stays in wa).
+        // The original page multiplies by rpx itself: amount = wa * rpx next to
+        // bet_size x bet_level x payout x wilds x rpx.
+        WinEvaluation evaluation=ResultUtil.evaluate(s.rskl,r.betSize,r.betLevel,1);
         for(Map.Entry<String,Map<String,Integer>> e:((Map<String,Map<String,Integer>>)s.wmkl).entrySet()){
             int line=Integer.parseInt(e.getKey());Map.Entry<String,Integer> win=e.getValue().entrySet().iterator().next();Map<String,Object>x=new LinkedHashMap<String,Object>();
             x.put("psn",win.getValue());x.put("sk",win.getKey());x.put("wa",evaluation.lineAwards.get(line));x.put("wpk",line);out.add(x);

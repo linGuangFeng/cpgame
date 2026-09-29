@@ -50,20 +50,11 @@ public final class GameRuleCore {
 
     public static Map<String, Map<Integer, Integer>> symbolPayTable() { return PAYTABLE; }
 
-    public static void validateBet(BigDecimal betSize, int betLevel) {
-        if (betSize == null || BET_SIZES.stream().noneMatch(value -> value.compareTo(betSize) == 0)) {
-            throw new IllegalArgumentException("bet_size must be one of 0.05, 0.5, 4");
-        }
-        if (!BET_LEVELS.contains(betLevel)) throw new IllegalArgumentException("bet_level must be 1..10");
-    }
-
     public static BigDecimal paidBet(BigDecimal betSize, int betLevel) {
-        validateBet(betSize, betLevel);
         return betSize.multiply(BigDecimal.valueOf((long) PAYLINES * betLevel)).stripTrailingZeros();
     }
 
     public static BigDecimal pay(String symbol, int symbolCount, BigDecimal betSize, int betLevel) {
-        validateBet(betSize, betLevel);
         Map<Integer, Integer> table = PAYTABLE.get(symbol);
         if (table == null || symbolCount < WIN_COUNT_THRESHOLD) return BigDecimal.ZERO;
         Integer units = table.get(Math.min(symbolCount, 25));
@@ -74,7 +65,6 @@ public final class GameRuleCore {
 
     public static BoardResult evaluateBoard(List<String> board, BigDecimal betSize, int betLevel) {
         requireBoard(board);
-        validateBet(betSize, betLevel);
         boolean[] seen = new boolean[CELLS];
         List<WinMatch> matches = new ArrayList<>();
         for (int start = 0; start < CELLS; start++) {
@@ -102,7 +92,6 @@ public final class GameRuleCore {
 
     public static CompleteRound materialize(BigDecimal paidBet, BigDecimal betSize, int betLevel,
                                             List<Step> facts) {
-        validateBet(betSize, betLevel);
         if (paidBet.compareTo(paidBet(betSize, betLevel)) != 0) {
             throw new IllegalArgumentException("paid bet must equal 10 * bet_size * bet_level");
         }
@@ -141,11 +130,13 @@ public final class GameRuleCore {
             payout.stripTrailingZeros(), multiplier, units);
     }
 
+    /** Giant transform is remove_status=4. Earth/water/fire stay ordinary WIN/LOSS. */
+    public static boolean reachedGiant(List<Step> steps) {
+        return steps.stream().anyMatch(step -> step.removeStatus() == 4);
+    }
+
     public static RoundMode classify(List<Step> steps, BigDecimal payout) {
-        boolean dragon = steps.stream().anyMatch(step -> step.removeStatus() > 0)
-            || steps.stream().anyMatch(step -> step.winAmount().signum() == 0
-                && step.spinStatus() == 0 && step.removeStatus() == 0 && step.removeNum() >= EARTH_THRESHOLD);
-        if (dragon) return RoundMode.DRAGON;
+        if (reachedGiant(steps)) return RoundMode.DRAGON;
         return payout.signum() == 0 ? RoundMode.LOSS : RoundMode.WIN;
     }
 

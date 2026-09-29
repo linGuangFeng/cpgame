@@ -1,6 +1,7 @@
 package com.cpgame.jungletreasure.api;
 
 import com.cpgame.batcha.g32.CompleteRound;
+import com.cpgame.batcha.g32.CompleteRoundFactory;
 import com.cpgame.batcha.g32.GameRuleCore;
 import com.cpgame.batcha.g32.IndependentVerifier;
 import com.cpgame.batcha.g32.MemberCodec;
@@ -38,6 +39,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class ServerMain {
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final MemberCodec CODEC = new MemberCodec();
+    private static final CompleteRoundFactory LOSS_ROUNDS = new CompleteRoundFactory(12, 30);
     private static final IndependentVerifier VERIFIER = new IndependentVerifier(new BigDecimal("20000"), 12, 10);
     private static final ConcurrentHashMap<String, Session> SESSIONS = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, History> HISTORY = new ConcurrentHashMap<>();
@@ -153,7 +155,6 @@ public final class ServerMain {
                 if (response == null) {
                     int betLevel = Integer.parseInt(form.getOrDefault("bet_level", form.getOrDefault("bl", "10")));
                     BigDecimal betSize = new BigDecimal(form.getOrDefault("bet_size", form.getOrDefault("bs", "0.02")));
-                    GameRuleCore.validateBet(betSize, betLevel);
                     if (session.active == null) beginRound(session, betSize, betLevel, requestedMode(form.get("scenario")));
                     response = deliver(session);
                     session.replays.put(requestId, response);
@@ -192,13 +193,17 @@ public final class ServerMain {
     }
 
     private static CompleteRound claimFormalRound(RoundMode requestedMode) {
+        if (requestedMode == RoundMode.LOSS) {
+            return LOSS_ROUNDS.generate(RoundMode.LOSS, RANDOM, new BigDecimal("0.02"), 1);
+        }
+        if (requestedMode == null && !RANDOM.nextBoolean()) {
+            return LOSS_ROUNDS.generate(RoundMode.LOSS, RANDOM, new BigDecimal("0.02"), 1);
+        }
         try (RedisRoundStore store = openRedisStore()) {
             RedisRoundWriter writer = new RedisRoundWriter(store, CODEC, VERIFIER, 300);
-            List<RoundMode> modes;
-            if (requestedMode != null) modes = List.of(requestedMode);
-            else modes = RANDOM.nextBoolean()
-                ? List.of(RoundMode.WIN, RoundMode.FREE)
-                : List.of(RoundMode.LOSS);
+            List<RoundMode> modes = requestedMode != null
+                ? List.of(requestedMode)
+                : List.of(RoundMode.WIN, RoundMode.FREE);
             return writer.claimAny(modes, RANDOM).orElseThrow(() ->
                 new IllegalStateException("Redis complete-Round pool is empty for " + modes)).round();
         } catch (IOException unavailable) {
@@ -354,8 +359,16 @@ public final class ServerMain {
             + String.join(",", match.reelGroups().stream().map(Json::ints).toList()) + "]").toList()) + "]";
     }
 
+    /**
+     * Origin log-view {@code wmkl[]} is {@code {sk,wa,wmk}} with {@code wa} before {@code rpx}.
+     * The original page does {@code t.wa=t.wa*n.rpx} then shows that amount next to
+     * {@code bet_size x bet_level x payout x ways x rpx}.
+     */
     private static String wmklObjects(List<WinMatch> matches) {
-        return "[" + String.join(",", matches.stream().map(match -> "{\"wmk\":["
+        return "[" + String.join(",", matches.stream().map(match -> "{\"sk\":"
+            + Json.quote(match.symbolKey())
+            + ",\"wa\":" + Json.quote(money(match.winAmount()))
+            + ",\"wmk\":["
             + String.join(",", match.reelGroups().stream().map(Json::ints).toList())
             + "]}").toList()) + "]";
     }
@@ -515,18 +528,19 @@ public final class ServerMain {
                 + ",\"small_game_type\":" + step.smallGameType()
                 + ",\"ss\":" + step.spinStatus()
                 + ",\"wa\":" + Json.quote(money(step.winAmount()))
-                + ",\"wmkl\":" + wmkl(step.winMatches())
+                + ",\"wmkl\":" + wmklObjects(step.winMatches())
                 + ",\"wskl\":" + Json.strings(step.winSymbolKeys()) + "}";
         }
     }
 
     private record RedisConfig(String host, int port, int database, String password, int timeoutMillis) {
         static RedisConfig from(Properties config) {
-            return new RedisConfig(config.getProperty("redis.host", "18.234.101.161"),
-                Integer.parseInt(config.getProperty("redis.port", "8021")),
+            return new RedisConfig(config.getProperty("redis.host", "54.172.218.28"),
+                Integer.parseInt(config.getProperty("redis.port", "8016")),
                 Integer.parseInt(config.getProperty("redis.database", "0")),
                 config.getProperty("redis.password", ""),
-                Integer.parseInt(config.getProperty("redis.timeout-millis", "3000")));
+                Integer.parseInt(config.getProperty("redis.socket-timeout-ms",
+                    config.getProperty("redis.timeout-millis", "30000"))));
         }
     }
 

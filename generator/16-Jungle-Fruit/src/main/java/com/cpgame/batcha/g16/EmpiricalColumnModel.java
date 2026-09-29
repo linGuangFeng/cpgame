@@ -11,6 +11,8 @@ public final class EmpiricalColumnModel {
     private static final EmpiricalColumnModel INSTANCE = new EmpiricalColumnModel();
     private final Map<String, List<Block>> slots = new HashMap<>();
     private final Map<String, Integer> totals = new HashMap<>();
+    private final Map<String, Long> observedNormal = new HashMap<>();
+    private final Map<String, Long> observedSpecial = new HashMap<>();
 
     private EmpiricalColumnModel() {
         try (InputStream in = getClass().getResourceAsStream("/jf16-column-model.tsv")) {
@@ -28,10 +30,73 @@ public final class EmpiricalColumnModel {
                     throw new IllegalArgumentException("Invalid model block");
                 int cumulative = totals.merge(key, count, Integer::sum);
                 slots.computeIfAbsent(key, ignored -> new ArrayList<>()).add(new Block(symbols, cumulative));
+                boolean special = f[0].startsWith("FREE_");
+                for (String symbol : symbols)
+                    (special ? observedSpecial : observedNormal).merge(symbol, (long) count, Long::sum);
             }
         } catch (IOException | NoSuchAlgorithmException e) {
             throw new IllegalStateException("Cannot load empirical column model", e);
         }
+    }
+
+    public static EmpiricalColumnModel configured(java.util.Map<String, Double> weights) {
+        if (weights.isEmpty()) return INSTANCE;
+        EmpiricalColumnModel model = new EmpiricalColumnModel();
+        Map<String, Double> adjustments = adjustmentRatios(model, weights);
+        for (var entry : model.slots.entrySet()) {
+            boolean special = entry.getKey().startsWith("FREE_");
+            double sum = 0;
+            int previous = 0;
+            java.util.List<WeightedBlock> blocks = new java.util.ArrayList<>();
+            for (Block block : entry.getValue()) {
+                double weight = block.cumulative() - previous;
+                previous = block.cumulative();
+                for (String symbol : block.symbols())
+                    weight *= adjustments.getOrDefault("generation.symbol." + symbol
+                        + (special ? ".special-weight" : ".normal-weight"), 1.0);
+                sum += weight;
+                blocks.add(new WeightedBlock(block.symbols(), sum));
+            }
+            if (!Double.isFinite(sum) || sum <= 0) throw new IllegalArgumentException("Invalid model weights: " + entry.getKey());
+            model.weighted.put(entry.getKey(), java.util.List.copyOf(blocks));
+        }
+        return model;
+    }
+
+    public static long observedWeight(String symbol, boolean special) {
+        return (special ? INSTANCE.observedSpecial : INSTANCE.observedNormal).getOrDefault(symbol, 0L);
+    }
+
+    private static Map<String, Double> adjustmentRatios(EmpiricalColumnModel model, Map<String, Double> configured) {
+        Map<String, Double> result = new HashMap<>();
+        for (String symbol : List.of("A", "H1", "H2", "H3", "H4", "H5", "J", "K", "Q", "T",
+                "Scat", "X2", "X3", "X4", "X5", "X7", "X15")) {
+            for (boolean special : new boolean[]{false, true}) {
+                String key = "generation.symbol." + symbol + (special ? ".special-weight" : ".normal-weight");
+                double observed = observedWeight(symbol, special);
+                double requested = configured.getOrDefault(key, observed);
+                if (observed == 0) {
+                    if (requested != 0) throw new IllegalArgumentException(key + " has no observed dealing entry");
+                    result.put(key, 1.0);
+                } else {
+                    result.put(key, requested / observed);
+                }
+            }
+        }
+        return Map.copyOf(result);
+    }
+    private final java.util.Map<String, java.util.List<WeightedBlock>> weighted = new java.util.HashMap<>();
+    private record WeightedBlock(List<String> symbols, double cumulative) { }
+    private List<String> drawWeighted(String key, SecureRandom random) {
+        var blocks = weighted.get(key);
+        if (blocks == null) return null;
+        double target = random.nextDouble() * blocks.getLast().cumulative();
+        int low = 0, high = blocks.size() - 1;
+        while (low < high) {
+            int middle = (low + high) >>> 1;
+            if (target < blocks.get(middle).cumulative()) high = middle; else low = middle + 1;
+        }
+        return blocks.get(low).symbols();
     }
 
     public static EmpiricalColumnModel instance() { return INSTANCE; }
@@ -39,6 +104,8 @@ public final class EmpiricalColumnModel {
     public List<String> draw(String entry, int column, int length, SecureRandom random) {
         if (length == 0) return List.of();
         String key = entry + "|" + column + "|" + length;
+        List<String> adjusted = drawWeighted(key, random);
+        if (adjusted != null) return adjusted;
         List<Block> blocks = slots.get(key);
         if (blocks == null) throw new IllegalArgumentException("Unobserved dealing entry " + key);
         int target = random.nextInt(totals.get(key));

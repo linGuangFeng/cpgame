@@ -277,20 +277,9 @@ public final class CpgameSharedDemoHostMain {
             Properties values = new Properties();
             try (InputStream input = Files.newInputStream(config)) { values.load(input); }
             overlayGeneratorRedis(descriptor.directory, values);
-            Path base = config.getParent();
+            absolutizePathProperties(values, config.getParent());
             for (String name : values.stringPropertyNames()) {
-                String value = values.getProperty(name).strip();
-                String lower = name.toLowerCase(Locale.ROOT);
-                boolean pathProperty = lower.contains("directory") || lower.endsWith(".root")
-                    || lower.endsWith(".file") || lower.endsWith(".path") || lower.endsWith(".basedir");
-                if (!value.isBlank() && pathProperty) {
-                    try {
-                        if (!Path.of(value).isAbsolute()) {
-                            value = base.resolve(value).normalize().toAbsolutePath().toString();
-                        }
-                    } catch (RuntimeException ignored) { }
-                }
-                result.add("--" + name + "=" + value);
+                result.add("--" + name + "=" + values.getProperty(name).strip());
             }
         }
         return result;
@@ -319,7 +308,9 @@ public final class CpgameSharedDemoHostMain {
         // Sharing Redis settings must not launch an embedded generator with Controller settings.
         // The demo consumes existing rounds; generation is started explicitly through runRedis.
         String preloader = descriptor.preloaderMain;
-        absolutizeProperty(values, "publish.root", descriptor.configFile.getParent());
+        // Overlay files live under reports/_shared-demo/. Path keys such as
+        // publish.directory were written relative to server-api/<game>/dist.
+        absolutizePathProperties(values, descriptor.configFile.getParent());
         Path runtimeConfig = root.resolve("reports/_shared-demo/runtime/config")
             .resolve(descriptor.directory + ".properties");
         Files.createDirectories(runtimeConfig.getParent());
@@ -367,12 +358,25 @@ public final class CpgameSharedDemoHostMain {
         return true;
     }
 
-    private void absolutizeProperty(Properties values, String key, Path base) {
+    static void absolutizePathProperties(Properties values, Path base) {
+        if (values == null || base == null) return;
+        for (String name : List.copyOf(values.stringPropertyNames())) {
+            absolutizeProperty(values, name, base);
+        }
+    }
+
+    private static void absolutizeProperty(Properties values, String key, Path base) {
         String value = values.getProperty(key);
-        if (value == null || value.isBlank()) return;
+        if (value == null || value.isBlank() || base == null) return;
+        String lower = key.toLowerCase(Locale.ROOT);
+        boolean pathProperty = lower.contains("directory") || lower.endsWith(".root")
+            || lower.endsWith(".file") || lower.endsWith(".path") || lower.endsWith(".basedir");
+        if (!pathProperty) return;
         try {
-            Path path = Path.of(value);
-            if (!path.isAbsolute()) values.setProperty(key, base.resolve(path).normalize().toAbsolutePath().toString());
+            Path path = Path.of(value.strip());
+            if (!path.isAbsolute()) {
+                values.setProperty(key, base.resolve(path).normalize().toAbsolutePath().toString());
+            }
         } catch (RuntimeException ignored) { }
     }
 

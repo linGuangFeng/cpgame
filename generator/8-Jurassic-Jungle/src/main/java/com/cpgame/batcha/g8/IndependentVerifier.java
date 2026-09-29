@@ -21,7 +21,6 @@ public final class IndependentVerifier {
 
     public Verification verify(CompleteRound round) {
         if (round.rawGameId() != GameRuleCore.RAW_GAME_ID) fail("raw game id is not 8");
-        GameRuleCore.validateBet(round.betSize(), round.betLevel());
         equal(GameRuleCore.paidBet(round.betSize(), round.betLevel()), round.paidBet(), "paid bet");
         if (round.steps().isEmpty() || round.steps().getLast().spinStatus() != 1) {
             fail("Round does not end at spin_status=1");
@@ -68,6 +67,10 @@ public final class IndependentVerifier {
         verify(decoded);
         if (decoded.mode() != round.mode() || decoded.steps().size() != round.steps().size()) {
             fail("codec round-trip changed mode or step count");
+        }
+        if (round.mode() == RoundMode.LOSS) {
+            equal(round.payout(), decoded.payout(), "compressed loss payout");
+            return;
         }
         for (int i = 0; i < round.steps().size(); i++) {
             if (!round.steps().get(i).symbols().equals(decoded.steps().get(i).symbols())) {

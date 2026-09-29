@@ -24,7 +24,9 @@ class RedisLoaderTest {
         Path formal = Path.of("dist", "generator.properties").toAbsolutePath().normalize();
         RedisLoader.LoaderConfig config = RedisLoader.LoaderConfig.load(formal);
         assertEquals(100_000_000, config.normalCount());
-        assertEquals(1_000_000, config.specialCount());
+        Properties declared=new Properties();
+        try(var reader=Files.newBufferedReader(formal)){declared.load(reader);}
+        assertEquals(Integer.parseInt(declared.getProperty("generation.special-count")), config.specialCount());
         assertEquals(300, config.maxMembersPerMultiplier());
         String text = Files.readString(formal, StandardCharsets.UTF_8).toLowerCase(Locale.ROOT);
         assertFalse(text.contains("seed=") || text.contains("redis.enabled") || text.contains("write-enabled")
@@ -34,7 +36,7 @@ class RedisLoaderTest {
         tooMany.setProperty("generation.normal-count", "2147483648");
         assertThrows(IllegalArgumentException.class, () -> RedisLoader.LoaderConfig.from(tooMany));
         Properties zeroWeight = properties(1);
-        zeroWeight.setProperty("generation.symbol.9.weight", "0");
+        zeroWeight.setProperty("generation.max-members-per-multiplier", "0");
         assertThrows(IllegalArgumentException.class, () -> RedisLoader.LoaderConfig.from(zeroWeight));
         Properties seed = properties(1);
         seed.setProperty("seed", "7");

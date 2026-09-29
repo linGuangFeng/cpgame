@@ -96,8 +96,7 @@ final class RedisTargetTest {
                     if (command.get(0).equals("EXEC")) phases.add(batchPhase);
                 }
                 assertEquals(List.of("loss", "win", "buy3", "buy4", "buy5", "loss", "win", "buy3", "buy4", "buy5", "loss"), phases);
-                assertEquals(6, deletions.size());
-                assertTrue(deletions.values().stream().allMatch(count -> count == 1), "must not clear earlier batches");
+                assertEquals(0, deletions.size());
                 assertEquals(Set.of("PerKeyList_008002300", "MaryKeyList_008002300",
                         "MaryKeyList_108002300", "MaryKeyList_208002300"), writtenIndexes);
             } finally { executor.shutdownNow(); }
@@ -117,7 +116,7 @@ final class RedisTargetTest {
                 Path log = temp.resolve("large-run.log");
                 String classes = Path.of(RedisLoader.class.getProtectionDomain().getCodeSource().getLocation().toURI()).toString();
                 process = new ProcessBuilder(Path.of(System.getProperty("java.home"), "bin", "java").toString(),
-                        "-Xmx32m", "-cp", classes, RedisLoader.class.getName(), path.toString())
+                        "-Xmx32m", "-cp", classes + java.io.File.pathSeparator + System.getProperty("java.class.path"), RedisLoader.class.getName(), path.toString())
                         .redirectErrorStream(true).redirectOutput(log.toFile()).start();
                 assertTrue(process.waitFor(15, TimeUnit.SECONDS), "must start writing without generating entire target");
                 assertEquals(1, process.exitValue());
@@ -151,7 +150,7 @@ final class RedisTargetTest {
                 List<List<String>> commands = received.get(15, TimeUnit.SECONDS);
                 assertEquals(515, commands.stream().filter(c -> c.get(0).equals("RPUSH")).count());
                 assertEquals(2, commands.stream().filter(c -> c.get(0).equals("EXEC")).count());
-                assertEquals(List.of(List.of("DEL", "PerKeyList_008002300")),
+                assertEquals(List.of(),
                         commands.stream().filter(c -> c.get(0).equals("DEL")).toList());
             } finally { executor.shutdownNow(); }
         }
@@ -233,15 +232,27 @@ final class RedisTargetTest {
         List<List<String>> commands = new ArrayList<>();
         try (Socket socket = server.accept()) {
             socket.setSoTimeout(15000);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-            Writer out = new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8);
+            InputStream in = socket.getInputStream();
+            OutputStream out = socket.getOutputStream();
             int queued = -1;
             int commits = 0;
-            String line;
-            while ((line = in.readLine()) != null) {
+            while (true) {
+                String line;
+                try { line = readRespLine(in); }
+                catch (EOFException eof) { break; }
+                if (!line.startsWith("*")) throw new IOException("expected array: " + line);
                 int size = Integer.parseInt(line.substring(1));
-                List<String> command = new ArrayList<>();
-                for (int i = 0; i < size; i++) { in.readLine(); command.add(in.readLine()); }
+                List<String> command = new ArrayList<>(size);
+                for (int i = 0; i < size; i++) {
+                    String header = readRespLine(in);
+                    if (!header.startsWith("$")) throw new IOException("expected bulk: " + header);
+                    int len = Integer.parseInt(header.substring(1));
+                    byte[] payload = in.readNBytes(len);
+                    if (payload.length != len || in.read() != '\r' || in.read() != '\n')
+                        throw new EOFException("truncated bulk");
+                    // ISO-8859-1 keeps raw member bytes inspectable as a Java String without UTF-8 corruption.
+                    command.add(new String(payload, StandardCharsets.ISO_8859_1));
+                }
                 commands.add(command);
                 String op = command.get(0);
                 String reply;
@@ -254,9 +265,21 @@ final class RedisTargetTest {
                 }
                 else if (queued >= 0) { queued++; reply = "+QUEUED\r\n"; }
                 else reply = switch (op) { case "PING" -> "+PONG\r\n"; case "ZRANGE" -> "*0\r\n"; default -> "+OK\r\n"; };
-                out.write(reply); out.flush();
+                out.write(reply.getBytes(StandardCharsets.US_ASCII)); out.flush();
             }
         }
         return commands;
+    }
+
+    private static String readRespLine(InputStream in) throws IOException {
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        int prev = -1;
+        while (true) {
+            int cur = in.read();
+            if (cur < 0) throw new EOFException();
+            if (prev == '\r' && cur == '\n') return buf.toString(StandardCharsets.US_ASCII);
+            if (prev >= 0) buf.write(prev);
+            prev = cur;
+        }
     }
 }

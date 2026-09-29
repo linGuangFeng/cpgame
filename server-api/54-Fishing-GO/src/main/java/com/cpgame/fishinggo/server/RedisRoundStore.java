@@ -35,8 +35,8 @@ final class RedisRoundStore implements AutoCloseable {
         String host = p.getProperty("redis.host");
         int port = Integer.parseInt(p.getProperty("redis.port", "8021"));
         int db = Integer.parseInt(p.getProperty("redis.database", "0"));
-        if (!"18.234.101.161".equals(host) || port != 8021 || db < 0)
-            throw new IllegalArgumentException("authorized Redis endpoint is 18.234.101.161:8021 DB15");
+        if (!allowedRedis(host, port) || db < 0)
+            throw new IllegalArgumentException("unauthorized Redis endpoint: " + host + ":" + port);
         DefaultJedisClientConfig.Builder cfg = DefaultJedisClientConfig.builder().database(db)
                 .connectionTimeoutMillis(Integer.parseInt(p.getProperty("redis.connect-timeout-ms", "5000")))
                 .socketTimeoutMillis(Integer.parseInt(p.getProperty("redis.socket-timeout-ms", "10000")));
@@ -145,4 +145,12 @@ final class RedisRoundStore implements AutoCloseable {
     
 
     @Override public void close() { jedis.close(); }
+
+    static boolean allowedRedis(String host, int port) {
+        if (host == null || host.isBlank() || port < 1 || port > 65535) return false;
+        return ("54.172.218.28".equals(host) && port == 8016)
+            || ("18.234.101.161".equals(host) && port == 8021)
+            || ("192.168.10.3".equals(host) && port == 6379)
+            || ("127.0.0.1".equals(host) && port == 6379);
+    }
 }

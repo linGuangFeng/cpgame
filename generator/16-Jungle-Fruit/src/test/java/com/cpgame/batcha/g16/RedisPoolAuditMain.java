@@ -30,7 +30,7 @@ public final class RedisPoolAuditMain {
                     }
                 }
                 total += modeTotal;
-                System.out.println((special ? "MARY" : "PER") + " buckets=" + ratios.size() + " members=" + modeTotal
+                System.out.println((special ? "FREE" : "PER") + " buckets=" + ratios.size() + " members=" + modeTotal
                     + " asciiHeads=" + asciiMembersSampled);
             }
             System.out.println("REDIS_POOL_AUDIT_PASS total=" + total + " database=" + config.redisDatabase());

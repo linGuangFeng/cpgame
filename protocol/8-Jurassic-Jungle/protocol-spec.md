@@ -45,6 +45,7 @@
 - 会话存在 active Round 时不得领取或生成另一 Round。
 - member 是 `JJ8V1.<base64url>` 极简 ASCII，只包含下注、Step 状态、extra 和 25 格盘面；中奖与 payout 由唯一 `GameRuleCore` 复算。
 - Redis 比率桶是整数 paytable unit 之和（`payout/bet*10`）。LOSS 为 0。
+- 普通奖 `PerKeyList`/`BetLog` 写入 LOSS、普通中奖，以及土龙/水龙/火龙完整局；玛丽奖 `MaryKeyList`/`MaryLog` 只写入变成巨龙（`remove_status=4`）的完整局。
 - Demo 先随机决定中奖或未中奖，再从对应奖池已有整数倍率桶 LPOP 一条 member。
 - Redis 不可用、池空或 member 非法时返回 HTTP 503，并且不得扣注、改余额或写 History。
 - fixtures 与 captures 只作独立 oracle，严禁作为运行时结果源。

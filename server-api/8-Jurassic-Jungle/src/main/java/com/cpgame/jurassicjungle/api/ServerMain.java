@@ -1,6 +1,7 @@
 package com.cpgame.jurassicjungle.api;
 
 import com.cpgame.batcha.g8.CompleteRound;
+import com.cpgame.batcha.g8.CompleteRoundFactory;
 import com.cpgame.batcha.g8.ExtraCell;
 import com.cpgame.batcha.g8.GameRuleCore;
 import com.cpgame.batcha.g8.IndependentVerifier;
@@ -43,6 +44,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class ServerMain {
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final MemberCodec CODEC = new MemberCodec();
+    private static final CompleteRoundFactory LOSS_ROUNDS =
+        new CompleteRoundFactory(GameRuleCore.MAX_STEPS_OBSERVED);
     private static final IndependentVerifier VERIFIER =
         new IndependentVerifier(new BigDecimal("20000"), GameRuleCore.MAX_STEPS_OBSERVED);
     private static final ConcurrentHashMap<String, Session> SESSIONS = new ConcurrentHashMap<>();
@@ -162,7 +165,6 @@ public final class ServerMain {
                 if (response == null) {
                     int betLevel = Integer.parseInt(form.getOrDefault("bet_level", form.getOrDefault("bl", "4")));
                     BigDecimal betSize = new BigDecimal(form.getOrDefault("bet_size", form.getOrDefault("bs", "0.05")));
-                    GameRuleCore.validateBet(betSize, betLevel);
                     if (session.active == null) beginRound(session, betSize, betLevel, requestedMode(form.get("scenario")));
                     response = deliver(session);
                     session.replays.put(requestId, response);
@@ -198,14 +200,19 @@ public final class ServerMain {
     }
 
     private static CompleteRound claimFormalRound(RoundMode requestedMode) {
+        if (requestedMode == RoundMode.LOSS) {
+            return LOSS_ROUNDS.generate(RoundMode.LOSS, RANDOM, new BigDecimal("0.05"), 1);
+        }
+        if (requestedMode == null && !RANDOM.nextBoolean()) {
+            return LOSS_ROUNDS.generate(RoundMode.LOSS, RANDOM, new BigDecimal("0.05"), 1);
+        }
         try (RedisRoundStore store = openRedisStore()) {
             RedisRoundWriter writer = new RedisRoundWriter(store, CODEC, VERIFIER, 500);
             if (requestedMode != null) {
                 return writer.claimMode(requestedMode, RANDOM).orElseThrow(() ->
                     new IllegalStateException("Redis complete-Round pool is empty for " + requestedMode)).round();
             }
-            boolean wantWin = RANDOM.nextBoolean();
-            return writer.claimWinOrLoss(wantWin, RANDOM).orElseThrow(() ->
+            return writer.claimWinOrLoss(true, RANDOM).orElseThrow(() ->
                 new IllegalStateException("Redis complete-Round pool is empty")).round();
         } catch (IOException unavailable) {
             throw new IllegalStateException("Redis complete-Round source unavailable", unavailable);
@@ -217,7 +224,7 @@ public final class ServerMain {
         return switch (value.trim().toUpperCase(java.util.Locale.ROOT)) {
             case "LOSS", "ORDINARY_LOSS" -> RoundMode.LOSS;
             case "WIN", "ORDINARY_WIN" -> RoundMode.WIN;
-            case "DRAGON", "SPECIAL", "SPECIAL_DRAGON" -> RoundMode.DRAGON;
+            case "DRAGON", "GIANT", "SPECIAL", "SPECIAL_DRAGON" -> RoundMode.DRAGON;
             default -> throw new IllegalArgumentException("unknown scenario: " + value);
         };
     }
@@ -504,11 +511,12 @@ public final class ServerMain {
 
     private record RedisConfig(String host, int port, int database, String password, int timeoutMillis) {
         static RedisConfig from(Properties config) {
-            return new RedisConfig(config.getProperty("redis.host", "18.234.101.161"),
-                Integer.parseInt(config.getProperty("redis.port", "8021")),
+            return new RedisConfig(config.getProperty("redis.host", "54.172.218.28"),
+                Integer.parseInt(config.getProperty("redis.port", "8016")),
                 Integer.parseInt(config.getProperty("redis.database", "0")),
                 config.getProperty("redis.password", ""),
-                Integer.parseInt(config.getProperty("redis.timeout-millis", "3000")));
+                Integer.parseInt(config.getProperty("redis.socket-timeout-ms",
+                    config.getProperty("redis.timeout-millis", "30000"))));
         }
     }
 

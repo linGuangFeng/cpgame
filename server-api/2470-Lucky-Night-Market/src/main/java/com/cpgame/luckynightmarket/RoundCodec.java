@@ -66,7 +66,7 @@ public final class RoundCodec {
         }
         for (String entry : entries) {
             if (entry.equals("#")) {
-                steps.add(LossHolder.MODEL.independentLoss(mode == RoundFact.Mode.LUCKY_FEATURE));
+                steps.add(LossHolder.LOSSES.next(mode == RoundFact.Mode.LUCKY_FEATURE));
                 continue;
             }
             String[] parts = entry.split("\\.", -1);
@@ -123,11 +123,7 @@ public final class RoundCodec {
     }
 
     private static final class LossHolder {
-        private static final DealingModel MODEL = create();
-        private static DealingModel create() {
-            try { return new DealingModel(new java.util.Properties()); }
-            catch(java.io.IOException e) { throw new IllegalStateException("Marker model unavailable",e); }
-        }
+        private static final ConstructiveLossGenerator LOSSES = new ConstructiveLossGenerator();
     }
 
     private static char modeCode(RoundFact.Mode mode) {

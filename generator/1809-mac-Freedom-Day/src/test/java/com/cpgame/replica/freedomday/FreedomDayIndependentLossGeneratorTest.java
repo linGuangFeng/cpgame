@@ -4,6 +4,7 @@ import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayBoard;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayIndependentLossGenerator;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayBoardGenerator;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayOrdinaryLossPolicy;
+import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayResultUtil;
 import org.junit.jupiter.api.Test;
 
 import java.util.Random;
@@ -17,6 +18,26 @@ class FreedomDayIndependentLossGeneratorTest {
         for (int i = 0; i < 1_000; i++) {
             FreedomDayBoard board = generator.generate(random, (i & 1) == 1);
             assertTrue(FreedomDayIndependentLossGenerator.isIndependentLoss(board));
+            assertNoOuterWild(board);
+        }
+    }
+
+    @Test void zeroWinAndMarkerLossesNeverPlaceWildOnOuterReels() {
+        FreedomDayIndependentLossGenerator generator = new FreedomDayIndependentLossGenerator();
+        Random random = new Random(180913L);
+        for (int i = 0; i < 500; i++) {
+            assertNoOuterWild(generator.generate(random, i % 2 == 1));
+            assertNoOuterWild(generator.generateMarkerLoss(random, i % 2 == 1, i % 4 == 0 ? 0 : i % 3));
+        }
+    }
+
+    private static void assertNoOuterWild(FreedomDayBoard board) {
+        int[] prop = board.getProp();
+        for (int reel : new int[]{0, FreedomDayBoard.REEL_COUNT - 1}) {
+            for (int row = 0; row < FreedomDayBoard.ROW_COUNT; row++) {
+                assertNotEquals(FreedomDayResultUtil.WILD, prop[reel * FreedomDayBoard.ROW_COUNT + row],
+                        "zero-win outer reel " + (reel + 1) + " must not be Wild");
+            }
         }
     }
 

@@ -15,7 +15,11 @@ final class RedisRoundStore implements AutoCloseable {
  private final ResultUtil util=new ResultUtil(rules);private final SecureRandom random=new SecureRandom();
  RedisRoundStore(Properties p){
   String host=p.getProperty("redis.host");int port=Integer.parseInt(p.getProperty("redis.port","8021")),db=Integer.parseInt(p.getProperty("redis.database","0"));
-  if(!"18.234.101.161".equals(host)||port!=8021||db < 0)throw new IllegalArgumentException("authorized Redis endpoint is 18.234.101.161:8021 DB15");
+  boolean nas = "192.168.10.3".equals(host) && port == 6379;
+    boolean aws = "18.234.101.161".equals(host) && port == 8021;
+    boolean fd = "54.172.218.28".equals(host) && port == 8016;
+    boolean local = "127.0.0.1".equals(host) && port == 6379;
+    if((!nas && !aws && !fd && !local) || db < 0) throw new IllegalArgumentException("unauthorized Redis endpoint: " + host + ":" + port);
   game=p.getProperty("redis.game-id","8001090");RedisKeys.prefix(game);
   DefaultJedisClientConfig.Builder cfg=DefaultJedisClientConfig.builder().database(db)
    .connectionTimeoutMillis(Integer.parseInt(p.getProperty("redis.connect-timeout-ms","5000")))

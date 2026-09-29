@@ -39,8 +39,18 @@ public final class FreedomDayResultUtil {
      */
     public static FreedomDayEvaluation evaluate(FreedomDayBoard board, BigDecimal unitBet,
                                                  int baseMultiplier, int ballIncrement) {
+        return evaluate(board, unitBet, baseMultiplier, ballIncrement, countVisibleSymbol(board, BALL));
+    }
+
+    /**
+     * {@code newBallCount} 只计本页新出现的可见倍率球（叠组算 1，trl 各算 1）。
+     * 客户端 isOddActive 会随重力保留，幸存球不再飞一次，也不能再加一次倍率。
+     */
+    public static FreedomDayEvaluation evaluate(FreedomDayBoard board, BigDecimal unitBet,
+                                                 int baseMultiplier, int ballIncrement, int newBallCount) {
         if (board == null || unitBet == null || unitBet.signum() < 0) throw new IllegalArgumentException();
-        int ballCount = countVisibleSymbol(board, BALL);
+        if (newBallCount < 0) throw new IllegalArgumentException("newBallCount");
+        int ballCount = newBallCount;
         List<Integer> winningSymbols = new ArrayList<>();
         List<Integer> winningReelCounts = new ArrayList<>();
         List<Integer> winningWays = new ArrayList<>();
@@ -59,7 +69,12 @@ public final class FreedomDayResultUtil {
                     if (position.getSymbol() == symbol || position.getSymbol() == WILD) {
                         matches++;
                         hasNatural |= position.getSymbol() == symbol;
-                        if (position.isTop()) top.add(position.getIndex()); else main.add(position.getIndices());
+                        if (position.isTop()) {
+                            top.add(position.getIndex());
+                        } else {
+                            // 核心内部保留完整占位格，供重力和框体变形使用；出站 p 再投影为牌块锚点。
+                            main.add(position.getIndices());
+                        }
                     }
                 }
                 if (matches == 0) break;
@@ -74,9 +89,8 @@ public final class FreedomDayResultUtil {
             winningTopPositions.add(top);
         }
 
-        // 倍率球只要可见就会收集；免费局即使当前页未中奖，也会把增量带到
-        // 后续 Spin。普通局的 1 是无球时的基础倍率占位，第一个倍率球应从
-        // 0 累加到 x2，而不是得到错误的 x3。
+        // 只给本页新出现的可见球加倍率。幸存球随重力下落，客户端不再播放 x2。
+        // 普通局的 1 是无球占位，第一个新球从 0 累加到 x2，而不是 x3。
         int multiplier = Math.max(1, baseMultiplier);
         if (ballCount > 0) {
             int accumulated = baseMultiplier == 1 && ballIncrement == 2 ? 0 : baseMultiplier;

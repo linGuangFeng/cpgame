@@ -55,6 +55,26 @@ public final class ResultUtil {
         return new Evaluation(total.setScale(2), List.copyOf(matches), List.copyOf(winningSymbols), scatters, wilds);
     }
 
+    /** Stake unit for Redis/odds: betSize × betLevel only. BASIC_BET_FACTOR (30) is billing, not the divisor. */
+    public static BigDecimal unitBet(BigDecimal betSize, int betLevel) {
+        if (betSize == null || betSize.signum() <= 0 || betLevel < 1) {
+            throw new IllegalArgumentException("下注必须为正数");
+        }
+        return betSize.multiply(BigDecimal.valueOf(betLevel));
+    }
+
+    /** Integer win multiplier = totalWin / (betSize × betLevel). Zero award → 0. */
+    public static BigDecimal winMultiplier(BigDecimal totalWin, BigDecimal betSize, int betLevel) {
+        if (totalWin == null || totalWin.signum() == 0) return BigDecimal.ZERO;
+        return totalWin.divide(unitBet(betSize, betLevel), 0, RoundingMode.UNNECESSARY).stripTrailingZeros();
+    }
+
+    public static BigDecimal winMultiplier(CompleteRound round, RoundResult result) {
+        Step first = round.deliveries().getFirst();
+        unitBet(first.bs(), first.bl());
+        return winMultiplier(result.totalWin(), first.bs(), first.bl());
+    }
+
     /** 反推整个Round的真实类型、倍率轨迹、金额和终态；任何声明字段不一致都会拒绝。 */
     public static RoundResult reverse(CompleteRound round) {
         if (round == null || round.deliveries().isEmpty()) throw new IllegalArgumentException("Round无Delivery");
@@ -62,13 +82,12 @@ public final class ResultUtil {
         BigDecimal cumulative = BigDecimal.ZERO.setScale(2);
         Step first = round.deliveries().getFirst();
         int expectedFsn = 0;
-        int multiplier = 2;
+        int multiplier = FREE_INITIAL_MULTIPLIER;
         int collectedWilds = 0;
 
         for (int index = 0; index < round.deliveries().size(); index++) {
             Step step = round.deliveries().get(index);
-            if(step.bl()!=first.bl() || step.bs().compareTo(first.bs())!=0 || step.bl()<1 || step.bl()>10
-                || !(step.bs().compareTo(new BigDecimal("0.02"))==0 || step.bs().compareTo(new BigDecimal("0.2"))==0))
+            if(step.bl()!=first.bl() || step.bs() == null || step.bs().compareTo(first.bs())!=0)
                 throw new IllegalArgumentException("Invalid or changed Round bet");
             Evaluation evaluation = evaluate(step.rskl(), step.bl(), step.bs());
             evaluations.add(evaluation);
@@ -76,16 +95,16 @@ public final class ResultUtil {
                 throw new IllegalArgumentException("Step Ways明细反推失败: " + index);
             }
             if (index == 0) {
-                expectedFsn = FREE_SPIN_AWARDS.getOrDefault(evaluation.scatterCount(), 0);
+                expectedFsn = freeSpinsFor(evaluation.scatterCount());
                 if (step.nfsc() != 0 || step.fsn() != expectedFsn || step.rpx() != 1 || step.gt() != 1
                         || step.small_game_type() != 0 || step.ba().compareTo(step.bs().multiply(BigDecimal.valueOf((long)step.bl()*BASIC_BET_FACTOR))) != 0) {
                     throw new IllegalArgumentException("付费起点字段或Scatter触发反推失败");
                 }
             } else {
                 collectedWilds += evaluation.wildCount();
-                while (collectedWilds >= 3 && multiplier < 20) {
-                    multiplier = Math.min(20, multiplier + 2);
-                    collectedWilds -= 3;
+                while (collectedWilds >= FREE_WILDS_PER_STEP && multiplier < FREE_MAX_MULTIPLIER) {
+                    multiplier = Math.min(FREE_MAX_MULTIPLIER, multiplier + FREE_MULTIPLIER_STEP);
+                    collectedWilds -= FREE_WILDS_PER_STEP;
                 }
                 if (step.fsn() != expectedFsn || step.nfsc() != index || step.rpx() != multiplier
                         || step.gt() != 2 || step.small_game_type() != 2 || step.ba().signum() != 0
@@ -118,12 +137,16 @@ public final class ResultUtil {
 
     private static void validateBoard(List<String> board) {
         if (board == null || board.size() != VISIBLE_CELLS) throw new IllegalArgumentException("rskl必须恰含15个可见格");
-        if (java.util.Collections.frequency(board, SCATTER)>4 || java.util.Collections.frequency(board,WILD)>3)
+        if (java.util.Collections.frequency(board, SCATTER) > SCATTER_BOARD_MAX
+                || java.util.Collections.frequency(board, WILD) > WILD_BOARD_MAX) {
             throw new IllegalArgumentException("Special symbol board ceiling exceeded");
-        for(int reel=0;reel<5;reel++) {
-            List<String> window=board.subList(reel*3,reel*3+3);
-            if(java.util.Collections.frequency(window,SCATTER)>1 || java.util.Collections.frequency(window,WILD)>1)
+        }
+        for (int reel = 0; reel < REELS; reel++) {
+            List<String> window = board.subList(reel * ROWS, reel * ROWS + ROWS);
+            if (java.util.Collections.frequency(window, SCATTER) > SCATTER_PER_REEL
+                    || java.util.Collections.frequency(window, WILD) > WILD_PER_REEL) {
                 throw new IllegalArgumentException("Special symbol reel ceiling exceeded");
+            }
         }
         for (int index = 0; index < board.size(); index++) {
             String symbol = board.get(index);
@@ -131,7 +154,7 @@ public final class ResultUtil {
             if (!PAYING_SYMBOLS.contains(symbol) && !WILD.equals(symbol) && !SCATTER.equals(symbol)) {
                 throw new IllegalArgumentException("未知符号: " + symbol);
             }
-            if (WILD.equals(symbol) && (reel == 0 || reel == 4)) throw new IllegalArgumentException("Wild只能出现在卷轴2/3/4");
+            if (WILD.equals(symbol) && !allowsWild(reel)) throw new IllegalArgumentException("Wild只能出现在卷轴2/3/4");
         }
     }
 }

@@ -69,6 +69,15 @@ class BlessingMultiplierCatalogTest {
         assertEquals(new BigDecimal("12.50"), round.totalWin());
     }
 
+    @Test
+    void generateAcceptsStakeOutsideConfigList() {
+        SecureRandom random = new SecureRandom();
+        BlessingRoundFactory.BlessingRound round = BlessingRoundFactory.generate(
+                random, 1, new BigDecimal("7.7"), 12, 1000);
+        assertEquals(100, round.top().odd());
+        assertEquals(0, round.bottom().odd());
+    }
+
     private static boolean containsPair(List<int[]> combos, int top, int bottom) {
         for (int[] pair : combos) {
             if (pair[0] == top && pair[1] == bottom) return true;

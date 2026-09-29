@@ -4,26 +4,25 @@
   "gameId": 60,
   "directoryName": "60-Crazy-Birds",
   "rawGameIdOnly": true,
-  "status": "BLOCKED_PENDING_ORIGINAL_EVIDENCE",
-  "implementationAllowed": false,
-  "formalPaidRounds": 0,
-  "confirmedEndpoints": [],
-  "confirmedRequestFields": [],
-  "confirmedResponseFields": [],
-  "confirmedBehaviors": [],
-  "confirmedRules": [],
+  "status": "EVIDENCE_BACKFILLED_WITH_EXPLICIT_REMAINING_GAPS",
+  "implementationAllowed": true,
+  "formalPaidRounds": 964,
+  "confirmedEndpoints": [
+    "auth/verify",
+    "crazy-birds/config",
+    "crazy-birds/spin",
+    "crazy-birds/log-list",
+    "crazy-birds/log-view"
+  ],
+  "confirmedRequestFields": ["bl", "bs", "t", "gid"],
+  "confirmedResponseFields": ["ba", "fsn", "gt", "nfsc", "pb", "pxl", "rskl", "rwa", "small_game_type", "ss", "wa", "wmkl", "wskl"],
+  "confirmedBehaviors": ["ORDINARY_LOSS", "ORDINARY_WIN", "FREE_SPINS", "WILD_MULTIPLIER", "MULTI_STEP_ROUND", "HISTORY"],
+  "confirmedRules": ["6x4 WAYS_4096", "SCATTER_REELS_TRIGGER_FREE", "CACHE_MULTIPLIER_SCALE_100"],
   "unknown": [
-    "init/config endpoint sequence",
-    "Spin endpoint and codec",
-    "board and win model",
-    "Round/Delivery/Step state machine",
-    "History list/detail/back contract",
-    "rules/paytable/paylines/bet levels",
-    "supported languages",
-    "symbol weights",
+    "official reel strips, symbol probabilities and RTP",
     "Mary applicability",
-    "all special/reward categories",
-    "Redis consumer contract"
+    "feature buy behavior",
+    "whether official free spins can retrigger"
   ],
   "requiredEvidenceSources": [
     "ORIGINAL_AUTHORIZED_HTTP",
@@ -33,5 +32,5 @@
     "OFFLINE_GENERATED_NOT_ORIGINAL",
     "OTHER_GAME_EXAMPLE"
   ],
-  "schedulerGate": "WAIT_FOR_ABC222_ORIGINAL_EVIDENCE_BACKFILL"
+  "schedulerGate": "NONE_FOR_CURRENT_IMPLEMENTED_SCOPE"
 }

@@ -3,6 +3,7 @@ package com.cpgame.batchc.cybergo;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.random.RandomGeneratorFactory;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,44 @@ class GameRuleCoreTest {
         ResultUtil.Evaluation result = ResultUtil.evaluate(board, 1, new BigDecimal("0.02"));
         assertEquals(new BigDecimal("109.80"), result.baseWin());
         assertEquals(List.of("S1", "S2"), result.winningSymbols());
+    }
+
+    @Test
+    void independentLossFirstCandidateIsAlwaysZeroAward() {
+        java.util.random.RandomGenerator random = new java.util.Random(52001L);
+        for (int index = 0; index < 20_000; index++) {
+            List<String> board = IndependentLoss.candidate(random);
+            ResultUtil.Evaluation evaluation = ResultUtil.evaluate(board, 1, new BigDecimal("0.02"));
+            assertTrue(evaluation.isLoss());
+            assertTrue(evaluation.scatterCount() < 3);
+            assertEquals(0, evaluation.baseWin().signum());
+        }
+    }
+
+    @Test
+    void fiveScatterPaidBoardIsLegalAndAwardsTwentyFreeSpins() {
+        List<String> paid = List.of(
+                "SC", "J", "Q",
+                "SC", "K", "A",
+                "SC", "S4", "S3",
+                "SC", "S2", "S1",
+                "SC", "J", "K");
+        ResultUtil.Evaluation evaluation = ResultUtil.evaluate(paid, 1, new BigDecimal("0.02"));
+        assertEquals(5, evaluation.scatterCount());
+        assertEquals(20, CyberGoRules.freeSpinsFor(5));
+        List<List<String>> boards = new ArrayList<>();
+        boards.add(paid);
+        java.util.random.RandomGenerator random = new java.util.Random(52L);
+        for (int i = 0; i < 20; i++) boards.add(IndependentWin.threeKind(random, "J"));
+        CyberGoModels.CompleteRound round = reproducible(52L).rebuild(new CyberGoModels.MinimalRoundFacts(boards));
+        assertEquals(CyberGoModels.RoundKind.FREE_SPINS, round.kind());
+        assertEquals(21, round.deliveries().size());
+        assertEquals(20, round.deliveries().getFirst().fsn());
+        for (int i = 1; i <= 20; i++) {
+            assertTrue(round.deliveries().get(i).rpx() >= 2);
+            assertTrue(round.deliveries().get(i).rpx() <= 20);
+            assertEquals(0, ResultUtil.evaluate(round.deliveries().get(i).rskl(), 1, new BigDecimal("0.02")).scatterCount());
+        }
     }
 
     @Test

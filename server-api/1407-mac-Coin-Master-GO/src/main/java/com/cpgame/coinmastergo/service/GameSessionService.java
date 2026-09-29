@@ -55,8 +55,8 @@ public class GameSessionService {
 
     public SpinStep spin(String token, String gid, int betLevel, BigDecimal betSize, String idempotencyKey) {
         requireGid(gid);
-        if (!GameRules.BET_LEVELS.contains(betLevel) || GameRules.BET_SIZES.stream().noneMatch(v -> v.compareTo(betSize) == 0)) {
-            throw new GameException(400, "invalid bl or bs");
+        if (betSize == null || betSize.signum() <= 0 || betLevel < 1) {
+            throw new GameException(400, "stake must be positive");
         }
         return store.transaction(state -> {
             PlayerSession session = state.sessionsByToken.get(token);

@@ -27,8 +27,8 @@ final class SocketRedisCommands implements RedisCommands {
     }
 
     static SocketRedisCommands connect(Properties config) throws IOException {
-        String host = config.getProperty("redis.host", "18.234.101.161").trim();
-        int port = Integer.parseInt(config.getProperty("redis.port", "8021").trim());
+        String host = config.getProperty("redis.host", "54.172.218.28").trim();
+        int port = Integer.parseInt(config.getProperty("redis.port", "8016").trim());
         int database = Integer.parseInt(config.getProperty("redis.database", "0").trim());
         boolean ssl = Boolean.parseBoolean(config.getProperty("redis.ssl", "false"));
         int connectTimeoutMs = Integer.parseInt(config.getProperty("redis.connect-timeout-ms", "5000").trim());

@@ -26,7 +26,6 @@ public final class CompleteRoundFactory {
     public static CompleteRound generate(SecureRandom random, List<String> chessboards,
                                          BigDecimal betSize, int betLevel, int requestedOdd) {
         Objects.requireNonNull(random);
-        GameRuleCore.validateBet(betSize, betLevel);
         List<String> keys = GameRuleCore.parseChessboards(String.join(",", chessboards));
         int floored = JungleKingsMultiplierCatalog.floorOdd(keys, requestedOdd);
         if(floored==0){

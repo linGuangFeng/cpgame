@@ -26,6 +26,13 @@ public final class RedisFloorLookup {
         return open(redis, index, listKey, random, minimum, maximum).next();
     }
 
+    /** 已经按场景/档位抽出整数目标后，只在同一索引内向下寻找非空桶。 */
+    public static <E extends Exception> Integer floor(Command<E> redis, String index,
+            IntFunction<String> listKey, int target, int minimum) throws E {
+        if (minimum < 0 || target < minimum) throw new IllegalArgumentException("invalid multiplier target");
+        return new Cursor<>(redis, index, listKey, minimum, Integer.toString(target)).next();
+    }
+
     public static final class Cursor<E extends Exception> {
         private final Command<E> redis;
         private final String index;

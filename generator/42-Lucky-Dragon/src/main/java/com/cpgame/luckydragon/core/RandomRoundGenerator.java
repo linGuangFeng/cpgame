@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.random.RandomGenerator;
 
-/** 从冻结训练集拟合的完整 INITIAL 状态联合分布抽样。 */
+/** Spin 出牌：请求倍数落到合法列表后一把取 combo。联合模型仅保留给 Loader 配置校验与离线抽样。 */
 public final class RandomRoundGenerator {
     /*
      * v38 冻结上限来自 1130 个原厂完整 Round，而不是 Help 未声明上限的推测。
@@ -17,55 +17,54 @@ public final class RandomRoundGenerator {
     private static final Map<String, Integer> OBSERVED_TOTAL_MAX = Map.of(
         "H0", 3, "H1", 3, "H2", 2, "H3", 2, "H4", 0, "WILD", 2);
     public static final String DEFAULT_JOINT_MODEL =
-        "H0,H0,H0,0:83;H0,H0,H1,0:36;H0,H0,H2,0:36;H0,H0,H3,0:32;H0,H1,H0,0:31;H0,H1,H1,0:19;H0,H1,H2,0:19;H0,H1,H3,0:17;H0,H1,WILD,0:1;H0,H2,H0,0:49;H0,H2,H1,0:18;H0,H2,H2,0:15;H0,H2,H3,0:19;H0,H2,WILD,0:1;H0,H3,H0,0:39;H0,H3,H1,0:15;H0,H3,H2,0:15;H0,H3,H3,0:11;H0,H3,WILD,0:1;H0,WILD,H0,3:1;H0,WILD,H0,5:1;H0,WILD,H1,5:1;H0,WILD,H2,3:1;H1,H0,H0,0:23;H1,H0,H1,0:18;H1,H0,H2,0:17;H1,H0,H3,0:15;H1,H0,WILD,0:1;H1,H1,H0,0:12;H1,H1,H1,0:40;H1,H1,WILD,0:1;H1,H2,H0,0:16;H1,H3,H0,0:14;H1,WILD,H1,3:38;H2,H0,H0,0:40;H2,H0,H1,0:14;H2,H0,H2,0:15;H2,H0,H3,0:13;H2,H0,WILD,0:1;H2,H1,H0,0:14;H2,H2,H0,0:15;H2,H3,H0,0:12;H2,WILD,H2,3:32;H2,WILD,H2,5:32;H2,WILD,H2,9:28;H2,WILD,WILD,3:3;H2,WILD,WILD,5:4;H2,WILD,WILD,9:2;H3,H0,H0,0:29;H3,H0,H1,0:18;H3,H0,H2,0:16;H3,H0,H3,0:15;H3,H0,WILD,0:3;H3,H1,H0,0:18;H3,H2,H0,0:23;H3,H3,H0,0:15;H3,WILD,H0,3:2;WILD,H0,H0,0:4;WILD,H0,H1,0:1;WILD,H0,H2,0:1;WILD,H1,H0,0:1;WILD,WILD,H2,3:1;WILD,WILD,H2,5:1;WILD,WILD,H2,9:1";
+        "H0,H0,H0,0:83;H0,H0,H1,0:36;H0,H0,H2,0:36;H0,H0,H3,0:32;H0,H1,H0,0:31;H0,H1,H1,0:19;H0,H1,H2,0:19;H0,H1,H3,0:17;H0,H1,WILD,0:1;H0,H2,H0,0:49;H0,H2,H1,0:18;H0,H2,H2,0:15;H0,H2,H3,0:19;H0,H2,WILD,0:1;H0,H3,H0,0:39;H0,H3,H1,0:15;H0,H3,H2,0:15;H0,H3,H3,0:11;H0,H3,WILD,0:1;H0,WILD,H0,3:1;H0,WILD,H0,5:1;H0,WILD,H1,5:1;H0,WILD,H2,3:1;H1,H0,H0,0:23;H1,H0,H1,0:18;H1,H0,H2,0:17;H1,H0,H3,0:15;H1,H0,WILD,0:1;H1,H1,H0,0:12;H1,H1,H1,0:40;H1,H1,WILD,0:1;H1,H2,H0,0:16;H1,H3,H0,0:14;H1,WILD,H1,3:38;H2,H0,H0,0:40;H2,H0,H1,0:14;H2,H0,H2,0:15;H2,H0,H3,0:13;H2,H0,WILD,0:1;H2,H1,H0,0:14;H2,H2,H0,0:15;H2,H3,H0,0:12;H2,WILD,H2,3:32;H2,WILD,H2,5:32;H2,WILD,H2,9:28;H2,WILD,WILD,3:3;H2,WILD,WILD,5:4;H2,WILD,WILD,9:2;H3,H0,H0,0:29;H3,H0,H1,0:18;H3,H0,H2,0:16;H3,H0,H3,0:15;H3,H0,WILD,0:3;H3,H1,H0,0:18;H3,H2,H0,0:23;H3,H3,H0,0:15;H3,WILD,H0,3:2;WILD,H0,H0,0:4;WILD,H0,H1,0:1;WILD,H0,H2,0:1;WILD,H1,H0,0:1;WILD,WILD,H2,3:1;WILD,WILD,H2,5:1;WILD,WILD,H2,9:1;H2,H2,WILD,0:8;WILD,H2,H2,0:8;H3,H3,WILD,0:8;WILD,H3,H3,0:8;H1,WILD,H1,5:8;H1,WILD,H1,9:8;H1,WILD,WILD,3:4;H1,WILD,WILD,5:4;H1,WILD,WILD,9:4;WILD,WILD,H1,3:4;WILD,WILD,H1,5:4;WILD,WILD,H1,9:4;H3,WILD,H3,3:8;H3,WILD,H3,5:8;H3,WILD,H3,9:8;H3,WILD,WILD,3:4;H3,WILD,WILD,5:4;H3,WILD,WILD,9:4;WILD,WILD,H3,3:4;WILD,WILD,H3,5:4;WILD,WILD,H3,9:4";
 
     private final GameRuleCore rules;
     private final RandomGenerator random;
-    private final List<JointState> weightedStates;
-    private final List<JointState> lossStates;
-    private final List<JointState> defaultLosses;
+    private final String jointModel;
+    private List<JointState> weightedStates;
 
     public RandomRoundGenerator(GameRuleCore rules) { this(rules, new SecureRandom(), DEFAULT_JOINT_MODEL); }
     public RandomRoundGenerator(GameRuleCore rules, RandomGenerator random) { this(rules, random, DEFAULT_JOINT_MODEL); }
 
     /**
-     * 一个抽样单位同时包含三个有序轴符号和中心 WILD 倍率；不把单格边际彼此独立相乘，
-     * 也不通过改写符号来人工拼 LOSS。
+     * Joint-model text is still validated for Loader/config compatibility. Spin generation
+     * floors the requested odd into the legal list and looks up one combo; no retry.
      */
     public RandomRoundGenerator(GameRuleCore rules, RandomGenerator random, String jointModel) {
         this.rules = Objects.requireNonNull(rules, "rules");
         this.random = Objects.requireNonNull(random, "random");
-        this.weightedStates = parse(jointModel, rules);
-        RoundRequest probe = new RoundRequest(java.math.BigDecimal.ONE, 1);
-        this.lossStates = weightedStates.stream().filter(state ->
-                rules.evaluate(probe, state.symbols, state.reelMultiplier).outcome() == OutcomeType.LOSS).toList();
-        if (lossStates.isEmpty()) throw new IllegalArgumentException("joint model has no loss support");
-        List<JointState> defaults = new ArrayList<>(10);
-        for (int i = 0; i < 10; i++) defaults.add(lossStates.get(i % lossStates.size()));
-        this.defaultLosses = List.copyOf(defaults);
+        this.jointModel = jointModel;
+    }
+
+    private List<JointState> states() {
+        if (weightedStates == null) weightedStates = parse(jointModel, rules);
+        return weightedStates;
     }
 
     public SpinResult next(RoundRequest request) {
-        JointState state = weightedStates.get(random.nextInt(weightedStates.size()));
-        return rules.evaluate(request, state.symbols, state.reelMultiplier);
+        return generate(request, LuckyDragonMultiplierCatalog.sampleRequestedOdd(random));
     }
 
-    /** Outcome conditioning by rejection over intact joint states; no cell is replaced or constrained. */
-    public SpinResult independentLoss(RoundRequest request) {
-        return generateWithCandidates(request, () -> independentLossCandidate(request));
-    }
-
-    SpinResult generateWithCandidates(RoundRequest request, java.util.function.Supplier<SpinResult> proposals) {
-        for (int attempts = 0; attempts < 5; attempts++) {
-            SpinResult result = proposals.get();
-            if (result != null && result.outcome() == OutcomeType.LOSS) return result;
+    /** One generate entry: requested odd floors into the list, then one catalog combo. */
+    public SpinResult generate(RoundRequest request, int requestedOdd) {
+        int floored = LuckyDragonMultiplierCatalog.floorOdd(requestedOdd);
+        LuckyDragonMultiplierCatalog.Combo combo = LuckyDragonMultiplierCatalog.pickCombo(floored, random);
+        SpinResult result = rules.evaluate(request, combo.symbols(), combo.reelMultiplier());
+        int got = ResultUtil.positiveMultiplier(request, result);
+        if (got != floored) {
+            throw new IllegalStateException("generated multiplier " + got + " != " + floored);
         }
-        JointState state = defaultLosses.get(random.nextInt(10));
-        return rules.evaluate(request, state.symbols, state.reelMultiplier);
+        return result;
     }
 
-    public SpinResult independentLossCandidate(RoundRequest request) {
-        JointState state = lossStates.get(random.nextInt(lossStates.size()));
+    public SpinResult independentLoss(RoundRequest request) {
+        return generate(request, 0);
+    }
+
+    /** Frozen joint-state sample; used by the offline model validator, not Spin. */
+    public SpinResult nextJoint(RoundRequest request) {
+        JointState state = states().get(random.nextInt(states().size()));
         return rules.evaluate(request, state.symbols, state.reelMultiplier);
     }
 

@@ -23,6 +23,10 @@ public final class GameRuleCoreTest {
                     throw new AssertionError("codec mismatch");
                 if(scenario==GameRuleCore.Scenario.ORDINARY_LOSS && round.totalAward().signum()!=0)throw new AssertionError("loss paid");
                 if(scenario==GameRuleCore.Scenario.ORDINARY_WIN && round.totalAward().signum()<=0)throw new AssertionError("win did not pay");
+                if(scenario==GameRuleCore.Scenario.ORDINARY_WIN) {
+                    int units=ResultUtil.multiplier(round);
+                    if(units<1 || units>500)throw new AssertionError("constructed ordinary win out of small/medium range: "+units);
+                }
                 if(scenario==GameRuleCore.Scenario.SCATTER_FREE_ROUNDS) {
                     GameRuleCore.Delivery last=round.deliveries().get(round.deliveries().size()-1);
                     if(round.deliveries().size()!=last.fsn()+1 || last.nfsc()!=last.fsn())throw new AssertionError("free Round is not complete");

@@ -11,8 +11,8 @@ public final class GameRuleCore {
     public static final int CELLS = COLS * ROWS;
     public static final int SCATTER = 100;
     public static final int FEATURE_PLACEHOLDER = 0;
-    public static final String RULES_VERSION = "2300-monster-slayer-v4-base-bet-multiplier";
-    public static final String RULES_HASH = "86af201a56e901c629e2f8d202b515b5d31fad77956ac8353b6b8886e385b61c";
+    public static final String RULES_VERSION = "2300-monster-slayer-v8-rule-generated-hunt";
+    public static final String RULES_HASH = "4de0fb37e9c562faf5061807574052b5da97f98a2540cd41691426c5a101b057";
 
     private static final int[][] PAY = {
             {}, {50,100,750}, {40,80,500}, {35,50,250}, {30,40,200}, {30,40,150},
@@ -23,8 +23,8 @@ public final class GameRuleCore {
 
     public enum RoundClass { ORDINARY_LOSS, ORDINARY_WIN, MONSTER_FEATURE, BUY_FEATURE }
 
-    public record FeatureFacts(int[] hearts, int[] locCell, int[] locId, int[] bl, int[] iu, int[] t, int[] rbs, String roles) {
-        public static final FeatureFacts EMPTY = new FeatureFacts(new int[0], new int[0], new int[0], new int[0], new int[0], new int[0], new int[0], "");
+    public record FeatureFacts(int[] hearts, int[] locCell, int[] locId, int[] bl, int[] iu, int[] t, int[] rbs, byte[] roles) {
+        public static final FeatureFacts EMPTY = new FeatureFacts(new int[0], new int[0], new int[0], new int[0], new int[0], new int[0], new int[0], new byte[0]);
         public FeatureFacts {
             hearts = hearts.clone();
             locCell = locCell.clone();
@@ -33,8 +33,7 @@ public final class GameRuleCore {
             iu = iu.clone();
             t = t.clone();
             rbs = rbs.clone();
-            if (roles == null) roles = "";
-            if (roles.indexOf('|') >= 0 || roles.indexOf('/') >= 0) throw new IllegalArgumentException("roles payload contains splitter");
+            roles = roles == null ? new byte[0] : roles.clone();
             if (locCell.length != locId.length) throw new IllegalArgumentException("loc length mismatch");
             if (bl.length != iu.length || bl.length != t.length) throw new IllegalArgumentException("animal length mismatch");
         }
@@ -45,8 +44,8 @@ public final class GameRuleCore {
         @Override public int[] iu() { return iu.clone(); }
         @Override public int[] t() { return t.clone(); }
         @Override public int[] rbs() { return rbs.clone(); }
-        public String roles() { return roles; }
-        public boolean empty() { return this == EMPTY || (hearts.length == 0 && locCell.length == 0 && bl.length == 0 && rbs.length == 0 && roles.isEmpty()); }
+        @Override public byte[] roles() { return roles.clone(); }
+        public boolean empty() { return this == EMPTY || (hearts.length == 0 && locCell.length == 0 && bl.length == 0 && rbs.length == 0 && roles.length == 0); }
     }
 
     public record Step(int[] board, int gameType, int nextType, FeatureFacts feature) {
@@ -99,6 +98,7 @@ public final class GameRuleCore {
 
     public static void validate(CompleteRound round) {
         validate(round.special(), round.buyType(), round.steps());
+        HuntRules.validate(round);
     }
 
     private static void validate(boolean special, int buyType, List<Step> steps) {

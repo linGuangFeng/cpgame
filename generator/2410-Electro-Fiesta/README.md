@@ -1,6 +1,6 @@
 # Electro Fiesta Java Redis Loader
 
-正式入口使用 `SecureRandom`，没有 seed、倍率追逐、0 倍开关或本地 JSONL 回退。每个候选由独立 `ResultUtil` 反推模式及倍率；0 倍自然进入未中奖池。`RPUSH` 与 `LTRIM` 位于同一 `MULTI/EXEC`。
+正式入口使用 `SecureRandom`，没有 seed、倍率追逐、0 倍开关或本地 JSONL 回退。每个候选由独立 `ResultUtil` 反推模式及倍率；0 倍走共享零奖生成器。`RPUSH` 与 `LTRIM` 位于同一 `MULTI/EXEC`。普通池按 `generation.respin-share` 写入直出与锁列；满屏写入玛丽池，`generation.mary-respin-share` 是玛丽里锁列的占比，默认与前者相同。
 
 构建：`mvn clean install`。交付目录只保留 `redis-loader.jar`、`generator.properties`、`run-generator.cmd`。
 

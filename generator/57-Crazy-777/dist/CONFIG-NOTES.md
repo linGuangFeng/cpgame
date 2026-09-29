@@ -1,3 +1,13 @@
+# 57 普通穷举与玛丽概率灌库
+
+`run-ordinary.cmd` 只写普通奖，`run-mary.cmd` 只写玛丽。`run-loader.cmd ordinary|mary` 仍只跑一池。runRedis 的 `java -jar crazy777-loader.jar generator.properties` 以及不带参数的 `run-loader.cmd` 在同一进程里先普通奖再玛丽。
+
+普通奖励写入 PerKeyList / BetLog：枚举全部合法可见卷轴结构（BLANK 与符号交替、不含三轴可见 SC）。loss-count / win-count 对穷举不生效。仍使用普通最小／最大倍数和 generation.max-members-per-multiplier。范围外或不可达档位不生成；某档结构少于保留条数时写完即停，不复制凑数。
+
+玛丽（三轴可见 SC 触发免费）写入 MaryKeyList / MaryLog：按 entry/free 权重从完整联合 kernel 概率生成。special-count、特殊最小／最大倍数和 special-max-members-per-multiplier 仍生效。
+
+需用新 Loader 重新灌库。本次不清理线上 Redis；每档 LTRIM 保留最新配置条数。
+
 # Redis 生成器配置生效说明（2026-09-14）
 
 上下限约束的是一个完整局的最终倍率，使用闭区间：下限 1、上限 100 时，只有 1≤倍率≤100 的新结果能写入；0 倍不再绕过检查。单局内部无奖的一步不等于完整局总倍率为 0。

@@ -42,12 +42,10 @@ public final class RoundEngineVerifier {
             }
         }
 
-        RandomCandidateGenerator lossCandidates = new RandomCandidateGenerator(new SecureRandom());
+        java.util.random.RandomGenerator lossRandom = new SecureRandom();
         int firstSuccesses = 0;
         for (int index = 0; index < lossSamples; index++) {
-            ResultUtil.Evaluation evaluation = ResultUtil.evaluate(lossCandidates.paidBoardCandidate(),
-                    CyberGoRules.MINIMUM_BET_LEVEL, CyberGoRules.MINIMUM_BET_SIZE);
-            if (evaluation.isLoss()) firstSuccesses++;
+            if (IndependentLoss.isLoss(IndependentLoss.candidate(lossRandom))) firstSuccesses++;
         }
         BigDecimal firstSuccessRate = BigDecimal.valueOf(firstSuccesses)
                 .divide(BigDecimal.valueOf(lossSamples), 8, RoundingMode.HALF_UP);

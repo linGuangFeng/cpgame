@@ -84,7 +84,7 @@ final class GeneratorConfig {
                 || lossCount > MAX_GENERATION_TARGET || winCount > MAX_GENERATION_TARGET
                 || specialCount > MAX_GENERATION_TARGET
                 || batchSize < 1 || batchSize > 10_000 || maxMembersPerMultiplier < 1
-                || paidBet.compareTo(GameConstants.MINIMUM_TOTAL_BET) < 0
+                || paidBet.signum() <= 0
                 || normalMaxWinMultiplier.signum() <= 0 || specialMaxWinMultiplier.signum() <= 0) {
             throw new IllegalArgumentException("generator.properties 参数超出允许范围");
         }

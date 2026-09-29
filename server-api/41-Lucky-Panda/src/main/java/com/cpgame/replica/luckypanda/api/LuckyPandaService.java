@@ -74,7 +74,7 @@ final class LuckyPandaService {
             if (state.active == null) {
                 BigDecimal betSize = decimal(form.get("bs"), "bs");
                 int betLevel = integer(form.get("bl"), "bl");
-                if (!SpinProjector.legalBet(betSize, betLevel)) throw new ApiException(400, "unsupported bs/bl");
+                if (!SpinProjector.positiveStake(betSize, betLevel)) throw new ApiException(400, "bs/bl must be positive");
                 BigDecimal stake = SpinProjector.stake(betSize, betLevel);
                 if (state.balance.compareTo(stake) < 0) throw new ApiException(409, "insufficient balance");
                 RedisRoundStore.ClaimedRound claimed;

@@ -39,7 +39,7 @@ public final class ResultUtil {
         if (facts == null) throw new IllegalArgumentException("完整 Round 事实不能为空");
         if (facts.roundKey() == null || facts.roundKey().isBlank()) throw new IllegalArgumentException("roundKey 不能为空");
         if (facts.createdAtEpochSecond() <= 0) throw new IllegalArgumentException("创建时间无效");
-        if (!GameRules.legalBet(facts.betSize(), facts.betLevel())) throw new IllegalArgumentException("非法下注档位");
+        if (!GameRules.positiveStake(facts.betSize(), facts.betLevel())) throw new IllegalArgumentException("下注必须为正数");
         List<String> paid = requireBoard(facts.paidBoard(), "S01");
         List<String> fin = requireBoard(facts.finalBoard(), "S02/rskl");
         enforceWildCaps(paid);

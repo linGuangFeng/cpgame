@@ -44,8 +44,7 @@ public record LoaderConfig(
         }
         BigDecimal betSize = decimal(properties, "generation.bet-size", new BigDecimal("0.05"));
         int betLevel = integer(properties, "generation.bet-level", 4);
-        GameRuleCore.validateBet(betSize, betLevel);
-        List<RoundMode> modes = parseModes(properties.getProperty("generation.modes", "LOSS,DRAGON"));
+        List<RoundMode> modes = parseModes(properties.getProperty("generation.modes", "LOSS,WIN,DRAGON"));
         LoaderConfig config = new LoaderConfig(
             properties.getProperty("redis.host", "192.168.10.3").strip(),
             integer(properties, "redis.port", 6379),
@@ -53,13 +52,16 @@ public record LoaderConfig(
             integer(properties, "redis.database", 15),
             integer(properties, "redis.connect-timeout-ms", 3000),
             integer(properties, "redis.socket-timeout-ms", integer(properties, "redis.read-timeout-ms", 30000)),
-            integer(properties, "generation.total-members", 400),
-            integer(properties, "generation.max-members-per-multiplier", 500),
+            totalMembers(properties),
+            integer(properties, "generation.max-members-per-multiplier", 300),
             integer(properties, "generation.max-candidates", 80000),
             decimal(properties, "generation.maximum-round-multiplier", new BigDecimal("20000")),
             integer(properties, "generation.maximum-steps", GameRuleCore.MAX_STEPS_OBSERVED),
             betSize, betLevel, modes, new LoaderLimits(properties));
         config.validate();
+        if (config.outputLimits().normalCount > 0 && config.modes().stream().allMatch(RedisKeys::special)
+            || config.outputLimits().specialCount > 0 && config.modes().stream().noneMatch(RedisKeys::special))
+            throw new IllegalArgumentException("Requested pool count has no enabled mode");
         return config;
     }
 
@@ -69,9 +71,21 @@ public record LoaderConfig(
             || maximumMembersPerMultiplier < 1 || maximumCandidates < totalMembers
             || maximumRoundMultiplier.signum() <= 0 || maximumSteps < 1
             || maximumSteps > GameRuleCore.MAX_STEPS_OBSERVED || modes.isEmpty()
-            || betSize.compareTo(new BigDecimal("0.05")) != 0) {
+            || betSize.signum() <= 0 || betLevel < 1) {
             throw new IllegalArgumentException("invalid formal Loader configuration");
         }
+    }
+
+    private static int totalMembers(Properties properties) {
+        LoaderLimits limits = new LoaderLimits(properties);
+        int fallback = 400;
+        if (limits.normalCount >= 0) {
+            fallback = Math.addExact(limits.normalCount, limits.specialCount);
+            if (properties.containsKey("generation.total-members")
+                && integer(properties, "generation.total-members", fallback) != fallback)
+                throw new IllegalArgumentException("total-members must equal normal-count + special-count");
+        }
+        return integer(properties, "generation.total-members", fallback);
     }
 
     private static int integer(Properties properties, String key, int fallback) {

@@ -1,13 +1,58 @@
 package com.cpgame.curupira;
-import com.cpgame.curupira.config.EngineConfiguration;import com.cpgame.curupira.core.*;import com.cpgame.curupira.model.*;import com.cpgame.curupira.random.WeightedSymbolSampler;import com.cpgame.curupira.verify.RoundVerifier;
-import org.junit.jupiter.api.Test;import java.math.BigDecimal;import java.nio.file.Path;import java.util.*;import static org.junit.jupiter.api.Assertions.*;
-class RoundEngineTest{
- private static final Path FORMAL=Path.of("packaging/generator.properties");
- @Test void capturedRoundTenIsIndependentOracle(){EvaluatedBoard e=new ResultUtil().evaluate(List.of(1,1,21,1,21,14,21,21,21,1,1,3,2,12,4));assertEquals(1303,e.multiplierSum());assertEquals(List.of(2),e.expandingWildColumns());assertEquals(20,e.awards().size());}
- @Test void visualPaylineRowsAreMappedBackToWireRows(){EvaluatedBoard e=new ResultUtil().evaluate(List.of(13,14,4,13,12,12,2,2,21,21,14,21,13,2,12));assertEquals(8,e.multiplierSum());assertEquals(List.of(new Award(5,18,8,13)),e.awards());}
- @Test void generatedBoardsNeverPlaceWildOnFirstReel()throws Exception{EngineConfiguration c=EngineConfiguration.load(FORMAL);GameRuleCore core=new GameRuleCore(new DeterministicRandomSource(235018),c.generationPolicy());for(int i=0;i<10000;i++){List<Integer>board=core.generateCompleteRound().deliveries().get(0).evaluatedBoard().ps();assertFalse(board.subList(0,GameRules.ROWS).contains(GameRules.WILD));}}
- @Test void oneCallProducesCompleteVerifiedRound()throws Exception{EngineConfiguration c=EngineConfiguration.load(FORMAL);GameRuleCore core=new GameRuleCore(new DeterministicRandomSource(2350),c.generationPolicy());RoundVerifier verifier=new RoundVerifier(c.generationPolicy());Set<List<Integer>>boards=new HashSet<>();for(int i=0;i<500;i++){CompleteRound r=core.generateCompleteRound();verifier.verify(r);assertEquals(1,r.deliveries().size());assertEquals(1,r.deliveries().get(0).deliveryIndex());assertTrue(r.deliveries().get(0).evaluatedBoard().scatterCount()<3);boards.add(r.deliveries().get(0).evaluatedBoard().ps());}assertTrue(boards.size()>490);}
- @Test void constructiveLossIsIndependentlyChecked()throws Exception{EngineConfiguration c=EngineConfiguration.load(FORMAL);GameRuleCore core=new GameRuleCore(new DeterministicRandomSource(991),c.generationPolicy());ResultUtil oracle=new ResultUtil();for(int i=0;i<10000;i++){RoundResult r=core.generateInitialRoomProjection(new BigDecimal("1000.00"),1,"opaque");oracle.assertIndependentLoss(r.board());assertFalse(r.board().ps().subList(0,GameRules.ROWS).contains(GameRules.WILD));assertEquals(0,r.totalBet().signum());assertEquals(r.startBalance(),r.endBalance());}}
- @Test void apiProjectionUsesSameCore()throws Exception{EngineConfiguration c=EngineConfiguration.load(FORMAL);RoundResult r=new GameRuleCore(new DeterministicRandomSource(77),c.generationPolicy()).generatePaidRound(new BigDecimal("0.02"),1,new BigDecimal("1000"),9,"opaque");assertEquals(new BigDecimal("0.50"),r.totalBet());assertEquals(r.totalWin().subtract(r.totalBet()),r.change());assertTrue(r.roundKey()>9007199254740991L);}
- @Test void configuredConstructiveFirstAttemptRateExceedsMinimum()throws Exception{EngineConfiguration c=EngineConfiguration.load(FORMAL);WeightedSymbolSampler sampler=new WeightedSymbolSampler(new DeterministicRandomSource(8080),c.generationPolicy().symbolWeights());ResultUtil util=new ResultUtil();CandidateBoardGenerator candidates=new CandidateBoardGenerator(sampler);ConstructiveLossGenerator losses=new ConstructiveLossGenerator(sampler,candidates,util,c.generationPolicy());int success=0;for(int i=0;i<c.validationSamples();i++)if(losses.tryConstructOnce().isPresent())success++;assertTrue((double)success/c.validationSamples()>=c.minimumFirstSuccessRate());}
+
+import com.cpgame.curupira.config.EngineConfiguration;
+import com.cpgame.curupira.core.GameRuleCore;
+import com.cpgame.curupira.core.GameRules;
+import com.cpgame.curupira.core.ResultUtil;
+import com.cpgame.curupira.model.Award;
+import com.cpgame.curupira.model.CompleteRoundFact;
+import com.cpgame.curupira.model.EvaluatedBoard;
+import com.cpgame.curupira.verify.RoundVerifier;
+import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class RoundEngineTest {
+    private static final Path FORMAL = Path.of("packaging/generator.properties");
+
+    @Test void capturedRoundTenIsIndependentOracle() {
+        EvaluatedBoard board = new ResultUtil().evaluate(List.of(1,1,21,1,21,14,21,21,21,1,1,3,2,12,4));
+        assertEquals(1303, board.multiplierSum());
+        assertEquals(List.of(2), board.expandingWildColumns());
+        assertEquals(20, board.awards().size());
+    }
+
+    @Test void visualPaylineRowsAreMappedBackToWireRows() {
+        EvaluatedBoard board = new ResultUtil().evaluate(List.of(13,14,4,13,12,12,2,2,21,21,14,21,13,2,12));
+        assertEquals(8, board.multiplierSum());
+        assertEquals(List.of(new Award(5,18,8,13)), board.awards());
+    }
+
+    @Test void oneCallDrawsOneFactThenClassifiesIt() throws Exception {
+        EngineConfiguration config = EngineConfiguration.load(FORMAL);
+        GameRuleCore core = new GameRuleCore(new DeterministicRandomSource(2350), config.generationPolicy());
+        RoundVerifier verifier = new RoundVerifier();
+        ResultUtil oracle = new ResultUtil();
+        Set<List<Integer>> boards = new HashSet<>();
+        boolean firstReelWildObserved = false;
+        for (int i = 0; i < 5_000; i++) {
+            CompleteRoundFact fact = core.generatePaidCandidate();
+            verifier.verifyFact(fact);
+            EvaluatedBoard evaluated = oracle.evaluate(fact.steps().get(0).cells());
+            assertEquals(oracle.classifyPaid(evaluated), fact.kind());
+            assertTrue(GameRules.hasAtMostOneScatterPerColumn(evaluated.ps()));
+            firstReelWildObserved |= evaluated.ps().subList(0, GameRules.ROWS).contains(GameRules.WILD);
+            boards.add(evaluated.ps());
+        }
+        assertTrue(firstReelWildObserved, "首轴 Wild 没有证据证明禁出，生成器不得硬禁");
+        assertTrue(boards.size() > 4_950);
+    }
+
+    @Test void formalBaseWeightsAreTheRecordedTenRoundCounts() throws Exception {
+        assertEquals(java.util.Map.of(1,26,2,14,3,16,4,16,11,16,12,17,13,19,14,17,21,6,31,3),
+                EngineConfiguration.load(FORMAL).generationPolicy().symbolWeights());
+    }
 }

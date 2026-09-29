@@ -60,7 +60,8 @@
           <div data-detail="description"><h3>游戏说明</h3><p th:if="${game.description.isEmpty()}">当前暂无游戏说明记录。</p><ul th:unless="${game.description.isEmpty()}"><li th:each="line : ${game.description}" th:text="${line}"></li></ul></div>
         </div>
         <div class="game-lab-actions play-only">
-          <button class="btn game-lab-detail-action" type="button" th:title="${game.gaps.isEmpty() ? '查看游戏详情' : game.gaps.size() + ' 项漏做或未获取内容'}" onclick="openCardDetail(this,'overview')">查看详情</button>
+          <button class="btn game-lab-detail-action" type="button" th:title="${game.gaps.isEmpty() ? '查看游戏详情' : game.gaps.size() + ' 项漏做或未获取内容'}" onclick="openCardDetail(this,'overview')">详情</button>
+          <button class="btn game-lab-detail-action" type="button" th:attr="data-directory=${game.directoryName}" th:disabled="${betlog == null || betlog.configName == null}" title="查看并修改试玩使用的 Redis 配置" onclick="openBetLogConfig(this, 'play')">配置</button>
           <div class="game-lab-runtime-actions" th:if="${mountedDemoUrls.get(game.directoryName) != null}">
             <button class="btn btn-game-enter" type="button" th:attr="data-game-url=${mountedDemoUrls.get(game.directoryName)},data-directory=${game.directoryName},data-reference1=${game.references.reference1Url == null ? '' : game.references.reference1Url},data-reference2=${game.references.reference2Url == null ? '' : game.references.reference2Url},title=${runningProcesses.get(game.directoryName) == null ? '' : 'PID ' + runningProcesses.get(game.directoryName).processId + ' · 端口 ' + runningProcesses.get(game.directoryName).port}" onclick="startGame(this)">进入游戏</button>
             <button class="btn btn-danger" type="button" th:attr="data-directory=${game.directoryName}" onclick="stopGame(this)">关闭</button>
@@ -73,7 +74,7 @@
           <span class="btn btn-secondary disabled" th:if="${mountedDemoUrls.get(game.directoryName) == null && (!game.publishReady || game.demoUrl == null)}">暂无试玩入口</span>
         </div>
         <div class="game-lab-actions betlog-only">
-          <button class="btn game-lab-detail-action" type="button" th:attr="data-directory=${game.directoryName}" th:disabled="${betlog == null || betlog.configName == null}" onclick="openBetLogConfig(this)">配置</button>
+          <button class="btn game-lab-detail-action" type="button" th:attr="data-directory=${game.directoryName}" th:disabled="${betlog == null || betlog.configName == null}" onclick="openBetLogConfig(this, 'betlog')">配置</button>
           <button class="btn game-lab-detail-action" type="button" th:attr="data-directory=${game.directoryName}" onclick="openBetLogResult(this)">结果</button>
           <div class="game-lab-runtime-actions betlog-run-actions" th:classappend="${betrun != null && betrun.state == 'RUNNING' ? ' is-running' : ''}">
             <button class="btn btn-game-enter betlog-run" type="button" th:if="${betlog != null && betlog.available}" th:attr="data-directory=${game.directoryName}" th:hidden="${betrun != null && betrun.state == 'RUNNING'}" onclick="runBetLog(this)">runRedis</button>
@@ -828,11 +829,11 @@
       button.disabled = false;
     }
   }
-  async function openBetLogConfig(button) {
+  async function openBetLogConfig(button, source) {
     const directory = button.dataset.directory;
     if (!directory) return;
     betlogConfigDirectory = directory;
-    betlogConfigTitle.textContent = '修改 Redis Loader 配置';
+    betlogConfigTitle.textContent = source === 'play' ? '修改试玩配置' : '修改 Redis Loader 配置';
     betlogConfigFile.textContent = '正在读取…';
     betlogConfigText.value = '';
     betlogConfigError.hidden = true;
@@ -1421,20 +1422,15 @@
     if (cacheAbort) cacheAbort.abort();
     let message = '';
     try {
-      const prefixes = cacheSnapshot && cacheSnapshot.prefixes || [];
-      const indexKeys = prefixes.map(prefix => prefix.indexKey).filter(Boolean);
-      const keys = [];
-      prefixes.forEach(prefix => {
-        (prefix.multipliers || []).forEach(row => { if (row.redisKey) keys.push(row.redisKey); });
-      });
+      // The game route is sufficient; the server resolves its indexes from configuration.
       const controller = new AbortController();
-      const timer = window.setTimeout(() => controller.abort(), 20000);
+      const timer = window.setTimeout(() => controller.abort(), 120000);
       let response;
       try {
         response = await fetch(betLogApi(betlogResultDirectory, '/cache/delete-all'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json; charset=UTF-8' },
-          body: JSON.stringify({ indexKeys, keys }),
+          body: '{}',
           signal: controller.signal
         });
       } finally {

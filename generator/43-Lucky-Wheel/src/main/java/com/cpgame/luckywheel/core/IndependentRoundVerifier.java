@@ -14,9 +14,10 @@ public final class IndependentRoundVerifier {
         RoundDelivery delivery = round.deliveries().get(0);
         ResultUtil.require(delivery.deliveryIndex() == 0, "deliveryIndex 必须从0开始");
         SpinResult result = delivery.result();
-        BigDecimal expectedBet = BigDecimal.valueOf((long) result.bl() * result.bs());
-        ResultUtil.require(result.bl() >= 1 && result.bs() == 1 && result.ba().compareTo(expectedBet) == 0,
-                "下注金额与 bl/bs 不一致");
+        ResultUtil.require(result.bl() >= 1
+                        && result.bs().compareTo(LuckyWheelStake.cs(result.bl())) == 0
+                        && result.ba().compareTo(LuckyWheelStake.ba(result.bl())) == 0,
+                "下注金额必须是 cs=1/bl、ba=1");
         ResultUtil.require(result.gt() == 1, "协议 gt 不匹配");
         ResultUtil.require(result.rskl().size() == (result.bl() < 5 ? 2 : 3), "基础符号尺寸与下注门槛不一致");
         List<String> nonBlank = result.rskl().stream().filter(symbol -> !"H0".equals(symbol)).toList();

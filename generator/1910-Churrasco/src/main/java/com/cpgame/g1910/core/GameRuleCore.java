@@ -146,7 +146,9 @@ public final class GameRuleCore {
     }
     public static BigDecimal paidBet(BigDecimal bet, int level) { return bet.multiply(BigDecimal.valueOf(level * 25L)).setScale(2, RoundingMode.HALF_UP); }
     public static BigDecimal award(BigDecimal bet, int level, int units) { return bet.multiply(BigDecimal.valueOf((long) level * units)).setScale(2, RoundingMode.HALF_UP); }
-    public static BigDecimal displayedOdds(BigDecimal award, BigDecimal paidBet) {
-        return paidBet.signum() == 0 ? BigDecimal.ZERO : award.divide(paidBet, 4, RoundingMode.HALF_UP).stripTrailingZeros();
+    /** Odds for protocol display: award / (bet × level). Payline count (25) is billing only. */
+    public static BigDecimal displayedOdds(BigDecimal award, BigDecimal bet, int level) {
+        BigDecimal unit = bet.multiply(BigDecimal.valueOf(level));
+        return unit.signum() == 0 ? BigDecimal.ZERO : award.divide(unit, 4, RoundingMode.HALF_UP).stripTrailingZeros();
     }
 }

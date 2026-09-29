@@ -74,21 +74,19 @@ public final class RandomBoardCandidateGenerator implements BoardCandidateGenera
         } catch (java.io.IOException e) { throw new IllegalStateException("cannot load bundled reel model", e); }
     }
 
-    private static final java.util.concurrent.ConcurrentMap<String,List<String>> LOSS_WINDOWS=new java.util.concurrent.ConcurrentHashMap<>();
     @Override public List<Integer> nextLossBoard(){
-        List<Integer> board=new ArrayList<>(15);int first=0;
-        for(int c=0;c<5;c++){
-            final int reel=c, forbidden=c==1?first:0;
-            List<String> windows=LOSS_WINDOWS.computeIfAbsent(c+":"+forbidden,key->{
-                List<String> pool=new ArrayList<>();var it=MODEL.path("paid").path("columns").get(reel).path("00").fields();
-                while(it.hasNext()){
-                    var e=it.next();boolean safe=true;for(char v:e.getKey().toCharArray())if(v<'1'||v>'8'||(forbidden&(1<<(v-'0')))!=0)safe=false;
-                    if(safe)for(int n=0;n<e.getValue().asInt();n++)pool.add(e.getKey());
-                }
-                if(pool.isEmpty())throw new IllegalStateException("no loss-conditioned reel support");return List.copyOf(pool);
-            });
-            String window=windows.get(random.nextInt(windows.size()));for(char v:window.toCharArray()){board.add(v-'0');if(c==0)first|=1<<(v-'0');}
+        List<Integer> pays=new ArrayList<>(List.of(1,2,3,4,5,6,7,8));
+        for(int i=pays.size()-1;i>0;i--){
+            int j=random.nextInt(i+1);
+            int tmp=pays.get(i);pays.set(i,pays.get(j));pays.set(j,tmp);
         }
+        List<Integer> first=pays.subList(0,4);
+        List<Integer> second=pays.subList(4,pays.size());
+        List<Integer> board=new ArrayList<>(15);
+        for(int row=0;row<3;row++)board.add(first.get(random.nextInt(first.size())));
+        for(int row=0;row<3;row++)board.add(second.get(random.nextInt(second.size())));
+        for(int reel=2;reel<5;reel++)
+            for(int row=0;row<3;row++)board.add(pays.get(random.nextInt(pays.size())));
         return List.copyOf(board);
     }
 }

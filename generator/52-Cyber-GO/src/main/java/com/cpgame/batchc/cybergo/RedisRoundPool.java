@@ -48,8 +48,13 @@ public final class RedisRoundPool {
    if(member==null) throw new IOException("POOL_EMPTY_"+(win?"WIN":"LOSS"));
    var facts=new MinimalFactCodec().decodeFromRedis(member.toString().getBytes(StandardCharsets.US_ASCII));
    var round=core.rebuild(facts); var result=ResultUtil.reverse(round);
-   if(result.totalWin().compareTo(CyberGoRules.MINIMUM_BET.multiply(new java.math.BigDecimal(multiplier)))!=0) throw new IOException("POOL_MEMBER_MULTIPLIER_MISMATCH");
+   requireMultiplier(round, result, multiplier);
    return round;
   }
+ }
+ static void requireMultiplier(CyberGoModels.CompleteRound round, ResultUtil.RoundResult result, String multiplier) throws IOException {
+  // A bucket is always totalWin / (bs * bl); never reinterpret the old /paidBet buckets.
+  if(ResultUtil.winMultiplier(round, result).compareTo(new java.math.BigDecimal(multiplier))!=0)
+   throw new IOException("POOL_MEMBER_MULTIPLIER_MISMATCH");
  }
 }

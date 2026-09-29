@@ -42,8 +42,8 @@ public final class GlacierTreasureController {
         this.publishRoot = publishRoot.toAbsolutePath().normalize();
         this.initialBalance = new BigDecimal(config.getProperty("session.initial-balance", "100000.00"));
         this.pool = new RedisRoundPool(
-            config.getProperty("redis.host", "18.234.101.161"),
-            Integer.parseInt(config.getProperty("redis.port", "8021")),
+            config.getProperty("redis.host", "54.172.218.28"),
+            Integer.parseInt(config.getProperty("redis.port", "8016")),
             Integer.parseInt(config.getProperty("redis.database", "0")),
             config.getProperty("redis.username", ""),
             config.getProperty("redis.password", ""),

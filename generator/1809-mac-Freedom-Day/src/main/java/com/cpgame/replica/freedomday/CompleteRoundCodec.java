@@ -187,11 +187,10 @@ public final class CompleteRoundCodec {
                 if (row + height > 5) throw new IllegalArgumentException("occupancy height exceeds reel");
                 List<Integer> group = new ArrayList<>(height);
                 for (int offset = 0; offset < height; offset++) group.add(reel * 5 + row + offset);
-                List<Integer> frozen = List.copyOf(group);
-                grids.add(frozen);
+                grids.add(new ArrayList<>(group));
                 int frame = occupancyFrame(mark);
-                if (frame == 2) gold.add(frozen);
-                else if (frame == 1) silver.add(frozen);
+                if (frame == 2) gold.add(new ArrayList<>(group));
+                else if (frame == 1) silver.add(new ArrayList<>(group));
                 row += height;
             }
         }
@@ -258,9 +257,13 @@ public final class CompleteRoundCodec {
             int multiplier = freeMode ? freeMultiplier : 1;
             int increment = 2;
             int consecutive = 0;
+            FreedomDayBoard previous = null;
+            FreedomDayEvaluation previousEval = null;
             for (int pageIndex = 0; pageIndex < spin.size(); pageIndex++) {
                 FreedomDayBoard board = board(spin.get(pageIndex));
-                FreedomDayEvaluation evaluation = FreedomDayResultUtil.evaluate(board, BigDecimal.ONE, multiplier, increment);
+                int newBalls = FreedomDayGridRules.countNewBalls(previous, previousEval, board);
+                FreedomDayEvaluation evaluation = FreedomDayResultUtil.evaluate(
+                        board, BigDecimal.ONE, multiplier, increment, newBalls);
                 total = total.add(evaluation.getTotalMultiplier());
                 multiplier = evaluation.getMultiplier();
                 pages++;
@@ -279,6 +282,8 @@ public final class CompleteRoundCodec {
                     if (last) throw new IllegalArgumentException("winning spin has no terminal no-win page");
                     FreedomDayBoard next = board(spin.get(pageIndex + 1));
                     verifyCascade(board, evaluation, next);
+                    previous = board;
+                    previousEval = evaluation;
                 }
             }
             if (consecutive > maxConsecutiveWins) throw new IllegalArgumentException("max consecutive wins exceeded");

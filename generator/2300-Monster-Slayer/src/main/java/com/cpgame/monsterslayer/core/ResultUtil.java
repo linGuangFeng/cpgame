@@ -18,6 +18,7 @@ public final class ResultUtil {
     public static StepResult evaluateStep(GameRuleCore.Step step) {
         boolean feature = step.gameType() > 0;
         int[] board = step.board();
+        HuntTrace.Payout featurePay = HuntTrace.payout(step);
         List<Award> awards = new ArrayList<>();
         Set<Integer> allWinning = new LinkedHashSet<>();
         int total = 0;
@@ -52,9 +53,33 @@ public final class ResultUtil {
                 // symbol to identify it and is not a valid captured win.
                 if (natural < 0) continue;
                 if (natural > 0) { int first = orderedCells.remove(natural); orderedCells.add(0, first); }
-                int value = Math.multiplyExact(payout, entry.getValue().size());
-                awards.add(new Award(symbol, reels, entry.getValue().size(), payout, List.copyOf(orderedCells)));
-                allWinning.addAll(cells); total = Math.addExact(total, value);
+                // Split tiles multiply the number of ways; upgraded ICE FANG
+                // multiplies only paths through that Wild. Global ICE multiplier applies once.
+                Map<Integer,Integer> weightedWays = new TreeMap<>();
+                for (List<Integer> path : entry.getValue()) {
+                    int ways = 1, local = 1;
+                    for (int cell : path) {
+                        if (featurePay.split().contains(cell)) ways = Math.multiplyExact(ways, 2);
+                        if (featurePay.doubled().contains(cell)) local = Math.multiplyExact(local, 2);
+                    }
+                    weightedWays.merge(local, ways, Math::addExact);
+                }
+                for (var group : weightedWays.entrySet()) {
+                    int adjustedPayout = Math.multiplyExact(payout, Math.multiplyExact(featurePay.multiplier(), group.getKey()));
+                    int value = Math.multiplyExact(adjustedPayout, group.getValue());
+                    Set<Integer> groupCells = new LinkedHashSet<>();
+                    for (List<Integer> path : entry.getValue()) {
+                        int local = 1;
+                        for (int cell : path) if (featurePay.doubled().contains(cell)) local *= 2;
+                        if (local == group.getKey()) groupCells.addAll(path);
+                    }
+                    List<Integer> ordered = new ArrayList<>(groupCells);
+                    for (int i = 0; i < ordered.size(); i++) if (board[ordered.get(i)] == symbol) {
+                        int anchor = ordered.remove(i); ordered.add(0, anchor); break;
+                    }
+                    awards.add(new Award(symbol, reels, group.getValue(), adjustedPayout, List.copyOf(ordered)));
+                    allWinning.addAll(groupCells); total = Math.addExact(total, value);
+                }
             }
         }
         return new StepResult(List.copyOf(awards), List.copyOf(allWinning), total);

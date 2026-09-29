@@ -1,6 +1,7 @@
 package com.cpgame.junglefruit.api;
 
 import com.cpgame.batcha.g16.CompleteRound;
+import com.cpgame.batcha.g16.CompleteRoundFactory;
 import com.cpgame.batcha.g16.GameRuleCore;
 import com.cpgame.batcha.g16.IndependentVerifier;
 import com.cpgame.batcha.g16.MemberCodec;
@@ -44,6 +45,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public final class ServerMain {
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final MemberCodec CODEC = new MemberCodec();
+    private static final CompleteRoundFactory LOSS_ROUNDS = new CompleteRoundFactory(18, 25);
     private static final IndependentVerifier VERIFIER = new IndependentVerifier(new BigDecimal("20000"), 18, 25);
     private static final ConcurrentHashMap<String, Session> SESSIONS = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, History> HISTORY = new ConcurrentHashMap<>();
@@ -157,7 +159,6 @@ public final class ServerMain {
                 if (response == null) {
                     int betLevel = Integer.parseInt(form.getOrDefault("bet_level", form.getOrDefault("bl", "1")));
                     BigDecimal betSize = new BigDecimal(form.getOrDefault("bet_size", form.getOrDefault("bs", "0.05")));
-                    GameRuleCore.validateBet(betSize, betLevel);
                     if (session.active == null) beginRound(session, betSize, betLevel, requestedMode(form.get("scenario")));
                     response = deliver(session);
                     session.replays.put(requestId, response);
@@ -195,13 +196,17 @@ public final class ServerMain {
     }
 
     private static CompleteRound claimFormalRound(RoundMode requestedMode) {
+        if (requestedMode == RoundMode.LOSS) {
+            return LOSS_ROUNDS.generate(RoundMode.LOSS, RANDOM, new BigDecimal("0.05"), 1);
+        }
+        if (requestedMode == null && !RANDOM.nextBoolean()) {
+            return LOSS_ROUNDS.generate(RoundMode.LOSS, RANDOM, new BigDecimal("0.05"), 1);
+        }
         try (RedisRoundStore store = openRedisStore()) {
             RedisRoundWriter writer = new RedisRoundWriter(store, CODEC, VERIFIER, 300);
-            List<RoundMode> modes;
-            if (requestedMode != null) modes = List.of(requestedMode);
-            else modes = RANDOM.nextBoolean()
-                ? List.of(RoundMode.WIN, RoundMode.MARY, RoundMode.FREE)
-                : List.of(RoundMode.LOSS);
+            List<RoundMode> modes = requestedMode != null
+                ? List.of(requestedMode)
+                : List.of(RoundMode.WIN, RoundMode.MARY, RoundMode.FREE);
             return writer.claimAny(modes, RANDOM).orElseThrow(() ->
                 new IllegalStateException("Redis complete-Round pool is empty for " + modes)).round();
         } catch (IOException unavailable) {
@@ -508,11 +513,12 @@ public final class ServerMain {
 
     private record RedisConfig(String host, int port, int database, String password, int timeoutMillis) {
         static RedisConfig from(Properties config) {
-            return new RedisConfig(config.getProperty("redis.host", "18.234.101.161"),
-                Integer.parseInt(config.getProperty("redis.port", "8021")),
+            return new RedisConfig(config.getProperty("redis.host", "54.172.218.28"),
+                Integer.parseInt(config.getProperty("redis.port", "8016")),
                 Integer.parseInt(config.getProperty("redis.database", "0")),
                 config.getProperty("redis.password", ""),
-                Integer.parseInt(config.getProperty("redis.timeout-millis", "300")));
+                Integer.parseInt(config.getProperty("redis.socket-timeout-ms",
+                    config.getProperty("redis.timeout-millis", "30000"))));
         }
     }
 

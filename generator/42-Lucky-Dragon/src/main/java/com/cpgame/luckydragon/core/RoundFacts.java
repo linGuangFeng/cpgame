@@ -12,8 +12,7 @@ public record RoundFacts(BigDecimal betSize, int betLevel, List<String> symbols,
     }
 
     public RoundFacts {
-        if (betSize == null || betSize.signum() <= 0) throw new IllegalArgumentException("betSize");
-        if (betLevel < 1 || betLevel > 10) throw new IllegalArgumentException("betLevel");
+        if (betSize == null) throw new IllegalArgumentException("betSize");
         symbols = List.copyOf(symbols);
         if (symbols.size() != 3) throw new IllegalArgumentException("three symbols required");
         if (reelMultiplier != 0 && reelMultiplier != 3 && reelMultiplier != 5 && reelMultiplier != 9) {

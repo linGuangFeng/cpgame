@@ -38,7 +38,7 @@ public final class ResultUtil {
    }
   }
   Outcome outcome=round.spins().size()>1?Outcome.FREE_SPINS:units==0?Outcome.NORMAL_LOSS:Outcome.NORMAL_WIN;
-  // Exact integer key in hundredths of total-bet multiplier; never rounded.
-  return new Analysis(outcome,units,Math.multiplyExact(units,5),round.spins().size(),pages);
+  // Redis key = paytable units = award/(betSize×betLevel); not hundredths of total-bet.
+  return new Analysis(outcome,units,units,round.spins().size(),pages);
  }
 }

@@ -14,13 +14,22 @@ import java.util.List;
 public final class DealingModel {
     static final class Rejected extends RuntimeException { Rejected(String m) { super(m); } }
 
-    private static final int[] PAID = {1945, 1977, 2008, 1996, 2462, 2335, 2098, 2160, 1119, 515};
-    private static final int[] FREE = {822, 824, 898, 877, 856, 859, 865, 862, 392, 125};
-    private static final int[] ENTRY_FILL = {47, 45, 50, 43, 46, 49, 52, 52, 0, 6};
-    private static final int[] ENTRY_SC = {0, 0, 0, 0, 0, 25, 12, 4};
+    private final int[] paid;
+    private final int[] free;
+    private final int[] entryFill;
+    private final int[] entryScatter = new int[8];
 
-    String pickPaid(SecureRandom r, int reel) { return pick(PAID, r, reel, true, true); }
-    String pickFree(SecureRandom r, int reel) { return pick(FREE, r, reel, true, true); }
+    DealingModel() { this(DealingWeights.empiricalDefaults()); }
+
+    DealingModel(DealingWeights weights) {
+        paid = array(weights.paid());
+        free = array(weights.free());
+        entryFill = array(weights.entryFill());
+        for (var entry : weights.entryScatter().entrySet()) entryScatter[entry.getKey()] = entry.getValue();
+    }
+
+    String pickPaid(SecureRandom r, int reel) { return pick(paid, r, reel, true, true); }
+    String pickFree(SecureRandom r, int reel) { return pick(free, r, reel, true, true); }
 
     List<String> paidBoard(SecureRandom random) {
         return constrained(random, true, ProtocolConstants.MAX_SCATTER_PAID,
@@ -51,7 +60,7 @@ public final class DealingModel {
             if (!board.get(i).isEmpty()) continue;
             int reel = i / 3;
             boolean wildOk = wilds < ProtocolConstants.MAX_WILD_PAID && wildCol[reel] < 2 && reel != 0 && reel != 4;
-            String s = pick(ENTRY_FILL, random, reel, false, wildOk);
+            String s = pick(entryFill, random, reel, false, wildOk);
             board.set(i, s);
             if (s.equals("WILD")) { wilds++; wildCol[reel]++; }
         }
@@ -59,10 +68,10 @@ public final class DealingModel {
     }
 
     int pickEntryScatter(SecureRandom random) {
-        int total = 0;
-        for (int i = 5; i <= 7; i++) total += ENTRY_SC[i];
-        int t = random.nextInt(total);
-        for (int i = 5; i <= 7; i++) { t -= ENTRY_SC[i]; if (t < 0) return i; }
+        long total = 0;
+        for (int i = 5; i <= 7; i++) total += entryScatter[i];
+        long t = random.nextLong(total);
+        for (int i = 5; i <= 7; i++) { t -= entryScatter[i]; if (t < 0) return i; }
         return 5;
     }
 
@@ -74,7 +83,7 @@ public final class DealingModel {
             for (int row = 0; row < 3; row++) {
                 boolean scOk = allowSc && scTotal < scBoard && scOn < scReel;
                 boolean wildOk = wildTotal < wildBoard && wildOn < 2 && reel != 0 && reel != 4;
-                String s = pick(free ? FREE : PAID, random, reel, scOk, wildOk);
+                String s = pick(free ? this.free : paid, random, reel, scOk, wildOk);
                 board.add(s);
                 if (s.equals("SC")) { scTotal++; scOn++; }
                 if (s.equals("WILD")) { wildTotal++; wildOn++; }
@@ -84,7 +93,7 @@ public final class DealingModel {
     }
 
     private String pick(int[] weights, SecureRandom random, int reel, boolean scOk, boolean wildOk) {
-        int total = 0;
+        long total = 0;
         for (int i = 0; i < ProtocolConstants.ORDER.size(); i++) {
             String s = ProtocolConstants.ORDER.get(i);
             if (s.equals("SC") && !scOk) continue;
@@ -92,7 +101,7 @@ public final class DealingModel {
             total += weights[i];
         }
         if (total <= 0) throw new Rejected("no symbol");
-        int t = random.nextInt(total);
+        long t = random.nextLong(total);
         for (int i = 0; i < ProtocolConstants.ORDER.size(); i++) {
             String s = ProtocolConstants.ORDER.get(i);
             if (s.equals("SC") && !scOk) continue;
@@ -108,7 +117,7 @@ public final class DealingModel {
         for(int c=0;c<5;c++){
             int cs=0,cw=0;
             for(int r=0;r<3;r++){
-                int[] weights=PAID.clone();
+                int[] weights=paid.clone();
                 if(c==1)for(int i=0;i<ProtocolConstants.ORDER.size();i++)if(first.contains(ProtocolConstants.ORDER.get(i)))weights[i]=0;
                 String symbol=pick(weights,random,c,sc<4&&cs<ProtocolConstants.MAX_SCATTER_PER_REEL,
                         c>=2&&wild<ProtocolConstants.MAX_WILD_PAID&&cw<2&&c!=4);
@@ -117,5 +126,11 @@ public final class DealingModel {
             }
         }
         return List.copyOf(b);
+    }
+
+    private static int[] array(java.util.Map<String, Integer> source) {
+        int[] result = new int[ProtocolConstants.ORDER.size()];
+        for (int i = 0; i < result.length; i++) result[i] = source.getOrDefault(ProtocolConstants.ORDER.get(i), 0);
+        return result;
     }
 }

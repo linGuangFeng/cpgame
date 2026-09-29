@@ -36,16 +36,8 @@ public final class GameRuleCore {
     /** Full immutable Config paytable for server Config JSON. */
     public static Map<String, Map<Integer, Integer>> symbolPayTable() { return PUBLIC_PAYTABLE; }
 
-    public static void validateBet(BigDecimal betSize, int betLevel) {
-        if (betSize == null || BET_SIZES.stream().noneMatch(value -> value.compareTo(betSize) == 0)) {
-            throw new IllegalArgumentException("bet_size must be one of 0.05, 0.5, 2.5");
-        }
-        if (!BET_LEVELS.contains(betLevel)) throw new IllegalArgumentException("bet_level must be 1..10");
-    }
-
     /** Config paytable units × bet_size × bet_level. */
     public static BigDecimal pay(String symbol, int symbolCount, BigDecimal betSize, int betLevel) {
-        validateBet(betSize, betLevel);
         int[] values = COMPACT_PAYTABLE.get(symbol);
         if (values == null || symbolCount < WIN_COUNT_THRESHOLD) return BigDecimal.ZERO;
         int units = values[Math.min(symbolCount, 15) - WIN_COUNT_THRESHOLD];
@@ -61,7 +53,6 @@ public final class GameRuleCore {
     /** A paying symbol wins when its total count anywhere on the 6x6 board is at least eight. */
     public static BoardResult evaluateBoard(List<String> board, BigDecimal betSize, int betLevel) {
         requireBoard(board);
-        validateBet(betSize, betLevel);
         Map<String, List<Integer>> positions = new LinkedHashMap<>();
         for (String symbol : PAYING_SYMBOLS) positions.put(symbol, new ArrayList<>());
         for (int index = 0; index < board.size(); index++) {
@@ -89,8 +80,6 @@ public final class GameRuleCore {
     /** Rebuild all derived response fields from minimal Step facts. */
     public static CompleteRound materialize(BigDecimal paidBet, BigDecimal betSize, int betLevel,
                                             List<Step> facts) {
-        validateBet(betSize, betLevel);
-        if (paidBet.signum() <= 0) throw new IllegalArgumentException("paid bet must be positive");
         List<Step> steps = new ArrayList<>(facts.size());
         BigDecimal phaseWin = BigDecimal.ZERO;
         BigDecimal roundPayout = BigDecimal.ZERO;
@@ -117,7 +106,9 @@ public final class GameRuleCore {
             throw new IllegalArgumentException("complete Round must end at spin_status=1");
         }
         RoundMode mode = classify(steps, roundPayout);
-        BigDecimal multiplier = roundPayout.divide(paidBet, 8, RoundingMode.HALF_UP).stripTrailingZeros();
+        BigDecimal unit = betSize.multiply(BigDecimal.valueOf(betLevel));
+        BigDecimal multiplier = unit.signum() == 0 ? BigDecimal.ZERO
+            : roundPayout.divide(unit, 0, RoundingMode.UNNECESSARY).stripTrailingZeros();
         return new CompleteRound(RAW_GAME_ID, mode, paidBet, betSize, betLevel, steps,
             roundPayout.stripTrailingZeros(), multiplier);
     }
@@ -179,6 +170,20 @@ public final class GameRuleCore {
     }
 
     public static boolean isMultiplier(String symbol) { return MULTIPLIER_SYMBOLS.contains(symbol); }
+
+    public static boolean legalSpecials(List<String> board) {
+        int scatters = 0, multipliers = 0;
+        for (int c = 0; c < 6; c++) {
+            int columnScatters = 0, columnMultipliers = 0;
+            for (int r = 0; r < 6; r++) {
+                String s = board.get(c * 6 + r);
+                if ("Scat".equals(s)) { scatters++; columnScatters++; }
+                if (isMultiplier(s)) { multipliers++; columnMultipliers++; }
+            }
+            if (columnScatters > 1 || columnMultipliers > 2) return false;
+        }
+        return scatters <= 5 && multipliers <= 4;
+    }
     public static int multiplierValue(String symbol) {
         if (!isMultiplier(symbol)) throw new IllegalArgumentException("not an X multiplier: " + symbol);
         return Integer.parseInt(symbol.substring(1));

@@ -33,13 +33,13 @@ public final class RedisRoundStore implements AutoCloseable {
     private final HotpotSpinProjector projector;
 
     public RedisRoundStore(RedisCommands redis, long gameId) {
-        this(redis, gameId, "18.234.101.161", 0);
+        this(redis, gameId, "54.172.218.28", 0);
     }
 
     RedisRoundStore(RedisCommands redis, long gameId, String redisHost, int redisDatabase) {
         this.redis = redis;
         this.gameId = gameId;
-        this.redisHost = redisHost == null || redisHost.isBlank() ? "18.234.101.161" : redisHost.trim();
+        this.redisHost = redisHost == null || redisHost.isBlank() ? "54.172.218.28" : redisHost.trim();
         this.redisDatabase = redisDatabase;
         this.core = new HotpotGameRuleCore();
         this.codec = new CompleteRoundCodec();
@@ -53,7 +53,7 @@ public final class RedisRoundStore implements AutoCloseable {
     public static RedisRoundStore connect(Properties config) throws IOException {
         long gameId = Long.parseLong(config.getProperty("redis.game-id", "8001830").trim());
         if (gameId <= 0) throw new IllegalArgumentException("redis.game-id must be positive");
-        String host = config.getProperty("redis.host", "18.234.101.161").trim();
+        String host = config.getProperty("redis.host", "54.172.218.28").trim();
         int database = Integer.parseInt(config.getProperty("redis.database", "0").trim());
         return new RedisRoundStore(SocketRedisCommands.connect(config), gameId, host, database);
     }

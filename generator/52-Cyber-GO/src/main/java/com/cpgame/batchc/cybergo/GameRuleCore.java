@@ -47,11 +47,9 @@ public final class GameRuleCore {
     public CyberGoModels.CompleteRound rebuild(CyberGoModels.MinimalRoundFacts facts) {
         return roundFactory.rebuild(facts);
     }
-    /** Apply captured bet options to an already claimed complete-round member. No new deal. */
+    /** Apply a configured positive bet to an already claimed complete-round member. No new deal. */
     public CyberGoModels.CompleteRound atBet(CyberGoModels.CompleteRound round, int level, java.math.BigDecimal size) {
-        if(level<1 || level>10 || !(size.compareTo(new java.math.BigDecimal("0.02"))==0 || size.compareTo(new java.math.BigDecimal("0.2"))==0))
-            throw new IllegalArgumentException("Unsupported captured bet option");
-        var factor=size.multiply(java.math.BigDecimal.valueOf(level)).divide(MINIMUM_BET_SIZE);
+        var factor=ResultUtil.unitBet(size, level).divide(MINIMUM_BET_SIZE);
         var steps=round.deliveries().stream().map(s -> {
             var e=RuleEvaluator.evaluate(s.rskl(),level,size);
             return new CyberGoModels.Step(s.ba().multiply(factor),s.bid(),level,size,s.ca(),s.fsn(),s.frwa().multiply(factor),s.gt(),s.nfsc(),s.rpx(),s.rskl(),s.rwa().multiply(factor),s.small_game_type(),s.ss(),s.wa().multiply(factor),e.matches(),e.winningSymbols());

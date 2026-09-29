@@ -10,7 +10,7 @@ public final class CompleteRoundFactory {
 
     private final int maximumCascades;
     private final int maximumSpecialSpins;
-    private final EmpiricalColumnModel model = EmpiricalColumnModel.instance();
+    private EmpiricalColumnModel model;
 
     public CompleteRoundFactory(int maximumCascades, int maximumSpecialSpins) {
         if (maximumCascades < 1 || maximumSpecialSpins < 14)
@@ -21,9 +21,18 @@ public final class CompleteRoundFactory {
         lossBoards=new ZeroLossSupport<>(()->lossBoardCandidate(defaultsRandom),this::validLossBoard,List::copyOf);
     }
 
+    public CompleteRoundFactory(int maximumCascades, int maximumSpecialSpins, EmpiricalColumnModel model) {
+        this(maximumCascades, maximumSpecialSpins);
+        this.model = Objects.requireNonNull(model);
+    }
+
+    private EmpiricalColumnModel model() {
+        if (model == null) model = EmpiricalColumnModel.instance();
+        return model;
+    }
+
     public CompleteRound generate(RoundMode requested, SecureRandom random, BigDecimal betSize, int betLevel) {
         Objects.requireNonNull(random);
-        GameRuleCore.validateBet(betSize, betLevel);
         if(requested==RoundMode.LOSS){
             List<String> board=lossBoards.generate(()->lossBoardCandidate(random),random::nextInt);
             BigDecimal paid=betSize.multiply(BigDecimal.valueOf(20L*betLevel));
@@ -97,8 +106,8 @@ public final class CompleteRoundFactory {
 
     private List<String> initial(String entry, SecureRandom random) {
         List<String> board = new ArrayList<>(36);
-        for (int c = 0; c < 6; c++) board.addAll(model.draw(entry, c, 6, random));
-        if (!EmpiricalColumnModel.legalSpecials(board)) throw new Rejected();
+        for (int c = 0; c < 6; c++) board.addAll(model().draw(entry, c, 6, random));
+        if (!GameRuleCore.legalSpecials(board)) throw new Rejected();
         return board;
     }
 
@@ -110,10 +119,10 @@ public final class CompleteRoundFactory {
         for (int c = 0; c < 6; c++) {
             List<String> retained = new ArrayList<>();
             for (int r = 0; r < 6; r++) if (!removed[c * 6 + r]) retained.add(previous.get(c * 6 + r));
-            board.addAll(model.draw(entry, c, 6 - retained.size(), random));
+            board.addAll(model().draw(entry, c, 6 - retained.size(), random));
             board.addAll(retained);
         }
-        if (!EmpiricalColumnModel.legalSpecials(board)) throw new Rejected();
+        if (!GameRuleCore.legalSpecials(board)) throw new Rejected();
         return board;
     }
 
@@ -128,23 +137,17 @@ public final class CompleteRoundFactory {
     }
 
     public List<String> lossBoardCandidate(SecureRandom random){
-        List<String> raw=new ArrayList<>();for(int c=0;c<6;c++)raw.addAll(model.draw("PAID_LOSS",c,6,random));
-        int[] counts=new int[GameRuleCore.PAYING_SYMBOLS.size()];int scat=0,x=0;
-        for(int c=0;c<6;c++){
-            int colScat=0,colX=0;
-            for(int r=0;r<6;r++){
-                int i=c*6+r;String symbol=raw.get(i);int at=GameRuleCore.PAYING_SYMBOLS.indexOf(symbol);
-                boolean unsafe=at>=0&&counts[at]>=7 || symbol.equals("Scat")&&(scat>=2||colScat>=1)
-                        || GameRuleCore.isMultiplier(symbol)&&(x>=4||colX>=2);
-                if(unsafe){
-                    List<String> allowed=new ArrayList<>();for(int k=0;k<counts.length;k++)if(counts[k]<7)allowed.add(GameRuleCore.PAYING_SYMBOLS.get(k));
-                    symbol=allowed.get(random.nextInt(allowed.size()));raw.set(i,symbol);at=GameRuleCore.PAYING_SYMBOLS.indexOf(symbol);
-                }
-                if(at>=0)counts[at]++;if(symbol.equals("Scat")){scat++;colScat++;}if(GameRuleCore.isMultiplier(symbol)){x++;colX++;}
-            }
+        int[] counts=new int[GameRuleCore.PAYING_SYMBOLS.size()];
+        List<String> board=new ArrayList<>(36);
+        for(int i=0;i<36;i++){
+            List<String> allowed=new ArrayList<>();
+            for(int k=0;k<counts.length;k++)if(counts[k]<7)allowed.add(GameRuleCore.PAYING_SYMBOLS.get(k));
+            String symbol=allowed.get(random.nextInt(allowed.size()));
+            board.add(symbol);
+            counts[GameRuleCore.PAYING_SYMBOLS.indexOf(symbol)]++;
         }
-        return List.copyOf(raw);
+        return List.copyOf(board);
     }
-    private boolean validLossBoard(List<String> b){return EmpiricalColumnModel.legalSpecials(b)&&count(b,"Scat")<3
+    private boolean validLossBoard(List<String> b){return GameRuleCore.legalSpecials(b)&&count(b,"Scat")<3
         &&GameRuleCore.evaluateBoard(b,new BigDecimal("0.05"),1).winAmount().signum()==0;}
 }

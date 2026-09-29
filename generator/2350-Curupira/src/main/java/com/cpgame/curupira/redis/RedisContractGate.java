@@ -7,16 +7,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-/**
- * 平台 Redis Key 合同。触发局不进缓存。
- * Mary 0 = Free Expanding Wild；Mary 1 = Hold &amp; Spins。
- * Hold 只写 MaryKeyList_1*，禁止再写 PerKeyList_1*。
- */
+/** 2350 稳定映射：普通付费起点 Per 0；Free Expanding Wild Mary 0；Hold & Spins Mary 1。 */
 public final class RedisContractGate {
     public static final int GAME_ID = 2350;
-    public static final int DIGIT_FREE_EW = 0;
-    public static final int DIGIT_HOLD = 1;
-    public static final int[] ALL_DIGITS = {DIGIT_FREE_EW, DIGIT_HOLD};
+    public static final int NORMAL_TYPE = 0;
+    public static final int MARY_FREE_EXPANDING_WILD_TYPE = 0;
+    public static final int MARY_HOLD_AND_SPINS_TYPE = 1;
 
     public boolean writable() { return true; }
 
@@ -28,54 +24,43 @@ public final class RedisContractGate {
 
     public int digitFor(Kind kind) {
         return switch (kind) {
-            case LOSS, WIN, EXPANDING_WILD -> DIGIT_FREE_EW;
-            case FREE_EW, BUY_FE -> DIGIT_FREE_EW;
-            case HOLD, BUY_HS -> DIGIT_HOLD;
-            case TRIGGER -> throw new IllegalArgumentException("trigger boards are live and not cached");
+            case LOSS, WIN, EXPANDING_WILD, TRIGGER, FREE_EW, BUY_FE -> MARY_FREE_EXPANDING_WILD_TYPE;
+            case HOLD, BUY_HS -> MARY_HOLD_AND_SPINS_TYPE;
         };
     }
 
     public String normalIndex(int gameId) {
-        return "PerKeyList_" + prefix(DIGIT_FREE_EW, gameId);
-    }
-
-    public String specialIndex(int gameId) {
-        return "MaryKeyList_" + prefix(DIGIT_FREE_EW, gameId);
+        return "PerKeyList_" + prefix(NORMAL_TYPE, gameId);
     }
 
     public String indexFor(Kind kind, int gameId) {
-        if (kind.ordinary()) return normalIndex(gameId);
+        if (isPaidStart(kind)) return normalIndex(gameId);
         return "MaryKeyList_" + prefix(digitFor(kind), gameId);
     }
 
     public List<String> indexesToWrite(Kind kind, int gameId) {
-        if (kind == Kind.TRIGGER) throw new IllegalArgumentException("trigger boards are live and not cached");
         return List.of(indexFor(kind, gameId));
     }
 
     public String listFor(Kind kind, int multiplier, int gameId) {
-        if (kind == Kind.TRIGGER) throw new IllegalArgumentException("trigger boards are live and not cached");
         String id = prefix(digitFor(kind), gameId);
-        if (kind.ordinary()) {
-            return String.format(Locale.ROOT, "BetLog:%s:%06d", id, multiplier);
-        }
-        return String.format(Locale.ROOT, "MaryLog:%s:%06d", id, multiplier);
+        return isPaidStart(kind)
+                ? String.format(Locale.ROOT, "BetLog:%s:%06d", id, multiplier)
+                : String.format(Locale.ROOT, "MaryLog:%s:%06d", id, multiplier);
     }
 
-    /** SPECIAL 默认落 Mary 0（选 Expanding Wild 后的结果）。 */
     public String resultKey(String pool, int multiplier, int gameId) {
-        boolean special = !"ORDINARY_PAID".equals(pool);
-        String id = prefix(DIGIT_FREE_EW, gameId);
-        return special
-                ? String.format(Locale.ROOT, "MaryLog:%s:%06d", id, multiplier)
-                : String.format(Locale.ROOT, "BetLog:%s:%06d", id, multiplier);
+        String id = prefix(NORMAL_TYPE, gameId);
+        return "ORDINARY_PAID".equals(pool)
+                ? String.format(Locale.ROOT, "BetLog:%s:%06d", id, multiplier)
+                : String.format(Locale.ROOT, "MaryLog:%s:%06d", id, multiplier);
     }
 
     public List<String> allIndexKeys(int gameId) {
         LinkedHashSet<String> keys = new LinkedHashSet<>();
         keys.add(normalIndex(gameId));
-        keys.add(specialIndex(gameId));
-        keys.add("MaryKeyList_" + prefix(DIGIT_HOLD, gameId));
+        keys.add("MaryKeyList_" + prefix(MARY_FREE_EXPANDING_WILD_TYPE, gameId));
+        keys.add("MaryKeyList_" + prefix(MARY_HOLD_AND_SPINS_TYPE, gameId));
         return List.copyOf(keys);
     }
 
@@ -95,6 +80,10 @@ public final class RedisContractGate {
 
     public Set<String> requiredIndexNames(int gameId) {
         return new LinkedHashSet<>(allIndexKeys(gameId));
+    }
+
+    private static boolean isPaidStart(Kind kind) {
+        return kind == Kind.LOSS || kind == Kind.WIN || kind == Kind.EXPANDING_WILD || kind == Kind.TRIGGER;
     }
 
     private static void requireGame(int gameId) {

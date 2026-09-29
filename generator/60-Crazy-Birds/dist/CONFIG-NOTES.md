@@ -1,17 +1,33 @@
-# Redis 生成器配置生效说明（2026-09-14）
+# 60-Crazy-Birds 新生成与缓存说明
 
-上下限约束的是一个完整局的最终倍率，使用闭区间：下限 1、上限 100 时，只有 1≤倍率≤100 的新结果能写入；0 倍不再绕过检查。单局内部无奖的一步不等于完整局总倍率为 0。
+## 不兼容旧缓存
 
-按本游戏 generator.properties 已有字段设置范围。普通池通常使用 generation.normal-min-win-multiplier / normal-max-win-multiplier；特殊池有 special-*、mary-*、max-total-* 等不同命名，不要同时设置数值冲突的别名。2470 使用 range.normal-min/max 和 range.special-min/max。58 当前采用一个共享结果池，使用 generation.min-win-multiplier / generation.max-win-multiplier / generation.total-members；旧的分池范围/容量配置会明确报错。
+- 新 member 没有任何固定前缀、版本号或 rulesHash：普通局只保存 24 个符号字符，免费多 Step 只用 `|` 分隔。旧 `CB60A1`、`CB60B1;rulesHash;...` 都会被新版 Controller 明确拒绝。
+- 核心按赔表只做一次“实际倍数 ×100”得到缓存倍率整数；赔付表最低 0.25 倍得到 25。
+- 生成器倍率上下限配置直接填写最终缓存整数；当前用户配置为普通 0–25000、免费 500–30000，以 `generator.properties` 为准。配置禁止写 0.25，也不会再对配置值乘100；过滤、ZSET score 和 `BetLog` key 以同一个缓存整数为准。
+- 部署时必须成对更新 `crazybirds-loader.jar` 与 `server-api/60-Crazy-Birds/dist/controller.jar`。只重生成缓存但继续运行旧 Controller 不可用。
+- 旧 Redis 键由用户自行清理；构建、测试和离线审计都不会连接、清理或写入 Redis。
 
-倍率单位沿用每款游戏的既有规则，不统一换算：58 使用十分之一倍，10=1倍；33、61、2300 使用百分之一倍，100=1倍。因此真实的 1–100 倍，在58应配置10–1000，在33/61/2300应配置100–10000。其他游戏按各自属性文件及结果计算代码的计量单位设置。
+## 正式生成
 
-min>0 时不生成该池的0倍结果；min=0 才允许0倍。显式 loss-count 在普通下限排除0时不执行；normal-count/total-members等总量按有效结果计数。生成数量与缓存保留条数相互独立，LTRIM控制每个倍率桶的最新保留条数。
+- `generation.count` 是候选完整局的总尝试数，默认 100000000；`generation.batch-size` 默认 1000。
+- 每批依次使用中性权重、逐牌单独放大权重，再复位中性；每批只放大一张牌，默认 3 倍，不累计。
+- 牌面先按权重自然生成，再由独立 Java 核心计奖与分类；不读取任何抓包完整局模板，不按目标奖金拼牌。
+- 免费中再次触发按本地默认策略拒绝；倍率越界和策略拒绝都计尝试且不补足。
+- 保持原有缓存映射：普通完整局使用 `PerKeyList_008000060` / `BetLog:008000060:倍率`，免费完整局使用 `MaryKeyList_008000060` / `MaryLog:008000060:倍率`。倍率范围只过滤候选局，不改变缓存家族、类型或键名。
 
-不支持的字段、无效范围、冲突别名会明确报错。由于游戏赔付规则、联合模型及局长限制，任意范围不一定能满足所有类别目标；耗尽采样预算时任务失败，不会为凑数量写入区间外牌面。发生失败前可能已提交部分合格批次，应按退出码确认是否完成。
+正式运行命令：
 
-修改配置只影响随后启动的新生成任务。既有缓存不会因为配置改变自动重新筛选；各游戏原有clear-existing/替换策略仍有差异。不要仅凭旧缓存中存在0倍判断新配置失效。本次检查使用本机隔离RESP服务，没有执行线上缓存清理。
+```text
+java -jar crazybirds-loader.jar generator.properties
+```
 
-58和1407的旧JAR在交付时被占用，新包以*-20260914.jar写入dist。已更新启动脚本按修改时间选取最新匹配JAR。必须停止并重新启动旧生成器进程，已运行的旧进程不会自动切换代码。
+## 离线审计
 
-2300：自然特殊局尚未实现，generation.special-count必须为0；购买特殊局使用generation.buy-count-per-mode，分别生成buy3/buy4/buy5。当前dist中用户新设置的special-count=30000000已保留，此配置会明确拒绝启动，需要按实际支持模式调整。未把购买特殊局冒充自然特殊局。
+审计走正式生成、校验、分类和编码链，但不连接 Redis：
+
+```text
+java -cp crazybirds-loader.jar com.cpgame.crazybirds.generator.GenerationAuditMain generator.properties 17000 generation-audit.json
+```
+
+审计报告中的 `accepted` 是离线接受数，`redisRetainedCount` 固定为空，不能当作 Redis 实际保留量。

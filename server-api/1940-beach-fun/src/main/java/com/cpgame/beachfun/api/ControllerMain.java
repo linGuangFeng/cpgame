@@ -14,7 +14,7 @@ public final class ControllerMain{
   if(!"POST".equals(x.getRequestMethod())){send(x,405,Map.of("code",405,"msg","POST_REQUIRED"));return;}
   synchronized(s){
    double bet=number(q,"bet_gold",number(q,"bet",.02)),rawLevel=number(q,"level",10);
-   if(!Double.isFinite(bet)||!(bet==.02||bet==.1||bet==.2)||rawLevel!=Math.rint(rawLevel)||rawLevel<1||rawLevel>10)throw new IllegalArgumentException("bet/level outside captured configuration");
+   if(!Double.isFinite(bet)||bet<=0||rawLevel!=Math.rint(rawLevel)||rawLevel<1)throw new IllegalArgumentException("bet/level must be positive");
    int level=(int)rawLevel;
    if(s.active==null){
     double charge=ResultUtil.totalBet(bet,level);if(s.balance<charge){send(x,409,Map.of("code",40901,"msg","INSUFFICIENT_BALANCE"));return;}

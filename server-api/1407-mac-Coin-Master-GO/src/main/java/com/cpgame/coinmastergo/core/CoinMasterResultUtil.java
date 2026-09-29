@@ -63,7 +63,8 @@ public final class CoinMasterResultUtil {
     }
 
     public static BigDecimal money(BigDecimal value) {
-        return value.setScale(2, RoundingMode.HALF_UP).stripTrailingZeros();
+        // stripTrailingZeros 会把 10.00 收成 scale=-1，Jackson/Fastjson 都会写成 1E+1。
+        return new BigDecimal(value.setScale(2, RoundingMode.HALF_UP).stripTrailingZeros().toPlainString());
     }
 
     public record Evaluation(BigDecimal totalWin, List<WinMatch> matches, int scatterCount) { }

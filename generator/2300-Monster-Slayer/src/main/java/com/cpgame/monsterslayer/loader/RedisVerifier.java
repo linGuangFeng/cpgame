@@ -40,15 +40,16 @@ public final class RedisVerifier {
         if (!(raw instanceof List<?> buckets) || buckets.isEmpty()) return 0;
         long members = 0;
         for (Object bucket : buckets) {
-            int expected = Integer.parseInt(bucket.toString());
+            int expected = Integer.parseInt(bucket instanceof byte[] bb ? new String(bb, java.nio.charset.StandardCharsets.US_ASCII) : bucket.toString());
             String key = buy ? RedisKeyContract.buyList(gameId, buyType, expected) : RedisKeyContract.normalList(gameId, expected);
             members += ((Number) r.command("LLEN", key)).longValue();
             Object values = r.command("LRANGE", key, "0", "-1");
             if (!(values instanceof List<?> list)) continue;
             for (Object value : list) {
-                int actual = ResultUtil.redisMultiplierCenti(codec.decode(value.toString()));
+                byte[] member = value instanceof byte[] b ? b : String.valueOf(value).getBytes(java.nio.charset.StandardCharsets.ISO_8859_1);
+                int actual = ResultUtil.redisMultiplierCenti(codec.decode(member));
                 if (actual != expected) throw new IllegalStateException("bucket mismatch " + key + " expected=" + expected + " actual=" + actual);
-                if (value.toString().startsWith("{")) throw new IllegalStateException("JSON member forbidden");
+                if (member.length > 0 && member[0] == '{') throw new IllegalStateException("JSON member forbidden");
             }
         }
         return members;

@@ -2,10 +2,10 @@
   "schemaVersion": "1.0",
   "gameId": 60,
   "directoryName": "60-Crazy-Birds",
-  "status": "IMPLEMENTATION_READY",
+  "status": "IMPLEMENTATION_UPDATED_AWAITING_CACHE_REGEN_AND_LAB_VERIFICATION",
   "accountAlias": "abc225",
   "sourceAuthority": "ORIGINAL_SITE_ONLY",
-  "rulesHash": "sha256:60crazybirds-v1510250430-ways4096",
+  "rulesHash": "sha256:60crazybirds-v1510250430-weighted-b1",
   "behaviorIds": [
     "AUTH_VERIFY",
     "CONFIG",
@@ -22,9 +22,30 @@
     "historyView": "POST /cp/api/v1/crazy-birds/log-view"
   },
   "redis": {
-    "host": "192.168.10.3",
-    "port": 6379,
-    "database": 15,
-    "memberPrefix": "CB60A1"
+    "connectionAuthority": "generator/60-Crazy-Birds/dist/generator.properties",
+    "memberHeaderLength": 0,
+    "memberFormat": "24_CHAR_BOARD[|24_CHAR_BOARD...]",
+    "multiplierScale": 100,
+    "generatorRangeUnit": "CACHE_INTEGER",
+    "generatorRanges": {
+      "normal": { "minimum": 0, "maximum": 25000 },
+      "freeSpins": { "minimum": 500, "maximum": 30000 }
+    },
+    "zeroPolicy": "ONLY_WHEN_CURRENT_MODE_RANGE_INCLUDES_ZERO",
+    "compatibleWithPreviousMembers": false,
+    "families": {
+      "normal": {
+        "family": "PER_BETLOG",
+        "type": 0,
+        "index": "PerKeyList_008000060",
+        "listPattern": "BetLog:008000060:%06d"
+      },
+      "freeSpins": {
+        "family": "MARY",
+        "type": 0,
+        "index": "MaryKeyList_008000060",
+        "listPattern": "MaryLog:008000060:%06d"
+      }
+    }
   }
 }

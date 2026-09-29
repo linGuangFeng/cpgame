@@ -3,6 +3,7 @@ package com.cpgame.replica.freedomday;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayBoard;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayBoardGenerator;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayEvaluation;
+import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayGridRules;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayResultUtil;
 import com.hd.pg.appapi.business.vo.cpgame.freedomday.FreedomDayOrdinaryLossPolicy;
 
@@ -98,14 +99,20 @@ public final class CompleteRoundFactory {
         int multiplier = startingMultiplier;
         int awarded = 0;
         int wins = 0;
+        FreedomDayBoard previous = null;
+        FreedomDayEvaluation previousEval = null;
         while (true) {
-            FreedomDayEvaluation evaluation = FreedomDayResultUtil.evaluate(board, BigDecimal.ONE, multiplier, increment);
+            int newBalls = FreedomDayGridRules.countNewBalls(previous, previousEval, board);
+            FreedomDayEvaluation evaluation = FreedomDayResultUtil.evaluate(
+                    board, BigDecimal.ONE, multiplier, increment, newBalls);
             pages.add(toFact(board));
             total = total.add(evaluation.getTotalMultiplier());
             multiplier = evaluation.getMultiplier();
             if (pages.size() == 1) awarded = evaluation.getAwardedFreeSpins();
             if (evaluation.getWins().isEmpty()) break;
             wins++;
+            previous = board;
+            previousEval = evaluation;
             if (wins >= maxConsecutiveWins) {
                 board = terminalAfter(boards, board, evaluation, freeMode, multiplier, increment);
             } else {
@@ -119,7 +126,9 @@ public final class CompleteRoundFactory {
                                           FreedomDayEvaluation evaluation, boolean freeMode,
                                           int multiplier, int increment) {
         FreedomDayBoard candidate = boards.cascade(winning, evaluation, freeMode);
-        FreedomDayEvaluation terminal = FreedomDayResultUtil.evaluate(candidate, BigDecimal.ONE, multiplier, increment);
+        int newBalls = FreedomDayGridRules.countNewBalls(winning, evaluation, candidate);
+        FreedomDayEvaluation terminal = FreedomDayResultUtil.evaluate(
+                candidate, BigDecimal.ONE, multiplier, increment, newBalls);
         if (terminal.getWins().isEmpty()) return candidate;
         throw new RoundRejectedException("natural cascade still wins at max-consecutive-wins");
     }

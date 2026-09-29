@@ -122,22 +122,13 @@ public final class EmpiricalDealModel {
     public record Bounds(int wildBoardMax,int scatterBoardMax,int[] wildPerReel,int[] scatterPerReel,int specialMin,int specialMax){}
 
     public int[] lossBoard(Random random){
-        int[] b=new int[15];int first=0;
-        for(int c=0;c<5;c++){
-            final int col=c, forbidden=c==1?first:0;
-            WeightedTable table=tupleTables.computeIfAbsent("LOSS:"+c+":"+forbidden,key->{
-                List<JsonNode> allowed=new ArrayList<>();
-                for(JsonNode tuple:entry("ORDINARY").path("reels").get(col)){
-                    boolean safe=true;for(JsonNode symbol:tuple.path("symbols")){
-                        int value=symbol.asInt();if(value<1||value>7||(forbidden&(1<<value))!=0)safe=false;
-                    }
-                    if(safe)allowed.add(tuple);
-                }
-                return new WeightedTable(allowed);
-            });
-            JsonNode tuple=table.draw(random);if(tuple==null)throw new IllegalStateException("no loss reel support");
-            for(int r=0;r<3;r++){b[c*3+r]=tuple.path("symbols").get(r).asInt();if(c==0)first|=1<<b[r];}
-        }
+        int[] b=new int[15];
+        int[] pays={1,2,3,4,5,6,7};
+        for(int i=pays.length-1;i>0;i--){int j=random.nextInt(i+1);int tmp=pays[i];pays[i]=pays[j];pays[j]=tmp;}
+        for(int row=0;row<3;row++)b[row]=pays[random.nextInt(3)];
+        for(int row=0;row<3;row++)b[3+row]=pays[3+random.nextInt(4)];
+        for(int reel=2;reel<5;reel++)
+            for(int row=0;row<3;row++)b[reel*3+row]=pays[random.nextInt(pays.length)];
         return b;
     }
 }

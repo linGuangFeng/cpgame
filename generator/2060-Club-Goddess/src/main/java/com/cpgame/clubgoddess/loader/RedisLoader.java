@@ -55,7 +55,9 @@ public final class RedisLoader {
         List<Member> pending = new ArrayList<>(config.batchSize());
         Counters counters = new Counters();
         try (RedisConnection redis = RedisConnection.connect(config)) {
-            while (counters.normalWritten < config.normalCount()) {
+            while (counters.normalWritten < config.normalCount()
+                    || counters.specialWritten < config.specialCount()) {
+            normalEntry: if (counters.normalWritten < config.normalCount()) {
                 RoundBundle round = core.generateOrdinaryRound(BET, LEVEL, VERIFY_BALANCE);
                 counters.normalGenerated++;
                 LoaderLimits.checkAttempts(counters.normalGenerated, config.normalCount());
@@ -67,12 +69,12 @@ public final class RedisLoader {
                 BigDecimal multiplier = BigDecimal.valueOf(integerMultiplier);
                 if (!config.outputLimits().accepts(false, multiplier) || multiplier.compareTo(config.normalMaxWinMultiplier()) > 0) {
                     counters.overLimitSkipped++;
-                    continue;
+                    break normalEntry;
                 }
                 int consecutiveWins = integerMultiplier > 0 ? 1 : 0;
                 if (consecutiveWins > config.maxConsecutiveWins()) {
                     counters.overLimitSkipped++;
-                    continue;
+                    break normalEntry;
                 }
                 String member = codec.encode(round);
                 RoundBundle decoded = codec.verify(member);
@@ -87,7 +89,7 @@ public final class RedisLoader {
                 counters.normalDistribution.merge(ratio, 1, Integer::sum);
                 if (pending.size() >= config.batchSize()) flush(redis, pending, config, counters);
             }
-            while (counters.specialWritten < config.specialCount()) {
+            if (counters.specialWritten < config.specialCount()) {
                 RoundBundle round=core.generateSpecialRound(BET,LEVEL,VERIFY_BALANCE);
                 counters.specialGenerated++;
                 LoaderLimits.checkAttempts(counters.specialGenerated, config.specialCount());
@@ -101,6 +103,7 @@ public final class RedisLoader {
                 String ratio=Integer.toString(integerMultiplier);pending.add(new Member(true,ratio,member));
                 counters.specialWritten++;counters.specialDistribution.merge(ratio,1,Integer::sum);
                 if(pending.size()>=config.batchSize())flush(redis,pending,config,counters);
+            }
             }
             flush(redis, pending, config, counters);
         }
@@ -212,7 +215,7 @@ public final class RedisLoader {
         private static void rejectUnknownProperties(Properties p) {
             Set<String> allowed = new LinkedHashSet<>(FIXED_KEYS);
             for (String key : p.stringPropertyNames()) {
-                if (!allowed.contains(key)) throw new IllegalArgumentException("非正式配置参数：" + key);
+                if (!allowed.contains(key)) {if(key.toLowerCase(java.util.Locale.ROOT).contains("seed"))throw new IllegalArgumentException("正式配置禁止 seed: "+key);System.err.println("[warn] unused generator.properties key: "+key);};
             }
         }
         private static String required(Properties p, String key) {

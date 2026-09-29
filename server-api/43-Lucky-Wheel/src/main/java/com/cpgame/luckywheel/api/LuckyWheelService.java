@@ -13,13 +13,12 @@ import java.util.*;
 
 public final class LuckyWheelService {
     private final PersistentSessionRepository repository;
-    private final RedisRoundStore roundStore;
+    private final GameRuleCore core = new GameRuleCore();
     private final RoundDeliveryService deliveries = new RoundDeliveryService();
     private final SecureRandom tokenRandom = new SecureRandom();
 
-    public LuckyWheelService(PersistentSessionRepository repository, RedisRoundStore roundStore) {
+    public LuckyWheelService(PersistentSessionRepository repository) {
         this.repository = repository;
-        this.roundStore = roundStore;
     }
 
     public String authenticate(Map<String, String> form) throws Exception {
@@ -69,11 +68,18 @@ public final class LuckyWheelService {
                 String previous = session.idempotentResponses().get(idempotencyKey);
                 if (previous != null) return previous;
             }
-            BigDecimal bet = BigDecimal.valueOf((long) bl * bs);
+            BigDecimal bet = LuckyWheelStake.ba(bl);
             if (session.balance().compareTo(bet) < 0) return ProtocolCodec.error(402, "Insufficient balance");
-            GameRound round;
-            try { round = roundStore.claim(new RoundRequest(bl, bs, session.balance())); }
-            catch (IOException error) { throw new IllegalStateException("Redis完整局缓存不可用: " + error.getMessage(), error); }
+            int requestedRatio;
+            String rawOdd = form.get("odd");
+            if (rawOdd != null && !rawOdd.isBlank()) {
+                requestedRatio = parseInt(rawOdd, "odd");
+                if (requestedRatio < 0) return ProtocolCodec.error(422, "odd不能为负");
+                requestedRatio = LuckyWheelMultiplierCatalog.floorOdd(bl, requestedRatio);
+            } else {
+                requestedRatio = LuckyWheelMultiplierCatalog.sample(bl, tokenRandom);
+            }
+            GameRound round = core.generateRound(new RoundRequest(bl, bs, session.balance()), requestedRatio);
             RoundDelivery delivery = deliveries.claimNext(session, round);
             SpinResult result = delivery.result();
             session.balance(new BigDecimal(result.pb()));
@@ -89,7 +95,7 @@ public final class LuckyWheelService {
         }
     }
 
-    public void close() throws IOException { roundStore.close(); }
+    public void close() { }
 
     public String historyList(Map<String, String> form) {
         SessionState session = requireSession(form);

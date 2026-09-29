@@ -72,25 +72,31 @@ public final class RedisRoundWriter {
 
     private Optional<ClaimedRound> claimPool(boolean special, boolean wantWin, SecureRandom random)
             throws IOException {
-        List<Integer> ratios = new ArrayList<>();
-        for (String token : store.ratios(special)) {
-            int ratio = Integer.parseInt(token);
-            if (wantWin) {
-                if (ratio <= 0) continue;
-            } else if (ratio != 0) continue;
-            if (store.listLength(special, ratio) > 0) ratios.add(ratio);
-        }
-        Collections.shuffle(ratios, random);
-        for (int ratio : ratios) {
-            Optional<byte[]> member = store.popMember(special, ratio);
-            if (member.isEmpty()) continue;
-            CompleteRound round = codec.decode(member.get());
-            verifier.verify(round);
-            if (RedisKeys.special(round.mode()) != special) {
-                throw new IOException("claimed member special flag does not match list");
+        int minimum = wantWin ? 1 : 0;
+        int maximum = wantWin ? Integer.MAX_VALUE : 0;
+        Optional<Integer> top = store.highestAtMost(special, maximum, minimum);
+        if (top.isEmpty()) return Optional.empty();
+        int target = wantWin ? random.nextInt(minimum, top.get() + 1) : 0;
+        int ceiling = target;
+        while (ceiling >= minimum) {
+            Optional<Integer> found = store.highestAtMost(special, ceiling, minimum);
+            if (found.isEmpty()) return Optional.empty();
+            int ratio = found.get();
+            if (store.listLength(special, ratio) > 0) {
+                Optional<byte[]> member = store.popMember(special, ratio);
+                if (member.isEmpty()) {
+                    ceiling = ratio - 1;
+                    continue;
+                }
+                CompleteRound round = codec.decode(member.get());
+                verifier.verify(round);
+                if (RedisKeys.special(round.mode()) != special) {
+                    throw new IOException("claimed member special flag does not match list");
+                }
+                if (round.unitRatio() != ratio) throw new IOException("claimed member unit ratio does not match list key");
+                return Optional.of(new ClaimedRound(RedisKeys.list(special, ratio), round));
             }
-            if (round.unitRatio() != ratio) throw new IOException("claimed member unit ratio does not match list key");
-            return Optional.of(new ClaimedRound(RedisKeys.list(special, ratio), round));
+            ceiling = ratio - 1;
         }
         return Optional.empty();
     }

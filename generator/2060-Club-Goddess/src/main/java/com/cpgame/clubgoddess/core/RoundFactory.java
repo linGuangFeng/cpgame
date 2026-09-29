@@ -23,7 +23,6 @@ public final class RoundFactory {
     }
 
     public RoundBundle create(BigDecimal bet,int level,BigDecimal startBalance) {
-        GameRuleDefinition.validateBet(bet,level);
         List<Integer> trigger=candidates.nextBoard();
         int scatters=ResultMath.scatterCount(trigger);
         if(scatters>=3) return createSpecialFromTrigger(newRoundKey(),trigger,bet,level,startBalance);
@@ -31,7 +30,6 @@ public final class RoundFactory {
     }
 
     public RoundBundle createOrdinary(BigDecimal bet,int level,BigDecimal startBalance) {
-        GameRuleDefinition.validateBet(bet,level);
         for(int i=0;i<MAX_CANDIDATES;i++) {
             List<Integer> board=candidates.nextBoard();
             if(ResultMath.scatterCount(board)<3) return build(newRoundKey(),List.of(board),bet,level,startBalance,false,true);
@@ -40,7 +38,6 @@ public final class RoundFactory {
     }
 
     public RoundBundle createSpecial(BigDecimal bet,int level,BigDecimal startBalance) {
-        GameRuleDefinition.validateBet(bet,level);
         for(int i=0;i<MAX_CANDIDATES;i++) {
             List<Integer> trigger=candidates.nextBoard();
             int scatters=ResultMath.scatterCount(trigger);
@@ -62,7 +59,6 @@ public final class RoundFactory {
     }
 
     public GameResult createIndependentLoss(BigDecimal bet,int level,BigDecimal startBalance,String oid) {
-        GameRuleDefinition.validateBet(bet,level);
         List<Integer> board=lossBoards.generate(candidates::nextLossBoard,roundKeyRandom::nextInt);
         return projectBase(board,bet,level,startBalance,oid,false,0);
     }
@@ -77,7 +73,7 @@ public final class RoundFactory {
     }
 
     private static RoundBundle build(String key,List<List<Integer>> boards,BigDecimal bet,int level,BigDecimal start,boolean special,boolean verify) {
-        GameRuleDefinition.validateBet(bet,level);boards.forEach(ResultMath::validateBoardSymbols);
+        boards.forEach(ResultMath::validateBoardSymbols);
         int scatters=ResultMath.scatterCount(boards.get(0));
         if(special!=(scatters>=3))throw new IllegalArgumentException("special classification mismatch");
         int award=special?GameRuleDefinition.awardedFreeSpins(scatters):0;

@@ -10,7 +10,7 @@ public final class ResultUtil {
     public Analysis analyze(GameRound round){
         rules.validateRound(round); List<RoundState> states=round.states(); RoundState first=states.get(0), last=states.get(states.size()-1);
         int payout; RoundOutcome outcome;
-        switch(first.mode()){
+        switch(last.mode()){
             case NORMAL -> { payout=rules.payoutUnits(last.board()); outcome=payout==0?RoundOutcome.ORDINARY_LOSS:RoundOutcome.ORDINARY_WIN; }
             case RESPIN_UNTIL_WIN -> { payout=rules.payoutUnits(last.board()); if(payout<=0) throw new IllegalArgumentException("respin must terminate in win"); outcome=RoundOutcome.RESPIN_UNTIL_WIN; }
             case MULTIPLIER_STICKY -> { int sum=Arrays.stream(last.multipliers()).sum(); if(sum<=0) throw new IllegalArgumentException("multiplier terminal sum"); payout=Math.multiplyExact(rules.payoutUnits(last.board()),sum); outcome=RoundOutcome.MULTIPLIER_STICKY; }

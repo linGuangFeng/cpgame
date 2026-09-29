@@ -602,7 +602,8 @@ public class CpgameBetLogService {
             if (ProcessHandle.of(state.processId).map(ProcessHandle::isAlive).orElse(false)) continue;
             Path log = state.logFile == null ? null : Path.of(state.logFile);
             String text = tail(log, LOG_PARSE_BYTES);
-            Integer exitCode = state.process != null && !state.process.isAlive() ? state.process.exitValue() : state.exitCode;
+            Integer exitCode = state.process != null && !state.process.isAlive()
+                ? Integer.valueOf(state.process.exitValue()) : state.exitCode;
             FinishClassification result = classifyFinish(exitCode, text);
             state.exitCode = result.exitCode();
             state.state = result.state();

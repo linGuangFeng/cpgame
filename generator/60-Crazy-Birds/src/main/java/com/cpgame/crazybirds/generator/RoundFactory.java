@@ -13,20 +13,29 @@ import java.util.Map;
 
 public final class RoundFactory {
     public RoundResult restore(String roundKey, BigDecimal bs, int bl, BigDecimal start, List<List<String>> boards) {
+        if (boards == null || boards.isEmpty()) throw new IllegalArgumentException("完整局不能没有牌面");
+        ResultUtil.validateBoardForStage(boards.get(0), false);
+        int scatterReels = ResultUtil.scatterReels(boards.get(0));
+        int awardedFreeSpins = scatterReels >= GameRules.SCATTER_TRIGGER_REELS
+                ? GameRules.freeSpinsForScatterReels(scatterReels) : 0;
+        int expectedBoards = awardedFreeSpins == 0 ? 1 : awardedFreeSpins + 1;
+        if (boards.size() != expectedBoards) {
+            throw new IllegalArgumentException("完整局 Step 数与 Scatter 奖励不一致: expected="
+                    + expectedBoards + ", actual=" + boards.size());
+        }
         BigDecimal bet = GameRules.betAmount(bl, bs);
         List<SpinStep> steps = new ArrayList<>();
         BigDecimal pb = start;
         BigDecimal rwa = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
-        int fsn = 0;
-        boolean free = false;
+        int fsn = awardedFreeSpins;
+        boolean free = awardedFreeSpins > 0;
         for (int i = 0; i < boards.size(); i++) {
             List<String> board = boards.get(i);
+            ResultUtil.validateBoardForStage(board, i > 0);
             List<WinWay> wins = ResultUtil.evaluateWays(board, bet);
             BigDecimal wa = ResultUtil.payout(wins);
-            boolean trigger = ResultUtil.isScatterTrigger(board);
-            if (i == 0 && (trigger || boards.size() > 1)) {
-                free = true;
-                fsn = Math.max(GameRules.BASE_FREE_SPINS, boards.size() - 1);
+            if (i > 0 && ResultUtil.isScatterTrigger(board)) {
+                throw new IllegalArgumentException("DISABLED_BY_DEFAULT_POLICY: 免费中再次触发");
             }
             int nfsc = free ? Math.min(i, fsn) : 0;
             if (i == 0) pb = pb.subtract(bet).add(wa);

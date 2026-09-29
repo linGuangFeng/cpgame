@@ -136,8 +136,8 @@ public final class RoundFactory {
     }
 
     static void requirePaidBet(BigDecimal paidBet) {
-        if (paidBet == null || paidBet.compareTo(GameConstants.MINIMUM_TOTAL_BET) < 0) {
-            throw new IllegalArgumentException("paid bet must be at least 0.40 BRL");
+        if (paidBet == null || paidBet.signum() <= 0) {
+            throw new IllegalArgumentException("paid bet must be positive");
         }
     }
 

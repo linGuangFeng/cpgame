@@ -14,24 +14,24 @@ import java.util.Map;
 
 /** Provider-trained hierarchical joint model for complete raw-gid-33 Rounds. */
 final class GenerationModel {
-    static final String MODEL_HASH = "8522e03f81318ebb80df6219fcb41d380314f12911062c0888066a9464067638";
+    static final String MODEL_HASH = GameRuleCore.RULES_HASH;
     private static final Model MODEL = load();
 
     private GenerationModel() {}
 
     static Plan sample(SecureRandom random, GameRuleCore.Scenario requested) {
+        return sample(random, requested, null);
+    }
+
+    static Plan sample(SecureRandom random, GameRuleCore.Scenario requested, WeightProfile weights) {
         if(requested==GameRuleCore.Scenario.ORDINARY_LOSS)
-            return LossDefaults.POOL.generate(()->lossCandidate(random),random::nextInt);
-        return sampleCandidate(random,requested);
+            return new Plan(GameRuleCore.Scenario.ORDINARY_LOSS,0,0,0,List.of(IndependentLoss.board(random)));
+        return sampleCandidate(random,requested, weights);
     }
-    static Plan lossCandidate(SecureRandom random){return sampleCandidate(random,GameRuleCore.Scenario.ORDINARY_LOSS);}
-    private static final class LossDefaults {
-        private static final SecureRandom RANDOM=new SecureRandom();
-        static final ZeroLossSupport<Plan> POOL=new ZeroLossSupport<>(()->lossCandidate(RANDOM),p->
-            p.boards().size()==1&&java.util.Arrays.stream(p.boards().get(0).cells()).filter(v->v==GameRuleCore.Symbol.Scat).count()<3
-            &&GameRuleCore.evaluate(p.boards().get(0),1,new java.math.BigDecimal("0.02"),0).award().signum()==0,p->p);
+    static Plan lossCandidate(SecureRandom random){
+        return new Plan(GameRuleCore.Scenario.ORDINARY_LOSS,0,0,0,List.of(IndependentLoss.candidate(random)));
     }
-    private static Plan sampleCandidate(SecureRandom random, GameRuleCore.Scenario requested) {
+    private static Plan sampleCandidate(SecureRandom random, GameRuleCore.Scenario requested, WeightProfile weights) {
         String wanted = switch (requested) {
             case ORDINARY_LOSS -> "LOSS";
             case ORDINARY_WIN -> "WIN";
@@ -48,7 +48,8 @@ final class GenerationModel {
             default -> throw new IllegalStateException("unknown outcome " + macro.outcome);
         };
         List<GameRuleCore.Board> boards = new ArrayList<>();
-        boards.add(sampleBoard(random, MODEL.initialByOutcome.get(macro.outcome)));
+        boards.add(sampleBoard(random, MODEL.initialByOutcome.get(macro.outcome),
+                weights == null ? null : weights.initialByOutcome.get(macro.outcome), weights));
         if (scenario == GameRuleCore.Scenario.SCATTER_FREE_ROUNDS) {
             int currentFsn = macro.initialFsn;
             int retriggersLeft = macro.retriggers;
@@ -56,7 +57,8 @@ final class GenerationModel {
                 int slotsLeftInWindow = currentFsn - nfsc + 1;
                 boolean retrigger = retriggersLeft > 0 &&
                     (slotsLeftInWindow <= retriggersLeft || random.nextInt(slotsLeftInWindow) < retriggersLeft);
-                boards.add(sampleBoard(random, retrigger ? MODEL.freeRetrigger : MODEL.freeNormal));
+                boards.add(sampleBoard(random, retrigger ? MODEL.freeRetrigger : MODEL.freeNormal,
+                        weights == null ? null : retrigger ? weights.freeRetrigger : weights.freeNormal, weights));
                 if (retrigger) { currentFsn += 8; retriggersLeft--; }
             }
             if (currentFsn != macro.finalFsn || retriggersLeft != 0)
@@ -65,13 +67,27 @@ final class GenerationModel {
         return new Plan(scenario, macro.initialFsn, macro.finalFsn, macro.rpx, List.copyOf(boards));
     }
 
-    private static GameRuleCore.Board sampleBoard(SecureRandom random, List<GameRuleCore.Symbol[]> pool) {
+    private static GameRuleCore.Board sampleBoard(SecureRandom random, List<GameRuleCore.Symbol[]> pool,
+                                                   List<WeightedBoard> weighted, WeightProfile profile) {
         if (pool == null || pool.isEmpty()) throw new IllegalStateException("empty complete-state kernel");
-        GameRuleCore.Symbol[] source = pool.get(random.nextInt(pool.size()));
+        GameRuleCore.Symbol[] source;
+        if (weighted == null) {
+            source = pool.get(random.nextInt(pool.size()));
+        } else {
+            double point = random.nextDouble() * weighted.get(weighted.size() - 1).cumulative;
+            int lo = 0, hi = weighted.size() - 1;
+            while (lo < hi) {
+                int mid = (lo + hi) >>> 1;
+                if (point < weighted.get(mid).cumulative) hi = mid; else lo = mid + 1;
+            }
+            source = weighted.get(lo).board;
+        }
         Map<GameRuleCore.Symbol,GameRuleCore.Symbol> mapping = new EnumMap<>(GameRuleCore.Symbol.class);
-        permuteGroup(random, mapping, GameRuleCore.Symbol.N9, GameRuleCore.Symbol.J, GameRuleCore.Symbol.Q, GameRuleCore.Symbol.T);
-        permuteGroup(random, mapping, GameRuleCore.Symbol.A, GameRuleCore.Symbol.K);
-        permuteGroup(random, mapping, GameRuleCore.Symbol.H4, GameRuleCore.Symbol.H5);
+        if (profile == null || !profile.adjusted) {
+            permuteGroup(random, mapping, GameRuleCore.Symbol.N9, GameRuleCore.Symbol.J, GameRuleCore.Symbol.Q, GameRuleCore.Symbol.T);
+            permuteGroup(random, mapping, GameRuleCore.Symbol.A, GameRuleCore.Symbol.K);
+            permuteGroup(random, mapping, GameRuleCore.Symbol.H4, GameRuleCore.Symbol.H5);
+        }
         GameRuleCore.Symbol[] cells = new GameRuleCore.Symbol[source.length];
         boolean verticalFlip = random.nextBoolean();
         for (int reel=0; reel<GameRuleCore.REELS; reel++) for (int row=0; row<GameRuleCore.ROWS; row++) {
@@ -80,6 +96,55 @@ final class GenerationModel {
             cells[reel * GameRuleCore.ROWS + row] = mapping.getOrDefault(symbol, symbol);
         }
         return new GameRuleCore.Board(cells);
+    }
+
+    static WeightProfile configured(Map<String,Integer> configured) {
+        if (configured.isEmpty()) return null;
+        Map<String,List<WeightedBoard>> initial = new HashMap<>();
+        boolean[] adjusted = {false};
+        MODEL.initialByOutcome.forEach((outcome, boards) -> initial.put(outcome,
+                weight(boards, "FREE".equals(outcome) ? "entry" : "normal", configured, adjusted)));
+        return new WeightProfile(freeze(initial), weight(MODEL.freeNormal, "free", configured, adjusted),
+                weight(MODEL.freeRetrigger, "free", configured, adjusted), adjusted[0]);
+    }
+
+    static long observedWeight(String symbol, String mode) {
+        GameRuleCore.Symbol target = GameRuleCore.parseSymbol(symbol);
+        List<GameRuleCore.Symbol[]> boards;
+        if ("normal".equals(mode)) boards = java.util.stream.Stream.of("LOSS", "WIN")
+                .flatMap(key -> MODEL.initialByOutcome.get(key).stream()).toList();
+        else if ("entry".equals(mode)) boards = MODEL.initialByOutcome.get("FREE");
+        else if ("free".equals(mode)) boards = java.util.stream.Stream.concat(MODEL.freeNormal.stream(), MODEL.freeRetrigger.stream()).toList();
+        else throw new IllegalArgumentException("mode " + mode);
+        long count = 0;
+        for (GameRuleCore.Symbol[] board : boards) for (GameRuleCore.Symbol cell : board) if (cell == target) count++;
+        return count;
+    }
+
+    private static List<WeightedBoard> weight(List<GameRuleCore.Symbol[]> boards, String mode,
+                                               Map<String,Integer> configured, boolean[] adjusted) {
+        double cumulative = 0;
+        List<WeightedBoard> result = new ArrayList<>(boards.size());
+        for (GameRuleCore.Symbol[] board : boards) {
+            double value = 1;
+            for (GameRuleCore.Symbol symbol : board) {
+                String name = external(symbol);
+                long observed = observedWeight(name, mode);
+                double requested = configured.getOrDefault("generation.symbol." + name + "." + mode + "-weight",
+                        Math.toIntExact(observed));
+                double ratio = requested / observed;
+                if (ratio != 1.0) adjusted[0] = true;
+                value *= ratio;
+            }
+            cumulative += value;
+            result.add(new WeightedBoard(board, cumulative));
+        }
+        if (!Double.isFinite(cumulative) || cumulative <= 0) throw new IllegalArgumentException("invalid " + mode + " symbol weights");
+        return List.copyOf(result);
+    }
+
+    private static String external(GameRuleCore.Symbol symbol) {
+        return symbol == GameRuleCore.Symbol.N9 ? "9" : symbol.name();
     }
 
     private static void permuteGroup(SecureRandom random, Map<GameRuleCore.Symbol,GameRuleCore.Symbol> map,
@@ -123,4 +188,7 @@ final class GenerationModel {
     record Macro(int ordinal,String outcome,int initialFsn,int finalFsn,int rpx,int retriggers) {}
     record Plan(GameRuleCore.Scenario scenario,int initialFsn,int finalFsn,int rpx,List<GameRuleCore.Board> boards) {}
     record Model(List<Macro> macros,Map<String,List<Macro>> macrosByOutcome,Map<String,List<GameRuleCore.Symbol[]>> initialByOutcome,List<GameRuleCore.Symbol[]> freeNormal,List<GameRuleCore.Symbol[]> freeRetrigger) {}
+    record WeightedBoard(GameRuleCore.Symbol[] board, double cumulative) {}
+    record WeightProfile(Map<String,List<WeightedBoard>> initialByOutcome, List<WeightedBoard> freeNormal,
+                         List<WeightedBoard> freeRetrigger, boolean adjusted) {}
 }

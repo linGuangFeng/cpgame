@@ -1,0 +1,34 @@
+---
+name: cache-result-encoding
+description: >-
+  Use when designing or reviewing how remake game results are encoded into
+  cache/BetLog members. Enforces compact encoding and the 20% separator rule.
+---
+
+# Cache / BetLog result encoding
+
+## Goal
+
+Results written to cache must be **as short as practical**. Separators are expensive.
+
+## Hard rules
+
+1. Prefer **single-character** symbols (or a fixed short alphabet).
+2. Use **one letter + digits** only for special meaning (height, count, variant)—not a comma between every cell.
+3. **Illegal:** CSV-like boards such as `H1,A,3,1,3` (separator between almost every token).
+4. For any one separator character `d` in a member string of length `N`: if `count(d)/N > 0.20`, the scheme is **invalid**—redesign.
+5. Do not repeat fixed headers in every member. Game ID/name, codec version, rulesHash, constant tags, and other values already determined by the Redis key, deployed code, or audit metadata must stay out of the member. Store only per-round facts required for lossless recovery. When old cache will be cleared, backward compatibility is not a reason to add a version prefix.
+
+## Checklist before merge
+
+- [ ] Sample win / loss / feature strings measured for each separator’s share
+- [ ] No per-cell commas (or equivalent) in the board body
+- [ ] Spin/page separators are few and documented (`|` / `;` style), not repeated per symbol
+- [ ] No repeated game/version/hash prefix that is constant for the whole key
+- [ ] Codec + SiUtil round-trip tested on the compact form
+- [ ] Document alphabet in protocol / core README
+
+## Related
+
+- Parent policy: `复刻要求.md` 的「缓存编码（硬门槛）」（路径相对 cpgame）。
+- 历史 Demo 的 `#` 占位约定不自动适用于新游戏；只使用当前游戏已明确记录、由 Java 核心实现的编码。

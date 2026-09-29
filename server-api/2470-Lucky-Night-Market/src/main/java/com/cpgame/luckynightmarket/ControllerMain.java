@@ -17,11 +17,12 @@ import java.util.concurrent.atomic.AtomicLong;
 /** Original protocol adapter. Every paid round is one complete immutable Redis member. */
 public final class ControllerMain {
     private static final String GAME="2470", DIRECTORY="2470-Lucky-Night-Market";
-    private static final String PER="PerKeyList_008002470", MARY="MaryKeyList_008002470", PRE="PreKeyList_108002470";
+    private static final String PER="PerKeyList_008002470", MARY="MaryKeyList_008002470", WHEEL_PER="PerKeyList_108002470";
     private static final BigDecimal FIVE=BigDecimal.valueOf(5);
     private static final List<BigDecimal> BETS=List.of(new BigDecimal("0.08"),new BigDecimal("0.8"),new BigDecimal("3"),new BigDecimal("10"));
     private final Properties properties; private final Path publish; private final int port;
     private final SecureRandom random=new SecureRandom(); private final AtomicLong ids=new AtomicLong(System.currentTimeMillis()*1000L);
+    private final ConstructiveLossGenerator independentLosses=new ConstructiveLossGenerator();
     private final ConcurrentHashMap<String,Session> sessions=new ConcurrentHashMap<>();
     private final AtomicLong redisReads=new AtomicLong(); private final AtomicLong paidRounds=new AtomicLong();
     public ControllerMain(Properties p,Path publish,int port){if(!"8002470".equals(p.getProperty("redis.game-id","8002470")))throw new IllegalArgumentException("redis.game-id must be 2470");this.properties=p;this.publish=publish.toAbsolutePath().normalize();this.port=port;}
@@ -73,11 +74,11 @@ public final class ControllerMain {
     private Object user(Session s){return Json.map("currency_symbol","R$","day_first_login",0,"first_gold",null,"gid",2470,"gold",s.balance,"is_guide",0,"nickname","Demo","token",s.id,"total_recharge","0","uid",24700001,"user_config",Json.map("game_config",Json.map("ac",List.of(),"open_auto_spin",1,"open_free_buy",0,"open_music",1,"open_paytable",0,"open_sound",1)));}
     private Map<String,Object> initRoom(Session s)throws Exception{if(s.last!=null){Map<String,Object> data=new LinkedHashMap<>(s.last);data.put("end_gold",s.balance);data.put("eg",s.balance);data.put("bet",s.bet);data.put("level",s.level);data.put("bet_gold",s.bet.multiply(BigDecimal.valueOf(s.level)).multiply(FIVE));return data;}
         // The canonical zero-loss marker provides an uncharged initial screen; paid rounds still require Redis.
-        RoundFact.Step step=RoundCodec.decode("LNM1|L|#").steps().get(0);Map<String,Object> data=base(s,Long.toString(ids.incrementAndGet()),s.bet,s.level,BigDecimal.ZERO,BigDecimal.ZERO,s.balance,s.balance);data.put("res",Json.map("muls",step.muls(),"ps",step.ps(),"tws",BigDecimal.ZERO,"wa",List.of(),"we",0,"wem",0));data.put("bet",s.bet);data.put("level",s.level);data.put("bet_gold",s.bet.multiply(FIVE));s.last=data;return data;}
+        RoundFact.Step step=independentLosses.next(false);Map<String,Object> data=base(s,Long.toString(ids.incrementAndGet()),s.bet,s.level,BigDecimal.ZERO,BigDecimal.ZERO,s.balance,s.balance);data.put("res",Json.map("muls",step.muls(),"ps",step.ps(),"tws",BigDecimal.ZERO,"wa",List.of(),"we",0,"wem",0));data.put("bet",s.bet);data.put("level",s.level);data.put("bet_gold",s.bet.multiply(FIVE));s.last=data;return data;}
     private Map<String,Object> spin(Session s,Map<String,String> request)throws Exception {
         String fingerprint=request.getOrDefault("request_id",request.getOrDefault("requestId",""));if(!fingerprint.isEmpty())fingerprint+="|"+request.getOrDefault("type","1")+"|"+request.getOrDefault("bet","0.08")+"|"+request.getOrDefault("level","1");
         if(!fingerprint.isEmpty()&&s.replies.containsKey(fingerprint))return s.replies.get(fingerprint);
-        boolean paid=s.active==null;int type=Integer.parseInt(request.getOrDefault("type","1"));if(type!=(paid?1:2))throw new IllegalArgumentException(paid?"No pending feature round":"Complete the pending feature round first");if(paid){BigDecimal bet=new BigDecimal(request.getOrDefault("bet","0.08"));int level=Integer.parseInt(request.getOrDefault("level","1"));if(BETS.stream().noneMatch(b->b.compareTo(bet)==0)||level<1||level>10)throw new IllegalArgumentException("Unsupported bet or level");BigDecimal cost=bet.multiply(BigDecimal.valueOf(level)).multiply(FIVE);if(s.balance.compareTo(cost)<0)throw new IllegalArgumentException("Insufficient demo balance");
+        boolean paid=s.active==null;int type=Integer.parseInt(request.getOrDefault("type","1"));if(type!=(paid?1:2))throw new IllegalArgumentException(paid?"No pending feature round":"Complete the pending feature round first");if(paid){BigDecimal bet=new BigDecimal(request.getOrDefault("bet","0.08"));int level=Integer.parseInt(request.getOrDefault("level","1"));if(bet.signum()<=0||level<1)throw new IllegalArgumentException("stake must be positive");BigDecimal cost=bet.multiply(BigDecimal.valueOf(level)).multiply(FIVE);if(s.balance.compareTo(cost)<0)throw new IllegalArgumentException("Insufficient demo balance");
             Selected selected=selectRound(s);s.active=selected.round;s.cursor=0;s.bet=bet;s.level=level;s.totalWin=BigDecimal.ZERO;s.roundStart=s.balance;s.roundId=Long.toString(ids.incrementAndGet());s.lastKey=selected.key;s.memberHash=hash(selected.member);s.roundFrames=new ArrayList<>();s.rounds++;s.counts.merge(selected.round.mode().name(),1,Integer::sum);paidRounds.incrementAndGet();}
         RoundFact round=s.active;RoundFact.Step step=round.steps().get(s.cursor);GameRuleCore.Evaluation evaluation=ResultUtil.evaluate(step,round.feature());BigDecimal cost=paid?s.bet.multiply(BigDecimal.valueOf(s.level)).multiply(FIVE):BigDecimal.ZERO;BigDecimal win=ResultUtil.stepCash(step,round.feature(),s.bet,s.level);BigDecimal before=s.balance;BigDecimal after=before.subtract(cost).add(win);s.totalWin=s.totalWin.add(win);
         String id=Long.toString(ids.incrementAndGet());Map<String,Object> data=base(s,id,s.bet,s.level,cost,win,before,after);
@@ -89,27 +90,48 @@ public final class ControllerMain {
     }
     private Map<String,Object> base(Session s,String id,BigDecimal bet,int level,BigDecimal cost,BigDecimal win,BigDecimal before,BigDecimal after){return Json.map("b",bet,"bg",cost,"cg",win.subtract(cost),"cl",0,"eg",after,"f",List.of(),"l",level,"o",BigDecimal.ZERO,"oid",id,"rid",id,"sg",before,"small_game_type",0,"start_gold",before,"t",1,"tw",win,"u",24700001);}
     private Selected selectRound(Session session) throws Exception {
+        RoundFact.Mode preferred = chooseMode(session.counts, random,
+                Double.parseDouble(properties.getProperty("demo.win-probability", "0.60")));
+        if (preferred == RoundFact.Mode.ORDINARY_LOSS) return independentLoss();
         try (RedisClient redis = new RedisClient(properties)) {
-            RoundFact.Mode mode = chooseMode(session.counts, random,
-                    Double.parseDouble(properties.getProperty("demo.win-probability", "0.60")));
-            if (mode == RoundFact.Mode.ORDINARY_WIN) {
-                double probability = Double.parseDouble(properties.getProperty("demo.ordinary-small-win-probability", "0.90"));
-                probability(probability);
-                boolean small = random.nextDouble() < probability;
-                Selected selected = readMode(redis, mode, small ? 1 : 25, small ? 24 : Integer.MAX_VALUE);
-                if (selected == null) selected = readMode(redis, mode, small ? 25 : 1, small ? Integer.MAX_VALUE : 24);
-                if (selected != null) return selected;
-            } else {
-                Selected selected = readMode(redis, mode, 0,
-                        mode == RoundFact.Mode.ORDINARY_LOSS ? 0 : Integer.MAX_VALUE);
+            for (RoundFact.Mode mode : modeOrder(preferred)) {
+                if (mode == RoundFact.Mode.ORDINARY_LOSS) continue;
+                Selected selected = readPreferred(redis, mode);
                 if (selected != null) return selected;
             }
-            throw new IOException("No valid Redis member at or below target for " + mode);
         }
+        throw new IOException("No valid Redis member at or below target for " + preferred);
+    }
+    private Selected independentLoss() {
+        RoundFact.Step step = independentLosses.next(false);
+        RoundFact round = new RoundFact(RoundFact.Mode.ORDINARY_LOSS, List.of(step));
+        GameRuleCore.validate(round);
+        if (ResultUtil.totalUnits(round) != 0) throw new IllegalStateException("independent loss is not zero");
+        String member = RoundCodec.encode(round);
+        return new Selected("independent-loss", member, round);
+    }
+    private static RoundFact.Mode[] modeOrder(RoundFact.Mode preferred) {
+        RoundFact.Mode[] all = RoundFact.Mode.values();
+        RoundFact.Mode[] out = new RoundFact.Mode[all.length];
+        out[0] = preferred;
+        int n = 1;
+        for (RoundFact.Mode mode : all) if (mode != preferred) out[n++] = mode;
+        return out;
+    }
+    private Selected readPreferred(RedisClient redis, RoundFact.Mode mode) throws IOException {
+        if (mode == RoundFact.Mode.ORDINARY_WIN) {
+            double probability = Double.parseDouble(properties.getProperty("demo.ordinary-small-win-probability", "0.90"));
+            probability(probability);
+            boolean small = random.nextDouble() < probability;
+            Selected selected = readMode(redis, mode, small ? 1 : 25, small ? 24 : Integer.MAX_VALUE);
+            if (selected == null) selected = readMode(redis, mode, small ? 25 : 1, small ? Integer.MAX_VALUE : 24);
+            return selected;
+        }
+        return readMode(redis, mode, 0, Integer.MAX_VALUE);
     }
     private Selected readMode(RedisClient redis, RoundFact.Mode mode, int minimum, int maximum) throws IOException {
-        String index = mode == RoundFact.Mode.LUCKY_WHEEL ? PRE : mode == RoundFact.Mode.LUCKY_FEATURE ? MARY : PER;
-        String prefix = mode == RoundFact.Mode.LUCKY_WHEEL ? "PreLog:108002470:"
+        String index = mode == RoundFact.Mode.LUCKY_WHEEL ? WHEEL_PER : mode == RoundFact.Mode.LUCKY_FEATURE ? MARY : PER;
+        String prefix = mode == RoundFact.Mode.LUCKY_WHEEL ? "BetLog:108002470:"
                 : mode == RoundFact.Mode.LUCKY_FEATURE ? "MaryLog:008002470:" : "BetLog:008002470:";
         var buckets = RedisFloorLookup.<IOException>open(args -> floorCommand(redis, prefix, args), index,
                 m -> prefix + String.format(Locale.ROOT, "%06d", m), random, minimum, maximum);

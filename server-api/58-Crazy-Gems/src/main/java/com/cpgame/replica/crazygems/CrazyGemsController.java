@@ -86,7 +86,7 @@ public final class CrazyGemsController {
         server.start();
         System.out.printf("CONTROLLER_READY gameId=58 port=%d pid=%d rulesVersion=%s rulesHash=%s publish=%s redis=%s:%s db=%s%n",
                 port, ProcessHandle.current().pid(), CrazyGemsRulesMetadata.VERSION, CrazyGemsRulesMetadata.HASH,
-                publish, config.getProperty("redis.host", "18.234.101.161"),
+                publish, config.getProperty("redis.host", "54.172.218.28"),
                 config.getProperty("redis.port", "8021"),
                 config.getProperty("redis.database", "0"));
         try {
@@ -163,7 +163,7 @@ public final class CrazyGemsController {
         ArrayNode bll = data.putArray("bll");
         for (int i = 1; i <= 10; i++) bll.add(i);
         ArrayNode bsl = data.putArray("bsl");
-        bsl.add(0.5).add(5).add(50);
+        for (BigDecimal size : BET_SIZES) bsl.add(size);
         data.put("cc", "BRL");
         data.put("cs", "R$");
         data.put("dbl", 50);
@@ -178,8 +178,7 @@ public final class CrazyGemsController {
         synchronized (session) {
             int bl = integer(form.getOrDefault("bl", "1"), "bl");
             BigDecimal bs = decimal(form.getOrDefault("bs", "0.5"), "bs");
-            if (bl < 1 || bl > 10) throw new IllegalArgumentException("bl out of range");
-            if (!legalBetSize(bs)) throw new IllegalArgumentException("bs out of range");
+            if (bl < 1 || bs.signum() <= 0) throw new IllegalArgumentException("stake must be positive");
             BigDecimal ba = bs.multiply(BigDecimal.valueOf(bl)).setScale(2, RoundingMode.HALF_UP);
             if (session.balance.compareTo(ba) < 0) throw new IllegalArgumentException("insufficient balance");
             CrazyGemsBoard board;
@@ -330,11 +329,6 @@ public final class CrazyGemsController {
 
     private static String stripCp(String path) {
         return path.startsWith("/cp/") ? path.substring(3) : path;
-    }
-
-    private static boolean legalBetSize(BigDecimal bs) {
-        for (BigDecimal allowed : BET_SIZES) if (allowed.compareTo(bs) == 0) return true;
-        return false;
     }
 
     private static long nextTransferId() {
@@ -557,6 +551,7 @@ public final class CrazyGemsController {
             List<String> hosts = new ArrayList<>();
             for (String host : new String[]{
                     config.getProperty("redis.host", "").trim(),
+                    "54.172.218.28",
                     "18.234.101.161",
                     "127.0.0.1"
             }) {

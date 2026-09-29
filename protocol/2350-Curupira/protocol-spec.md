@@ -21,6 +21,8 @@
 | 方向 | 从左到右 | 每条线只取最高一组中奖 |
 | Wild | 21 | 替代除 Scatter 外的所有付费符号 |
 | Scatter | 31 | 3 个或以上进入功能选择；孤立的“4+”文本是陈旧冲突文本 |
+| Scatter 位置限制 | 每列最多 1 个 | 用户于 2026-09-23 确认；生成时约束候选空间，禁止出牌后替换 |
+| 首列 Wild | UNKNOWN | 10 局样本未见不能证明禁出；当前实现不得硬禁 |
 | 最小押注 | line bet 0.02，level 1，总押注 0.50 | `bg = b * l * 25` |
 
 25 条线的逻辑行模式如下，行号使用 `0/1/2`：
@@ -196,23 +198,23 @@ for column c in 0..4:
 
 必须保留原始 wire `res.ps` 供规则校验；前端动画期间对显示符号的本地替换不得回写协议结果。
 
-## 8. UNKNOWN 行为与禁止实现边界
+## 8. 原站 wire 未确认边界与本地工程投影
 
-以下行为的规则/UI/前端路径可见，但没有完整运行时 wire 序列，因此 handoff 状态必须为 `UNKNOWN`：
+以下行为的规则/UI/前端路径可见，但没有完整原站运行时 wire 序列，因此 handoff 的原站证据状态保持 `UNKNOWN`。这不再表示两种 Mary 停止生成；本地实现按已确认规则建立显式工程投影，并且不得把该投影反称为原站抓包事实：
 
 ### B005_FREE_EXPANDING_WILD
 
 - 已知规则：3+ Scatter 后选择该模式；6 次免费 Spin；每次出现一个扩展 Curupira reel。
 - 代码请求路径：`type=2, game_type=2`。
 - 缺失：激活响应、相邻 6 Step、`f` 转换、rid/oid 连续性、终止响应、History 聚合。
-- 处置：不得实现协议 payload 或运行时模式。
+- 本地处置：正式生成 6 Step 完整 Mary 事实，每 Step 恰好一列三 Wild，Scatter 少于 3（当前不实现免费再触发）；触发后 `type=2, game_type=2` 只从 `Mary type0` 读取并逐 Step 投影。状态字段属于本地工程合同，待完整原站序列取得后再校准。
 
 ### B006_HOLD_AND_SPINS
 
 - 已知规则：初始 3 次；新 Coin 增加一次；单 Coin 最高 10x；15 格填满提前结束。
 - 代码请求路径：`type=2, game_type=3`。
 - 缺失：激活响应、Coin 数组类型、相邻 respin、剩余次数转换、终止响应、History 聚合。
-- 处置：不得实现 Coin payload 或运行时模式。
+- 本地处置：正式生成从 3 次开始到终止的完整 Coin 状态序列，新 Coin 各增加 1 次、面值 1..10、填满 15 格立即结束；触发后 `type=2, game_type=3` 只从 `Mary type1` 读取并逐 Step 投影。空/Coin 权重是显式本地临时配置，不是原站概率。
 
 ### B007_FEATURE_BUY
 
@@ -222,35 +224,32 @@ for column c in 0..4:
 - 缺失：扣费字段/时机、购买响应、rid/oid 边界、相邻购买模式 Step、终止响应。
 - 处置：不得模拟或实现购买响应。
 
-## 9. 运行时独立 LOSS
+## 9. 正式完整局生成边界
 
-能力清单仅允许普通付费独立单步 LOSS。生成结果必须由 Java `GameRuleCore` 实时产生，并由独立 `ResultUtil` 验证：
+正式生成器在统一 `generation.count` 尝试预算内，先按显式场景权重选择普通、免费扩展 Wild 或 Hold & Spins，再自然生成该场景完整事实。它不得接收目标结果类型、目标奖金或样本局模板；样本只可作为明确标注不足的基础权重。Demo 运行时不得调用生成器。
 
-```text
-type=1, game_type=1
-res.ps 长度 15，符号属于当前游戏枚举
-res.sc < 3
-res.wa = []
-res.tws = tw = 0
-f = []
-cg = -bg
-eg = sg - bg
-gt = 1
-small_game_type = 0
-```
+普通场景每次自然生成一个 5×3 候选，应用同列最多一个 Scatter 后由独立 `ResultUtil` 计奖并分类为 LOSS、WIN、主游戏 EXPANDING_WILD 或 TRIGGER；TRIGGER 不再丢弃，作为普通类型 0 的付费起点缓存。免费场景必须包含完整 6 Step，每 Step 恰好一个扩展 Wild 列且当前不生成再触发。Hold 场景必须包含从初始 3 次到剩余次数归零或 15 格填满的全部状态；每个新 Coin 增加一次，Coin 面值为 1..10。
 
-当前没有 reel strip 或服务器 symbol weights 证据。前端随机数组只用于动画，不得当作结果权重。不得声称复现原站概率分布。
+普通与免费符号 Step 都必须保存完整 15 格及可独立反推的奖项；Hold 每个 Step 必须保存完整 15 格 Coin 快照、新增位置、剩余次数和本 Step 新增面值。0 倍同样保存完整事实。
+
+当前没有 reel strip 或服务器 symbol weights 证据。10 个连续付费样本的 150 格计数为 `1=26,2=14,3=16,4=16,11=16,12=17,13=19,14=17,21=6,31=3`，状态为 `SAMPLE_INSUFFICIENT`，只能作为当前经验基础权重。前端随机数组只用于动画，不得当作结果权重，不得声称复现原站概率分布。
+
+Scatter 位置约束为每列最多一个：同列首次抽到 31 后，余下位置不再包含 31。该约束在候选采样阶段执行，不得在生成后替换。首列 Wild 未经证实为禁止，因此所有列都允许 21。
 
 ## 10. Redis 与 fixtures
 
-没有当前游戏 Redis Key、score、member 编码或长度证据，`redisContract` 保持 UNKNOWN。禁止继承其他游戏的 Redis 结构。
+原站证据中没有 Redis Key、score、member 编码或长度；本地交付合同因此明确标注为工程合同而非原站事实：普通 LOSS/WIN/主游戏 Expanding Wild/TRIGGER 使用当前配置 `redis.game-id` 的类型 0 `PerKeyList` / `BetLog`；免费扩展 Wild 使用 `Mary type0`；Hold & Spins 使用 `Mary type1`。类型映射固定，不按样本、倍率或运行结果改变。
+
+每个 member 都必须保存 `CU1` 紧凑 ASCII 完整事实：普通/触发保存完整 15 格，免费保存完整 6 Step，Hold 保存从开始到终止的全部 Coin 状态。旧 `CU1PL;#` 标记禁止写入和消费。
+
+Demo Init/Spin 只读上述正式缓存；普通、免费和 Hold 各自按六档实际总注倍数 `0、(0,5]、(5,20]、(20,50]、(50,100]、(100,10000]` 选择目标，换算到 Redis 单位后只向下找同一场景最近有效桶。禁止跨普通/Mary 或两种 Mary 混取。缓存空、member 非法或连接失败必须明确报错，不得现场生成。
 
 fixtures 的唯一用途是协议回归 oracle：
 
 - 禁止读取或轮播历史 Spin 响应作为运行时结果。
 - 禁止按局号播放固定 LOSS/WIN 列表。
 - 禁止把 fixture token、余额或 Round ID 当作运行时 session。
-- 本地 Init、Spin、Balance、Session 必须来自 Java `GameRuleCore`。
+- 本地 Init 与 Spin 的牌面必须来自 Redis 中正式生成的完整事实；Balance 与 Session 由 Java 服务端根据该事实投影。
 
 ## 11. 下游验收入口
 
@@ -262,13 +261,9 @@ fixtures 的唯一用途是协议回归 oracle：
 4. `evidence-matrix.json`
 5. `reports/2350-Curupira/protocol-validation.json`
 
-实现不得跳过任何 `CONFIRMED` behaviorId；状态为 `UNKNOWN` 的三项只能保持禁用/安全拒绝，不能根据示例游戏或猜测补齐。
+实现不得跳过任何 `CONFIRMED` behaviorId。B005/B006 的原站 wire 状态仍为 `UNKNOWN`，但本地工程投影必须按本规范生成并消费两种 Mary，同时明确不冒充原站已验证 wire；B007 Feature Buy 保持禁用/安全拒绝。
 
 
-## 独立无奖标记（2026-09-14）
+## 完整事实编码修订（2026-09-23）
 
-本次只接普通付费单步 LOSS，保留 CU1 版本和入口/种类头，编码为 `CU1PL;#`。解析器调用共享 ConstructiveLossGenerator 物化真实零奖盘面，禁止带入免费触发或整列扩展 Wild。
-
-FREE_EW / BUY_FE（免费扩展 Wild）、HOLD / BUY_HS（锁币）、TRIGGER 及其他种类仍完整保存。本次未接免费扩展 Wild 的专用零奖生成逻辑；锁币中即使当前没有新增奖金，也不得替换前后继承的格子与剩余次数。只有 `CU1PL;#` 接受标记，其他模式的 `#` 明确拒绝。
-
-新解析器兼容已有完整编码。每次领取 Redis member 后只物化一次，校验、后续交付、重试与历史共用该事实；Redis 为空时仍失败。零奖生成最多尝试 5 次，并有 10 个已校验默认盘（41 按 PAN 数量分别保存）。先更新消费端 JAR，再使用新 Loader 写入带标记的数据。Loader JAR 通过 Maven package 交付到本游戏 dist 目录。
+旧独立无奖标记 `CU1PL;#` 已废止。它会导致消费缓存时重新造盘，不满足“包括 0 倍在内所有试玩结果均从 Redis 完整局读取”的要求。Loader 现在把 LOSS/WIN/主游戏 Expanding Wild 都编码为完整 15 格事实；解析器明确拒绝旧标记。更新顺序为先部署新 Controller，再由新 Loader 写入完整 member；旧标记只会被跳过，不会现场物化。

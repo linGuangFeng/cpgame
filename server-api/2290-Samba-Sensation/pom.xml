@@ -11,7 +11,7 @@
     <junit.version>5.11.4</junit.version>
   </properties>
   <dependencies>
-    <!-- 唯一规则核心来自 generator Maven artifact，Controller 不复制判奖/赔表。 -->
+    <!-- 唯一规则核心来自 generator Maven artifact，Controller 不复制判�?赔表�?-->
     <dependency>
       <groupId>com.cpgame.sambasensation</groupId>
       <artifactId>samba-sensation-rule-engine</artifactId>
@@ -52,7 +52,25 @@
             <goals><goal>shade</goal></goals>
             <configuration>
               <createDependencyReducedPom>false</createDependencyReducedPom>
-              <!-- 最终 Controller 只嵌入共享 core/codec/key contract，不携带生成器或 Loader 可执行类。 -->
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>**/*column-model.tsv</exclude>
+                    <exclude>**/*-model.tsv</exclude>
+                    <exclude>**/generation-model*.tsv</exclude>
+                    <exclude>**/*joint-kernels.txt</exclude>
+                    <exclude>**/*holdout-kernels.txt</exclude>
+                    <exclude>**/*kernels.txt</exclude>
+                    <exclude>**/dealing-model.json</exclude>
+                    <exclude>**/deal-model.json</exclude>
+                    <exclude>**/reel-model.json</exclude>
+                    <exclude>**/*-distribution.tsv</exclude>
+                    <exclude>**/holdout-pages.txt</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <!-- 最�?Controller 只嵌入共�?core/codec/key contract，不携带生成器或 Loader 可执行类�?-->
               <filters>
                 <filter>
                   <artifact>com.cpgame.sambasensation:samba-sensation-rule-engine</artifact>

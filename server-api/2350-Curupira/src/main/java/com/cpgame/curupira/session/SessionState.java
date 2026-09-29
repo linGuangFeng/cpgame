@@ -1,25 +1,24 @@
 package com.cpgame.curupira.session;
 
-import com.cpgame.curupira.api.DemoCatalog;
+import com.cpgame.curupira.api.DemoSelectionPolicy;
 import com.cpgame.curupira.api.RoundSource;
 import com.cpgame.curupira.api.SpinProjector;
 import com.cpgame.curupira.api.UnsupportedBehaviorException;
 import com.cpgame.curupira.core.GameRuleCore;
 import com.cpgame.curupira.core.GameRules;
+import com.cpgame.curupira.core.GenerationScene;
 import com.cpgame.curupira.model.CompleteRoundFact;
 import com.cpgame.curupira.model.CompleteRoundFact.Kind;
 import com.cpgame.curupira.model.FeatureStep;
-import com.cpgame.curupira.model.RoundResult;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
+/** Session accounting and wire projection. Every visible board/state fact comes from Redis. */
 public final class SessionState {
     private enum Phase { IDLE, SELECTING, FEATURE }
 
@@ -27,39 +26,43 @@ public final class SessionState {
     private final long userId;
     private final String opaqueToken;
     private final int historyLimit;
+    private final DemoSelectionPolicy selectionPolicy;
     private final AtomicLong ids = new AtomicLong(System.currentTimeMillis() * 1_000_000L + 2350);
     private BigDecimal balance;
     private Map<String, Object> lastData;
     private final List<HistoryRound> history = new ArrayList<>();
     private final Map<String, Map<String, Object>> idempotentResults = new HashMap<>();
-    private int paidStarts;
     private Phase phase = Phase.IDLE;
-    private CompleteRoundFact active;
+    private CompleteRoundFact activeMary;
     private int featureIndex;
     private BigDecimal featureTwa = BigDecimal.ZERO.setScale(2);
     private BigDecimal activeLineBet = GameRules.MINIMUM_LINE_BET;
     private int activeLevel = 1;
     private HistoryRound openHistory;
 
-    SessionState(String token, long userId, String opaqueToken, BigDecimal balance, int historyLimit) {
+    SessionState(String token, long userId, String opaqueToken, BigDecimal balance, int historyLimit,
+                 DemoSelectionPolicy selectionPolicy) {
         this.token = token;
         this.userId = userId;
         this.opaqueToken = opaqueToken;
         this.balance = GameRuleCore.money(balance);
         this.historyLimit = historyLimit;
+        this.selectionPolicy = selectionPolicy;
     }
 
     public synchronized Map<String, Object> play(int type, int gameType, BigDecimal lineBet, int level,
-                                                 String idempotencyKey, RoundSource source, GameRuleCore core) {
+                                                 String idempotencyKey, RoundSource source) {
         Map<String, Object> existing = idempotentResults.get(idempotencyKey);
         if (existing != null) return existing;
-        if (lineBet == null || lineBet.compareTo(GameRules.MINIMUM_LINE_BET) < 0 || level < 1) {
+        if (lineBet == null || lineBet.signum() <= 0 || level < 1) {
             throw new IllegalArgumentException("Invalid Curupira bet or level");
         }
         Map<String, Object> data = switch (type) {
-            case 1 -> paid(lineBet, level, source, core);
+            case 1 -> {
+                if (gameType != 1) throw new UnsupportedBehaviorException(type, gameType);
+                yield paid(lineBet, level, source);
+            }
             case 2 -> featureContinue(gameType, source);
-            case 3 -> buy(gameType, lineBet, level, source);
             default -> throw new UnsupportedBehaviorException(type, gameType);
         };
         lastData = data;
@@ -69,7 +72,7 @@ public final class SessionState {
 
     public synchronized Map<String, Object> roomProjection(RoundSource source) {
         if (lastData == null) {
-            CompleteRoundFact idle = source.peekLoss();
+            CompleteRoundFact idle = requirePaidStart(source.peekLoss());
             FeatureStep step = idle.steps().get(0);
             lastData = SpinProjector.data(step, 0L, GameRules.MINIMUM_LINE_BET, 1,
                     BigDecimal.ZERO.setScale(2), balance, BigDecimal.ZERO.setScale(2),
@@ -79,94 +82,55 @@ public final class SessionState {
         return lastData;
     }
 
-    public synchronized RoundResult spin(String idempotencyKey, BigDecimal lineBet, int level, GameRuleCore core) {
-        throw new IllegalStateException("Demo spins must claim Redis members");
-    }
-
-    public synchronized RoundResult roomProjection(GameRuleCore core) {
-        throw new IllegalStateException("Demo init must peek Redis members");
-    }
-
-    private Map<String, Object> paid(BigDecimal lineBet, int level, RoundSource source, GameRuleCore core) {
+    private Map<String, Object> paid(BigDecimal lineBet, int level, RoundSource source) {
         if (phase != Phase.IDLE) throw new UnsupportedBehaviorException(1, 1);
-        DemoCatalog.PaidSlot slot = DemoCatalog.slot(paidStarts++);
-        Kind kind = slot.kind();
-        CompleteRoundFact fact = kind == Kind.TRIGGER
-                ? core.generateFact(Kind.TRIGGER)
-                : source.claim(kind, slot.minMultiplier(), slot.maxMultiplier());
         BigDecimal bet = SpinProjector.totalBet(lineBet, level);
         if (balance.compareTo(bet) < 0) throw new GameRuleCore.InsufficientBalanceException();
-        activeLineBet = lineBet;
-        activeLevel = level;
+        int targetMultiplier = selectionPolicy.chooseTargetMultiplier(GenerationScene.NORMAL_PAID);
+        CompleteRoundFact fact = requirePaidStart(source.claimPaidAtOrBelow(targetMultiplier));
         FeatureStep step = fact.steps().get(0);
         BigDecimal tw = SpinProjector.stepWin(step, lineBet, level);
         BigDecimal start = balance;
         BigDecimal change = GameRuleCore.money(tw.subtract(bet));
         balance = GameRuleCore.money(start.add(change));
+        activeLineBet = lineBet;
+        activeLevel = level;
+        featureTwa = BigDecimal.ZERO.setScale(2);
+        openHistory = new HistoryRound(bet, Instant.now().getEpochSecond());
+        phase = fact.kind() == Kind.TRIGGER ? Phase.SELECTING : Phase.IDLE;
         long rid = ids.incrementAndGet();
-        if (kind == Kind.TRIGGER) {
-            phase = Phase.SELECTING;
-            featureTwa = BigDecimal.ZERO.setScale(2);
-            openHistory = new HistoryRound(bet, Instant.now().getEpochSecond());
-        } else {
-            phase = Phase.IDLE;
-            openHistory = new HistoryRound(bet, Instant.now().getEpochSecond());
-        }
         Map<String, Object> data = SpinProjector.data(step, rid, lineBet, level, bet, start, tw, change, balance,
                 userId, opaqueToken, 1, featureTwa, false);
-        appendHistory(data, bet, change, tw);
-        if (kind != Kind.TRIGGER) finishHistory();
+        appendHistory(data, change, tw);
+        if (phase == Phase.IDLE) finishHistory();
         return data;
     }
 
     private Map<String, Object> featureContinue(int gameType, RoundSource source) {
+        Kind kind;
+        GenerationScene scene;
+        if (gameType == 2) {
+            kind = Kind.FREE_EW;
+            scene = GenerationScene.FREE_EXPANDING_WILD;
+        } else if (gameType == 3) {
+            kind = Kind.HOLD;
+            scene = GenerationScene.HOLD_AND_SPINS;
+        } else {
+            throw new UnsupportedBehaviorException(2, gameType);
+        }
         if (phase == Phase.SELECTING) {
-            if (gameType != 2 && gameType != 3) throw new UnsupportedBehaviorException(2, gameType);
-            active = source.claim(gameType == 2 ? Kind.FREE_EW : Kind.HOLD);
+            int target = selectionPolicy.chooseTargetMultiplier(scene);
+            activeMary = requireMary(source.claimMaryAtOrBelow(kind, target), kind);
             featureIndex = 0;
             phase = Phase.FEATURE;
-            featureTwa = BigDecimal.ZERO.setScale(2);
-            return emitFeatureStep(2);
+        } else if (phase != Phase.FEATURE || activeMary == null || activeMary.kind() != kind) {
+            throw new UnsupportedBehaviorException(2, gameType);
         }
-        if (phase != Phase.FEATURE || active == null) throw new UnsupportedBehaviorException(2, gameType);
-        return emitFeatureStep(2);
+        return emitFeatureStep();
     }
 
-    private Map<String, Object> buy(int gameType, BigDecimal lineBet, int level, RoundSource source) {
-        if (phase != Phase.IDLE) throw new UnsupportedBehaviorException(3, gameType);
-        if (gameType != 2 && gameType != 3) throw new UnsupportedBehaviorException(3, gameType);
-        CompleteRoundFact fact = source.claimBuy(gameType);
-        BigDecimal bet = SpinProjector.totalBet(lineBet, level);
-        BigDecimal charge = GameRuleCore.money(bet.multiply(BigDecimal.valueOf(GameRules.BUY_FREE_MULTIPLE)));
-        if (balance.compareTo(charge) < 0) throw new GameRuleCore.InsufficientBalanceException();
-        active = fact;
-        featureIndex = 0;
-        phase = Phase.FEATURE;
-        activeLineBet = lineBet;
-        activeLevel = level;
-        featureTwa = BigDecimal.ZERO.setScale(2);
-        openHistory = new HistoryRound(charge, Instant.now().getEpochSecond());
-        FeatureStep step = fact.steps().get(0);
-        BigDecimal tw = SpinProjector.stepWin(step, lineBet, level);
-        featureTwa = tw;
-        BigDecimal start = balance;
-        BigDecimal change = GameRuleCore.money(tw.subtract(charge));
-        balance = GameRuleCore.money(start.add(change));
-        long rid = ids.incrementAndGet();
-        featureIndex = 1;
-        Map<String, Object> data = SpinProjector.data(step, rid, lineBet, level, charge, start, tw, change, balance,
-                userId, opaqueToken, 3, featureTwa, false);
-        appendHistory(data, charge, change, tw);
-        if (featureIndex >= active.steps().size()) {
-            phase = Phase.IDLE;
-            active = null;
-            finishHistory();
-        }
-        return data;
-    }
-
-    private Map<String, Object> emitFeatureStep(int wireType) {
-        FeatureStep step = active.steps().get(featureIndex);
+    private Map<String, Object> emitFeatureStep() {
+        FeatureStep step = activeMary.steps().get(featureIndex);
         BigDecimal tw = SpinProjector.stepWin(step, activeLineBet, activeLevel);
         featureTwa = GameRuleCore.money(featureTwa.add(tw));
         BigDecimal start = balance;
@@ -175,19 +139,34 @@ public final class SessionState {
         long rid = ids.incrementAndGet();
         Map<String, Object> data = SpinProjector.data(step, rid, activeLineBet, activeLevel,
                 BigDecimal.ZERO.setScale(2), start, tw, change, balance, userId, opaqueToken,
-                wireType, featureTwa, false);
-        appendHistory(data, BigDecimal.ZERO.setScale(2), change, tw);
+                2, featureTwa, false);
+        appendHistory(data, change, tw);
         featureIndex++;
-        if (featureIndex >= active.steps().size() || step.st() == 0) {
+        if (featureIndex >= activeMary.steps().size() || step.st() == 0) {
             phase = Phase.IDLE;
-            active = null;
+            activeMary = null;
             finishHistory();
         }
         return data;
     }
 
-    private void appendHistory(Map<String, Object> step, BigDecimal bet, BigDecimal change, BigDecimal tw) {
-        if (openHistory == null) openHistory = new HistoryRound(bet, Instant.now().getEpochSecond());
+    private static CompleteRoundFact requirePaidStart(CompleteRoundFact fact) {
+        if (fact == null || fact.entry() != CompleteRoundFact.EntryKind.PAID || fact.steps().size() != 1
+                || !(fact.kind().ordinary() || fact.kind() == Kind.TRIGGER)) {
+            throw new IllegalStateException("Redis member is not a complete paid-start fact");
+        }
+        return fact;
+    }
+
+    private static CompleteRoundFact requireMary(CompleteRoundFact fact, Kind expected) {
+        if (fact == null || fact.kind() != expected || fact.entry() != CompleteRoundFact.EntryKind.PAID) {
+            throw new IllegalStateException("Redis member is not the selected Mary fact");
+        }
+        return fact;
+    }
+
+    private void appendHistory(Map<String, Object> step, BigDecimal change, BigDecimal tw) {
+        if (openHistory == null) throw new IllegalStateException("Feature history has no paid start");
         openHistory.steps.add(step);
         openHistory.change = openHistory.change.add(change);
         openHistory.tw = openHistory.tw.add(tw);
@@ -202,8 +181,6 @@ public final class SessionState {
 
     public synchronized BigDecimal balance() { return balance; }
     public synchronized List<HistoryRound> historyRounds() { return List.copyOf(history); }
-    public synchronized List<RoundResult> history() { return List.of(); }
-    public synchronized Optional<RoundResult> idempotentResult(String key) { return Optional.empty(); }
     public String token() { return token; }
     public long userId() { return userId; }
 

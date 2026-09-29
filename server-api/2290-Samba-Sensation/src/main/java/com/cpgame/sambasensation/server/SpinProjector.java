@@ -29,8 +29,7 @@ final class SpinProjector {
     private SpinProjector() { }
 
     static boolean legalBet(BigDecimal bet, int level, int betType) {
-        return BET_SIZES.stream().anyMatch(value -> value.compareTo(bet) == 0)
-                && BET_LEVELS.contains(level) && betType >= 1 && betType <= 3;
+        return bet != null && bet.signum() > 0 && level >= 1 && betType >= 1 && betType <= 3;
     }
 
     static BigDecimal unitBetGold(BigDecimal bet, int level) {

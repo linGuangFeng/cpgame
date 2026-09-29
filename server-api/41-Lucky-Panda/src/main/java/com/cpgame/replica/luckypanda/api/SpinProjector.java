@@ -37,9 +37,8 @@ final class SpinProjector {
         return GameRuleCore.stakeAmount(betSize, betLevel).setScale(2, RoundingMode.HALF_UP);
     }
 
-    static boolean legalBet(BigDecimal betSize, int betLevel) {
-        return BET_LEVELS.contains(betLevel)
-                && BET_SIZES.stream().anyMatch(value -> value.compareTo(betSize) == 0);
+    static boolean positiveStake(BigDecimal betSize, int betLevel) {
+        return betSize != null && betSize.signum() > 0 && betLevel >= 1;
     }
 
     static Map<String, int[]> symbolPayList() {
@@ -172,7 +171,10 @@ final class SpinProjector {
         for (LuckyPandaWin win : delivery.wins()) {
             Map<String, Object> row = new LinkedHashMap<>();
             row.put("sk", win.symbol().wireName());
-            row.put("wa", win.award());
+            // The original history UI applies rpx when rendering each win row, so
+            // wmkl.wa must remain the pre-multiplier award.  The delivery wa/rwa
+            // fields still carry the fully multiplied, settled amount.
+            row.put("wa", win.award().divide(BigDecimal.valueOf(win.rpxFactor())));
             row.put("wmk", win.wmkl());
             rows.add(row);
         }

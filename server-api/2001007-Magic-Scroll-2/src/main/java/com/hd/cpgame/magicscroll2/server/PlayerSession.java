@@ -51,8 +51,8 @@ public final class PlayerSession {
         } else if (bet.signum() == 0 && mult.signum() == 0) {
             result = deliverNext();
         } else {
-            if (bet.compareTo(GameConstants.MINIMUM_TOTAL_BET) < 0 || mult.signum() <= 0) {
-                throw new ApiException("INVALID_WAGER", "paid bet must be >=0.40 and mult must be >0");
+            if (bet.signum() <= 0 || mult.signum() <= 0) {
+                throw new ApiException("INVALID_WAGER", "paid bet and mult must be positive");
             }
             if (pendingRound != null) {
                 DeliveryRuntimeUtil.Projection current = currentProjection();

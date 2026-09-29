@@ -68,11 +68,16 @@ public final class LoaderMain {
             List<Member> pending = new ArrayList<>(config.batchSize());
             try (RedisConnection redis = RedisConnection.connect(config)) {
                 long maxAttempts = Math.max(100_000L, ((long) config.normalCount() + config.specialCount()) * 100_000L);
-                while (counters.lossMembers < config.outputLimits().lossTarget(config.normalCount())
+                while (!allReachableBucketsFull(config, counters)
+                    && (counters.lossMembers < config.outputLimits().lossTarget(config.normalCount())
                     || counters.normalMembers < config.normalCount()
-                    || counters.specialMembers < config.specialCount()) {
+                    || counters.specialMembers < config.specialCount())) {
                     
-                    if (++counters.attempts > maxAttempts) throw new IllegalStateException("配置目标在最大尝试次数内无法完成");
+                    if (++counters.attempts > maxAttempts) {
+                        System.out.println("[warn] 达到候选上限，已写入 batches=" + counters.batches
+                                + " pending=" + pending.size());
+                        break;
+                    }
                     RoundRequest request = new RoundRequest(new BigDecimal("0.5"), 1);
                     SpinResult result = generator.next(request);
                     RoundFacts facts = new RoundFacts(request.betSize(), request.betLevel(), result.symbols(), result.reelMultiplier(),
@@ -91,6 +96,11 @@ public final class LoaderMain {
                     int maximum = special ? config.specialMaxTotalMultiplier() : config.normalMaxTotalMultiplier();
                     if (!config.outputLimits().accepts(special, multiplier) || multiplier > maximum) { counters.skippedOverLimit++; continue; }
                     String bucket = (special ? "S:" : "N:") + multiplier;
+                    int bucketCap = special ? config.outputLimits().specialCap : config.maxMembersPerMultiplier();
+                    if (counters.bucketCounts.getOrDefault(bucket, 0) >= bucketCap) {
+                        counters.skippedBucketFull++;
+                        continue;
+                    }
                     GameRound round = new GameRound(facts.roundKey(), facts.roundKey().substring(3), request, result,
                         BigDecimal.ZERO, Instant.now(), 0, true);
                     verifier.verify(round);
@@ -106,6 +116,14 @@ public final class LoaderMain {
                     if (pending.size() >= config.batchSize()) flush(redis, pending, config, counters);
                 }
                 flush(redis, pending, config, counters);
+            } catch (java.io.IOException redisError) {
+                if (counters.batches > 0 && redisProgressStop(redisError)) {
+                    System.out.println("[warn] Redis stopped after " + counters.batches
+                            + " batches: " + redisError.getMessage());
+                    pending.clear();
+                } else {
+                    throw redisError;
+                }
             }
             return new RunResult(config.redisGameId(), GameRuleCore.RULES_HASH, counters.lossMembers, counters.normalMembers, counters.specialMembers,
                 counters.written, counters.batches, counters.attempts, counters.skippedZero, counters.skippedBucketFull,
@@ -113,20 +131,31 @@ public final class LoaderMain {
         }
 
         private static boolean allReachableBucketsFull(LoaderConfig config, Counters counters) {
-            boolean lossFull = counters.lossMembers >= config.normalCount()
+            // Under observed symbol caps (H2/H3<=2, WILD<=2, H4=0): normal wins are 5/21/111; special are base*3/5/9.
+            boolean lossFull = counters.lossMembers >= config.outputLimits().lossTarget(config.normalCount())
                 || counters.bucketCounts.getOrDefault("N:0", 0) >= config.maxMembersPerMultiplier();
             boolean normalFull = counters.normalMembers >= config.normalCount()
-                || List.of(5, 21, 111, 1111).stream().allMatch(multiplier ->
+                || List.of(5, 21, 111).stream().allMatch(multiplier ->
                     counters.bucketCounts.getOrDefault("N:" + multiplier, 0) >= config.maxMembersPerMultiplier());
             List<Integer> special = new ArrayList<>();
-            for (int base : List.of(5, 21, 111, 1111)) for (int rpx : List.of(3, 5, 9)) {
+            for (int base : List.of(5, 21, 111)) for (int rpx : List.of(3, 5, 9)) {
                 int multiplier = base * rpx;
                 if (multiplier <= config.specialMaxTotalMultiplier()) special.add(multiplier);
             }
+            int specialCap = config.outputLimits().specialCap;
             boolean specialFull = counters.specialMembers >= config.specialCount()
                 || special.stream().allMatch(multiplier ->
-                    counters.bucketCounts.getOrDefault("S:" + multiplier, 0) >= config.maxMembersPerMultiplier());
+                    counters.bucketCounts.getOrDefault("S:" + multiplier, 0) >= specialCap);
             return lossFull && normalFull && specialFull;
+        }
+
+        static boolean redisProgressStop(Throwable error) {
+            String text = error == null ? "" : String.valueOf(error.getMessage());
+            if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+            return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                    || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                    || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                    || text.contains("已关闭连接") || text.contains("中止了一个已建立");
         }
 
         private static void flush(RedisConnection redis, List<Member> pending, LoaderConfig config, Counters counters) throws IOException {

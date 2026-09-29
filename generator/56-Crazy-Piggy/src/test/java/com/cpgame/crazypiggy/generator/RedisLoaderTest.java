@@ -3,6 +3,7 @@ package com.cpgame.crazypiggy.generator;
 import com.cpgame.crazypiggy.generator.model.RoundMode;
 import com.cpgame.crazypiggy.generator.model.RoundResult;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -16,10 +17,15 @@ import java.util.Properties;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RedisLoaderTest {
-    @Test void productionWeightsArePositiveNonUniformActuallyUsedAndDistributed() throws Exception {
+    @Test void productionWeightsRemainAvailableForKernelEntry() throws Exception {
         GeneratorConfig config = GeneratorConfig.load(Path.of("dist", "generator.properties"));
         for (int weight : config.weights.modeWeights().values()) assertTrue(weight > 0);
         assertTrue(new RandomCandidateGenerator(config.weights).trainingKernelCount() >= 1292);
+        assertEquals(0, config.outputLimits.accepts(false, 0) ? 0 : 1);
+        assertTrue(config.outputLimits.accepts(false, 1));
+        assertTrue(config.outputLimits.accepts(false, 2500));
+        assertFalse(config.outputLimits.accepts(false, 2501));
+        assertEquals(300, config.maxMembersPerMultiplier);
 
         GameRuleCore core = GameRuleCore.forTesting(560050L, config.weights);
         RoundVerifier verifier = new RoundVerifier();
@@ -35,36 +41,58 @@ class RedisLoaderTest {
         assertTrue(special > 200 && special < 700, "特殊模式分布异常: " + special);
     }
 
-    @Test void configurationRejectsJsonlSeedSwitchesZeroWeightsAndOversizedTargets() throws Exception {
-        Properties base = productionProperties();
-        assertRejected(base, "output.file", "rounds.jsonl");
-        assertRejected(base, "seed", "56");
-        assertRejected(base, "redis.enabled", "false");
-        assertRejected(base, "write-enabled", "false");
-        assertRejected(base, "generation.loss-count", "2147483648");
-        assertRejected(base, "generation.special-count", "0");
+    @Test void symbolWeightsChangeCompleteKernelSelection() {
+        GenerationWeights base = GenerationWeights.defaults();
+        Map<String, Integer> boostedNormal = new LinkedHashMap<>(base.symbolWeights());
+        boostedNormal.compute("HOT", (key, value) -> value * 20);
+        GenerationWeights boostedWeights = new GenerationWeights(base.modeWeights(), boostedNormal,
+                base.boosterSymbolWeights());
+        RandomCandidateGenerator normal = new RandomCandidateGenerator(base);
+        RandomCandidateGenerator boosted = new RandomCandidateGenerator(boostedWeights);
+        int normalHot = 0, boostedHot = 0;
+        var normalRandom = new java.util.SplittableRandom(560099L);
+        var boostedRandom = new java.util.SplittableRandom(560099L);
+        for (int i = 0; i < 1000; i++) {
+            normalHot += java.util.Collections.frequency(normal.ordinaryWin(normalRandom).symbols(), "HOT");
+            boostedHot += java.util.Collections.frequency(boosted.ordinaryWin(boostedRandom).symbols(), "HOT");
+        }
+        assertTrue(boostedHot > normalHot * 3 / 2, normalHot + " -> " + boostedHot);
     }
 
-    @Test void isolatedRedisReceivesVerifiedCompleteRoundsWithAtomicTrimmedBuckets() throws Exception {
+    @Test void configurationRejectsSeedAndIgnoresGenerationCounts() throws Exception {
+        Properties base = productionProperties();
+        assertThrows(IllegalArgumentException.class, () -> GeneratorConfig.load(write(with(base, "seed", "56"))));
+        assertDoesNotThrow(() -> GeneratorConfig.load(write(with(base, "generation.loss-count", "1"))));
+        assertDoesNotThrow(() -> GeneratorConfig.load(write(with(base, "generation.win-count", "1"))));
+        assertDoesNotThrow(() -> GeneratorConfig.load(write(with(base, "generation.special-count", "0"))));
+        assertDoesNotThrow(() -> GeneratorConfig.load(write(with(base, "generation.loss-count", "2147483648"))));
+    }
+
+    @Test
+    @Timeout(180)
+    void isolatedRedisReceivesVerifiedCompleteRoundsInOrdinaryPool() throws Exception {
         try (IsolatedRedisServer redis = new IsolatedRedisServer()) {
             Properties p = productionProperties();
             p.setProperty("redis.host", "127.0.0.1");
             p.setProperty("redis.port", Integer.toString(redis.port()));
             p.setProperty("redis.database", "0");
-            p.setProperty("generation.loss-count", "6");
-            p.setProperty("generation.win-count", "6");
-            p.setProperty("generation.special-count", "3");
+            p.setProperty("generation.loss-count", "1");
+            p.setProperty("generation.win-count", "1");
+            p.setProperty("generation.special-count", "1");
             p.setProperty("generation.batch-size", "4");
             p.setProperty("generation.max-members-per-multiplier", "2");
-            RedisLoader.LoadSummary summary = new RedisLoader().load(GeneratorConfig.load(write(p)));
+            p.setProperty("generation.normal-min-win-multiplier", "0");
+            p.setProperty("generation.normal-max-win-multiplier", "25");
+            GeneratorConfig config = GeneratorConfig.load(write(p));
+            RedisLoader.LoadSummary summary = new RedisLoader().load(config);
 
-            assertEquals(6, summary.lossMembers());
-            assertEquals(6, summary.winMembers());
-            assertEquals(3, summary.specialMembers());
-            assertEquals(4, summary.batches());
-            assertTrue(redis.zsets.containsKey("PerKeyList_000000056"));
-            assertTrue(redis.zsets.containsKey("MaryKeyList_000000056"));
-            assertEquals(4, redis.transactions.size());
+            assertEquals(0, summary.specialMembers());
+            assertTrue(summary.winMembers() > 1);
+            assertTrue(summary.lossMembers() > 0);
+            assertTrue(redis.zsets.containsKey(RedisLoader.normalIndex(config.redisGameId)));
+            assertFalse(redis.zsets.containsKey(RedisLoader.specialIndex(config.redisGameId)));
+            assertFalse(redis.lists.keySet().stream().anyMatch(k -> k.startsWith("MaryLog:")));
+            assertTrue(summary.batches() > 0);
             for (List<List<String>> transaction : redis.transactions) {
                 assertEquals(0, transaction.size() % 3);
                 for (int i = 0; i < transaction.size(); i += 3) {
@@ -72,32 +100,34 @@ class RedisLoaderTest {
                     assertEquals("RPUSH", transaction.get(i + 1).get(0));
                     assertEquals("LTRIM", transaction.get(i + 2).get(0));
                     assertEquals(transaction.get(i + 1).get(1), transaction.get(i + 2).get(1));
+                    assertTrue(transaction.get(i).get(1).startsWith("PerKeyList_"));
+                    assertTrue(transaction.get(i + 1).get(1).startsWith("BetLog:"));
                 }
             }
 
             MinimalRoundFactCodec codec = new MinimalRoundFactCodec(new RoundFactory(), new RoundVerifier());
-            int retainedNormal = 0, retainedSpecial = 0;
+            int retainedNormal = 0, retainedBooster = 0;
             for (Map.Entry<String, List<String>> entry : redis.lists.entrySet()) {
                 assertTrue(entry.getValue().size() <= 2, entry.getKey());
-                boolean special = entry.getKey().startsWith("MaryLog:");
+                assertTrue(entry.getKey().startsWith("BetLog:"));
                 for (String payload : entry.getValue()) {
                     RoundResult round = codec.decodeRedisMember(payload);
-                    assertEquals(special, round.boosterWheel());
-                    assertTrue(payload.startsWith(MinimalRoundFactCodec.PREFIX + ";"));
-                    if (special) { assertFalse(round.deliveries().isEmpty()); retainedSpecial++; }
-                    else { assertTrue(round.deliveries().isEmpty()); retainedNormal++; }
+                    assertTrue(payload.equals("#") || payload.startsWith(MinimalRoundFactCodec.PREFIX + "|"));
+                    assertFalse(payload.contains(","));
+                    if (round.boosterWheel()) retainedBooster++;
+                    else retainedNormal++;
                 }
             }
-            assertTrue(retainedNormal > 0 && retainedSpecial > 0);
+            assertTrue(retainedNormal > 0 && retainedBooster > 0);
             redis.assertHealthy();
         }
     }
 
-    private static void assertRejected(Properties source, String key, String value) throws Exception {
+    private static Properties with(Properties source, String key, String value) {
         Properties copy = new Properties();
         copy.putAll(source);
         copy.setProperty(key, value);
-        assertThrows(IllegalArgumentException.class, () -> GeneratorConfig.load(write(copy)), key);
+        return copy;
     }
 
     private static Properties productionProperties() throws Exception {

@@ -68,10 +68,10 @@ public final class FreedomDayGridRules {
                 int run = 1;
                 while (row + run < FreedomDayBoard.ROW_COUNT && prop[start + row + run] == symbol) run++;
                 if (mergeable(symbol) && run >= 2) {
-                    int height = Math.min(run, 4);
+                    int height = Math.min(run, maxStackedHeight(symbol));
                     List<Integer> group = new ArrayList<>(height);
                     for (int offset = 0; offset < height; offset++) group.add(start + row + offset);
-                    grids.add(List.copyOf(group));
+                    grids.add(new ArrayList<>(group));
                     row += height;
                 } else {
                     row++;
@@ -82,7 +82,80 @@ public final class FreedomDayGridRules {
     }
 
     public static boolean mergeable(int symbol) {
-        // 原厂内轴 Ball/Scatter 均可叠成 2–4 高；叠组是一个可见符号。
+        // 原厂内轴 Ball/Wild 可叠 2–4 高；Scatter 抓包只有 2 高，loop3/loop4 动画不存在。
         return symbol >= 1 && symbol <= 13;
+    }
+
+    public static int maxStackedHeight(int symbol) {
+        return symbol == FreedomDayResultUtil.SCATTER ? 2 : 4;
+    }
+
+    /** 下一页相对上一页新出现的可见倍率球；幸存球随重力下落，不重复收集。主盘叠组算 1，trl 各算 1。 */
+    public static int countNewBalls(FreedomDayBoard previous, FreedomDayEvaluation previousEval, FreedomDayBoard next) {
+        if (previous == null || previousEval == null) {
+            return FreedomDayResultUtil.countVisibleSymbol(next, FreedomDayResultUtil.BALL);
+        }
+        Set<Integer> winMain = new HashSet<>();
+        Set<Integer> removedTop = new HashSet<>();
+        for (FreedomDayWin win : previousEval.getWins()) {
+            winMain.addAll(win.getMainPositions());
+            removedTop.addAll(win.getTopPositions());
+        }
+        Set<Integer> transformed = new HashSet<>();
+        for (List<Integer> frame : previous.getGoldFrames()) {
+            if (frame.stream().anyMatch(winMain::contains)) transformed.addAll(frame);
+        }
+        for (List<Integer> frame : previous.getSilverFrames()) {
+            if (frame.stream().anyMatch(winMain::contains)) transformed.addAll(frame);
+        }
+        Set<Integer> removedMain = new HashSet<>(winMain);
+        for (List<Integer> group : previous.getGrids()) {
+            if (group.stream().anyMatch(winMain::contains) && !transformed.contains(group.get(0))) {
+                removedMain.addAll(group);
+            }
+        }
+        removedMain.removeAll(transformed);
+
+        Set<Integer> mappedMainBalls = new HashSet<>();
+        int[] oldProp = previous.getProp();
+        for (int reel = 0; reel < FreedomDayBoard.REEL_COUNT; reel++) {
+            List<Integer> survivors = new ArrayList<>();
+            for (int row = 0; row < FreedomDayBoard.ROW_COUNT; row++) {
+                int index = reel * FreedomDayBoard.ROW_COUNT + row;
+                if (!removedMain.contains(index)) survivors.add(index);
+            }
+            int start = reel * FreedomDayBoard.ROW_COUNT + (FreedomDayBoard.ROW_COUNT - survivors.size());
+            for (int i = 0; i < survivors.size(); i++) {
+                if (oldProp[survivors.get(i)] == FreedomDayResultUtil.BALL) mappedMainBalls.add(start + i);
+            }
+        }
+        int fresh = 0;
+        int[] nextProp = next.getProp();
+        for (int reel = 0; reel < FreedomDayBoard.REEL_COUNT; reel++) {
+            for (FreedomDayBoard.Position position : next.positionsOnReel(reel)) {
+                if (position.isTop() || position.getSymbol() != FreedomDayResultUtil.BALL) continue;
+                boolean anyNew = false;
+                for (int index : position.getIndices()) {
+                    if (nextProp[index] == FreedomDayResultUtil.BALL && !mappedMainBalls.contains(index)) {
+                        anyNew = true;
+                        break;
+                    }
+                }
+                if (anyNew) fresh++;
+            }
+        }
+        Set<Integer> mappedTopBalls = new HashSet<>();
+        int[] oldTop = previous.getTrl();
+        int mappedPos = 0;
+        for (int i = 0; i < oldTop.length; i++) {
+            if (removedTop.contains(i)) continue;
+            if (oldTop[i] == FreedomDayResultUtil.BALL) mappedTopBalls.add(mappedPos);
+            mappedPos++;
+        }
+        int[] nextTop = next.getTrl();
+        for (int i = 0; i < nextTop.length; i++) {
+            if (nextTop[i] == FreedomDayResultUtil.BALL && !mappedTopBalls.contains(i)) fresh++;
+        }
+        return fresh;
     }
 }

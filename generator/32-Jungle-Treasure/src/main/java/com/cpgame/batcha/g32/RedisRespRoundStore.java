@@ -56,6 +56,19 @@ public final class RedisRespRoundStore implements RedisRoundStore {
     }
 
     @Override
+    public synchronized Optional<Integer> highestAtMost(boolean special, int maxInclusive, int minInclusive)
+            throws IOException {
+        if (maxInclusive < minInclusive) return Optional.empty();
+        Object response = command("ZREVRANGEBYSCORE", RedisKeys.index(special),
+            Integer.toString(maxInclusive), Integer.toString(minInclusive), "LIMIT", "0", "1");
+        if (!(response instanceof List<?> members)) throw new IOException("Redis ZREVRANGEBYSCORE returned an unexpected type");
+        if (members.isEmpty() || members.get(0) == null) return Optional.empty();
+        Object member = members.get(0);
+        String token = member instanceof byte[] bytes ? new String(bytes, StandardCharsets.UTF_8) : member.toString();
+        return Optional.of(Integer.parseInt(token));
+    }
+
+    @Override
     public synchronized List<String> ratios(boolean special) throws IOException {
         Object response = command("ZRANGE", RedisKeys.index(special), "0", "-1");
         if (!(response instanceof List<?> members)) throw new IOException("Redis ZRANGE returned an unexpected type");

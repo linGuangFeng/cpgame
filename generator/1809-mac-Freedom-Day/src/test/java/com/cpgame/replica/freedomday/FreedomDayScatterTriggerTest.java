@@ -46,7 +46,7 @@ class FreedomDayScatterTriggerTest {
             for (List<Integer> group : board.getGrids()) {
                 if (board.getProp()[group.get(0)] == 12) {
                     stackedScatter++;
-                    assertTrue(group.size() >= 2 && group.size() <= 4);
+                    assertTrue(group.size() >= 2 && group.size() <= 2);
                     assertTrue(board.getGoldFrames().stream().noneMatch(group::equals));
                     assertTrue(board.getSilverFrames().stream().noneMatch(group::equals));
                 }

@@ -81,7 +81,7 @@ public final class GeneratorConfig {
         for (String key : p.stringPropertyNames()) {
             String lower = key.toLowerCase(Locale.ROOT);
             if (lower.contains("seed")) throw new IllegalArgumentException("正式配置禁止 seed: " + key);
-            if (!FIXED_KEYS.contains(key)) throw new IllegalArgumentException("配置项未被正式代码读取或已禁止: " + key);
+            if (!FIXED_KEYS.contains(key)) {if(key.toLowerCase(java.util.Locale.ROOT).contains("seed"))throw new IllegalArgumentException("正式配置禁止 seed: "+key);System.err.println("[warn] unused generator.properties key: "+key);};
         }
     }
 

@@ -91,7 +91,8 @@ final class SambaSensationService {
                 BigDecimal bet = decimal(form.getOrDefault("bet", "0.02"), "bet");
                 int level = integer(form.getOrDefault("level", "10"), "level");
                 int betType = integer(form.getOrDefault("bet_type", "1"), "bet_type");
-                if (!SpinProjector.legalBet(bet, level, betType)) throw new IllegalArgumentException("unsupported bet/level/bet_type");
+                if (!SpinProjector.legalBet(bet, level, betType))
+                    throw new IllegalArgumentException("bet/level must be positive and bet_type must be 1..3");
                 boolean featureBuy = type == 3;
                 BigDecimal charge = SpinProjector.charge(bet, level, betType, featureBuy);
                 if (state.balance.compareTo(charge) < 0) throw new IllegalArgumentException("insufficient balance");

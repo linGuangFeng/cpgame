@@ -2,6 +2,7 @@ package com.cpgame.luckycatii;
 
 import com.cpgame.luckycatii.model.ResultAnalysis;
 import com.cpgame.luckycatii.model.RoundFacts;
+import com.cpgame.luckycatii.model.RoundMode;
 import com.cpgame.luckycatii.model.RoundResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,7 +71,11 @@ class GenerationModelValidationTest {
                     : generatedCore.generateSpecial(BS, 1, rng);
             ResultAnalysis inferred = verifier.verify(round);
             String member = codec.encodeRedisMemberString(round);
-            verifier.verifyRecovery(round, codec.decodeRedisMember(member));
+            RoundResult decoded = codec.decodeRedisMember(member);
+            if ("#".equals(member)) {
+                assertEquals(RoundMode.ORDINARY_LOSS, ResultUtil.analyze(decoded).redisPoolMode());
+                assertEquals(0, decoded.award().signum());
+            } else verifier.verifyRecovery(round, decoded);
             maxMemberBytes = Math.max(maxMemberBytes, member.getBytes(java.nio.charset.StandardCharsets.US_ASCII).length);
             uniqueBoards.add(round.finalBoard());
             uniqueStates.add(round.paidBoard() + "|" + round.finalBoard() + "|" + round.rpx());
@@ -98,8 +103,9 @@ class GenerationModelValidationTest {
         report.put("executedAt", Instant.now().toString());
         report.put("rulesHash", GameRules.RULES_HASH);
         report.put("model", Map.of(
-                "type", "joint-complete-state-kernel-with-left-right-reel-swap",
-                "perCellConstruction", false,
+                "type", "rule-constructed-boards-with-weight-reference",
+                "perCellConstruction", true,
+                "jointKernelSampling", false,
                 "stitchedLoss", false,
                 "trainingRounds", 1465,
                 "holdoutRounds", 100,
@@ -132,7 +138,8 @@ class GenerationModelValidationTest {
                 "GameRuleCore restore reproduces holdout wa/gm/rpx/wmkl/rdri",
                 "ResultUtil independently reproduces every generated settlement",
                 "each Redis member round-trips one complete Round as minimal US-ASCII",
-                "no holdout round is present in the training kernel file",
+                "formal dealing constructs boards from paylines, Lucky prefix-WILD stacks and Wheel rules",
+                "symbol weights are reference counts, not copied joint kernels",
                 "WILD reel/board caps and confirmed wheel multipliers are enforced"));
         Path out = Path.of("..", "..", "reports", "50-Lucky-Cat-II", "generation-model-validation.json");
         JSON.writeValue(out.toFile(), report);

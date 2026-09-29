@@ -1,7 +1,7 @@
 package com.hd.pg.appapi.business.vo.cpgame.freedomday;
 
 import java.math.BigDecimal;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /** 单个符号的一条 ways 中奖，字段与前端 win_arr 一一对应。 */
@@ -20,9 +20,13 @@ public final class FreedomDayWin {
                          BigDecimal winMoney, List<List<Integer>> mainPositionGroups, List<Integer> topPositions) {
         this.symbol = symbol; this.reelCount = reelCount; this.ways = ways; this.payOdd = payOdd;
         this.multiplier = multiplier; this.winMoney = winMoney;
-        this.mainPositionGroups = mainPositionGroups.stream().map(List::copyOf).toList();
+        List<List<Integer>> copied = new ArrayList<>();
+        for (List<Integer> group : mainPositionGroups) {
+            copied.add(group == null ? new ArrayList<>() : new ArrayList<>(group));
+        }
+        this.mainPositionGroups = copied;
         this.mainPositions = this.mainPositionGroups.stream().flatMap(List::stream).distinct().toList();
-        this.topPositions = Collections.unmodifiableList(topPositions);
+        this.topPositions = topPositions == null ? new ArrayList<>() : new ArrayList<>(topPositions);
     }
     public int getSymbol() { return symbol; }
     public int getReelCount() { return reelCount; }

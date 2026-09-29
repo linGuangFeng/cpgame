@@ -112,6 +112,12 @@ public final class ServerMain {
 
     private static GameRuleCore.Round claimRound(GameRuleCore.Scenario requested, int level, BigDecimal size) throws Exception {
         if (!"redis".equalsIgnoreCase(config.getProperty("result.source", "redis"))) throw new IllegalStateException("runtime generation is disabled; result.source must be redis");
+        if (requested == GameRuleCore.Scenario.ORDINARY_LOSS
+                || (requested != GameRuleCore.Scenario.ORDINARY_WIN
+                    && requested != GameRuleCore.Scenario.SCATTER_FREE_ROUNDS
+                    && !RANDOM.nextBoolean())) {
+            return GameRuleCore.generate(RANDOM, GameRuleCore.Scenario.ORDINARY_LOSS, level, size);
+        }
         long gameId = Long.parseLong(config.getProperty("redis.game-id", "8000033"));
         if (gameId <= 0) throw new IllegalStateException("redis.game-id must be positive");
         try (RedisRoundWriter redis = new RedisRoundWriter(requiredConfig("redis.host"), Integer.parseInt(requiredConfig("redis.port")),
@@ -119,22 +125,16 @@ public final class ServerMain {
             Boolean.parseBoolean(requiredConfig("redis.ssl")))) {
             redis.auth(config.getProperty("redis.username", ""), config.getProperty("redis.password", ""));
             redis.select(Integer.parseInt(requiredConfig("redis.database")));
-            boolean explicit = requested == GameRuleCore.Scenario.ORDINARY_LOSS
-                    || requested == GameRuleCore.Scenario.ORDINARY_WIN
+            boolean explicit = requested == GameRuleCore.Scenario.ORDINARY_WIN
                     || requested == GameRuleCore.Scenario.SCATTER_FREE_ROUNDS;
-            boolean firstWin = requested != GameRuleCore.Scenario.ORDINARY_LOSS
-                    && (explicit || RANDOM.nextBoolean());
-            for (int side = 0; side < (explicit ? 1 : 2); side++) {
-                boolean wantWin = side == 0 ? firstWin : !firstWin;
-                boolean firstSpecial = wantWin && (requested == GameRuleCore.Scenario.SCATTER_FREE_ROUNDS
-                        || (!explicit && RANDOM.nextBoolean()));
-                boolean[] pools = explicit || !wantWin ? new boolean[]{firstSpecial}
-                        : new boolean[]{firstSpecial, !firstSpecial};
-                for (boolean special : pools) {
+            boolean firstSpecial = requested == GameRuleCore.Scenario.SCATTER_FREE_ROUNDS
+                    || (!explicit && RANDOM.nextBoolean());
+            boolean[] pools = explicit ? new boolean[]{firstSpecial} : new boolean[]{firstSpecial, !firstSpecial};
+            for (boolean special : pools) {
                     var buckets = RedisFloorLookup.open(redis::command,
                             special ? RedisKeyContract.specialIndex(gameId) : RedisKeyContract.normalIndex(gameId),
                             m -> special ? RedisKeyContract.specialList(gameId, m) : RedisKeyContract.normalList(gameId, m),
-                            RANDOM, wantWin ? 1 : 0, wantWin ? Integer.MAX_VALUE : 0);
+                            RANDOM, 1, Integer.MAX_VALUE);
                     Integer multiplier;
                     while ((multiplier = buckets.next()) != null) {
                         Bucket bucket = new Bucket(special, multiplier);
@@ -149,10 +149,9 @@ public final class ServerMain {
                 if (ResultUtil.multiplier(cached) != bucket.multiplier || ResultUtil.special(cached) != bucket.special)
                     throw new IllegalStateException("Redis member classification does not match selected bucket");
                 return GameRuleCore.reprice(cached, level, size);
+                    }
             }
-                }
-            }
-            throw new IllegalStateException("selected Redis gid33 WIN/LOSS side became empty");
+            throw new IllegalStateException("selected Redis gid33 WIN side became empty");
         }
     }
 
@@ -193,10 +192,10 @@ public final class ServerMain {
     }
 
     private static String deliveryJson(String transfer, GameRuleCore.Round r, GameRuleCore.Delivery d, BigDecimal balance) {
-        return "{\"ba\":" + money(d.paidBet()) + ",\"bl\":" + r.betLevel() + ",\"bs\":" + r.betSize() + ",\"fbt\":" + Math.max(0, d.fsn() - d.nfsc()) + ",\"frwa\":0,\"fsn\":" + d.fsn() + ",\"gt\":" + d.gameType() + ",\"nfsc\":" + d.nfsc() + ",\"pb\":" + quote(money(balance)) + ",\"pl\":{\"balance\":" + quote(money(balance)) + ",\"id\":33},\"rpx\":" + d.rpx() + ",\"rskl\":" + strings(d.board().externalCells()) + ",\"rwa\":" + money(d.cumulativeAward()) + ",\"small_game_type\":" + d.smallGameType() + ",\"ss\":" + (d.terminal() ? 1 : 0) + ",\"wa\":" + money(d.award()) + ",\"wmkl\":" + wins(d.wins(), false) + ",\"_transferId\":" + quote(transfer) + ",\"_roundTerminal\":" + d.terminal() + "}";
+        return "{\"ba\":" + money(d.paidBet()) + ",\"bl\":" + r.betLevel() + ",\"bs\":" + r.betSize() + ",\"fbt\":" + Math.max(0, d.fsn() - d.nfsc()) + ",\"frwa\":0,\"fsn\":" + d.fsn() + ",\"gt\":" + d.gameType() + ",\"nfsc\":" + d.nfsc() + ",\"pb\":" + quote(money(balance)) + ",\"pl\":{\"balance\":" + quote(money(balance)) + ",\"id\":33},\"rpx\":" + d.rpx() + ",\"rskl\":" + strings(d.board().externalCells()) + ",\"rwa\":" + money(d.cumulativeAward()) + ",\"small_game_type\":" + d.smallGameType() + ",\"ss\":" + (d.terminal() ? 1 : 0) + ",\"wa\":" + money(d.award()) + ",\"wmkl\":" + wins(d.wins(), false, d.rpx()) + ",\"_transferId\":" + quote(transfer) + ",\"_roundTerminal\":" + d.terminal() + "}";
     }
     private static String historyStep(String transfer, GameRuleCore.Round r, GameRuleCore.Delivery d, BigDecimal balance) {
-        return "{\"ba\":" + money(d.paidBet()) + ",\"balance_after\":" + quote(money(balance)) + ",\"bet_level\":" + r.betLevel() + ",\"bet_size\":" + r.betSize() + ",\"bid\":" + quote("33-" + transfer) + ",\"bl\":" + r.betLevel() + ",\"bs\":" + r.betSize() + ",\"cc\":\"BRL\",\"created_at\":" + Instant.now().getEpochSecond() + ",\"cs\":\"R$\",\"frwa\":0,\"fsn\":" + d.fsn() + ",\"gt\":" + d.gameType() + ",\"nfsc\":" + d.nfsc() + ",\"pb\":" + quote(money(balance)) + ",\"pl\":{\"balance\":" + quote(money(balance)) + ",\"id\":33},\"rpx\":" + d.rpx() + ",\"rskl\":" + strings(d.board().externalCells()) + ",\"rwa\":" + money(d.cumulativeAward()) + ",\"small_game_type\":" + d.smallGameType() + ",\"ss\":" + (d.terminal() ? 1 : 0) + ",\"wa\":" + money(d.award()) + ",\"wmkl\":" + wins(d.wins(), true) + "}";
+        return "{\"ba\":" + money(d.paidBet()) + ",\"balance_after\":" + quote(money(balance)) + ",\"bet_level\":" + r.betLevel() + ",\"bet_size\":" + r.betSize() + ",\"bid\":" + quote("33-" + transfer) + ",\"bl\":" + r.betLevel() + ",\"bs\":" + r.betSize() + ",\"cc\":\"BRL\",\"created_at\":" + Instant.now().getEpochSecond() + ",\"cs\":\"R$\",\"frwa\":0,\"fsn\":" + d.fsn() + ",\"gt\":" + d.gameType() + ",\"nfsc\":" + d.nfsc() + ",\"pb\":" + quote(money(balance)) + ",\"pl\":{\"balance\":" + quote(money(balance)) + ",\"id\":33},\"rpx\":" + d.rpx() + ",\"rskl\":" + strings(d.board().externalCells()) + ",\"rwa\":" + money(d.cumulativeAward()) + ",\"small_game_type\":" + d.smallGameType() + ",\"ss\":" + (d.terminal() ? 1 : 0) + ",\"wa\":" + money(d.award()) + ",\"wmkl\":" + wins(d.wins(), true, d.rpx()) + "}";
     }
 
     private static SessionState session(String token) { return state.sessions.computeIfAbsent(token, ignored -> new SessionState(new BigDecimal(config.getProperty("session.initialBalance", "10000.00")))); }
@@ -221,14 +220,28 @@ public final class ServerMain {
     private static String quote(String v) { return "\"" + v.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r") + "\""; }
     private static String money(BigDecimal v) { return v.setScale(2, java.math.RoundingMode.HALF_UP).toPlainString(); }
     private static String strings(List<String> v) { return "[" + String.join(",", v.stream().map(ServerMain::quote).toList()) + "]"; }
-    private static String wins(List<GameRuleCore.Win> wins, boolean history) { List<String> values = new ArrayList<>(); for (GameRuleCore.Win w : wins) values.add(history ? "{\"psn\":" + w.count() + ",\"sk\":" + quote(GameRuleCore.externalName(w.symbol())) + ",\"wa\":" + quote(money(w.award())) + ",\"wpk\":" + w.line() + "}" : quote(Integer.toString(w.line())) + ":{\"" + GameRuleCore.externalName(w.symbol()) + "\":" + w.count() + "}"); return history ? "[" + String.join(",", values) + "]" : "{" + String.join(",", values) + "}"; }
+    private static String wins(List<GameRuleCore.Win> wins, boolean history, int rpx) {
+        List<String> values = new ArrayList<>();
+        int factor = Math.max(1, rpx);
+        for (GameRuleCore.Win w : wins) {
+            if (history) {
+                // Origin history UI does amount = wmkl.wa * rpx. Win.award() already includes rpx.
+                BigDecimal preRpx = w.award().divide(BigDecimal.valueOf(factor), 2, java.math.RoundingMode.HALF_UP);
+                values.add("{\"psn\":" + w.count() + ",\"sk\":" + quote(GameRuleCore.externalName(w.symbol()))
+                    + ",\"wa\":" + quote(money(preRpx)) + ",\"wpk\":" + w.line() + "}");
+            } else {
+                values.add(quote(Integer.toString(w.line())) + ":{\"" + GameRuleCore.externalName(w.symbol()) + "\":" + w.count() + "}");
+            }
+        }
+        return history ? "[" + String.join(",", values) + "]" : "{" + String.join(",", values) + "}";
+    }
     private static String paytableJson() { return "{\"9\":{\"3\":5,\"4\":25,\"5\":100},\"A\":{\"3\":10,\"4\":50,\"5\":150},\"H1\":{\"2\":10,\"3\":50,\"4\":250,\"5\":750},\"H2\":{\"2\":5,\"3\":40,\"4\":200,\"5\":500},\"H3\":{\"3\":30,\"4\":150,\"5\":400},\"H4\":{\"3\":25,\"4\":100,\"5\":250},\"H5\":{\"3\":25,\"4\":100,\"5\":250},\"J\":{\"3\":5,\"4\":25,\"5\":100},\"K\":{\"3\":10,\"4\":50,\"5\":150},\"Q\":{\"3\":5,\"4\":25,\"5\":100},\"Scat\":{\"2\":0,\"3\":0,\"4\":0,\"5\":0},\"T\":{\"3\":5,\"4\":25,\"5\":100},\"Wild\":{\"2\":25,\"3\":150,\"4\":1000,\"5\":2500}}"; }
     private static Properties load(Path p) throws IOException { Properties v = new Properties(); try (InputStream in = Files.newInputStream(p)) { v.load(in); } return v; }
     private static String requiredConfig(String key) { String value = config.getProperty(key); if (value == null || value.isBlank()) throw new IllegalArgumentException("missing " + key); return value.trim(); }
     private static Map<String,String> options(String[] args) { Map<String,String> v = new LinkedHashMap<>(); for (int i = 0; i < args.length; i++) { if (!args[i].startsWith("--")) continue; String key = args[i].substring(2); if (i + 1 >= args.length || args[i + 1].startsWith("--")) throw new IllegalArgumentException("missing value for --" + key); v.put(key, args[++i]); } return v; }
     private static int requiredPort(Map<String,String> options) { String text = firstNonBlank(options.get("port"), System.getenv("PORT")); if (text == null) throw new IllegalArgumentException("managed controller requires --port or PORT"); int port = Integer.parseInt(text); if (port < 50000 || port > 59999) throw new IllegalArgumentException("managed port must be 50000..59999"); return port; }
-    private static int parseLevel(String v) { int n = Integer.parseInt(v); if (n < 1 || n > 10) throw new IllegalArgumentException("bl must be 1..10"); return n; }
-    private static BigDecimal parseBetSize(String v) { BigDecimal n = new BigDecimal(v); if (n.compareTo(new BigDecimal("0.02")) != 0 && n.compareTo(new BigDecimal("0.12")) != 0 && n.compareTo(new BigDecimal("0.8")) != 0) throw new IllegalArgumentException("bs must be 0.02, 0.12 or 0.8"); return n; }
+    private static int parseLevel(String v) { int n = Integer.parseInt(v); if (n < 1) throw new IllegalArgumentException("bl must be positive"); return n; }
+    private static BigDecimal parseBetSize(String v) { BigDecimal n = new BigDecimal(v); if (n.signum() <= 0) throw new IllegalArgumentException("bs must be positive"); return n; }
     private static GameRuleCore.Scenario scenario(String v) { return v == null || v.isBlank() ? GameRuleCore.Scenario.RANDOM : GameRuleCore.Scenario.valueOf(v.toUpperCase(Locale.ROOT)); }
     private static String firstNonBlank(String... values) { for (String v : values) if (v != null && !v.isBlank()) return v; return null; }
 

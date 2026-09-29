@@ -14,6 +14,13 @@ public final class GameRules {
     public static final int REELS = 5;
     public static final int ROWS = 3;
     public static final int PAYLINE_COUNT = 25;
+    public static final int MAX_STEPS = 33;
+    public static final int MAX_RETRIGGERS = 1;
+    public static final int MAX_SCATTER_BOARD = 5;
+    public static final int MAX_SCATTER_REEL = 3;
+    public static final int MAX_WILD_BOARD = 8;
+    public static final int MAX_WILD_REEL = 3;
+    public static final int[] FREE_MULTIPLIERS = {2, 5, 8};
     public static final String WILD = "Wild";
     public static final String SCATTER = "Scat";
 
@@ -24,14 +31,11 @@ public final class GameRules {
     public static final List<Integer> BET_LEVELS = Collections.unmodifiableList(Arrays.asList(1,2,3,4,5,6,7,8,9,10));
     public static final List<Integer> AUTO_SPINS = Collections.unmodifiableList(Arrays.asList(10,30,50,100,500));
 
-    /**
-     * 原厂结果权重没有出现在已验收协议证据中。这里是 Rio Carnival 本地复刻的显式正数权重，
-     * 只用于本地正式生成链路，不代表原厂 RTP；正式 Loader 可通过 generator.properties 调整。
-     */
+    /** Training-board marginal counts used to calibrate correlated reel-window weights. */
     public static final Map<String, Integer> DEFAULT_NORMAL_WEIGHTS = weights(
-        12,10,5,6,7,8,8,12,10,12,4,11,2);
+        1614,1602,1684,1727,1665,1583,1516,1507,1603,1647,683,1542,1217);
     public static final Map<String, Integer> DEFAULT_FREE_WEIGHTS = weights(
-        12,10,5,6,7,8,8,12,10,12,3,11,2);
+        1026,1100,1110,1080,1035,1019,1027,1029,1001,1014,356,1045,458);
 
     public static final int[][] PAYLINES = {
         {1,1,1,1,1},{0,0,0,0,0},{2,2,2,2,2},{0,1,2,1,0},{2,1,0,1,2},

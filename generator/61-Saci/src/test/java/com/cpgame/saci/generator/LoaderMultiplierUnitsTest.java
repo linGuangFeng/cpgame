@@ -8,9 +8,10 @@ class LoaderMultiplierUnitsTest {
   p.setProperty("generation.normal-min-win-multiplier","50");
   p.setProperty("generation.normal-max-win-multiplier","1500");
   LoaderLimits limits=new LoaderLimits(p);
-  assertTrue(limits.acceptsHundredths(false,5000));
-  assertTrue(limits.acceptsHundredths(false,150000));
-  assertFalse(limits.acceptsHundredths(false,4999));
-  assertFalse(limits.acceptsHundredths(false,150001));
+  assertTrue(limits.acceptsHundredths(false,50));
+  assertTrue(limits.acceptsHundredths(false,1500));
+  assertFalse(limits.acceptsHundredths(false,49));
+  assertFalse(limits.acceptsHundredths(false,1501));
+  assertTrue(limits.acceptsMultiplier(false,50));
  }
 }

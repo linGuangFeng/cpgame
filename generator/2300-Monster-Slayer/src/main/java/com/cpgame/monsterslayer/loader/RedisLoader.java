@@ -47,28 +47,50 @@ public final class RedisLoader {
         try (RedisConnection redis = RedisConnection.connect(c)) {
             int[] remaining = {lossTarget, c.winCount, c.buyCountPerMode, c.buyCountPerMode, c.buyCountPerMode};
             // Losses and wins share pool 0; each purchase mode has its own pool.
-            boolean[] prepared = new boolean[4];
+            // Do not wipe existing Redis keys on start; RPUSH+LTRIM caps each bucket.
             while (progress.loaded() < total) {
+                boolean any = false;
                 for (int phase = 0; phase < remaining.length; phase++) {
                     if (remaining[phase] == 0) continue;
+                    any = true;
                     int buyType = phase < 2 ? 0 : phase + 1;
-                    int pool = phase < 2 ? 0 : phase - 1;
                     int size = Math.min(c.batchSize, remaining[phase]);
                     List<Member> batch = generateBatch(factory, codec, random, c, phase, size);
-                    if (!prepared[pool]) {
-                        preparePool(redis, c, buyType);
-                        prepared[pool] = true;
+                    if (batch.isEmpty()) {
+                        remaining[phase] = 0;
+                        continue;
                     }
-                    commitBatch(redis, batch, c);
+                    try {
+                        commitBatch(redis, batch, c);
+                    } catch (Exception redisError) {
+                        if (progress.batches > 0 && redisProgressStop(redisError)) {
+                            System.out.println("[warn] Redis stopped after " + progress.batches
+                                    + " batches: " + redisError.getMessage());
+                            remaining = new int[remaining.length];
+                            break;
+                        }
+                        throw redisError;
+                    }
                     remaining[phase] -= batch.size();
+                    if (batch.size() < size) remaining[phase] = 0;
                     progress.record(batch, phase);
                     System.out.printf("BATCH_COMMITTED batch=%d members=%d loaded=%d normal=%d special=%d phase=%s%n",
                             progress.batches, batch.size(), progress.loaded(), progress.normal, progress.special,
                             phase == 0 ? "loss" : phase == 1 ? "win" : "buy" + buyType);
                 }
+                if (!any) break;
             }
         }
         return new Summary(lossTarget, c.winCount, c.buyCountPerMode, c.buyCountPerMode, c.buyCountPerMode);
+    }
+
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
     }
 
     static String completionLine(Summary s) {
@@ -85,8 +107,9 @@ public final class RedisLoader {
         long retryLimit = 1000L * size;
         while (batch.size() < size) {
             if (++attempts > retryLimit) {
-                throw new IllegalStateException("phase " + phase + " generation exceeded batch retry cap; "
-                        + "check configured weights and multiplier limits (accepted=" + batch.size() + "/" + size + ")");
+                System.out.println("[warn] phase " + phase + " stopping with " + batch.size() + "/" + size
+                        + " after candidate limit");
+                break;
             }
             GameRuleCore.CompleteRound round = phase == 0 ? factory.generateLoss(random)
                     : phase == 1 ? factory.generateWin(random) : factory.generateBuy(buyType, random);
@@ -95,7 +118,10 @@ public final class RedisLoader {
             if (phase == 1 && (mult < c.normalMinWinMultiplier || mult > c.normalMaxWinMultiplier)) continue;
             if (buyType != 0 && (mult < c.maryMinWinMultiplier || mult > c.maryMaxWinMultiplier)) continue;
             if (!c.outputLimits.accepts(buyType!=0,mult) || !withinRoundLimits(round,c.maxConsecutiveWins,c.maxMarySpins)) continue;
-            if (mult > c.maxCentiMultiplier) continue;
+            if (mult < 0 || mult > c.maxCentiMultiplier) continue;
+            GameRuleCore.RoundClass roundClass = ResultUtil.evaluate(round).roundClass();
+            if (buyType == 0 && roundClass == GameRuleCore.RoundClass.BUY_FEATURE) continue;
+            if (buyType != 0 && roundClass != GameRuleCore.RoundClass.BUY_FEATURE) continue;
             batch.add(verified(codec, round, c.maxCentiMultiplier, buyType));
         }
         return batch;
@@ -119,7 +145,7 @@ public final class RedisLoader {
             throw new IllegalStateException("ordinary generator emitted buy");
         if (buyType != 0 && result.roundClass() != GameRuleCore.RoundClass.BUY_FEATURE)
             throw new IllegalStateException("buy generator emitted non-buy");
-        String member = codec.encode(round);
+        byte[] member = codec.encode(round);
         GameRuleCore.CompleteRound decoded = codec.decode(member);
         if (ResultUtil.redisMultiplierCenti(decoded) != mult) throw new IllegalStateException("codec verification mismatch");
         return new Member(buyType, mult, member);
@@ -135,7 +161,7 @@ public final class RedisLoader {
                 if (!(raw instanceof List<?> buckets) || buckets.isEmpty()) break;
                 List<String[]> commands = new ArrayList<>(buckets.size());
                 for (Object bucket : buckets) {
-                    int mult = Integer.parseInt(bucket.toString());
+                    int mult = Integer.parseInt(bucket instanceof byte[] bb ? new String(bb, java.nio.charset.StandardCharsets.US_ASCII) : bucket.toString());
                     String key = buyType == 0 ? RedisKeyContract.normalList(c.redisGameId, mult)
                             : RedisKeyContract.buyList(c.redisGameId, buyType, mult);
                     commands.add(new String[]{"DEL", key});
@@ -148,7 +174,7 @@ public final class RedisLoader {
     }
 
     private static void commitBatch(RedisConnection redis, List<Member> members, GeneratorConfig c) throws Exception {
-        List<String[]> commands = new ArrayList<>(members.size() * 4);
+        List<byte[][]> commands = new ArrayList<>(members.size() * 4);
         for (Member member : members) {
             int buyType = member.buyType;
             String multiplier = Integer.toString(member.mult);
@@ -156,13 +182,23 @@ public final class RedisLoader {
                     : RedisKeyContract.buyList(c.redisGameId, buyType, member.mult);
             List<String> indexes = buyType == 0 ? List.of(RedisKeyContract.normalIndex(c.redisGameId))
                     : RedisKeyContract.buyIndexesToWrite(c.redisGameId, buyType);
-            for (String index : indexes) commands.add(new String[]{"ZADD", index, multiplier, multiplier});
-            commands.add(new String[]{"RPUSH", key, member.value});
+            for (String index : indexes)
+                commands.add(bytes("ZADD", index, multiplier, multiplier));
+            commands.add(new byte[][]{
+                    "RPUSH".getBytes(java.nio.charset.StandardCharsets.UTF_8),
+                    key.getBytes(java.nio.charset.StandardCharsets.UTF_8),
+                    member.value});
             int limit = buyType == 0 ? c.maxMembersPerMultiplier : c.outputLimits.specialCap;
-            commands.add(new String[]{"LTRIM", key, "-" + limit, "-1"});
+            commands.add(bytes("LTRIM", key, "-" + limit, "-1"));
         }
         // One transaction commits complete rounds; never split a round across transactions.
-        redis.transaction(commands);
+        redis.transactionBinary(commands);
+    }
+
+    private static byte[][] bytes(String... parts) {
+        byte[][] out = new byte[parts.length][];
+        for (int i = 0; i < parts.length; i++) out[i] = parts[i].getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        return out;
     }
 
     private static final class Progress {
@@ -174,6 +210,6 @@ public final class RedisLoader {
         long loaded() { return normal + special; }
     }
 
-    private record Member(int buyType, int mult, String value) {}
+    private record Member(int buyType, int mult, byte[] value) {}
     public record Summary(int loss, int win, int buy3, int buy4, int buy5) {}
 }

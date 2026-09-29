@@ -22,7 +22,11 @@ record ServerConfig(Path configPath, Path publishDirectory, Path stateFile, Stri
             integer(p,"redis.database"), Boolean.parseBoolean(required(p,"redis.ssl")), integer(p,"redis.connect-timeout-ms"),
             integer(p,"redis.socket-timeout-ms"), integer(p,"redis.game-id"), decimal(p,"selection.feature-probability"),
             decimal(p,"selection.ordinary-loss-probability"));
-        if (!"18.234.101.161".equals(config.redisHost) || config.redisPort != 8021 || config.redisDatabase < 0 || config.gameId <= 0) {
+        boolean aws = "18.234.101.161".equals(config.redisHost) && config.redisPort == 8021;
+        boolean nas = "192.168.10.3".equals(config.redisHost) && config.redisPort == 6379;
+        boolean local = "127.0.0.1".equals(config.redisHost) && config.redisPort == 6379;
+        boolean fd = "54.172.218.28".equals(config.redisHost) && config.redisPort == 8016;
+        if ((!aws && !nas && !local && !fd) || config.redisDatabase < 0 || config.gameId <= 0) {
             throw new IllegalArgumentException("fixed Redis/game contract mismatch");
         }
         if (!Files.isRegularFile(config.publishDirectory.resolve("index.html"))) throw new IllegalArgumentException("publish/index.html missing");

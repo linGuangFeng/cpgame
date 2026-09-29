@@ -23,6 +23,11 @@ public final class GameRuleCoreTestMain {
         assertRejectedModel(rules, "H4,H0,H0,0:100");
         SpinResult loss = generator.independentLoss(request);
         if (loss.payout().signum() != 0) throw new AssertionError("loss generator emitted payout");
+        SpinResult floored = generator.generate(request, 1000);
+        verifier.verify(request, floored);
+        if (ResultUtil.positiveMultiplier(request, floored) != LuckyDragonMultiplierCatalog.floorOdd(1000)) {
+            throw new AssertionError("generate(1000) did not floor to catalog max: " + floored);
+        }
         GameRound round = new GameRound("round:test", "42", request, loss,
             new BigDecimal("999.50"), Instant.EPOCH, 0, true);
         MinimalFactCodec codec = new MinimalFactCodec();

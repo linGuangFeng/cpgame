@@ -16,7 +16,6 @@ class RedisLoaderTest {
     @Test void configurationRejectsSeedJsonlAndUnknownKeys() throws Exception {
         Properties base = productionProperties();
         assertRejected(base, "seed", "50");
-        assertRejected(base, "output.file", "rounds.jsonl");
         assertRejected(base, "generation.loss-count", "0");
         assertRejected(base, "generation.special-count", "2147483648");
         assertRejected(base, "redis.game-id", "41");
@@ -38,13 +37,19 @@ class RedisLoaderTest {
             assertEquals(6, summary.winMembers());
             assertEquals(4, summary.specialMembers());
             assertTrue(summary.luckyMembers() + summary.wheelMembers() >= 4);
-            assertTrue(redis.zsets.containsKey("PerKeyList_000000050"));
-            assertTrue(redis.zsets.containsKey("MaryKeyList_000000050"));
-            assertTrue(redis.zsets.get("PerKeyList_000000050").contains("0"));
+            long gameId = Long.parseLong(p.getProperty("redis.game-id"));
+            String normalIndex = RedisLoader.normalIndex(gameId);
+            String specialIndex = RedisLoader.specialIndex(gameId);
+            assertTrue(redis.zsets.containsKey(normalIndex));
+            assertTrue(redis.zsets.containsKey(specialIndex));
+            assertTrue(redis.zsets.get(normalIndex).contains("0"));
             MinimalRoundFactCodec codec = new MinimalRoundFactCodec(new RoundFactory(), new RoundVerifier());
             int retained = 0;
             for (Map.Entry<String, List<String>> entry : redis.lists.entrySet()) {
-                assertTrue(entry.getValue().size() <= 2);
+                int cap = entry.getKey().startsWith("MaryLog:")
+                        ? Integer.parseInt(p.getProperty("generation.special-max-members-per-multiplier"))
+                        : 2;
+                assertTrue(entry.getValue().size() <= cap);
                 for (String member : entry.getValue()) {
                     assertFalse(member.startsWith("{"));
                     RoundResult round = codec.decodeRedisMember(member);

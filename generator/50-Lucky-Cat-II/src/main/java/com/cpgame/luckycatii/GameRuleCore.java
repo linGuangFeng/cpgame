@@ -11,63 +11,92 @@ import java.util.random.RandomGenerator;
 
 /** Single rule core shared by the generator, Redis loader and controller restore path. */
 public final class GameRuleCore {
-    private final RandomCandidateGenerator candidates;
     private final RoundFactory roundFactory;
     private final RoundVerifier verifier;
     private final RandomGenerator random;
+    private final IndependentLossGenerator losses;
+    private final IndependentWin wins;
+    private final IndependentSpecial specials;
 
     public GameRuleCore() {
-        this(new RandomCandidateGenerator(), new RoundFactory(), new RoundVerifier(), new SecureRandom());
+        this(SymbolWeights.empiricalDefaults(), ReelPatterns.defaults(),
+                new RoundFactory(), new RoundVerifier(), new SecureRandom());
     }
 
-    private GameRuleCore(RandomCandidateGenerator candidates, RoundFactory roundFactory,
+    public GameRuleCore(SymbolWeights weights) {
+        this(weights, ReelPatterns.defaults(), new RoundFactory(), new RoundVerifier(), new SecureRandom());
+    }
+
+    public GameRuleCore(SymbolWeights weights, ReelPatterns patterns) {
+        this(weights, patterns, new RoundFactory(), new RoundVerifier(), new SecureRandom());
+    }
+
+    private GameRuleCore(SymbolWeights weights, ReelPatterns patterns, RoundFactory roundFactory,
                          RoundVerifier verifier, RandomGenerator random) {
-        this.candidates = candidates;
         this.roundFactory = roundFactory;
         this.verifier = verifier;
         this.random = random;
+        if (random == null) {
+            this.losses = null;
+            this.wins = null;
+            this.specials = null;
+        } else {
+            SymbolWeights resolved = weights == null ? SymbolWeights.empiricalDefaults() : weights;
+            ReelPatterns shapes = patterns == null ? ReelPatterns.defaults() : patterns;
+            this.losses = new IndependentLossGenerator(resolved, shapes);
+            this.wins = new IndependentWin(resolved, shapes);
+            this.specials = new IndependentSpecial(resolved, shapes);
+        }
     }
 
     public static GameRuleCore forTesting(long seed) {
-        return new GameRuleCore(new RandomCandidateGenerator(),
+        return new GameRuleCore(SymbolWeights.empiricalDefaults(), ReelPatterns.defaults(),
                 new RoundFactory(RoundFactory.deterministicIdentitySource(seed ^ 0x50C47L)),
                 new RoundVerifier(), new SplittableRandom(seed));
     }
 
     public static GameRuleCore forRestoration() {
-        return new GameRuleCore(null, new RoundFactory(), new RoundVerifier(), null);
+        return new GameRuleCore(null, null, new RoundFactory(), new RoundVerifier(), null);
     }
 
     public RoundResult generateIndependentLoss(BigDecimal betSize, int betLevel) {
-        return finish(requireGen().independentLoss(random), betSize, betLevel);
+        requireRandom();
+        return finish(losses.generate(random), betSize, betLevel);
     }
 
     public RoundResult generateIndependentLoss(BigDecimal betSize, int betLevel, RandomGenerator rng) {
-        return finish(requireGen().independentLoss(rng), betSize, betLevel);
+        requireRandom();
+        return finish(losses.generate(rng), betSize, betLevel);
     }
 
     public RoundResult generateOrdinaryWin(BigDecimal betSize, int betLevel) {
-        return finish(requireGen().ordinaryWin(random), betSize, betLevel);
+        requireRandom();
+        return finish(wins.generate(random), betSize, betLevel);
     }
 
     public RoundResult generateOrdinaryWin(BigDecimal betSize, int betLevel, RandomGenerator rng) {
-        return finish(requireGen().ordinaryWin(rng), betSize, betLevel);
+        requireRandom();
+        return finish(wins.generate(rng), betSize, betLevel);
     }
 
     public RoundResult generateSpecial(BigDecimal betSize, int betLevel) {
-        return finish(requireGen().special(random), betSize, betLevel);
+        requireRandom();
+        return finish(specials.generate(random), betSize, betLevel);
     }
 
     public RoundResult generateSpecial(BigDecimal betSize, int betLevel, RandomGenerator rng) {
-        return finish(requireGen().special(rng), betSize, betLevel);
+        requireRandom();
+        return finish(specials.generate(rng), betSize, betLevel);
     }
 
     public RoundResult generateLuckyRespin(BigDecimal betSize, int betLevel, RandomGenerator rng) {
-        return finish(requireGen().luckyRespin(rng), betSize, betLevel);
+        requireRandom();
+        return finish(specials.lucky(rng), betSize, betLevel);
     }
 
     public RoundResult generateMultiplierWheel(BigDecimal betSize, int betLevel, RandomGenerator rng) {
-        return finish(requireGen().multiplierWheel(rng), betSize, betLevel);
+        requireRandom();
+        return finish(specials.wheel(rng), betSize, betLevel);
     }
 
     public RoundResult restore(RoundFacts facts) {
@@ -80,19 +109,13 @@ public final class GameRuleCore {
         return finish(candidate, betSize, betLevel);
     }
 
-    public int trainingKernelCount() {
-        return requireGen().trainingKernelCount();
-    }
-
     private RoundResult finish(RoundCandidate candidate, BigDecimal betSize, int betLevel) {
-        if (!GameRules.legalBet(betSize, betLevel)) throw new IllegalArgumentException("非法下注档位");
         RoundResult result = roundFactory.create(candidate, betSize, betLevel);
         verifier.verify(result);
         return result;
     }
 
-    private RandomCandidateGenerator requireGen() {
-        if (candidates == null || random == null) throw new IllegalStateException("restore-only GameRuleCore 禁止生成");
-        return candidates;
+    private void requireRandom() {
+        if (random == null) throw new IllegalStateException("restore-only GameRuleCore 禁止生成");
     }
 }

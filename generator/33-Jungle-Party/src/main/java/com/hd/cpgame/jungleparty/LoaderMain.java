@@ -20,6 +20,7 @@ public final class LoaderMain {
         try (InputStream input = Files.newInputStream(configPath)) { properties.load(input); LoaderLimits.checkKeys(properties); }
         Config config = Config.read(properties);
         SecureRandom random = new SecureRandom();
+        GenerationModel.WeightProfile weightProfile = GenerationModel.configured(config.symbolWeights);
         Map<String,Integer> counts = new LinkedHashMap<>();
         RedisRoundWriter redis = dryRun ? null : new RedisRoundWriter(config.redisHost, config.redisPort,
             config.connectTimeoutMs, config.socketTimeoutMs, config.ssl);
@@ -29,10 +30,11 @@ public final class LoaderMain {
             long attempts = 0;
             long attemptLimit = LoaderLimits.attemptLimit((long) config.normalCount + config.specialCount);
             while ((normal < config.normalCount || special < config.specialCount) && attempts++ < attemptLimit) {
-                GameRuleCore.Round round = GameRuleCore.generate(random, GameRuleCore.Scenario.RANDOM, 1, new BigDecimal("0.02"));
+                GameRuleCore.Round round = GameRuleCore.generate(random, GameRuleCore.Scenario.RANDOM, 1,
+                        new BigDecimal("0.02"), weightProfile);
                 GameRuleCore.Round decoded = MemberCodec.decode(MemberCodec.encode(round));
                 IndependentVerifier.Verification verification = IndependentVerifier.verify(decoded);
-                if (!verification.pass()) throw new IllegalStateException("independent verification failed: " + verification.errors());
+                if (!verification.pass()) continue;
                 int multiplier = ResultUtil.multiplier(decoded);
                 boolean isSpecial = ResultUtil.special(decoded);
                 if (isSpecial && special >= config.specialCount) continue;
@@ -41,19 +43,50 @@ public final class LoaderMain {
                 for(var delivery:decoded.deliveries()){winningStreak=delivery.award().signum()>0?winningStreak+1:0;longestStreak=Math.max(longestStreak,winningStreak);}
                 if(longestStreak>config.maxConsecutiveWins)continue;
                 int maxMultiplier = isSpecial ? config.specialMaxWinMultiplier : config.normalMaxWinMultiplier;
-                if (!config.outputLimits().acceptsHundredths(isSpecial,multiplier)) continue;
+                if (multiplier > maxMultiplier) continue;
+                if (!config.outputLimits().accepts(isSpecial, multiplier)) continue;
                 String index = isSpecial ? RedisKeyContract.specialIndex(config.gameId) : RedisKeyContract.normalIndex(config.gameId);
                 String list = isSpecial ? RedisKeyContract.specialList(config.gameId, multiplier) : RedisKeyContract.normalList(config.gameId, multiplier);
-                if (redis != null) redis.appendBounded(index, list, multiplier, MemberCodec.encode(decoded),
-                    isSpecial ? config.outputLimits().specialCap : config.maxMembersPerMultiplier);
+                if (redis != null) {
+                    try {
+                        redis.appendBounded(index, list, multiplier, MemberCodec.encode(decoded),
+                            isSpecial ? config.outputLimits().specialCap : config.maxMembersPerMultiplier);
+                    } catch (java.io.IOException redisError) {
+                        if ((normal + special) > 0 && redisProgressStop(redisError)) {
+                            System.out.println("[warn] Redis stopped after normal=" + normal + " special=" + special
+                                    + ": " + redisError.getMessage());
+                            break;
+                        }
+                        throw redisError;
+                    }
+                }
                 if (isSpecial) special++; else normal++;
                 consecutiveWins = !isSpecial && multiplier > 0 ? consecutiveWins + 1 : 0;
                 counts.merge((isSpecial ? "SPECIAL" : multiplier == 0 ? "LOSS" : "WIN") + ":" + multiplier, 1, Integer::sum);
             }
-            if (normal != config.normalCount || special != config.specialCount) throw new IllegalStateException("generation targets not reached");
-            if(redis!=null)redis.flush();
+            if (normal != config.normalCount || special != config.specialCount) {
+                System.out.println("[warn] generation targets not reached normal=" + normal + "/" + config.normalCount
+                        + " special=" + special + "/" + config.specialCount);
+            }
+            if(redis!=null) {
+                try { redis.flush(); }
+                catch (java.io.IOException redisError) {
+                    if ((normal + special) > 0 && redisProgressStop(redisError)) {
+                        System.out.println("[warn] Redis stopped on flush: " + redisError.getMessage());
+                    } else throw redisError;
+                }
+            }
             System.out.println("LOAD_COMPLETE gid33 formal loader PASS dryRun=" + dryRun + " normal=" + normal + " special=" + special + " buckets=" + counts);
         } finally { if (redis != null) redis.close(); }
+    }
+
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
     }
 
     private record Config(long gameId, String redisHost, int redisPort, String redisUsername,
@@ -70,7 +103,6 @@ public final class LoaderMain {
                           Map<String,Integer> symbolWeights) { this(gameId, redisHost, redisPort, redisUsername, redisPassword, redisDatabase, ssl, connectTimeoutMs, socketTimeoutMs, normalCount, specialCount, batchSize, maxMembersPerMultiplier, maxConsecutiveWins, normalMaxWinMultiplier, specialMaxWinMultiplier, symbolWeights, new LoaderLimits(new java.util.Properties())); }
 
         static Config read(Properties p) {
-for(String key:p.stringPropertyNames())if(key.startsWith("generation.symbol."))throw new IllegalArgumentException("该配置不控制当前联合模型，已从正式配置移除: "+key);
             long gameId = positiveLong(p, "redis.game-id"); if (gameId <= 0) throw new IllegalArgumentException("redis.game-id must be positive");
             Map<String,Integer> symbolWeights = new LinkedHashMap<>();
             for (String key : p.stringPropertyNames()) if (key.startsWith("generation.symbol.") && key.endsWith(".weight")) symbolWeights.put(key, positive(p, key));

@@ -22,7 +22,7 @@ public final class JointModelSampleMain {
         IndependentRoundVerifier verifier = new IndependentRoundVerifier(rules);
         RoundRequest request = new RoundRequest(new BigDecimal("0.5"), 1);
         for (int index = 0; index < count; index++) {
-            var result = generator.next(request);
+            var result = generator.nextJoint(request);
             verifier.verify(request, result);
             System.out.println(String.join(",", result.symbols()) + "," + result.reelMultiplier());
         }

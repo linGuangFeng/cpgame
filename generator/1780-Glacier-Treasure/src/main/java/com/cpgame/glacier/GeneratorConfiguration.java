@@ -39,6 +39,7 @@ public final class GeneratorConfiguration {
         "generation.max-consecutive-wins", "generation.max-mary-spins",
         "generation.normal-min-win-multiplier", "generation.normal-max-win-multiplier",
         "generation.mary-min-win-multiplier", "generation.mary-max-win-multiplier",
+        "generation.special-min-win-multiplier", "generation.special-max-win-multiplier", "generation.maximum-round-multiplier",
         "generation.entry-switch-every", "generation.special-scatter-boost",
         "generation.loss.constructive-attempts", "generation.loss.fallback-samples",
         "generation.cap.scatter-units-board", "generation.cap.scatter-units-reel",
@@ -52,6 +53,7 @@ public final class GeneratorConfiguration {
     final long redisGameId;
     final int lossCount, winCount, specialCount, batchSize, maxMembersPerMultiplier;
     final int maxConsecutiveWins, maxMarySpins;
+    final int maximumRoundMultiplier;
     final int normalMinWinMultiplier, normalMaxWinMultiplier, maryMinWinMultiplier, maryMaxWinMultiplier;
     final int entrySwitchEvery, specialScatterBoost, lossConstructiveAttempts, lossFallbackSamples;
     final int maxScatterUnitsBoard, maxScatterUnitsReel, maxScatterSymbolsColumn, maxScatterSymbolsFree;
@@ -61,6 +63,7 @@ public final class GeneratorConfiguration {
 
     private GeneratorConfiguration(Properties p) {
         outputLimits = new LoaderLimits(p);
+        maximumRoundMultiplier=p.containsKey("generation.maximum-round-multiplier")?integer(p,"generation.maximum-round-multiplier",1,Integer.MAX_VALUE):Integer.MAX_VALUE;
         rejectUnknown(p);
         redisHost = required(p, "redis.host");
         redisPort = integer(p, "redis.port", 1, 65535);

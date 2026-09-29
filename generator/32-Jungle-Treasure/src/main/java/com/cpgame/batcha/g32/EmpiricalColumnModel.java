@@ -20,16 +20,43 @@ public final class EmpiricalColumnModel {
     private final Map<String, Integer> columnTotals = new HashMap<>();
     private final Map<String, List<Block>> fills = new HashMap<>();
     private final Map<String, Integer> fillTotals = new HashMap<>();
+    private final Map<String, List<WeightedBlock>> weightedColumns = new HashMap<>();
+    private final Map<String, List<WeightedBlock>> weightedFills = new HashMap<>();
+    private final Map<String, Long> observedNormal = new HashMap<>();
+    private final Map<String, Long> observedSpecial = new HashMap<>();
+    private final Map<String, Long> observedRefill = new HashMap<>();
 
     private EmpiricalColumnModel() {
         load("/jt32-column-model.tsv", COLUMN_SHA256, columns, columnTotals, true);
         load("/jt32-fill-tokens.tsv", FILL_SHA256, fills, fillTotals, false);
+        count(columns, "PAID_INITIAL|", observedNormal);
+        count(columns, "FREE_INITIAL|", observedSpecial);
+        count(fills, "FILL|", observedRefill);
     }
 
     public static EmpiricalColumnModel instance() { return INSTANCE; }
 
+    public static EmpiricalColumnModel configured(Map<String, Double> weights) {
+        if (weights.isEmpty()) return INSTANCE;
+        EmpiricalColumnModel model = new EmpiricalColumnModel();
+        Map<String, Double> adjustments = adjustments(model, weights);
+        model.buildWeighted(model.columns, model.weightedColumns, adjustments, false);
+        model.buildWeighted(model.fills, model.weightedFills, adjustments, true);
+        return model;
+    }
+
+    public static long observedWeight(String symbol, String mode) {
+        Map<String, Long> values = switch (mode) {
+            case "normal" -> INSTANCE.observedNormal;
+            case "special" -> INSTANCE.observedSpecial;
+            case "refill" -> INSTANCE.observedRefill;
+            default -> throw new IllegalArgumentException("mode " + mode);
+        };
+        return values.getOrDefault(symbol, 0L);
+    }
+
     public List<String> drawReel(String entry, int column, SecureRandom random) {
-        return draw(columns, columnTotals, entry + "|" + column, random).symbols();
+        return draw(columns, columnTotals, weightedColumns, entry + "|" + column, random).symbols();
     }
 
     public List<String> drawFill(String entry, int column, int remain, SecureRandom random) {
@@ -38,7 +65,7 @@ public final class EmpiricalColumnModel {
             return List.of(fallback(remain, column, random));
         }
         for (int attempt = 0; attempt < 16; attempt++) {
-            List<String> tokens = draw(fills, fillTotals, entry + "|" + column, random).symbols();
+            List<String> tokens = draw(fills, fillTotals, weightedFills, entry + "|" + column, random).symbols();
             String token = tokens.getFirst();
             int height = token.charAt(0) - '0';
             if (height >= 1 && height <= remain) return tokens;
@@ -57,7 +84,18 @@ public final class EmpiricalColumnModel {
         return "1T";
     }
 
-    private static Block draw(Map<String, List<Block>> slots, Map<String, Integer> totals, String key, SecureRandom random) {
+    private static Block draw(Map<String, List<Block>> slots, Map<String, Integer> totals,
+                              Map<String, List<WeightedBlock>> weighted, String key, SecureRandom random) {
+        List<WeightedBlock> adjusted = weighted.get(key);
+        if (adjusted != null) {
+            double target = random.nextDouble() * adjusted.get(adjusted.size() - 1).cumulative();
+            int lo = 0, hi = adjusted.size() - 1;
+            while (lo < hi) {
+                int mid = (lo + hi) >>> 1;
+                if (target < adjusted.get(mid).cumulative()) hi = mid; else lo = mid + 1;
+            }
+            return new Block(adjusted.get(lo).symbols(), 0);
+        }
         List<Block> blocks = slots.get(key);
         Integer total = totals.get(key);
         if (blocks == null || total == null || total <= 0) throw new IllegalArgumentException("Unobserved dealing entry " + key);
@@ -68,6 +106,58 @@ public final class EmpiricalColumnModel {
             if (target < blocks.get(mid).cumulative()) hi = mid; else lo = mid + 1;
         }
         return blocks.get(lo);
+    }
+
+    private void buildWeighted(Map<String, List<Block>> source, Map<String, List<WeightedBlock>> target,
+                               Map<String, Double> adjustments, boolean refill) {
+        for (Map.Entry<String, List<Block>> entry : source.entrySet()) {
+            String mode = refill ? "refill" : entry.getKey().startsWith("FREE_INITIAL|") ? "special" : "normal";
+            int previous = 0;
+            double sum = 0;
+            List<WeightedBlock> blocks = new ArrayList<>();
+            for (Block block : entry.getValue()) {
+                double weight = block.cumulative() - previous;
+                previous = block.cumulative();
+                for (String token : block.symbols()) {
+                    String symbol = token.substring(1);
+                    weight *= adjustments.getOrDefault(mode + "|" + symbol, 1.0);
+                }
+                sum += weight;
+                blocks.add(new WeightedBlock(block.symbols(), sum));
+            }
+            if (!Double.isFinite(sum) || sum <= 0) throw new IllegalArgumentException("Invalid model weights: " + entry.getKey());
+            target.put(entry.getKey(), List.copyOf(blocks));
+        }
+    }
+
+    private static Map<String, Double> adjustments(EmpiricalColumnModel model, Map<String, Double> configured) {
+        Map<String, Double> result = new HashMap<>();
+        for (String symbol : List.of("A", "H1", "H2", "H3", "H4", "H5", "H6", "J", "K", "Q", "T", "Scat", "Wild")) {
+            for (String mode : List.of("normal", "special", "refill")) {
+                double observed = observedWeight(symbol, mode);
+                String key = "generation.symbol." + symbol + "." + mode + "-weight";
+                double requested = configured.getOrDefault(key, observed);
+                if (observed == 0) {
+                    if (requested != 0) throw new IllegalArgumentException(key + " has no observed dealing entry");
+                    result.put(mode + "|" + symbol, 1.0);
+                } else {
+                    result.put(mode + "|" + symbol, requested / observed);
+                }
+            }
+        }
+        return Map.copyOf(result);
+    }
+
+    private static void count(Map<String, List<Block>> source, String prefix, Map<String, Long> target) {
+        for (Map.Entry<String, List<Block>> entry : source.entrySet()) {
+            if (!entry.getKey().startsWith(prefix)) continue;
+            int previous = 0;
+            for (Block block : entry.getValue()) {
+                int count = block.cumulative() - previous;
+                previous = block.cumulative();
+                for (String token : block.symbols()) target.merge(token.substring(1), (long) count, Long::sum);
+            }
+        }
     }
 
     private static void load(String resource, String expected, Map<String, List<Block>> slots,
@@ -94,4 +184,5 @@ public final class EmpiricalColumnModel {
     }
 
     private record Block(List<String> symbols, int cumulative) { }
+    private record WeightedBlock(List<String> symbols, double cumulative) { }
 }

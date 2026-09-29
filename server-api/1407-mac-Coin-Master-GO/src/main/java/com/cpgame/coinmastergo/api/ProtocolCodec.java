@@ -55,11 +55,7 @@ public class ProtocolCodec {
                 : session.history.isEmpty() ? null : session.history.getFirst().round;
         int betLevel = round == null ? 1 : round.betLevel;
         BigDecimal betSize = round == null ? new BigDecimal("0.02") : round.betSize;
-        List<Map<String, Object>> matches = new ArrayList<>();
-        for (WinMatch match : CoinMasterResultUtil.evaluate(last.rskl, betLevel, betSize, last.rpx).matches()) {
-            matches.add(linked("sk", match.symbol, "wa", match.win.setScale(2).toPlainString(),
-                    "wmk", match.coordinates));
-        }
+        List<Map<String, Object>> matches = historyMatchObjects(last.rskl, betLevel, betSize);
         return linked("ba", last.ba, "bl", betLevel, "bs", betSize,
                 "frwa", last.frwa, "fsn", last.fsn, "gfl", last.gfl, "gt", last.gt,
                 "nfsc", last.nfsc, "pb", last.pb, "rpx", last.rpx, "rskl", last.rskl,
@@ -130,13 +126,22 @@ public class ProtocolCodec {
         return detail;
     }
 
-    private Map<String, Object> historyStep(RoundPlan round, SpinStep step, int ordinal) {
-        List<Map<String, Object>> matchObjects = new ArrayList<>();
-        CoinMasterResultUtil.Evaluation evaluated = CoinMasterResultUtil.evaluate(
-                step.rskl, round.betLevel, round.betSize, step.rpx);
-        for (WinMatch match : evaluated.matches()) {
-            matchObjects.add(linked("sk", match.symbol, "wa", match.win.setScale(2).toPlainString(), "wmk", match.coordinates));
+    /**
+     * Origin log-view {@code wmkl[].wa} is the line pay before {@code rpx}.
+     * The original page multiplies by the round multiplier itself; including {@code rpx}
+     * here doubles the amount shown next to the paytable formula.
+     */
+    private List<Map<String, Object>> historyMatchObjects(List<String> board, int betLevel, BigDecimal betSize) {
+        List<Map<String, Object>> matches = new ArrayList<>();
+        for (WinMatch match : CoinMasterResultUtil.evaluate(board, betLevel, betSize, 1).matches()) {
+            matches.add(linked("sk", match.symbol, "wa", match.win.setScale(2).toPlainString(),
+                    "wmk", match.coordinates));
         }
+        return matches;
+    }
+
+    private Map<String, Object> historyStep(RoundPlan round, SpinStep step, int ordinal) {
+        List<Map<String, Object>> matchObjects = historyMatchObjects(step.rskl, round.betLevel, round.betSize);
         String bid = ordinal == 0 ? round.paidBid : round.paidBid + "-" + ordinal;
         return linked("ba", step.ba, "bid", bid, "bl", round.betLevel, "bs", round.betSize,
                 "ca", round.createdAt, "frwa", step.frwa, "fsn", step.fsn, "gfl", step.gfl,

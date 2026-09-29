@@ -124,7 +124,7 @@ public final class GeneratorConfiguration {
         Set<String> allowed = new java.util.HashSet<>(FIXED_KEYS);
         for (String symbol : symbolOrder()) allowed.add(weightKey(symbol));
         for (String key : values.stringPropertyNames()) {
-            if (!allowed.contains(key)) throw new IllegalArgumentException("未知或不允许的配置项：" + key);
+            if (!allowed.contains(key)) {if(key.toLowerCase(java.util.Locale.ROOT).contains("seed"))throw new IllegalArgumentException("正式配置禁止 seed: "+key);System.err.println("[warn] unused generator.properties key: "+key);};
         }
     }
 

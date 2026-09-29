@@ -18,6 +18,29 @@ public final class RedisConnection implements AutoCloseable {
         try{if(!c.redisPassword.isBlank()&&c.redisUsername.isBlank())r.command("AUTH",c.redisPassword);if(!c.redisPassword.isBlank()&&!c.redisUsername.isBlank())r.command("AUTH",c.redisUsername,c.redisPassword);r.command("SELECT",Integer.toString(c.redisDatabase));if(!"PONG".equals(r.command("PING")))throw new IOException("Redis PING did not return PONG");return r;}catch(Exception e){r.close();throw e;}
     }
     public synchronized Object command(String...args)throws IOException{write(args);out.flush();return read();}
+    public synchronized Object commandBinary(byte[]...args)throws IOException{writeBinary(args);out.flush();return read();}
+    public synchronized List<Object> transactionBinary(List<byte[][]> commands) throws IOException {
+        write(new String[]{"MULTI"});
+        for (int start = 0; start < commands.size(); start += 512) {
+            int end = Math.min(commands.size(), start + 512);
+            for (int i = start; i < end; i++) writeBinary(commands.get(i));
+            if (end == commands.size()) write(new String[]{"EXEC"});
+            out.flush();
+            if (start == 0 && !"OK".equals(read())) throw new IOException("MULTI failed");
+            for (int i = start; i < end; i++) {
+                if (!"QUEUED".equals(read())) throw new IOException("command not queued");
+            }
+        }
+        if (commands.isEmpty()) {
+            write(new String[]{"EXEC"});
+            out.flush();
+            if (!"OK".equals(read())) throw new IOException("MULTI failed");
+        }
+        Object result = read();
+        if (!(result instanceof List<?> list) || list.size() != commands.size())
+            throw new IOException("EXEC response mismatch");
+        return new ArrayList<>(list);
+    }
     public synchronized List<Object> transaction(List<String[]> commands) throws IOException {
         write(new String[]{"MULTI"});
         // Bound unread QUEUED replies while keeping a usual 100-round batch in one round trip.
@@ -41,10 +64,11 @@ public final class RedisConnection implements AutoCloseable {
             throw new IOException("EXEC response mismatch");
         return new ArrayList<>(list);
     }
-    private void write(String[]args)throws IOException{out.write(("*"+args.length+"\r\n").getBytes(StandardCharsets.US_ASCII));for(String a:args){byte[]b=a.getBytes(StandardCharsets.UTF_8);out.write(("$"+b.length+"\r\n").getBytes(StandardCharsets.US_ASCII));out.write(b);out.write('\r');out.write('\n');}}
+    private void write(String[]args)throws IOException{byte[][] bin=new byte[args.length][];for(int i=0;i<args.length;i++)bin[i]=args[i].getBytes(StandardCharsets.UTF_8);writeBinary(bin);}
+    private void writeBinary(byte[][]args)throws IOException{out.write(("*"+args.length+"\r\n").getBytes(StandardCharsets.US_ASCII));for(byte[] b:args){out.write(("$"+b.length+"\r\n").getBytes(StandardCharsets.US_ASCII));out.write(b);out.write('\r');out.write('\n');}}
     private Object read()throws IOException{int p=in.read();if(p<0)throw new EOFException("Redis closed connection");return switch(p){case '+'->line();case '-'->throw new IOException("Redis error: "+line());case ':'->Long.parseLong(line());case '$'->bulk();case '*'->array();default->throw new IOException("invalid RESP prefix");};}
     private String line()throws IOException{ByteArrayOutputStream b=new ByteArrayOutputStream();int prev=-1;while(true){int cur=in.read();if(cur<0)throw new EOFException();if(prev=='\r'&&cur=='\n')return b.toString(StandardCharsets.UTF_8);if(prev>=0)b.write(prev);prev=cur;}}
-    private Object bulk()throws IOException{int n=Integer.parseInt(line());if(n<0)return null;byte[]b=in.readNBytes(n);if(b.length!=n||in.read()!='\r'||in.read()!='\n')throw new EOFException();return new String(b,StandardCharsets.UTF_8);}
+    private Object bulk()throws IOException{int n=Integer.parseInt(line());if(n<0)return null;byte[]b=in.readNBytes(n);if(b.length!=n||in.read()!='\r'||in.read()!='\n')throw new EOFException();return b; }
     private Object array()throws IOException{int n=Integer.parseInt(line());if(n<0)return null;List<Object>v=new ArrayList<>();for(int i=0;i<n;i++)v.add(read());return v;}
     @Override public void close()throws IOException{socket.close();}
 }

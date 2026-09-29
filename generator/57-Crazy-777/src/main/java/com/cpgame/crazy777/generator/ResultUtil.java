@@ -110,6 +110,48 @@ public final class ResultUtil {
         return evaluateRegularLines(board);
     }
 
+    /**
+     * 历史页会丢弃 rskl 中的 BLANK，再把每轴剩余的 2/3 个符号居中显示。
+     * 这可能把协议坐标上不成线的符号画成肉眼可见的三连。生成阶段用本方法
+     * 排除这种“画面像中奖、协议却是 0 奖”的候选；实际结算仍只认固定坐标线。
+     */
+    public static boolean hasPresentationOnlyWin(List<String> board, boolean freeMode) {
+        Map<String, String> actual = expectedWins(board, freeMode);
+        Map<String, String> displayed = evaluateDisplayedLines(board);
+        return actual.isEmpty() && !displayed.isEmpty();
+    }
+
+    static Map<String, String> evaluateDisplayedLines(List<String> board) {
+        if (board == null || board.size() != GameRules.BOARD_SIZE) {
+            throw new IllegalArgumentException("rskl 必须恰好包含 15 项");
+        }
+        List<List<String>> rowsByReel = new ArrayList<>(GameRules.REEL_COUNT);
+        for (int reel = 0; reel < GameRules.REEL_COUNT; reel++) {
+            List<String> symbols = new ArrayList<>(3);
+            for (int pos = 0; pos < GameRules.SLOTS_PER_REEL; pos++) {
+                String symbol = board.get(reel * GameRules.SLOTS_PER_REEL + pos);
+                if (!"BLANK".equals(symbol)) symbols.add(symbol);
+            }
+            if (symbols.size() == 2) {
+                rowsByReel.add(List.of(symbols.get(0), "BLANK", symbols.get(1)));
+            } else if (symbols.size() == 3) {
+                rowsByReel.add(List.copyOf(symbols));
+            } else {
+                throw new IllegalArgumentException("每轴历史画面必须包含 2 或 3 个可见符号");
+            }
+        }
+        Map<String, String> wins = new LinkedHashMap<>();
+        for (int line = 0; line < GameRules.PAYLINES.length; line++) {
+            List<String> symbols = new ArrayList<>(GameRules.REEL_COUNT);
+            for (int reel = 0; reel < GameRules.REEL_COUNT; reel++) {
+                symbols.add(rowsByReel.get(reel).get(GameRules.PAYLINES[line][reel] - 1));
+            }
+            String reward = bestReward(symbols);
+            if (reward != null) wins.put(String.valueOf(line), reward);
+        }
+        return wins;
+    }
+
     public static BigDecimal payout(Map<String, String> wmkl, int bl, BigDecimal bs, int rpx) {
         BigDecimal total = BigDecimal.ZERO;
         for (String reward : wmkl.values()) {

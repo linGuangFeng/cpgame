@@ -2,8 +2,8 @@
   "schemaVersion": "3.0",
   "gameId": 2300,
   "gameName": "Monster Slayer",
-  "rulesVersion": "2300-monster-slayer-v4-base-bet-multiplier",
-  "rulesHash": "86af201a56e901c629e2f8d202b515b5d31fad77956ac8353b6b8886e385b61c",
+  "rulesVersion": "2300-monster-slayer-v7-plain-animation-codec",
+  "rulesHash": "1da71873fdf85cb840ee9033af88bb0855c68114fd1cb8e4d0b9c8fb42652996",
   "behaviorIds": [
     "B001_ENTRY_BOOTSTRAP",
     "B002_LANGUAGE",

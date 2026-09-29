@@ -48,18 +48,6 @@ final class GameRuleDefinition {
         return odds.get(matchedReels - MINIMUM_WIN_REELS);
     }
 
-    static void validateBet(BigDecimal bet, int level) {
-        if (BET_SIZES.stream().noneMatch(candidate -> candidate.compareTo(bet) == 0)) {
-            throw new IllegalArgumentException("Unsupported bet size");
-        }
-        if (level < 1 || level > 10) {
-            throw new IllegalArgumentException("Unsupported level");
-        }
-        if (stake(bet, level).compareTo(MINIMUM_EVIDENCED_TOTAL_STAKE) < 0) {
-            throw new IllegalArgumentException("Only evidenced total stake >= 3 is enabled");
-        }
-    }
-
     static BigDecimal stake(BigDecimal bet, int level) {
         return ResultMath.money(bet.multiply(BigDecimal.valueOf((long) level * BASE_BET_FACTOR)));
     }

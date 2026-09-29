@@ -64,6 +64,10 @@
                 <mkdir dir="${project.basedir}/dist"/>
                 <copy file="${project.build.directory}/crazybirds-loader.jar"
                       tofile="${project.basedir}/dist/crazybirds-loader.jar" overwrite="true"/>
+                <copy file="${project.build.directory}/crazybirds-loader.jar"
+                      tofile="${project.basedir}/dist/crazybirds-generator-1.0.0-shaded.jar" overwrite="true"/>
+                <copy file="${project.build.directory}/crazybirds-generator-1.0.0.jar"
+                      tofile="${project.basedir}/dist/crazybirds-generator-1.0.0.jar" overwrite="true"/>
               </target>
             </configuration>
           </execution>

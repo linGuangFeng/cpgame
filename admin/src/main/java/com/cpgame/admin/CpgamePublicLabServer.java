@@ -527,11 +527,13 @@ public class CpgamePublicLabServer {
             send(exchange, 503, "text/plain; charset=UTF-8", "缓存查看未启用".getBytes(StandardCharsets.UTF_8));
             return;
         }
-        CacheKeyRequest request = readCacheKeyRequest(exchange);
-        if (request == null) return;
+        // The route and server configuration define the entire deletion scope.
+        // Older pages send every bucket key, often exceeding the ordinary 256 KiB limit.
+        // Discard that legacy body as a stream, without parsing or trusting its keys.
+        exchange.getRequestBody().transferTo(OutputStream.nullOutputStream());
         try {
             sendJson(exchange, 200, cache.deleteAll(
-                URLDecoder.decode(encodedDirectory, StandardCharsets.UTF_8), request.indexKeys, request.keys));
+                URLDecoder.decode(encodedDirectory, StandardCharsets.UTF_8)));
         } catch (IllegalArgumentException error) {
             send(exchange, 400, "text/plain; charset=UTF-8", error.getMessage().getBytes(StandardCharsets.UTF_8));
         } catch (RuntimeException error) {

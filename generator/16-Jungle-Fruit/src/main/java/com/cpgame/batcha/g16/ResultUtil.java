@@ -10,7 +10,6 @@ import java.util.Map;
 public final class ResultUtil {
     public BoardResult evaluate(List<String> board, BigDecimal betSize, int betLevel) {
         if (board == null || board.size() != 36) throw new IllegalArgumentException("board must contain 36 symbols");
-        GameRuleCore.validateBet(betSize, betLevel);
         Map<String, List<Integer>> positions = new LinkedHashMap<>();
         for (String symbol : GameRuleCore.PAYING_SYMBOLS) positions.put(symbol, new ArrayList<>());
         for (int index = 0; index < 36; index++) {

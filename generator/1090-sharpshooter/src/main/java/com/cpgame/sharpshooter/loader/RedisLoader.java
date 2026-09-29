@@ -16,8 +16,16 @@ RedisKeys.prefix(game);
         GameRuleCore rules=new GameRuleCore();RoundGenerator generator=new RoundGenerator(new SecureRandom(),rules);ResultUtil util=new ResultUtil(rules);RoundCodec codec=new RoundCodec();Map<String,Integer> counts=new TreeMap<>();
         LoaderLimits limits = new LoaderLimits(p);
         loss = limits.lossTarget(loss);
-        long[] attempts = {0};
-        try(Jedis jedis=new Jedis(host,port,cfg.build())){jedis.connect();for(int i=0;i<loss;i++)if (!write(jedis,game,generator.ordinary(false),util,codec, cap, counts, limits, attempts)) i--;for(int i=0;i<win;i++)if (!write(jedis,game,generator.ordinary(true),util,codec, cap, counts, limits, attempts)) i--;for(int i=0;i<special;i++)if (!write(jedis,game,generator.freeSpins(),util,codec, cap, counts, limits, attempts)) i--;System.out.printf(Locale.ROOT,"LOAD_COMPLETE complete rounds loss=%d win=%d special=%d rulesHash=%s buckets=%s%n",loss,win,special,GameRuleCore.RULES_HASH,counts);}
+        long[][] attempts={{0},{0},{0}};
+        EntrySchedule schedule=new EntrySchedule(loss,win,special);
+        try(Jedis jedis=new Jedis(host,port,cfg.build())) {
+            jedis.connect();
+            for(int phase;(phase=schedule.next())>=0;) {
+                CompleteRound round=phase==2?generator.freeSpins():generator.ordinary(phase==1);
+                if(write(jedis,game,round,util,codec,cap,counts,limits,attempts[phase]))schedule.accepted(phase);
+            }
+            System.out.printf(Locale.ROOT,"LOAD_COMPLETE complete rounds loss=%d win=%d special=%d rulesHash=%s buckets=%s%n",loss,win,special,GameRuleCore.RULES_HASH,counts);
+        }
     }
     private static boolean write(Jedis jedis,String game,CompleteRound round,ResultUtil util,RoundCodec codec,int cap,Map<String,Integer> counts,LoaderLimits limits,long[] attempts){if (++attempts[0] > 10_000) throw new IllegalStateException("Configured range or weights cannot satisfy requested category after 10000 rejected candidates");ResultUtil.Analysis a=util.analyze(round);boolean specialPool = RedisKeys.index(game, a.outcome()).startsWith("MaryKeyList_");
         if (!limits.acceptsHundredths(specialPool, a.integerMultiplier())) return false;

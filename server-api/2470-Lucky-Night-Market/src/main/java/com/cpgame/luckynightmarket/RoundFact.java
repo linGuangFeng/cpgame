@@ -31,9 +31,13 @@ public record RoundFact(Mode mode, List<Step> steps) {
                     throw new IllegalArgumentException("Invalid reel multiplier");
                 }
             }
-            // Only these two prizes have original paid-round evidence.
-            if (wheelMultiplier != 0 && wheelMultiplier != 100 && wheelMultiplier != 200) {
-                throw new IllegalArgumentException("Wheel prize lacks captured evidence");
+            // Original help/paytable rule, not the two-value capture sample.
+            if (wheelMultiplier != 0 && wheelMultiplier != 1 && wheelMultiplier != 3
+                    && wheelMultiplier != 5 && wheelMultiplier != 8 && wheelMultiplier != 10
+                    && wheelMultiplier != 15 && wheelMultiplier != 20 && wheelMultiplier != 30
+                    && wheelMultiplier != 50 && wheelMultiplier != 100
+                    && wheelMultiplier != 200 && wheelMultiplier != 1000) {
+                throw new IllegalArgumentException("Invalid wheel prize");
             }
         }
 

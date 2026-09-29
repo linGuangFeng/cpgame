@@ -10,6 +10,7 @@ import java.util.Map;
 
 /** Redis member只保存每个Delivery的15格盘面；所有派生结果必须重新反推。 */
 public final class MinimalFactCodec {
+    private static final GameRuleCore LOSS_CORE = new GameRuleCore();
     private static final Map<String, String> ENCODE = Map.of(
             "S1", "0", "S2", "1", "S3", "2", "S4", "3", "A", "4",
             "K", "5", "Q", "6", "J", "7", "WILD", "8", "SC", "9");
@@ -23,6 +24,9 @@ public final class MinimalFactCodec {
     public boolean redisEncodingEnabled() { return true; }
 
     public byte[] encodeForRedis(CyberGoModels.MinimalRoundFacts facts) {
+        CyberGoModels.CompleteRound round = LOSS_CORE.rebuild(facts);
+        if (round.kind() == CyberGoModels.RoundKind.ORDINARY_LOSS && round.deliveries().size() == 1
+                && round.totalWin().signum() == 0) return new byte[]{'#'};
         StringBuilder result = new StringBuilder(facts.boards().size() * (VISIBLE_CELLS + 1));
         for (int boardIndex = 0; boardIndex < facts.boards().size(); boardIndex++) {
             List<String> board = facts.boards().get(boardIndex);
@@ -40,6 +44,7 @@ public final class MinimalFactCodec {
     public CyberGoModels.MinimalRoundFacts decodeFromRedis(byte[] member) {
         if (member == null || member.length == 0) throw new IllegalArgumentException("Redis member不能为空");
         String text = new String(member, StandardCharsets.US_ASCII);
+        if ("#".equals(text)) return extract(LOSS_CORE.generateOrdinaryLoss());
         String[] encodedBoards = text.split("\\|", -1);
         List<List<String>> boards = new ArrayList<>(encodedBoards.length);
         for (String encoded : encodedBoards) {

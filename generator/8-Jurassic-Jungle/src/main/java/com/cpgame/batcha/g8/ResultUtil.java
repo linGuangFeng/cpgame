@@ -14,7 +14,6 @@ public final class ResultUtil {
 
     public BoardResult evaluate(List<String> board, BigDecimal betSize, int betLevel) {
         if (board == null || board.size() != 25) throw new IllegalArgumentException("board must contain 25 symbols");
-        GameRuleCore.validateBet(betSize, betLevel);
         List<WinMatch> matches = new ArrayList<>();
         for (String symbol : PAYING) {
             boolean[] visited = new boolean[25];

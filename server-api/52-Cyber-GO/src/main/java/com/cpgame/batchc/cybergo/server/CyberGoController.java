@@ -134,8 +134,8 @@ final class CyberGoController {
     private Object spin(SessionStore.PlayerSession session, Map<String, String> form) {
         BigDecimal bs = decimal(form.get("bs"), "bs");
         int bl = integer(form.get("bl"), "bl");
-        if (bl < 1 || bl > 10 || !(bs.compareTo(MINIMUM_BET_SIZE)==0 || bs.compareTo(new BigDecimal("0.2"))==0)) {
-            throw new ApiException(400, 400, "下注选项不在原始config范围内");
+        if (bl < 1 || bs.signum() <= 0) {
+            throw new ApiException(400, 400, "下注必须为正数");
         }
         synchronized (session) {
             if (session.activeRound == null) {

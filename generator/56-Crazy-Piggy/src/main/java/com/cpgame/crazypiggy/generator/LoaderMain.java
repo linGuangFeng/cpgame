@@ -10,7 +10,7 @@ public final class LoaderMain {
         Path configPath = findConfig(args).toAbsolutePath().normalize();
         GeneratorConfig config = GeneratorConfig.load(configPath);
         RedisLoader.LoadSummary summary = new RedisLoader().load(config);
-        System.out.printf("Crazy Piggy Redis Loader 完成：未中奖=%d，普通中奖=%d，特殊=%d，事务批次=%d，候选=%d%n",
+        System.out.printf("Crazy Piggy Redis Loader 完成：未中奖=%d，普通池中奖=%d，特殊池=%d，事务批次=%d，候选=%d%n",
                 summary.lossMembers(), summary.winMembers(), summary.specialMembers(), summary.batches(),
                 summary.candidates());
         System.out.println("普通实际倍率分布=" + summary.normalDistribution());

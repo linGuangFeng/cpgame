@@ -33,9 +33,14 @@ public class RedisRoundStore {
     private final SecureRandom random = new SecureRandom();
     private final MinimalRoundFactCodec codec = new MinimalRoundFactCodec(new RoundFactory(), new RoundVerifier());
     private final GameRuleCore core = GameRuleCore.forRestoration();
+    private final GameRuleCore losses = new GameRuleCore();
 
     public RedisRoundStore(AppConfig config) { this.config = config; }
     RedisRoundStore() { this.config = null; }
+
+    RoundResult independentLoss(int bl, BigDecimal bs, BigDecimal startingBalance) {
+        return losses.generateIndependentLoss(bl, bs, startingBalance);
+    }
 
     public RoundResult claim(BigDecimal bs, int bl, BigDecimal startingBalance) {
         return claim(bs, bl, startingBalance, ResultUtil.EnergyState.initial());

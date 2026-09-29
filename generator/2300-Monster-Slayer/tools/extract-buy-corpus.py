@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Build BuyCorpus.java from captured buy-mode complete rounds. Generator-time only."""
+"""Build BuyCorpus.java from captured buy-mode complete rounds. Regression fixtures only; never used by production generation."""
 from __future__ import annotations
 
 import json
 from pathlib import Path
 
-ROOT = Path(r"D:\work\hd\cpgame")
+ROOT = Path(__file__).resolve().parents[3]
 CAPTURE = ROOT / "captures" / "2300-Monster-Slayer" / "buy-modes"
-OUT = ROOT / "generator" / "2300-Monster-Slayer" / "src" / "main" / "java" / "com" / "cpgame" / "monsterslayer" / "generator" / "BuyCorpus.java"
+OUT = ROOT / "generator" / "2300-Monster-Slayer" / "src" / "test" / "java" / "com" / "cpgame" / "monsterslayer" / "generator" / "BuyCorpus.java"
 
 MODES = [
     (3, "000002300", "BUY1"),
@@ -42,7 +42,7 @@ def animals(node):
         try:
             t = int(raw)
         except (TypeError, ValueError):
-            t = i + 1
+            raise ValueError("Redacted monster identity: recover from independent evidence before exporting")
         out.append((bl, iu, t))
     return out
 

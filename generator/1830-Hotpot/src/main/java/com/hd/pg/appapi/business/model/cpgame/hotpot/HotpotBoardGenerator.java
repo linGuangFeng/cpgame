@@ -5,7 +5,8 @@ import java.util.Random;
 
 /**
  * Weighted board construction only. No pay evaluation lives here.
- * Scene weights are empirical cell counts; start weights are never used as cascade fill.
+ * Scene weights are base weights; cascade pay weights decay once per elimination (floor 1).
+ * New cascade fills exclude Scatter; paid multiplier opportunities use a separate x1..x5 draw.
  */
 public final class HotpotBoardGenerator {
     public static final int SYMBOL_COUNT = 23;
@@ -37,6 +38,9 @@ public final class HotpotBoardGenerator {
             439, 0, 0, 0, 108, 78, 47, 32, 57, 47, 32, 10, 6
     };
 
+    // Owned by this sequential board generator; reset for each independent Spin.
+    private final int[] eliminationCounts = new int[11];
+    private final PaidMultiplierPolicy multiplierPolicy;
     private final Random random;
     private final int[] paidStart;
     private final int[] paidCascade;
@@ -58,12 +62,19 @@ public final class HotpotBoardGenerator {
 
     public HotpotBoardGenerator(Random random, int[] paidStart, int[] cascade, int[] freeStart,
                                 boolean boostFirstColumnScatter) {
+        this(random, paidStart, cascade, freeStart, boostFirstColumnScatter, PaidMultiplierPolicy.defaults());
+    }
+
+    public HotpotBoardGenerator(Random random, int[] paidStart, int[] cascade, int[] freeStart,
+                                boolean boostFirstColumnScatter, PaidMultiplierPolicy multiplierPolicy) {
+        this.multiplierPolicy = java.util.Objects.requireNonNull(multiplierPolicy, "multiplierPolicy");
         if (random == null) throw new IllegalArgumentException("random is required");
         this.random = random;
+        java.util.Arrays.fill(eliminationCounts, 0);
         this.paidStart = validated(paidStart, "paid-start");
-        this.paidCascade = maskPaid(validated(cascade, "cascade"));
+        this.paidCascade = withoutScatter(maskPaid(validated(cascade, "cascade")));
         this.freeStart = maskFree(validated(freeStart, "free-start"));
-        this.freeCascade = maskFree(validated(cascade, "free-cascade"));
+        this.freeCascade = withoutScatter(maskFree(validated(cascade, "free-cascade")));
         this.boostFirstColumnScatter = boostFirstColumnScatter;
     }
 
@@ -87,6 +98,7 @@ public final class HotpotBoardGenerator {
     }
 
     public HotpotBoard generate(HotpotSymbolScene scene) {
+        java.util.Arrays.fill(eliminationCounts, 0);
         int[] prop = new int[HotpotBoard.SIZE];
         boolean seenTrigger = false;
         for (int i = 0; i < prop.length; i++) {
@@ -126,6 +138,8 @@ public final class HotpotBoardGenerator {
     }
 
     public HotpotBoard cascade(HotpotBoard board, HotpotEvaluation evaluation, HotpotSymbolScene fillScene) {
+        // One reduction per winning symbol per elimination, never per removed cell.
+        for (HotpotWin win : evaluation.getWins()) eliminationCounts[win.getSymbol()]++;
         boolean[] removed = HotpotResultUtil.eliminatedMask(board, evaluation);
         int[] oldProp = board.getProp();
         int[] next = new int[HotpotBoard.SIZE];
@@ -152,7 +166,7 @@ public final class HotpotBoardGenerator {
     public int nextSymbol(HotpotSymbolScene scene) {
         if (scene == null) throw new IllegalArgumentException("symbol scene is required");
         int[] weights = weightsFor(scene);
-        return pick(weights);
+        return draw(weights, scene, true);
     }
 
     private int[] weightsFor(HotpotSymbolScene scene) {
@@ -169,7 +183,7 @@ public final class HotpotBoardGenerator {
                             boolean columnHasTrigger) {
         int[] weights = weightsForDraw(scene, columnHasTrigger);
         for (int attempt = 0; attempt < 32; attempt++) {
-            int symbol = pick(weights);
+            int symbol = draw(weights, scene, true);
             if (symbol != HotpotResultUtil.SCATTER) return symbol;
             if (scatterAllowed(prop, index, 0, maxBoardScatter)) return symbol;
         }
@@ -186,7 +200,7 @@ public final class HotpotBoardGenerator {
     private int nextAllowedFill(HotpotSymbolScene scene, int[] next, int index, int keepScatter,
                                 int maxBoardScatter) {
         for (int attempt = 0; attempt < 32; attempt++) {
-            int symbol = pick(weightsFor(scene));
+            int symbol = draw(weightsFor(scene), scene, true);
             if (symbol != HotpotResultUtil.SCATTER) return symbol;
             if (scatterAllowed(next, index, keepScatter, maxBoardScatter)) return symbol;
         }
@@ -195,7 +209,8 @@ public final class HotpotBoardGenerator {
 
     private int nextAllowedLossSymbol(int[] prop, int index, int[] payCounts, int scatter, int maxScatter, int[] lossWeights) {
         for (int attempt = 0; attempt < 64; attempt++) {
-            int symbol = pick(lossWeights);
+            int symbol = draw(lossWeights, lossWeights == freeStart
+                    ? HotpotSymbolScene.FREE_START : HotpotSymbolScene.PAID_START, false);
             if (symbol >= HotpotResultUtil.MIN_PAY_SYMBOL && symbol <= HotpotResultUtil.MAX_PAY_SYMBOL
                     && payCounts[symbol] >= 7) continue;
             if (symbol == HotpotResultUtil.SCATTER) {
@@ -235,7 +250,55 @@ public final class HotpotBoardGenerator {
     private int pickNonScatter(HotpotSymbolScene scene) {
         int[] weights = weightsFor(scene).clone();
         weights[HotpotResultUtil.SCATTER - 1] = 0;
-        return pick(weights);
+        return draw(weights, scene, true);
+    }
+
+    /** Keep the configured special-symbol opportunity rate; decay only pay-symbol selection.
+     * A paid multiplier opportunity gets exactly one x1..x5 choice. x1 becomes a pay symbol.
+     * Existing balls and the number of available fill positions are untouched.
+     */
+    private int draw(int[] weights, HotpotSymbolScene scene, boolean useDecay) {
+        int symbol = pick(weights);
+        boolean cascade = useDecay && (scene == HotpotSymbolScene.PAID_CASCADE
+                || scene == HotpotSymbolScene.FREE_CASCADE);
+        if ((scene == HotpotSymbolScene.PAID_START || scene == HotpotSymbolScene.PAID_CASCADE)
+                && symbol >= HotpotResultUtil.MIN_MULTIPLIER_ID) {
+            int multiplier = multiplierPolicy.choose(random);
+            return multiplier == 1 ? pickPay(weights, cascade) : multiplier + 10;
+        }
+        if (symbol <= HotpotResultUtil.MAX_PAY_SYMBOL && cascade)
+            return pickPay(weights, true);
+        return symbol;
+    }
+
+    private double payWeight(int[] weights, int symbol, boolean decay) {
+        double weight = weights[symbol - 1];
+        if (weight == 0 || !decay) return weight;
+        for (int n = 0; n < eliminationCounts[symbol] && weight > 1; n++)
+            weight = Math.max(1.0, weight / 5.0);
+        return weight;
+    }
+
+    private static int[] withoutScatter(int[] weights) {
+        weights[HotpotResultUtil.SCATTER - 1] = 0;
+        return requirePositiveTotal(weights, "cascade without Scatter");
+    }
+
+    private int pickPay(int[] weights, boolean decay) {
+        double total = 0;
+        for (int symbol = 1; symbol <= 10; symbol++)
+            total += payWeight(weights, symbol, decay);
+        if (!(total > 0)) throw new IllegalArgumentException("pay-symbol weights must be positive");
+        double ticket = random.nextDouble() * total;
+        int last = 0;
+        for (int symbol = 1; symbol <= 10; symbol++) {
+            double weight = payWeight(weights, symbol, decay);
+            if (weight <= 0) continue;
+            last = symbol;
+            ticket -= weight;
+            if (ticket < 0) return symbol;
+        }
+        return last; // Floating-point boundary only.
     }
 
     private int pick(int[] weights) {

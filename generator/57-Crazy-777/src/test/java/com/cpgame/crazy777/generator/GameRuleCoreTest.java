@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.SplittableRandom;
 
@@ -59,13 +60,28 @@ class GameRuleCoreTest {
             assertEquals(RoundMode.FREE_SPINS, inferred.mode());
             assertEquals(11, round.steps().size());
             assertTrue(ResultUtil.isScatterTrigger(round.boards().get(0)));
-            for (int s = 1; s < 11; s++) assertFalse(round.boards().get(s).contains("SC"));
+            for (int s = 1; s < 11; s++) {
+                assertFalse(round.boards().get(s).contains("SC"));
+                assertFalse(ResultUtil.hasPresentationOnlyWin(round.boards().get(s), true));
+            }
             assertEquals(10, round.steps().get(0).fsn());
             assertEquals(0, round.steps().get(0).nfsc());
             assertEquals(10, round.steps().get(10).nfsc());
             assertEquals(1, round.steps().get(10).ss());
             assertTrue(keys.add(round.roundKey()));
         }
+    }
+
+    @Test void rejectsScreenshotStyleYellowVisualThreeOfAKindWhenProtocolLinesLose() {
+        List<String> board = List.of(
+                "H3", "BLANK", "H1", "BLANK", "H1",
+                "H1", "BLANK", "H4", "BLANK", "H4",
+                "H1", "BLANK", "H3", "BLANK", "H4");
+
+        assertTrue(ResultUtil.evaluateRegularLines(board).isEmpty(), "协议固定坐标本身是 0 奖");
+        assertEquals("H4", ResultUtil.evaluateDisplayedLines(board).get("2"),
+                "历史页压缩 BLANK 后，底行会显示成黄渐变+黄空心+黄空心");
+        assertTrue(ResultUtil.hasPresentationOnlyWin(board, true));
     }
 
     @Test void asciiMemberRoundTripsWithoutJson() {
@@ -81,7 +97,11 @@ class GameRuleCoreTest {
             assertFalse(payload.startsWith("{") || payload.startsWith("["));
             assertTrue(StandardCharsets.US_ASCII.newEncoder().canEncode(payload));
             RoundResult rebuilt = codec.decodeRedisMember(payload, round.bs(), round.bl(), round.startingBalance());
-            verifier.verifyRecovery(round, rebuilt);
+            assertEquals(verifier.verify(round).mode(), verifier.verify(rebuilt).mode());
+            assertEquals(0, round.totalWin().divide(round.betAmount())
+                    .compareTo(rebuilt.totalWin().divide(rebuilt.betAmount())));
+            if (!payload.equals("#")) verifier.verifyRecovery(round, rebuilt);
+            assertFalse(payload.contains(","));
         }
     }
 

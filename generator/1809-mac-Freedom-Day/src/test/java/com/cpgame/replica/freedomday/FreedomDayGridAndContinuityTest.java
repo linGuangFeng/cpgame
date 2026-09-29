@@ -32,6 +32,39 @@ class FreedomDayGridAndContinuityTest {
         assertTrue(withFrames >= 120, "silver/gold frames are visible on real boards, frames=" + withFrames);
     }
 
+    @Test void wildNeverLandsOnOuterReelsIncludingCascadeFills() {
+        FreedomDayBoardGenerator generator = new FreedomDayBoardGenerator(new Random(180913L));
+        CompleteRoundFactory factory = new CompleteRoundFactory();
+        Random random = new Random(180913L);
+        for (int i = 0; i < 400; i++) {
+            assertNoOuterWild(generator.generate(i % 2 == 0));
+            try {
+                CompleteRoundFactory.GeneratedRound round = factory.generate(random, i % 7 == 0, 10);
+                for (var spin : round.fact().spins()) {
+                    for (var page : spin) {
+                        int[] prop = page.prop().stream().mapToInt(Integer::intValue).toArray();
+                        assertNoOuterWild(prop);
+                    }
+                }
+            } catch (CompleteRoundFactory.RoundRejectedException ignored) {
+            }
+        }
+    }
+
+    private static void assertNoOuterWild(FreedomDayBoard board) {
+        assertNoOuterWild(board.getProp());
+    }
+
+    private static void assertNoOuterWild(int[] prop) {
+        for (int reel : new int[]{0, FreedomDayBoard.REEL_COUNT - 1}) {
+            for (int row = 0; row < FreedomDayBoard.ROW_COUNT; row++) {
+                int symbol = prop[reel * FreedomDayBoard.ROW_COUNT + row];
+                assertNotEquals(FreedomDayResultUtil.WILD, symbol,
+                        "outer reel " + (reel + 1) + " row " + row + " must not be Wild");
+            }
+        }
+    }
+
     @Test void legalMergedGridRoundTripsAndCountsAsOneVisibleSymbol() {
         int[] prop = baseBoard();
         prop[5] = 9;

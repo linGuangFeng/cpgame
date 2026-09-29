@@ -46,56 +46,29 @@ public final class RedisDirectLoader {
         SecureRandom random = new SecureRandom();
         var pending = new ArrayList<Member>();
         Counters counters = new Counters();
-        fill(c, factory, codec, random, pending, counters, CompleteRoundFactory.Outcome.LOSS, c.lossCount, false);
-        fill(c, factory, codec, random, pending, counters, CompleteRoundFactory.Outcome.WIN, c.winCount, false);
-        fill(c, factory, codec, random, pending, counters, CompleteRoundFactory.Outcome.SPECIAL, c.specialCount, true);
-        System.out.printf("GENERATION_COMPLETE members=%d writing redis%n", pending.size());
-        System.out.flush();
-        try (RedisConnection redis = RedisConnection.connect(c)) {
-            var batch = new ArrayList<Member>(c.batchSize);
-            for (Member m : pending) {
-                batch.add(m);
-                if (batch.size()>=c.batchSize) flush(redis, batch, c, counters);
-            }
-            flush(redis, batch, c, counters);
-        }
-        return new LoadSummary(c.redisGameId, counters.loss, counters.win, counters.special, counters.batches);
-    }
-
-    private static void fill(GeneratorConfiguration c, CompleteRoundFactory factory, CompleteRoundCodec codec,
-                             SecureRandom random, List<Member> pending,
-                             Counters counters, CompleteRoundFactory.Outcome target, int want, boolean special)
-            throws Exception {
-        Map<Integer,Integer> per = new HashMap<>();
-        int got=0;
-        if (target == CompleteRoundFactory.Outcome.LOSS) want = c.outputLimits.lossTarget(want);
+        EntrySchedule schedule=new EntrySchedule(c.outputLimits.lossTarget(c.lossCount),c.winCount,c.specialCount);
+        CompleteRoundFactory.Outcome[] outcomes={CompleteRoundFactory.Outcome.LOSS,CompleteRoundFactory.Outcome.WIN,CompleteRoundFactory.Outcome.SPECIAL};
         long attempts=0;
-        int minWin = special ? c.maryMinWinMultiplier : c.normalMinWinMultiplier;
-        int maxWin = special ? c.maryMaxWinMultiplier : c.normalMaxWinMultiplier;
-        while (got<want) {
-            LoaderLimits.checkAttempts(++attempts,want);
-            CompleteRoundFactory.GeneratedRound generated;
-            try { generated = factory.generateTarget(random, false, target); }
-            catch (CompleteRoundFactory.RoundRejectedException ex) { counters.skipped++; continue; }
-            if (generated.special()!=special) { counters.skipped++; continue; }
-            int ratio = generated.ratio;
-            if (special && ratio<=0) { counters.skipped++; continue; }
-            if (!special && target==CompleteRoundFactory.Outcome.LOSS && ratio!=0) { counters.skipped++; continue; }
-            if (!special && target==CompleteRoundFactory.Outcome.WIN && ratio<=0) { counters.skipped++; continue; }
-            if (ratio<minWin || ratio>maxWin) { counters.skipped++; continue; }
-            int have = per.getOrDefault(ratio, 0);
-            String payload = codec.encode(generated.fact);
-            if (payload.charAt(0)=='{' || payload.charAt(0)=='[') throw new IllegalStateException("JSON member");
-            CompleteRoundFactory.verifyRatio(codec.decode(payload));
-            per.put(ratio, have+1);
-            pending.add(new Member(special, ratio, payload));
-            got++;
-            if (special) counters.special++; else if (ratio==0) counters.loss++; else counters.win++;
-            if (got%10==0) {
-                System.out.printf("GENERATED kind=%s %d/%d skipped=%d%n", target, got, want, counters.skipped);
-                System.out.flush();
+        try(RedisConnection redis=RedisConnection.connect(c)) {
+            for(int phase;(phase=schedule.next())>=0;) {
+                LoaderLimits.checkAttempts(++attempts,(long)c.lossCount+c.winCount+c.specialCount);
+                boolean special=phase==2;
+                CompleteRoundFactory.GeneratedRound generated;
+                try{generated=factory.generateTarget(random,false,outcomes[phase]);}
+                catch(CompleteRoundFactory.RoundRejectedException ex){counters.skipped++;continue;}
+                int ratio=generated.ratio;
+                if(generated.special()!=special || (phase==0?ratio!=0:ratio<=0)
+                        || ratio>c.maximumRoundMultiplier || !c.outputLimits.accepts(special,ratio)) {counters.skipped++;continue;}
+                String payload=codec.encode(generated.fact);
+                if(payload.charAt(0)=='{'||payload.charAt(0)=='[')throw new IllegalStateException("JSON member");
+                CompleteRoundFactory.verifyRatio(codec.decode(payload));
+                pending.add(new Member(special,ratio,payload));schedule.accepted(phase);
+                if(special)counters.special++;else if(ratio==0)counters.loss++;else counters.win++;
+                if(pending.size()>=c.batchSize)flush(redis,pending,c,counters);
             }
+            flush(redis,pending,c,counters);
         }
+        return new LoadSummary(c.redisGameId,counters.loss,counters.win,counters.special,counters.batches);
     }
 
     private static void flush(RedisConnection redis, List<Member> pending, GeneratorConfiguration c, Counters counters)

@@ -1,10 +1,28 @@
 package com.cpgame.admin;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import tools.jackson.databind.ObjectMapper;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class CpgameBetLogServiceTest {
+    @TempDir Path root;
+
+    @Test void recoversDeadRunWithoutExitCode() throws Exception {
+        Path betlog = Files.createDirectories(root.resolve("runtime/betlog"));
+        Files.writeString(betlog.resolve("1-test.json"),
+            "{\"directoryName\":\"1-test\",\"state\":\"RUNNING\",\"processId\":0}");
+        var settings = new AdminSettings(root, root.resolve("runtime"), "127.0.0.1", 8000);
+        var service = new CpgameBetLogService(settings, new ObjectMapper());
+        assertEquals(0, service.runningCount());
+        assertEquals("FAILED", new ObjectMapper().readTree(Files.readString(betlog.resolve("1-test.json")))
+            .path("state").asString());
+    }
+
     @Test void fatalCandidateMessageIsVisibleAndWinsOverCompletionMarker() {
         var result = CpgameBetLogService.classifyFinish(null,
                 "LOAD_COMPLETE loaded=2\n[失败] Scatter exceeds PAID page cap\n[EXIT] FAILED\n");

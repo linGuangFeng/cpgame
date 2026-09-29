@@ -35,7 +35,6 @@ public record LoaderConfig(
         }
         BigDecimal betSize = decimal(properties, "generation.bet-size", new BigDecimal("0.5"));
         int betLevel = integer(properties, "generation.bet-level", 1);
-        GameRuleCore.validateBet(betSize, betLevel);
         List<RoundMode> modes = parseModes(properties.getProperty("generation.modes", "LOSS,WIN"));
         LoaderConfig config = new LoaderConfig(
                 properties.getProperty("redis.host", "192.168.10.3").strip(),
@@ -56,8 +55,7 @@ public record LoaderConfig(
         if (redisHost.isBlank() || redisPort < 1 || redisDatabase < 0
                 || connectTimeoutMillis < 1 || readTimeoutMillis < 1 || totalMembers < 1
                 || maximumMembersPerMultiplier < 1 || maximumCandidates < totalMembers
-                || modes.isEmpty()
-                || betSize.compareTo(new BigDecimal("0.5")) != 0 || betLevel != 1) {
+                || modes.isEmpty() || betSize.signum() <= 0 || betLevel < 1) {
             throw new IllegalArgumentException("invalid formal Loader configuration");
         }
     }

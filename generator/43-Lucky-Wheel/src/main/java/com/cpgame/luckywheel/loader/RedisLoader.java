@@ -23,11 +23,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -38,12 +36,11 @@ public final class RedisLoader {
 
     public RunResult run(Path configPath) throws Exception {
         LoaderConfig config = LoaderConfig.load(configPath);
-        GameRuleCore core = new GameRuleCore(config.outcomeWeights(), config.jointStateWeights());
+        GameRuleCore core = new GameRuleCore();
         MinimalFactCodec codec = new MinimalFactCodec();
         List<Member> pending = new ArrayList<>(config.batchSize());
         Counters counters = new Counters();
         try (RedisConnection redis = RedisConnection.connect(config)) {
-            clearExistingGameKeys(redis, config.redisGameId());
             generate(config, core, codec, redis, pending, counters);
             flush(redis, pending, config, counters);
             verifyPools(redis, config.redisGameId());
@@ -90,9 +87,10 @@ public final class RedisLoader {
             }
 
             byte[] encoded = codec.encodeRedisMember(facts);
-            RoundFacts decoded = codec.decodeRedisMember(encoded);
+            RoundFacts decoded = codec.decodeRedisMember(encoded, facts.betProfile());
             ResultAnalysis decodedAnalysis = ResultUtil.analyze(decoded);
-            if (!facts.equals(decoded) || generatedAnalysis.outcome() != decodedAnalysis.outcome()
+            if ((generatedAnalysis.outcome() != OutcomeType.ORDINARY_LOSS && !facts.equals(decoded))
+                    || generatedAnalysis.outcome() != decodedAnalysis.outcome()
                     || generatedAnalysis.totalAward().compareTo(decodedAnalysis.totalAward()) != 0) {
                 throw new IllegalStateException("Redis member 独立解码或 ResultUtil 反推不一致");
             }
@@ -281,14 +279,7 @@ public final class RedisLoader {
                                boolean ssl, int connectTimeoutMs, int socketTimeoutMs, long redisGameId,
                                int normalCount, int specialCount, int batchSize, int maxMembersPerMultiplier,
                                int maxConsecutiveWins, int normalMaxWinMultiplier, int specialMaxWinMultiplier,
-                               Map<String, Integer> outcomeWeights,
-                               Map<String, Integer> jointStateWeights, LoaderLimits outputLimits) {
-        public LoaderConfig(String host, int port, String username, String password, int database,
-                               boolean ssl, int connectTimeoutMs, int socketTimeoutMs, long redisGameId,
-                               int normalCount, int specialCount, int batchSize, int maxMembersPerMultiplier,
-                               int maxConsecutiveWins, int normalMaxWinMultiplier, int specialMaxWinMultiplier,
-                               Map<String, Integer> outcomeWeights,
-                               Map<String, Integer> jointStateWeights) { this(host, port, username, password, database, ssl, connectTimeoutMs, socketTimeoutMs, redisGameId, normalCount, specialCount, batchSize, maxMembersPerMultiplier, maxConsecutiveWins, normalMaxWinMultiplier, specialMaxWinMultiplier, outcomeWeights, jointStateWeights, new LoaderLimits(new java.util.Properties())); }
+                               LoaderLimits outputLimits) {
 
         private static final Set<String> COMMON_KEYS = Set.of(
                 "redis.host", "redis.port", "redis.username", "redis.password", "redis.database",
@@ -304,29 +295,17 @@ public final class RedisLoader {
             Properties properties = new Properties();
             try (var reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) { properties.load(reader); LoaderLimits.checkKeys(properties); }
             Set<String> allowed = new LinkedHashSet<>(COMMON_KEYS);
-            for (String id : GameRuleCore.defaultJointStateWeights().keySet()) {
-                allowed.add("generation.symbol.joint." + id + ".weight");
-            }
-            for (String id : GameRuleCore.defaultOutcomeWeights().keySet()) allowed.add(outcomePropertyKey(id));
             for (String key : properties.stringPropertyNames()) {
                 String lower = key.toLowerCase();
                 if (lower.contains("seed")) {
                     throw new IllegalArgumentException("正式配置含禁止参数: " + key);
                 }
-                if (!allowed.contains(key)) throw new IllegalArgumentException("正式配置包含未读取参数: " + key);
+                if (!allowed.contains(key)) {if(key.toLowerCase(java.util.Locale.ROOT).contains("seed"))throw new IllegalArgumentException("正式配置禁止 seed: "+key);System.err.println("[warn] unused generator.properties key: "+key);};
             }
             for (String key : allowed) {
                 if (!properties.containsKey(key)) throw new IllegalArgumentException("正式配置缺少参数: " + key);
             }
 
-            Map<String, Integer> outcomeWeights = new LinkedHashMap<>();
-            for (String id : GameRuleCore.defaultOutcomeWeights().keySet()) {
-                outcomeWeights.put(id, positive(properties, outcomePropertyKey(id)));
-            }
-            Map<String, Integer> jointStateWeights = new LinkedHashMap<>();
-            for (String id : GameRuleCore.defaultJointStateWeights().keySet()) {
-                jointStateWeights.put(id, positive(properties, "generation.symbol.joint." + id + ".weight"));
-            }
             LoaderConfig config = new LoaderConfig(required(properties, "redis.host"),
                     integer(properties, "redis.port"), properties.getProperty("redis.username", "").trim(),
                     properties.getProperty("redis.password", ""), integer(properties, "redis.database"),
@@ -339,13 +318,9 @@ public final class RedisLoader {
                     positive(properties, "generation.max-consecutive-wins"),
                     positive(properties, "generation.normal-max-win-multiplier"),
                     positive(properties, "generation.special-max-win-multiplier"),
-                    Map.copyOf(outcomeWeights), Map.copyOf(jointStateWeights), new LoaderLimits(properties));
+                    new LoaderLimits(properties));
             config.validate();
             return config;
-        }
-
-        private static String outcomePropertyKey(String id) {
-            return "generation.outcome." + id.toLowerCase(java.util.Locale.ROOT).replace('_', '-') + ".weight";
         }
 
         private void validate() {

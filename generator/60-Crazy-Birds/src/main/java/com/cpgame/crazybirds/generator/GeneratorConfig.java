@@ -1,28 +1,29 @@
 package com.cpgame.crazybirds.generator;
 
+import com.cpgame.crazybirds.generator.model.RoundMode;
+
 import java.io.IOException;
 import java.io.Reader;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 
-/** 只接受正式 Redis Loader 实际读取的配置；拒绝 seed、场景控制和 JSONL。 */
+/** 最新生成合同：总尝试数、尝试批次、显式权重和有界桶容量。 */
 public final class GeneratorConfig {
-    final LoaderLimits outputLimits;
-    private static final int MAX_TARGET = Integer.MAX_VALUE;
     private static final Set<String> FIXED_KEYS = Set.of(
             "redis.host", "redis.port", "redis.username", "redis.password", "redis.database", "redis.ssl",
             "redis.connect-timeout-ms", "redis.socket-timeout-ms", "redis.game-id",
-            "generation.loss-count", "generation.win-count", "generation.special-count", "generation.batch-size",
-            "generation.max-members-per-multiplier", "generation.special-max-members-per-multiplier", "generation.normal-min-win-multiplier", "generation.special-min-win-multiplier",
-            "generation.max-consecutive-wins",
-            "generation.normal-max-win-multiplier", "generation.special-max-win-multiplier");
+            "generation.count", "generation.batch-size",
+            "generation.normal-min-win-multiplier", "generation.normal-max-win-multiplier",
+            "generation.free-min-win-multiplier", "generation.free-max-win-multiplier",
+            "weights.source", "weights.symbol-order",
+            "retention.normal-per-multiplier", "retention.mary-per-multiplier");
 
+    final GenerationWeights weights;
+    final RetentionPolicy retention;
     final String host;
     final int port;
     final String username;
@@ -32,18 +33,17 @@ public final class GeneratorConfig {
     final int connectTimeoutMs;
     final int socketTimeoutMs;
     final long redisGameId;
-    final int lossCount;
-    final int winCount;
-    final int specialCount;
+    final long generationCount;
     final int batchSize;
-    final int maxMembersPerMultiplier;
-    final int maxConsecutiveWins;
-    final BigDecimal normalMaxWinMultiplier;
-    final BigDecimal specialMaxWinMultiplier;
+    final int normalMinCacheMultiplier;
+    final int normalMaxCacheMultiplier;
+    final int freeMinCacheMultiplier;
+    final int freeMaxCacheMultiplier;
 
     private GeneratorConfig(Properties p) {
-        outputLimits = new LoaderLimits(p);
         rejectUnknownKeys(p);
+        weights = new GenerationWeights(p);
+        retention = new RetentionPolicy(p);
         host = required(p, "redis.host");
         port = integer(p, "redis.port", 1, 65_535);
         username = p.getProperty("redis.username", "").trim();
@@ -52,15 +52,17 @@ public final class GeneratorConfig {
         ssl = bool(p, "redis.ssl");
         connectTimeoutMs = integer(p, "redis.connect-timeout-ms", 1, Integer.MAX_VALUE);
         socketTimeoutMs = integer(p, "redis.socket-timeout-ms", 1, Integer.MAX_VALUE);
-        redisGameId = longValue(p, "redis.game-id", 1, 999_999_999L);
-        lossCount = integer(p, "generation.loss-count", 0, MAX_TARGET);
-        winCount = integer(p, "generation.win-count", 0, MAX_TARGET);
-        specialCount = integer(p, "generation.special-count", 0, MAX_TARGET);
-        batchSize = integer(p, "generation.batch-size", 1, 10_000);
-        maxMembersPerMultiplier = integer(p, "generation.max-members-per-multiplier", 1, 1_000_000);
-        maxConsecutiveWins = integer(p, "generation.max-consecutive-wins", 1, 80);
-        normalMaxWinMultiplier = decimal(p, "generation.normal-max-win-multiplier");
-        specialMaxWinMultiplier = decimal(p, "generation.special-max-win-multiplier");
+        redisGameId = longValue(p, "redis.game-id", 1, 99_999_999L);
+        generationCount = longValue(p, "generation.count", 1, Long.MAX_VALUE);
+        batchSize = integer(p, "generation.batch-size", 1, 1_000_000);
+        normalMinCacheMultiplier = integer(p, "generation.normal-min-win-multiplier", 0, Integer.MAX_VALUE);
+        normalMaxCacheMultiplier = integer(p, "generation.normal-max-win-multiplier", 1, Integer.MAX_VALUE);
+        freeMinCacheMultiplier = integer(p, "generation.free-min-win-multiplier", 0, Integer.MAX_VALUE);
+        freeMaxCacheMultiplier = integer(p, "generation.free-max-win-multiplier", 1, Integer.MAX_VALUE);
+        if (normalMaxCacheMultiplier < normalMinCacheMultiplier
+                || freeMaxCacheMultiplier < freeMinCacheMultiplier) {
+            throw new IllegalArgumentException("生成倍率范围上下界错误");
+        }
     }
 
     public static GeneratorConfig load(Path file) throws IOException {
@@ -68,31 +70,44 @@ public final class GeneratorConfig {
             throw new IllegalArgumentException("找不到 generator.properties: " + file);
         }
         Properties p = new Properties();
-        try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) { p.load(reader); LoaderLimits.checkKeys(p); }
+        try (Reader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) { p.load(reader); }
         return new GeneratorConfig(p);
     }
 
+    boolean acceptsCacheMultiplier(RoundMode mode, int cacheMultiplier) {
+        if (cacheMultiplier < 0) throw new IllegalArgumentException("缓存倍率不能为负数");
+        int min = mode == RoundMode.FREE_SPINS ? freeMinCacheMultiplier : normalMinCacheMultiplier;
+        int max = mode == RoundMode.FREE_SPINS ? freeMaxCacheMultiplier : normalMaxCacheMultiplier;
+        return cacheMultiplier >= min && cacheMultiplier <= max;
+    }
+
     private static void rejectUnknownKeys(Properties p) {
-        Set<String> allowed = new LinkedHashSet<>(FIXED_KEYS);
         for (String key : p.stringPropertyNames()) {
             String lower = key.toLowerCase(Locale.ROOT);
             if (lower.contains("seed")) throw new IllegalArgumentException("正式配置禁止 seed: " + key);
-            if (!allowed.contains(key)) throw new IllegalArgumentException("配置项未被正式代码读取或已禁止: " + key);
+            if (FIXED_KEYS.contains(key) || RetentionPolicy.recognizes(key) || weightKey(key)) continue;
+            throw new IllegalArgumentException("配置项未被正式代码读取或已禁止: " + key);
         }
+    }
+
+    private static boolean weightKey(String key) {
+        for (String symbol : GameRules.ALL_SYMBOLS) {
+            if (("weights.base.paid." + symbol).equals(key)
+                    || ("weights.base.free." + symbol).equals(key)
+                    || ("weights.boost." + symbol).equals(key)) return true;
+        }
+        return false;
     }
 
     private static String required(Properties p, String key) {
         String value = p.getProperty(key);
-        if (value == null || value.trim().isEmpty()) throw new IllegalArgumentException("缺少配置: " + key);
+        if (value == null || value.isBlank()) throw new IllegalArgumentException("缺少配置: " + key);
         return value.trim();
     }
 
     private static int integer(Properties p, String key, int min, int max) {
-        int value;
-        try { value = Integer.parseInt(required(p, key)); }
-        catch (NumberFormatException ex) { throw new IllegalArgumentException(key + " 必须为整数", ex); }
-        if (value < min || value > max) throw new IllegalArgumentException(key + " 超出范围 " + min + ".." + max);
-        return value;
+        long value = longValue(p, key, min, max);
+        return Math.toIntExact(value);
     }
 
     private static long longValue(Properties p, String key, long min, long max) {
@@ -101,14 +116,6 @@ public final class GeneratorConfig {
         catch (NumberFormatException ex) { throw new IllegalArgumentException(key + " 必须为整数", ex); }
         if (value < min || value > max) throw new IllegalArgumentException(key + " 超出范围 " + min + ".." + max);
         return value;
-    }
-
-    private static BigDecimal decimal(Properties p, String key) {
-        BigDecimal value;
-        try { value = new BigDecimal(required(p, key)); }
-        catch (NumberFormatException ex) { throw new IllegalArgumentException(key + " 必须为正数", ex); }
-        if (value.signum() <= 0) throw new IllegalArgumentException(key + " 必须为正数");
-        return value.stripTrailingZeros();
     }
 
     private static boolean bool(Properties p, String key) {

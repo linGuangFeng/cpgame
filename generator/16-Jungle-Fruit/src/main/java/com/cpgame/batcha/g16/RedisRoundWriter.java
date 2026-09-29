@@ -68,33 +68,33 @@ public final class RedisRoundWriter {
 
     private Optional<ClaimedRound> claimPool(boolean special, List<RoundMode> modes, SecureRandom random)
             throws IOException {
-        List<Integer> ratios = new ArrayList<>();
-        for (String token : store.ratios(special)) {
-            int ratio = Integer.parseInt(token);
-            if (special) {
-                if (ratio < 0) continue;
-            } else if (modes.contains(RoundMode.LOSS) && !modes.contains(RoundMode.WIN)) {
-                if (ratio != 0) continue;
-            } else if (modes.contains(RoundMode.WIN) && !modes.contains(RoundMode.LOSS)) {
-                if (ratio <= 0) continue;
-            }
-            if (store.listLength(special, ratio) > 0) ratios.add(ratio);
-        }
-        Collections.shuffle(ratios, random);
-        for (int ratio : ratios) {
+        int minimum = (!special && modes.contains(RoundMode.LOSS) && !modes.contains(RoundMode.WIN)
+            && !modes.contains(RoundMode.MARY)) ? 0 : (special || modes.contains(RoundMode.LOSS) ? 0 : 1);
+        int maximum = (!special && modes.contains(RoundMode.LOSS) && !modes.contains(RoundMode.WIN)
+            && !modes.contains(RoundMode.MARY)) ? 0 : Integer.MAX_VALUE;
+        Optional<Integer> top = store.highestAtMost(special, maximum, minimum);
+        if (top.isEmpty()) return Optional.empty();
+        int target = minimum >= top.get() ? minimum : random.nextInt(minimum, top.get() + 1);
+        int ceiling = target;
+        int attempts = 0;
+        while (ceiling >= minimum && attempts++ < 64) {
+            Optional<Integer> found = store.highestAtMost(special, ceiling, minimum);
+            if (found.isEmpty()) return Optional.empty();
+            int ratio = found.get();
             long len = store.listLength(special, ratio);
-            if (len <= 0) continue;
-            int offset = random.nextInt((int) Math.min(len, Integer.MAX_VALUE));
-            Optional<byte[]> member = store.readMember(special, ratio, offset);
-            if (member.isEmpty()) continue;
-            CompleteRound round = codec.decode(member.get());
-            verifier.verify(round);
-            if (!modes.contains(round.mode())) continue;
-            if (RedisKeys.special(round.mode()) != special) continue;
-            if (round.multiplier().intValueExact() != ratio) {
-                throw new IOException("cached member multiplier does not match list key");
+            if (len > 0) {
+                int offset = random.nextInt((int) Math.min(len, Integer.MAX_VALUE));
+                Optional<byte[]> member = store.readMember(special, ratio, offset);
+                if (member.isPresent()) {
+                    CompleteRound round = codec.decode(member.get());
+                    verifier.verify(round);
+                    if (modes.contains(round.mode()) && RedisKeys.special(round.mode()) == special
+                        && round.multiplier().intValueExact() == ratio) {
+                        return Optional.of(new ClaimedRound(RedisKeys.list(special, ratio), round));
+                    }
+                }
             }
-            return Optional.of(new ClaimedRound(RedisKeys.list(special, ratio), round));
+            ceiling = ratio - 1;
         }
         return Optional.empty();
     }

@@ -14,13 +14,14 @@ import java.util.random.RandomGenerator;
 
 /** Loader 与 Controller 共用的唯一规则核心。Controller 只能 restore。 */
 public final class GameRuleCore {
-    private final RandomCandidateGenerator candidateGenerator;
+    private RandomCandidateGenerator candidateGenerator;
     private final RoundFactory roundFactory;
     private final RoundVerifier verifier;
     private final RandomGenerator random;
+    private final IndependentLossGenerator losses = new IndependentLossGenerator();
 
     public GameRuleCore() {
-        this(new RandomCandidateGenerator(), new RoundFactory(), new RoundVerifier(), new SecureRandom());
+        this(null, new RoundFactory(), new RoundVerifier(), new SecureRandom());
     }
 
     private GameRuleCore(RandomCandidateGenerator candidateGenerator, RoundFactory roundFactory,
@@ -47,8 +48,8 @@ public final class GameRuleCore {
 
     public RoundResult generateIndependentLoss(int bl, BigDecimal bs, BigDecimal startingBalance,
                                                RandomGenerator supplied) {
-        requireGenerationEnabled();
-        return finish(candidateGenerator.independentLoss(supplied), bl, bs, startingBalance);
+        if (random == null && supplied == null) throw new IllegalStateException("restore-only GameRuleCore 禁止生成");
+        return finish(losses.generate(supplied != null ? supplied : random), bl, bs, startingBalance);
     }
 
     public RoundResult generateOrdinaryWin(int bl, BigDecimal bs, BigDecimal startingBalance) {
@@ -112,9 +113,13 @@ public final class GameRuleCore {
     }
 
     public double validateIndependentLossStrategy() {
-        requireGenerationEnabled();
-        double rate = candidateGenerator.measureFirstAttemptLossSuccess(random, 200);
-        if (rate < 0.9d) throw new IllegalStateException("LOSS kernel 首次成功率低于下限: " + rate);
+        if (random == null) throw new IllegalStateException("restore-only GameRuleCore 禁止生成");
+        int ok = 0;
+        for (int i = 0; i < 200; i++) {
+            if (IndependentLossGenerator.isIndependentLoss(losses.candidate(random))) ok++;
+        }
+        double rate = ok / 200.0d;
+        if (rate < 0.9d) throw new IllegalStateException("LOSS 首次成功率低于下限: " + rate);
         return rate;
     }
 
@@ -125,8 +130,7 @@ public final class GameRuleCore {
     }
 
     private void requireGenerationEnabled() {
-        if (candidateGenerator == null || random == null) {
-            throw new IllegalStateException("restore-only GameRuleCore 禁止生成");
-        }
+        if (random == null) throw new IllegalStateException("restore-only GameRuleCore 禁止生成");
+        if (candidateGenerator == null) candidateGenerator = new RandomCandidateGenerator();
     }
 }

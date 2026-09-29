@@ -37,7 +37,9 @@ public final class CoreRegressionTest {
         equal(new BigDecimal("120.00"), ResultUtil.stepCash(wheelWithLines,false,new BigDecimal("0.08"),1), "Exact decimal units");
         fails(() -> GameRuleCore.evaluate(wheelWithLines,true), "Feature cannot start a wheel");
         fails(() -> new RoundFact.Step(allWild.ps(),List.of(1,4,1),0), "Unconfigured multiplier rejected");
-        fails(() -> new RoundFact.Step(allWild.ps(),List.of(1,0,1),1000), "Unobserved wheel prize rejected");
+        equal(5500L, GameRuleCore.evaluate(new RoundFact.Step(allWild.ps(),List.of(1,0,1),1000),false).units(),
+                "Help-listed 1000x wheel prize is rule-valid");
+        fails(() -> new RoundFact.Step(allWild.ps(),List.of(1,0,1),4), "Wheel prize outside help rule rejected");
         List<Integer> input = new ArrayList<>(allWild.ps());
         RoundFact.Step frozen = new RoundFact.Step(input,List.of(1,1,1),0);
         input.set(0,6);
@@ -71,7 +73,8 @@ public final class CoreRegressionTest {
             for (int j=0;j<9;j++) ps.add(random.nextInt(7));
             for (int j=0;j<3;j++) muls.add(values[random.nextInt(values.length)]);
             boolean feature = random.nextBoolean();
-            int wem = !feature && muls.get(1)==0 ? (random.nextBoolean()?100:200) : 0;
+            int wem = !feature && muls.get(1)==0
+                    ? RuleBasedBoardGenerator.WHEEL_PRIZES[random.nextInt(RuleBasedBoardGenerator.WHEEL_PRIZES.length)] : 0;
             RoundFact.Step step = new RoundFact.Step(ps,muls,wem);
             equal(GameRuleCore.evaluate(step,feature), ResultUtil.evaluate(step,feature), "Independent random settlement " + i);
         }

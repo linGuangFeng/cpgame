@@ -1,0 +1,60 @@
+---
+name: cpgame-s3-upload
+description: >
+  把 CPGame 静态资源或 publish 包上传到 S3/CDN。代码在 D:\work\hd\s3-admin。
+  Use when the user says 上传 S3, 传到 CDN, 补漏后上传, s3-admin, s-cp1,
+  or after cpgame-capture fills missing static files. /cpgame-s3-upload
+---
+
+业务硬约束以根 AGENTS.md、复刻要求.md、抓包要求.md 为准；本 skill 保留 CP 取证/发布操作，不覆盖新版采集完成标准或生成真实性要求。
+
+
+# S3 上传
+
+工具：`D:\work\hd\s3-admin`，本机 API `http://127.0.0.1:8181`。密钥已保存在该项目的 `data/state.json`，不要读出来写进对话或本 skill。
+
+桶配置名称 / 桶名：`s-cp1`。访问域：`https://cp1.pgf-nm2nd.com`。
+
+## 启动
+
+1. 先 `GET http://127.0.0.1:8181/api/profiles`。已经 200 就复用，不要重启，不要杀已有 s3-admin。
+2. 没起来时用脱离 Job 的方式启动（agent 壳会收割普通子进程）：
+
+```
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.grok\bin\start-detached.ps1" -CommandLine "D:\non-install\java\jdk-21\bin\java.exe -jar D:\work\hd\s3-admin\target\s3-admin-1.0.0.jar" -WorkingDirectory "D:\work\hd\s3-admin" -StdoutLog "D:\work\hd\s3-admin\logs\runtime.out.log" -StderrLog "D:\work\hd\s3-admin\logs\runtime.err.log"
+```
+
+3. 再探活 `GET /api/profiles`，看到 `s-cp1` 即可。
+
+## 创建任务
+
+```
+POST http://127.0.0.1:8181/api/tasks
+Content-Type: application/json
+
+{"sourcePath":"<本机绝对路径>","bucket":"s-cp1","prefix":"<见下>"}
+```
+
+也可用 `"profileId"` 代替 `bucket`。目录会递归上传；**目录名不会自动进 Key**，文件相对 `sourcePath` 的路径接在 prefix 后面。
+
+轮询 `GET /api/tasks/{id}` 直到 `status` 为 `COMPLETED` / `PARTIAL` / `FAILED` / `CANCELLED`。`PARTIAL` 或 `FAILED` 看任务 `logs`，可 `POST /api/tasks/{id}/retry` 一次。未完成不要对用户说已经传上去。
+
+## prefix
+
+s3-admin 会按源路径里的游戏 ID 自动改 prefix（`CpCdnPrefix`）：
+
+- 这些 ID 走 `v2/<rid>`：1090、1380、1400、1670、1780、1940、2060、2300、2350、2410、2470。
+- 其余 ID（8、16、32、41、45、1809、2110、2210 等）走 `<rid>`。
+- 若已显式传入 `v2` 或 `v2/...`，不再改写。
+
+因此：
+
+- 上传 `publish/<ID>-<Name>`：`sourcePath` 指向该目录，`prefix` 可空，让服务按目录名补 ID（v2 游戏会变成 `v2/<rid>`）。
+- 补原站静态资源：Key 必须等于原 URL 去掉 host 后的路径。例如 `https://static.cpgame.io/1809/assets/a.png` → 源目录的相对文件是 `assets/a.png`，`prefix` 为 `1809`。不要把 `resources/` 整包当 publish 上传。
+- 源目录选「相对路径 = Key 去掉 prefix 的那一层」，不要多套一层游戏目录名。
+
+v2 游戏若源旁有 `reportv2.js`，服务会额外传到 `v2/reportv2.js`，不用自己再传一次。
+
+## 补漏默认动作
+
+抓遗漏静态文件并落到本地后，立刻按上面创建任务，不必再问用户。只传本次补到的静态文件（或其所在、路径已对齐 CDN 的目录）。captures/fixtures/reports 不要传。

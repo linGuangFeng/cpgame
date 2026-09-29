@@ -8,10 +8,14 @@ import java.util.List;
 public final class RoundGenerator {
     private final SecureRandom random;
     private final ResultUtil util = new ResultUtil();
-    private final DealingModel model = new DealingModel();
+    private final DealingModel model;
     private final ZeroLossSupport<List<String>> losses;
 
-    public RoundGenerator(SecureRandom random) { this.random = random;losses=new ZeroLossSupport<>(()->model.lossBoard(random),b->util.scatter(b)<5&&util.evaluate(b,1).payout().signum()==0,List::copyOf); }
+    public RoundGenerator(SecureRandom random) { this(random, DealingWeights.empiricalDefaults()); }
+    public RoundGenerator(SecureRandom random, DealingWeights weights) {
+        this.random = random;model=new DealingModel(weights);
+        losses=new ZeroLossSupport<>(()->model.lossBoard(random),b->util.scatter(b)<5&&util.evaluate(b,1).payout().signum()==0,List::copyOf);
+    }
 
     public CompleteRound loss(){
         List<String> board=losses.generate(()->model.lossBoard(random),random::nextInt);

@@ -219,7 +219,7 @@ public final class RedisDirectLoader {
                     integer(p, "generation.min-win-multiplier", 1),
                     integer(p, "generation.max-win-multiplier", 20000),
                     symbols, rpx,
-                    bool(p, "generation.clear-existing", true));
+                    bool(p, "generation.clear-existing", false));
             if (c.port < 1 || c.port > 65535 || c.database < 0 || c.redisGameId <= 0
                     || c.totalMembers < 1 || c.batchSize < 1 || c.maxMembersPerMultiplier < 1
                     || c.minWinMultiplier < 0 || c.maxWinMultiplier < c.minWinMultiplier) {

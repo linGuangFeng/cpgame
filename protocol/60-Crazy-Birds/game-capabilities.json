@@ -6,7 +6,27 @@
   "evidenceStatus": "CAPTURED_ABC225",
   "implementationAllowed": true,
   "ruleCoreAllowed": true,
-  "rulesHash": "sha256:60crazybirds-v1510250430-ways4096",
+  "rulesHash": "sha256:60crazybirds-v1510250430-weighted-b1",
+  "cacheMultiplier": {
+    "scale": 100,
+    "generatorRangeUnit": "CACHE_INTEGER",
+    "zeroPolicy": "ONLY_WHEN_CURRENT_MODE_RANGE_INCLUDES_ZERO"
+  },
+  "redisKeyContract": {
+    "normal": {
+      "family": "PER_BETLOG",
+      "type": 0,
+      "index": "PerKeyList_008000060",
+      "listPattern": "BetLog:008000060:%06d"
+    },
+    "freeSpins": {
+      "family": "MARY",
+      "type": 0,
+      "index": "MaryKeyList_008000060",
+      "listPattern": "MaryLog:008000060:%06d"
+    },
+    "multiplierRangeChangesKeys": false
+  },
   "board": { "reels": 6, "rows": 4, "winModel": "WAYS_4096" },
   "minBet": { "bl": 1, "bs": 1, "ba": 1, "cc": "BRL" },
   "supportedLanguages": {
@@ -30,12 +50,13 @@
     "crazy-birds/log-list",
     "ordinary LOSS",
     "ordinary WIN",
-    "FREE_SPINS fsn=8",
+    "FREE_SPINS scatter reels 3/4/5/6 award 8/15/25/40",
     "WILD_MULTIPLIER pxl/WILDXn",
     "multi-step ss=0 continuation"
   ],
   "unresolvedBehaviors": [
     "feature buy not observed",
-    "mary not applicable"
+    "no independent Mary gameplay was observed; Mary is retained only as the existing free-spin cache family",
+    "empirical symbol weights are not official reel strips or RTP"
   ]
 }

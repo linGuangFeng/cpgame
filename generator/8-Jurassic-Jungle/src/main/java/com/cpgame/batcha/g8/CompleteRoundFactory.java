@@ -11,7 +11,7 @@ public final class CompleteRoundFactory {
     private final ZeroLossSupport<List<String>> lossBoards;
 
     private final int maximumSteps;
-    private final EmpiricalColumnModel model = EmpiricalColumnModel.instance();
+    private EmpiricalColumnModel model;
 
     public CompleteRoundFactory(int maximumSteps) {
         this.maximumSteps = Math.min(GameRuleCore.MAX_STEPS_OBSERVED, Math.max(1, maximumSteps));
@@ -19,9 +19,18 @@ public final class CompleteRoundFactory {
         lossBoards=new ZeroLossSupport<>(()->lossBoardCandidate(defaultsRandom),this::validLossBoard,List::copyOf);
     }
 
+    public CompleteRoundFactory(int maximumSteps, EmpiricalColumnModel model) {
+        this(maximumSteps);
+        this.model = Objects.requireNonNull(model);
+    }
+
+    private EmpiricalColumnModel model() {
+        if (model == null) model = EmpiricalColumnModel.instance();
+        return model;
+    }
+
     public CompleteRound generate(RoundMode requested, SecureRandom random, BigDecimal betSize, int betLevel) {
         Objects.requireNonNull(random);
-        GameRuleCore.validateBet(betSize, betLevel);
         if(requested==RoundMode.LOSS){
             List<String> board=lossBoards.generate(()->lossBoardCandidate(random),random::nextInt);
             BigDecimal paid=GameRuleCore.paidBet(betSize,betLevel);
@@ -43,17 +52,20 @@ public final class CompleteRoundFactory {
         List<String> board = initial(random);
         List<Step> facts = new ArrayList<>();
         int rs = 0;
+        int collected = 0;
         boolean earth = false, water = false, fire = false, giant = false;
         List<ExtraCell> pendingExtra = List.of();
         for (int guard = 0; guard < maximumSteps; guard++) {
             GameRuleCore.BoardResult result = GameRuleCore.evaluateBoard(board, betSize, betLevel);
             boolean wins = result.winAmount().signum() > 0;
-            int collectedPreview = previewCollected(facts, result);
+            int collectedPreview = Math.min(GameRuleCore.COLLECTOR_CAP,
+                collected + GameRuleCore.uniqueWinningCells(result.matches()).size());
             boolean pending = nextDragon(collectedPreview, earth, water, fire, giant) != 0;
             int st = (!wins && !pending) ? 1 : 0;
             int sg = facts.isEmpty() ? 0 : 1;
             facts.add(Step.fact(facts.size(), facts.isEmpty() ? paid : BigDecimal.ZERO, betSize, betLevel,
                 List.copyOf(board), pendingExtra, st, sg, rs));
+            collected = collectedPreview;
             pendingExtra = List.of();
             if (st == 1) break;
             if (wins) {
@@ -89,7 +101,7 @@ public final class CompleteRoundFactory {
                     rs = 2;
                 } else if (next == 3) {
                     fire = true;
-                    board = GameRuleCore.applyFireChecker(board, model.fireSymbol(random));
+                    board = GameRuleCore.applyFireChecker(board, model().fireSymbol(random));
                     rs = 3;
                 } else if (next == 4) {
                     giant = true;
@@ -113,7 +125,7 @@ public final class CompleteRoundFactory {
         List<String> board = new ArrayList<>(GameRuleCore.CELLS);
         for (int i = 0; i < GameRuleCore.CELLS; i++) board.add(null);
         for (int col = 0; col < GameRuleCore.COLUMNS; col++) {
-            List<String> strip = model.draw("PAID_INITIAL", col, 5, random);
+            List<String> strip = model().draw("PAID_INITIAL", col, 5, random);
             if (strip.size() != 5) throw new Rejected();
             for (int row = 0; row < 5; row++) board.set(row * 5 + col, strip.get(row));
         }
@@ -130,7 +142,7 @@ public final class CompleteRoundFactory {
                 if (board.get(index) == null) empty.add(index);
             }
             if (empty.isEmpty()) continue;
-            List<String> fill = model.draw(entry, col, empty.size(), random);
+            List<String> fill = model().draw(entry, col, empty.size(), random);
             if (fill.size() != empty.size()) throw new Rejected();
             for (int i = 0; i < empty.size(); i++) board.set(empty.get(i), fill.get(i));
         }
@@ -145,20 +157,11 @@ public final class CompleteRoundFactory {
             String symbol = next.get(i);
             if (!GameRuleCore.isLow(symbol)) continue;
             extra.add(new ExtraCell(GameRuleCore.protocolCoordinate(i), symbol));
-            next.set(i, model.transformLow(symbol, random));
+            next.set(i, model().transformLow(symbol, random));
         }
         return new Transformed(List.copyOf(next), List.copyOf(extra));
     }
 
-    private static int previewCollected(List<Step> facts, GameRuleCore.BoardResult result) {
-        int prior = 0;
-        for (Step fact : facts) {
-            GameRuleCore.BoardResult priorBoard = GameRuleCore.evaluateBoard(fact.symbols(), fact.betSize(), fact.betLevel());
-            prior = Math.min(GameRuleCore.COLLECTOR_CAP,
-                prior + GameRuleCore.uniqueWinningCells(priorBoard.matches()).size());
-        }
-        return Math.min(GameRuleCore.COLLECTOR_CAP, prior + GameRuleCore.uniqueWinningCells(result.matches()).size());
-    }
 
     private static int nextDragon(int collected, boolean earth, boolean water, boolean fire, boolean giant) {
         if (!earth && collected >= GameRuleCore.EARTH_THRESHOLD) return 1;
@@ -175,19 +178,13 @@ public final class CompleteRoundFactory {
     }
 
     public List<String> lossBoardCandidate(SecureRandom random){
-        List<String> board=new ArrayList<>(java.util.Collections.nCopies(25,"S2"));
-        for(int c=0;c<5;c++){
-            List<String> strip=model.draw("PAID_INITIAL",c,5,random);
-            for(int r=0;r<5;r++)board.set(r*5+c,strip.get(r));
-        }
-        // Orthogonal cluster game: each placed natural symbol differs from already placed neighbours.
+        List<String> board=new ArrayList<>(java.util.Collections.nCopies(25,GameRuleCore.PAYING_SYMBOLS.get(0)));
         for(int r=0;r<5;r++)for(int c=0;c<5;c++){
-            int i=r*5+c;String symbol=board.get(i);
-            if(symbol.equals(GameRuleCore.WILD)||(r>0&&symbol.equals(board.get(i-5)))||(c>0&&symbol.equals(board.get(i-1)))){
-                List<String> allowed=new ArrayList<>();for(String v:GameRuleCore.PAYING_SYMBOLS)
-                    if((r==0||!v.equals(board.get(i-5)))&&(c==0||!v.equals(board.get(i-1))))allowed.add(v);
-                board.set(i,allowed.get(random.nextInt(allowed.size())));
-            }
+            int i=r*5+c;
+            List<String> allowed=new ArrayList<>();
+            for(String v:GameRuleCore.PAYING_SYMBOLS)
+                if((r==0||!v.equals(board.get(i-5)))&&(c==0||!v.equals(board.get(i-1))))allowed.add(v);
+            board.set(i,allowed.get(random.nextInt(allowed.size())));
         }
         return List.copyOf(board);
     }

@@ -10,7 +10,7 @@ public final class GameRules {
     public static final int GAME_ID = 60;
     public static final String GAME_NAME = "Crazy Birds";
     public static final String RULES_VERSION = "v1.5.10.250430";
-    public static final String RULES_HASH = "sha256:60crazybirds-v1510250430-ways4096";
+    public static final String RULES_HASH = "sha256:60crazybirds-v1510250430-weighted-b1";
     public static final int REEL_COUNT = 6;
     public static final int ROWS = 4;
     public static final int BOARD_SIZE = 24;
@@ -18,6 +18,9 @@ public final class GameRules {
     public static final int MIN_LOW_REELS = 3;
     public static final int SCATTER_TRIGGER_REELS = 3;
     public static final int BASE_FREE_SPINS = 8;
+    public static final int CACHE_MULTIPLIER_SCALE = 100;
+    public static final int NORMAL_POOL_TYPE = 0;
+    public static final int FREE_SPINS_MARY_POOL_TYPE = 0;
     public static final List<Integer> BET_LEVELS = List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     public static final List<BigDecimal> BET_SIZES = List.of(
             new BigDecimal("1"), new BigDecimal("5"), new BigDecimal("50"));
@@ -25,6 +28,14 @@ public final class GameRules {
     public static final List<String> LOW = List.of("9", "10", "J", "Q", "K", "A");
     public static final List<String> HIGH = List.of("S5", "S4", "S3", "S2", "S1");
     public static final Set<String> WILDS = Set.of("WILD", "WILDX2", "WILDX3", "WILDX5");
+    public static final List<String> ALL_SYMBOLS = List.of(
+            "9", "10", "J", "Q", "K", "A", "S5", "S4", "S3", "S2", "S1",
+            "WILD", "WILDX2", "WILDX3", "WILDX5", "SC");
+    public static final Set<String> PAID_SYMBOLS = Set.of(
+            "9", "10", "J", "Q", "K", "A", "S5", "S4", "S3", "S2", "S1", "WILD", "SC");
+    public static final Set<String> FREE_SYMBOLS = Set.of(
+            "9", "10", "J", "Q", "K", "A", "S5", "S4", "S3", "S2", "S1",
+            "WILDX2", "WILDX3", "WILDX5", "SC");
     public static final Map<String, Integer> WILD_RPX = Map.of(
             "WILD", 1, "WILDX2", 2, "WILDX3", 3, "WILDX5", 5);
     public static final Map<String, Map<Integer, BigDecimal>> PAYTABLE = Map.ofEntries(
@@ -48,11 +59,21 @@ public final class GameRules {
     }
 
     public static BigDecimal betAmount(int bl, BigDecimal bs) {
-        BigDecimal size = bs.stripTrailingZeros();
-        if (!BET_LEVELS.contains(bl) || BET_SIZES.stream().noneMatch(v -> v.compareTo(size) == 0)) {
-            throw new IllegalArgumentException("不支持的下注 bl=" + bl + ", bs=" + bs);
-        }
-        return size.multiply(BigDecimal.valueOf(bl));
+        return bs.stripTrailingZeros().multiply(BigDecimal.valueOf(bl));
+    }
+
+    public static int cacheMultiplier(BigDecimal actualMultiplier) {
+        return actualMultiplier.multiply(BigDecimal.valueOf(CACHE_MULTIPLIER_SCALE)).intValueExact();
+    }
+
+    public static int freeSpinsForScatterReels(int scatterReels) {
+        return switch (scatterReels) {
+            case 3 -> 8;
+            case 4 -> 15;
+            case 5 -> 25;
+            case 6 -> 40;
+            default -> throw new IllegalArgumentException("免费触发轴数必须为 3..6: " + scatterReels);
+        };
     }
 
     public static int coord(int reel, int row) {

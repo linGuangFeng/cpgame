@@ -44,4 +44,55 @@ class CpgameRedisNamespaceTest {
         assertEquals("false", values.getProperty("redis.ssl"));
         assertEquals("test", values.getProperty("redis.password"));
     }
+
+    @Test void overlayConfigAbsolutizesPublishDirectoryAgainstOriginalDist() throws Exception {
+        Path dist = root.resolve("server-api/50-Lucky-Cat-II/dist");
+        Files.createDirectories(dist);
+        Path original = dist.resolve("controller.properties");
+        Files.writeString(original, "publish.directory=../../../publish/50-Lucky-Cat-II\n"
+            + "player.initial-balance=10000.00\nredis.host=old-host\nredis.port=6379\n");
+        Path gen = root.resolve("generator/50-Lucky-Cat-II/dist");
+        Files.createDirectories(gen);
+        try (java.net.ServerSocket redis = new java.net.ServerSocket(0)) {
+            int redisPort = redis.getLocalPort();
+            Files.writeString(gen.resolve("generator.properties"),
+                "redis.host=127.0.0.1\nredis.port=" + redisPort + "\nredis.database=0\n"
+                    + "redis.username=\nredis.password=test\nredis.ssl=false\n"
+                    + "redis.connect-timeout-ms=5000\nredis.socket-timeout-ms=30000\nredis.game-id=8000050\n");
+            var constructor = CpgameSharedDemoHostMain.class.getDeclaredConstructor(Path.class, int.class, String.class);
+            constructor.setAccessible(true);
+            Object host = constructor.newInstance(root, 50001, "test");
+            Class<?> descriptorType = Class.forName("com.cpgame.admin.CpgameSharedDemoHostMain$ControllerDescriptor");
+            var descriptorCtor = descriptorType.getDeclaredConstructors()[0];
+            descriptorCtor.setAccessible(true);
+            Object descriptor = descriptorCtor.newInstance(
+                "50-Lucky-Cat-II",
+                root.resolve("server-api/50-Lucky-Cat-II"),
+                dist.resolve("controller.jar"),
+                "com.cpgame.luckycatii.server.ServerMain",
+                false,
+                50050,
+                original,
+                "--config",
+                java.net.URI.create("http://127.0.0.1:50050/"),
+                "managed-process",
+                null,
+                false,
+                "--port",
+                "",
+                "0.0.0.0",
+                "--publish");
+            var prepare = CpgameSharedDemoHostMain.class.getDeclaredMethod("prepareRuntimeConfig", descriptorType);
+            prepare.setAccessible(true);
+            Object prepared = prepare.invoke(host, descriptor);
+            Path overlay = (Path) descriptorType.getDeclaredMethod("configFile").invoke(prepared);
+            assertNotEquals(original, overlay);
+            Properties written = new Properties();
+            try (var input = Files.newInputStream(overlay)) { written.load(input); }
+            Path expected = dist.resolve("../../../publish/50-Lucky-Cat-II").normalize().toAbsolutePath();
+            assertEquals(expected.toString(), written.getProperty("publish.directory"));
+            assertEquals("127.0.0.1", written.getProperty("redis.host"));
+            assertEquals("10000.00", written.getProperty("player.initial-balance"));
+        }
+    }
 }

@@ -16,37 +16,42 @@ public final class CompleteRoundFactory {
         if (candidates == null || random == null) throw new IllegalArgumentException("完整局工厂依赖不能为空");
         this.candidates = candidates;
         this.random = random;
-        lossBoards=new ZeroLossSupport<>(()->DealingModel.lossBoard(random),b->ResultUtil.scatterCount(b)<3&&ResultUtil.evaluate(b,new BigDecimal("0.02"),1,0).award.signum()==0,b->Collections.unmodifiableList(new ArrayList<String>(b)));
+        lossBoards=new ZeroLossSupport<>(candidates::lossBoard,b->ResultUtil.scatterCount(b)<3&&ResultUtil.evaluate(b,new BigDecimal("0.02"),1,0).award.signum()==0,b->Collections.unmodifiableList(new ArrayList<String>(b)));
     }
 
     public GeneratedRound create(BigDecimal betSize, int betLevel) {
-        requireBet(betSize, betLevel);
-        for (int attempt=0;attempt<10000;attempt++) {
-            List<List<String>> boards = new ArrayList<List<String>>();
-            List<String> paid = candidates.nextBoard(false,false);boards.add(paid);
-            int scatters=ResultUtil.scatterCount(paid),initial=0,multiplier=0;
-            int scheduled=0,delivered=0,retriggers=0;boolean reject=false;
-            if(scatters>=3) {
-                int[] choice=DealingModel.initial(scatters,random);
-                initial=scheduled=choice[0];multiplier=choice[1];
-                while(delivered<scheduled) {
-                    List<String> board=candidates.nextBoard(false,true);boards.add(board);delivered++;
-                    int n=ResultUtil.scatterCount(board);
-                    if(n>=3){scheduled+=GameRules.scatterAward(n);retriggers++;}
-                    if(scheduled+1>DealingModel.MAX_STEPS||retriggers>DealingModel.MAX_RETRIGGERS){reject=true;break;}
+        List<List<String>> boards = new ArrayList<List<String>>();
+        List<String> paid = candidates.nextBoard(false,false);boards.add(paid);
+        int scatters=ResultUtil.scatterCount(paid),initial=0,multiplier=0;
+        int scheduled=0,retriggers=0;
+        if(scatters>=3) {
+            int[] choice=DealingModel.initial(scatters,random);
+            initial=scheduled=choice[0];multiplier=choice[1];
+            if (scheduled + 1 > GameRules.MAX_STEPS) scheduled = GameRules.MAX_STEPS - 1;
+            while(boards.size()-1<scheduled && boards.size() < GameRules.MAX_STEPS) {
+                boolean allowRetrigger = retriggers < GameRules.MAX_RETRIGGERS
+                        && scheduled + GameRules.scatterAward(3) + 1 <= GameRules.MAX_STEPS;
+                List<String> board = allowRetrigger
+                    ? candidates.nextBoard(false, true)
+                    : candidates.nextBoard(true, true);
+                boards.add(board);
+                int n=ResultUtil.scatterCount(board);
+                if(n>=3 && retriggers < GameRules.MAX_RETRIGGERS){
+                    int next=scheduled+GameRules.scatterAward(n);
+                    if(next+1<=GameRules.MAX_STEPS){
+                        scheduled=next;
+                        retriggers++;
+                    }
                 }
             }
-            if(reject)continue;
-            GeneratedRound round=rebuild(betSize,betLevel,initial,multiplier,boards);
-            RoundVerifier.verify(round);
-            return round;
         }
-        throw new IllegalStateException("No complete round within evidenced generation constraints");
+        GeneratedRound round=rebuild(betSize,betLevel,initial,multiplier,boards);
+        RoundVerifier.verify(round);
+        return round;
     }
 
     public static GeneratedRound rebuild(BigDecimal betSize, int betLevel, int initialFreeSpins,
                                          int freeMultiplier, List<List<String>> boards) {
-        requireBet(betSize, betLevel);
         if (boards == null || boards.isEmpty()) throw new IllegalArgumentException("完整局事实缺少牌面");
         GeneratedRound round = new GeneratedRound();
         round.roundKey = GameRules.GAME_ID + "-" + UUID.randomUUID().toString();
@@ -99,13 +104,8 @@ public final class CompleteRoundFactory {
         return step;
     }
 
-    private static void requireBet(BigDecimal betSize, int betLevel) {
-        if (!GameRules.BET_SIZES.contains(betSize) || !GameRules.BET_LEVELS.contains(betLevel))
-            throw new IllegalArgumentException("不支持的 bs/bl");
-    }
-
     public GeneratedRound createIndependentLoss(BigDecimal bs,int bl){
-        requireBet(bs,bl);List<String> board=lossBoards.generate(()->DealingModel.lossBoard(random),random::nextInt);
+        List<String> board=lossBoards.generate(candidates::lossBoard,random::nextInt);
         GeneratedRound round=rebuild(bs,bl,0,0,Collections.singletonList(board));RoundVerifier.verify(round);return round;
     }
 }

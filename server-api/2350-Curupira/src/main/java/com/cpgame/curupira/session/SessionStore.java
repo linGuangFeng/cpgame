@@ -1,5 +1,6 @@
 package com.cpgame.curupira.session;
 
+import com.cpgame.curupira.api.DemoSelectionPolicy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -17,12 +18,15 @@ public final class SessionStore {
     private final ConcurrentMap<String, SessionState> sessions = new ConcurrentHashMap<>();
     private final BigDecimal initialBalance;
     private final int historyLimit;
+    private final DemoSelectionPolicy selectionPolicy;
     private final SecureRandom random = new SecureRandom();
 
     public SessionStore(@Value("${curupira.initial-balance}") BigDecimal initialBalance,
-                        @Value("${curupira.history-limit}") int historyLimit) {
+                        @Value("${curupira.history-limit}") int historyLimit,
+                        DemoSelectionPolicy selectionPolicy) {
         this.initialBalance = initialBalance;
         this.historyLimit = historyLimit;
+        this.selectionPolicy = selectionPolicy;
     }
 
     public SessionState require(String token) {
@@ -36,7 +40,7 @@ public final class SessionStore {
         byte[] opaqueBytes = new byte[16];
         random.nextBytes(opaqueBytes);
         return new SessionState(token, stableUserId(token), HexFormat.of().formatHex(opaqueBytes),
-                initialBalance, historyLimit);
+                initialBalance, historyLimit, selectionPolicy);
     }
 
     private static long stableUserId(String token) {

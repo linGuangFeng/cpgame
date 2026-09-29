@@ -11,6 +11,7 @@ import com.hd.pg.appapi.business.model.cpgame.hotpot.HotpotSpinMode;
 import com.hd.pg.appapi.business.model.cpgame.hotpot.HotpotSymbolScene;
 import com.hd.pg.appapi.business.model.cpgame.hotpot.HotpotGameRuleCore;
 
+import com.hd.pg.appapi.business.model.cpgame.hotpot.PaidMultiplierPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,6 +20,13 @@ import java.util.Random;
 public final class CompleteRoundFactory {
     private static final int DEFAULT_MAX_FREE_SPINS = 30;
     private final HotpotGameRuleCore core = new HotpotGameRuleCore();
+
+    private final PaidMultiplierPolicy multiplierPolicy;
+
+    public CompleteRoundFactory() { this(PaidMultiplierPolicy.defaults()); }
+    public CompleteRoundFactory(PaidMultiplierPolicy multiplierPolicy) {
+        this.multiplierPolicy = java.util.Objects.requireNonNull(multiplierPolicy);
+    }
 
     public GeneratedRound generateIndependentLoss(Random random) {
         HotpotBoard board = new HotpotIndependentLossGenerator().generate(random);
@@ -51,7 +59,7 @@ public final class CompleteRoundFactory {
         if (maxFreeSpins < 1) throw new IllegalArgumentException("max-free-spins must be >= 1");
         if (random == null) throw new IllegalArgumentException("random source is required");
         HotpotBoardGenerator boards = new HotpotBoardGenerator(
-                random, paidStartWeights, cascadeWeights, freeStartWeights, boostFirstColumnScatter);
+                random, paidStartWeights, cascadeWeights, freeStartWeights, boostFirstColumnScatter, multiplierPolicy);
         List<List<CompleteRoundFact.BoardFact>> spins = new ArrayList<>();
 
         SpinResult paid = generateSpin(boards, boards.generate(HotpotSymbolScene.PAID_START),

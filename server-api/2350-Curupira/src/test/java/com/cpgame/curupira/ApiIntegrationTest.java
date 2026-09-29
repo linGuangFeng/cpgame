@@ -1,8 +1,14 @@
 package com.cpgame.curupira;
 
+import com.cpgame.curupira.api.RoundSource;
+import com.cpgame.curupira.codec.MinimalFactCodec;
+import com.cpgame.curupira.model.CompleteRoundFact;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Import(ApiIntegrationTest.TestRoundConfig.class)
 class ApiIntegrationTest {
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper mapper;
@@ -69,58 +76,23 @@ class ApiIntegrationTest {
     }
 
     @Test
-    void twentyPaidSpinsCoverCatalogAndFeatureBuyUsesCachedMembers() throws Exception {
+    void ordinaryPaidSpinsNeverInventUnknownSpecialModesAndBuyIsRejected() throws Exception {
         String token = "local-" + UUID.randomUUID();
         userInfo(token);
-        boolean sawTrigger = false, sawWin = false, sawLoss = false, sawExpanding = false;
         for (int i = 0; i < 20; i++) {
             JsonNode spin = spin(token, "paid-" + i);
             assertThat(spin.path("code").asInt()).isEqualTo(0);
-            int sgt = spin.at("/data/small_game_type").asInt();
-            int sc = spin.at("/data/res/sc").asInt();
-            if (sgt == 2 && sc >= 3) {
-                sawTrigger = true;
-                assertThat(spin.at("/data/tw").decimalValue()).isEqualByComparingTo("0.00");
-                assertThat(spin.at("/data/res/wa")).isEmpty();
-                JsonNode fe = json(mvc.perform(post("/cp/single_game.Game/gameResult")
-                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
-                        .header("Idempotency-Key", "free-" + i)
-                        .param("token", token).param("gid", "2350").param("language", "en-us")
-                        .param("bet", "0.02").param("level", "1").param("type", "2").param("game_type", "2"))
-                        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
-                assertThat(fe.path("code").asInt()).isEqualTo(0);
-                assertThat(fe.at("/data/f/t").asInt()).isEqualTo(2);
-                while (fe.at("/data/f/st").asInt() > 0) {
-                    fe = json(mvc.perform(post("/cp/single_game.Game/gameResult")
-                            .contentType("application/x-www-form-urlencoded;charset=utf-8")
-                            .header("Idempotency-Key", "free-" + i + "-" + fe.at("/data/f/st").asInt())
-                            .param("token", token).param("gid", "2350").param("language", "en-us")
-                            .param("bet", "0.02").param("level", "1").param("type", "2").param("game_type", "2"))
-                            .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
-                    assertThat(fe.path("code").asInt()).isEqualTo(0);
-                }
-            } else if (spin.at("/data/tw").decimalValue().signum() > 0) {
-                sawWin = true;
-                if (spin.at("/data/res/ps").toString().contains("21,21,21")
-                        || spin.at("/data/res/ps").toString().contains("21, 21, 21")) {
-                    sawExpanding = true;
-                }
-            } else {
-                sawLoss = true;
-            }
+            assertThat(spin.at("/data/small_game_type").asInt()).isZero();
+            assertThat(spin.at("/data/f")).isEmpty();
+            assertThat(spin.at("/data/res/sc").asInt()).isLessThan(3);
         }
-        assertThat(sawTrigger).isTrue();
-        assertThat(sawWin).isTrue();
-        assertThat(sawLoss).isTrue();
         JsonNode buy = json(mvc.perform(post("/cp/single_game.Game/gameResult")
                 .contentType("application/x-www-form-urlencoded;charset=utf-8")
                 .header("Idempotency-Key", "buy-hs")
                 .param("token", token).param("gid", "2350").param("language", "en-us")
                 .param("bet", "0.02").param("level", "1").param("type", "3").param("game_type", "3"))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
-        assertThat(buy.path("code").asInt()).isEqualTo(0);
-        assertThat(buy.at("/data/f/t").asInt()).isEqualTo(3);
-        assertThat(buy.at("/data/res/gt").asInt()).isEqualTo(3);
+        assertThat(buy.path("code").asInt()).isEqualTo(4007);
     }
 
     @Test
@@ -142,7 +114,8 @@ class ApiIntegrationTest {
         JsonNode health = json(mvc.perform(get("/health")).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString());
         assertThat(health.path("bindAddress").asText()).isEqualTo("0.0.0.0");
-        assertThat(health.path("unsupportedUnknownBehaviors")).isEmpty();
+        assertThat(health.path("unsupportedUnknownBehaviors").toString())
+                .isEqualTo("[\"B007_FEATURE_BUY\"]");
     }
 
     private JsonNode spin(String token, String key) throws Exception {
@@ -171,5 +144,21 @@ class ApiIntegrationTest {
 
     private JsonNode json(String body) throws Exception {
         return mapper.readTree(body);
+    }
+
+    @TestConfiguration(proxyBeanMethods = false)
+    static class TestRoundConfig {
+        @Bean
+        RoundSource testRoundSource() {
+            CompleteRoundFact loss = new MinimalFactCodec().decode("CU1PL;S111222333444AAA");
+            return new RoundSource() {
+                @Override public CompleteRoundFact peekLoss() { return loss; }
+                @Override public CompleteRoundFact claimPaidAtOrBelow(int targetMultiplier) { return loss; }
+                @Override public CompleteRoundFact claimMaryAtOrBelow(CompleteRoundFact.Kind kind,
+                                                                       int targetMultiplier) {
+                    throw new AssertionError("Mary must follow a cached trigger");
+                }
+            };
+        }
     }
 }

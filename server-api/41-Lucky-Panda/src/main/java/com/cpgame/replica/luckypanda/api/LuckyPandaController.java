@@ -66,7 +66,7 @@ public final class LuckyPandaController {
         server.start();
         System.out.printf("CONTROLLER_READY gameId=41 port=%d pid=%d rulesVersion=%s rulesHash=%s publish=%s redis=%s:%s db=%s%n",
                 port, ProcessHandle.current().pid(), GameRuleCore.RULES_VERSION, GameRuleCore.RULES_HASH,
-                publish, config.getProperty("redis.host", "18.234.101.161"),
+                publish, config.getProperty("redis.host", "54.172.218.28"),
                 config.getProperty("redis.port", "8021"), config.getProperty("redis.database", "0"));
         if (shared) new CountDownLatch(1).await();
     }
@@ -316,8 +316,8 @@ public final class LuckyPandaController {
 
     private static Properties loadConfig(String value) throws IOException {
         Properties result = new Properties();
-        result.setProperty("redis.host", "18.234.101.161");
-        result.setProperty("redis.port", "8021");
+        result.setProperty("redis.host", "54.172.218.28");
+        result.setProperty("redis.port", "8016");
         result.setProperty("redis.database", "0");
         result.setProperty("redis.game-id", "8000041");
         result.setProperty("redis.ssl", "false");

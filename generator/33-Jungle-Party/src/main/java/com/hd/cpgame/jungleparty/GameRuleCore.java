@@ -16,7 +16,7 @@ public final class GameRuleCore {
     public static final int REELS = 5;
     public static final int ROWS = 3;
     public static final int PAYLINES = 25;
-    public static final String RULES_HASH = GenerationModel.MODEL_HASH;
+    public static final String RULES_HASH = "8522e03f81318ebb80df6219fcb41d380314f12911062c0888066a9464067638";
 
     public enum Symbol { N9, A, H1, H2, H3, H4, H5, J, K, Q, T, Wild, Scat }
     public enum Scenario { RANDOM, ORDINARY_LOSS, ORDINARY_WIN, SCATTER_FREE_ROUNDS }
@@ -33,11 +33,28 @@ public final class GameRuleCore {
     private GameRuleCore() {}
 
     public static Round generate(SecureRandom random, Scenario requested, int betLevel, BigDecimal betSize) {
-        validateBet(betLevel, betSize);
-        GenerationModel.Plan plan = GenerationModel.sample(random, requested);
+        return generate(random, requested, betLevel, betSize, null);
+    }
+
+    static Round generate(SecureRandom random, Scenario requested, int betLevel, BigDecimal betSize,
+                          GenerationModel.WeightProfile weights) {
+        if (requested == Scenario.ORDINARY_LOSS) {
+            return ordinaryRound(IndependentLoss.board(random), Scenario.ORDINARY_LOSS, betLevel, betSize);
+        }
+        if (requested == Scenario.ORDINARY_WIN) {
+            return ordinaryRound(IndependentWin.board(random), Scenario.ORDINARY_WIN, betLevel, betSize);
+        }
+        GenerationModel.Plan plan = GenerationModel.sample(random, requested, weights);
         Scenario scenario = plan.scenario();
         BigDecimal paidBet = money(betSize.multiply(BigDecimal.valueOf(betLevel * PAYLINES)));
         List<Delivery> deliveries = new ArrayList<>();
+        if (scenario == Scenario.ORDINARY_WIN) {
+            // Capture WIN kernels are all large hits (~50x total bet and up). Mix constructed
+            // small/medium boards so Redis ordinary buckets include 5–500 line-pay units.
+            Board board = random.nextInt(5) == 0 ? plan.boards().get(0) : IndependentWin.board(random);
+            if (evaluate(board, betLevel, betSize, 0).award().signum() <= 0) board = IndependentWin.board(random);
+            return ordinaryRound(board, Scenario.ORDINARY_WIN, betLevel, betSize);
+        }
         if (scenario == Scenario.SCATTER_FREE_ROUNDS) {
             BigDecimal cumulative = BigDecimal.ZERO;
             Board trigger = plan.boards().get(0);
@@ -67,9 +84,20 @@ public final class GameRuleCore {
         return round;
     }
 
+    private static Round ordinaryRound(Board board, Scenario scenario, int betLevel, BigDecimal betSize) {
+        Evaluation evaluation = evaluate(board, betLevel, betSize, 0);
+        BigDecimal paidBet = money(betSize.multiply(BigDecimal.valueOf(betLevel * PAYLINES)));
+        List<Delivery> deliveries = List.of(new Delivery(0, paidBet, 1, 0, 0, 0, 0, board,
+                evaluation.wins(), evaluation.award(), evaluation.award(), true));
+        Round round = new Round(RAW_GAME_ID, scenario, betLevel, betSize, paidBet,
+                deliveries.get(deliveries.size() - 1).cumulativeAward(), deliveries);
+        IndependentVerifier.Verification verification = IndependentVerifier.verify(round);
+        if (!verification.pass()) throw new IllegalStateException("generated Round failed verification: " + verification.errors());
+        return round;
+    }
+
     /** Re-evaluates a cached complete Round at the requested legal bet without changing any sampled state. */
     public static Round reprice(Round cached, int betLevel, BigDecimal betSize) {
-        validateBet(betLevel, betSize);
         BigDecimal paidBet = money(betSize.multiply(BigDecimal.valueOf(betLevel * PAYLINES)));
         BigDecimal cumulative = BigDecimal.ZERO;
         List<Delivery> deliveries = new ArrayList<>();
@@ -90,7 +118,6 @@ public final class GameRuleCore {
 
     /** Evidence-derived 25-line evaluator; local probability selection is intentionally outside this method. */
     public static Evaluation evaluate(Board board, int betLevel, BigDecimal betSize, int rpx) {
-        validateBet(betLevel, betSize);
         List<Win> wins = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
         for (int lineIndex = 0; lineIndex < LINE_ROWS.length; lineIndex++) {
@@ -125,11 +152,6 @@ public final class GameRuleCore {
 
     public static String externalName(Symbol symbol) { return symbol == Symbol.N9 ? "9" : symbol.name(); }
     public static Symbol parseSymbol(String value) { return "9".equals(value) ? Symbol.N9 : Symbol.valueOf(value); }
-    private static void validateBet(int level, BigDecimal size) {
-        if (level < 1 || level > 10) throw new IllegalArgumentException("betLevel must be 1..10");
-        if (!(size.compareTo(new BigDecimal("0.02")) == 0 || size.compareTo(new BigDecimal("0.12")) == 0 || size.compareTo(new BigDecimal("0.8")) == 0))
-            throw new IllegalArgumentException("betSize must be 0.02, 0.12 or 0.8");
-    }
     private static BigDecimal money(BigDecimal value) { return value.setScale(2, RoundingMode.HALF_UP).stripTrailingZeros(); }
     private static Map<Symbol, Map<Integer,Integer>> paytable() {
         Map<Symbol, Map<Integer,Integer>> table = new EnumMap<>(Symbol.class);

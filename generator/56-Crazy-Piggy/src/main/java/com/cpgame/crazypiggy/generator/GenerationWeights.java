@@ -6,8 +6,7 @@ import java.util.Map;
 import java.util.random.RandomGenerator;
 
 /**
- * Crazy Piggy 本地复刻生成权重。原厂服务端权重未知；默认值不代表原厂概率或 RTP。
- * 所有正式随机分支都通过本对象显式取权重，避免隐式均匀随机。
+ * Complete-kernel calibration weights measured from the captured training set.
  */
 public final class GenerationWeights {
     public static final String ORDINARY = "ORDINARY";
@@ -15,6 +14,7 @@ public final class GenerationWeights {
 
     private final Map<String, Integer> modeWeights;
     private final Map<String, Integer> symbolWeights;
+    private final Map<String, Integer> boosterSymbolWeights;
     private final Map<Integer, Integer> wheelStepWeights;
     private final Map<Integer, Integer> wheelPositionWeights;
 
@@ -22,9 +22,26 @@ public final class GenerationWeights {
                              Map<String, Integer> symbolWeights,
                              Map<Integer, Integer> wheelStepWeights,
                              Map<Integer, Integer> wheelPositionWeights) {
+        this(modeWeights, symbolWeights, boosterDefaults(), wheelStepWeights, wheelPositionWeights);
+    }
+
+    public GenerationWeights(Map<String, Integer> modeWeights,
+                             Map<String, Integer> symbolWeights,
+                             Map<String, Integer> boosterSymbolWeights) {
+        this(modeWeights, symbolWeights, boosterSymbolWeights,
+                orderedIntMap(new int[]{2, 3, 4, 5, 6}),
+                orderedIntMap(new int[]{0, 1, 2, 3, 4, 5, 6, 7}));
+    }
+
+    private GenerationWeights(Map<String, Integer> modeWeights,
+                              Map<String, Integer> symbolWeights,
+                              Map<String, Integer> boosterSymbolWeights,
+                              Map<Integer, Integer> wheelStepWeights,
+                              Map<Integer, Integer> wheelPositionWeights) {
         this.modeWeights = validated(modeWeights, "模式", Map.of(ORDINARY, 1, BOOSTER_WHEEL, 1));
         this.symbolWeights = validated(symbolWeights, "符号",
                 GameRules.SYMBOLS.stream().collect(LinkedHashMap::new, (m, s) -> m.put(s, 1), Map::putAll));
+        this.boosterSymbolWeights = validated(boosterSymbolWeights, "Booster符号", boosterDefaults());
         this.wheelStepWeights = validated(wheelStepWeights, "轮盘派奖步数",
                 orderedIntMap(new int[]{2, 3, 4, 5, 6}));
         this.wheelPositionWeights = validated(wheelPositionWeights, "轮盘位置",
@@ -35,14 +52,13 @@ public final class GenerationWeights {
         return new GenerationWeights(
                 orderedStringMap(new String[]{ORDINARY, BOOSTER_WHEEL}, new int[]{98, 2}),
                 orderedStringMap(new String[]{"HOT", "SEV", "H2", "H3", "H4", "H5", "H6", "H7"},
-                        new int[]{2, 4, 6, 8, 12, 16, 22, 30}),
-                orderedIntMap(new int[]{2, 3, 4, 5, 6}, new int[]{35, 25, 18, 13, 9}),
-                orderedIntMap(new int[]{0, 1, 2, 3, 4, 5, 6, 7},
-                        new int[]{20, 5, 16, 14, 12, 5, 10, 18}));
+                        new int[]{627, 1829, 1555, 1399, 1401, 1458, 1565, 1470}),
+                boosterDefaults());
     }
 
     public Map<String, Integer> modeWeights() { return modeWeights; }
     public Map<String, Integer> symbolWeights() { return symbolWeights; }
+    public Map<String, Integer> boosterSymbolWeights() { return boosterSymbolWeights; }
     public Map<Integer, Integer> wheelStepWeights() { return wheelStepWeights; }
     public Map<Integer, Integer> wheelPositionWeights() { return wheelPositionWeights; }
 
@@ -85,5 +101,10 @@ public final class GenerationWeights {
         LinkedHashMap<String, Integer> result = new LinkedHashMap<>();
         for (int i = 0; i < keys.length; i++) result.put(keys[i], values[i]);
         return result;
+    }
+
+    private static Map<String, Integer> boosterDefaults() {
+        return orderedStringMap(new String[]{"H2", "H3", "H4", "H5", "H6", "H7"},
+                new int[]{63, 45, 72, 63, 63, 18});
     }
 }

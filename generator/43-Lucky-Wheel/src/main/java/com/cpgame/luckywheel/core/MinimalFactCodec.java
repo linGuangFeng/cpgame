@@ -10,6 +10,7 @@ import java.util.List;
  */
 public final class MinimalFactCodec {
     private static final List<Character> SYMBOL_CODES = List.of('0', '1', '3', '4', '5');
+    private static final IndependentLossGenerator LOSSES = new IndependentLossGenerator();
 
     public RoundFacts extract(GameRound round) {
         SpinResult result = round.deliveries().get(0).result();
@@ -23,19 +24,36 @@ public final class MinimalFactCodec {
     }
 
     public byte[] encodeRedisMember(RoundFacts facts) {
+        ResultAnalysis analysis = ResultUtil.analyze(facts);
+        if (analysis.outcome() == OutcomeType.ORDINARY_LOSS && !analysis.continuationRequired()) {
+            return new byte[]{'#'};
+        }
         StringBuilder value = new StringBuilder(9);
         if (facts.betProfile() == 5) value.append('5');
         value.append(facts.mode());
-        if (facts.mode() == 1) value.append(facts.multiplier());
+        if (facts.mode() == 1) value.append(facts.multiplier() == 10 ? 'A' : (char) ('0' + facts.multiplier()));
         appendSymbols(value, facts.baseSymbols());
         if (facts.mode() == 2) appendSymbols(value, facts.respinSymbols());
-        if (facts.mode() == 3) value.append(String.format(java.util.Locale.ROOT, "%03d", facts.luckyWheelAward()));
+        if (facts.mode() == 3) {
+            int award = facts.luckyWheelAward();
+            value.append(award >= 1000
+                    ? String.format(java.util.Locale.ROOT, "%04d", award)
+                    : String.format(java.util.Locale.ROOT, "%03d", award));
+        }
         return value.toString().getBytes(StandardCharsets.US_ASCII);
     }
 
     public RoundFacts decodeRedisMember(byte[] member) {
+        return decodeRedisMember(member, 1);
+    }
+
+    /** betProfile comes from the isolated Redis key and is required to materialize #. */
+    public RoundFacts decodeRedisMember(byte[] member, int betProfile) {
         if (member == null) throw new IllegalArgumentException("Redis member 不能为空");
         String value = new String(member, StandardCharsets.US_ASCII);
+        if ("#".equals(value)) {
+            return LOSSES.generate(betProfile == 1 ? 1 : 5);
+        }
         if (!value.isEmpty() && value.charAt(0) == '5') return decodeUnlocked(value);
         return switch (value.length() == 0 ? -1 : value.charAt(0)) {
             case '0' -> {
@@ -44,8 +62,7 @@ public final class MinimalFactCodec {
             }
             case '1' -> {
                 requireLength(value, 4);
-                int multiplier = Character.digit(value.charAt(1), 10);
-                if (multiplier != 2 && multiplier != 5) throw new IllegalArgumentException("md=1 倍率码不合法");
+                int multiplier = decodeMultiplier(value.charAt(1));
                 yield RoundFacts.multiplier(decodeSymbols(value, 2), multiplier);
             }
             case '2' -> {
@@ -61,13 +78,12 @@ public final class MinimalFactCodec {
             case '0' -> { requireLength(value, 5); yield RoundFacts.ordinary(5, decodeSymbols(value, 2, 3)); }
             case '1' -> {
                 requireLength(value, 6);
-                int multiplier = Character.digit(value.charAt(2), 10);
-                if (multiplier != 2 && multiplier != 5) throw new IllegalArgumentException("md=1 倍率码不合法");
+                int multiplier = decodeMultiplier(value.charAt(2));
                 yield RoundFacts.multiplier(5, decodeSymbols(value, 3, 3), multiplier);
             }
             case '2' -> { requireLength(value, 8); yield RoundFacts.respin(5, decodeSymbols(value, 2, 3), decodeSymbols(value, 5, 3)); }
             case '3' -> {
-                requireLength(value, 8);
+                if (value.length() < 8) throw new IllegalArgumentException("Redis member 长度不合法");
                 int award;
                 try { award = Integer.parseInt(value.substring(5)); }
                 catch (NumberFormatException error) { throw new IllegalArgumentException("md=3 奖励码不合法", error); }
@@ -99,6 +115,15 @@ public final class MinimalFactCodec {
             symbols[i] = "H" + code;
         }
         return List.of(symbols);
+    }
+
+    private static int decodeMultiplier(char code) {
+        if (code == 'A' || code == 'a') return 10;
+        int multiplier = Character.digit(code, 10);
+        if (multiplier != 2 && multiplier != 5 && multiplier != 10) {
+            throw new IllegalArgumentException("md=1 倍率码不合法");
+        }
+        return multiplier;
     }
 
     private static void requireLength(String value, int expected) {

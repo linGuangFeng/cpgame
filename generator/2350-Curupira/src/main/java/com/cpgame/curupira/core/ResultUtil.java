@@ -15,6 +15,11 @@ public final class ResultUtil{
  }
  public void assertOrdinaryTerminal(EvaluatedBoard b){if(b.scatterCount()>=GameRules.SCATTER_TRIGGER)throw new IllegalArgumentException("Unresolved special mode");}
  public void assertIndependentLoss(EvaluatedBoard b){assertOrdinaryTerminal(b);if(!b.awards().isEmpty()||b.multiplierSum()!=0)throw new IllegalArgumentException("Not LOSS");}
+ public com.cpgame.curupira.model.CompleteRoundFact.Kind classifyPaid(EvaluatedBoard b){
+  if(b.scatterCount()>=GameRules.SCATTER_TRIGGER)return com.cpgame.curupira.model.CompleteRoundFact.Kind.TRIGGER;
+  if(!b.expandingWildColumns().isEmpty())return com.cpgame.curupira.model.CompleteRoundFact.Kind.EXPANDING_WILD;
+  return b.awards().isEmpty()?com.cpgame.curupira.model.CompleteRoundFact.Kind.LOSS:com.cpgame.curupira.model.CompleteRoundFact.Kind.WIN;
+ }
  public RoundAnalysis analyzeRound(CompleteRound round){
   if(round==null||round.roundKey()<=0||round.deliveries().isEmpty())throw new IllegalArgumentException("Complete Round identity missing");
   List<EvaluatedBoard>derived=new ArrayList<>();int multiplier=0;
@@ -29,7 +34,7 @@ public final class ResultUtil{
   if(fact==null)throw new IllegalArgumentException("Complete Round fact missing");
   return fact.redisMultiplier();
  }
- private static void validate(List<Integer>s){if(s==null||s.size()!=GameRules.CELL_COUNT)throw new IllegalArgumentException("res.ps must contain 15 symbols");if(s.stream().anyMatch(v->v==null||!GameRules.SYMBOLS.contains(v)))throw new IllegalArgumentException("Unknown symbol");}
+ private static void validate(List<Integer>s){if(s==null||s.size()!=GameRules.CELL_COUNT)throw new IllegalArgumentException("res.ps must contain 15 symbols");if(s.stream().anyMatch(v->v==null||!GameRules.SYMBOLS.contains(v)))throw new IllegalArgumentException("Unknown symbol");if(!GameRules.hasAtMostOneScatterPerColumn(s))throw new IllegalArgumentException("2350 每列最多 1 个 Scatter");}
  private static Award line(List<Integer>s,int[]rows,int number){int candidate=GameRules.WILD;for(int c=0;c<GameRules.COLUMNS;c++){int v=s.get(wireIndex(c,rows[c]));if(v!=GameRules.WILD){if(v==GameRules.SCATTER)return null;candidate=v;break;}}int count=0;for(int c=0;c<GameRules.COLUMNS;c++){int v=s.get(wireIndex(c,rows[c]));if(v!=candidate&&v!=GameRules.WILD)break;count++;}Integer m=GameRules.PAYOUTS.get(candidate).get(count);return m==null?null:new Award(count,number,m,candidate);}
  /** 前端 payline 行号从上到下为 0..2，而 wire ps 在每轴内按相反方向存放。 */
  private static int wireIndex(int column,int visualRow){return column*GameRules.ROWS+(GameRules.ROWS-1-visualRow);}

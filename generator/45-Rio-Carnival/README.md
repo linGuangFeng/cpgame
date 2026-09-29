@@ -1,8 +1,8 @@
 # Rio Carnival Java Redis 结果生成器
 
-本工程是游戏 45 的正式完整 Round 生成链路。`GameRuleCore` 使用 `SecureRandom` 和由 1,306 个训练 Round 聚合出的联合特殊符号形状/条件卷轴窗口模型生成牌面；`CompleteRoundFactory` 从一个付费起点一次生成到所有免费与重触发结束；`ResultUtil`/`RoundVerifier` 独立反推 25 条固定线、Wild、奖表、累计奖金、免费进度和终止边界。运行时不读取 fixtures、抓包或历史响应，也没有强制场景、固定牌面或按次数轮播。
+本工程是游戏 45 的正式完整 Round 生成链路。`GameRuleCore` 使用 `SecureRandom`，由 `RandomBoardCandidateGenerator` 按逐牌经验权重和已确认的 Scatter/Wild 约束生成牌面；`CompleteRoundFactory` 从一个付费起点一次生成到所有免费与重触发结束；`ResultUtil`/`RoundVerifier` 独立反推 25 条固定线、Wild、奖表、累计奖金、免费进度和终止边界。运行时不读取 fixtures、抓包、历史响应或旧模型资源，也没有强制场景、固定牌面或按次数轮播。
 
-原厂没有公开 RNG 或 RTP 权重，交付不作原厂 RTP 声明。聚合模型固定封装在 JAR 中；`generator.properties` 只含 Redis 与数量参数，没有 seed 或可改写规则的权重。测试代码才可使用确定性随机源复现故障。
+原厂没有公开 RNG 或 RTP 权重，交付不作原厂 RTP 声明。`generator.properties` 中的逐牌权重是可追溯的本地经验配置；交付 JAR 不再包含或加载 `rio-dealing-model.json`。测试代码才可使用确定性随机源复现故障。
 
 Loader 对每个自然生成的 Round 执行以下流程：
 

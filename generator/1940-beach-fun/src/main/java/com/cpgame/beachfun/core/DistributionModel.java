@@ -93,34 +93,12 @@ public final class DistributionModel {
     public String sourceHash(){return sourceHash;}
     public long conditionedColumnRetries(){return conditionedColumnRetries;}
 
-    private final Map<String,Weighted> lossGroups=new java.util.concurrent.ConcurrentHashMap<>();
-    private Weighted filtered(String key,java.util.function.Predicate<String> eligible){
-        Weighted source=groups.get(key);if(source==null)throw new IllegalStateException("missing loss support "+key);
-        List<String> values=new ArrayList<>();List<Long> counts=new ArrayList<>();long previous=0;
-        for(int i=0;i<source.values.length;i++){
-            long count=source.cumulative[i]-previous;previous=source.cumulative[i];
-            if(eligible.test(source.values[i])){values.add(source.values[i]);counts.add(count);}
-        }
-        long total=0;long[] cumulative=new long[counts.size()];for(int i=0;i<counts.size();i++)cumulative[i]=total+=counts.get(i);
-        if(total==0)throw new IllegalStateException("empty conditioned loss support "+key);
-        return new Weighted(values.toArray(String[]::new),cumulative,total);
-    }
-    private static int regularMask(String vector){int mask=0;for(char v:vector.toCharArray()){int id=Character.digit(v,36);if(id<1||id>8)return -1;mask|=1<<(id-1);}return mask;}
     public GameRuleCore.Cascade lossInitial(SecureRandom random,GameRuleCore rules){
-        Weighted layouts=lossGroups.computeIfAbsent("layout",k->filtered("P:L",v->Long.parseLong(v.split("\\.")[0],16)==0));
-        String[] layout=layouts.draw(random).split("\\.");long goldMask=Long.parseLong(layout[1],16);
-        int[] board=new int[20];boolean[] gold=new boolean[20];int prefix=255;
-        for(int c=0;c<5;c++){
-            final int col=c,prior=prefix;
-            Weighted vectors=lossGroups.computeIfAbsent(c+":"+prefix,k->filtered("P:M:"+col+":0:"+prior,v->{
-                int mask=regularMask(v);if(mask<0)return false;
-                if(col==1)return (mask&prior)==0;
-                if(col==0){Weighted next=groups.get("P:M:1:0:"+mask);if(next==null)return false;for(String w:next.values)if(regularMask(w)>=0&&(regularMask(w)&mask)==0)return true;return false;}
-                return true;
-            }));
-            String v=vectors.draw(random);for(int row=0;row<4;row++){int pos=c*4+row;board[pos]=Character.digit(v.charAt(row),36);gold[pos]=(goldMask&(1L<<pos))!=0;}
-            prefix&=regularMask(v);
-        }
+        int[] board=new int[20];boolean[] gold=new boolean[20];
+        for(int row=0;row<4;row++)board[row]=1+random.nextInt(4);
+        for(int row=0;row<4;row++)board[4+row]=5+random.nextInt(4);
+        for(int reel=2;reel<5;reel++)
+            for(int row=0;row<4;row++)board[reel*4+row]=1+random.nextInt(8);
         var result=new GameRuleCore.Cascade(board,gold,rules.evaluate(board,1));check(result,false,0);return result;
     }
 }

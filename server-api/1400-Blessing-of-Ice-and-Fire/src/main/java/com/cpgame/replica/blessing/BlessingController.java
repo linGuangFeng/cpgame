@@ -137,9 +137,7 @@ public final class BlessingController {
             int betType = Integer.parseInt(form.getOrDefault("bet_type", "3"));
             if (betType < 1 || betType > 3) throw new IllegalArgumentException("bet_type must be 1, 2 or 3");
             BigDecimal betSize = decimal(form.getOrDefault("bet_gold", "0.5"), "bet_gold");
-            if (betSize.compareTo(new BigDecimal("0.5")) < 0) betSize = new BigDecimal("0.5");
             int level = positiveInt(form.getOrDefault("level", "1"), "level");
-            if (level > 10) level = 10;
             String rawOdd = firstNonBlank(form.get("odd"), form.get("odds"));
             int requestedOdd = rawOdd == null
                     ? BlessingRoundFactory.sampleRequestedOdd(RANDOM, betType)

@@ -150,7 +150,9 @@ final class MonsterSlayerService {
         boolean paidStart = a.index == 0;
         ObjectNode data = project(s, a.round, a.index, a.bet, a.level, paidStart, a.rootOid, a.buyMultiple, a.cumulativeWin, a.requestType);
         a.responses.add(data.deepCopy());
-        a.cumulativeWin = a.cumulativeWin.add(data.path("tw").decimalValue());
+        // The trigger's ordinary award is credited, but original f.tw starts at zero.
+        if (!(paidStart && a.round.special() && a.round.steps().get(0).feature().roles().isEmpty()))
+            a.cumulativeWin = a.cumulativeWin.add(data.path("tw").decimalValue());
         a.index++;
         if (a.index >= a.round.steps().size()) {
             s.history.add(0, historyRow(a));
@@ -177,7 +179,7 @@ final class MonsterSlayerService {
         d.put("cl", 0);
         d.put("eg", s.balance);
         GameRuleCore.Step previous = index > 0 ? round.steps().get(index - 1) : null;
-        d.set("f", feature(step, previous, index, bet, level, priorFeatureWin.add(win)));
+        d.set("f", feature(step, previous, index, bet, level, round.special() && index == 0 && step.feature().roles().isEmpty() ? BigDecimal.ZERO : priorFeatureWin.add(win)));
         d.put("l", level);
         d.put("o", BigDecimal.valueOf(result.multiplierCenti(), 2));
         d.put("oid", oid);
@@ -256,142 +258,26 @@ final class MonsterSlayerService {
             int[] locCells, int[] locIds, int[] rbs) {
         if (roles != null && !roles.isEmpty()) {
             try {
-                return JSON.readTree(roles);
+                ArrayNode resolved = com.cpgame.monsterslayer.core.HuntTrace.roles(roles);
+                for (JsonNode role : resolved) for (JsonNode action : role) {
+                    ObjectNode state = (ObjectNode) action.path("f");
+                    state.put("b", bet); state.put("l", level);
+                    // Original choreography uses a zero interim win; the outer f.tw is cumulative.
+                    state.put("tw", 0);
+                }
+                return resolved;
             } catch (Exception e) {
                 throw new IllegalStateException("stored hunt roles are not valid JSON", e);
             }
         }
-        return huntRoles(step, previous, index, animals, hearts, locCells, locIds, rbs, bet, level, cumulative);
-    }
-
-    private ArrayNode huntRoles(GameRuleCore.Step step, GameRuleCore.Step previous, int index,
-            ArrayNode animals, ArrayNode hearts, int[] locCells, int[] locIds, int[] rbs,
-            BigDecimal bet, int level, BigDecimal cumulative) {
-        ArrayNode r = JSON.createArrayNode();
-        if (index == 0 || step.gameType() == 0) return r;
-        ObjectNode innerLoc = locObject(locCells, locIds);
-        JsonNode af = step.gameType() == 4 ? JSON.createArrayNode() : innerLoc.deepCopy();
-        int[] currentHearts = toInts(hearts);
-        int[] previousHearts = previous == null ? currentHearts : previous.feature().hearts();
-        if (previousHearts.length == 0) previousHearts = currentHearts;
-        boolean dropped = heartDropped(previousHearts, currentHearts);
-        int[] target = rbs.length > 0 ? rbs : locCells;
-        int monsterId = monsterAt(locCells, locIds, target.length > 0 ? target[0] : -1, animals);
-        int ln = laneFor(animals, monsterId, currentHearts.length);
-        int heart = ln - 1 < currentHearts.length ? currentHearts[ln - 1] : 1;
-        ObjectNode sp = weaponPath(step.gameType(), target, locCells);
-        if (step.gameType() == 4) {
-            r.add(roleObject("1", af, innerLoc, animals, previousHearts.length == 0 ? currentHearts : previousHearts,
-                    bet, level, step, index, cumulative, ln, 1, 1, heart, monsterId, JSON.createObjectNode()));
-            ObjectNode reelFive = JSON.createObjectNode();
-            ArrayNode cells = reelFive.putArray("2");
-            cells.add(12).add(13).add(14);
-            r.add(roleObject("1", af, innerLoc, animals, currentHearts, bet, level, step, index, cumulative,
-                    Math.max(1, ln - 1), 1, 1, heart, monsterId, reelFive));
-            return r;
-        }
-        if (step.gameType() >= 3) {
-            r.add(roleObject("1", af, innerLoc, animals, previousHearts, bet, level, step, index, cumulative,
-                    ln, 1, dropped ? 0 : 1, heart, monsterId, sp));
-            r.add(roleObject("1", af, innerLoc, animals, currentHearts, bet, level, step, index, cumulative,
-                    ln, 1, 1, heart, monsterId, sp.deepCopy()));
-            return r;
-        }
-        ObjectNode bundle = r.addObject();
-        if (dropped) {
-            bundle.set("1", roleBody(af, innerLoc, animals, previousHearts, bet, level, step, index, cumulative,
-                    ln, 1, 0, heart, monsterId, sp));
-            bundle.set("2", roleBody(af, innerLoc, animals, currentHearts, bet, level, step, index, cumulative,
-                    ln, 2, 0, heart, monsterId, sp.deepCopy()));
-        } else {
-            bundle.set("1", roleBody(af, innerLoc, animals, currentHearts, bet, level, step, index, cumulative,
-                    ln, 1, 1, heart, monsterId, sp));
-        }
-        return r;
-    }
-
-    private ObjectNode roleObject(String key, JsonNode af, ObjectNode innerLoc,
-            ArrayNode animals, int[] hs, BigDecimal bet, int level, GameRuleCore.Step step, int index,
-            BigDecimal cumulative, int ln, int dt, int ib, int heart, int monsterId, ObjectNode sp) {
-        ObjectNode wrap = JSON.createObjectNode();
-        wrap.set(key, roleBody(af, innerLoc, animals, hs, bet, level, step, index, cumulative, ln, dt, ib, heart, monsterId, sp));
-        return wrap;
-    }
-
-    private ObjectNode roleBody(JsonNode af, ObjectNode innerLoc, ArrayNode animals,
-            int[] hs, BigDecimal bet, int level, GameRuleCore.Step step, int index, BigDecimal cumulative,
-            int ln, int dt, int ib, int heart, int monsterId, ObjectNode sp) {
-        ObjectNode role = JSON.createObjectNode();
-        role.set("af", af.deepCopy());
-        role.set("bf", af.deepCopy());
-        ObjectNode rf = role.putObject("f");
-        rf.set("a", animals.deepCopy());
-        rf.put("b", bet);
-        rf.put("but", 0);
-        rf.putArray("cs").addObject().put("h", heart).put("t", monsterId);
-        rf.put("gt", step.gameType());
-        ArrayNode hsNode = rf.putArray("hs");
-        for (int value : hs) hsNode.add(value);
-        rf.put("l", level);
-        rf.set("loc", innerLoc.deepCopy());
-        rf.put("m", Math.max(1, index));
-        rf.put("next_type", step.nextType());
-        rf.put("ts", Math.max(0, index - 1));
-        rf.put("tw", cumulative);
-        ObjectNode ls = role.putObject("ls");
-        ls.putObject("ca").put("h", heart).put("t", monsterId);
-        ls.put("dt", dt);
-        ls.put("ib", ib);
-        ls.put("ln", ln);
-        ls.put("rand", 100 + Math.floorMod(index * 137 + ln * 41 + monsterId * 17, 900));
-        if (sp.size() == 0 && ib == 1 && step.gameType() < 4) role.set("sp", JSON.createArrayNode());
-        else role.set("sp", sp);
-        return role;
+        if (index == 0 || step.gameType() == 0) return JSON.createArrayNode();
+        throw new IllegalStateException("special cache is missing weapon facts; rebuild with the rule-driven Loader");
     }
 
     private static ObjectNode locObject(int[] cells, int[] ids) {
         ObjectNode loc = JSON.createObjectNode();
         for (int i = 0; i < cells.length; i++) loc.put(Integer.toString(cells[i]), ids[i]);
         return loc;
-    }
-
-    private static ObjectNode weaponPath(int gameType, int[] target, int[] locCells) {
-        ObjectNode sp = JSON.createObjectNode();
-        int[] cells = target.length > 0 ? target : locCells;
-        if (cells.length == 0 || gameType == 4) return sp;
-        ArrayNode path = sp.putArray("5");
-        for (int cell : cells) path.add(cell);
-        return sp;
-    }
-
-    private static int monsterAt(int[] locCells, int[] locIds, int cell, ArrayNode animals) {
-        for (int i = 0; i < locCells.length; i++) if (locCells[i] == cell) return locIds[i];
-        if (locIds.length > 0) return locIds[0];
-        if (animals.size() > 0) return animals.get(0).path("t").asInt(1);
-        return 1;
-    }
-
-    private static int laneFor(ArrayNode animals, int monsterId, int heartCount) {
-        for (int i = 0; i < animals.size(); i++) {
-            if (animals.get(i).path("t").asInt() == monsterId) return i + 1;
-        }
-        int lanes = Math.max(1, Math.max(animals.size(), heartCount));
-        int id = monsterId;
-        if (id < 1) id = 1;
-        if (id > lanes) id = lanes;
-        return id;
-    }
-
-    private static boolean heartDropped(int[] previous, int[] current) {
-        int n = Math.min(previous.length, current.length);
-        for (int i = 0; i < n; i++) if (current[i] < previous[i]) return true;
-        return false;
-    }
-
-    private static int[] toInts(ArrayNode node) {
-        int[] out = new int[node.size()];
-        for (int i = 0; i < out.length; i++) out[i] = node.get(i).asInt();
-        return out;
     }
 
     ObjectNode historySummary(Map<String, String> form) {

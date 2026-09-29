@@ -11,7 +11,11 @@ record ServerConfig(Path publishDirectory,String redisHost,int redisPort,String 
         Properties p=new Properties();try(InputStream in=Files.newInputStream(configPath)){p.load(in);}Path base=configPath.toAbsolutePath().normalize().getParent();
         Path publish=publishOverride!=null?publishOverride.toAbsolutePath().normalize():base.resolve(required(p,"publish.directory")).normalize();
         var c=new ServerConfig(publish,required(p,"redis.host"),integer(p,"redis.port"),p.getProperty("redis.username",""),p.getProperty("redis.password",""),integer(p,"redis.database"),Boolean.parseBoolean(required(p,"redis.ssl")),integer(p,"redis.connect-timeout-ms"),integer(p,"redis.socket-timeout-ms"),integer(p,"redis.game-id"),decimal(p,"selection.loss-probability"),decimal(p,"selection.small-probability"),decimal(p,"selection.free-probability"));
-        if(!"18.234.101.161".equals(c.redisHost)||c.redisPort!=8021||c.redisDatabase < 0||c.gameId <= 0)throw new IllegalArgumentException("fixed Redis/game contract mismatch");
+                boolean aws = "18.234.101.161".equals(c.redisHost) && c.redisPort == 8021;
+        boolean nas = "192.168.10.3".equals(c.redisHost) && c.redisPort == 6379;
+        boolean local = "127.0.0.1".equals(c.redisHost) && c.redisPort == 6379;
+        boolean fd = "54.172.218.28".equals(c.redisHost) && c.redisPort == 8016;
+        if((!aws && !nas && !local && !fd) || c.redisDatabase < 0 || c.gameId <= 0) throw new IllegalArgumentException("fixed Redis/game contract mismatch");
         if(!Files.isRegularFile(c.publishDirectory.resolve("index.html")))throw new IllegalArgumentException("original publish index.html missing");return c;
     }
     RedisClient openRedis(){return new RedisClient(redisHost,redisPort,redisUsername,redisPassword,redisDatabase,redisSsl,connectTimeoutMs,socketTimeoutMs);}

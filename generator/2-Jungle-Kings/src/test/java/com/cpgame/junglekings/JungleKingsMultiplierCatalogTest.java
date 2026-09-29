@@ -127,6 +127,15 @@ class JungleKingsMultiplierCatalogTest {
         assertEquals(0, new BigDecimal("50").compareTo(round.winAmount()));
     }
 
+    @Test
+    void generateAcceptsStakeOutsideConfigList() {
+        SecureRandom random = new SecureRandom();
+        CompleteRound round = CompleteRoundFactory.generate(
+                random, SINGLE, new BigDecimal("7.7"), 12, 1000);
+        VERIFIER.verify(round);
+        assertEquals(100, round.multiplier());
+    }
+
     private static boolean containsPair(List<int[]> combos, int top, int bottom) {
         for (int[] pair : combos) {
             if (pair[0] == top && pair[1] == bottom) return true;

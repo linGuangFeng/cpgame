@@ -105,12 +105,17 @@ class GameRuleCoreTest {
     }
 
     @Test void redisMemberRoundTripKeepsCompleteRoundAndDeliveryIdentity() {
-        RoundResult round = GameRuleCore.forTesting(56007).generateIndependentLoss(BS, 1);
+        GameRuleCore source = GameRuleCore.forTesting(56007);
         MinimalRoundFactCodec codec = new MinimalRoundFactCodec(new RoundFactory(), verifier);
-        String payload = codec.encodeRedisMemberString(round);
-        RoundResult rebuilt = codec.decodeRedisMember(payload);
-        verifier.verifyRecovery(round, rebuilt);
-        assertTrue(payload.startsWith(MinimalRoundFactCodec.PREFIX + ";"));
-        assertFalse(payload.contains("{") || payload.contains("\"") || payload.contains("deliveries"));
+        for (RoundResult round : java.util.List.of(source.generateIndependentLoss(BS, 1),
+                source.generateOrdinaryWin(BS, 1), source.generateBoosterRound(BS, 1))) {
+            String payload = codec.encodeRedisMemberString(round);
+            RoundResult rebuilt = codec.decodeRedisMember(payload);
+            assertEquals(verifier.verify(round).mode(), verifier.verify(rebuilt).mode());
+            assertEquals(0, round.totalAward().divide(round.betAmount())
+                    .compareTo(rebuilt.totalAward().divide(rebuilt.betAmount())));
+            assertTrue(payload.equals("#") || payload.startsWith(MinimalRoundFactCodec.PREFIX + "|"));
+            assertFalse(payload.contains(",") || payload.contains("{") || payload.contains("\"") || payload.contains("deliveries"));
+        }
     }
 }

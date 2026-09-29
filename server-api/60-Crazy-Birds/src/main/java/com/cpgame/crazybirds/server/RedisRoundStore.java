@@ -2,6 +2,7 @@ package com.cpgame.crazybirds.server;
 
 import com.cpgame.demo.redis.RedisFloorLookup;
 
+import com.cpgame.crazybirds.generator.GameRules;
 import com.cpgame.crazybirds.generator.MinimalRoundFactCodec;
 import com.cpgame.crazybirds.generator.RedisLoader;
 import com.cpgame.crazybirds.generator.RoundFactory;
@@ -25,8 +26,9 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import javax.net.ssl.SSLSocketFactory;
 
-/** Controller v3 唯一结果源：结果类别 -> 已有整数倍率 -> LINDEX 一整个 ASCII member。 */
+/** Controller v4 唯一结果源：场景 -> 倍率段 -> 已有整数倍率 -> LINDEX 一整个 ASCII member。 */
 public class RedisRoundStore {
     private final AppConfig config;
     private final SecureRandom random = new SecureRandom();
@@ -37,15 +39,16 @@ public class RedisRoundStore {
     RedisRoundStore() { this.config = null; }
 
     public RoundResult claim(BigDecimal bs, int bl, BigDecimal startingBalance) {
-        Outcome outcome = chooseOutcome();
+        boolean freeSpins = config.chooseFreeSpins(random);
+        MultiplierBand band = (freeSpins ? config.freeSpinsBands() : config.normalBands()).choose(random);
+        int target = band.target(random);
+        boolean mary = freeSpins;
+        int type = mary ? GameRules.FREE_SPINS_MARY_POOL_TYPE : GameRules.NORMAL_POOL_TYPE;
         try (Connection redis = Connection.connect(config)) {
-            int ratio = switch (outcome) {
-                case LOSS -> requireNonEmpty(redis, false, 0, 0);
-                case WIN -> requireNonEmpty(redis, false, 1, Integer.MAX_VALUE);
-                case SPECIAL -> requireNonEmpty(redis, true, 1, Integer.MAX_VALUE);
-            };
-            String key = outcome == Outcome.SPECIAL ? RedisLoader.specialList(config.redisGameId(), ratio)
-                    : RedisLoader.normalList(config.redisGameId(), ratio);
+            int ratio = requireNonEmpty(redis, mary, type, band, target);
+            String key = mary
+                    ? RedisLoader.maryList(config.redisGameId(), type, ratio)
+                    : RedisLoader.normalList(config.redisGameId(), type, ratio);
             Object length = redis.command("LLEN", key);
             long len = length instanceof Long n ? n : Long.parseLong(String.valueOf(length));
             if (len <= 0) throw new PoolUnavailableException("REDIS_POOL_EMPTY", key);
@@ -55,12 +58,11 @@ public class RedisRoundStore {
             String roundKey = UUID.randomUUID().toString().replace("-", "");
             RoundResult round = codec.decodeRedisMember(payload, roundKey, bs, bl, startingBalance);
             ResultAnalysis actual = verifier.verify(round);
-            if ((outcome == Outcome.LOSS && actual.mode() != RoundMode.ORDINARY_LOSS)
-                    || (outcome == Outcome.WIN && actual.mode() != RoundMode.ORDINARY_WIN)
-                    || (outcome == Outcome.SPECIAL && actual.mode() != RoundMode.FREE_SPINS)) {
+            if ((freeSpins && actual.mode() != RoundMode.FREE_SPINS)
+                    || (!freeSpins && actual.mode() == RoundMode.FREE_SPINS)) {
                 throw new PoolUnavailableException("REDIS_MEMBER_CATEGORY_MISMATCH", key);
             }
-            int projectedRatio = actual.totalMultiplier().intValueExact();
+            int projectedRatio = GameRules.cacheMultiplier(actual.totalMultiplier());
             if (projectedRatio != ratio) throw new PoolUnavailableException("REDIS_MEMBER_RATIO_MISMATCH", key);
             return round;
         } catch (PoolUnavailableException ex) {
@@ -71,26 +73,19 @@ public class RedisRoundStore {
         }
     }
 
-    private Outcome chooseOutcome() {
-        int total = Math.addExact(config.lossWeight(), Math.addExact(config.winWeight(), config.specialWeight()));
-        int point = random.nextInt(total);
-        if (point < config.lossWeight()) return Outcome.LOSS;
-        point -= config.lossWeight();
-        return point < config.winWeight() ? Outcome.WIN : Outcome.SPECIAL;
-    }
-
-    
-
-    private int requireNonEmpty(Connection redis, boolean special, int minimum, int maximum) throws IOException {
-        String index = special ? RedisLoader.specialIndex(config.redisGameId()) : RedisLoader.normalIndex(config.redisGameId());
-        Integer selected = RedisFloorLookup.choose(redis::command, index,
-                m -> special ? RedisLoader.specialList(config.redisGameId(), m) : RedisLoader.normalList(config.redisGameId(), m),
-                random, minimum, maximum);
+    private int requireNonEmpty(Connection redis, boolean mary, int type,
+                                MultiplierBand band, int target) throws IOException {
+        String index = mary
+                ? RedisLoader.maryIndex(config.redisGameId(), type)
+                : RedisLoader.normalIndex(config.redisGameId(), type);
+        Integer selected = RedisFloorLookup.floor(redis::command, index,
+                m -> mary
+                        ? RedisLoader.maryList(config.redisGameId(), type, m)
+                        : RedisLoader.normalList(config.redisGameId(), type, m),
+                target, band.minimum());
         if (selected == null) throw new PoolUnavailableException("REDIS_POOL_EMPTY", index);
         return selected;
     }
-
-    private enum Outcome { LOSS, WIN, SPECIAL }
 
     public static final class PoolUnavailableException extends RuntimeException {
         private final String code;
@@ -111,7 +106,7 @@ public class RedisRoundStore {
             out = new BufferedOutputStream(socket.getOutputStream());
         }
         static Connection connect(AppConfig c) throws IOException {
-            Socket s = new Socket();
+            Socket s = c.redisSsl() ? SSLSocketFactory.getDefault().createSocket() : new Socket();
             s.connect(new InetSocketAddress(c.redisHost(), c.redisPort()), c.redisConnectTimeoutMs());
             s.setSoTimeout(c.redisSocketTimeoutMs());
             Connection r = new Connection(s);

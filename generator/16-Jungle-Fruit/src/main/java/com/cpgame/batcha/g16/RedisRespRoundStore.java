@@ -21,38 +21,68 @@ public final class RedisRespRoundStore implements RedisRoundStore {
 
     public RedisRespRoundStore(String host, int port, String password, int database,
                                int connectTimeoutMillis, int readTimeoutMillis) throws IOException {
+        this(host, port, "", password, false, database, connectTimeoutMillis, readTimeoutMillis);
+    }
+
+    public RedisRespRoundStore(String host, int port, String username, String password, boolean ssl,
+                               int database, int connectTimeoutMillis, int readTimeoutMillis) throws IOException {
         if (host == null || host.isBlank()) throw new IllegalArgumentException("Redis host is required");
         if (port < 1 || port > 65535 || database < 0) throw new IllegalArgumentException("invalid Redis address/database");
-        socket = new Socket();
+        socket = ssl ? javax.net.ssl.SSLSocketFactory.getDefault().createSocket() : new Socket();
         socket.connect(new InetSocketAddress(host, port), connectTimeoutMillis);
         socket.setSoTimeout(readTimeoutMillis);
         input = new BufferedInputStream(socket.getInputStream());
         output = new BufferedOutputStream(socket.getOutputStream());
-        if (password != null && !password.isBlank()) expectSimple(command("AUTH", password));
+        if (socket instanceof javax.net.ssl.SSLSocket tls) {
+            var parameters = tls.getSSLParameters();
+            parameters.setEndpointIdentificationAlgorithm("HTTPS");
+            tls.setSSLParameters(parameters);
+            tls.startHandshake();
+        }
+        if (username != null && !username.isBlank()) expectSimple(command("AUTH", username, password));
+        else if (password != null && !password.isBlank()) expectSimple(command("AUTH", password));
         if (database != 0) expectSimple(command("SELECT", Integer.toString(database)));
     }
 
     @Override
     public synchronized void writeMember(boolean special, int ratio, byte[] member, int maximumMembers)
             throws IOException {
-        if (maximumMembers < 1) throw new IllegalArgumentException("maximumMembers must be positive");
-        if (ratio < 0) throw new IllegalArgumentException("ratio must be non-negative");
-        String index = RedisKeys.index(special);
-        String list = RedisKeys.list(special, ratio);
-        String token = Integer.toString(ratio);
-        writeCommand(parts("MULTI"));
-        expectSimple(readResponse());
-        writeCommand(parts("ZADD", index, token, token));
-        expectQueued(readResponse());
-        writeCommand(parts("RPUSH", list, member));
-        expectQueued(readResponse());
-        writeCommand(parts("LTRIM", list, Integer.toString(-maximumMembers), "-1"));
-        expectQueued(readResponse());
-        writeCommand(parts("EXEC"));
-        Object response = readResponse();
-        if (!(response instanceof List<?> values) || values.size() != 3) {
-            throw new IOException("Redis EXEC did not return three results");
+        writeBatch(List.of(new PendingMember(special, ratio, member, maximumMembers)));
+    }
+
+    @Override
+    public synchronized void writeBatch(List<PendingMember> members) throws IOException {
+        if (members.isEmpty()) return;
+        for (PendingMember member : members)
+            if (member.maximumMembers() < 1 || member.ratio() < 0)
+                throw new IllegalArgumentException("Invalid pending Redis member");
+        expectSimple(command("MULTI"));
+        for (PendingMember member : members) {
+            String token = Integer.toString(member.ratio());
+            writeCommand(parts("ZADD", RedisKeys.index(member.special()), token, token));
+            expectQueued(readResponse());
+            String list = RedisKeys.list(member.special(), member.ratio());
+            writeCommand(parts("RPUSH", list, member.member()));
+            expectQueued(readResponse());
+            writeCommand(parts("LTRIM", list, Integer.toString(-member.maximumMembers()), "-1"));
+            expectQueued(readResponse());
         }
+        Object response = command("EXEC");
+        if (!(response instanceof List<?> values) || values.size() != members.size() * 3)
+            throw new IOException("Redis EXEC returned an unexpected batch size");
+    }
+
+    @Override
+    public synchronized Optional<Integer> highestAtMost(boolean special, int maxInclusive, int minInclusive)
+            throws IOException {
+        if (maxInclusive < minInclusive) return Optional.empty();
+        Object response = command("ZREVRANGEBYSCORE", RedisKeys.index(special),
+            Integer.toString(maxInclusive), Integer.toString(minInclusive), "LIMIT", "0", "1");
+        if (!(response instanceof List<?> members)) throw new IOException("Redis ZREVRANGEBYSCORE returned an unexpected type");
+        if (members.isEmpty() || members.get(0) == null) return Optional.empty();
+        Object member = members.get(0);
+        String token = member instanceof byte[] bytes ? new String(bytes, StandardCharsets.UTF_8) : member.toString();
+        return Optional.of(Integer.parseInt(token));
     }
 
     @Override

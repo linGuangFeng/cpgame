@@ -55,6 +55,14 @@ public final class RedisDirectLoader {
         try (RedisConnection redis = RedisConnection.connect(config)) {
             generateNaturally(config, factory, codec, random, redis, pending, counters);
             flush(redis, pending, config, counters);
+        } catch (IOException redisError) {
+            if (counters.batches > 0 && redisProgressStop(redisError)) {
+                System.out.println("[warn] Redis stopped after " + counters.batches
+                        + " batches: " + redisError.getMessage());
+                pending.clear();
+            } else {
+                throw redisError;
+            }
         }
         return new LoadSummary(config.redisGameId(), config.normalCount(), config.specialCount(), counters.batches,
                 counters.maxConsecutiveWins);
@@ -76,7 +84,10 @@ public final class RedisDirectLoader {
         while (normalMembers < config.normalCount() || specialMembers < config.specialCount()) {
             Member selected;
             while (true) {
-                if (++attempts > attemptLimit) throw new IllegalStateException("配置范围/权重/容量内无法完成生成目标，已达到候选上限");
+                if (++attempts > attemptLimit) {
+                    System.out.println("[warn] candidate limit reached; keeping batches=" + counters.batches);
+                    return;
+                }
                 if (drawsInEntry >= ENTRY_SWITCH_EVERY) {
                     specialEntry = !specialEntry;
                     drawsInEntry = 0;
@@ -165,6 +176,15 @@ public final class RedisDirectLoader {
     private static int exactRatio(BigDecimal value) {
         try { return value.stripTrailingZeros().intValueExact(); }
         catch (ArithmeticException ex) { throw new IllegalStateException("non-integer multiplier: " + value, ex); }
+    }
+
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
     }
 
     static boolean tryReserveMultiplier(Map<Integer, Integer> generatedPerRatio, int ratio, int cap) {

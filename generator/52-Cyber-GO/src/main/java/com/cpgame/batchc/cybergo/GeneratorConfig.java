@@ -26,7 +26,17 @@ public final class GeneratorConfig {
             "generation.max-consecutive-wins",
             "generation.normal-min-win-multiplier", "generation.normal-max-win-multiplier",
             "generation.special-min-win-multiplier", "generation.special-max-win-multiplier",
-            "generation.special-max-steps");
+            "generation.special-max-steps",
+            "generation.symbol.S1.normal-weight", "generation.symbol.S2.normal-weight",
+            "generation.symbol.S3.normal-weight", "generation.symbol.S4.normal-weight",
+            "generation.symbol.A.normal-weight", "generation.symbol.K.normal-weight",
+            "generation.symbol.Q.normal-weight", "generation.symbol.J.normal-weight",
+            "generation.symbol.WILD.normal-weight", "generation.symbol.SC.normal-weight",
+            "generation.symbol.S1.free-weight", "generation.symbol.S2.free-weight",
+            "generation.symbol.S3.free-weight", "generation.symbol.S4.free-weight",
+            "generation.symbol.A.free-weight", "generation.symbol.K.free-weight",
+            "generation.symbol.Q.free-weight", "generation.symbol.J.free-weight",
+            "generation.symbol.WILD.free-weight");
 
     final String host;
     final int port;
@@ -60,6 +70,8 @@ public final class GeneratorConfig {
         connectTimeoutMs = integer(properties, "redis.connect-timeout-ms", 1, Integer.MAX_VALUE);
         socketTimeoutMs = integer(properties, "redis.socket-timeout-ms", 1, Integer.MAX_VALUE);
         redisGameId = longValue(properties, "redis.game-id", 1, 999_999_999);
+        if (redisGameId != RedisRoundPool.GAME_ID)
+            throw new IllegalArgumentException("redis.game-id must be " + RedisRoundPool.GAME_ID);
         lossCount = integer(properties, "generation.loss-count", 0, MAX_GENERATION_TARGET);
         normalCount = integer(properties, "generation.normal-count", 0, MAX_GENERATION_TARGET);
         specialCount = integer(properties, "generation.special-count", 0, MAX_GENERATION_TARGET);
@@ -70,7 +82,7 @@ public final class GeneratorConfig {
         normalMaxWinMultiplier = positiveDecimal(properties, "generation.normal-max-win-multiplier");
         specialMaxWinMultiplier = positiveDecimal(properties, "generation.special-max-win-multiplier");
         specialMaxSteps = integer(properties, "generation.special-max-steps", 1, 20);
-        symbolWeights = SymbolWeights.localDefaults(); // Compatibility only; sampling uses EmpiricalReelModel.
+        symbolWeights = new SymbolWeights(weights(properties, true), weights(properties, false));
     }
 
     public static GeneratorConfig load(Path file) throws IOException {
@@ -102,7 +114,7 @@ public final class GeneratorConfig {
         for (String key : properties.stringPropertyNames()) {
             String lower = key.toLowerCase(java.util.Locale.ROOT);
             if (lower.contains("seed")) throw new IllegalArgumentException("正式配置禁止 seed: " + key);
-            if (!allowed.contains(key)) throw new IllegalArgumentException("配置项未被正式代码读取: " + key);
+            if (!allowed.contains(key)) {if(key.toLowerCase(java.util.Locale.ROOT).contains("seed"))throw new IllegalArgumentException("正式配置禁止 seed: "+key);System.err.println("[warn] unused generator.properties key: "+key);};
         }
         for (String key : allowed) {
             boolean optionalLimit = key.equals("generation.normal-min-win-multiplier")

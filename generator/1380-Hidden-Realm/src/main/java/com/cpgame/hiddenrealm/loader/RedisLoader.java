@@ -47,24 +47,23 @@ public final class RedisLoader {
         Map<String, Integer> counts = new TreeMap<>();
         LoaderLimits limits = new LoaderLimits(p);
         loss = limits.lossTarget(loss);
-        long[] attempts = {0, System.nanoTime()};
-        int[] phaseQuota = {0, special / 4, special / 4, special / 4, special - 3 * (special / 4)};
-        try (Jedis jedis = new Jedis(host, port, cfg.build())) {
+        long[][] attempts={{0},{0},{0},{0},{0},{0}};
+        EntrySchedule schedule=new EntrySchedule(loss,win,special/4,special/4,special/4,special-3*(special/4));
+        try (Jedis jedis=new Jedis(host,port,cfg.build())) {
             jedis.connect();
-            if (!"PONG".equalsIgnoreCase(jedis.ping())) throw new IllegalStateException("redis ping failed " + host + ":" + port);
-            for (int i = 0; i < loss; i++) if (!write(jedis, game, generator.ordinary(false), util, codec, cap, counts, limits, attempts)) i--;
-            for (int i = 0; i < win; i++) if (!write(jedis, game, generator.ordinary(true), util, codec, cap, counts, limits, attempts)) i--;
-            for (int phase = 1; phase <= 4; phase++)
-                for (int i = 0; i < phaseQuota[phase]; i++)
-                    if (!write(jedis, game, generator.special(phase), util, codec, cap, counts, limits, attempts)) i--;
-            System.out.printf(Locale.ROOT, "Loaded complete rounds loss=%d win=%d special=%d rulesHash=%s buckets=%s%n",
-                    loss, win, special, GameRuleCore.RULES_HASH, counts);
+            if(!"PONG".equalsIgnoreCase(jedis.ping()))throw new IllegalStateException("redis ping failed");
+            for(int phase;(phase=schedule.next())>=0;) {
+                CompleteRound round=phase<2?generator.ordinary(phase==1):generator.special(phase-1);
+                if(write(jedis,game,round,util,codec,cap,counts,limits,attempts[phase]))schedule.accepted(phase);
+            }
+            System.out.printf(Locale.ROOT,"Loaded complete rounds loss=%d win=%d special=%d rulesHash=%s buckets=%s%n",
+                    loss,win,special,GameRuleCore.RULES_HASH,counts);
         }
     }
 
     private static boolean write(Jedis jedis, String game, CompleteRound round, ResultUtil util, RoundCodec codec,
                               int cap, Map<String, Integer> counts, LoaderLimits limits, long[] attempts) {
-        if (++attempts[0] > 10_000 || System.nanoTime()-attempts[1] > java.util.concurrent.TimeUnit.SECONDS.toNanos(30)) throw new IllegalStateException("Configured range or weights cannot satisfy requested category within the rejection budget (10000 candidates / 30 seconds)");
+        if (++attempts[0] > 10_000) throw new IllegalStateException("Configured range or weights cannot satisfy requested category within the rejection budget (10000 candidates)");
         ResultUtil.Analysis a = util.analyze(round);
         boolean specialPool = RedisKeys.index(game, a.outcome()).startsWith("MaryKeyList_");
         if (!limits.accepts(specialPool, a.integerMultiplier())) return false;
@@ -82,7 +81,7 @@ public final class RedisLoader {
         tx.zadd(index, (double) a.integerMultiplier(), ratio);
         tx.exec();
         counts.merge(bucket, 1, Integer::sum);
-        attempts[0]=0; attempts[1]=System.nanoTime(); return true;
+        attempts[0]=0; return true;
     }
 
     private static String req(Properties p, String key) {

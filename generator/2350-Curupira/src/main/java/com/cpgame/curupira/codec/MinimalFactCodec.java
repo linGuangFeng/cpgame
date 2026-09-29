@@ -30,16 +30,12 @@ public final class MinimalFactCodec {
         return encodeFact(fact);
     }
 
-    public String encodeFact(CompleteRoundFact fact) { return encodeFact(fact, true); }
-    public String encodeFull(CompleteRoundFact fact) { return encodeFact(fact, false); }
-
-    private String encodeFact(CompleteRoundFact fact, boolean compact) {
+    public String encodeFact(CompleteRoundFact fact) {
         if (fact == null) throw new IllegalArgumentException("完整局不能为空");
         StringBuilder out = new StringBuilder(PREFIX);
         out.append(fact.entry() == EntryKind.PAID ? 'P' : 'B');
         out.append(kindCode(fact.kind()));
         out.append(';');
-        if (compact && isIndependentLoss(fact)) return out.append('#').toString();
         for (int i = 0; i < fact.steps().size(); i++) {
             if (i > 0) out.append('/');
             appendStep(out, fact.steps().get(i));
@@ -51,6 +47,9 @@ public final class MinimalFactCodec {
         }
         return encoded;
     }
+
+    /** 兼容旧调用名；现在所有结果（包括 0 倍）都保存完整事实。 */
+    public String encodeFull(CompleteRoundFact fact) { return encodeFact(fact); }
 
     public CompleteRound decodeRound(String member) {
         CompleteRoundFact fact = decode(member);
@@ -80,14 +79,7 @@ public final class MinimalFactCodec {
             default -> throw new IllegalArgumentException("invalid entry kind");
         };
         Kind kind = parseKind(member.charAt(4), entry);
-        if (member.substring(6).equals("#")) {
-            if (entry != EntryKind.PAID || kind != Kind.LOSS) {
-                throw new IllegalArgumentException("loss marker requires ordinary paid LOSS");
-            }
-            EvaluatedBoard board = LossHolder.GENERATOR.nextLoss();
-            FeatureStep step = FeatureStep.symbol(Role.ORDINARY, board.ps(), board, 0, 0, 0, 1, 1);
-            return new CompleteRoundFact(identityFromMember(member), kind, entry, List.of(step));
-        }
+        if (member.substring(6).equals("#")) throw new IllegalArgumentException("0 倍标记已禁用，Redis 必须保存完整牌面事实");
         List<FeatureStep> steps = new ArrayList<>();
         for (String encoded : member.substring(6).split("/", -1)) {
             steps.add(parseStep(encoded, kind, steps.size()));
@@ -99,38 +91,11 @@ public final class MinimalFactCodec {
         return encode(fact).getBytes(StandardCharsets.US_ASCII);
     }
 
-    private static boolean isIndependentLoss(CompleteRoundFact fact) {
-        if (fact.kind() != Kind.LOSS || fact.entry() != EntryKind.PAID || fact.steps().size() != 1) return false;
-        FeatureStep step = fact.steps().get(0);
-        if (step.role() != Role.ORDINARY || step.st() != 0 || step.tt() != 0 || step.featureT() != 0
-                || step.gt() != 1 || step.resGt() != 1 || step.redisUnits() != 0) return false;
-        EvaluatedBoard board = UTIL.evaluate(step.cells());
-        return board.awards().isEmpty() && board.multiplierSum() == 0
-                && board.scatterCount() < GameRules.SCATTER_TRIGGER && board.expandingWildColumns().isEmpty();
-    }
-
-    private static final class LossHolder {
-        private static final com.cpgame.curupira.core.ConstructiveLossGenerator GENERATOR = create();
-        private static com.cpgame.curupira.core.ConstructiveLossGenerator create() {
-            var policy = com.cpgame.curupira.core.GenerationPolicy.ordinaryPaidDefaults();
-            var weights = new java.util.HashMap<>(policy.symbolWeights());
-            // Ordinary markers cannot introduce an expanding-Wild animation or a feature trigger.
-            weights.put(GameRules.WILD, 0);
-            weights.put(GameRules.SCATTER, 0);
-            var sampler = new com.cpgame.curupira.random.WeightedSymbolSampler(
-                    new com.cpgame.curupira.random.SecureRandomSource(), weights);
-            return new com.cpgame.curupira.core.ConstructiveLossGenerator(sampler,
-                    new com.cpgame.curupira.core.CandidateBoardGenerator(sampler), UTIL, policy);
-        }
-    }
-
     private static CompleteRoundFact fromOrdinary(CompleteRound round) {
         EvaluatedBoard board = round.deliveries().get(0).evaluatedBoard();
-        Kind kind = board.scatterCount() >= GameRules.SCATTER_TRIGGER ? Kind.TRIGGER
-                : board.expandingWildColumns().isEmpty()
-                ? (board.awards().isEmpty() ? Kind.LOSS : Kind.WIN)
-                : Kind.EXPANDING_WILD;
-        FeatureStep step = FeatureStep.symbol(Role.ORDINARY, board.ps(), board, 0, 0, 0, 1, 1);
+        Kind kind = UTIL.classifyPaid(board);
+        FeatureStep step = FeatureStep.symbol(kind == Kind.TRIGGER ? Role.TRIGGER : Role.ORDINARY,
+                board.ps(), board, 0, 0, 0, 1, 1);
         return new CompleteRoundFact(round.roundKey(), kind, EntryKind.PAID, List.of(step));
     }
 

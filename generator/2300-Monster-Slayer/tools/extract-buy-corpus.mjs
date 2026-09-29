@@ -1,9 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+// Regression fixtures only; production generation must never load this corpus.
 
-const ROOT = "D:/work/hd/cpgame";
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const CAPTURE = path.join(ROOT, "captures/2300-Monster-Slayer/buy-modes");
-const RES = path.join(ROOT, "generator/2300-Monster-Slayer/src/main/resources");
+const RES = path.join(ROOT, "generator/2300-Monster-Slayer/src/test/resources");
 const MODES = [
   [3, "000002300", "buy-3"],
   [4, "100002300", "buy-4"],
@@ -16,12 +18,18 @@ function asInt(v, fallback) {
   return Number.isFinite(n) ? n : fallback;
 }
 
+function requireType(value) {
+  const t = Number(value);
+  if (![1, 2, 3].includes(t)) throw new Error("Redacted monster identity: recover from independent evidence before exporting");
+  return t;
+}
+
 function animals(node) {
   if (!Array.isArray(node)) return [];
   return node.map((a, i) => ({
     bl: asInt(a?.bl, 0),
     iu: asInt(a?.iu, 0),
-    t: asInt(a?.t, i + 1),
+    t: requireType(a?.t),
   }));
 }
 
@@ -53,7 +61,7 @@ function fixT(node, animalList) {
   if (Array.isArray(node)) {
     return node.map((item, i) => {
       if (item && typeof item === "object" && "t" in item) {
-        const fallback = animalList[i]?.t ?? i + 1;
+        const fallback = requireType(item.t);
         const copy = { ...item, t: asInt(item.t, fallback) };
         return fixT(copy, animalList);
       }
@@ -63,7 +71,7 @@ function fixT(node, animalList) {
   if (node && typeof node === "object") {
     const out = {};
     for (const [k, v] of Object.entries(node)) {
-      if (k === "t") out[k] = asInt(v, 1);
+      if (k === "t") out[k] = requireType(v);
       else if (k === "a" && Array.isArray(v)) out[k] = fixT(v, animalList);
       else out[k] = fixT(v, animalList);
     }

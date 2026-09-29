@@ -34,7 +34,8 @@ public final class RedisConnection implements AutoCloseable {
             if(password!=null&&!password.isEmpty()) {
                 if(username==null||username.isEmpty())c.command("AUTH",password);else c.command("AUTH",username,password);
             }
-            c.command("SELECT","15");c.command("PING");return c;
+            if(database!=0)c.command("SELECT",Integer.toString(database));
+            c.command("PING");return c;
         } catch(IOException ex){c.close();throw ex;}
     }
 

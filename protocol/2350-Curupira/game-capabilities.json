@@ -56,6 +56,19 @@
       "runtime Help payline diagrams 1 through 25"
     ]
   },
+  "positionConstraints": {
+    "columnNumbering": "ZERO_BASED_0_TO_4",
+    "scatterPerColumn": {
+      "maximum": 1,
+      "status": "CONFIRMED_BY_USER_2026_09_23",
+      "implementation": "after the first Scatter(31) is sampled in a column, remove Scatter from that column's remaining candidate positions; never mutate a completed board"
+    },
+    "wildOnFirstColumn": {
+      "status": "UNKNOWN_SAMPLE_ABSENCE_IS_NOT_A_RULE",
+      "implementation": "Wild(21) remains eligible on every column"
+    },
+    "otherStackingMutualExclusionLockAndRefillRules": "UNKNOWN"
+  },
   "grid": {
     "columns": 5,
     "rows": 3,
@@ -163,7 +176,8 @@
       "knownRule": "3+ Scatter opens feature selection; this selection starts six free spins and each free spin contains one expanding Curupira reel",
       "knownRequestPath": {"type":2,"game_type":2},
       "codeExpectedStateFields": ["f.t","f.st","f.tt","f.twa"],
-      "wireContractStatus": "UNRESOLVED_DO_NOT_IMPLEMENT",
+      "wireContractStatus": "ORIGINAL_WIRE_UNRESOLVED_LOCAL_PROJECTION_ENABLED",
+      "localProjection": "generate exactly six complete Steps; each Step has exactly one triple-Wild column and fewer than three Scatter; consume only from Mary type0 after a cached trigger",
       "missingEvidence": "trigger response, selected-mode request/response, six adjacent Steps, state transitions and terminal response",
       "evidence": ["runtime Help","GameFreeFeatures","GameMain free loop","SlotDataMgr getters","GameBetType.Free=2","GameType.FREE_EXPANDING_WILD=2","FREE_EXPANDING_WILD_COUNT=6"]
     },
@@ -174,7 +188,8 @@
       "knownRule": "starts with three spins; each newly landed Coin adds one spin; each Coin is up to 10x; filling all 15 positions ends early",
       "knownRequestPath": {"type":2,"game_type":3},
       "codeExpectedStateFields": ["f.t","f.st","f.tt","f.twa","f.fcc","f.fcp","f.fcn"],
-      "wireContractStatus": "UNRESOLVED_DO_NOT_IMPLEMENT",
+      "wireContractStatus": "ORIGINAL_WIRE_UNRESOLVED_LOCAL_PROJECTION_ENABLED",
+      "localProjection": "generate complete states from three starting spins until remaining reaches zero or all 15 positions fill; every new Coin adds one spin and values are 1..10; consume only from Mary type1 after a cached trigger",
       "missingEvidence": "activation response, coin payload types, adjacent respins, count transition and terminal response",
       "evidence": ["runtime Help","GameMain.onBunesFree","SlotDataMgr getters","GameBetType.Free=2","GameType.FREE_BOUNES=3","FREE_BOUNES_COUNT=3","COIN_TOTAL_COUNT=15"]
     },
@@ -191,13 +206,18 @@
       "evidence": ["feature-buy-entry.png","GameFreeBuy.onClick","GameBetType.Buy=3","BuyFreeMultiple=40","SlotDataMgr.isShowBetBuy","authenticated initialData"]
     }
   ],
-  "runtimeIndependentLoss": {
+  "formalGeneration": {
     "supported": true,
-    "scope": "ordinary paid type=1 game_type=1 single-step Round only",
-    "preconditions": ["no active free/reward/buy Round","minimum or selected valid bet","new rid/oid"],
-    "requiredResultAssertions": ["res.ps has 15 current-game symbols","res.wa is empty","res.tws=0","tw=0","cg=-bg","eg=sg-bg","f is empty array","gt=1","small_game_type=0","Scatter count remains below the proven trigger threshold"],
-    "distributionCaveat": "symbol weights are unknown; this capability proves a valid independent LOSS state, not the original probability distribution",
-    "evidence": ["paid Rounds 1-9","fixed-line and Scatter rules"]
+    "scope": "ordinary paid starts plus FREE_EXPANDING_WILD Mary type0 and HOLD_AND_SPINS Mary type1",
+    "generationOrder": "choose a scene from explicit weights, naturally generate its complete fact, independently verify and classify, then write only to that scene family",
+    "prohibitedInputs": ["target result kind","target payout","captured board template","fixed sample winning combination"],
+    "requiredResultAssertions": ["ordinary/trigger is one complete paid-start Step","free mode has six complete Steps and exactly one triple-Wild column per Step","free mode currently has fewer than three Scatter per Step","Hold starts at three and terminates at zero remaining or 15 filled positions","each new Hold Coin adds one spin and has value 1..10","every encoded fact survives codec and independent verifier round-trip"],
+    "defaultSceneWeights": {"normalPaid":8,"freeExpandingWild":1,"holdAndSpins":1},
+    "holdLocalWeights": {"empty":9,"coin":1,"coinValue":"uniform 1..10","status":"LOCAL_TEMPORARY_NOT_ORIGINAL_PROBABILITY"},
+    "sampleWeights": {"status":"SAMPLE_INSUFFICIENT","rounds":10,"cells":150,"counts":{"1":26,"2":14,"3":16,"4":16,"11":16,"12":17,"13":19,"14":17,"21":6,"31":3},"bias":"9 of 10 captured paid rounds are LOSS"},
+    "distributionCaveat": "no reel strips or official server weights were found; empirical sample counts do not reproduce the original probability distribution",
+    "demoBoundary": "Demo never invokes generation; Init and Spin read complete formal Redis members, including multiplier zero",
+    "evidence": ["paid Rounds 1-9","fixed-line and Scatter rules","reports/2350-Curupira/weight-statistics.json"]
   },
   "apiRequestConstruction": {
     "apiBase": "window.location.protocol + '//' + sip + '/cp' from versionconfig.js",
@@ -223,23 +243,25 @@
     },
     "nestedParameterEncoding": "objects and arrays use JSON.stringify in the form body; no captured gameplay request uses nested input",
     "roundIdPrecision": "rid/oid exceed 2^53-1; preserve as Java long or decimal string and never route through double",
-    "redisCodec": "UNKNOWN_NO_CURRENT_GAME_REDIS_EVIDENCE",
+    "redisCodec": "ORIGINAL_EVIDENCE_UNKNOWN; LOCAL_DELIVERY_CONTRACT_CU1_FULL_FACT",
     "evidence": ["HttpRequest.getParamString/calc","versionconfig.js","authenticated request/response captures","round-id-precision-evidence.json"]
   },
   "redisContract": {
-    "status": "UNKNOWN_NO_CURRENT_GAME_REDIS_EVIDENCE",
-    "keyPattern": null,
-    "memberEncoding": null,
-    "memberLength": null,
-    "scoreSemantics": null,
-    "roundPackagingRule": "workflow requires one complete Round per member, but no current-game Redis key or codec was observed",
-    "implementationRestriction": "do not inherit Redis keys, lengths or encoding from a sample game; downstream Loader must remain disabled until a current-game delivery contract is established"
+    "originalEvidenceStatus": "UNKNOWN_NO_ORIGINAL_REDIS_EVIDENCE",
+    "localDeliveryStatus": "ENABLED_EXPLICIT_ENGINEERING_CONTRACT",
+    "keyFamily": "configured redis.game-id: paid LOSS/WIN/EXPANDING_WILD/TRIGGER in Per/BetLog type0; FREE_EXPANDING_WILD in Mary type0; HOLD_AND_SPINS in Mary type1",
+    "memberEncoding": "compact CU1 full fact: paid/trigger includes all 15 cells, free includes all six Steps, Hold includes every state through termination",
+    "zeroMultiplierEncoding": "full LOSS board; CU1PL;# is forbidden",
+    "scoreSemantics": "sum(res.wa[].o); divide by 25 for actual total-bet multiplier",
+    "roundPackagingRule": "one complete scene fact per member; a cached trigger remains the paid start and its selected Mary contains every following feature Step",
+    "unsupportedFamilies": ["FEATURE_BUY","FREE_RETRIGGER"],
+    "demoConsumption": "choose one of six configured actual-multiplier bands separately for normal, free and Hold, convert to Redis units, then search downward only in the selected family; empty cache is an error and never triggers live generation"
   },
   "fixturePolicy": {
     "oracleOnly": true,
     "runtimeSourceAllowed": false,
     "prohibitedUses": ["replay captured Spin responses","rotate fixed result lists","copy History rows as generated results","derive runtime identity or balance from fixture credentials/session data"],
-    "requiredRuntimeSource": "local Java GameRuleCore for every init/spin/balance/session result"
+    "requiredRuntimeSource": "formal Redis complete facts for every Init/Spin board; Java service projects balance and session state without generating a board"
   },
   "responseFields": {
     "initialData": ["code","data.game_address","data.game_info","data.game_server","data.initial_config","data.language","data.r","data.zone","msg","time"],

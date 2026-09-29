@@ -215,7 +215,7 @@ public final class SambaSensationController {
     }
     private static Properties loadConfig(String value) throws IOException {
         Properties result = new Properties();
-        result.setProperty("redis.host", "18.234.101.161"); result.setProperty("redis.port", "8021");
+        result.setProperty("redis.host", "54.172.218.28"); result.setProperty("redis.port", "8016");
         result.setProperty("redis.database", "0"); result.setProperty("redis.game-id", "8002290");
         result.setProperty("redis.ssl", "false"); result.setProperty("redis.connect-timeout-ms", "5000");
         result.setProperty("redis.socket-timeout-ms", "30000");
@@ -230,9 +230,14 @@ public final class SambaSensationController {
             throw new IllegalArgumentException("formal Controller config must not contain " + key);
         if (config.containsKey("port") || config.containsKey("controller.api-port"))
             throw new IllegalArgumentException("managed Controller forbids hard-coded port settings");
-        if (!"18.234.101.161".equals(config.getProperty("redis.host"))
-                || !"8021".equals(config.getProperty("redis.port")) || Integer.parseInt(config.getProperty("redis.database")) < 0)
-            throw new IllegalArgumentException("Demo Redis 固定为 18.234.101.161:8021 db=15");
+        String host = config.getProperty("redis.host", "");
+        String port = config.getProperty("redis.port", "");
+        boolean aws = "18.234.101.161".equals(host) && "8021".equals(port);
+        boolean nas = "192.168.10.3".equals(host) && "6379".equals(port);
+        boolean local = "127.0.0.1".equals(host) && "6379".equals(port);
+        boolean fd = "54.172.218.28".equals(host) && "8016".equals(port);
+        if ((!aws && !nas && !local && !fd) || Integer.parseInt(config.getProperty("redis.database")) < 0)
+            throw new IllegalArgumentException("unauthorized Redis endpoint: " + host + ":" + port);
     }
     private static Path resolvePublish(String value) throws Exception {
         if (value != null && !value.isBlank()) {

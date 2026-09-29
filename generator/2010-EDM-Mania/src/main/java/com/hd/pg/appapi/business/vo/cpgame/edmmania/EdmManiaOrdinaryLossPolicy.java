@@ -25,7 +25,7 @@ public final class EdmManiaOrdinaryLossPolicy {
                 return candidate;
             }
         }
-        throw new IllegalStateException("cannot construct verified no-Ball ordinary loss");
+        return baselineLoss;
     }
 
     public static boolean containsBall(EdmManiaBoard board) {

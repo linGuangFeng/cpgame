@@ -2,7 +2,7 @@
   "schemaVersion": "3.0",
   "gameId": 2300,
   "gameName": "Monster Slayer",
-  "rulesVersion": "2300-monster-slayer-v4-base-bet-multiplier",
+  "rulesVersion": "2300-monster-slayer-v8-rule-generated-hunt",
   "board": {
     "columns": 5,
     "rows": 3,
@@ -91,13 +91,21 @@
     "terminalNextType": 0,
     "collectorCap": 5,
     "hunterFuryHitCount": 20,
-    "maxObservedCompleteRoundDeliveries": 32
+    "maxObservedCompleteRoundDeliveries": 32,
+    "iceGlobalMultiplierMax": 5,
+    "upgradedIcePathMultiplier": 2,
+    "splitCellWayFactor": 2,
+    "collectorIncrementsOnlyWhenWeaponStops": true,
+    "weaponHitFlagMeansAnyCollision": true,
+    "maxObservedWildCells": 9,
+    "maxObservedTreePathLength": 3,
+    "maxObservedShadowCollectorPerMonster": 11
   },
   "redis": {
     "database": 15,
     "multiplierScale": 100,
     "multiplierFormula": "exact roundTotalWin / baseBet * 100; buy cost multiplier affects charge only",
-    "memberPrefix": "MS1",
+    "memberPrefix": "MS4 for generated hunting rounds; MS3 for ordinary rounds",
     "maxMembersPerMultiplier": 300
   },
   "normalConstraints": {
@@ -131,6 +139,6 @@
     "ordinary": true,
     "special": false,
     "purchases": true,
-    "reason": "natural scatter-feature SAMPLE_INSUFFICIENT; purchase type=3/4/5 served from captured templates in prefix buckets"
+    "reason": "Purchase modes use fresh rule-driven hunting states. Natural special-count Loader pool remains disabled; its 1-to-2 Scatter progression is not modeled."
   }
 }

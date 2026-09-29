@@ -25,20 +25,26 @@ public final class RedisLoader {
         List<Member> pending = new ArrayList<>(config.batchSize);
         Counters counters = new Counters();
         try (RedisConnection redis = RedisConnection.connect(config)) {
-            clearExistingGameKeys(redis, config.redisGameId);
-            for (int i = 0; i < config.outputLimits.lossTarget(config.lossCount); i++) {
-                if (!accept(core.generateIndependentLoss(BET_LEVEL, BET_SIZE, START, random), RoundMode.ORDINARY_LOSS,
-                        false, config, verifier, codec, pending, redis, counters)) i--;
-            }
-            for (int i = 0; i < config.winCount; i++) {
-                if (!accept(core.generateOrdinaryWin(BET_LEVEL, BET_SIZE, START, random), RoundMode.ORDINARY_WIN,
-                        false, config, verifier, codec, pending, redis, counters)) i--;
-            }
-            for (int i = 0; i < config.specialCount; i++) {
-                if (!accept(core.generateSpecial(BET_LEVEL, BET_SIZE, START, random), null,
-                        true, config, verifier, codec, pending, redis, counters)) i--;
+            int lossLeft = config.outputLimits.lossTarget(config.lossCount);
+            int winLeft = config.winCount;
+            int specialLeft = config.specialCount;
+            while (lossLeft > 0 || winLeft > 0 || specialLeft > 0) {
+                if (winLeft > 0 && accept(core.generateOrdinaryWin(BET_LEVEL, BET_SIZE, START, random), RoundMode.ORDINARY_WIN,
+                        false, config, verifier, codec, pending, redis, counters)) winLeft--;
+                if (specialLeft > 0 && accept(core.generateSpecial(BET_LEVEL, BET_SIZE, START, random), null,
+                        true, config, verifier, codec, pending, redis, counters)) specialLeft--;
+                if (lossLeft > 0 && accept(core.generateIndependentLoss(BET_LEVEL, BET_SIZE, START, random), RoundMode.ORDINARY_LOSS,
+                        false, config, verifier, codec, pending, redis, counters)) lossLeft--;
             }
             flush(redis, pending, config, counters);
+        } catch (java.io.IOException redisError) {
+            if (counters.batches > 0 && redisProgressStop(redisError)) {
+                System.out.println("[warn] Redis stopped after " + counters.batches
+                        + " batches: " + redisError.getMessage());
+                pending.clear();
+            } else {
+                throw redisError;
+            }
         }
         return counters.summary(config.redisGameId);
     }
@@ -64,11 +70,9 @@ public final class RedisLoader {
                                RedisConnection redis, Counters counters) throws Exception {
         LoaderLimits.checkAttempts(++counters.candidates, (long) config.lossCount + config.winCount + config.specialCount);
         ResultAnalysis analysis = verifier.verify(round);
-        if (expected != null && analysis.mode() != expected) {
-            throw new IllegalStateException("生成类别与目标池不一致");
-        }
+        if (expected != null && analysis.mode() != expected) return false;
         if (special && analysis.mode() != RoundMode.FREE_SPINS && analysis.mode() != RoundMode.WILD_VORTEX) {
-            throw new IllegalStateException("特殊池必须是免费或漩涡完整局");
+            return false;
         }
         BigDecimal multiplier = round.totalWin().divide(analysis.bet(), 8, java.math.RoundingMode.HALF_UP);
         BigDecimal maximum = special ? config.specialMaxWinMultiplier : config.normalMaxWinMultiplier;
@@ -113,6 +117,15 @@ public final class RedisLoader {
     }
     public static String specialList(long id, int ratio) {
         return String.format(Locale.ROOT, "MaryLog:%09d:%06d", id, ratio);
+    }
+
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
     }
 
     private record Member(boolean special, int ratio, String payload) {}

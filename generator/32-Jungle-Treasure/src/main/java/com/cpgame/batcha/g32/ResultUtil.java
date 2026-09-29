@@ -9,7 +9,6 @@ import java.util.Map;
 /** Independent ways reconstruction; does not call GameRuleCore.evaluateBoard. */
 public final class ResultUtil {
     public BoardResult evaluate(List<String> rskl, BigDecimal betSize, int betLevel, int roundPayX) {
-        GameRuleCore.validateBet(betSize, betLevel);
         List<Token> tokens = GameRuleCore.parse(rskl);
         Map<Integer, List<Token>> byReel = new LinkedHashMap<>();
         for (int c = 0; c < 6; c++) byReel.put(c, new ArrayList<>());

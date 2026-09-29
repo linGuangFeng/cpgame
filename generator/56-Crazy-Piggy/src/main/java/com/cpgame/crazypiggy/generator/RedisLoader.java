@@ -5,7 +5,6 @@ import com.cpgame.crazypiggy.generator.model.RoundMode;
 import com.cpgame.crazypiggy.generator.model.RoundResult;
 
 import java.math.BigDecimal;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,66 +13,64 @@ import java.util.Map;
 
 /** 仅在部署前生成完整局；Controller 运行时没有任何生成分支。 */
 public final class RedisLoader {
-    private static final BigDecimal BET_SIZE = new BigDecimal("0.5");
-    private static final int BET_LEVEL = 1;
-
     public LoadSummary load(GeneratorConfig config) throws Exception {
-        GameRuleCore core = new GameRuleCore(config.weights);
         RoundVerifier verifier = new RoundVerifier();
         MinimalRoundFactCodec codec = new MinimalRoundFactCodec(new RoundFactory(), verifier);
-        SecureRandom random = new SecureRandom();
         List<Member> pending = new ArrayList<>(config.batchSize);
         Counters counters = new Counters();
         try (RedisConnection redis = RedisConnection.connect(config)) {
-            clearExistingGameKeys(redis, config.redisGameId);
-            for (int i = 0; i < config.outputLimits.lossTarget(config.lossCount); i++)
-                if (!accept(core.generateIndependentLoss(BET_SIZE, BET_LEVEL, random), RoundMode.ORDINARY_LOSS,
-                        false, config, verifier, codec, pending, redis, counters)) i--;
-            for (int i = 0; i < config.winCount; i++)
-                if (!accept(core.generateOrdinaryWin(BET_SIZE, BET_LEVEL, random), RoundMode.ORDINARY_WIN,
-                        false, config, verifier, codec, pending, redis, counters)) i--;
-            for (int i = 0; i < config.specialCount; i++)
-                if (!accept(core.generateBoosterRound(BET_SIZE, BET_LEVEL, random), RoundMode.BOOSTER_WHEEL,
-                        true, config, verifier, codec, pending, redis, counters)) i--;
+            try {
+                EnumerationLoader.GenerationSummary generated = EnumerationLoader.generate(config, (round, analysis) -> {
+                    try {
+                        accept(round, analysis, config, verifier, codec, pending, redis, counters);
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+                counters.candidates = generated.attempts();
+            } catch (RuntimeException wrapped) {
+                Throwable cause = wrapped.getCause() == null ? wrapped : wrapped.getCause();
+                if (cause instanceof java.io.IOException redisError) throw redisError;
+                if (cause instanceof RuntimeException runtime) throw runtime;
+                if (cause instanceof Error error) throw error;
+                throw wrapped;
+            }
             flush(redis, pending, config, counters);
+        } catch (java.io.IOException redisError) {
+            if (counters.batches > 0 && redisProgressStop(redisError)) {
+                System.out.println("[warn] Redis stopped after " + counters.batches
+                        + " batches: " + redisError.getMessage());
+                pending.clear();
+            } else {
+                throw redisError;
+            }
         }
         return counters.summary(config.redisGameId);
     }
 
-    private static void clearExistingGameKeys(RedisConnection redis, long gameId) throws Exception {
-        List<String> keys = new ArrayList<>();
-        keys.add(normalIndex(gameId));
-        keys.add(specialIndex(gameId));
-        for (String pattern : List.of(
-                String.format(Locale.ROOT, "BetLog:0%08d:*", gameId),
-                String.format(Locale.ROOT, "MaryLog:%09d:*", gameId))) {
-            Object found = redis.command("KEYS", pattern);
-            if (found instanceof List<?> list) for (Object key : list) keys.add(key.toString());
-        }
-        if (!keys.isEmpty()) redis.command(java.util.stream.Stream.concat(
-                java.util.stream.Stream.of("DEL"), keys.stream()).toArray(String[]::new));
-    }
-
-    private static boolean accept(RoundResult round, RoundMode expected, boolean special, GeneratorConfig config,
+    private static void accept(RoundResult round, ResultAnalysis analysis, GeneratorConfig config,
                                RoundVerifier verifier, MinimalRoundFactCodec codec, List<Member> pending,
                                RedisConnection redis, Counters counters) throws Exception {
-        LoaderLimits.checkAttempts(++counters.candidates, (long) config.lossCount + config.winCount + config.specialCount);
-        ResultAnalysis analysis = verifier.verify(round);
-        if (analysis.mode() != expected) throw new IllegalStateException("生成类别与目标池不一致");
         BigDecimal multiplier = analysis.totalAward().divide(analysis.betAmount()).stripTrailingZeros();
         int ratio = multiplier.intValueExact();
-        if (!config.outputLimits.accepts(special, ratio)) return false;
-        BigDecimal maximum = special ? config.specialMaxWinMultiplier : config.normalMaxWinMultiplier;
-        if (multiplier.compareTo(maximum) > 0) return false;
-        int consecutiveWins = special ? 1 + round.wheelMultipliers().size() : (ratio == 0 ? 0 : 1);
-        if (consecutiveWins > config.maxConsecutiveWins) return false;
+        if (!config.outputLimits.accepts(false, ratio))
+            throw new IllegalStateException("enumeration produced a ratio outside the configured range");
+        int consecutiveWins = round.boosterWheel() ? 1 + round.wheelMultipliers().size() : (ratio == 0 ? 0 : 1);
+        if (consecutiveWins > config.maxConsecutiveWins)
+            throw new IllegalStateException("enumeration exceeded max-consecutive-wins");
         String payload = codec.encodeRedisMemberString(round);
         RoundResult rebuilt = codec.decodeRedisMember(payload);
-        verifier.verifyRecovery(round, rebuilt);
-        pending.add(new Member(special, ratio, payload));
-        counters.accept(expected, ratio, round.deliveries().size());
+        ResultAnalysis rebuiltAnalysis = verifier.verify(rebuilt);
+        BigDecimal rebuiltMultiplier = rebuiltAnalysis.totalAward().divide(rebuiltAnalysis.betAmount()).stripTrailingZeros();
+        if (rebuiltMultiplier.compareTo(multiplier) != 0)
+            throw new IllegalStateException("Redis member 恢复后的倍率不一致");
+        if (!payload.equals("#") && (!round.symbols().equals(rebuilt.symbols())
+                || !round.wheelPositions().equals(rebuilt.wheelPositions())
+                || !round.wheelMultipliers().equals(rebuilt.wheelMultipliers())))
+            throw new IllegalStateException("Redis member 最小事实不一致");
+        pending.add(new Member(ratio, payload));
+        counters.accept(analysis.mode(), ratio, round.deliveries().size());
         if (pending.size() >= config.batchSize) flush(redis, pending, config, counters);
-        return true;
     }
 
     private static void flush(RedisConnection redis, List<Member> pending,
@@ -81,14 +78,12 @@ public final class RedisLoader {
         if (pending.isEmpty()) return;
         List<String[]> commands = new ArrayList<>(pending.size() * 3);
         for (Member member : pending) {
-            String index = member.special ? specialIndex(config.redisGameId) : normalIndex(config.redisGameId);
-            String list = member.special ? specialList(config.redisGameId, member.ratio)
-                    : normalList(config.redisGameId, member.ratio);
+            String index = normalIndex(config.redisGameId);
+            String list = normalList(config.redisGameId, member.ratio);
             String ratio = Integer.toString(member.ratio);
             commands.add(new String[]{"ZADD", index, ratio, ratio});
             commands.add(new String[]{"RPUSH", list, member.payload});
-            int cap = member.special ? config.outputLimits.specialCap : config.maxMembersPerMultiplier;
-            commands.add(new String[]{"LTRIM", list, "-" + cap, "-1"});
+            commands.add(new String[]{"LTRIM", list, "-" + config.maxMembersPerMultiplier, "-1"});
         }
         redis.transaction(commands);
         counters.batches++;
@@ -104,24 +99,30 @@ public final class RedisLoader {
         return String.format(Locale.ROOT, "MaryLog:%09d:%06d", id, ratio);
     }
 
-    private record Member(boolean special, int ratio, String payload) {}
+    static boolean redisProgressStop(Throwable error) {
+        String text = error == null ? "" : String.valueOf(error.getMessage());
+        if (error != null && error.getCause() != null) text += " " + error.getCause().getMessage();
+        return text.contains("OOM") || text.contains("maxmemory") || text.contains("timed out")
+                || text.contains("Timed out") || text.contains("MISCONF") || text.contains("Connection reset")
+                || text.contains("closed") || text.contains("EXECABORT") || text.contains("Broken pipe")
+                || text.contains("已关闭连接") || text.contains("中止了一个已建立");
+    }
+
+    private record Member(int ratio, String payload) {}
 
     private static final class Counters {
-        int loss, win, special, batches, maxDeliveries;
+        int loss, win, batches, maxDeliveries;
         long candidates;
         final Map<Integer, Integer> normalDistribution = new LinkedHashMap<>();
-        final Map<Integer, Integer> specialDistribution = new LinkedHashMap<>();
         void accept(RoundMode mode, int multiplier, int deliveries) {
             if (mode == RoundMode.ORDINARY_LOSS) loss++;
-            else if (mode == RoundMode.ORDINARY_WIN) win++;
-            else special++;
-            (mode == RoundMode.BOOSTER_WHEEL ? specialDistribution : normalDistribution)
-                    .merge(multiplier, 1, Integer::sum);
+            else win++;
+            normalDistribution.merge(multiplier, 1, Integer::sum);
             maxDeliveries = Math.max(maxDeliveries, deliveries);
         }
         LoadSummary summary(long gameId) {
-            return new LoadSummary(gameId, loss, win, special, batches, candidates, maxDeliveries,
-                    Map.copyOf(normalDistribution), Map.copyOf(specialDistribution));
+            return new LoadSummary(gameId, loss, win, 0, batches, candidates, maxDeliveries,
+                    Map.copyOf(normalDistribution), Map.of());
         }
     }
 

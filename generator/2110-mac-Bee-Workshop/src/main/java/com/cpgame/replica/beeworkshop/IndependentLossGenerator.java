@@ -24,9 +24,7 @@ public final class IndependentLossGenerator {
     public GameRuleCore.CompleteRound generate(Random random) {
         if (random == null) throw new IllegalArgumentException("random is required");
         for (int attempt = 0; attempt < RANDOM_ATTEMPTS; attempt++) {
-            int[] board = weighted != null ? weighted.generate(random) : model.board("ORDINARY", 0, true, random);
-            if (board == null) continue;
-            board = forceLoss(board);
+            int[] board = constructLoss(random);
             if (!isIndependentLoss(board)) continue;
             try {
                 var step = new GameRuleCore.Step(board, List.of());
@@ -46,6 +44,22 @@ public final class IndependentLossGenerator {
         return util.independentPayoutUnits(board) == 0
                 && rules.payoutUnits(board) == 0
                 && rules.scatterCount(board) < 3;
+    }
+
+    int[] constructLoss(Random random) {
+        int[] board = new int[15];
+        int[] pays = {1, 2, 3, 4, 5, 6, 7};
+        for (int i = pays.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            int tmp = pays[i];
+            pays[i] = pays[j];
+            pays[j] = tmp;
+        }
+        for (int row = 0; row < 3; row++) board[row] = pays[random.nextInt(3)];
+        for (int row = 0; row < 3; row++) board[3 + row] = pays[3 + random.nextInt(4)];
+        for (int reel = 2; reel < 5; reel++)
+            for (int row = 0; row < 3; row++) board[reel * 3 + row] = pays[random.nextInt(pays.length)];
+        return board;
     }
 
     int[] forceLoss(int[] board) {
